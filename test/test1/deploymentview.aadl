@@ -1,0 +1,371 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- 
+-- 
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::linuxboard
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS mypartlinuxnative
+END mypartlinuxnative;
+
+PROCESS IMPLEMENTATION mypartlinuxnative.others
+END mypartlinuxnative.others;
+
+DEVICE generic_serial
+EXTENDS ocarina_drivers::generic_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "82 83";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "87 112" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/ttyS0"", speed b38400}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END generic_serial;
+
+DEVICE IMPLEMENTATION generic_serial.others
+EXTENDS ocarina_drivers::generic_serial.raw_sender
+END generic_serial.others;
+
+END deploymentview::DV::linuxboard;
+
+PACKAGE deploymentview::DV::leoncentral
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS mypartleoncentral
+END mypartleoncentral;
+
+PROCESS IMPLEMENTATION mypartleoncentral.others
+END mypartleoncentral.others;
+
+DEVICE rasta_serial
+EXTENDS ocarina_drivers::rasta_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "116 75";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "112 112" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/apburasta0"", speed b38400}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END rasta_serial;
+
+DEVICE IMPLEMENTATION rasta_serial.others
+EXTENDS ocarina_drivers::rasta_serial.raw
+END rasta_serial.others;
+
+DEVICE rasta_spacewire
+EXTENDS ocarina_drivers::rasta_spacewire
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::spacewire.generic {
+    Taste::coordinates => "171 94";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "169 114" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/grspwrasta0"", nodeaddr 22, corefreq 30000, clockdiv 0}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/spacewire.asn";
+  Deployment::Version => "0.1beta";
+END rasta_spacewire;
+
+DEVICE IMPLEMENTATION rasta_spacewire.others
+EXTENDS ocarina_drivers::rasta_spacewire.pohic
+END rasta_spacewire.others;
+
+END deploymentview::DV::leoncentral;
+
+PACKAGE deploymentview::DV::leonfinal
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS mypartleoncpu
+END mypartleoncpu;
+
+PROCESS IMPLEMENTATION mypartleoncpu.others
+END mypartleoncpu.others;
+
+DEVICE rasta_spacewire
+EXTENDS ocarina_drivers::rasta_spacewire
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::spacewire.generic {
+    Taste::coordinates => "210 78";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "219 114" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/grspwrasta0"", nodeaddr 10, corefreq 30000, clockdiv 0}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/spacewire.asn";
+  Deployment::Version => "0.1beta";
+END rasta_spacewire;
+
+DEVICE IMPLEMENTATION rasta_spacewire.others
+EXTENDS ocarina_drivers::rasta_spacewire.pohic
+END rasta_spacewire.others;
+
+DEVICE rasta_serial
+EXTENDS ocarina_drivers::rasta_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "267 104";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "274 143" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/apburasta0"", speed b38400}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END rasta_serial;
+
+DEVICE IMPLEMENTATION rasta_serial.others
+EXTENDS ocarina_drivers::rasta_serial.raw
+END rasta_serial.others;
+
+END deploymentview::DV::leonfinal;
+
+PACKAGE deploymentview::DV::x86finalpingee
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS finalpart
+END finalpart;
+
+PROCESS IMPLEMENTATION finalpart.others
+END finalpart.others;
+
+DEVICE generic_serial
+EXTENDS ocarina_drivers::generic_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "348 93";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "342 143" APPLIES TO link;
+  Deployment::Configuration => "{devname ""/dev/ttyUSB0"", speed b38400}";
+  Deployment::Config => "/home/assert/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END generic_serial;
+
+DEVICE IMPLEMENTATION generic_serial.others
+EXTENDS ocarina_drivers::generic_serial.raw_sender
+END generic_serial.others;
+
+END deploymentview::DV::x86finalpingee;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::linuxboard;
+WITH ocarina_processors_leon;
+WITH deploymentview::DV::leoncentral;
+WITH deploymentview::DV::leonfinal;
+WITH deploymentview::DV::x86finalpingee;
+WITH ocarina_buses;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM linuxboard
+FEATURES
+  serialdriversender_serial : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END linuxboard;
+
+SYSTEM IMPLEMENTATION linuxboard.others
+SUBCOMPONENTS
+  IV_pinger : SYSTEM interfaceview::IV::pinger.others {
+    Taste::coordinates => "12 24 72 40";
+    Taste::FunctionName => "pinger";
+  };
+  mypartlinuxnative : PROCESS deploymentview::DV::linuxboard::mypartlinuxnative.others {
+    Taste::coordinates => "10 17 79 45";
+    Deployment::Port_Number => 0;
+  };
+  linuxnative : PROCESSOR ocarina_processors_x86::x86.native {
+    Taste::coordinates => "7 9 83 49";
+  };
+  serialdriversender : DEVICE deploymentview::DV::linuxboard::generic_serial.others {
+    Taste::coordinates => "8 67 84 83";
+  };
+CONNECTIONS
+  serialdriversender_serial_link : BUS ACCESS serialdriversender_serial -> serialdriversender.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (mypartlinuxnative)) APPLIES TO IV_pinger;
+  Actual_Processor_Binding => (reference (linuxnative)) APPLIES TO mypartlinuxnative;
+  Actual_Processor_Binding => (reference (linuxnative)) APPLIES TO serialdriversender;
+END linuxboard.others;
+
+SYSTEM leoncentral
+FEATURES
+  serial_serial : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+  spw_spw : REQUIRES BUS ACCESS ocarina_buses::spacewire.generic;
+END leoncentral;
+
+SYSTEM IMPLEMENTATION leoncentral.others
+SUBCOMPONENTS
+  IV_pingee1 : SYSTEM interfaceview::IV::pingee1.others {
+    Taste::coordinates => "123 28 167 38";
+    Taste::FunctionName => "pingee1";
+  };
+  mypartleoncentral : PROCESS deploymentview::DV::leoncentral::mypartleoncentral.others {
+    Taste::coordinates => "118 20 172 42";
+    Deployment::Port_Number => 0;
+  };
+  leoncpu : PROCESSOR ocarina_processors_leon::leon.rtems {
+    Taste::coordinates => "113 14 178 46";
+  };
+  serial : DEVICE deploymentview::DV::leoncentral::rasta_serial.others {
+    Taste::coordinates => "116 70 177 82";
+  };
+  spw : DEVICE deploymentview::DV::leoncentral::rasta_spacewire.others {
+    Taste::coordinates => "120 85 180 94";
+  };
+CONNECTIONS
+  serial_serial_link : BUS ACCESS serial_serial -> serial.link;
+  spw_spw_link : BUS ACCESS spw_spw -> spw.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (mypartleoncentral)) APPLIES TO IV_pingee1;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO mypartleoncentral;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO serial;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO spw;
+END leoncentral.others;
+
+SYSTEM leonfinal
+FEATURES
+  spw_spw : REQUIRES BUS ACCESS ocarina_buses::spacewire.generic;
+  serialleon_serial2 : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END leonfinal;
+
+SYSTEM IMPLEMENTATION leonfinal.others
+SUBCOMPONENTS
+  IV_pingee2 : SYSTEM interfaceview::IV::pingee2.others {
+    Taste::coordinates => "216 25 266 36";
+    Taste::FunctionName => "pingee2";
+  };
+  mypartleoncpu : PROCESS deploymentview::DV::leonfinal::mypartleoncpu.others {
+    Taste::coordinates => "213 19 269 39";
+    Deployment::Port_Number => 0;
+  };
+  leoncpu : PROCESSOR ocarina_processors_leon::leon.rtems {
+    Taste::coordinates => "209 12 278 51";
+  };
+  spw : DEVICE deploymentview::DV::leonfinal::rasta_spacewire.others {
+    Taste::coordinates => "210 73 277 89";
+  };
+  serialleon : DEVICE deploymentview::DV::leonfinal::rasta_serial.others {
+    Taste::coordinates => "210 93 278 104";
+  };
+CONNECTIONS
+  spw_spw_link : BUS ACCESS spw_spw -> spw.link;
+  serialleon_serial2_link : BUS ACCESS serialleon_serial2 -> serialleon.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (mypartleoncpu)) APPLIES TO IV_pingee2;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO mypartleoncpu;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO spw;
+  Actual_Processor_Binding => (reference (leoncpu)) APPLIES TO serialleon;
+END leonfinal.others;
+
+SYSTEM x86finalpingee
+FEATURES
+  seriallinuxreceiver_serial2 : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END x86finalpingee;
+
+SYSTEM IMPLEMENTATION x86finalpingee.others
+SUBCOMPONENTS
+  IV_finalpingee : SYSTEM interfaceview::IV::finalpingee.others {
+    Taste::coordinates => "326 29 371 38";
+    Taste::FunctionName => "finalpingee";
+  };
+  finalpart : PROCESS deploymentview::DV::x86finalpingee::finalpart.others {
+    Taste::coordinates => "320 20 376 39";
+    Deployment::Port_Number => 0;
+  };
+  mylinux : PROCESSOR ocarina_processors_x86::x86.native {
+    Taste::coordinates => "314 13 401 43";
+  };
+  seriallinuxreceiver : DEVICE deploymentview::DV::x86finalpingee::generic_serial.others {
+    Taste::coordinates => "317 71 396 93";
+  };
+CONNECTIONS
+  seriallinuxreceiver_serial2_link : BUS ACCESS seriallinuxreceiver_serial2 -> seriallinuxreceiver.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (finalpart)) APPLIES TO IV_finalpingee;
+  Actual_Processor_Binding => (reference (mylinux)) APPLIES TO finalpart;
+  Actual_Processor_Binding => (reference (mylinux)) APPLIES TO seriallinuxreceiver;
+END x86finalpingee.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  linuxboard : SYSTEM linuxboard.others {
+    Taste::coordinates => "5 3 88 93";
+  };
+  leoncentral : SYSTEM leoncentral.others {
+    Taste::coordinates => "109 8 183 98";
+  };
+  leonfinal : SYSTEM leonfinal.others {
+    Taste::coordinates => "205 4 284 109";
+  };
+  x86finalpingee : SYSTEM x86finalpingee.others {
+    Taste::coordinates => "311 5 408 99";
+  };
+  serial : BUS ocarina_buses::serial.generic {
+    Taste::coordinates => "66 112 138 136";
+    TASTE_DV_Properties::Comment => "Hello_world";
+  };
+  spw : BUS ocarina_buses::spacewire.generic {
+    Taste::coordinates => "159 114 237 134";
+  };
+  serial2 : BUS ocarina_buses::serial.generic {
+    Taste::coordinates => "264 143 367 163";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+CONNECTIONS
+  obj827 : BUS ACCESS serial -> linuxboard.serialdriversender_serial {
+    Taste::coordinates => "83 83 83 98 88 98 88 112";
+  };
+  obj648 : BUS ACCESS serial -> leoncentral.serial_serial {
+    Taste::coordinates => "116 76 113 76 113 112";
+  };
+  obj7839 : BUS ACCESS spw -> leoncentral.spw_spw {
+    Taste::coordinates => "172 94 172 104 170 104 170 114";
+  };
+  obj7928 : BUS ACCESS spw -> leonfinal.spw_spw {
+    Taste::coordinates => "210 79 205 79 205 111 220 111 220 114";
+  };
+  obj1477 : BUS ACCESS serial2 -> leonfinal.serialleon_serial2 {
+    Taste::coordinates => "268 104 268 114 275 114 275 143";
+  };
+  obj1009 : BUS ACCESS serial2 -> x86finalpingee.seriallinuxreceiver_serial2 {
+    Taste::coordinates => "348 93 348 118 342 118 342 143";
+  };
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 594 420";
+  Taste::version => "1.3.18";
+  Taste::interfaceView => "interfaceview.aadl";
+  Taste::HWLibraries => ("../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

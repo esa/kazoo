@@ -1,0 +1,60 @@
+with "ocarina";
+--  with "templates_parser";  --  from libtemplates-parser11.10.1-dev
+
+project BuildSupport is
+
+   for Source_Dirs use ("ada", "c", "include");
+
+   for Object_Dir use "tmpBuild";
+   for Exec_Dir use ".";
+   for Main use ("buildsupport.adb");
+   for Languages use ("Ada", "C");
+
+   package Builder is
+      for Default_Switches ("ada") use ("-m");
+   end Builder;
+
+   package binder is
+     for default_switches ("Ada") use ("-E", "-t", "-static");
+   end binder;
+
+   package Compiler is
+      for Default_Switches ("Ada") use
+        ("-g",
+         "-Ada2012",
+         "-gnatf",
+         "-gnaty",
+         "-gnatwa",
+         "-gnatoa",
+         "-gnatg",
+         "-fstack-check");
+
+      for Default_Switches ("C") use
+         ("-g",
+          "-W",
+          "-g3",
+          "-Wall",
+          "-Werror",
+          "-Wextra",
+          "-Werror=format-security",
+          "-Wconversion",
+          "-Wno-deprecated",
+          "-Winit-self",
+          "-Wsign-conversion",
+          "-Wredundant-decls",
+          "-Wvla",
+          "-Wshadow",
+          "-Wlogical-op",
+          "-Wmissing-include-dirs",
+          "-Winit-self",
+          "-Wpointer-arith",
+          "-Wcast-qual",
+          "-Wcast-align",
+          "-Wno-error=old-style-cast",
+          "-Wundef",
+          "-std=c11",
+          "-pedantic");
+   end Compiler;
+
+end BuildSupport;
+

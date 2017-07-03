@@ -1,0 +1,197 @@
+PACKAGE interfaceview::IV
+PUBLIC
+WITH DataView;
+WITH interfaceview::FV;
+WITH Taste;
+
+---------------------------------------------------
+-- TASTE Interface View 
+---------------------------------------------------
+
+  SYSTEM interfaceview
+  END interfaceview;
+
+  SYSTEM IMPLEMENTATION interfaceview.others
+    SUBCOMPONENTS
+      pinger: SYSTEM interfaceview::IV::pinger.others
+        { Taste::Coordinates => "19 8 49 16"; };
+      pingee1: SYSTEM interfaceview::IV::pingee1.others
+        { Taste::Coordinates => "67 8 100 15"; };
+      pingee2: SYSTEM interfaceview::IV::pingee2.others
+        { Taste::Coordinates => "42 25 96 33"; };
+      finalpingee: SYSTEM interfaceview::IV::finalpingee.others
+        { Taste::Coordinates => "61 47 90 57"; };
+    CONNECTIONS
+      obj282 : SUBPROGRAM ACCESS pingee1.receive_int_obj107  -> pinger.obj247_obj86 
+        { Taste::Coordinates => "49 12 58 12 58 12 67 12"; };
+      obj521 : SUBPROGRAM ACCESS pingee2.receive_int2_obj140  -> pingee1.obj485_obj119 
+        { Taste::Coordinates => "86 15 86 20 86 20 86 25"; };
+      obj1232 : SUBPROGRAM ACCESS finalpingee.receive_int3_obj173  -> pingee2.obj1121_obj152 
+        { Taste::Coordinates => "83 33 83 40 83 40 83 47"; };
+  END interfaceview.others;
+
+  ---------------------------------------------------
+  -- TASTE Function: interfaceview::IV::pinger
+  ---------------------------------------------------
+
+  SYSTEM pinger
+    FEATURES
+      activator_obj75 : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::activator_obj75.others
+        { Taste::Coordinates => "19 12";
+          Taste::RCMoperationKind => cyclic;
+          Taste::RCMperiod => 10000 ms;
+          Taste::Deadline => 10000 ms;
+          Taste::Importance => MEDIUM ;};
+      obj247_obj86 : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::receive_int_obj107.others 
+        { Taste::Coordinates => "49 12";
+          Taste::RCMoperationKind => sporadic;};
+    PROPERTIES
+      Source_Language => C;
+      Taste::Instance_Name => "pinger";
+  END pinger;
+
+  SYSTEM IMPLEMENTATION pinger.others
+    SUBCOMPONENTS
+      activator_obj75_impl : SUBPROGRAM interfaceview::FV::activator_obj75.others
+        { Compute_Execution_Time => 0ms..500ms ;};
+    CONNECTIONS
+      SUBPROGRAM ACCESS activator_obj75_impl  -> activator_obj75;
+  END pinger.others;
+
+  ---------------------------------------------------
+  -- TASTE Function: interfaceview::IV::pingee1
+  ---------------------------------------------------
+
+  SYSTEM pingee1
+    FEATURES
+      receive_int_obj107 : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::receive_int_obj107.others
+        { Taste::Coordinates => "67 12 67 12";
+          Taste::RCMoperationKind => sporadic;
+          Taste::RCMperiod => 6000 ms;
+          Taste::Deadline => 6000 ms;
+          Taste::Importance => MEDIUM ;};
+      obj485_obj119 : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::receive_int2_obj140.others 
+        { Taste::Coordinates => "86 15";
+          Taste::RCMoperationKind => sporadic;};
+    PROPERTIES
+      Source_Language => C;
+      Taste::Instance_Name => "pingee1";
+  END pingee1;
+
+  SYSTEM IMPLEMENTATION pingee1.others
+    SUBCOMPONENTS
+      receive_int_obj107_impl : SUBPROGRAM interfaceview::FV::receive_int_obj107.others
+        { Compute_Execution_Time => 0ms..200ms ;};
+    CONNECTIONS
+      SUBPROGRAM ACCESS receive_int_obj107_impl  -> receive_int_obj107;
+  END pingee1.others;
+
+  ---------------------------------------------------
+  -- TASTE Function: interfaceview::IV::pingee2
+  ---------------------------------------------------
+
+  SYSTEM pingee2
+    FEATURES
+      receive_int2_obj140 : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::receive_int2_obj140.others
+        { Taste::Coordinates => "86 25 86 25";
+          Taste::RCMoperationKind => sporadic;
+          Taste::RCMperiod => 6000 ms;
+          Taste::Deadline => 6000 ms;
+          Taste::Importance => MEDIUM ;};
+      obj1121_obj152 : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::receive_int3_obj173.others 
+        { Taste::Coordinates => "83 33";
+          Taste::RCMoperationKind => sporadic;};
+    PROPERTIES
+      Source_Language => C;
+      Taste::Instance_Name => "pingee2";
+  END pingee2;
+
+  SYSTEM IMPLEMENTATION pingee2.others
+    SUBCOMPONENTS
+      receive_int2_obj140_impl : SUBPROGRAM interfaceview::FV::receive_int2_obj140.others
+        { Compute_Execution_Time => 0ms..200ms ;};
+    CONNECTIONS
+      SUBPROGRAM ACCESS receive_int2_obj140_impl  -> receive_int2_obj140;
+  END pingee2.others;
+
+  ---------------------------------------------------
+  -- TASTE Function: interfaceview::IV::finalpingee
+  ---------------------------------------------------
+
+  SYSTEM finalpingee
+    FEATURES
+      receive_int3_obj173 : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::receive_int3_obj173.others
+        { Taste::Coordinates => "83 47 83 47";
+          Taste::RCMoperationKind => sporadic;
+          Taste::RCMperiod => 6000 ms;
+          Taste::Deadline => 6000 ms;
+          Taste::Importance => MEDIUM ;};
+    PROPERTIES
+      Source_Language => C;
+      Taste::Instance_Name => "finalpingee";
+  END finalpingee;
+
+  SYSTEM IMPLEMENTATION finalpingee.others
+    SUBCOMPONENTS
+      receive_int3_obj173_impl : SUBPROGRAM interfaceview::FV::receive_int3_obj173.others
+        { Compute_Execution_Time => 0ms..5ms ;};
+    CONNECTIONS
+      SUBPROGRAM ACCESS receive_int3_obj173_impl  -> receive_int3_obj173;
+  END finalpingee.others;
+
+
+
+PROPERTIES
+  Taste::Coordinates => "0 0 297 210";
+Taste::dataView => ("DataView");
+Taste::dataViewPath => ("dataview.aadl");
+
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH DataView;
+WITH TASTE;
+
+  SUBPROGRAM activator_obj75
+  END activator_obj75;
+
+  SUBPROGRAM IMPLEMENTATION activator_obj75.others
+  END activator_obj75.others;
+
+  SUBPROGRAM receive_int_obj107
+    FEATURES
+      v : IN PARAMETER DataView::My_Integer
+        { Taste::encoding => UPER; };
+    PROPERTIES
+      Taste::Associated_Queue_Size => 1;
+  END receive_int_obj107;
+
+  SUBPROGRAM IMPLEMENTATION receive_int_obj107.others
+  END receive_int_obj107.others;
+
+  SUBPROGRAM receive_int2_obj140
+    FEATURES
+      v : IN PARAMETER DataView::My_Integer
+        { Taste::encoding => UPER; };
+    PROPERTIES
+      Taste::Associated_Queue_Size => 1;
+  END receive_int2_obj140;
+
+  SUBPROGRAM IMPLEMENTATION receive_int2_obj140.others
+  END receive_int2_obj140.others;
+
+  SUBPROGRAM receive_int3_obj173
+    FEATURES
+      v : IN PARAMETER DataView::My_Integer
+        { Taste::encoding => UPER; };
+    PROPERTIES
+      Taste::Associated_Queue_Size => 1;
+  END receive_int3_obj173;
+
+  SUBPROGRAM IMPLEMENTATION receive_int3_obj173.others
+  END receive_int3_obj173.others;
+
+END interfaceview::FV;
+

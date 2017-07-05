@@ -27,7 +27,6 @@ with Ada.Strings.Unbounded,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
-     Imported_Routines,
      Parser_Utils,
      Ocarina.Backends.Utils;
 
@@ -48,8 +47,7 @@ use Ada.Strings.Unbounded,
     Ocarina.ME_AADL.AADL_Instances.Nutils,
     Ocarina.Backends.Properties,
     Parser_Utils,
-    GNAT.OS_Lib,
-    Imported_Routines;
+    GNAT.OS_Lib;
 
 procedure AADL_Parser is
 

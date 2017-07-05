@@ -1,10 +1,10 @@
---  *************************** buildsupport ****************************  --
+--  *************************** taste aadl parser *************************  --
 --  (c) 2008-2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 with Ada.Text_IO,
      GNAT.OS_Lib,
-     Buildsupport_Version,
+     Parser_Version,
      Ocarina.Configuration,
      Ocarina.AADL_Values,
      Ocarina.Instances.Queries,
@@ -13,7 +13,7 @@ with Ada.Text_IO,
      Ocarina.Backends.Utils,
      Ada.Characters.Latin_1;
 
-package body Buildsupport_Utils is
+package body Parser_Utils is
 
    use Ada.Text_IO,
        GNAT.OS_Lib,
@@ -30,8 +30,8 @@ package body Buildsupport_Utils is
 
    procedure Banner is
       The_Banner : constant String :=
-        "TASTE Buildsupport (Version "
-        & Buildsupport_Version.Buildsupport_Release & ") "
+        "TASTE AADL Parser (Version "
+        & Parser_Version.Parser_Release & ") "
         & ASCII.LF & ASCII.CR
         & "Contact: Maxime.Perrotin@esa.int or Thanassis.Tsiodras@esa.int"
         & ASCII.LF & ASCII.CR
@@ -47,7 +47,7 @@ package body Buildsupport_Utils is
    procedure Usage is
    begin
       Put_Line
-        ("Usage: buildsupport <options> otherfiles");
+        ("Usage: taste-aadl-parser <options> otherfiles");
       Put_Line
         ("Where <options> are:");
       New_Line;
@@ -74,7 +74,7 @@ package body Buildsupport_Utils is
       Put ("-x, --timer <timer-resolution in ms>" & HT);
       Put_Line ("Set the timer resolution (default 100 ms)");
       Put ("-v, --version" & HT & HT & HT & HT);
-      Put_Line ("Display buildsupport version number");
+      Put_Line ("Display taste-aadl-parser version number");
       Put ("-p, --polyorb-hi-c" & HT & HT & HT);
       Put_Line ("Interface glue code with PolyORB-HI-C");
       Put ("otherfiles" & HT & HT & HT & HT);
@@ -84,7 +84,7 @@ package body Buildsupport_Utils is
       Put_Line ("For example, this command will generate your application"
        & " skeletons:");
       New_Line;
-      Put_Line ("buildsupport -i InterfaceView.aadl -d DataView.aadl"
+      Put_Line ("taste-aadl-parser -i InterfaceView.aadl -d DataView.aadl"
        & " -o code --gw --keep-case");
       New_Line;
 
@@ -662,4 +662,4 @@ package body Buildsupport_Utils is
            Nested_Conn     => Routes_Map);
    end AADL_to_Ada_IV;
 
-end Buildsupport_Utils;
+end Parser_Utils;

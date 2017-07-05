@@ -1,38 +1,37 @@
 UNAME := $(shell uname)
 
 CC=gcc
-exec = buildsupport
+exec = taste-aadl-parser
 
 all: build
 
 build:
 ifeq ($(UNAME), Linux)
-	@echo "package Buildsupport_Version is" > ada/buildsupport_version.ads.new
-	@echo -n "   Buildsupport_Release : constant String :=\n      \"" >> ada/buildsupport_version.ads.new
-	@git log --oneline | head -1 | cut -f1 -d' ' | tr -d '\012' >> ada/buildsupport_version.ads.new
-	@echo " ; Commit " | tr -d '\r\n' >> ada/buildsupport_version.ads.new
-	@git log | head -3 | tail -1 | cut -f1 -d"+" | tr -d '\r\n' >>  ada/buildsupport_version.ads.new
-	@echo "\";" >> ada/buildsupport_version.ads.new
-	@echo -n "end Buildsupport_Version;" >> ada/buildsupport_version.ads.new
-	@if [ ! -f "ada/buildsupport_version.ads" ] ; then                \
-		mv ada/buildsupport_version.ads.new ada/buildsupport_version.ads;          \
+	@echo "package Parser_Version is" > src/parser_version.ads.new
+	@echo -n "   Parser_Release : constant String :=\n      \"" >> src/parser_version.ads.new
+	@git log --oneline | head -1 | cut -f1 -d' ' | tr -d '\012' >> src/parser_version.ads.new
+	@echo " ; Commit " | tr -d '\r\n' >> src/parser_version.ads.new
+	@git log | head -3 | tail -1 | cut -f1 -d"+" | tr -d '\r\n' >>  src/parser_version.ads.new
+	@echo "\";" >> src/parser_version.ads.new
+	@echo -n "end Parser_Version;" >> src/parser_version.ads.new
+	@if [ ! -f "src/parser_version.ads" ] ; then                \
+		mv src/parser_version.ads.new src/parser_version.ads;          \
 	else                                            \
-		MD1=`cat ada/buildsupport_version.ads | md5sum` ;         \
-		MD2=`cat ada/buildsupport_version.ads.new | md5sum` ;     \
+		MD1=`cat src/parser_version.ads | md5sum` ;         \
+		MD2=`cat src/parser_version.ads.new | md5sum` ;     \
 		if [ "$$MD1" != "$$MD2" ] ; then        \
-			mv ada/buildsupport_version.ads.new ada/buildsupport_version.ads ;  \
+			mv src/parser_version.ads.new src/parser_version.ads ;  \
 		else                                    \
-			rm ada/buildsupport_version.ads.new ;             \
+			rm src/parser_version.ads.new ;             \
 		fi ;                                    \
 	fi
 endif
 	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
-            $(gnatpath)gprbuild -x -g $(exec) -p -P buildsupport.gpr -XBUILD="debug"
+            $(gnatpath)gprbuild -x -g $(exec) -p -P aadl-parser.gpr -XBUILD="debug"
 
 install:
 	$(MAKE)
-	cp buildsupport `ocarina-config --prefix`/bin/
-	cp misc/driveGnuPlotsStreams.pl `ocarina-config --prefix`/bin/
+	cp taste-aadl-parser `ocarina-config --prefix`/bin/
 
 clean:
 	rm -rf tmpBuild $(exec) *~

@@ -1,8 +1,8 @@
---  *************************** buildsupport ****************************  --
+--  ************************ TASTE AADL Parser **************************  --
+--  Based on Ocarina ****************************************************  --
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
---  pragma Style_Checks (Off);
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
      Ada.Command_Line,
@@ -28,7 +28,7 @@ with Ada.Strings.Unbounded,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
      Imported_Routines,
-     Buildsupport_Utils,
+     Parser_Utils,
      Ocarina.Backends.Utils;
 
 use Ada.Strings.Unbounded,
@@ -47,11 +47,11 @@ use Ada.Strings.Unbounded,
     Ocarina.ME_AADL.AADL_Instances.Nodes,
     Ocarina.ME_AADL.AADL_Instances.Nutils,
     Ocarina.Backends.Properties,
-    Buildsupport_Utils,
+    Parser_Utils,
     GNAT.OS_Lib,
     Imported_Routines;
 
-procedure BuildSupport is
+procedure AADL_Parser is
 
    package ATN renames Ocarina.ME_AADL.AADL_Tree.Nodes;
 
@@ -617,29 +617,6 @@ procedure BuildSupport is
          end loop;
       end if;
    end Process_Interface_View;
-
-   -----------------------------
-   -- Process_DataView --
-   -----------------------------
-
---  procedure Process_DataView (My_Root : Node_Id) is
---     CI             : Node_Id;
---  begin
---     Subs := My_Root;
---     while Present (Subs) loop
---        CI := Subs;
---        if Get_Category_Of_Component (CI) = CC_Data then
---           declare
---              SourceText : constant Name_Array := Get_Source_Text (CI);
---           begin
---              if SourceText'Length > 0 then
---                 Put_Line (Get_Name_String (SourceText (1)));
---              end if;
---           end;
---        end if;
---        Subs := Next_Node (Subs);
---     end loop;
---  end Process_DataView;
 
    -----------------------------
    -- Process_Deployment_View --
@@ -1273,7 +1250,7 @@ procedure BuildSupport is
          then
             C_Set_Gateway;
 
-         --  The "test" flag activates a function in buildsupport,
+         --  The "test" flag activates a function in the parser,
          --  used for debugging purposes (e.g. dump of the model after
          --  all preprocessings). Users need not use it.
          elsif Ada.Command_Line.Argument (J) = "--test"
@@ -1419,7 +1396,7 @@ procedure BuildSupport is
          Put_Line
             ("Note: the generation of glue code is invoked automatically");
          Put_Line
-            ("from the TASTE orchestrator. You should run buildsupport");
+            ("from the TASTE orchestrator. You should run taste-aadl-parser");
          Put_Line
             ("only to generate your application skeletons ('-gw' flag).");
          New_line;
@@ -1508,4 +1485,4 @@ begin
 exception
    when E : others =>
       Errors.Display_Bug_Box (E);
-end BuildSupport;
+end AADL_Parser;

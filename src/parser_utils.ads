@@ -1,8 +1,8 @@
---  *************************** buildsupport ****************************  --
+--  *************************** taste aadl parser ***********************  --
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
---  Set of helper functions for buildsupport
+--  Set of helper functions for the parser
 with Ocarina,
      --  Ocarina.Types,
      Ocarina.Types,
@@ -24,7 +24,7 @@ use Ocarina,
     Ada.Containers,
     Ada.Strings.Unbounded;
 
-package Buildsupport_Utils is
+package Parser_Utils is
 
    package ATN renames Ocarina.ME_AADL.AADL_Tree.Nodes;
    package AIN renames Ocarina.ME_AADL.AADL_Instances.Nodes;
@@ -189,4 +189,4 @@ package Buildsupport_Utils is
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View;
 
-end Buildsupport_Utils;
+end Parser_Utils;

@@ -1,4 +1,4 @@
---  *************************** buildsupport ****************************  --
+--  ************************ taste aadl parser ****************************  --
 --  (c) 2008-2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 --  Define a generic Option type

@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 
 CC=gcc
-exec = taste-aadl-parser
+exec = aadl_parser
 
 all: build
 
@@ -27,10 +27,11 @@ ifeq ($(UNAME), Linux)
 	fi
 endif
 	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
-            $(gnatpath)gprbuild -x -g $(exec) -p -P aadl-parser.gpr -XBUILD="debug"
+            $(gnatpath)gprbuild -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug"
 
 install:
 	$(MAKE)
+	mv aadl_parser taste-aadl-parser
 	cp taste-aadl-parser `ocarina-config --prefix`/bin/
 
 clean:

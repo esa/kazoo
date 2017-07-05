@@ -1,4 +1,4 @@
-buildsupport is a low-level TASTE command, responsible for the generation of skeletons and some glue code.
+aadl-parser is a low-level TASTE command
 
 License: LGPL (see LICENSE file)
 

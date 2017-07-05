@@ -1,13 +1,13 @@
 with "ocarina";
 --  with "templates_parser";  --  from libtemplates-parser11.10.1-dev
 
-project BuildSupport is
+project AADL_Parser is
 
    for Source_Dirs use ("ada", "c", "include");
 
    for Object_Dir use "tmpBuild";
    for Exec_Dir use ".";
-   for Main use ("buildsupport.adb");
+   for Main use ("aadl_parser.adb");
    for Languages use ("Ada", "C");
 
    package Builder is
@@ -56,5 +56,5 @@ project BuildSupport is
           "-pedantic");
    end Compiler;
 
-end BuildSupport;
+end AADL_Parser;
 

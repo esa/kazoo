@@ -2,7 +2,7 @@
 --  Based on Ocarina ****************************************************  --
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
-
+pragma Warnings (Off);
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
      Ada.Command_Line,

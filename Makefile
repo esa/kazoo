@@ -8,7 +8,8 @@ all: build
 build:
 ifeq ($(UNAME), Linux)
 	@echo "package Parser_Version is" > src/parser_version.ads.new
-	@echo -n "   Parser_Release : constant String :=\n      \"" >> src/parser_version.ads.new
+	@echo "   Parser_Release : constant String :=" >> src/parser_version.ads.new
+	@echo -n '      "' >> src/parser_version.ads.new
 	@git log --oneline | head -1 | cut -f1 -d' ' | tr -d '\012' >> src/parser_version.ads.new
 	@echo " ; Commit " | tr -d '\r\n' >> src/parser_version.ads.new
 	@git log | head -3 | tail -1 | cut -f1 -d"+" | tr -d '\r\n' >>  src/parser_version.ads.new
@@ -35,6 +36,6 @@ install:
 	cp taste-aadl-parser `ocarina-config --prefix`/bin/
 
 clean:
-	rm -rf tmpBuild $(exec) *~
+	rm -rf obj $(exec) *~
 
 .PHONY: install clean build

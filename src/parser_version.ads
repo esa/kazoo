@@ -1,4 +1,4 @@
 package Parser_Version is
    Parser_Release : constant String :=
-      "053a312 ; Commit Date:   Wed Jul 5 18:34:45 2017 ";
+      "98e23df ; Commit Date:   Sat Jul 15 17:46:28 2017 ";
 end Parser_Version;

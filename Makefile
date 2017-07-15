@@ -39,7 +39,11 @@ install:
 	mv aadl_parser taste-aadl-parser
 	cp taste-aadl-parser `ocarina-config --prefix`/bin/
 
+edit:
+	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
+            gps aadl_parser.gpr
+
 clean:
 	rm -rf obj $(exec) *~
 
-.PHONY: install clean build
+.PHONY: install clean build edit

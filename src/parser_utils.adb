@@ -5,7 +5,6 @@
 with Ada.Text_IO,
      GNAT.OS_Lib,
      Parser_Version,
-     Ocarina.Configuration,
      Ocarina.AADL_Values,
      Ocarina.Instances.Queries,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
@@ -35,7 +34,7 @@ package body Parser_Utils is
         & ASCII.LF & ASCII.CR
         & "Contact: Maxime.Perrotin@esa.int or Thanassis.Tsiodras@esa.int"
         & ASCII.LF & ASCII.CR
-        & "Based on Ocarina: " & Ocarina.Configuration.Ocarina_Version;
+        & "Based on " & Parser_Version.Ocarina_Version;
    begin
       Put_Line (The_Banner);
    end Banner;

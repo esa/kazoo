@@ -14,6 +14,10 @@ ifeq ($(UNAME), Linux)
 	@echo " ; Commit " | tr -d '\r\n' >> src/parser_version.ads.new
 	@git log | head -3 | tail -1 | cut -f1 -d"+" | tr -d '\r\n' >>  src/parser_version.ads.new
 	@echo "\";" >> src/parser_version.ads.new
+	@echo "   Ocarina_Version : constant String :=" >> src/parser_version.ads.new
+	@echo -n '      "' >> src/parser_version.ads.new
+	@ocarina --version | head -1 | tr -d '\012' >> src/parser_version.ads.new
+	@echo "\";" >> src/parser_version.ads.new
 	@echo -n "end Parser_Version;" >> src/parser_version.ads.new
 	@if [ ! -f "src/parser_version.ads" ] ; then                \
 		mv src/parser_version.ads.new src/parser_version.ads;          \

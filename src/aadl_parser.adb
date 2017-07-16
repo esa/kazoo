@@ -1411,7 +1411,6 @@ procedure AADL_Parser is
 
    IV_Root : Node_Id;
    AST : Complete_Interface_View;
-   pragma Unreferenced (AST);
 
 begin
    Banner;
@@ -1428,11 +1427,11 @@ begin
           Get_String_Name ("interfaceview.others");
 
    IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
-   --  AST := AADL_to_Ada_IV (IV_Root);
-   --  for each of AST.Flat_Functions loop
-   --     Put_Line ("AST: " & To_String (Each.Prefix.Value_Or (US ("")))
-   --                 & " " & To_String (Each.Name));
-   --  end loop;
+   AST := AADL_to_Ada_IV (IV_Root);
+   for each of AST.Flat_Functions loop
+      Put_Line ("AST: " & To_String (Each.Prefix.Value_Or (US ("")))
+                  & " " & To_String (Each.Name));
+   end loop;
 
    Process_Interface_View (IV_Root);
 --      (Root_System (Instantiate_Model (Root => Interface_Root)));

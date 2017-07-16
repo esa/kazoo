@@ -43,7 +43,10 @@ edit:
 	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
             gps aadl_parser.gpr
 
+test:
+	@$(MAKE) -C test
+
 clean:
 	rm -rf obj $(exec) *~
 
-.PHONY: install clean build edit
+.PHONY: install clean build edit test

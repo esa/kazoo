@@ -8,7 +8,7 @@ package Option_Type is
    type Option is tagged private;
    function Just (I : T) return Option;
    function Nothing return Option;
-   --  function Just (O : Option) return T;
+   function Unsafe_Just (O : Option) return T;
    --  function Value (O : Option) return T renames Just;
    function Value_Or (O : Option; Default : T) return T;
    function Has_Value (O : Option) return Boolean;
@@ -27,7 +27,7 @@ private
    function Nothing return Option is
        (Present => False, others => <>);
 
-   --  function Just (O : Option) return T is (O.Value);
+   function Unsafe_Just (O : Option) return T is (O.Value);
 
    function Value_Or (O : Option; Default : T) return T is
        (if O.Present then O.Value else Default);

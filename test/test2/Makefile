@@ -1,6 +1,6 @@
 AADL_PARSER=../../aadl_parser
 
-all: build
+all: test-parse
 
 test-parse:
 	$(AADL_PARSER) -gw -i InterfaceView.aadl -d DataView.aadl ../common/TASTE_IV_Properties.aadl

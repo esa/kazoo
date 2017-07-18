@@ -411,25 +411,33 @@ package body Parser_Utils is
       Current_Function  : Node_Id;
 
       --  Parse a connection
-      function Parse_Connection (Conn : Node_Id) return Connection is
+      function Parse_Connection (Conn : Node_Id) return Optional_Connection is
+         use Option_Connection;
          Caller  : constant Node_Id := AIN.Item (AIN.First_Node
                                          (AIN.Path (AIN.Destination (Conn))));
          Callee  : constant Node_Id := AIN.Item (AIN.First_Node
                                          (AIN.Path (AIN.Source (Conn))));
-         PI_Name : constant Name_Id := Get_Interface_Name
-                                   (Get_Referenced_Entity (AIN.Source (Conn)));
+         PI_Name : Name_Id;  --  None in case of cyclic interface
          RI_Name : constant Name_Id := Get_Interface_Name
                               (Get_Referenced_Entity (AIN.Destination (Conn)));
       begin
          --  Put_Line (AIN.Node_Kind'Image (Kind (Caller)));
-         return Connection'(Caller =>
+         --  Filter out connections if the PI is cyclic (not a connection!)
+         if Get_RCM_Operation_Kind (Caller) = Cyclic_Operation then
+            return Nothing;
+         end if;
+
+         PI_Name := Get_Interface_Name
+                                  (Get_Referenced_Entity (AIN.Source (Conn)));
+
+         return Just (Connection'(Caller =>
            (if Kind (Caller) = K_Subcomponent_Access_Instance then US ("_env")
             else US (AIN_Case (Caller))),
                             Callee =>
            (if Kind (Callee) = K_Subcomponent_Access_Instance then US ("_env")
             else US (AIN_Case (Callee))),
                             PI_Name => US (Get_Name_String (PI_Name)),
-                            RI_Name => US (Get_Name_String (RI_Name)));
+                            RI_Name => US (Get_Name_String (RI_Name))));
       end Parse_Connection;
 
       --  Create a vector of connections for a given system
@@ -438,13 +446,18 @@ package body Parser_Utils is
       function Parse_System_Connections (System : Node_Id)
          return Channels.Vector
       is
-         Conn   : Node_Id;
-         Result : Channels.Vector;
+         use Option_Connection;
+         Conn     : Node_Id;
+         Result   : Channels.Vector;
+         Opt_Conn : Optional_Connection;
       begin
          if Present (AIN.Connections (System)) then
             Conn := AIN.First_Node (AIN.Connections (System));
             while Present (Conn) loop
-               Result := Result & Parse_Connection (Conn);
+               Opt_Conn := Parse_Connection (Conn);
+               if Opt_Conn.Has_Value then
+                  Result := Result & Opt_Conn.Unsafe_Just;
+               end if;
                Conn := AIN.Next_Node (Conn);
             end loop;
          end if;

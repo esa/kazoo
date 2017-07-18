@@ -172,7 +172,10 @@ package Parser_Utils is
            Callee  : Unbounded_String;
            RI_Name : Unbounded_String;
            PI_Name : Unbounded_String;
-       end record;
+   end record;
+
+   package Option_Connection is new Option_Type (Connection);
+   subtype Optional_Connection is Option_Connection.Option;
 
    package Channels is new Indefinite_Vectors (Natural, Connection);
    package Connection_Maps is new Indefinite_Ordered_Maps (String,

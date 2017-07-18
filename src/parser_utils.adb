@@ -438,10 +438,6 @@ package body Parser_Utils is
             return Nothing;
          end if;
 
-         if RI_Name = No_Name then
-            return Nothing;
-         end if;
-
          PI_Name := Get_Interface_Name
                                   (Get_Referenced_Entity (AIN.Source (Conn)));
 

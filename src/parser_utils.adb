@@ -423,7 +423,9 @@ package body Parser_Utils is
       begin
          --  Put_Line (AIN.Node_Kind'Image (Kind (Caller)));
          --  Filter out connections if the PI is cyclic (not a connection!)
-         if Get_RCM_Operation_Kind (Caller) = Cyclic_Operation then
+         if Get_RCM_Operation_Kind
+           (Get_Referenced_Entity (AIN.Destination (Conn))) = Cyclic_Operation
+         then
             return Nothing;
          end if;
 

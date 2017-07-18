@@ -422,10 +422,23 @@ package body Parser_Utils is
                               (Get_Referenced_Entity (AIN.Destination (Conn)));
       begin
          --  Put_Line (AIN.Node_Kind'Image (Kind (Caller)));
+
+         --  If RI_Name has no value it means the interface view misses the
+         --  AADL property "TASTE::InterfaceName". Not supported.
+         Exit_On_Error (RI_Name = No_Name,
+                        "[ERROR] Interface view contains errors "
+                        & "(Missing TASTE::InterfaceName properties)"
+                        & ASCII.CR & ASCII.LF
+                        & "        Try updating it with taste-edit-project");
+
          --  Filter out connections if the PI is cyclic (not a connection!)
          if Get_RCM_Operation_Kind
            (Get_Referenced_Entity (AIN.Destination (Conn))) = Cyclic_Operation
          then
+            return Nothing;
+         end if;
+
+         if RI_Name = No_Name then
             return Nothing;
          end if;
 

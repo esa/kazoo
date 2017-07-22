@@ -1,4 +1,5 @@
 UNAME := $(shell uname)
+ARCH := $(shell getconf LONG_BIT)
 
 CC=gcc
 exec = aadl_parser
@@ -31,7 +32,7 @@ ifeq ($(UNAME), Linux)
 		fi ;                                    \
 	fi
 endif
-	uname -a | grep x86_64 && EXTRAFLAG="--target=x86_64-linux" ; \
+	[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ; \
 	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
             $(gnatpath)gprbuild -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
 

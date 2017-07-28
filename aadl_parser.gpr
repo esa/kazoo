@@ -15,7 +15,7 @@ project AADL_Parser is
    end Builder;
 
    package binder is
-     for default_switches ("Ada") use ("-E", "-t", "-static");
+     for default_switches ("Ada") use ("-E", "-t");
    end binder;
 
    package Compiler is
@@ -27,7 +27,8 @@ project AADL_Parser is
          "-gnatwa",
          "-gnatoa",
          "-gnatg",
-         "-fstack-check");
+         "-fstack-check",
+         "-no-pie");
    end Compiler;
 
 end AADL_Parser;

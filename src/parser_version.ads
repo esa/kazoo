@@ -1,6 +1,6 @@
 package Parser_Version is
    Parser_Release : constant String :=
-      "f4c4258 ; Commit Date:   Fri Jul 21 13:10:24 2017 ";
+      "c26e446 ; Commit Date:   Sat Jul 22 16:18:25 2017 ";
    Ocarina_Version : constant String :=
-      "Ocarina 2017.x (Working Copy from r2c2360e)";
+      "Ocarina 2017.x (Working Copy from r9932664)";
 end Parser_Version;

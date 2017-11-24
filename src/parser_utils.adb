@@ -578,6 +578,7 @@ package body Parser_Utils is
          Subco       : Node_Id;
          --  To get the provided and required interfaces
          PI_Or_RI    : Node_Id;
+         Iface       : Taste_Interface;
       begin
          Result.Name     := US (Name);
          Result.Prefix   := (if Prefix'Length > 0 then Just (US (Prefix))
@@ -605,12 +606,12 @@ package body Parser_Utils is
          if Present (AIN.Features (Inst)) then
             PI_Or_RI := AIN.First_Node (AIN.Features (Inst));
             while Present (PI_Or_RI) loop
+               Iface := Parse_Interface (PI_Or_RI);
+               Iface.Parent_Function := Result.Name;
                if AIN.Is_Provided (PI_Or_RI) then
-                  Result.Provided := Result.Provided
-                                        & Parse_Interface (PI_Or_RI);
+                  Result.Provided := Result.Provided & Iface;
                else
-                  Result.Required := Result.Required
-                                        & Parse_Interface (PI_Or_RI);
+                  Result.Required := Result.Required & Iface;
                end if;
                PI_Or_RI := AIN.Next_Node (PI_Or_RI);
             end loop;
@@ -641,7 +642,6 @@ package body Parser_Utils is
                   end loop;
                end if;
 
-               --  Routes := Routes & Parse_System_Connections (CI);
                Routes_Map.Insert (Key      => Name,
                                   New_Item => Parse_System_Connections (CI));
 
@@ -682,7 +682,7 @@ package body Parser_Utils is
       return IV_AST : constant Complete_Interface_View :=
           (Flat_Functions  => Funcs,
            End_To_End_Conn => Routes,
-           Nested_Conn     => Routes_Map);
+           Nested_Routes   => Routes_Map);
    end AADL_to_Ada_IV;
 
 end Parser_Utils;

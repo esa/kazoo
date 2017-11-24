@@ -114,80 +114,95 @@ package Parser_Utils is
    subtype Optional_Long_Long is Option_ULL.Option;
 
    type ASN1_Parameter is
-       record
-           Name            : Unbounded_String;
-           Sort            : Unbounded_String;
-           ASN1_Module     : Unbounded_String;
-           ASN1_Basic_Type : Supported_ASN1_Basic_Type;
-           ASN1_File_Name  : Unbounded_String;
-           Encoding        : Supported_ASN1_Encoding;
-           Direction       : Parameter_Direction;
-       end record;
+      record
+         Name            : Unbounded_String;
+         Sort            : Unbounded_String;
+         ASN1_Module     : Unbounded_String;
+         ASN1_Basic_Type : Supported_ASN1_Basic_Type;
+         ASN1_File_Name  : Unbounded_String;
+         Encoding        : Supported_ASN1_Encoding;
+         Direction       : Parameter_Direction;
+      end record;
 
    package Parameters is new Indefinite_Vectors (Natural, ASN1_Parameter);
 
+   --  Remote entities reference to the other ends of an interface, when it
+   --  is connected. There can be several, but connections are optional.
+   type Remote_Entity is
+      record
+         Function_Name  : Unbounded_String;
+         Interface_Name : Unbounded_String;
+      end record;
+
+   package Remote_Entities is new Indefinite_Vectors (Natural, Remote_Entity);
+   package Option_Remote_Entities is new Option_Type (Remote_Entities.Vector);
+   subtype Optional_Remote_Entities is Option_Remote_Entities.Option;
+   use Option_Remote_Entities;
+
    type Taste_Interface is
-       record
-           Name            : Unbounded_String;
-           Params          : Parameters.Vector;
-           RCM             : Supported_RCM_Operation_Kind;
-           Period_Or_MIAT  : Unsigned_Long_Long;
-           WCET_ms         : Optional_Long_Long := Nothing;
-           Queue_Size      : Optional_Long_Long := Nothing;
-           User_Properties : Property_Maps.Map;
-       end record;
+      record
+         Name              : Unbounded_String;
+         Parent_Function   : Unbounded_String;
+         Remote_Interfaces : Optional_Remote_Entities := Nothing;
+         Params            : Parameters.Vector;
+         RCM               : Supported_RCM_Operation_Kind;
+         Period_Or_MIAT    : Unsigned_Long_Long;
+         WCET_ms           : Optional_Long_Long := Nothing;
+         Queue_Size        : Optional_Long_Long := Nothing;
+         User_Properties   : Property_Maps.Map;
+      end record;
 
    package Interfaces is new Indefinite_Vectors (Natural, Taste_Interface);
 
    type Context_Parameter is
-       record
-           Name           : Unbounded_String;
-           Sort           : Unbounded_String;
-           Default_Value  : Unbounded_String;
-           ASN1_Module    : Unbounded_String;
-           ASN1_File_Name : Optional_Unbounded_String := Nothing;
-       end record;
+      record
+         Name           : Unbounded_String;
+         Sort           : Unbounded_String;
+         Default_Value  : Unbounded_String;
+         ASN1_Module    : Unbounded_String;
+         ASN1_File_Name : Optional_Unbounded_String := Nothing;
+      end record;
 
    package Ctxt_Params is new Indefinite_Vectors (Natural, Context_Parameter);
 
    type Taste_Terminal_Function is
-       record
-           Name            : Unbounded_String;
-           Prefix          : Optional_Unbounded_String := Nothing;
-           Language        : Supported_Source_Language;
-           Zip_File        : Optional_Unbounded_String := Nothing;
-           Context_Params  : Ctxt_Params.Vector;
-           User_Properties : Property_Maps.Map;
-           Timers          : String_Vectors.Vector;
-           Provided        : Interfaces.Vector;
-           Required        : Interfaces.Vector;
-       end record;
+      record
+         Name            : Unbounded_String;
+         Prefix          : Optional_Unbounded_String := Nothing;
+         Language        : Supported_Source_Language;
+         Zip_File        : Optional_Unbounded_String := Nothing;
+         Context_Params  : Ctxt_Params.Vector;
+         User_Properties : Property_Maps.Map;
+         Timers          : String_Vectors.Vector;
+         Provided        : Interfaces.Vector;
+         Required        : Interfaces.Vector;
+      end record;
 
    package Functions is new Indefinite_Vectors (Natural,
                                                 Taste_Terminal_Function);
 
    type Connection is
-       record
-           Caller  : Unbounded_String;
-           Callee  : Unbounded_String;
-           RI_Name : Unbounded_String;
-           PI_Name : Unbounded_String;
-   end record;
+      record
+         Caller  : Unbounded_String;
+         Callee  : Unbounded_String;
+         RI_Name : Unbounded_String;
+         PI_Name : Unbounded_String;
+      end record;
 
    package Option_Connection is new Option_Type (Connection);
    subtype Optional_Connection is Option_Connection.Option;
 
    package Channels is new Indefinite_Vectors (Natural, Connection);
    package Connection_Maps is new Indefinite_Ordered_Maps (String,
-                                                           Channels.Vector,
+                                                          Channels.Vector,
                                                           "=" => Channels."=");
 
    type Complete_Interface_View is
-       record
-           Flat_Functions  : Functions.Vector;
-           End_To_End_Conn : Channels.Vector;
-           Nested_Conn     : Connection_Maps.Map;
-       end record;
+      record
+         Flat_Functions  : Functions.Vector;
+         End_To_End_Conn : Channels.Vector;
+         Nested_Routes   : Connection_Maps.Map;
+      end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View;

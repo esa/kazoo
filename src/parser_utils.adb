@@ -399,13 +399,14 @@ package body Parser_Utils is
    ---------------------------
 
    function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View is
-      use type Functions.Vector;
+      --  use type Functions.Vector;
       use type Channels.Vector;
       use type Ctxt_Params.Vector;
       use type Interfaces.Vector;
       use type Parameters.Vector;
       use type Connection_Maps.Map;
-      Funcs             : Functions.Vector := Functions.Empty_Vector;
+      --  Funcs             : Functions.Vector := Functions.Empty_Vector;
+      Functions         : Function_Maps.Map;
       Routes            : Channels.Vector; --  := Channels.Empty_Vector;
       Routes_Map        : Connection_Maps.Map;
       Current_Function  : Node_Id;
@@ -623,29 +624,28 @@ package body Parser_Utils is
       --  Recursive parsing of a system made of nested functions (TASTE v2)
       function Rec_Function (Prefix : String  := "";
                              Context : String := "_Root";
-                             Func   : Node_Id) return Functions.Vector is
+                             Func   : Node_Id) return Boolean is
          Inner        : Node_Id;
-         Res          : Functions.Vector := Functions.Empty_Vector;
+         Is_Terminal  : Boolean := True;
          CI           : constant Node_Id := Corresponding_Instance (Func);
          Name         : constant String := AIN_Case (Func);
          Next_Prefix  : constant String := Prefix &
                            (if Prefix'Length > 0 then "." else "") & Name;
          Terminal_Fn  : Taste_Terminal_Function;
       begin
-
          case Get_Category_Of_Component (CI) is
             when CC_System =>
                if Present (AIN.Subcomponents (CI)) then
                   Inner := AIN.First_Node (AIN.Subcomponents (CI));
                   while Present (Inner) loop
-                     Res := Res & Rec_Function (Prefix => Next_Prefix,
-                                                Context => Name,
-                                                Func   => Inner);
+                     Is_Terminal := Rec_Function (Prefix  => Next_Prefix,
+                                                  Context => Name,
+                                                  Func    => Inner);
                      Inner := AIN.Next_Node (Inner);
                   end loop;
 
                   --  Inner components may not be functions but properties
-                  if Res /= Functions.Empty_Vector
+                  if not Is_Terminal
                   then
                      Routes_Map.Insert (Key      => Name,
                                         New_Item =>
@@ -653,19 +653,21 @@ package body Parser_Utils is
                   end if;
                end if;
 
-               if No (AIN.Subcomponents (CI)) or Res = Functions.Empty_Vector
+               if No (AIN.Subcomponents (CI)) or Is_Terminal
                then
                   Terminal_Fn := Parse_Function (Prefix => Prefix,
                                                  Name   => Name,
                                                  Inst   => CI);
                   Terminal_Fn.Context := US (Context);
-                  Res := Res & Terminal_Fn;
+                  Functions.Insert (Key       => Name,
+                                    New_Item  => Terminal_Fn);
+                  Is_Terminal := False;
                end if;
             when others =>
                null;
          end case;
 
-         return Res;
+         return Is_Terminal;
       end Rec_Function;
    begin
       Exit_On_Error (No (System), "Missing or erroneous interface view");
@@ -673,8 +675,12 @@ package body Parser_Utils is
       Current_Function := AIN.First_Node (AIN.Subcomponents (System));
       --  Parse functions recursively
       while Present (Current_Function) loop
-         Funcs := Funcs & Rec_Function (Func => Current_Function);
-         Current_Function := AIN.Next_Node (Current_Function);
+         declare
+            dummy : constant Boolean := Rec_Function
+              (Func => Current_Function);
+         begin
+            Current_Function := AIN.Next_Node (Current_Function);
+         end;
       end loop;
 
       Routes_Map.Insert (Key      => "_Root",
@@ -689,8 +695,14 @@ package body Parser_Utils is
          end loop;
       end loop;
 
+      Put_Line ("Now the functions");
+      for Each of Functions loop
+         Put_Line ("Name    : " & To_String (Each.Name));
+         Put_Line ("Context : " & To_String (Each.Context));
+      end loop;
+
       return IV_AST : constant Complete_Interface_View :=
-          (Flat_Functions  => Funcs,
+          (Flat_Functions  => Functions,
            End_To_End_Conn => Routes,
            Nested_Routes   => Routes_Map);
    end AADL_to_Ada_IV;

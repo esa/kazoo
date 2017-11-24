@@ -179,8 +179,10 @@ package Parser_Utils is
          Required        : Interfaces.Vector;
       end record;
 
-   package Functions is new Indefinite_Vectors (Natural,
-                                                Taste_Terminal_Function);
+--   package Functions is new Indefinite_Vectors (Natural,
+--                                                Taste_Terminal_Function);
+   package Function_Maps is new Indefinite_Ordered_Maps (String,
+                                                      Taste_Terminal_Function);
 
    type Connection is
       record
@@ -200,7 +202,7 @@ package Parser_Utils is
 
    type Complete_Interface_View is
       record
-         Flat_Functions  : Functions.Vector;
+         Flat_Functions  : Function_Maps.Map; --  Functions.Vector;
          End_To_End_Conn : Channels.Vector;
          Nested_Routes   : Connection_Maps.Map;
       end record;

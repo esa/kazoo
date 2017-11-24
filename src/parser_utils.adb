@@ -629,6 +629,7 @@ package body Parser_Utils is
          Name         : constant String := AIN_Case (Func);
          Next_Prefix  : constant String := Prefix &
                            (if Prefix'Length > 0 then "." else "") & Name;
+         Terminal_Fn  : Taste_Terminal_Function;
       begin
 
          case Get_Category_Of_Component (CI) is
@@ -640,16 +641,23 @@ package body Parser_Utils is
                                                 Func   => Inner);
                      Inner := AIN.Next_Node (Inner);
                   end loop;
-               end if;
 
-               Routes_Map.Insert (Key      => Name,
-                                  New_Item => Parse_System_Connections (CI));
+                  --  Inner components may not be functions but properties
+                  if Res /= Functions.Empty_Vector
+                  then
+                     Routes_Map.Insert (Key      => Name,
+                                        New_Item =>
+                                                Parse_System_Connections (CI));
+                  end if;
+               end if;
 
                if No (AIN.Subcomponents (CI)) or Res = Functions.Empty_Vector
                then
-                  Res := Res & Parse_Function (Prefix => Prefix,
-                                               Name   => Name,
-                                               Inst   => CI);
+                  Terminal_Fn := Parse_Function (Prefix => Prefix,
+                                                 Name   => Name,
+                                                 Inst   => CI);
+                  Terminal_Fn.Context := US (Name);
+                  Res := Res & Terminal_Fn;
                end if;
             when others =>
                null;

@@ -168,6 +168,7 @@ package Parser_Utils is
    type Taste_Terminal_Function is
       record
          Name            : Unbounded_String;
+         Context         : Unbounded_String          := Null_Unbounded_String;
          Prefix          : Optional_Unbounded_String := Nothing;
          Language        : Supported_Source_Language;
          Zip_File        : Optional_Unbounded_String := Nothing;

@@ -580,10 +580,10 @@ package body Parser_Utils is
          PI_Or_RI    : Node_Id;
          Iface       : Taste_Interface;
       begin
-         Result.Name     := US (Name);
-         Result.Prefix   := (if Prefix'Length > 0 then Just (US (Prefix))
-                             else Nothing);
-         Result.Language := Get_Source_Language (Inst);
+         Result.Name          := US (Name);
+         Result.Full_Prefix   := (if Prefix'Length > 0 then Just (US (Prefix))
+                                 else Nothing);
+         Result.Language      := Get_Source_Language (Inst);
          if Source_Text'Length /= 0 then
             Zip_Id          := Source_Text (1);
             Result.Zip_File := Just (US (Get_Name_String (Zip_Id)));
@@ -621,7 +621,8 @@ package body Parser_Utils is
       end Parse_Function;
 
       --  Recursive parsing of a system made of nested functions (TASTE v2)
-      function Rec_Function (Prefix : String := "";
+      function Rec_Function (Prefix : String  := "";
+                             Context : String := "_Root";
                              Func   : Node_Id) return Functions.Vector is
          Inner        : Node_Id;
          Res          : Functions.Vector := Functions.Empty_Vector;
@@ -638,6 +639,7 @@ package body Parser_Utils is
                   Inner := AIN.First_Node (AIN.Subcomponents (CI));
                   while Present (Inner) loop
                      Res := Res & Rec_Function (Prefix => Next_Prefix,
+                                                Context => Name,
                                                 Func   => Inner);
                      Inner := AIN.Next_Node (Inner);
                   end loop;
@@ -656,7 +658,7 @@ package body Parser_Utils is
                   Terminal_Fn := Parse_Function (Prefix => Prefix,
                                                  Name   => Name,
                                                  Inst   => CI);
-                  Terminal_Fn.Context := US (Name);
+                  Terminal_Fn.Context := US (Context);
                   Res := Res & Terminal_Fn;
                end if;
             when others =>
@@ -669,7 +671,7 @@ package body Parser_Utils is
       Exit_On_Error (No (System), "Missing or erroneous interface view");
 
       Current_Function := AIN.First_Node (AIN.Subcomponents (System));
-      --  Parse functions
+      --  Parse functions recursively
       while Present (Current_Function) loop
          Funcs := Funcs & Rec_Function (Func => Current_Function);
          Current_Function := AIN.Next_Node (Current_Function);

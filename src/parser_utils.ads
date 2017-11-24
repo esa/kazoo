@@ -169,7 +169,7 @@ package Parser_Utils is
       record
          Name            : Unbounded_String;
          Context         : Unbounded_String          := Null_Unbounded_String;
-         Prefix          : Optional_Unbounded_String := Nothing;
+         Full_Prefix     : Optional_Unbounded_String := Nothing;
          Language        : Supported_Source_Language;
          Zip_File        : Optional_Unbounded_String := Nothing;
          Context_Params  : Ctxt_Params.Vector;

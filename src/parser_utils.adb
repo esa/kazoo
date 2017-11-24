@@ -559,7 +559,72 @@ package body Parser_Utils is
          return Result;
       end Parse_Interface;
 
-      --  Parse the content of a single function :
+      --  Helper function - return the context name above the current one
+      --  Needed to resolve the connections to "_env".
+      function Parent_Context (Context : String) return String is
+      begin
+         for Each in Routes_Map.Iterate loop
+            if Context /= Connection_Maps.Key (Each) then
+               for Conn of Connection_Maps.Element (Each) loop
+                  if Conn.Caller = Context or Conn.Callee = Context then
+                     return Connection_Maps.Key (Each);
+                  end if;
+               end loop;
+            end if;
+         end loop;
+         return "ERROR";
+      end Parent_Context;
+
+      --  Recursive function making jumps to find the provided interface
+      --  connected to a required interface. It returns a Remote Entity,
+      --  which contains the name of the remote PI and the name of the function
+      function Rec_Jump (From : String; RI : String;
+                         Going_Out : Boolean := False) return Remote_Entity is
+         Context     : constant String :=
+           (if Functions.Contains (Key => From)
+            then To_String (Functions.Element (Key => From).Context)
+            else (if not Going_Out then From else Parent_Context (From)));
+         Source      : constant String :=
+           (if Context /= From then From else "_env");
+         Result      : Remote_Entity := (US ("Not found!"), US ("Not found!"));
+         Connections : Channels.Vector;
+         Set_Going_Out : Boolean := False;
+      begin
+         --  Note: There is a limitation in the interface view when there are
+         --  nested functions. At the border of a nested function, there can
+         --  be only ONE function of a given name. This means that it is
+         --  impossible to have two PIs with the same name, even in different
+         --  functions, if they are located in the same nested context.
+         --  * This is NOT RIGHT and should be fixed by Ellidiss *
+
+         --  Retrieve the list of connections of the source function context
+         Connections := Routes_Map.Element (Key => Context);
+         for Each of Connections loop
+            if Each.Caller = Source and Each.RI_Name = US (RI) then
+               --  Found the connection in the current context
+               --  Now recurse if the callee is a nested block,
+               --  and return otherwise (if destination is a function)
+               if Each.Callee = "_env" then
+                  Set_Going_Out := True;
+               end if;
+
+               Result :=
+                 (if Functions.Contains (Key => To_String (Each.Callee))
+                  then (Function_Name  => Each.Callee,
+                        Interface_Name => Each.PI_Name)
+                  else Rec_Jump (From      => (if not Set_Going_Out
+                                               then To_String (Each.Callee)
+                                               else Context),
+                                 Going_Out => Set_Going_Out,
+                                 RI        => To_String (Each.PI_Name)));
+            end if;
+
+            exit when Each.Caller = Source and Each.RI_Name = US (RI);
+         end loop;
+         return Result;
+      end Rec_Jump;
+
+      --  Parse the following content of a single function :
       --  * Name
       --  * Language
       --  * Zip File
@@ -685,20 +750,46 @@ package body Parser_Utils is
 
       Routes_Map.Insert (Key      => "_Root",
                          New_Item => Parse_System_Connections (System));
-      for C in Routes_Map.Iterate loop
-         Put_Line ("Routes of Function " & Connection_Maps.Key (C));
-         for Each of Connection_Maps.Element (C) loop
-            Put_Line ("   " & To_String (Each.Caller)
-                     & "." & To_String (Each.RI_Name)
-                     & " -> " & To_String (Each.Callee) & "." &
-                     To_String (Each.PI_Name));
-         end loop;
-      end loop;
+--      for C in Routes_Map.Iterate loop
+--         for Each of Connection_Maps.Element (C) loop
+--            Put_Line ("   " & To_String (Each.Caller)
+--                     & "." & To_String (Each.RI_Name)
+--                     & " -> " & To_String (Each.Callee) & "." &
+--                     To_String (Each.PI_Name));
+--         end loop;
+--      end loop;
 
       Put_Line ("Now the functions");
       for Each of Functions loop
-         Put_Line ("Name    : " & To_String (Each.Name));
-         Put_Line ("Context : " & To_String (Each.Context));
+         Put_Line ("Function: " & To_String (Each.Name));
+         for RI of Each.Required loop
+            declare
+               use Remote_Entities;
+               Remote : constant Remote_Entity := Rec_Jump
+                                                     (To_String (Each.Name),
+                                                      To_String (RI.Name));
+               V1     : Remote_Entities.Vector := Empty_Vector;
+               V2     : Remote_Entities.Vector := Empty_Vector;
+               Corr   : Taste_Terminal_Function;
+            begin
+               Put ("   ... RI " & To_String (RI.Name) & " ---> ");
+               Put (To_String (Remote.Function_Name) & ".");
+               Put_Line (To_String (Remote.Interface_Name));
+               if Remote.Function_Name /= "Not found!" then
+                  V1 := RI.Remote_Interfaces.Value_Or (V1);
+                  V1.Append (Remote);
+                  Corr := Functions.Element (To_String (Remote.Function_Name));
+                  for PI of Corr.Provided loop   -- TODO: replace with a Map
+                     if PI.Name = Remote.Interface_Name then
+                        V2 := PI.Remote_Interfaces.Value_Or (V2);
+                        V2.Append (Remote_Entity'(Function_Name => Each.Name,
+                                                  Interface_Name => RI.Name));
+                     end if;
+                     exit when PI.Name = Remote.Interface_Name;
+                  end loop;
+               end if;
+            end;
+         end loop;
       end loop;
 
       return IV_AST : constant Complete_Interface_View :=

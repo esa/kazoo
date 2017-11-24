@@ -124,6 +124,12 @@ END RI_RI1;
 SUBPROGRAM IMPLEMENTATION RI_RI1.others
 END RI_RI1.others;
 
+SUBPROGRAM RI_coucou
+END RI_coucou;
+
+SUBPROGRAM IMPLEMENTATION RI_coucou.others
+END RI_coucou.others;
+
 SYSTEM Nested2_Appear
 FEATURES
   PI_world : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear::PI_world.others {
@@ -149,6 +155,12 @@ FEATURES
     Taste::coordinates => "172016 90485";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "RI1";
+    Taste::labelInheritance => "true";
+  };
+  RI_coucou : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
+    Taste::coordinates => "160536 91710";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "coucou";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -207,6 +219,12 @@ END RI_ola;
 SUBPROGRAM IMPLEMENTATION RI_ola.others
 END RI_ola.others;
 
+SUBPROGRAM RI_coucou
+END RI_coucou;
+
+SUBPROGRAM IMPLEMENTATION RI_coucou.others
+END RI_coucou.others;
+
 SYSTEM Should_Not_Appear_Either
 FEATURES
   PI_world : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear::PI_world.others {
@@ -228,6 +246,12 @@ FEATURES
     Taste::InterfaceName => "ola";
     Taste::labelInheritance => "true";
   };
+  RI_coucou : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
+    Taste::coordinates => "154931 95943";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "coucou";
+    Taste::labelInheritance => "true";
+  };
 PROPERTIES
   Source_Language => (C);
   Taste::Active_Interfaces => any;
@@ -239,14 +263,17 @@ SUBCOMPONENTS
     Taste::coordinates => "156260 76190 172016 91710";
   };
 CONNECTIONS
-  Nested2_PI_world_Function1_RI_world : SUBPROGRAM ACCESS Nested2_Appear.PI_world -> PI_world {
+  Nested2_Appear_PI_world_Should_Not_Appear_Either_PI_world : SUBPROGRAM ACCESS Nested2_Appear.PI_world -> PI_world {
     Taste::coordinates => "158967 70311 158967 73250 159788 73250 159788 76190";
   };
-  Function1_PI_my_final_result_Nested2_RI_my_final_result : SUBPROGRAM ACCESS RI_my_final_result -> Nested2_Appear.RI_my_final_result {
+  Should_Not_Appear_Either_RI_my_final_result_Nested2_Appear_RI_my_final_result : SUBPROGRAM ACCESS RI_my_final_result -> Nested2_Appear.RI_my_final_result {
     Taste::coordinates => "156260 82070 150557 82070 150557 80895 144855 80895";
   };
-  Should_Not_Appear_Either_PI_ola_Nested2_Appear_RI_ola : SUBPROGRAM ACCESS RI_ola -> Nested2_Appear.RI_ola {
+  Should_Not_Appear_Either_RI_ola_Nested2_Appear_RI_ola : SUBPROGRAM ACCESS RI_ola -> Nested2_Appear.RI_ola {
     Taste::coordinates => "156260 86774 150558 86774 150558 90656 144855 90656";
+  };
+  Should_Not_Appear_Either_RI_coucou_Nested2_Appear_RI_coucou : SUBPROGRAM ACCESS RI_coucou -> Nested2_Appear.RI_coucou {
+    Taste::coordinates => "160536 91710 160536 93314 154931 93314 154931 95943";
   };
 END Should_Not_Appear_Either.others;
 
@@ -334,6 +361,12 @@ END RI_ola_bis;
 SUBPROGRAM IMPLEMENTATION RI_ola_bis.others
 END RI_ola_bis.others;
 
+SUBPROGRAM RI_coucou
+END RI_coucou;
+
+SUBPROGRAM IMPLEMENTATION RI_coucou.others
+END RI_coucou.others;
+
 SYSTEM Function1_ShouldNotAppear
 FEATURES
   PI_hello : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1_ShouldNotAppear::Nested1_Appear::PI_hello.others {
@@ -361,6 +394,12 @@ FEATURES
     Taste::InterfaceName => "ola_bis";
     Taste::labelInheritance => "true";
   };
+  RI_coucou : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
+    Taste::coordinates => "124279 109383";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "coucou";
+    Taste::labelInheritance => "true";
+  };
 PROPERTIES
   Source_Language => (C);
   Taste::Active_Interfaces => any;
@@ -380,20 +419,23 @@ SUBCOMPONENTS
     TASTE_IV_Properties::is_Component_Type => TRUE;
   };
 CONNECTIONS
-  Nested1_PI_hello_Function1_ShouldNotAppear_RI_hello : SUBPROGRAM ACCESS Nested1_Appear.PI_hello -> PI_hello {
+  Nested1_Appear_PI_hello_Function1_ShouldNotAppear_PI_hello : SUBPROGRAM ACCESS Nested1_Appear.PI_hello -> PI_hello {
     Taste::coordinates => "124279 55614 130628 55614 130628 55732 136978 55732";
   };
-  Function1_PI_world_Nested1_RI_world : SUBPROGRAM ACCESS Should_Not_Appear_Either.PI_world -> Nested1_Appear.RI_world {
+  Should_Not_Appear_Either_PI_world_Nested1_Appear_RI_world : SUBPROGRAM ACCESS Should_Not_Appear_Either.PI_world -> Nested1_Appear.RI_world {
     Taste::coordinates => "153203 65140 158967 65140 158967 70311";
   };
-  Function1_ShouldNotAppear_PI_ola_bis_Nested1_Appear_RI_ola_bis : SUBPROGRAM ACCESS RI_ola_bis -> Nested1_Appear.RI_ola_bis {
+  Function1_ShouldNotAppear_RI_ola_bis_Nested1_Appear_RI_ola_bis : SUBPROGRAM ACCESS RI_ola_bis -> Nested1_Appear.RI_ola_bis {
     Taste::coordinates => "140345 66548 140345 84791 124279 84791";
   };
-  Function1_ShouldNotAppear_PI_my_final_result_Function1_RI_my_final_result : SUBPROGRAM ACCESS RI_my_final_result -> Should_Not_Appear_Either.RI_my_final_result {
+  Function1_ShouldNotAppear_RI_my_final_result_Should_Not_Appear_Either_RI_my_final_result : SUBPROGRAM ACCESS RI_my_final_result -> Should_Not_Appear_Either.RI_my_final_result {
     Taste::coordinates => "144855 80895 134567 80895 134567 80311 124279 80311";
   };
-  Function1_ShouldNotAppear_PI_ola_Should_Not_Appear_Either_RI_ola : SUBPROGRAM ACCESS RI_ola -> Should_Not_Appear_Either.RI_ola {
+  Function1_ShouldNotAppear_RI_ola_Should_Not_Appear_Either_RI_ola : SUBPROGRAM ACCESS RI_ola -> Should_Not_Appear_Either.RI_ola {
     Taste::coordinates => "144855 90656 134567 90656 134567 92808 124279 92808";
+  };
+  Function1_ShouldNotAppear_RI_coucou_Should_Not_Appear_Either_RI_coucou : SUBPROGRAM ACCESS RI_coucou -> Should_Not_Appear_Either.RI_coucou {
+    Taste::coordinates => "154931 95943 154931 109383 124279 109383";
   };
 END Function1_ShouldNotAppear.others;
 
@@ -462,6 +504,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_bonjour
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_bonjour;
 
 SUBPROGRAM IMPLEMENTATION PI_bonjour.others
@@ -469,12 +513,27 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_bonjour.others;
 
+SUBPROGRAM PI_coucou
+END PI_coucou;
+
+SUBPROGRAM IMPLEMENTATION PI_coucou.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_coucou.others;
+
 SYSTEM Z_Shown
 FEATURES
   PI_bonjour : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_bonjour.others {
     Taste::coordinates => "102645 107303";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "bonjour";
+  };
+  PI_coucou : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
+    Taste::coordinates => "102645 112510";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "coucou";
   };
 PROPERTIES
   Source_Language => (C);
@@ -494,6 +553,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_bonjour
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_bonjour;
 
 SUBPROGRAM IMPLEMENTATION PI_bonjour.others
@@ -501,12 +562,27 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_bonjour.others;
 
+SUBPROGRAM PI_coucou
+END PI_coucou;
+
+SUBPROGRAM IMPLEMENTATION PI_coucou.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_coucou.others;
+
 SYSTEM Y_Hidden
 FEATURES
   PI_bonjour : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_bonjour.others {
     Taste::coordinates => "109817 102811";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "bonjour";
+  };
+  PI_coucou : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
+    Taste::coordinates => "109817 111577";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "coucou";
   };
 PROPERTIES
   Source_Language => (C);
@@ -519,8 +595,11 @@ SUBCOMPONENTS
     Taste::coordinates => "82304 103585 102645 117224";
   };
 CONNECTIONS
-  Z_Shown_PI_bonjour_Y_Hidden_RI_bonjour : SUBPROGRAM ACCESS Z_Shown.PI_bonjour -> PI_bonjour {
+  Z_Shown_PI_bonjour_Y_Hidden_PI_bonjour : SUBPROGRAM ACCESS Z_Shown.PI_bonjour -> PI_bonjour {
     Taste::coordinates => "109817 102811 104850 102811 104850 107303 102645 107303";
+  };
+  Z_Shown_PI_coucou_Y_Hidden_PI_coucou : SUBPROGRAM ACCESS Z_Shown.PI_coucou -> PI_coucou {
+    Taste::coordinates => "109817 111577 106231 111577 106231 112510 102645 112510";
   };
 END Y_Hidden.others;
 
@@ -541,7 +620,7 @@ END interfaceview;
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   Function1_ShouldNotAppear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Function1_ShouldNotAppear.others {
-    Taste::coordinates => "124279 48559 182010 102410";
+    Taste::coordinates => "124279 48559 182010 120553";
   };
   Level0_Appear : SYSTEM interfaceview::IV::Level0_Appear::Level0_Appear.others {
     Taste::coordinates => "81834 63257 99353 90064";
@@ -550,10 +629,10 @@ SUBCOMPONENTS
     Taste::coordinates => "81833 95002 109817 119693";
   };
 CONNECTIONS
-  Function1_ShouldNotAppear_PI_hello_Level0_RI_I_say_hello : SUBPROGRAM ACCESS Function1_ShouldNotAppear.PI_hello -> Level0_Appear.RI_I_say_hello {
+  Function1_ShouldNotAppear_PI_hello_Level0_Appear_RI_I_say_hello : SUBPROGRAM ACCESS Function1_ShouldNotAppear.PI_hello -> Level0_Appear.RI_I_say_hello {
     Taste::coordinates => "99353 67961 111816 67961 111816 55614 124279 55614";
   };
-  Level0_PI_final_result_Function1_ShouldNotAppear_RI_my_final_result : SUBPROGRAM ACCESS Level0_Appear.PI_final_result -> Function1_ShouldNotAppear.RI_my_final_result {
+  Level0_Appear_PI_final_result_Function1_ShouldNotAppear_RI_my_final_result : SUBPROGRAM ACCESS Level0_Appear.PI_final_result -> Function1_ShouldNotAppear.RI_my_final_result {
     Taste::coordinates => "124279 80311 111816 80311 111816 83249 99353 83249";
   };
   Y_Hidden_PI_bonjour_Function1_ShouldNotAppear_RI_ola : SUBPROGRAM ACCESS Y_Hidden.PI_bonjour -> Function1_ShouldNotAppear.RI_ola {
@@ -561,6 +640,9 @@ CONNECTIONS
   };
   Y_Hidden_PI_bonjour_Function1_ShouldNotAppear_RI_ola_bis : SUBPROGRAM ACCESS Y_Hidden.PI_bonjour -> Function1_ShouldNotAppear.RI_ola_bis {
     Taste::coordinates => "124279 84791 115667 84791 115667 102811 109817 102811";
+  };
+  Y_Hidden_PI_coucou_Function1_ShouldNotAppear_RI_coucou : SUBPROGRAM ACCESS Y_Hidden.PI_coucou -> Function1_ShouldNotAppear.RI_coucou {
+    Taste::coordinates => "124279 109383 117277 109383 117277 111577 109817 111577";
   };
 END interfaceview.others;
 

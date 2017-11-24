@@ -202,7 +202,7 @@ package Parser_Utils is
 
    type Complete_Interface_View is
       record
-         Flat_Functions  : Function_Maps.Map; --  Functions.Vector;
+         Flat_Functions  : Function_Maps.Map;
          End_To_End_Conn : Channels.Vector;
          Nested_Routes   : Connection_Maps.Map;
       end record;

@@ -203,8 +203,6 @@ package Parser_Utils is
    type Complete_Interface_View is
       record
          Flat_Functions  : Function_Maps.Map;
-         End_To_End_Conn : Channels.Vector;
-         Nested_Routes   : Connection_Maps.Map;
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina

@@ -405,9 +405,7 @@ package body Parser_Utils is
       use type Interfaces.Vector;
       use type Parameters.Vector;
       use type Connection_Maps.Map;
-      --  Funcs             : Functions.Vector := Functions.Empty_Vector;
       Functions         : Function_Maps.Map;
-      Routes            : Channels.Vector; --  := Channels.Empty_Vector;
       Routes_Map        : Connection_Maps.Map;
       Current_Function  : Node_Id;
 
@@ -422,8 +420,6 @@ package body Parser_Utils is
          RI_Name : constant Name_Id := Get_Interface_Name
                               (Get_Referenced_Entity (AIN.Destination (Conn)));
       begin
-         --  Put_Line (AIN.Node_Kind'Image (Kind (Caller)));
-
          --  If RI_Name has no value it means the interface view misses the
          --  AADL property "TASTE::InterfaceName". Not supported.
          Exit_On_Error (RI_Name = No_Name,
@@ -750,21 +746,15 @@ package body Parser_Utils is
 
       Routes_Map.Insert (Key      => "_Root",
                          New_Item => Parse_System_Connections (System));
---      for C in Routes_Map.Iterate loop
---         for Each of Connection_Maps.Element (C) loop
---            Put_Line ("   " & To_String (Each.Caller)
---                     & "." & To_String (Each.RI_Name)
---                     & " -> " & To_String (Each.Callee) & "." &
---                     To_String (Each.PI_Name));
---         end loop;
---      end loop;
 
-      Put_Line ("Now the functions");
+      Put_Line ("The parser found the following functions");
+      --  Resolve the PI-RI connections within the functions
       for Each of Functions loop
          Put_Line ("Function: " & To_String (Each.Name));
          for RI of Each.Required loop
             declare
                use Remote_Entities;
+               --  From a RI, follow the connection until the remote PI
                Remote : constant Remote_Entity := Rec_Jump
                                                      (To_String (Each.Name),
                                                       To_String (RI.Name));
@@ -793,9 +783,8 @@ package body Parser_Utils is
       end loop;
 
       return IV_AST : constant Complete_Interface_View :=
-          (Flat_Functions  => Functions,
-           End_To_End_Conn => Routes,
-           Nested_Routes   => Routes_Map);
+          (Flat_Functions  => Functions);
+
    end AADL_to_Ada_IV;
 
 end Parser_Utils;

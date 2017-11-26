@@ -71,7 +71,14 @@ package Parser_Utils is
                                       ASN1_String,
                                       ASN1_Unknown);
 
-   package Property_Maps is new Indefinite_Ordered_Maps (String, String);
+   type User_Property is
+      record
+         Name  : Unbounded_String;
+         Value : Unbounded_String;
+      end record;
+
+   package Property_Maps is new Indefinite_Ordered_Maps (String,
+                                                         User_Property);
    use Property_Maps;
    package String_Vectors is new Indefinite_Vectors (Natural, String);
 
@@ -135,15 +142,12 @@ package Parser_Utils is
       end record;
 
    package Remote_Entities is new Indefinite_Vectors (Natural, Remote_Entity);
-   package Option_Remote_Entities is new Option_Type (Remote_Entities.Vector);
-   subtype Optional_Remote_Entities is Option_Remote_Entities.Option;
-   use Option_Remote_Entities;
 
    type Taste_Interface is
       record
          Name              : Unbounded_String;
          Parent_Function   : Unbounded_String;
-         Remote_Interfaces : Optional_Remote_Entities := Nothing;
+         Remote_Interfaces : Remote_Entities.Vector;
          Params            : Parameters.Vector;
          RCM               : Supported_RCM_Operation_Kind;
          Period_Or_MIAT    : Unsigned_Long_Long;
@@ -152,7 +156,6 @@ package Parser_Utils is
          User_Properties   : Property_Maps.Map;
       end record;
 
-   package Interfaces is new Indefinite_Vectors (Natural, Taste_Interface);
    package Interfaces_Maps is new Indefinite_Ordered_Maps (String,
                                                            Taste_Interface);
 
@@ -202,12 +205,18 @@ package Parser_Utils is
                                                           Channels.Vector,
                                                           "=" => Channels."=");
 
-   type Complete_Interface_View is
+   type Complete_Interface_View is tagged
       record
          Flat_Functions  : Function_Maps.Map;
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View;
+
+   --  Model transformation API: Rename a function
+   procedure Rename_Function (IV       : in out Complete_Interface_View;
+                              From, To : String);
+
+   procedure Debug_Dump_IV (IV : Complete_Interface_View);
 
 end Parser_Utils;

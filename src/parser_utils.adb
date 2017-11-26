@@ -257,8 +257,9 @@ package body Parser_Utils is
             --  Only support single-value properties for now
             single_val := ATN.Single_Value (prop_value);
             result.Insert (Key => AIN_Case (property),
-                        New_Item =>
-              (case ATN.Kind (single_val) is
+                           New_Item => (Name  => US (AIN_Case (property)),
+                                        Value =>
+              US (case ATN.Kind (single_val) is
                  when ATN.K_Signed_AADLNumber =>
                    Ocarina.AADL_Values.Image
                       (ATN.Value (ATN.Number_Value (single_val))) &
@@ -279,7 +280,7 @@ package body Parser_Utils is
                  when ATN.K_Number_Range_Term =>
                     "RANGE NOT SUPPORTED!",
                  when others => "ERROR! Unsupported kind: "
-                                & ATN.Kind (single_val)'Img));
+                                & ATN.Kind (single_val)'Img)));
          end if;
          property := AIN.Next_Node (property);
       end loop;
@@ -402,7 +403,6 @@ package body Parser_Utils is
       --  use type Functions.Vector;
       use type Channels.Vector;
       use type Ctxt_Params.Vector;
-      use type Interfaces.Vector;
       use type Parameters.Vector;
       use type Connection_Maps.Map;
       Functions         : Function_Maps.Map;
@@ -749,10 +749,8 @@ package body Parser_Utils is
       Routes_Map.Insert (Key      => "_Root",
                          New_Item => Parse_System_Connections (System));
 
-      Put_Line ("The parser found the following functions");
       --  Resolve the PI-RI connections within the functions
       for Each of Functions loop
-         Put_Line ("Function: " & To_String (Each.Name));
          for RI of Each.Required loop
             declare
                use Remote_Entities;
@@ -760,31 +758,139 @@ package body Parser_Utils is
                Remote : constant Remote_Entity := Rec_Jump
                                                      (To_String (Each.Name),
                                                       To_String (RI.Name));
-               V1     : Remote_Entities.Vector := Empty_Vector;
-               V2     : Remote_Entities.Vector := Empty_Vector;
                Corr   : Taste_Terminal_Function;
                PI     : Taste_Interface;
             begin
-               Put ("   ... RI " & To_String (RI.Name) & " ---> ");
-               Put (To_String (Remote.Function_Name) & ".");
-               Put_Line (To_String (Remote.Interface_Name));
                if Remote.Function_Name /= "Not found!" then
-                  V1 := RI.Remote_Interfaces.Value_Or (V1);
-                  V1.Append (Remote);
+                  RI.Remote_Interfaces.Append (Remote);
                   Corr := Functions.Element (To_String (Remote.Function_Name));
                   PI := Corr.Provided.Element
                                      (To_String (Remote.Interface_Name));
-                  V2 := PI.Remote_Interfaces.Value_Or (V2);
-                  V2.Append (Remote_Entity'(Function_Name  => Each.Name,
+                  PI.Remote_Interfaces.Append
+                            (Remote_Entity'(Function_Name  => Each.Name,
                                             Interface_Name => RI.Name));
+                  Corr.Provided.Replace
+                    (Key      => To_String (Remote.Interface_Name),
+                     New_Item => PI);
                end if;
             end;
          end loop;
       end loop;
 
       return IV_AST : constant Complete_Interface_View :=
-          (Flat_Functions  => Functions);
-
+                                                 (Flat_Functions => Functions);
    end AADL_to_Ada_IV;
+
+   procedure Rename_Function (IV       : in out Complete_Interface_View;
+                              From, To : String)
+   is
+      FV        : Taste_Terminal_Function :=
+                                       IV.Flat_Functions.Element (Key => From);
+      Remote_FV : Taste_Terminal_Function;
+      Remote_If : Taste_Interface;
+   begin
+      FV.Name := US (To);
+      for Each of FV.Provided loop
+         Each.Parent_Function := FV.Name;
+         --  Update the "Remote Function Name" of all connected interfaces
+         for Remote of Each.Remote_Interfaces loop
+            Remote_FV := IV.Flat_Functions.Element
+                                     (Key => To_String (Remote.Function_Name));
+            Remote_If := Remote_FV.Required.Element
+                                    (Key => To_String (Remote.Interface_Name));
+            for Entity of Remote_If.Remote_Interfaces loop
+               if Entity.Function_Name = US (From) then
+                  Entity.Function_Name := FV.Name;
+               end if;
+            end loop;
+         end loop;
+      end loop;
+      for Each of FV.Required loop
+         Each.Parent_Function := FV.Name;
+         --  Update the "Remote Function Name" of all connected interfaces
+         for Remote of Each.Remote_Interfaces loop
+            Remote_FV := IV.Flat_Functions.Element
+                                     (Key => To_String (Remote.Function_Name));
+            Remote_If := Remote_FV.Provided.Element
+                                    (Key => To_String (Remote.Interface_Name));
+            for Entity of Remote_If.Remote_Interfaces loop
+               if Entity.Function_Name = US (From) then
+                  Entity.Function_Name := FV.Name;
+               end if;
+            end loop;
+         end loop;
+      end loop;
+      IV.Flat_Functions.Delete (Key => From);
+      IV.Flat_Functions.Insert (Key      => To,
+                                New_Item => FV);
+   end Rename_Function;
+
+   procedure Debug_Dump_IV (IV : Complete_Interface_View) is
+      procedure Dump_Interface (Ind : String := "      ";
+                                I   : Taste_Interface) is
+      begin
+         Put_Line (Ind & "Name: " & To_String (I.Name) & " - in FV: "
+                   & To_String (I.Parent_Function));
+         Put_Line (Ind & "   RCM Kind    : " & I.RCM'Img);
+         Put_Line (Ind & "   Period/MIAT : " & I.Period_Or_MIAT'Img);
+         Put_Line (Ind & "   WCET (ms)   : " & Value_Or (I.WCET_ms, 0)'Img);
+         Put_Line (Ind & "   Queue Size  : " & Value_Or (I.Queue_Size, 1)'Img);
+         Put_Line (Ind & "   Parameters  :");
+         for Each of I.Params loop
+            Put_Line (Ind & "      Name         : " & To_String (Each.Name));
+            Put_Line (Ind & "      Type         : " & To_String (Each.Sort));
+            Put_Line (Ind & "      ASN.1 Module : "
+                      & To_String (Each.ASN1_Module));
+            Put_Line (Ind & "      ASN.1 File   : "
+                      & To_String (Each.ASN1_File_Name));
+            Put_Line (Ind & "      Basic type   : "
+                      & Each.ASN1_Basic_Type'Img);
+            Put_Line (Ind & "      Encoding     : " & Each.Encoding'Img);
+            Put_Line (Ind & "      Direction    : " & Each.Direction'Img);
+         end loop;
+         Put_Line (Ind & "   Connections :");
+         for Each of I.Remote_Interfaces loop
+            Put_Line (Ind & "      Function " & To_String (Each.Function_Name)
+                      & ", interface " & To_String (Each.Interface_Name));
+         end loop;
+      end Dump_Interface;
+   begin
+      for Each of IV.Flat_Functions loop
+         Put_Line ("Function " & To_String (Each.Name)
+                   & " in context " & To_String (Each.Context));
+
+         Put_Line ("   Full Prefix: " & To_String (Value_Or (Each.Full_Prefix,
+                                                             US ("(none)"))));
+         Put_Line ("   Language   : " & Each.Language'Img);
+         Put_Line ("   Zip file   : " & To_String (Value_Or (Each.Zip_File,
+                                                             US ("(none)"))));
+         Put_Line ("   Cxtx Params:");
+         for CP of Each.Context_Params loop
+            Put_Line ("      " & To_String (CP.Name) & ":"
+                      & To_String (CP.Sort) & "- default: "
+                      & To_String (CP.Default_Value) & " - asn1 module: "
+                      & To_String (CP.ASN1_Module) & " - file:"
+                      & To_String (Value_Or (CP.ASN1_File_Name,
+                                             US ("(none)"))));
+         end loop;
+         Put_Line ("   User properties:");
+         for Ppty of Each.User_Properties loop
+            Put_Line ("      " & To_String (Ppty.Name) & " = "
+                      & To_String (Ppty.Value));
+         end loop;
+         Put_Line ("   Timers:");
+         for Timer of Each.Timers loop
+            Put_Line ("      " & Timer);
+         end loop;
+         Put_Line ("   Provided interfaces:");
+         for PI of Each.Provided loop
+            Dump_Interface (I => PI);
+         end loop;
+         Put_Line ("   Required interfaces:");
+         for RI of Each.Required loop
+            Dump_Interface (I => RI);
+         end loop;
+      end loop;
+   end Debug_Dump_IV;
 
 end Parser_Utils;

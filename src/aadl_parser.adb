@@ -1433,8 +1433,9 @@ begin
 --                  & "::" & To_String (Each.Name));
 --   end loop;
 
+   Debug_Dump_IV (AST);
+
    Process_Interface_View (IV_Root);
---      (Root_System (Instantiate_Model (Root => Interface_Root)));
 
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.

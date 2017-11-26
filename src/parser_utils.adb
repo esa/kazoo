@@ -671,9 +671,11 @@ package body Parser_Utils is
                Iface := Parse_Interface (PI_Or_RI);
                Iface.Parent_Function := Result.Name;
                if AIN.Is_Provided (PI_Or_RI) then
-                  Result.Provided := Result.Provided & Iface;
+                  Result.Provided.Insert (Key      => To_String (Iface.Name),
+                                          New_Item => Iface);
                else
-                  Result.Required := Result.Required & Iface;
+                  Result.Required.Insert (Key      => To_String (Iface.Name),
+                                          New_Item => Iface);
                end if;
                PI_Or_RI := AIN.Next_Node (PI_Or_RI);
             end loop;
@@ -761,6 +763,7 @@ package body Parser_Utils is
                V1     : Remote_Entities.Vector := Empty_Vector;
                V2     : Remote_Entities.Vector := Empty_Vector;
                Corr   : Taste_Terminal_Function;
+               PI     : Taste_Interface;
             begin
                Put ("   ... RI " & To_String (RI.Name) & " ---> ");
                Put (To_String (Remote.Function_Name) & ".");
@@ -769,14 +772,11 @@ package body Parser_Utils is
                   V1 := RI.Remote_Interfaces.Value_Or (V1);
                   V1.Append (Remote);
                   Corr := Functions.Element (To_String (Remote.Function_Name));
-                  for PI of Corr.Provided loop   -- TODO: replace with a Map
-                     if PI.Name = Remote.Interface_Name then
-                        V2 := PI.Remote_Interfaces.Value_Or (V2);
-                        V2.Append (Remote_Entity'(Function_Name => Each.Name,
-                                                  Interface_Name => RI.Name));
-                     end if;
-                     exit when PI.Name = Remote.Interface_Name;
-                  end loop;
+                  PI := Corr.Provided.Element
+                                     (To_String (Remote.Interface_Name));
+                  V2 := PI.Remote_Interfaces.Value_Or (V2);
+                  V2.Append (Remote_Entity'(Function_Name  => Each.Name,
+                                            Interface_Name => RI.Name));
                end if;
             end;
          end loop;

@@ -153,6 +153,8 @@ package Parser_Utils is
       end record;
 
    package Interfaces is new Indefinite_Vectors (Natural, Taste_Interface);
+   package Interfaces_Maps is new Indefinite_Ordered_Maps (String,
+                                                           Taste_Interface);
 
    type Context_Parameter is
       record
@@ -175,8 +177,8 @@ package Parser_Utils is
          Context_Params  : Ctxt_Params.Vector;
          User_Properties : Property_Maps.Map;
          Timers          : String_Vectors.Vector;
-         Provided        : Interfaces.Vector;
-         Required        : Interfaces.Vector;
+         Provided        : Interfaces_Maps.Map;
+         Required        : Interfaces_Maps.Map;
       end record;
 
 --   package Functions is new Indefinite_Vectors (Natural,

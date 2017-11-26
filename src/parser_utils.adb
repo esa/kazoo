@@ -753,27 +753,35 @@ package body Parser_Utils is
       for Each of Functions loop
          for RI of Each.Required loop
             declare
-               use Remote_Entities;
                --  From a RI, follow the connection until the remote PI
                Remote : constant Remote_Entity := Rec_Jump
                                                      (To_String (Each.Name),
                                                       To_String (RI.Name));
-               Corr   : Taste_Terminal_Function;
-               PI     : Taste_Interface;
             begin
                if Remote.Function_Name /= "Not found!" then
                   RI.Remote_Interfaces.Append (Remote);
-                  Corr := Functions.Element (To_String (Remote.Function_Name));
-                  PI := Corr.Provided.Element
-                                     (To_String (Remote.Interface_Name));
-                  PI.Remote_Interfaces.Append
-                            (Remote_Entity'(Function_Name  => Each.Name,
-                                            Interface_Name => RI.Name));
-                  Corr.Provided.Replace
-                    (Key      => To_String (Remote.Interface_Name),
-                     New_Item => PI);
                end if;
             end;
+         end loop;
+      end loop;
+      --  Do the same for the PIs - they could not be updated at the same time
+      --  because when we iterate on the functions, we can modify only the
+      --  current function - we cannot touch the one with the remote PI.
+      for Each of Functions loop
+         for PI of Each.Provided loop
+            for Fn of Functions loop
+               for RI of Fn.Required loop
+                  for Remote of RI.Remote_Interfaces loop
+                     if Remote.Function_Name = Each.Name and then
+                       Remote.Interface_Name = PI.Name
+                     then
+                        PI.Remote_Interfaces.Append
+                                (Remote_Entity'(Function_Name  => Fn.Name,
+                                                Interface_Name => RI.Name));
+                     end if;
+                  end loop;
+               end loop;
+            end loop;
          end loop;
       end loop;
 
@@ -872,6 +880,7 @@ package body Parser_Utils is
                       & To_String (CP.ASN1_Module) & " - file:"
                       & To_String (Value_Or (CP.ASN1_File_Name,
                                              US ("(none)"))));
+            New_Line;
          end loop;
          Put_Line ("   User properties:");
          for Ppty of Each.User_Properties loop
@@ -886,10 +895,12 @@ package body Parser_Utils is
          for PI of Each.Provided loop
             Dump_Interface (I => PI);
          end loop;
+         New_Line;
          Put_Line ("   Required interfaces:");
          for RI of Each.Required loop
             Dump_Interface (I => RI);
          end loop;
+         New_Line;
       end loop;
    end Debug_Dump_IV;
 

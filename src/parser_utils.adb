@@ -837,28 +837,29 @@ package body Parser_Utils is
       procedure Dump_Interface (Ind : String := "      ";
                                 I   : Taste_Interface) is
       begin
-         Put_Line (Ind & "Name: " & To_String (I.Name) & " - in FV: "
+         Put_Line ("    |_Name: " & To_String (I.Name) & " - in FV: "
                    & To_String (I.Parent_Function));
-         Put_Line (Ind & "   RCM Kind    : " & I.RCM'Img);
-         Put_Line (Ind & "   Period/MIAT : " & I.Period_Or_MIAT'Img);
-         Put_Line (Ind & "   WCET (ms)   : " & Value_Or (I.WCET_ms, 0)'Img);
-         Put_Line (Ind & "   Queue Size  : " & Value_Or (I.Queue_Size, 1)'Img);
-         Put_Line (Ind & "   Parameters  :");
+         Put_Line (Ind & " |_RCM Kind    : " & I.RCM'Img);
+         Put_Line (Ind & " |_Period/MIAT : " & I.Period_Or_MIAT'Img);
+         Put_Line (Ind & " |_WCET (ms)   : " & Value_Or (I.WCET_ms, 0)'Img);
+         Put_Line (Ind & " |_Queue Size  : " & Value_Or (I.Queue_Size, 1)'Img);
+         Put_Line (Ind & " |_Parameters  :");
          for Each of I.Params loop
-            Put_Line (Ind & "      Name         : " & To_String (Each.Name));
-            Put_Line (Ind & "      Type         : " & To_String (Each.Sort));
-            Put_Line (Ind & "      ASN.1 Module : "
+            Put_Line (Ind & "    |_Name         : " & To_String (Each.Name));
+            Put_Line (Ind & "       |_Type         : "
+                      & To_String (Each.Sort));
+            Put_Line (Ind & "       |_ASN.1 Module : "
                       & To_String (Each.ASN1_Module));
-            Put_Line (Ind & "      ASN.1 File   : "
+            Put_Line (Ind & "       |_ASN.1 File   : "
                       & To_String (Each.ASN1_File_Name));
-            Put_Line (Ind & "      Basic type   : "
+            Put_Line (Ind & "       |_Basic type   : "
                       & Each.ASN1_Basic_Type'Img);
-            Put_Line (Ind & "      Encoding     : " & Each.Encoding'Img);
-            Put_Line (Ind & "      Direction    : " & Each.Direction'Img);
+            Put_Line (Ind & "       |_Encoding     : " & Each.Encoding'Img);
+            Put_Line (Ind & "       |_Direction    : " & Each.Direction'Img);
          end loop;
-         Put_Line (Ind & "   Connections :");
+         Put_Line (Ind & " |_Connections :");
          for Each of I.Remote_Interfaces loop
-            Put_Line (Ind & "      Function " & To_String (Each.Function_Name)
+            Put_Line (Ind & "    |_Function " & To_String (Each.Function_Name)
                       & ", interface " & To_String (Each.Interface_Name));
          end loop;
       end Dump_Interface;
@@ -867,14 +868,14 @@ package body Parser_Utils is
          Put_Line ("Function " & To_String (Each.Name)
                    & " in context " & To_String (Each.Context));
 
-         Put_Line ("   Full Prefix: " & To_String (Value_Or (Each.Full_Prefix,
+         Put_Line (" |_Full Prefix: " & To_String (Value_Or (Each.Full_Prefix,
                                                              US ("(none)"))));
-         Put_Line ("   Language   : " & Each.Language'Img);
-         Put_Line ("   Zip file   : " & To_String (Value_Or (Each.Zip_File,
+         Put_Line (" |_Language   : " & Each.Language'Img);
+         Put_Line (" |_Zip file   : " & To_String (Value_Or (Each.Zip_File,
                                                              US ("(none)"))));
          Put_Line ("   Cxtx Params:");
          for CP of Each.Context_Params loop
-            Put_Line ("      " & To_String (CP.Name) & ":"
+            Put_Line ("    |_" & To_String (CP.Name) & ":"
                       & To_String (CP.Sort) & "- default: "
                       & To_String (CP.Default_Value) & " - asn1 module: "
                       & To_String (CP.ASN1_Module) & " - file:"
@@ -882,21 +883,21 @@ package body Parser_Utils is
                                              US ("(none)"))));
             New_Line;
          end loop;
-         Put_Line ("   User properties:");
+         Put_Line (" |_User properties:");
          for Ppty of Each.User_Properties loop
             Put_Line ("      " & To_String (Ppty.Name) & " = "
                       & To_String (Ppty.Value));
          end loop;
-         Put_Line ("   Timers:");
+         Put_Line (" |_Timers:");
          for Timer of Each.Timers loop
-            Put_Line ("      " & Timer);
+            Put_Line ("    |_" & Timer);
          end loop;
-         Put_Line ("   Provided interfaces:");
+         Put_Line (" |_Provided interfaces:");
          for PI of Each.Provided loop
             Dump_Interface (I => PI);
          end loop;
          New_Line;
-         Put_Line ("   Required interfaces:");
+         Put_Line (" |_Required interfaces:");
          for RI of Each.Required loop
             Dump_Interface (I => RI);
          end loop;

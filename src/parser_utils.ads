@@ -4,7 +4,6 @@
 
 --  Set of helper functions for the parser
 with Ocarina,
-     --  Ocarina.Types,
      Ocarina.Types,
      Ocarina.Namet,
      Ocarina.Backends.Properties,
@@ -36,6 +35,9 @@ package Parser_Utils is
    procedure Usage;
 
    AADL_Parser_Error : exception;
+   No_RCM_Error      : exception;
+   Interface_Error   : exception;
+   Function_Error    : exception;
 
    procedure Exit_On_Error (Error : Boolean; Reason : String);
 

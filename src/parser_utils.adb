@@ -3,7 +3,7 @@
 --  LGPL license, see LICENSE file
 
 with Ada.Text_IO,
-     --  GNAT.OS_Lib,
+     Ada.Exceptions,
      Parser_Version,
      Ocarina.AADL_Values,
      Ocarina.Instances.Queries,
@@ -15,7 +15,7 @@ with Ada.Text_IO,
 package body Parser_Utils is
 
    use Ada.Text_IO,
-       --  GNAT.OS_Lib,
+       Ada.Exceptions,
        Ocarina.Instances.Queries,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ada.Characters.Latin_1,
@@ -123,22 +123,20 @@ package body Parser_Utils is
          if RCM_Operation_Kind_N = Unprotected_Name then
             return Unprotected_Operation;
 
-         elsif RCM_Operation_Kind_N =  Protected_Name then
+         elsif RCM_Operation_Kind_N = Protected_Name then
             return Protected_Operation;
 
-         elsif RCM_Operation_Kind_N =  Cyclic_Name then
+         elsif RCM_Operation_Kind_N = Cyclic_Name then
             return Cyclic_Operation;
 
-         elsif RCM_Operation_Kind_N =  Sporadic_Name then
+         elsif RCM_Operation_Kind_N = Sporadic_Name then
             return Sporadic_Operation;
 
-         elsif RCM_Operation_Kind_N =  Any_Name then
+         elsif RCM_Operation_Kind_N = Any_Name then
             return Any_Operation;
          end if;
       end if;
-      Exit_On_Error (True, "Could not determine interface kind: "
-                        & Get_Name_String (RCM_Operation_Kind_N));
-      return Sporadic_Operation;
+      raise No_RCM_Error;
    end Get_RCM_Operation_Kind;
 
    -----------------------
@@ -552,6 +550,12 @@ package body Parser_Utils is
             end loop;
          end if;
          return Result;
+      exception
+         when No_RCM_Error =>
+            raise Interface_Error with "Interface " & To_String (Result.Name)
+                                       & " has no kind "
+                                       & "(periodic, sporadic ...)";
+
       end Parse_Interface;
 
       --  Helper function - return the context name above the current one
@@ -681,6 +685,10 @@ package body Parser_Utils is
          end if;
          Result.User_Properties := Get_Properties_Map (Inst);
          return Result;
+      exception
+         when Error : Interface_Error =>
+            raise Function_Error with "Function " & To_String (Result.Name)
+                                      & " : " & Exception_Message (Error);
       end Parse_Function;
 
       --  Recursive parsing of a system made of nested functions (TASTE v2)
@@ -717,13 +725,18 @@ package body Parser_Utils is
 
                if No (AIN.Subcomponents (CI)) or Is_Terminal
                then
-                  Terminal_Fn := Parse_Function (Prefix => Prefix,
-                                                 Name   => Name,
-                                                 Inst   => CI);
-                  Terminal_Fn.Context := US (Context);
-                  Functions.Insert (Key       => Name,
-                                    New_Item  => Terminal_Fn);
-                  Is_Terminal := False;
+                  begin
+                     Terminal_Fn := Parse_Function (Prefix => Prefix,
+                                                    Name   => Name,
+                                                    Inst   => CI);
+                     Terminal_Fn.Context := US (Context);
+                     Functions.Insert (Key       => Name,
+                                       New_Item  => Terminal_Fn);
+                     Is_Terminal := False;
+                  exception
+                     when Error : Function_Error =>
+                        Exit_On_Error (True, Exception_Message (Error));
+                  end;
                end if;
             when others =>
                null;

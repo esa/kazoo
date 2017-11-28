@@ -21,11 +21,13 @@ package body Parser_Utils is
 
    procedure Banner is
       The_Banner : constant String :=
-        "TASTE AADL Parser (Version "
+        Yellow_Bold & "TASTE AADL Parser" & No_Color & " (Version "
         & Parser_Version.Parser_Release & ") "
-        & ASCII.LF & ASCII.CR
-        & "Contact: Maxime.Perrotin@esa.int or Thanassis.Tsiodras@esa.int"
-        & ASCII.LF & ASCII.CR
+        & ASCII.LF & ASCII.CR & No_Color
+        & "Contact: " & Underscore
+        & "Maxime.Perrotin@esa.int" & No_Color & " or " & Underscore
+        & "Thanassis.Tsiodras@esa.int"
+        & ASCII.LF & ASCII.CR & No_Color
         & "Based on " & Parser_Version.Ocarina_Version;
    begin
       Put_Line (The_Banner);

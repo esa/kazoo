@@ -28,6 +28,12 @@ package Parser_Utils is
    function US (Source : String) return Unbounded_String renames
        To_Unbounded_String;
 
+   Yellow_Bold : constant String := ASCII.ESC & "[33m" & ASCII.ESC & "[1m";
+   White       : constant String := ASCII.ESC & "[37m";
+   Red_Bold    : constant String := ASCII.ESC & "[31m" & ASCII.ESC & "[1m";
+   Underscore  : constant String := ASCII.ESC & "[4m";
+   No_Color    : constant String := ASCII.ESC & "[0m";
+
    procedure Banner;
 
    procedure Usage;

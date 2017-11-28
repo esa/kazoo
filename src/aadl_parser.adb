@@ -965,8 +965,8 @@ begin
    Ocarina.Reset;
 exception
    when Error : AADL_Parser_Error =>
-      Put ("[ERROR] ");
-      Put_Line (Exception_Message (Error));
+      Put (Red_Bold & "[ERROR] " & White);
+      Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);
    when E : others =>
       Errors.Display_Bug_Box (E);

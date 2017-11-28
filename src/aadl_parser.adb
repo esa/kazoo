@@ -4,7 +4,6 @@
 --  LGPL license, see LICENSE file
 pragma Warnings (Off);
 with Ada.Strings.Unbounded,
-     Ada.Characters.Handling,
      Ada.Command_Line,
      Ada.Text_IO,
      Ada.Containers.Indefinite_Vectors,
@@ -13,26 +12,21 @@ with Ada.Strings.Unbounded,
      Locations,
      Ocarina.Namet,
      Ocarina.Types,
-     System.Assertions,
      Ocarina.Analyzer,
      Ocarina.Backends.Properties,
      Ocarina.Configuration,
      Ocarina.Files,
      Ocarina.Options,
      Ocarina.Instances,
-     Ocarina.Instances.Queries,
-     Ocarina.ME_AADL.AADL_Tree.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Entities,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
-     Parser_Utils,
-     Ocarina.Backends.Utils;
+     Parser_Utils;
 
 use Ada.Strings.Unbounded,
     Ada.Text_IO,
-    Ada.Characters.Handling,
     Locations,
     Ocarina.Namet,
     Ocarina.Types,
@@ -40,7 +34,6 @@ use Ada.Strings.Unbounded,
     Ocarina.Analyzer,
     Ocarina.Backends.Properties,
     Ocarina.Instances,
-    Ocarina.Instances.Queries,
     Ocarina.ME_AADL,
     Ocarina.ME_AADL.AADL_Instances.Entities,
     Ocarina.ME_AADL.AADL_Instances.Nodes,
@@ -51,8 +44,6 @@ use Ada.Strings.Unbounded,
 
 procedure AADL_Parser is
 
-   package ATN renames Ocarina.ME_AADL.AADL_Tree.Nodes;
-
    AADL_Language : Name_Id;
 
    Interface_Root    : Node_Id := No_Node;
@@ -62,8 +53,7 @@ procedure AADL_Parser is
    OutDir            : Integer := 0;
    Stack_Val         : Integer := 0;
    Timer_Resolution  : Integer := 0;
-   Subs              : Node_id;
-   Interface_view    : Integer := 0;
+   Interface_View    : Integer := 0;
    Concurrency_view  : Integer := 0;
    Data_View         : Integer := 0;
    Generate_glue     : Boolean := false;
@@ -73,9 +63,8 @@ procedure AADL_Parser is
    procedure Parse_Command_Line;
    procedure Process_Deployment_View (My_Root : Node_Id);
    --  procedure Process_DataView (My_Root : Node_Id);
-   procedure Process_Interface_View (My_System : Node_Id);
    procedure Browse_Deployment_View_System
-                  (My_System : Node_Id; NodeName : String);
+     (My_System : Node_Id; NodeName : String) with Unreferenced;
 
    --  Find the bus that is connected to a device through a require
    --  access.
@@ -122,13 +111,6 @@ procedure AADL_Parser is
    -- Process_Interface_View --
    ----------------------------
 
-   procedure Process_Interface_View (My_System : Node_Id) is
-   begin
-
-      Exit_On_Error
-         (No (My_System),
-         "Internal Error, cannot instantiate model");
-
          --  Set the output directory
 --        if OutDir > 0 then
 --           C_Set_OutDir (Ada.Command_Line.Argument (Outdir),
@@ -149,7 +131,6 @@ procedure AADL_Parser is
 --        end if;
 
          --  Current_function is read from the list of system subcomponents
-   end Process_Interface_View;
 
    -----------------------------
    -- Process_Deployment_View --
@@ -311,16 +292,16 @@ procedure AADL_Parser is
 
    procedure Browse_Deployment_View_System
        (My_System : Node_Id; NodeName : String) is
-      Processes         : Node_Id;
-      Processes2        : Node_Id;
-      Tmp_CI            : Node_Id;
-      Tmp_CI2           : Node_Id;
-      Ref               : Node_Id;
-      CPU               : Node_Id;
-      CPU_Name          : Name_Id := No_Name;
-      Pkg_Name          : Name_Id := No_Name;
-      CPU_Classifier    : Name_Id := No_Name;
-      CPU_Platform      : Supported_Execution_Platform := Platform_None;
+--      Processes         : Node_Id;
+--      Processes2        : Node_Id;
+--      Tmp_CI            : Node_Id;
+--      Tmp_CI2           : Node_Id;
+--      Ref               : Node_Id;
+--      CPU               : Node_Id;
+--      CPU_Name          : Name_Id := No_Name;
+--      Pkg_Name          : Name_Id := No_Name;
+--      CPU_Classifier    : Name_Id := No_Name;
+--      CPU_Platform      : Supported_Execution_Platform := Platform_None;
       Conn              : Node_Id;
       Bound_Bus         : Node_Id;
       Src_Port          : Node_Id;
@@ -737,7 +718,6 @@ procedure AADL_Parser is
            or else Ada.Command_Line.Argument (J) = "-keep-case"
          then
             Keep_case := true;
-            null;
 
          elsif Ada.Command_Line.Argument (J) = "--glue"
            or else Ada.Command_Line.Argument (J) = "-glue"
@@ -921,7 +901,7 @@ procedure AADL_Parser is
          Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Data_View));
          FN := Ocarina.Files.Search_File (Name_Find);
 
-         Exit_On_Error (FN = No_Name, "Cannot find Data View");
+         Exit_On_Error (FN = No_Name, "[ERROR] Cannot find Data View");
 --        C_Set_Dataview
 --           (Ada.Command_Line.Argument (Data_View),
 --           Ada.Command_Line.Argument (Data_View)'Length);
@@ -936,7 +916,8 @@ procedure AADL_Parser is
                             (AADL_Language, Dataview_root, B);
       end if;
 
-      Exit_On_Error (No (Interface_Root), "Internal error");
+      Exit_On_Error (No (Interface_Root),
+                     "[ERROR] AADL Parser Internal error");
 
       --  Analyze the tree
 
@@ -964,14 +945,8 @@ begin
 
    IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
    AST := AADL_to_Ada_IV (IV_Root);
---   for each of AST.Flat_Functions loop
---      Put_Line ("AST: " & To_String (Each.Full_Prefix.Value_Or (US ("")))
---                  & "::" & To_String (Each.Name));
---   end loop;
 
    Debug_Dump_IV (AST);
-
-   Process_Interface_View (IV_Root);
 
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.

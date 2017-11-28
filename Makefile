@@ -32,8 +32,9 @@ ifeq ($(UNAME), Linux)
 		fi ;                                    \
 	fi
 endif
-	[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ; \
-	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
+	#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ; \
+
+	OCARINA_PATH=`ocarina-config --prefix` \
             $(gnatpath)gprbuild -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
 
 install:
@@ -42,8 +43,7 @@ install:
 	cp taste-aadl-parser `ocarina-config --prefix`/bin/
 
 edit:
-	ADA_PROJECT_PATH=`ocarina-config --prefix`/lib/gnat:$$ADA_PROJECT_PATH \
-            gps aadl_parser.gpr
+	OCARINA_PATH=`ocarina-config --prefix` gps
 
 test:
 	@$(MAKE) -C test

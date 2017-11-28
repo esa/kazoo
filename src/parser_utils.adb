@@ -3,7 +3,7 @@
 --  LGPL license, see LICENSE file
 
 with Ada.Text_IO,
-     GNAT.OS_Lib,
+     --  GNAT.OS_Lib,
      Parser_Version,
      Ocarina.AADL_Values,
      Ocarina.Instances.Queries,
@@ -15,7 +15,7 @@ with Ada.Text_IO,
 package body Parser_Utils is
 
    use Ada.Text_IO,
-       GNAT.OS_Lib,
+       --  GNAT.OS_Lib,
        Ocarina.Instances.Queries,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ada.Characters.Latin_1,
@@ -96,8 +96,7 @@ package body Parser_Utils is
    procedure Exit_On_Error (Error : Boolean; Reason : String) is
    begin
       if Error then
-         Put_Line (Reason);
-         OS_Exit (1);
+         raise AADL_Parser_Error with Reason;
       end if;
    end Exit_On_Error;
 
@@ -377,7 +376,7 @@ package body Parser_Utils is
               & Get_Name_String (ASN1_Basic_Type_N);
          end if;
       end if;
-      Exit_On_Error (True, "Error: ASN.1 Basic type undefined!");
+      Exit_On_Error (True, "ASN.1 Basic type undefined!");
       return ASN1_Unknown;
    end Get_ASN1_Basic_Type;
 
@@ -423,7 +422,7 @@ package body Parser_Utils is
          --  If RI_Name has no value it means the interface view misses the
          --  AADL property "TASTE::InterfaceName". Not supported.
          Exit_On_Error (RI_Name = No_Name,
-                        "[ERROR] Interface view contains errors "
+                        "Interface view contains errors "
                         & "(Missing TASTE::InterfaceName properties)"
                         & ASCII.CR & ASCII.LF
                         & "        Try updating it with taste-edit-project");

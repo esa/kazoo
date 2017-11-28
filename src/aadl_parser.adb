@@ -5,6 +5,8 @@
 pragma Warnings (Off);
 with Ada.Strings.Unbounded,
      Ada.Command_Line,
+     Ada.Exceptions,
+
      Ada.Text_IO,
      Ada.Containers.Indefinite_Vectors,
      GNAT.OS_Lib,
@@ -27,6 +29,7 @@ with Ada.Strings.Unbounded,
 
 use Ada.Strings.Unbounded,
     Ada.Text_IO,
+    Ada.Exceptions,
     Locations,
     Ocarina.Namet,
     Ocarina.Types,
@@ -146,7 +149,7 @@ procedure AADL_Parser is
 --        --  Analyze the tree
 --
 --        Success := Ocarina.Analyzer.Analyze (AADL_Language, My_Root);
---        Exit_On_Error (not Success, "[ERROR] Deployment view is incorrect");
+--        Exit_On_Error (not Success, "Deployment view is incorrect");
 --        if Success then
 --           --  After making sure that the Deployment view is correct, set
 --           --  the Glue flag
@@ -460,7 +463,7 @@ procedure AADL_Parser is
 --
 --                 else
 --                    Exit_On_Error (true,
---                            "[ERROR] Device configuration is incorrect (" &
+--                            "Device configuration is incorrect (" &
 --                            Get_Name_String (Name (Identifier (Tmp_CI))) &
 --                            ")");
 --                 end if;
@@ -841,7 +844,7 @@ procedure AADL_Parser is
            := GNAT.OS_Lib.Locate_Exec_On_Path ("ocarina");
       begin
          Exit_On_Error (S = null,
-            "[ERROR] ocarina is not in your PATH");
+            "Ocarina is not in your PATH");
          GNAT.OS_Lib.Setenv ("OCARINA_PATH", S.all (S'First .. S'Last - 12));
       end;
 
@@ -862,10 +865,10 @@ procedure AADL_Parser is
 
       Parse_Command_Line;
 
-      Exit_On_Error (Interface_View = 0, "Error: Missing Interface view!");
+      Exit_On_Error (Interface_View = 0, "Missing Interface view!");
       Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Interface_View));
       FN := Ocarina.Files.Search_File (Name_Find);
-      Exit_On_Error (FN = No_Name, "Error: Missing Interface view!");
+      Exit_On_Error (FN = No_Name, "Missing Interface view!");
       B := Ocarina.Files.Load_File (FN);
 --     C_Set_Interfaceview
 --      (Ada.Command_Line.Argument (Interface_View),
@@ -891,7 +894,7 @@ procedure AADL_Parser is
          Deployment_Root := Ocarina.Parser.Parse
            (AADL_Language, Deployment_Root, B);
          Exit_On_Error (Deployment_Root = No_Node,
-              "[ERROR] Deployment view is incorrect");
+              "Deployment view is incorrect");
       end if;
 
       --  Missing data view is actually not an error.
@@ -901,7 +904,7 @@ procedure AADL_Parser is
          Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Data_View));
          FN := Ocarina.Files.Search_File (Name_Find);
 
-         Exit_On_Error (FN = No_Name, "[ERROR] Cannot find Data View");
+         Exit_On_Error (FN = No_Name, "Cannot find Data View");
 --        C_Set_Dataview
 --           (Ada.Command_Line.Argument (Data_View),
 --           Ada.Command_Line.Argument (Data_View)'Length);
@@ -916,13 +919,12 @@ procedure AADL_Parser is
                             (AADL_Language, Dataview_root, B);
       end if;
 
-      Exit_On_Error (No (Interface_Root),
-                     "[ERROR] AADL Parser Internal error");
+      Exit_On_Error (No (Interface_Root), "AADL Parser Internal error");
 
       --  Analyze the tree
 
       Success := Ocarina.Analyzer.Analyze (AADL_Language, Interface_Root);
-      Exit_On_Error (not Success, "Internal Error, cannot analyze model.");
+      Exit_On_Error (not Success, "Cannot analyze model.");
 
    end Initialize;
 
@@ -960,6 +962,10 @@ begin
    Ocarina.Configuration.Reset_Modules;
    Ocarina.Reset;
 exception
+   when Error : AADL_Parser_Error =>
+      Put ("[ERROR] ");
+      Put_Line (Exception_Message (Error));
+      OS_Exit (1);
    when E : others =>
       Errors.Display_Bug_Box (E);
 end AADL_Parser;

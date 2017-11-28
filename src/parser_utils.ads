@@ -35,6 +35,8 @@ package Parser_Utils is
 
    procedure Usage;
 
+   AADL_Parser_Error : exception;
+
    procedure Exit_On_Error (Error : Boolean; Reason : String);
 
    type Synchronism is (Sync, Async);

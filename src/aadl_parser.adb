@@ -681,7 +681,6 @@ procedure AADL_Parser is
       Previous_IFview   : Boolean := False;
       Previous_CView    : Boolean := False;
       Previous_DataView : Boolean := False;
-      Previous_Stack    : Boolean := False;
       Previous_TimerRes : Boolean := False;
    begin
       for J in 1 .. Ada.Command_Line.Argument_Count loop
@@ -703,10 +702,6 @@ procedure AADL_Parser is
          elsif Previous_Outdir then
             OutDir := J;
             Previous_OutDir := false;
-
-         elsif Previous_Stack then
-            Stack_Val := J;
-            Previous_Stack := false;
 
          elsif Previous_TimerRes then
             Timer_Resolution := J;
@@ -768,12 +763,6 @@ procedure AADL_Parser is
            or else Ada.Command_Line.Argument (J) = "-i"
          then
             Previous_Ifview := True;
-
-         elsif Ada.Command_Line.Argument (J) = "--stack"
-           or else Ada.Command_Line.Argument (J) = "-stack"
-           or else Ada.Command_Line.Argument (J) = "-s"
-         then
-            Previous_Stack := True;
 
          elsif Ada.Command_Line.Argument (J) = "--timer"
            or else Ada.Command_Line.Argument (J) = "-timer"

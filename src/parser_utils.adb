@@ -62,8 +62,6 @@ package body Parser_Utils is
       Put_Line ("Dump model information");
       Put ("-g, --debug" & HT & HT & HT & HT);
       Put_Line ("Generate runtime debug output");
-      Put ("-s, --stack <stack-value>" & HT & HT);
-      Put_Line ("Set the size of the stack per thread in kbytes (default 50)");
       Put ("-x, --timer <timer-resolution in ms>" & HT);
       Put_Line ("Set the timer resolution (default 100 ms)");
       Put ("-v, --version" & HT & HT & HT & HT);

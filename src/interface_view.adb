@@ -709,6 +709,60 @@ package body Interface_View is
                                 New_Item => FV);
    end Rename_Function;
 
+   procedure Rename_Provided_Interface (IV    : in out Complete_Interface_View;
+                                        Func  : String;
+                                        Iface : String;
+                                        To    : String) is
+      FV        : Taste_Terminal_Function :=
+                    IV.Flat_Functions.Element (Key => Func);
+      FV_If     : Taste_Interface :=
+                    FV.Provided.Element (Key => Iface);
+   begin
+      FV_If.Name := US (To);
+      FV.Provided.Delete (Key       => Iface);
+      FV.Provided.Insert  (Key      => To,
+                           New_Item => FV_If);
+      --  Now fix all references to this interface
+      for Each of IV.Flat_Functions loop
+         for RI of Each.Required loop
+            for Remote of RI.Remote_Interfaces loop
+               if Remote.Function_Name = FV.Name and then
+                 Remote.Interface_Name = US (Iface)
+               then
+                  Remote.Interface_Name := FV_If.Name;
+               end if;
+            end loop;
+         end loop;
+      end loop;
+   end Rename_Provided_Interface;
+
+   procedure Rename_Required_Interface (IV    : in out Complete_Interface_View;
+                                        Func  : String;
+                                        Iface : String;
+                                        To    : String) is
+      FV        : Taste_Terminal_Function :=
+                    IV.Flat_Functions.Element (Key => Func);
+      FV_If     : Taste_Interface :=
+                    FV.Provided.Element (Key => Iface);
+   begin
+      FV_If.Name := US (To);
+      FV.Required.Delete (Key       => Iface);
+      FV.Required.Insert  (Key      => To,
+                           New_Item => FV_If);
+      --  Now fix all references to this interface
+      for Each of IV.Flat_Functions loop
+         for PI of Each.Provided loop
+            for Remote of PI.Remote_Interfaces loop
+               if Remote.Function_Name = FV.Name and then
+                 Remote.Interface_Name = US (Iface)
+               then
+                  Remote.Interface_Name := FV_If.Name;
+               end if;
+            end loop;
+         end loop;
+      end loop;
+   end Rename_Required_Interface;
+
    procedure Debug_Dump_IV (IV : Complete_Interface_View) is
       procedure Dump_Interface (Ind : String := "      ";
                                 I   : Taste_Interface) is

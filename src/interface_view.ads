@@ -9,7 +9,6 @@ with Ocarina,
      Ocarina.Backends.Properties,
      Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
-     --  Ocarina.ME_AADL.AADL_Tree.Nodes,
      Ada.Strings.Unbounded,
      Option_Type,
      Parser_Utils;
@@ -17,7 +16,6 @@ with Ocarina,
 use Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
-    --  Ocarina.ME_AADL.AADL_Tree.Nodes,
     Ada.Containers,
     Ada.Strings.Unbounded,
     Parser_Utils;
@@ -170,6 +168,16 @@ package Interface_View is
    --  Model transformation API: Rename a function
    procedure Rename_Function (IV       : in out Complete_Interface_View;
                               From, To : String);
+
+   procedure Rename_Provided_Interface (IV    : in out Complete_Interface_View;
+                                        Func  : String;
+                                        Iface : String;
+                                        To    : String);
+
+   procedure Rename_Required_Interface (IV    : in out Complete_Interface_View;
+                                        Func  : String;
+                                        Iface : String;
+                                        To    : String);
 
    procedure Debug_Dump_IV (IV : Complete_Interface_View);
 

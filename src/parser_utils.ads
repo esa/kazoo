@@ -11,7 +11,8 @@ with Ocarina,
      Ocarina.ME_AADL.AADL_Tree.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ada.Strings.Unbounded,
-     Option_Type;
+     Option_Type,
+     Interfaces.C_Streams;
 
 use Ocarina,
     Ocarina.Types,
@@ -19,7 +20,8 @@ use Ocarina,
     Ocarina.ME_AADL.AADL_Tree.Nodes,
     Ocarina.ME_AADL.AADL_Instances.Nodes,
     Ada.Containers,
-    Ada.Strings.Unbounded;
+    Ada.Strings.Unbounded,
+    Interfaces.C_Streams;
 
 package Parser_Utils is
 
@@ -28,11 +30,20 @@ package Parser_Utils is
    function US (Source : String) return Unbounded_String renames
        To_Unbounded_String;
 
-   Yellow_Bold : constant String := ASCII.ESC & "[33m" & ASCII.ESC & "[1m";
+   Yellow      : constant String := ASCII.ESC & "[33m";
    White       : constant String := ASCII.ESC & "[37m";
-   Red_Bold    : constant String := ASCII.ESC & "[31m" & ASCII.ESC & "[1m";
-   Underscore  : constant String := ASCII.ESC & "[4m";
-   No_Color    : constant String := ASCII.ESC & "[0m";
+   Red         : constant String := ASCII.ESC & "[31m";
+   Bold        : constant String := ASCII.ESC & "[1m";
+
+   function Is_Tty return Boolean is (Isatty (Fileno (Stdout)) /= 0);
+   function Red_Bold return String is (if Is_Tty then Red & Bold else "");
+   function Yellow_Bold return String is
+     (if Is_Tty then Yellow & Bold else "");
+   function No_Color return String is
+     (if Is_Tty then ASCII.ESC & "[0m" else "");
+   function Underscore return String is
+     (if Is_Tty then ASCII.ESC & "[4m" else "");
+   function White_Bold return String is (if Is_Tty then White & Bold else "");
 
    procedure Banner;
 

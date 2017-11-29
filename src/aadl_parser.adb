@@ -60,7 +60,7 @@ procedure AADL_Parser is
    Stack_Val         : Integer := 0;
    Timer_Resolution  : Integer := 0;
    Interface_View    : Integer := 0;
-   Concurrency_view  : Integer := 0;
+   Depl_View_Pos : Integer := 0;
    Data_View         : Integer := 0;
    Generate_glue     : Boolean := false;
    Keep_case         : Boolean := false;
@@ -581,7 +581,7 @@ procedure AADL_Parser is
             Previous_Ifview := false;
 
          elsif Previous_Cview then
-            Concurrency_view := J;
+            Depl_View_Pos := J;
             Previous_Cview := false;
 
          elsif Previous_DataView then
@@ -756,7 +756,7 @@ procedure AADL_Parser is
       Interface_Root := Ocarina.Parser.Parse
         (AADL_Language, Interface_Root, B);
 
-      if Concurrency_view = 0 and Generate_Glue then
+      if Depl_View_Pos = 0 and Generate_Glue then
          Put_Line ("Fatal error: Missing Deployment view!");
          Put_Line ("Use the '-c file.aadl' parameter.");
          Put_Line
@@ -767,8 +767,8 @@ procedure AADL_Parser is
             ("only to generate your application skeletons ('-gw' flag).");
          New_line;
 
-      elsif Concurrency_View > 0 and Generate_Glue then
-         Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Concurrency_View));
+      elsif Depl_View_Pos > 0 and Generate_Glue then
+         Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Depl_View_Pos));
          FN := Ocarina.Files.Search_File (Name_Find);
          B := Ocarina.Files.Load_File (FN);
          Deployment_Root := Ocarina.Parser.Parse
@@ -817,11 +817,7 @@ begin
 
    Initialize;
 
-   --  First, we analyze the interface view. For that, we load the
-   --  AADL model, analyze it. Under AADLv2 version, the root system
-   --  of the interface view is called interfaceview.others.
-
-   --  Instantiate AADL tree
+   --  First, we analyze the interface view.
 
    Ocarina.Options.Root_System_Name :=
           Get_String_Name ("interfaceview.others");
@@ -834,18 +830,18 @@ begin
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.
 
-   --  Additional properties for the Deployment view
-
-   Load_Deployment_View_Properties (Deployment_Root);
-
-   DV_AST := AADL_To_Ada_DV (Deployment_Root);
-   --  Process_Deployment_View (Deployment_Root);
+   if Depl_View_Pos > 0 then
+      Load_Deployment_View_Properties (Deployment_Root);
+      DV_AST := AADL_To_Ada_DV (Deployment_Root);
+   end if;
 
    Ocarina.Configuration.Reset_Modules;
    Ocarina.Reset;
+
 exception
-   when Error : AADL_Parser_Error | Deployment_View_Error =>
-      Put (Red_Bold & "[ERROR] " & White);
+   when Error : AADL_Parser_Error
+               | Deployment_View_Error =>
+      Put (Red_Bold & "[ERROR] " & White_Bold);
       Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);
 

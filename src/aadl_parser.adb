@@ -6,7 +6,6 @@ pragma Warnings (Off);
 with Ada.Strings.Unbounded,
      Ada.Command_Line,
      Ada.Exceptions,
-
      Ada.Text_IO,
      Ada.Containers.Indefinite_Vectors,
      GNAT.OS_Lib,
@@ -26,7 +25,8 @@ with Ada.Strings.Unbounded,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
      Parser_Utils,
-     Interface_View;
+     Interface_View,
+     Deployment_View;
 
 use Ada.Strings.Unbounded,
     Ada.Text_IO,
@@ -45,6 +45,7 @@ use Ada.Strings.Unbounded,
     Ocarina.Backends.Properties,
     Parser_Utils,
     Interface_View,
+    Deployment_View,
     GNAT.OS_Lib;
 
 procedure AADL_Parser is
@@ -142,110 +143,6 @@ procedure AADL_Parser is
    -----------------------------
 
    procedure Process_Deployment_View (My_Root : Node_Id) is null;
---     My_Root_System : Node_Id;
---     CI             : Node_Id;
---     Root_Instance  : Node_Id;
---  begin
---
---     if My_Root /= No_Node and then Concurrency_view /= 0 then
---        --  Analyze the tree
---
---        Success := Ocarina.Analyzer.Analyze (AADL_Language, My_Root);
---        Exit_On_Error (not Success, "Deployment view is incorrect");
---        if Success then
---           --  After making sure that the Deployment view is correct, set
---           --  the Glue flag
---
---           if generate_glue then
---              C_Set_Glue;
---           end if;
---
---           --  Put_Line (Get_Name_String
---           --    (Get_Ellidiss_Tool_Version (My_Root)));
---
---           Ocarina.Options.Root_System_Name :=
---                 Get_String_Name ("deploymentview.others");
---
---           --  Instantiate AADL tree
---           Root_Instance := Instantiate_Model (Root => My_Root);
---
---           My_Root_System := Root_System (Root_Instance);
---
---           --  Name of the ROOT SYSTEM (not implementation)
---
---           declare
---              My_Root_System_Name : constant String :=
---                Get_Name_String
---                (Ocarina.ME_AADL.AADL_Tree.Nodes.Name
---                   (Ocarina.ME_AADL.AADL_Tree.Nodes.
---                      Component_Type_Identifier
---                      (Corresponding_Declaration
---                       (My_Root_System))));
---           begin
---              C_Set_Root_node
---                  (My_Root_System_Name, My_Root_System_Name'Length);
---           end;
---
---           if not Is_Empty (Subcomponents (My_Root_System)) then
---              Subs := First_Node (Subcomponents (My_Root_System));
---
---              while Present (Subs) loop
---                 CI := Corresponding_Instance (Subs);
---
---                 if Get_Category_Of_Component (CI) = CC_System then
---                    Browse_Deployment_View_System
---                        (CI, Get_Name_String (Name (Identifier (Subs))));
---                 elsif Get_Category_Of_Component (CI) = CC_Bus then
---                    declare
---                       --  Get the list of properties attaches to the bus
---                       Properties : constant Property_Maps.Map :=
---                                                     Get_Properties_Map (CI);
---                       Bus_Classifier : Name_Id := No_Name;
---                       Pkg_Name : Name_Id := No_Name;
---                    begin
---                       --  Iterate on the BUS Instance properties
---                       for each in Properties.Iterate loop
---                          null;
---                          --  Put_Line (Property_Maps.Key (each) & " : " &
---                          --            Property_Maps.Element (each));
---                       end loop;
---                       Set_Str_To_Name_Buffer ("");
---                       if ATN.Namespace
---                           (Corresponding_Declaration (CI)) /= No_Node
---                       then
---                          Set_Str_To_Name_Buffer ("");
---                          Get_Name_String
---                             (ATN.Name
---                                (ATN.Identifier
---                                   (ATN.Namespace
---                                      (Corresponding_Declaration (CI)))));
---                          Pkg_Name := Name_Find;
---                          C_Add_Package
---                             (Get_Name_String (Pkg_Name),
---                             Get_Name_String (Pkg_Name)'Length);
---                          Set_Str_To_Name_Buffer ("");
---                          Get_Name_String (Pkg_Name);
---                          Add_Str_To_Name_Buffer ("::");
---                          Get_Name_String_And_Append
---                             (Name (Identifier (CI)));
---                          Bus_Classifier := Name_Find;
---                       else
---                          Bus_Classifier := Name (Identifier (CI));
---                       end if;
---                       C_New_Bus
---                        (Get_Name_String (Name (Identifier (Subs))),
---                         Get_Name_String (Name (Identifier (Subs)))'Length,
---                         Get_Name_String (Bus_Classifier),
---                         Get_Name_String (Bus_Classifier)'Length);
---                       C_End_Bus;
---                    end;
---                 end if;
---                 Subs := Next_Node (Subs);
---              end loop;
---           end if;
---        end if;
---     end if;
---  end Process_Deployment_View;
 
    -------------------------------------
    -- Load_Deployment_View_Properties --

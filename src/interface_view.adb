@@ -121,17 +121,6 @@ package body Interface_View is
       return Get_String_Property (D, Ellidiss_Tool_Version);
    end Get_Ellidiss_Tool_Version;
 
-   ------------------------
-   -- Get_Interface_Name --
-   ------------------------
-
-   function Get_Interface_Name (D : Node_Id) return Name_Id is
-      Interface_Name : constant Name_id :=
-         Get_String_Name ("taste::interfacename");
-   begin
-      return Get_String_Property (D, Interface_Name);
-   end Get_Interface_Name;
-
    ---------------------------
    -- Get ASN.1 Module name --
    ---------------------------

@@ -107,6 +107,17 @@ package body Parser_Utils is
       end if;
    end Get_APLC_Binding;
 
+   ------------------------
+   -- Get_Interface_Name --
+   ------------------------
+
+   function Get_Interface_Name (D : Node_Id) return Name_Id is
+      Interface_Name : constant Name_id :=
+         Get_String_Name ("taste::interfacename");
+   begin
+      return Get_String_Property (D, Interface_Name);
+   end Get_Interface_Name;
+
    --------------------------------------------
    -- Get all properties as a Map Key/String --
    -- Input parameter is an AADL instance    --

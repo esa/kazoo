@@ -68,8 +68,6 @@ package Interface_View is
 
    function Get_Ellidiss_Tool_Version (D : Node_Id) return Name_Id;
 
-   function Get_Interface_Name (D : Node_Id) return Name_Id;
-
    function Get_ASN1_Module_Name (D : Node_Id) return String;
 
    type Parameter_Direction is (param_in, param_out);

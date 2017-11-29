@@ -6,7 +6,6 @@
 
 with Ocarina,
      Ocarina.Types,
-     --  Ocarina.Backends.Properties,
      Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
@@ -15,7 +14,6 @@ with Ocarina,
 
 use Ocarina,
     Ocarina.Types,
-    --  Ocarina.Backends.Properties,
     Ada.Containers,
     Ada.Strings.Unbounded,
     Parser_Utils;
@@ -50,10 +48,22 @@ package Deployment_View is
 
    package Taste_Busses is new Indefinite_Vectors (Natural, Taste_Bus);
 
+   type Bus_Connection is
+      record
+         Source_Node : Unbounded_String;
+         Source_Port : Unbounded_String;
+         Bus_Name    : Unbounded_String;
+         Dest_Node   : Unbounded_String;
+         Dest_Port   : Unbounded_String;
+      end record;
+
+   package Bus_Connections is new Indefinite_Vectors (Natural, Bus_Connection);
+
    type Complete_Deployment_View is tagged
       record
-         Nodes  : Node_Maps.Map;
-         Busses : Taste_Busses.Vector;
+         Nodes       : Node_Maps.Map;
+         Connections : Bus_Connections.Vector;
+         Busses      : Taste_Busses.Vector;
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina

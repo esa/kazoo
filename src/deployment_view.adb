@@ -59,6 +59,8 @@ package body Deployment_View is
    is
       use type Node_Maps.Map;
       use type Taste_Busses.Vector;
+      use type Bus_Connections.Vector;
+
       Nodes          : Node_Maps.Map;
       Busses         : Taste_Busses.Vector;
       Conns          : Bus_Connections.Vector;
@@ -150,6 +152,32 @@ package body Deployment_View is
          return Result;
       end Parse_Connections;
 
+      function Parse_Node (Depl_View_System : Node_Id)
+                            return Taste_Node is
+         Processes : Node_Id;
+         CI        : Node_Id;
+         Result    : Taste_Node;
+      begin
+         Processes := First_Node (Subcomponents (Depl_View_System));
+
+         while Present (Processes) loop
+            CI := Corresponding_Instance (Processes);
+            if Get_Category_Of_Component (CI) = CC_Device then
+               --  There can be several drivers
+               null;
+
+            elsif Get_Category_Of_Component (CI) = CC_Process then
+               --  Partitions?
+               null;
+            end if;
+
+            Processes := Next_Node (Processes);
+         end loop;
+
+         return Result;
+
+      end Parse_Node;
+
    begin
       My_Root_System := Initialize (System);
 
@@ -162,14 +190,16 @@ package body Deployment_View is
       while Present (Subs) loop
          CI := Corresponding_Instance (Subs);
 
-         if Get_Category_Of_Component (CI) = CC_System then
+         if Get_Category_Of_Component (CI) = CC_System then  --  Node
             if not Is_Empty (Connections (CI)) then
-               Conns := Parse_Connections (CI);
+               Conns := Conns & Parse_Connections (CI);  --  Checkme
             end if;
 
---            Browse_Deployment_View_System
---                (CI, Get_Name_String (Name (Identifier (Subs))));
-         elsif Get_Category_Of_Component (CI) = CC_Bus then
+            if not Is_Empty (Subcomponents (CI)) then
+               Nodes.Insert (Key => Get_Name_String (Name (Identifier (Subs))),
+                             New_Item => Parse_Node (CI));
+            end if;
+         elsif Get_Category_Of_Component (CI) = CC_Bus then  --  Bus
             Busses.Append (Parse_Bus (Subs, CI));
          end if;
          Subs := Next_Node (Subs);

@@ -73,15 +73,9 @@ package body Deployment_View is
              (Corresponding_Declaration (Bus)) /= No_Node
          then
             Set_Str_To_Name_Buffer ("");
-            Get_Name_String
-               (ATN.Name
-                  (ATN.Identifier
-                     (ATN.Namespace
-                        (Corresponding_Declaration (Bus)))));
+            Get_Name_String (ATN.Name (ATN.Identifier (ATN.Namespace
+                             (Corresponding_Declaration (Bus)))));
             Pkg_Name := Name_Find;
-            --  C_Add_Package
-            --   (Get_Name_String (Pkg_Name),
-
             Set_Str_To_Name_Buffer ("");
             Get_Name_String (Pkg_Name);
             Add_Str_To_Name_Buffer ("::");
@@ -91,12 +85,12 @@ package body Deployment_View is
          else
             Classifier := Name (Identifier (Bus));
          end if;
-         return Taste_Bus'(Name       =>
+         return Taste_Bus'(Name         =>
                              US (Get_Name_String (Name (Identifier (Elem)))),
-                           Classifier => US (Get_Name_String (Classifier)),
-                           Properties => Properties);
+                           AADL_Package => US (Get_Name_String (Pkg_Name)),
+                           Classifier   => US (Get_Name_String (Classifier)),
+                           Properties   => Properties);
       end Parse_Bus;
-
    begin
       My_Root_System := Initialize (System);
 
@@ -115,7 +109,6 @@ package body Deployment_View is
 --                (CI, Get_Name_String (Name (Identifier (Subs))));
          elsif Get_Category_Of_Component (CI) = CC_Bus then
             Busses.Append (Parse_Bus (Subs, CI));
-
          end if;
          Subs := Next_Node (Subs);
       end loop;

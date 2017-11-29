@@ -42,9 +42,10 @@ package Deployment_View is
 
    type Taste_Bus is
       record
-         Name       : Unbounded_String;
-         Classifier : Unbounded_String;
-         Properties : Property_Maps.Map;
+         Name         : Unbounded_String;
+         AADL_Package : Unbounded_String;
+         Classifier   : Unbounded_String;
+         Properties   : Property_Maps.Map;
       end record;
 
    package Taste_Busses is new Indefinite_Vectors (Natural, Taste_Bus);

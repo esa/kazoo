@@ -783,20 +783,20 @@ public
   -- used through the TCP_IP_Device defined in TCP_IP_Protocol
   -- package.
 
-  processor Generic_Processor
-  features
-    eth0_tcp_ip : requires bus access Generic_Bus::Generic_Bus.impl;
-    -- One ethernet card, connected to the processor. It is assumed
-    -- later that it is used through a TCP/IP stack
-
-  end Generic_Processor;
-
-  processor implementation Generic_Processor.impl
-  properties
-    Deployment::Execution_Platform => Native;
-    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
-    Priority_Range => 0 .. 255;
-  end Generic_Processor.impl;
+-- processor Generic_Processor
+-- features
+--   eth0_tcp_ip : requires bus access Generic_Bus::Generic_Bus.impl;
+--   -- One ethernet card, connected to the processor. It is assumed
+--   -- later that it is used through a TCP/IP stack
+--
+-- end Generic_Processor;
+--
+-- processor implementation Generic_Processor.impl
+-- properties
+--   Deployment::Execution_Platform => Native;
+--   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+--   Priority_Range => 0 .. 255;
+-- end Generic_Processor.impl;
 
   ------------
   -- MEMORY --
@@ -838,15 +838,15 @@ public
     -- XXX Add UARTS
   end LEON2;
 
-  processor implementation LEON2.impl
-  properties
-    Deployment::Execution_Platform => LEON_ORK;  -- for using GNATforLEON
-
-    -- Information on the scheduler used by GNATforLEON
-
-    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
-    Priority_Range => 0 .. 255;
-  end LEON2.impl;
+-- processor implementation LEON2.impl
+-- properties
+--   Deployment::Execution_Platform => LEON_ORK;  -- for using GNATforLEON
+--
+--   -- Information on the scheduler used by GNATforLEON
+--
+--   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+--   Priority_Range => 0 .. 255;
+-- end LEON2.impl;
 
   ------------
   -- MEMORY --
@@ -2132,78 +2132,167 @@ with Cheddar_Properties;
 processor arm
 end arm;
 
-processor cortex_m extends arm
+processor crazyflie_v2 extends arm
 properties
    Deployment::Execution_Platform => GNAT_Runtime;
-end cortex_m;
+   Deployment::Ada_Runtime => "crazyflie_full";
+end crazyflie_v2;
 
-processor implementation cortex_m.i
+processor implementation crazyflie_v2.gnat
 properties
    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
    Priority_Range => 0 .. 255;
    Cheddar_Properties::Scheduler_Quantum => 0 Ms;
    Cheddar_Properties::Preemptive_Scheduler => true;
-end cortex_m.i;
+end crazyflie_v2.gnat;
+
+
+processor stm32f407_discovery extends arm
+properties
+   Deployment::Execution_Platform => GNAT_Runtime;
+   Deployment::Ada_Runtime => "stm32f407_discovery_full";
+end stm32f407_discovery;
+
+processor implementation stm32f407_discovery.gnat2017
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
+   Cheddar_Properties::Preemptive_Scheduler => true;
+end stm32f407_discovery.gnat2017;
+
+processor stm32f429_discovery extends arm
+properties
+   Deployment::Execution_Platform => GNAT_Runtime;
+   Deployment::Ada_Runtime => "stm32f429_discovery_full";
+end stm32f429_discovery;
+
+processor implementation stm32f429_discovery.gnat2017
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
+   Cheddar_Properties::Preemptive_Scheduler => true;
+end stm32f429_discovery.gnat2017;
+
+
 
 processor nds extends arm
 end nds;
 
-processor implementation nds.rtems
-properties
-   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
-   Priority_Range => 0 .. 255;
-   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
-   Cheddar_Properties::Preemptive_Scheduler => true;
-   Deployment::Execution_Platform => NDS_RTEMS;
-end nds.rtems;
+--   processor implementation nds.rtems
+--   properties
+--      Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+--      Priority_Range => 0 .. 255;
+--      Cheddar_Properties::Scheduler_Quantum => 0 Ms;
+--      Cheddar_Properties::Preemptive_Scheduler => true;
+--      Deployment::Execution_Platform => NDS_RTEMS;
+--   end nds.rtems;
 
 
 processor gumstix extends arm
 end gumstix;
 
-processor implementation gumstix.rtems
-properties
-   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
-   Priority_Range => 0 .. 255;
-   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
-   Cheddar_Properties::Preemptive_Scheduler => true;
-   Deployment::Execution_Platform => GUMSTIX_RTEMS;
-end gumstix.rtems;
+--   processor implementation gumstix.rtems
+--   properties
+--      Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+--      Priority_Range => 0 .. 255;
+--      Cheddar_Properties::Scheduler_Quantum => 0 Ms;
+--      Cheddar_Properties::Preemptive_Scheduler => true;
+--      Deployment::Execution_Platform => GUMSTIX_RTEMS;
+--   end gumstix.rtems;
 
 end ocarina_processors_arm;
 package ocarina_processors_leon
-
 public
 
 with Deployment;
-with Cheddar_Properties;
 
 processor leon
 end leon;
 
-processor implementation leon.rtems
-properties
-   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
-   Priority_Range => 0 .. 255;
-   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
-   Cheddar_Properties::Preemptive_Scheduler => true;
-   Deployment::Execution_Platform => LEON_RTEMS;
-end leon.rtems;
+processor leon2 extends leon
+end leon2;
+
+processor gr712 extends leon
+end gr712;
+
+processor gr740 extends leon
+end gr740;
+
+--   processor implementation leon.rtems
+--   properties
+--      Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+--      Priority_Range => 0 .. 255;
+--      Scheduler_Quantum => 0 Ms;
+--      Preemptive_Scheduler => true;
+--      Deployment::Execution_Platform => LEON_RTEMS;
+--   end leon.rtems;
 
 processor implementation leon.rtems_posix
 properties
    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
    Priority_Range => 0 .. 255;
-   Cheddar_Properties::Scheduler_Quantum => 0 Ms;
-   Cheddar_Properties::Preemptive_Scheduler => true;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
    Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.12-2017.07.17/sparc-rtems4.12/leon3";
 end leon.rtems_posix;
 
-
-processor implementation leon.ork
+processor implementation leon2.rtems412_posix
 properties
-   Deployment::Execution_Platform => LEON_ORK;
-end leon.ork;
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
+   Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.12-2017.07.17/sparc-rtems4.12/leon2";
+end leon2.rtems412_posix;
+
+processor implementation leon3.rtems412_posix
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
+   Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.12-2017.07.17/sparc-rtems4.12/leon3";
+end leon3.rtems412_posix;
+
+processor implementation gr712.rtems412_posix
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
+   Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.12-2017.07.17/sparc-rtems4.12/gr712rc:CFLAGS=-DCONFIGURE_SMP_APPLICATION -DCONFIGURE_MAXIMUM_PROCESSORS=2 ";
+end gr712.rtems412_posix;
+
+processor implementation gr740.rtems412_posix
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
+   Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.12-2017.07.17/sparc-rtems4.12/gr740:CFLAGS=-DCONFIGURE_SMP_APPLICATION -DCONFIGURE_MAXIMUM_PROCESSORS=4 ";
+end gr740.rtems412_posix;
+
+processor implementation gr740.rtems410_gaisler_posix
+properties
+   Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+   Priority_Range => 0 .. 255;
+   Scheduler_Quantum => 0 Ms;
+   Preemptive_Scheduler => true;
+   Deployment::Execution_Platform => LEON_RTEMS_POSIX;
+   EnvVars => "RTEMS_MAKEFILE_PATH_LEON=/opt/rtems-4.10/sparc-rtems/leon3:CFLAGS=-qngmp:LDFLAGS=-qngmp ";
+end gr740.rtems410_gaisler_posix;
+
+--   processor implementation leon.ork
+--   properties
+--      Deployment::Execution_Platform => LEON_ORK;
+--   end leon.ork;
 
 processor leon3
 end leon3;
@@ -2214,27 +2303,27 @@ end xtratum_partition;
 virtual processor implementation xtratum_partition.generic
 end xtratum_partition.generic;
 
-processor implementation leon3.scoc3
-properties
-   Deployment::Execution_Platform => LEON3_SCOC3;
-end leon3.scoc3;
+--   processor implementation leon3.scoc3
+--   properties
+--      Deployment::Execution_Platform => LEON3_SCOC3;
+--   end leon3.scoc3;
 
-processor implementation leon3.xtratum
-properties
-   Deployment::Execution_Platform => LEON3_XTRATUM;
-end leon3.xtratum;
+--   processor implementation leon3.xtratum
+--   properties
+--      Deployment::Execution_Platform => LEON3_XTRATUM;
+--   end leon3.xtratum;
 
-processor implementation leon3.xtratum_2partitions extends leon3.xtratum
-subcomponents
-	part1 : virtual processor xtratum_partition.generic
-      { Deployment::Execution_Platform => LEON3_XM3;};
-	part2 : virtual processor xtratum_partition.generic
-      { Deployment::Execution_Platform => LEON3_XM3;};
---  properties
---   ARINC653::Partition_Slots => (500ms, 500ms);
---   ARINC653::Slots_Allocation => (reference (part1), reference (part2));
---	ARINC653::Module_Major_Frame => 1000ms;
-end leon3.xtratum_2partitions;
+--   processor implementation leon3.xtratum_2partitions extends leon3.xtratum
+--   subcomponents
+--           part1 : virtual processor xtratum_partition.generic
+--         { Deployment::Execution_Platform => LEON3_XM3;};
+--           part2 : virtual processor xtratum_partition.generic
+--         { Deployment::Execution_Platform => LEON3_XM3;};
+     --  properties
+     --   ARINC653::Partition_Slots => (500ms, 500ms);
+     --   ARINC653::Slots_Allocation => (reference (part1), reference (part2));
+     --	ARINC653::Module_Major_Frame => 1000ms;
+--   end leon3.xtratum_2partitions;
 
 end ocarina_processors_leon;
 package ocarina_processors_x86
@@ -2260,50 +2349,50 @@ properties
 end x86.win32;
 
 
-processor implementation x86.linux_bench
-properties
-   Scheduling_Protocol => (POSIX_1003_HIGHEST_PRIORITY_FIRST_PROTOCOL);
-   Deployment::Execution_Platform => bench;
-end x86.linux_bench;
+--   processor implementation x86.linux_bench
+--   properties
+--      Scheduling_Protocol => (POSIX_1003_HIGHEST_PRIORITY_FIRST_PROTOCOL);
+--      Deployment::Execution_Platform => bench;
+--   end x86.linux_bench;
 
-processor implementation x86.linux32
-properties
-   Deployment::Execution_Platform => Linux32;
-end x86.linux32;
+--   processor implementation x86.linux32
+--   properties
+--      Deployment::Execution_Platform => Linux32;
+--   end x86.linux32;
+--
+--   processor implementation x86.linux64
+--   properties
+--      Deployment::Execution_Platform => Linux64;
+--   end x86.linux64;
 
-processor implementation x86.linux64
-properties
-   Deployment::Execution_Platform => Linux64;
-end x86.linux64;
+--   processor implementation x86.native
+--   properties
+--      Deployment::Execution_Platform => Native;
+--   end x86.native;
+--
+--   processor implementation x86.native_compcert
+--   properties
+--      Deployment::Execution_Platform => Native_Compcert;
+--   end x86.native_compcert;
+--
+--   processor implementation x86.rtems
+--   properties
+--      Deployment::Execution_Platform => X86_RTEMS;
+--   end x86.rtems;
+--
+--   processor implementation x86.rtems_posix
+--   properties
+--      Deployment::Execution_Platform => X86_RTEMS_POSIX;
+--   end x86.rtems_posix;
 
-processor implementation x86.native
-properties
-   Deployment::Execution_Platform => Native;
-end x86.native;
-
-processor implementation x86.native_compcert
-properties
-   Deployment::Execution_Platform => Native_Compcert;
-end x86.native_compcert;
-
-processor implementation x86.rtems
-properties
-   Deployment::Execution_Platform => X86_RTEMS;
-end x86.rtems;
-
-processor implementation x86.rtems_posix
-properties
-   Deployment::Execution_Platform => X86_RTEMS_POSIX;
-end x86.rtems_posix;
-
-processor implementation x86.xenomai_posix
-properties
-   Deployment::Execution_Platform => linux32_xenomai_posix;
-end x86.xenomai_posix;
-
-processor implementation x86.xenomai_native
-properties
-   Deployment::Execution_Platform => linux32_xenomai_native;
-end x86.xenomai_native;
+--   processor implementation x86.xenomai_posix
+--   properties
+--      Deployment::Execution_Platform => linux32_xenomai_posix;
+--   end x86.xenomai_posix;
+--
+--   processor implementation x86.xenomai_native
+--   properties
+--      Deployment::Execution_Platform => linux32_xenomai_native;
+--   end x86.xenomai_native;
 
 end ocarina_processors_x86;

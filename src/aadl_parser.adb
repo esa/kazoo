@@ -67,7 +67,6 @@ procedure AADL_Parser is
    AADL_Version      : AADL_Version_Type := Ocarina.AADL_V2;
 
    procedure Parse_Command_Line;
-   procedure Process_Deployment_View (My_Root : Node_Id);
    --  procedure Process_DataView (My_Root : Node_Id);
    procedure Browse_Deployment_View_System
      (My_System : Node_Id; NodeName : String) with Unreferenced;
@@ -138,12 +137,6 @@ procedure AADL_Parser is
 
          --  Current_function is read from the list of system subcomponents
 
-   -----------------------------
-   -- Process_Deployment_View --
-   -----------------------------
-
-   procedure Process_Deployment_View (My_Root : Node_Id) is null;
-
    -------------------------------------
    -- Load_Deployment_View_Properties --
    -------------------------------------
@@ -173,7 +166,6 @@ procedure AADL_Parser is
                   "memory_properties.aadl" &
                   "modeling_properties.aadl" &
                   "arinc653.aadl" &
-                  --  "arinc653_properties.aadl" &
                   "base_types.aadl" &
                   "data_model.aadl" &
                   "deployment.aadl";
@@ -817,7 +809,8 @@ procedure AADL_Parser is
    end Initialize;
 
    IV_Root : Node_Id;
-   AST : Complete_Interface_View;
+   IV_AST : Complete_Interface_View;
+   DV_AST : Complete_Deployment_View;
 
 begin
    Banner;
@@ -834,9 +827,9 @@ begin
           Get_String_Name ("interfaceview.others");
 
    IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
-   AST := AADL_to_Ada_IV (IV_Root);
+   IV_AST := AADL_to_Ada_IV (IV_Root);
 
-   Debug_Dump_IV (AST);
+   Debug_Dump_IV (IV_AST);
 
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.
@@ -845,15 +838,17 @@ begin
 
    Load_Deployment_View_Properties (Deployment_Root);
 
-   Process_Deployment_View (Deployment_Root);
+   DV_AST := AADL_To_Ada_DV (Deployment_Root);
+   --  Process_Deployment_View (Deployment_Root);
 
    Ocarina.Configuration.Reset_Modules;
    Ocarina.Reset;
 exception
-   when Error : AADL_Parser_Error =>
+   when Error : AADL_Parser_Error | Deployment_View_Error =>
       Put (Red_Bold & "[ERROR] " & White);
       Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);
+
    when E : others =>
       Errors.Display_Bug_Box (E);
 end AADL_Parser;

@@ -8,7 +8,7 @@ test-parse:
 			     -d dataview.aadl \
 			     ../common/ocarina_components.aadl \
 			     ../common/TASTE_DV_Properties.aadl \
-			     2>&1 | tail -2 | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | tail -2 | diff expected -
+			     2>&1 | tail -2 | diff expected -
 
 clean:
 	rm -rf obj $(exec) *~

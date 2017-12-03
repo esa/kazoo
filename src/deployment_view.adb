@@ -6,7 +6,7 @@
 
 with --  Ada.Text_IO,
      --  Ada.Exceptions,
-     --  Ocarina.Instances.Queries,
+     Ocarina.Instances.Queries,
      Ocarina.Backends.Properties,
      Ocarina.Instances,
      Ocarina.Namet,
@@ -21,7 +21,7 @@ package body Deployment_View is
 
    use --  Ada.Text_IO,
        --  Ada.Exceptions,
-       --  Ocarina.Instances.Queries,
+       Ocarina.Instances.Queries,
        Ocarina.Backends.Properties,
        Ocarina.Namet,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
@@ -152,6 +152,159 @@ package body Deployment_View is
          return Result;
       end Parse_Connections;
 
+      --  Find the bus that is connected to a device through a require access
+      procedure Find_Connected_Bus (Device        : Node_Id;
+                                    Accessed_Bus  : out Node_Id;
+                                    Accessed_Port : out Node_Id) is
+         F   : Node_Id;
+         Src : Node_Id;
+      begin
+         Accessed_Bus := No_Node;
+         Accessed_Port := No_Node;
+         if not Is_Empty (Features (Device)) then
+            F := First_Node (Features (Device));
+            while Present (F) loop
+               --  The sources of F
+               if not Is_Empty (Sources (F)) then
+                  Src := First_Node (Sources (F));
+                  if Src /= No_Node then
+                     if Item (Src) /= No_Node and then
+                        not Is_Empty (Sources (Item (Src))) and then
+                        First_Node (Sources (Item (Src))) /= No_Node
+                     then
+                        Src := Item (First_Node (Sources (Item (Src))));
+                        Accessed_Bus := Src;
+                        Accessed_Port := F;
+                     end if;
+                  end if;
+               end if;
+               F := Next_Node (F);
+            end loop;
+         end if;
+      end Find_Connected_Bus;
+
+      function Parse_Device (dummy_CI : Node_Id) return Taste_Device_Driver is
+         Result : Taste_Device_Driver;
+         Device_Classifier          : Name_Id   := No_Name;
+         Pkg_Name                   : Name_Id   := No_Name;
+         Associated_Processor_Name  : Name_Id   := No_Name;
+         Accessed_Bus               : Node_Id   := No_Node;
+         Accessed_Port              : Node_Id   := No_Node;
+         Device_ASN1_Filename       : Name_Id   := No_Name;
+         Device_Implementation      : Node_Id   := No_Node;
+         Configuration_Data         : Node_Id   := No_Node;
+         Device_ASN1_Typename       : Name_Id   := No_Name;
+         Device_ASN1_Module         : Name_Id   := No_Name;
+      begin
+         Result.Name := US (Get_Name_String (Name (Identifier (CI))));
+
+         Device_Implementation := Get_Implementation (CI);
+
+         if Device_Implementation /= No_Node and then
+            Is_Defined_Property (Device_Implementation,
+                                 "deployment::configuration_type")
+         then
+            Configuration_Data := Get_Classifier_Property
+                (Device_Implementation, "deployment::configuration_type");
+
+            if Is_Defined_Property (Configuration_Data, "type_source_name")
+            then
+               Device_ASN1_Typename :=
+                 (Get_String_Property
+                    (Configuration_Data, "type_source_name"));
+               declare
+                  ST : constant Name_Array :=
+                    Get_Source_Text (Configuration_Data);
+               begin
+                  for Index in ST'Range loop
+                     Get_Name_String (ST (Index));
+                     if Name_Buffer (Name_Len - 3 .. Name_Len) = ".asn"
+                     then
+                        Device_ASN1_Filename := Get_String_Name
+                          (Name_Buffer (1 .. Name_Len));
+                     end if;
+                  end loop;
+               end;
+            end if;
+            if Is_Defined_Property
+                 (Configuration_Data, "deployment::asn1_module_name")
+            then
+               Device_ASN1_Module := Get_String_Property
+                 (Configuration_Data, "deployment::asn1_module_name");
+            else
+               Device_ASN1_Module := Get_String_Name ("nomod");
+            end if;
+         else
+            raise Device_Driver_Error with
+              "Device configuration is incorrect ("
+              & Get_Name_String (Name (Identifier (CI))) & ")";
+         end if;
+
+         Set_Str_To_Name_Buffer ("");
+         if ATN.Namespace (Corresponding_Declaration (CI)) /= No_Node
+         then
+            Set_Str_To_Name_Buffer ("");
+            Get_Name_String (ATN.Name (ATN.Identifier
+                        (ATN.Namespace (Corresponding_Declaration (CI)))));
+            Pkg_Name := Name_Find;
+--            C_Add_Package   (Get_Name_String (Pkg_Name),
+            Set_Str_To_Name_Buffer ("");
+            Get_Name_String (Pkg_Name);
+            Add_Str_To_Name_Buffer ("::");
+            Get_Name_String_And_Append (Name (Identifier (CI)));
+            Device_Classifier := Name_Find;
+         else
+            Device_Classifier := Name (Identifier (CI));
+         end if;
+
+         if Get_Bound_Processor (CI) /= No_Node then
+            Set_Str_To_Name_Buffer ("");
+            Associated_Processor_Name := Name
+               (Identifier (Parent_Subcomponent (Get_Bound_Processor (CI))));
+         end if;
+
+         if Is_Defined_Property (CI, "deployment::configuration") and then
+            Get_String_Property (CI, "deployment::configuration") /= No_Name
+         then
+            Result.Device_Configuration :=
+              US (Get_Name_String
+                  (Get_String_Property (CI, "deployment::configuration")));
+         else
+            Result.Device_Configuration := US ("noconf");
+         end if;
+
+         Find_Connected_Bus (CI, Accessed_Bus, Accessed_Port);
+
+         if Accessed_Bus /= No_Node and then Accessed_Port /= No_Node
+         then
+            Result.Accessed_Bus_Name :=
+              US (Get_Name_String (Name (Identifier (Accessed_Bus))));
+            Result.Accessed_Port_Name :=
+              US (Get_Name_String (Name (Identifier (Accessed_Port))));
+         end if;
+
+         if Device_ASN1_Filename = No_Name
+           or Associated_Processor_Name = No_Name
+         then
+            raise Device_Driver_Error with "Missing ASN.1 configuration file"
+              & " for device driver specification "
+              & Get_Name_String (Device_Classifier);
+         end if;
+
+         Result.Device_Classifier :=
+           US (Get_Name_String (Device_Classifier));
+         Result.Associated_Processor_Name :=
+           US (Get_Name_String (Associated_Processor_Name));
+
+         Result.ASN1_Filename :=
+           US (Get_Name_String (Device_ASN1_Filename));
+         Result.ASN1_Typename :=
+           US (Get_Name_String (Device_ASN1_Typename));
+         Result.ASN1_Module := US (Get_Name_String (Device_ASN1_Module));
+
+         return Result;
+      end Parse_Device;
+
       function Parse_Node (Depl_View_System : Node_Id)
                             return Taste_Node is
          Processes : Node_Id;
@@ -163,9 +316,7 @@ package body Deployment_View is
          while Present (Processes) loop
             CI := Corresponding_Instance (Processes);
             if Get_Category_Of_Component (CI) = CC_Device then
-               --  There can be several drivers
-               null;
-
+               Result.Drivers.Append (Parse_Device (CI));
             elsif Get_Category_Of_Component (CI) = CC_Process then
                --  Partitions?
                null;
@@ -201,6 +352,9 @@ package body Deployment_View is
             end if;
          elsif Get_Category_Of_Component (CI) = CC_Bus then  --  Bus
             Busses.Append (Parse_Bus (Subs, CI));
+         else
+            raise Deployment_View_Error with "Unknown component found: "
+                                         & Get_Category_Of_Component (CI)'Img;
          end if;
          Subs := Next_Node (Subs);
       end loop;

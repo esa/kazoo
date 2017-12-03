@@ -25,18 +25,12 @@ package Deployment_View is
 
    --  Exceptions specific to the deployment view
    Deployment_View_Error       : exception;
+   Device_Driver_Error         : exception;
    Empty_Deployment_View_Error : exception;
 
    --  Initialize Ocarina and instantiate the deployment view, return root.
    function Initialize (Root : Node_Id) return Node_Id
    with Pre => Root /= No_Node;
-
-   type Taste_Node is
-      record
-         Name : Unbounded_String;
-      end record;
-
-   package Node_Maps is new Indefinite_Ordered_Maps (String, Taste_Node);
 
    type Taste_Bus is
       record
@@ -58,6 +52,30 @@ package Deployment_View is
       end record;
 
    package Bus_Connections is new Indefinite_Vectors (Natural, Bus_Connection);
+
+   type Taste_Device_Driver is
+      record
+         Name                      : Unbounded_String;
+         Device_Classifier         : Unbounded_String;
+         Associated_Processor_Name : Unbounded_String;
+         Device_Configuration      : Unbounded_String;
+         Accessed_Bus_Name         : Unbounded_String;
+         Accessed_Port_Name        : Unbounded_String;
+         ASN1_Filename             : Unbounded_String;
+         ASN1_Typename             : Unbounded_String;
+         ASN1_Module               : Unbounded_String;
+      end record;
+
+   package Taste_Drivers is
+     new Indefinite_Vectors (Natural, Taste_Device_Driver);
+
+   type Taste_Node is
+      record
+         Name    : Unbounded_String;
+         Drivers : Taste_Drivers.Vector;
+      end record;
+
+   package Node_Maps is new Indefinite_Ordered_Maps (String, Taste_Node);
 
    type Complete_Deployment_View is tagged
       record

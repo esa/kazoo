@@ -4,8 +4,8 @@
 
 --  Deployment View parser
 
-with --  Ada.Text_IO,
-     --  Ada.Exceptions,
+with Ada.Text_IO,
+     Ada.Exceptions,
      Ocarina.Instances.Queries,
      Ocarina.Backends.Properties,
      Ocarina.Instances,
@@ -19,8 +19,8 @@ with --  Ada.Text_IO,
 
 package body Deployment_View is
 
-   use --  Ada.Text_IO,
-       --  Ada.Exceptions,
+   use Ada.Text_IO,
+       Ada.Exceptions,
        Ocarina.Instances.Queries,
        Ocarina.Backends.Properties,
        Ocarina.Namet,
@@ -185,16 +185,11 @@ package body Deployment_View is
 
       function Parse_Device (CI : Node_Id) return Taste_Device_Driver is
          Result : Taste_Device_Driver;
-         Device_Classifier          : Name_Id   := No_Name;
          Pkg_Name                   : Name_Id   := No_Name;
-         Associated_Processor_Name  : Name_Id   := No_Name;
          Accessed_Bus               : Node_Id   := No_Node;
          Accessed_Port              : Node_Id   := No_Node;
-         Device_ASN1_Filename       : Name_Id   := No_Name;
          Device_Implementation      : Node_Id   := No_Node;
          Configuration_Data         : Node_Id   := No_Node;
-         Device_ASN1_Typename       : Name_Id   := No_Name;
-         Device_ASN1_Module         : Name_Id   := No_Name;
       begin
          Result.Name := US (Get_Name_String (Name (Identifier (CI))));
 
@@ -209,30 +204,44 @@ package body Deployment_View is
 
             if Is_Defined_Property (Configuration_Data, "type_source_name")
             then
-               Device_ASN1_Typename :=
-                 (Get_String_Property
-                    (Configuration_Data, "type_source_name"));
+               Result.ASN1_Typename :=
+                 US (Get_Name_String (Get_String_Property
+                    (Configuration_Data, "type_source_name")));
                declare
                   ST : constant Name_Array :=
                     Get_Source_Text (Configuration_Data);
                begin
+                  --  ST is a tuple (asn.1 file, .h file)
+                  if ST'Length = 0 then
+                     raise Device_Driver_Error with "Driver error ("
+                       & To_String (Result.Name)
+                       & ") : Missing configuration data";
+                  end if;
                   for Index in ST'Range loop
                      Get_Name_String (ST (Index));
                      if Name_Buffer (Name_Len - 3 .. Name_Len) = ".asn"
                      then
-                        Device_ASN1_Filename := Get_String_Name
-                          (Name_Buffer (1 .. Name_Len));
+                        Result.ASN1_Filename := US (Get_Name_String
+                             (Get_String_Name (Name_Buffer (1 .. Name_Len))));
                      end if;
                   end loop;
                end;
             end if;
+            if Result.ASN1_Filename = US ("") then
+               raise Device_Driver_Error with "Driver error ("
+                 & To_String (Result.Name)
+                 & ") : Missing ASN.1 configuration file";
+            end if;
+
             if Is_Defined_Property
                  (Configuration_Data, "deployment::asn1_module_name")
             then
-               Device_ASN1_Module := Get_String_Property
-                 (Configuration_Data, "deployment::asn1_module_name");
+               Result.ASN1_Module := US (Get_Name_String
+                                                (Get_String_Property
+                 (Configuration_Data, "deployment::asn1_module_name")));
             else
-               Device_ASN1_Module := Get_String_Name ("nomod");
+               raise Device_Driver_Error with "Driver error ("
+                 & To_String (Result.Name) & ") : Missing ASN.1 module name";
             end if;
          else
             raise Device_Driver_Error with
@@ -247,20 +256,23 @@ package body Deployment_View is
             Get_Name_String (ATN.Name (ATN.Identifier
                         (ATN.Namespace (Corresponding_Declaration (CI)))));
             Pkg_Name := Name_Find;
---            C_Add_Package   (Get_Name_String (Pkg_Name),
+            --  CHECKME : I don't kwnow when this needed, check buildsupport
+            --            C_Add_Package   (Get_Name_String (Pkg_Name),
+            Result.Package_Name := US (Get_Name_String (Pkg_Name));
             Set_Str_To_Name_Buffer ("");
             Get_Name_String (Pkg_Name);
             Add_Str_To_Name_Buffer ("::");
             Get_Name_String_And_Append (Name (Identifier (CI)));
-            Device_Classifier := Name_Find;
+            Result.Device_Classifier := US (Get_Name_String (Name_Find));
          else
-            Device_Classifier := Name (Identifier (CI));
+            Result.Device_Classifier :=
+              US (Get_Name_String (Name (Identifier (CI))));
          end if;
 
          if Get_Bound_Processor (CI) /= No_Node then
             Set_Str_To_Name_Buffer ("");
-            Associated_Processor_Name := Name
-               (Identifier (Parent_Subcomponent (Get_Bound_Processor (CI))));
+            Result.Associated_Processor_Name := US (Get_Name_String (Name
+               (Identifier (Parent_Subcomponent (Get_Bound_Processor (CI))))));
          end if;
 
          if Is_Defined_Property (CI, "deployment::configuration") and then
@@ -282,27 +294,13 @@ package body Deployment_View is
             Result.Accessed_Port_Name :=
               US (Get_Name_String (Name (Identifier (Accessed_Port))));
          end if;
-
-         if Device_ASN1_Filename = No_Name
-           or Associated_Processor_Name = No_Name
-         then
-            raise Device_Driver_Error with "Missing ASN.1 configuration file"
-              & " for device driver specification "
-              & Get_Name_String (Device_Classifier);
-         end if;
-
-         Result.Device_Classifier :=
-           US (Get_Name_String (Device_Classifier));
-         Result.Associated_Processor_Name :=
-           US (Get_Name_String (Associated_Processor_Name));
-
-         Result.ASN1_Filename :=
-           US (Get_Name_String (Device_ASN1_Filename));
-         Result.ASN1_Typename :=
-           US (Get_Name_String (Device_ASN1_Typename));
-         Result.ASN1_Module := US (Get_Name_String (Device_ASN1_Module));
-
          return Result;
+      exception
+         when Error : Device_Driver_Error =>
+            raise Device_Driver_Error with Exception_Message (Error);
+         when Error : others =>
+            raise Device_Driver_Error with "Device driver unknown error : "
+              & Exception_Message (Error);
       end Parse_Device;
 
       function Parse_Node (Depl_View_System : Node_Id)
@@ -330,6 +328,7 @@ package body Deployment_View is
       end Parse_Node;
 
    begin
+      Put_Line ("Parsing deployment view");
       My_Root_System := Initialize (System);
 
       if Is_Empty (Subcomponents (My_Root_System)) then

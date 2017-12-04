@@ -56,6 +56,7 @@ package Deployment_View is
    type Taste_Device_Driver is
       record
          Name                      : Unbounded_String;
+         Package_Name              : Unbounded_String;
          Device_Classifier         : Unbounded_String;
          Associated_Processor_Name : Unbounded_String;
          Device_Configuration      : Unbounded_String;

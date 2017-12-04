@@ -563,7 +563,8 @@ begin
 
 exception
    when Error : AADL_Parser_Error
-               | Deployment_View_Error =>
+      | Deployment_View_Error
+      | Device_Driver_Error =>
       Put (Red_Bold & "[ERROR] " & White_Bold);
       Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);

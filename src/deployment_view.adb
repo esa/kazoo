@@ -183,7 +183,7 @@ package body Deployment_View is
          end if;
       end Find_Connected_Bus;
 
-      function Parse_Device (dummy_CI : Node_Id) return Taste_Device_Driver is
+      function Parse_Device (CI : Node_Id) return Taste_Device_Driver is
          Result : Taste_Device_Driver;
          Device_Classifier          : Name_Id   := No_Name;
          Pkg_Name                   : Name_Id   := No_Name;

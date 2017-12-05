@@ -92,7 +92,7 @@ package Deployment_View is
    type Taste_Partition is
       record
          Name            : Unbounded_String;
-         Coverage        : Boolean;
+         Coverage        : Boolean := False;
          Package_Name    : Unbounded_String;
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;

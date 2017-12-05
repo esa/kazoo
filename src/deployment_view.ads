@@ -22,11 +22,29 @@ package Deployment_View is
 
    use Option_UString;
    use Option_ULL;
+   use String_Vectors;
 
    --  Exceptions specific to the deployment view
    Deployment_View_Error       : exception;
    Device_Driver_Error         : exception;
    Empty_Deployment_View_Error : exception;
+
+   --  List of Ocarina AADL models needed to parse the deployment view
+   AADL_Lib : String_Vectors.Vector := Empty_Vector &
+                "aadl_project.aadl" &
+                "taste_properties.aadl" &
+                "Cheddar_Properties.aadl" &
+                "communication_properties.aadl" &
+                "deployment_properties.aadl" &
+                "thread_properties.aadl" &
+                "timing_properties.aadl" &
+                "programming_properties.aadl" &
+                "memory_properties.aadl" &
+                "modeling_properties.aadl" &
+                "arinc653.aadl" &
+                "base_types.aadl" &
+                "data_model.aadl" &
+                "deployment.aadl";
 
    --  Initialize Ocarina and instantiate the deployment view, return root.
    function Initialize (Root : Node_Id) return Node_Id
@@ -86,7 +104,9 @@ package Deployment_View is
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina
-   function AADL_To_Ada_DV (System : Node_Id) return Complete_Deployment_View;
+   function Parse_Deployment_View (System : Node_Id)
+                                   return Complete_Deployment_View
+   with Pre => System /= No_Node;
 
    procedure Debug_Dump_DV (DV : Complete_Deployment_View);
 

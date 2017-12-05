@@ -96,49 +96,6 @@ procedure AADL_Parser is
 
          --  Current_function is read from the list of system subcomponents
 
-   -------------------------------------
-   -- Load_Deployment_View_Properties --
-   -------------------------------------
-
-   procedure Load_Deployment_View_Properties (Root_Tree : in out Node_Id) is
-      Loc : Location;
-      F : Name_Id;
-      package Vectors is new Ada.Containers.Indefinite_Vectors (Natural,
-                                                                String);
-      use Vectors;
-      AADL_Lib : Vectors.Vector;
-
-   begin
-      if Root_Tree = No_Node then
-         return;
-      end if;
-      AADL_Lib := AADL_Lib &
-                  Ada.Command_Line.Argument (Interface_View) &
-                  "aadl_project.aadl" &
-                  "taste_properties.aadl" &
-                  "Cheddar_Properties.aadl" &
-                  "communication_properties.aadl" &
-                  "deployment_properties.aadl" &
-                  "thread_properties.aadl" &
-                  "timing_properties.aadl" &
-                  "programming_properties.aadl" &
-                  "memory_properties.aadl" &
-                  "modeling_properties.aadl" &
-                  "arinc653.aadl" &
-                  "base_types.aadl" &
-                  "data_model.aadl" &
-                  "deployment.aadl";
-
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
-
-      for each of AADL_Lib loop
-         Set_Str_To_Name_Buffer (each);
-         F := Ocarina.Files.Search_File (Name_Find);
-         Loc := Ocarina.Files.Load_File (F);
-         Root_Tree := Ocarina.Parser.Parse (AADL_Language, Root_Tree, Loc);
-      end loop;
-   end Load_Deployment_View_Properties;
-
    -----------------------------------
    -- Browse_Deployment_View_System --
    -----------------------------------
@@ -546,7 +503,7 @@ begin
           Get_String_Name ("interfaceview.others");
 
    IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
-   IV_AST := AADL_to_Ada_IV (IV_Root);
+   IV_AST := Parse_Interface_View (IV_Root);
 
    Debug_Dump_IV (IV_AST);
 
@@ -554,8 +511,8 @@ begin
    --  deployment view.
 
    if Depl_View_Pos > 0 then
-      Load_Deployment_View_Properties (Deployment_Root);
-      DV_AST := AADL_To_Ada_DV (Deployment_Root);
+      AADL_Lib.Append (Ada.Command_Line.Argument (Interface_View));
+      DV_AST := Parse_Deployment_View (Deployment_Root);
    end if;
 
    Ocarina.Configuration.Reset_Modules;

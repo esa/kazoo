@@ -250,7 +250,9 @@ package body Interface_View is
    -- AST Builder Functions --
    ---------------------------
 
-   function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View is
+   function Parse_Interface_View (System : Node_Id)
+                                  return Complete_Interface_View
+   is
       --  use type Functions.Vector;
       use type Channels.Vector;
       use type Ctxt_Params.Vector;
@@ -652,7 +654,7 @@ package body Interface_View is
 
       return IV_AST : constant Complete_Interface_View :=
                                                  (Flat_Functions => Functions);
-   end AADL_to_Ada_IV;
+   end Parse_Interface_View;
 
    procedure Rename_Function (IV       : in out Complete_Interface_View;
                               From, To : String)

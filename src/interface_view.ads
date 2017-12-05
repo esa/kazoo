@@ -161,7 +161,9 @@ package Interface_View is
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina
-   function AADL_to_Ada_IV (System : Node_Id) return Complete_Interface_View;
+   function Parse_Interface_View (System : Node_Id)
+                                  return Complete_Interface_View
+   with Pre => System /= No_Node;
 
    --  Model transformation API: Rename a function
    procedure Rename_Function (IV       : in out Complete_Interface_View;

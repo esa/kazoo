@@ -6,12 +6,17 @@
 
 with Ada.Text_IO,
      Ada.Exceptions,
+     --  Ada.Command_Line,
      Ocarina.Instances.Queries,
      Ocarina.Backends.Properties,
      Ocarina.Instances,
+     Ocarina.Files,
+     Ocarina.FE_AADL.Parser,
+     Ocarina.Parser,
      Ocarina.Namet,
      Ocarina.Analyzer,
      Ocarina.Options,
+     Locations,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities;
@@ -24,18 +29,40 @@ package body Deployment_View is
        Ocarina.Instances.Queries,
        Ocarina.Backends.Properties,
        Ocarina.Namet,
+       Ocarina.Files,
+       Ocarina.FE_AADL.Parser,
+       Locations,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.ME_AADL;
        --  Ocarina.Backends.Utils;
 
+   ----------------
+   -- Initialize --
+   ----------------
+
    function Initialize (Root : Node_Id) return Node_Id is
+      Root_Depl      : Node_Id := Root;
       Success        : Boolean;
       Root_Instance  : Node_Id;
       AADL_Language  : constant Name_Id := Get_String_Name ("aadl");
+      Loc : Location;
+      F   : Name_Id;
    begin
-      Success := Ocarina.Analyzer.Analyze (AADL_Language, Root);
+      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+
+      --  Parse all AADL files possibly needed to instantiate the model
+      --  (Including the Interface View)
+      for each of AADL_Lib loop
+         Set_Str_To_Name_Buffer (each);
+         F := Ocarina.Files.Search_File (Name_Find);
+         Loc := Ocarina.Files.Load_File (F);
+         Root_Depl := Ocarina.Parser.Parse (Get_String_Name ("aadl"),
+                                            Root_Depl, Loc);
+      end loop;
+
+      Success := Ocarina.Analyzer.Analyze (AADL_Language, Root_Depl);
 
       if not Success then
          raise Deployment_View_Error with "Deployment view is incorrect";
@@ -46,16 +73,15 @@ package body Deployment_View is
 
       --  Instantiate AADL tree
       Root_Instance := Ocarina.Instances.Instantiate_Model (Root => Root);
-
       return Root_System (Root_Instance);
-
    end Initialize;
 
    ---------------------------
    -- AST Builder Functions --
    ---------------------------
 
-   function AADL_To_Ada_DV (System : Node_Id) return Complete_Deployment_View
+   function Parse_Deployment_View (System : Node_Id)
+                                   return Complete_Deployment_View
    is
       use type Node_Maps.Map;
       use type Taste_Busses.Vector;
@@ -165,14 +191,14 @@ package body Deployment_View is
             F := First_Node (Features (Device));
             while Present (F) loop
                --  The sources of F
-               if not Is_Empty (Sources (F)) then
-                  Src := First_Node (Sources (F));
+               if not Is_Empty (AIN.Sources (F)) then
+                  Src := First_Node (AIN.Sources (F));
                   if Src /= No_Node then
                      if Item (Src) /= No_Node and then
-                        not Is_Empty (Sources (Item (Src))) and then
-                        First_Node (Sources (Item (Src))) /= No_Node
+                        not Is_Empty (AIN.Sources (Item (Src))) and then
+                        First_Node (AIN.Sources (Item (Src))) /= No_Node
                      then
-                        Src := Item (First_Node (Sources (Item (Src))));
+                        Src := Item (First_Node (AIN.Sources (Item (Src))));
                         Accessed_Bus := Src;
                         Accessed_Port := F;
                      end if;
@@ -362,7 +388,7 @@ package body Deployment_View is
         (Nodes          => Nodes,
          Connections    => Conns,
          Busses         => Busses);
-   end AADL_To_Ada_DV;
+   end Parse_Deployment_View;
 
    procedure Debug_Dump_DV (DV : Complete_Deployment_View) is null;
 end Deployment_View;

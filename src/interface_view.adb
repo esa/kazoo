@@ -754,7 +754,7 @@ package body Interface_View is
       end loop;
    end Rename_Required_Interface;
 
-   procedure Debug_Dump_IV (IV : Complete_Interface_View) is
+   procedure Debug_Dump (IV : Complete_Interface_View) is
       procedure Dump_Interface (Ind : String := "      ";
                                 I   : Taste_Interface) is
       begin
@@ -824,5 +824,5 @@ package body Interface_View is
          end loop;
          New_Line;
       end loop;
-   end Debug_Dump_IV;
+   end Debug_Dump;
 end Interface_View;

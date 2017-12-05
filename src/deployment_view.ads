@@ -9,11 +9,12 @@ with Ocarina,
      Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
-     --  Option_Type,
+     Ocarina.Backends.Properties,
      Parser_Utils;
 
 use Ocarina,
     Ocarina.Types,
+    Ocarina.Backends.Properties,
     Ada.Containers,
     Ada.Strings.Unbounded,
     Parser_Utils;
@@ -88,10 +89,25 @@ package Deployment_View is
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);
 
+   type Taste_Partition is
+      record
+         Name            : Unbounded_String;
+         Coverage        : Boolean;
+         Package_Name    : Unbounded_String;
+         CPU_Name        : Unbounded_String;
+         CPU_Platform    : Supported_Execution_Platform;
+         CPU_Classifier  : Unbounded_String;
+         Bound_Functions : String_Vectors.Vector;
+      end record;
+
+   package Taste_Partitions is
+      new Indefinite_Ordered_Maps (String, Taste_Partition);
+
    type Taste_Node is
       record
-         Name    : Unbounded_String;
-         Drivers : Taste_Drivers.Vector;
+         Name       : Unbounded_String;
+         Drivers    : Taste_Drivers.Vector;
+         Partitions : Taste_Partitions.Map;
       end record;
 
    package Node_Maps is new Indefinite_Ordered_Maps (String, Taste_Node);
@@ -108,6 +124,6 @@ package Deployment_View is
                                    return Complete_Deployment_View
    with Pre => System /= No_Node;
 
-   procedure Debug_Dump_DV (DV : Complete_Deployment_View);
+   procedure Debug_Dump (DV : Complete_Deployment_View);
 
 end Deployment_View;

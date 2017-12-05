@@ -6,9 +6,9 @@
 
 with Ada.Text_IO,
      Ada.Exceptions,
+     System.Assertions,
      --  Ada.Command_Line,
      Ocarina.Instances.Queries,
-     Ocarina.Backends.Properties,
      Ocarina.Instances,
      Ocarina.Files,
      Ocarina.FE_AADL.Parser,
@@ -26,8 +26,8 @@ package body Deployment_View is
 
    use Ada.Text_IO,
        Ada.Exceptions,
+       System.Assertions,
        Ocarina.Instances.Queries,
-       Ocarina.Backends.Properties,
        Ocarina.Namet,
        Ocarina.Files,
        Ocarina.FE_AADL.Parser,
@@ -88,6 +88,7 @@ package body Deployment_View is
       use type Bus_Connections.Vector;
 
       Nodes          : Node_Maps.Map;
+      Node           : Taste_Node;
       Busses         : Taste_Busses.Vector;
       Conns          : Bus_Connections.Vector;
       My_Root_System : Node_Id;
@@ -329,11 +330,84 @@ package body Deployment_View is
               & Exception_Message (Error);
       end Parse_Device;
 
-      function Parse_Node (Depl_View_System : Node_Id)
-                            return Taste_Node is
+      function Parse_Partition (CI : Node_Id; Depl : Node_Id)
+                                return Taste_Partition is
+         Result         : Taste_Partition;
+         CPU            : Node_Id;
+         Processes      : Node_Id;
+         P_CI           : Node_Id;
+         Ref            : Node_Id;
+      begin
+         if Is_Defined_Property (CI, "taste_dv_properties::coverageenabled")
+         then
+            Result.Coverage := Get_Boolean_Property
+               (CI, Get_String_Name ("taste_dv_properties::coverageenabled"));
+         end if;
+
+         CPU := Get_Bound_Processor (CI);
+
+         Result.CPU_Name :=
+          US (Get_Name_String (Name (Identifier (Parent_Subcomponent (CPU)))));
+
+         Result.CPU_Platform := Get_Execution_Platform (CPU);
+
+         if ATN.Namespace (Corresponding_Declaration (CPU)) /= No_Node
+         then
+            Set_Str_To_Name_Buffer ("");
+            Get_Name_String (ATN.Name (ATN.Identifier (ATN.Namespace
+                        (Corresponding_Declaration (CPU)))));
+            Result.Package_Name := US (Get_Name_String (Name_Find));
+            Set_Str_To_Name_Buffer ("");
+            Get_Name_String
+              (Get_String_Name (To_String (Result.Package_Name)));
+            Add_Str_To_Name_Buffer ("::");
+            Get_Name_String_And_Append (Name (Identifier (CPU)));
+            Result.CPU_Classifier := US (Get_Name_String (Name_Find));
+         else
+            Result.CPU_Classifier :=
+              US (Get_Name_String (Name (Identifier (CPU))));
+            Result.Package_Name := US ("");
+         end if;
+
+         Result.Name :=
+            US (Get_Name_String (ATN.Name (ATN.Component_Type_Identifier
+                     (Corresponding_Declaration (CI)))));
+
+         --  Bounded functions
+         Processes := First_Node (Subcomponents (Depl));
+         while Present (Processes) loop
+            P_CI := Corresponding_Instance (Processes);
+
+            if Get_Category_Of_Component (P_CI) = CC_System
+              and then Is_Defined_Property (P_CI, "taste::aplc_binding")
+            then
+               Ref := Get_Reference_Property
+                  (P_CI, Get_String_Name ("taste::aplc_binding"));
+
+               if Ref = CI then
+                  begin
+                     Result.Bound_Functions.Append (Get_Name_String (ATN.Name
+                        (ATN.Component_Type_Identifier
+                            (Corresponding_Declaration (P_CI)))));
+                  exception
+                     when Assert_Failure =>
+                        Put_Line ("Detected DV from TASTE version 1.2");
+                        Result.Bound_Functions.Append
+                          (Get_Name_String (Name (Identifier (Processes))));
+                  end;
+               end if;
+            end if;
+            Processes := Next_Node (Processes);
+         end loop;
+
+         return Result;
+      end Parse_Partition;
+
+      function Parse_Node (Depl_View_System : Node_Id) return Taste_Node is
          Processes : Node_Id;
          CI        : Node_Id;
          Result    : Taste_Node;
+         Partition : Taste_Partition;
       begin
          Processes := First_Node (Subcomponents (Depl_View_System));
 
@@ -342,15 +416,14 @@ package body Deployment_View is
             if Get_Category_Of_Component (CI) = CC_Device then
                Result.Drivers.Append (Parse_Device (CI));
             elsif Get_Category_Of_Component (CI) = CC_Process then
-               --  Partitions?
-               null;
+               Partition := Parse_Partition (CI, Depl_View_System);
+               Result.Partitions.Insert (Key => To_String (Partition.Name),
+                                         New_Item => Partition);
             end if;
 
             Processes := Next_Node (Processes);
          end loop;
-
          return Result;
-
       end Parse_Node;
 
    begin
@@ -372,8 +445,10 @@ package body Deployment_View is
             end if;
 
             if not Is_Empty (Subcomponents (CI)) then
-               Nodes.Insert (Key => Get_Name_String (Name (Identifier (Subs))),
-                             New_Item => Parse_Node (CI));
+               Node := Parse_Node (CI);
+               Node.Name := US (Get_Name_String (Name (Identifier (Subs))));
+               Nodes.Insert (Key      => To_String (Node.Name),
+                             New_Item => Node);
             end if;
          elsif Get_Category_Of_Component (CI) = CC_Bus then  --  Bus
             Busses.Append (Parse_Bus (Subs, CI));
@@ -390,5 +465,5 @@ package body Deployment_View is
          Busses         => Busses);
    end Parse_Deployment_View;
 
-   procedure Debug_Dump_DV (DV : Complete_Deployment_View) is null;
+   procedure Debug_Dump (DV : Complete_Deployment_View) is null;
 end Deployment_View;

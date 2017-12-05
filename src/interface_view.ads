@@ -179,6 +179,6 @@ package Interface_View is
                                         Iface : String;
                                         To    : String);
 
-   procedure Debug_Dump_IV (IV : Complete_Interface_View);
+   procedure Debug_Dump (IV : Complete_Interface_View);
 
 end Interface_View;

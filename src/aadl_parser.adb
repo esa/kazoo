@@ -2,47 +2,37 @@
 --  Based on Ocarina ****************************************************  --
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
-pragma Warnings (Off);
-with Ada.Strings.Unbounded,
-     Ada.Command_Line,
+
+with Ada.Command_Line,
      Ada.Exceptions,
      Ada.Text_IO,
-     Ada.Containers.Indefinite_Vectors,
      GNAT.OS_Lib,
      Errors,
      Locations,
      Ocarina.Namet,
      Ocarina.Types,
      Ocarina.Analyzer,
-     Ocarina.Backends.Properties,
      Ocarina.Configuration,
      Ocarina.Files,
      Ocarina.Options,
      Ocarina.Instances,
-     Ocarina.ME_AADL.AADL_Instances.Entities,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
-     Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
      Parser_Utils,
      Interface_View,
      Deployment_View;
 
-use Ada.Strings.Unbounded,
-    Ada.Text_IO,
+use Ada.Text_IO,
     Ada.Exceptions,
     Locations,
     Ocarina.Namet,
     Ocarina.Types,
     Ocarina,
     Ocarina.Analyzer,
-    Ocarina.Backends.Properties,
     Ocarina.Instances,
     Ocarina.ME_AADL,
-    Ocarina.ME_AADL.AADL_Instances.Entities,
     Ocarina.ME_AADL.AADL_Instances.Nodes,
-    Ocarina.ME_AADL.AADL_Instances.Nutils,
-    Ocarina.Backends.Properties,
     Parser_Utils,
     Interface_View,
     Deployment_View,
@@ -56,20 +46,17 @@ procedure AADL_Parser is
    Deployment_root   : Node_Id := No_Node;
    Dataview_root     : Node_ID := No_Node;
    Success           : Boolean;
-   OutDir            : Integer := 0;
-   Stack_Val         : Integer := 0;
-   Timer_Resolution  : Integer := 0;
+--   OutDir            : Integer := 0;
+--   Stack_Val         : Integer := 0;
+--   Timer_Resolution  : Integer := 0;
    Interface_View    : Integer := 0;
    Depl_View_Pos : Integer := 0;
    Data_View         : Integer := 0;
    Generate_glue     : Boolean := false;
-   Keep_case         : Boolean := false;
    AADL_Version      : AADL_Version_Type := Ocarina.AADL_V2;
 
    procedure Parse_Command_Line;
    --  procedure Process_DataView (My_Root : Node_Id);
-   procedure Browse_Deployment_View_System
-     (My_System : Node_Id; NodeName : String) with Unreferenced;
 
    ----------------------------
    -- Process_Interface_View --
@@ -100,8 +87,8 @@ procedure AADL_Parser is
    -- Browse_Deployment_View_System --
    -----------------------------------
 
-   procedure Browse_Deployment_View_System
-       (My_System : Node_Id; NodeName : String) is
+--   procedure Browse_Deployment_View_System
+--       (My_System : Node_Id; NodeName : String) is
 --      Processes         : Node_Id;
 --      Processes2        : Node_Id;
 --      Tmp_CI            : Node_Id;
@@ -112,132 +99,6 @@ procedure AADL_Parser is
 --      Pkg_Name          : Name_Id := No_Name;
 --      CPU_Classifier    : Name_Id := No_Name;
 --      CPU_Platform      : Supported_Execution_Platform := Platform_None;
-   begin
-      null;
---     if not Is_Empty (Subcomponents (My_System)) then
---        C_New_Drivers_Section;
---        Processes := First_Node (Subcomponents (My_System));
---
---        while Present (Processes) loop
---           Tmp_CI := Corresponding_Instance (Processes);
---
---           if Get_Category_Of_Component (Tmp_CI) = CC_Process then
---              declare
---                 Node_Coverage : Boolean := False;
---              begin
---                 if Is_Defined_Property (Tmp_CI,
---                                      "taste_dv_properties::coverageenabled")
---                 then
---                    Node_Coverage := Get_Boolean_Property
---                       (Tmp_CI,
---                   Get_String_Name ("taste_dv_properties::coverageenabled"));
---                    if Node_Coverage then
---                       Put_Line ("Needs Coverage");
---                    else
---                       Put_Line ("Needs No coverage");
---                    end if;
---                 end if;
---
---                 CPU := Get_Bound_Processor (Tmp_CI);
---                 Set_Str_To_Name_Buffer ("");
---                 CPU_Name := Name (Identifier (Parent_Subcomponent (CPU)));
---
---                 CPU_Platform := Get_Execution_Platform (CPU);
---
---                if ATN.Namespace (Corresponding_Declaration (CPU)) /= No_Node
---                 then
---                    Set_Str_To_Name_Buffer ("");
---                    Get_Name_String
---                       (ATN.Name
---                          (ATN.Identifier
---                             (ATN.Namespace
---                                (Corresponding_Declaration (CPU)))));
---                    Pkg_Name := Name_Find;
---                    C_Add_Package
---                       (Get_Name_String (Pkg_Name),
---                       Get_Name_String (Pkg_Name)'Length);
---                    Set_Str_To_Name_Buffer ("");
---                    Get_Name_String (Pkg_Name);
---                    Add_Str_To_Name_Buffer ("::");
---                    Get_Name_String_And_Append (Name (Identifier (CPU)));
---                    CPU_Classifier := Name_Find;
---                 else
---                    CPU_Classifier := Name (Identifier (CPU));
---                 end if;
---
---                 C_New_Processor
---                    (Get_Name_String (CPU_Name),
---                    Get_Name_String (CPU_Name)'Length,
---                    Get_Name_String (CPU_Classifier),
---                    Get_Name_String (CPU_Classifier)'Length,
---                    Supported_Execution_Platform'Image (CPU_Platform),
---                   Supported_Execution_Platform'Image (CPU_Platform)'Length);
---
---                 C_New_Process
---                    (Get_Name_String
---                       (ATN.Name
---                          (ATN.Component_Type_Identifier
---                             (Corresponding_Declaration (Tmp_CI)))),
---                     Get_Name_String
---                       (ATN.Name
---                          (ATN.Component_Type_Identifier
---                             (Corresponding_Declaration (Tmp_CI))))'Length,
---                    Get_Name_String (Name (Identifier (Processes))),
---                    Get_Name_String (Name (Identifier (Processes)))'Length,
---                    NodeName, NodeName'Length,
---                    Boolean'Pos (Node_Coverage));
---
---                 Processes2 := First_Node (Subcomponents (My_System));
---
---                 while Present (Processes2) loop
---                    Tmp_CI2 := Corresponding_Instance (Processes2);
---
---                    if Get_Category_Of_Component (Tmp_CI2) = CC_System
---                       and then
---                       Is_Defined_Property
---                          (Tmp_CI2, "taste::aplc_binding")
---                    then
---                       Ref := Get_Reference_Property
---                          (Tmp_CI2, Get_String_Name ("taste::aplc_binding"));
---
---                       if Ref = Tmp_CI then
---                          declare
---                             Bound_APLC_Name : Unbounded_String;
---                          begin
---                             begin
---                                Bound_APLC_Name := US
---                                  (Get_Name_String
---                                    (ATN.Name
---                                      (ATN.Component_Type_Identifier
---                                    (Corresponding_Declaration (Tmp_CI2)))));
---                             exception
---                                when System.Assertions.Assert_Failure =>
---                                   Put_Line
---                                      ("Detected DV from TASTE version 1.2");
---                                   Bound_APLC_Name := US
---                                     (Get_Name_String
---                                        (Name (Identifier (Processes2))));
---                             end;
---
---                             C_Add_Binding
---                                (To_String (Bound_APLC_Name),
---                                 To_String (Bound_APLC_Name)'Length);
---                          end;
---                       end if;
---                    end if;
---
---                    Processes2 := Next_Node (Processes2);
---                 end loop;
---
---                 C_End_Process;
---              end;
---           end if;
---
---           Processes := Next_Node (Processes);
---        end loop;
---        C_End_Drivers_Section;
---     end if;
-   end Browse_Deployment_View_System;
 
    ------------------------
    -- Parse_Command_Line --
@@ -269,11 +130,11 @@ procedure AADL_Parser is
             Previous_DataView := false;
 
          elsif Previous_Outdir then
-            OutDir := J;
+            --  OutDir := J;
             Previous_OutDir := false;
 
          elsif Previous_TimerRes then
-            Timer_Resolution := J;
+            --  Timer_Resolution := J;
             Previous_TimerRes := false;
 
          elsif Ada.Command_Line.Argument (J) = "--polyorb-hi-c"
@@ -281,12 +142,6 @@ procedure AADL_Parser is
            or else Ada.Command_Line.Argument (J) = "-polyorb-hi-c"
          then
             null;
-
-         elsif Ada.Command_Line.Argument (J) = "--keep-case"
-           or else Ada.Command_Line.Argument (J) = "-j"
-           or else Ada.Command_Line.Argument (J) = "-keep-case"
-         then
-            Keep_case := true;
 
          elsif Ada.Command_Line.Argument (J) = "--glue"
            or else Ada.Command_Line.Argument (J) = "-glue"
@@ -505,7 +360,7 @@ begin
    IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
    IV_AST := Parse_Interface_View (IV_Root);
 
-   Debug_Dump_IV (IV_AST);
+   IV_AST.Debug_Dump;
 
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.
@@ -513,6 +368,7 @@ begin
    if Depl_View_Pos > 0 then
       AADL_Lib.Append (Ada.Command_Line.Argument (Interface_View));
       DV_AST := Parse_Deployment_View (Deployment_Root);
+      DV_AST.Debug_Dump;
    end if;
 
    Ocarina.Configuration.Reset_Modules;

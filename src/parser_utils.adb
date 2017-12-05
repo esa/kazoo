@@ -48,8 +48,6 @@ package body Parser_Utils is
       Put_Line ("Generate glue code");
       Put ("-w, --gw" & HT & HT & HT & HT);
       Put_Line ("Generate code skeletons");
-      Put ("-j, --keep-case" & HT & HT & HT & HT);
-      Put_Line ("Respect the case for interface names");
       Put ("-o, --output <outputDir>" & HT & HT);
       Put_Line ("Root directory for the output files");
       Put ("-i, --interfaceview <i_view.aadl>" & HT);

@@ -123,7 +123,9 @@ package Deployment_View is
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View
    with Pre => System /= No_Node;
-
-   procedure Debug_Dump (DV : Complete_Deployment_View);
+   procedure Dump_Nodes       (DV : Complete_Deployment_View);
+   procedure Dump_Connections (DV : Complete_Deployment_View) is null;
+   procedure Dump_Busses      (DV : Complete_Deployment_View) is null;
+   procedure Debug_Dump       (DV : Complete_Deployment_View);
 
 end Deployment_View;

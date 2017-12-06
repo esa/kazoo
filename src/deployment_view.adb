@@ -465,5 +465,34 @@ package body Deployment_View is
          Busses         => Busses);
    end Parse_Deployment_View;
 
-   procedure Debug_Dump (DV : Complete_Deployment_View) is null;
+   procedure Dump_Nodes (DV : Complete_Deployment_View) is
+   begin
+      for Each of DV.Nodes loop
+         Put_Line ("Node : " & To_String (Each.Name));
+         for Partition of Each.Partitions loop
+            Put_Line ("  |_ Partition        : " & To_String (Partition.Name));
+            Put_Line ("    |_ Coverage       : " & Partition.Coverage'Img);
+            Put_Line ("    |_ Package        : "
+                      & To_String (Partition.Package_Name));
+            Put_Line ("    |_ CPU Name       : "
+                      & To_String (Partition.CPU_Name));
+            Put_Line ("    |_ CPU Platform   : " & Partition.CPU_Platform'Img);
+            Put_Line ("    |_ CPU Classifier : "
+                      & To_String (Partition.CPU_Classifier));
+            Put ("    |_ Contains       : ");
+            for Bounded of Partition.Bound_Functions loop
+               Put (Bounded & " ");
+            end loop;
+            Ada.Text_IO.New_Line;
+         end loop;
+      end loop;
+   end Dump_Nodes;
+
+   procedure Debug_Dump (DV : Complete_Deployment_View) is
+   begin
+      DV.Dump_Nodes;
+      DV.Dump_Connections;
+      DV.Dump_Busses;
+   end Debug_Dump;
+
 end Deployment_View;

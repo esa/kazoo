@@ -101,6 +101,7 @@ SUBCOMPONENTS
   };
   first_binary : PROCESS deploymentview::DV::Node1::first_binary.others {
     Taste::coordinates => "97495 54172 119317 74971";
+    TASTE_DV_Properties::CoverageEnabled => true;
     Deployment::Port_Number => 0;
   };
   x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {

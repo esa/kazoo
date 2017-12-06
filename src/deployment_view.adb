@@ -468,7 +468,7 @@ package body Deployment_View is
    procedure Dump_Nodes (DV : Complete_Deployment_View) is
    begin
       for Each of DV.Nodes loop
-         Put_Line ("Node : " & To_String (Each.Name));
+         Put_Line ("Node : " & White_Bold & To_String (Each.Name) & No_Color);
          for Partition of Each.Partitions loop
             Put_Line ("  |_ Partition        : " & To_String (Partition.Name));
             Put_Line ("    |_ Coverage       : " & Partition.Coverage'Img);
@@ -484,6 +484,27 @@ package body Deployment_View is
                Put (Bounded & " ");
             end loop;
             Ada.Text_IO.New_Line;
+         end loop;
+         for Driver of Each.Drivers loop
+            Put_Line ("  |_ Driver : " & To_String (Driver.Name));
+            Put_Line ("    |_ Package       : "
+                      & To_String (Driver.Package_Name));
+            Put_Line ("    |_ Classifier    : "
+                      & To_String (Driver.Device_Classifier));
+            Put_Line ("    |_ Processor     : "
+                      & To_String (Driver.Associated_Processor_Name));
+            Put_Line ("    |_ Configuration : "
+                      & To_String (Driver.Device_Configuration));
+            Put_Line ("    |_ Bus_Name      : "
+                      & To_String (Driver.Accessed_Bus_Name));
+            Put_Line ("    |_ Port_Name     : "
+                      & To_String (Driver.Accessed_Port_Name));
+            Put_Line ("    |_ ASN.1 File    : "
+                      & To_String (Driver.ASN1_Filename));
+            Put_Line ("    |_ ASN.1 Type    : "
+                      & To_String (Driver.ASN1_Typename));
+            Put_Line ("    |_ ASN.1 Module  : "
+                      & To_String (Driver.ASN1_Module));
          end loop;
       end loop;
    end Dump_Nodes;

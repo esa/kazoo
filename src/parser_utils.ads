@@ -51,8 +51,6 @@ package Parser_Utils is
 
    AADL_Parser_Error : exception;
 
-   procedure Exit_On_Error (Error : Boolean; Reason : String);
-
    function Get_APLC_Binding (E : Node_Id) return List_Id;
 
    function Get_Interface_Name (D : Node_Id) return Name_Id;

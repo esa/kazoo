@@ -79,17 +79,6 @@ package body Parser_Utils is
 
    end Usage;
 
-   -------------------
-   -- Exit_On_Error --
-   -------------------
-
-   procedure Exit_On_Error (Error : Boolean; Reason : String) is
-   begin
-      if Error then
-         raise AADL_Parser_Error with Reason;
-      end if;
-   end Exit_On_Error;
-
    -----------------------
    -- Get_APLC_Binding --
    -----------------------

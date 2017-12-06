@@ -162,7 +162,7 @@ package body Interface_View is
             return ACN;
          end if;
       end if;
-      Exit_On_Error (True, "ASN1 Encoding not set");
+      raise Interface_Error with "ASN1 Encoding not set";
       return Default;
    end Get_ASN1_Encoding;
 
@@ -228,7 +228,7 @@ package body Interface_View is
               & Get_Name_String (ASN1_Basic_Type_N);
          end if;
       end if;
-      Exit_On_Error (True, "ASN.1 Basic type undefined!");
+      raise Interface_Error with "ASN.1 Basic type undefined!";
       return ASN1_Unknown;
    end Get_ASN1_Basic_Type;
 
@@ -275,11 +275,12 @@ package body Interface_View is
       begin
          --  If RI_Name has no value it means the interface view misses the
          --  AADL property "TASTE::InterfaceName". Not supported.
-         Exit_On_Error (RI_Name = No_Name,
-                        "Interface view contains errors "
-                        & "(Missing TASTE::InterfaceName properties)"
-                        & ASCII.CR & ASCII.LF
-                        & "        Try updating it with taste-edit-project");
+         if RI_Name = No_Name then
+            raise Interface_Error with "Interface view contains errors "
+              & "(Missing TASTE::InterfaceName properties)"
+              & ASCII.CR & ASCII.LF
+              & "        Try updating it with taste-edit-project";
+         end if;
 
          --  Filter out connections if the PI is cyclic (not a connection!)
          if Get_RCM_Operation_Kind
@@ -580,18 +581,13 @@ package body Interface_View is
 
                if No (AIN.Subcomponents (CI)) or Is_Terminal
                then
-                  begin
-                     Terminal_Fn := Parse_Function (Prefix => Prefix,
-                                                    Name   => Name,
-                                                    Inst   => CI);
-                     Terminal_Fn.Context := US (Context);
-                     Functions.Insert (Key       => Name,
-                                       New_Item  => Terminal_Fn);
-                     Is_Terminal := False;
-                  exception
-                     when Error : Function_Error =>
-                        Exit_On_Error (True, Exception_Message (Error));
-                  end;
+                  Terminal_Fn := Parse_Function (Prefix => Prefix,
+                                                 Name   => Name,
+                                                 Inst   => CI);
+                  Terminal_Fn.Context := US (Context);
+                  Functions.Insert (Key       => Name,
+                                    New_Item  => Terminal_Fn);
+                  Is_Terminal := False;
                end if;
             when others =>
                null;
@@ -600,7 +596,9 @@ package body Interface_View is
          return Is_Terminal;
       end Rec_Function;
    begin
-      Exit_On_Error (No (System), "Missing or erroneous interface view");
+      if No (System) then
+         raise Interface_Error with "Missing or erroneous interface view";
+      end if;
 
       Current_Function := AIN.First_Node (AIN.Subcomponents (System));
       --  Parse functions recursively

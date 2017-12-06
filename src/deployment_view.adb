@@ -488,11 +488,35 @@ package body Deployment_View is
       end loop;
    end Dump_Nodes;
 
+   procedure Dump_Connections (DV : Complete_Deployment_View) is
+   begin
+      for Each of DV.Connections loop
+         Put_Line ("Connection on bus : " & To_String (Each.Bus_Name));
+         Put_Line ("  |_ Source Node : " & To_String (Each.Source_Node));
+         Put_Line ("  |_ Source Port : " & To_String (Each.Source_Port));
+         Put_Line ("  |_ Dest Node   : " & To_String (Each.Dest_Node));
+         Put_Line ("  |_ Dest Port   : " & To_String (Each.Dest_Port));
+      end loop;
+   end Dump_Connections;
+
+   procedure Dump_Busses (DV : Complete_Deployment_View) is
+   begin
+      for Each of DV.Busses loop
+         Put_Line ("Bus : " & To_String (Each.Name));
+         Put_Line ("  |_ Package    : " & To_String (Each.AADL_Package));
+         Put_Line ("  |_ Classifier : " & To_String (Each.Classifier));
+         for Prop of Each.Properties loop
+            Put_Line ("    |_ Property: " & To_String (Prop.Name)
+                      & " = " & To_String (Prop.Value));
+         end loop;
+      end loop;
+   end Dump_Busses;
+
    procedure Debug_Dump (DV : Complete_Deployment_View) is
    begin
       DV.Dump_Nodes;
-      DV.Dump_Connections;
       DV.Dump_Busses;
+      DV.Dump_Connections;
    end Debug_Dump;
 
 end Deployment_View;

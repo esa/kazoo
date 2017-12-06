@@ -124,8 +124,8 @@ package Deployment_View is
                                    return Complete_Deployment_View
    with Pre => System /= No_Node;
    procedure Dump_Nodes       (DV : Complete_Deployment_View);
-   procedure Dump_Connections (DV : Complete_Deployment_View) is null;
-   procedure Dump_Busses      (DV : Complete_Deployment_View) is null;
+   procedure Dump_Connections (DV : Complete_Deployment_View);
+   procedure Dump_Busses      (DV : Complete_Deployment_View);
    procedure Debug_Dump       (DV : Complete_Deployment_View);
 
 end Deployment_View;

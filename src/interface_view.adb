@@ -126,7 +126,7 @@ package body Interface_View is
    ---------------------------
 
    function Get_ASN1_Module_Name (D : Node_Id) return String is
-      id : Name_Id := No_Name;
+      id : Name_Id;
       ASN1_Module : constant Name_id :=
          Get_String_Name ("deployment::asn1_module_name");
    begin
@@ -494,7 +494,7 @@ package body Interface_View is
          Result      : Taste_Terminal_Function;
          --  To get the optional zip filename where user code is stored:
          Source_Text : constant Name_Array := Get_Source_Text (Inst);
-         Zip_Id      : Name_Id             := No_Name;
+         Zip_Id      : Name_Id;
          --  To get the context parameters
          Subco       : Node_Id;
          --  To get the provided and required interfaces

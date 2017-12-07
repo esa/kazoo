@@ -6,6 +6,7 @@
 
 with Ada.Text_IO,
      Ada.Exceptions,
+     Ada.Strings.Fixed,
      System.Assertions,
      --  Ada.Command_Line,
      Ocarina.Instances.Queries,
@@ -26,6 +27,7 @@ package body Deployment_View is
 
    use Ada.Text_IO,
        Ada.Exceptions,
+       Ada.Strings.Fixed,
        System.Assertions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
@@ -97,7 +99,7 @@ package body Deployment_View is
 
       function Parse_Bus (Elem : Node_Id; Bus : Node_Id) return Taste_Bus is
          Properties : constant Property_Maps.Map := Get_Properties_Map (CI);
-         Classifier : Name_Id := No_Name;
+         Classifier : Name_Id;
          Pkg_Name   : Name_Id := No_Name;
       begin
          Set_Str_To_Name_Buffer ("");
@@ -116,6 +118,7 @@ package body Deployment_View is
             Classifier := Name_Find;
          else
             Classifier := Name (Identifier (Bus));
+            --  No "default" Pkg_Name?
          end if;
          return Taste_Bus'(Name         =>
                              US (Get_Name_String (Name (Identifier (Elem)))),
@@ -212,11 +215,11 @@ package body Deployment_View is
 
       function Parse_Device (CI : Node_Id) return Taste_Device_Driver is
          Result : Taste_Device_Driver;
-         Pkg_Name                   : Name_Id   := No_Name;
-         Accessed_Bus               : Node_Id   := No_Node;
-         Accessed_Port              : Node_Id   := No_Node;
-         Device_Implementation      : Node_Id   := No_Node;
-         Configuration_Data         : Node_Id   := No_Node;
+         Pkg_Name                   : Name_Id;
+         Accessed_Bus               : Node_Id;
+         Accessed_Port              : Node_Id;
+         Device_Implementation      : Node_Id;
+         Configuration_Data         : Node_Id;
       begin
          Result.Name := US (Get_Name_String (Name (Identifier (CI))));
 
@@ -246,10 +249,11 @@ package body Deployment_View is
                   end if;
                   for Index in ST'Range loop
                      Get_Name_String (ST (Index));
-                     if Name_Buffer (Name_Len - 3 .. Name_Len) = ".asn"
+                     if Tail (Source => Name_Buffer (1 .. Name_Len),
+                              Count  => 4) = ".asn"
                      then
-                        Result.ASN1_Filename := US (Get_Name_String
-                             (Get_String_Name (Name_Buffer (1 .. Name_Len))));
+                        Result.ASN1_Filename :=
+                          US (Name_Buffer (1 .. Name_Len));
                      end if;
                   end loop;
                end;

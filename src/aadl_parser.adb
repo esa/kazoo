@@ -46,12 +46,12 @@ procedure AADL_Parser is
    Deployment_root   : Node_Id := No_Node;
    Dataview_root     : Node_ID := No_Node;
    Success           : Boolean;
---   OutDir            : Integer := 0;
---   Stack_Val         : Integer := 0;
---   Timer_Resolution  : Integer := 0;
-   Interface_View    : Integer := 0;
-   Depl_View_Pos : Integer := 0;
-   Data_View         : Integer := 0;
+--   OutDir            : Natural := 0;
+--   Stack_Val         : Natural := 0;
+--   Timer_Resolution  : Natural := 0;
+   Interface_View    : Natural := 0;
+   Depl_View_Pos     : Natural := 0;
+   Data_View         : Natural := 0;
    Generate_glue     : Boolean := false;
    AADL_Version      : AADL_Version_Type := Ocarina.AADL_V2;
 

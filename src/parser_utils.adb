@@ -5,15 +5,21 @@
 with Ada.Text_IO,
      Parser_Version,
      Ocarina.AADL_Values,
+     Ocarina.Configuration,
+     Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
-     Ada.Characters.Latin_1;
+     GNAT.OS_Lib,
+     Ada.Characters.Latin_1,
+     GNAT.Command_Line;
 
 package body Parser_Utils is
 
    use Ada.Text_IO,
        Ocarina.Instances.Queries,
        Ada.Characters.Latin_1,
-       Ocarina.ME_AADL;
+       GNAT.OS_Lib,
+       Ocarina.ME_AADL,
+       GNAT.Command_Line;
 
    ------------
    -- Banner --
@@ -39,37 +45,40 @@ package body Parser_Utils is
 
    procedure Usage is
    begin
-      Put_Line
-        ("Usage: taste-aadl-parser <options> otherfiles");
-      Put_Line
-        ("Where <options> are:");
-      New_Line;
+
       Put ("-l, --glue" & HT & HT & HT & HT);
       Put_Line ("Generate glue code");
+
       Put ("-w, --gw" & HT & HT & HT & HT);
       Put_Line ("Generate code skeletons");
+
       Put ("-o, --output <outputDir>" & HT & HT);
       Put_Line ("Root directory for the output files");
-      Put ("-i, --interfaceview <i_view.aadl>" & HT);
-      Put_Line ("The interface view in AADL");
+
       Put ("-c, --deploymentview <d_view.aadl>" & HT);
       Put_Line ("The deployment view in AADL");
+
       Put ("-d, --dataview <dataview.aadl>" & HT & HT);
       Put_Line ("The data view in AADL");
+
       Put ("-t, --test" & HT & HT & HT & HT);
       Put_Line ("Dump model information");
+
       Put ("-g, --debug" & HT & HT & HT & HT);
       Put_Line ("Generate runtime debug output");
+
       Put ("-x, --timer <timer-resolution in ms>" & HT);
       Put_Line ("Set the timer resolution (default 100 ms)");
+
       Put ("-v, --version" & HT & HT & HT & HT);
       Put_Line ("Display taste-aadl-parser version number");
+
       Put ("-p, --polyorb-hi-c" & HT & HT & HT);
       Put_Line ("Interface glue code with PolyORB-HI-C");
+
       Put ("otherfiles" & HT & HT & HT & HT);
       Put_Line ("Any other aadl file you want to parse");
-      New_Line;
-      New_Line;
+
       Put_Line ("For example, this command will generate your application"
        & " skeletons:");
       New_Line;
@@ -78,6 +87,34 @@ package body Parser_Utils is
       New_Line;
 
    end Usage;
+
+   function Parse_Command_Line return Taste_Configuration is
+      Config : Command_Line_Configuration;
+      Result : Taste_Configuration;
+   begin
+      Define_Switch (Config, Output => Result.Interface_View'Access,
+                     Switch   => "-i:", Long_Switch => "--interfaceview=",
+                     Help     => "Mandatory interface view (AADL model)",
+                     Argument => "InterfaceView.aadl");
+      Define_Switch (Config, Output => Result.Deployment_View'Access,
+                     Switch   => "-c:", Long_Switch => "--deploymentview=",
+                     Help     => "Optional deployment view (AADL model)",
+                     Argument => "DeploymentView.aadl");
+      Define_Switch (Config, Output => Result.Data_View'Access,
+                     Switch   => "-d:", Long_Switch => "--dataview=",
+                     Help     => "Optional data view (AADL model)",
+                     Argument => "DataView.aadl");
+      Getopt (Config);
+      loop
+         declare
+            S : constant String := Get_Argument;
+         begin
+            exit when S'Length = 0;
+            Put_Line ("File argument : " & S);
+         end;
+      end loop;
+      return Result;
+   end Parse_Command_Line;
 
    -----------------------
    -- Get_APLC_Binding --
@@ -152,4 +189,21 @@ package body Parser_Utils is
       return result;
    end Get_Properties_Map;
 
+   --  Initialization step: we look for ocarina on path to define
+   --  OCARINA_PATH env. variable. This will indicate Ocarina librrary
+   --  where to find AADL default property sets, and Ocarina specific
+   --  packages and property sets.
+   procedure Initialize_Ocarina is
+      S : constant GNAT.OS_Lib.String_Access :=
+        GNAT.OS_Lib.Locate_Exec_On_Path ("ocarina");
+   begin
+      if S = null then
+         raise AADL_Parser_Error with "Ocarina is not in your PATH";
+      end if;
+      GNAT.OS_Lib.Setenv ("OCARINA_PATH", S.all (S'First .. S'Last - 12));
+      Ocarina.Initialize;
+      Ocarina.AADL_Version := Ocarina.AADL_V2;
+      Ocarina.Configuration.Init_Modules;
+      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+   end Initialize_Ocarina;
 end Parser_Utils;

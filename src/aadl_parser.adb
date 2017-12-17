@@ -18,7 +18,6 @@ with Ada.Command_Line,
      Ocarina.Instances,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.Parser,
-     Ocarina.FE_AADL.Parser,
      Parser_Utils,
      Interface_View,
      Deployment_View;
@@ -53,7 +52,6 @@ procedure AADL_Parser is
    Depl_View_Pos     : Natural := 0;
    Data_View         : Natural := 0;
    Generate_glue     : Boolean := false;
-   AADL_Version      : AADL_Version_Type := Ocarina.AADL_V2;
 
    procedure Parse_Command_Line;
    --  procedure Process_DataView (My_Root : Node_Id);
@@ -252,35 +250,12 @@ procedure AADL_Parser is
       FN : Name_Id;
       B  : Location;
    begin
-      --  Initialization step: we look for ocarina on path to define
-      --  OCARINA_PATH env. variable. This will indicate Ocarina librrary
-      --  where to find AADL default property sets, and Ocarina specific
-      --  packages and property sets.
-
-      declare
-            S : constant GNAT.OS_Lib.String_Access :=
-               GNAT.OS_Lib.Locate_Exec_On_Path ("ocarina");
-      begin
-         if S = null then
-            raise AADL_Parser_Error with "Ocarina is not in your PATH";
-         end if;
-
-         GNAT.OS_Lib.Setenv ("OCARINA_PATH", S.all (S'First .. S'Last - 12));
-      end;
-
       --  Display the command line syntax
-
       if Ada.Command_Line.Argument_Count = 0 then
          Usage;
          raise AADL_Parser_Error with "Missing command line arguments";
       end if;
 
-      Ocarina.Initialize;
-      Ocarina.AADL_Version := AADL_Version;
-
-      Ocarina.Configuration.Init_Modules;
-
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
       AADL_Language := Get_String_Name ("aadl");
 
       Parse_Command_Line;
@@ -362,6 +337,7 @@ procedure AADL_Parser is
 begin
    Banner;
 
+   Initialize_Ocarina;
    Initialize;
 
    --  First, we analyze the interface view.

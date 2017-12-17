@@ -12,6 +12,7 @@ with Ocarina,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ada.Strings.Unbounded,
      Option_Type,
+     GNAT.Strings,
      Interfaces.C_Streams;
 
 use Ocarina,
@@ -89,5 +90,27 @@ package Parser_Utils is
    package Option_ULL is new Option_Type (Unsigned_Long_Long);
    use Option_ULL;
    subtype Optional_Long_Long is Option_ULL.Option;
+
+   procedure Initialize_Ocarina;
+
+   type Taste_Configuration is
+      record
+         Interface_View   : aliased GNAT.Strings.String_Access;
+         Deployment_View  : aliased GNAT.Strings.String_Access;
+         Data_View        : aliased GNAT.Strings.String_Access;
+         Use_POHIC        : aliased Boolean;
+         Glue             : aliased Boolean;
+         Smp2             : aliased Boolean;
+         Skeletons        : aliased Boolean;
+         Test_Flag        : aliased Boolean;
+         Aadlv2           : aliased Boolean;
+         Future_Flag      : aliased Boolean;
+         Output_Dir       : aliased GNAT.Strings.String_Access;
+         Timer_Resolution : aliased Natural;
+         Version          : aliased Boolean;
+         Debug_Flag       : aliased Boolean;
+      end record;
+
+   function Parse_Command_Line return Taste_Configuration;
 
 end Parser_Utils;

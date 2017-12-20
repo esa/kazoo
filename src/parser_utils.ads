@@ -42,13 +42,11 @@ package Parser_Utils is
      (if Is_Tty then Yellow & Bold else "");
    function No_Color return String is
      (if Is_Tty then ASCII.ESC & "[0m" else "");
-   function Underscore return String is
+   function Underline return String is
      (if Is_Tty then ASCII.ESC & "[4m" else "");
    function White_Bold return String is (if Is_Tty then White & Bold else "");
 
    procedure Banner;
-
-   procedure Usage;
 
    AADL_Parser_Error : exception;
 
@@ -98,17 +96,13 @@ package Parser_Utils is
          Interface_View   : aliased GNAT.Strings.String_Access;
          Deployment_View  : aliased GNAT.Strings.String_Access;
          Data_View        : aliased GNAT.Strings.String_Access;
-         Use_POHIC        : aliased Boolean;
-         Glue             : aliased Boolean;
-         Smp2             : aliased Boolean;
-         Skeletons        : aliased Boolean;
-         Test_Flag        : aliased Boolean;
-         Aadlv2           : aliased Boolean;
-         Future_Flag      : aliased Boolean;
          Output_Dir       : aliased GNAT.Strings.String_Access;
-         Timer_Resolution : aliased Natural;
-         Version          : aliased Boolean;
-         Debug_Flag       : aliased Boolean;
+         Skeletons        : aliased Boolean := False;
+         Glue             : aliased Boolean := False;
+         Use_POHIC        : aliased Boolean := False;
+         Timer_Resolution : aliased Integer := 100;
+         Debug_Flag       : aliased Boolean := False;
+         Version          : aliased Boolean := False;
       end record;
 
    function Parse_Command_Line return Taste_Configuration;

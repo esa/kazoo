@@ -9,14 +9,12 @@ with Ada.Text_IO,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
      GNAT.OS_Lib,
-     Ada.Characters.Latin_1,
      GNAT.Command_Line;
 
 package body Parser_Utils is
 
    use Ada.Text_IO,
        Ocarina.Instances.Queries,
-       Ada.Characters.Latin_1,
        GNAT.OS_Lib,
        Ocarina.ME_AADL,
        GNAT.Command_Line;
@@ -30,63 +28,14 @@ package body Parser_Utils is
         Yellow_Bold & "TASTE AADL Parser" & No_Color & " (Version "
         & Parser_Version.Parser_Release & ") "
         & ASCII.LF & ASCII.CR & No_Color
-        & "Contact: " & Underscore
-        & "Maxime.Perrotin@esa.int" & No_Color & " or " & Underscore
+        & "Contact: " & Underline
+        & "Maxime.Perrotin@esa.int" & No_Color & " or " & Underline
         & "Thanassis.Tsiodras@esa.int"
         & ASCII.LF & ASCII.CR & No_Color
         & "Based on " & Parser_Version.Ocarina_Version;
    begin
       Put_Line (The_Banner);
    end Banner;
-
-   -----------
-   -- Usage --
-   -----------
-
-   procedure Usage is
-   begin
-
-      Put ("-l, --glue" & HT & HT & HT & HT);
-      Put_Line ("Generate glue code");
-
-      Put ("-w, --gw" & HT & HT & HT & HT);
-      Put_Line ("Generate code skeletons");
-
-      Put ("-o, --output <outputDir>" & HT & HT);
-      Put_Line ("Root directory for the output files");
-
-      Put ("-c, --deploymentview <d_view.aadl>" & HT);
-      Put_Line ("The deployment view in AADL");
-
-      Put ("-d, --dataview <dataview.aadl>" & HT & HT);
-      Put_Line ("The data view in AADL");
-
-      Put ("-t, --test" & HT & HT & HT & HT);
-      Put_Line ("Dump model information");
-
-      Put ("-g, --debug" & HT & HT & HT & HT);
-      Put_Line ("Generate runtime debug output");
-
-      Put ("-x, --timer <timer-resolution in ms>" & HT);
-      Put_Line ("Set the timer resolution (default 100 ms)");
-
-      Put ("-v, --version" & HT & HT & HT & HT);
-      Put_Line ("Display taste-aadl-parser version number");
-
-      Put ("-p, --polyorb-hi-c" & HT & HT & HT);
-      Put_Line ("Interface glue code with PolyORB-HI-C");
-
-      Put ("otherfiles" & HT & HT & HT & HT);
-      Put_Line ("Any other aadl file you want to parse");
-
-      Put_Line ("For example, this command will generate your application"
-       & " skeletons:");
-      New_Line;
-      Put_Line ("taste-aadl-parser -i InterfaceView.aadl -d DataView.aadl"
-       & " -o code --gw --keep-case");
-      New_Line;
-
-   end Usage;
 
    function Parse_Command_Line return Taste_Configuration is
       Config : Command_Line_Configuration;
@@ -104,6 +53,28 @@ package body Parser_Utils is
                      Switch   => "-d:", Long_Switch => "--dataview=",
                      Help     => "Optional data view (AADL model)",
                      Argument => "DataView.aadl");
+      Define_Switch (Config, Output => Result.Output_Dir'Access,
+                     Switch   => "-o:", Long_Switch => "--output=",
+                     Help     => "Output directory (to be created if absent)",
+                     Argument => "Folder");
+      Define_Switch (Config, Output => Result.Skeletons'Access,
+                     Switch   => "-w", Long_Switch => "--gw",
+                     Help     => "Generate models and code skeletons");
+      Define_Switch (Config, Output => Result.Glue'Access,
+                     Switch   => "-l", Long_Switch => "--glue",
+                     Help     => "Generate glue code");
+      Define_Switch (Config, Output => Result.Use_POHIC'Access,
+                     Switch   => "-p", Long_Switch => "--polyorb-hi-c",
+                     Help     => "Use PolyORB-HI-C runtime in place of Ada");
+      Define_Switch (Config, Output => Result.Timer_Resolution'Access,
+                     Switch => "-x", Long_Switch => "--timer",
+                     Help     => "Specify timer resolution (default 100 ms)");
+      Define_Switch (Config, Output => Result.Debug_Flag'Access,
+                     Switch   => "-g", Long_Switch => "--debug",
+                     Help     => "Set debug mode");
+      Define_Switch (Config, Output => Result.Version'Access,
+                     Switch   => "-v", Long_Switch => "--version",
+                     Help     => "Display tool version");
       Getopt (Config);
       loop
          declare
@@ -113,6 +84,19 @@ package body Parser_Utils is
             Put_Line ("File argument : " & S);
          end;
       end loop;
+      --  Dump (Debug)
+      Put_Line ("Command line:");
+      Put_Line ("  |_ Interface View  : " & Result.Interface_View.all);
+      Put_Line ("  |_ Deployment View : " & Result.Deployment_View.all);
+      Put_Line ("  |_ Data View       : " & Result.Data_View.all);
+      Put_Line ("  |_ Output Dir      : " & Result.Output_Dir.all);
+      Put_Line ("  |_ Use POHIC       : " & Result.Use_POHIC'Img);
+      Put_Line ("  |_ Glue            : " & Result.Use_POHIC'Img);
+      Put_Line ("  |_ Skeletons       : " & Result.Skeletons'Img);
+      Put_Line ("  |_ Timer Res       : " & Result.Timer_Resolution'Img);
+      Put_Line ("  |_ Version         : " & Result.Version'Img);
+      Put_Line ("  |_ Debug           : " & Result.Debug_Flag'Img);
+
       return Result;
    end Parse_Command_Line;
 

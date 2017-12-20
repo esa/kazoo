@@ -3,7 +3,8 @@
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with Ada.Command_Line,
+with Ada.Command_Line,  -- Remove this ASAP
+     GNAT.Command_Line,
      Ada.Exceptions,
      Ada.Text_IO,
      GNAT.OS_Lib,
@@ -39,6 +40,8 @@ use Ada.Text_IO,
 
 procedure AADL_Parser is
 
+   Exit_With_No_Error : exception;
+
    AADL_Language : Name_Id;
 
    Interface_Root    : Node_Id := No_Node;
@@ -53,7 +56,7 @@ procedure AADL_Parser is
    Data_View         : Natural := 0;
    Generate_glue     : Boolean := false;
 
-   procedure Parse_Command_Line;
+   procedure Parse_Command_Line_Old with Unreferenced;
    --  procedure Process_DataView (My_Root : Node_Id);
 
    ----------------------------
@@ -102,7 +105,7 @@ procedure AADL_Parser is
    -- Parse_Command_Line --
    ------------------------
 
-   procedure Parse_Command_Line is
+   procedure Parse_Command_Line_Old is
       FN                : Name_Id;
       B                 : Location;
       Previous_OutDir   : Boolean := False;
@@ -197,27 +200,6 @@ procedure AADL_Parser is
          then
             Previous_Cview := True;
 
-         elsif Ada.Command_Line.Argument (J) = "--version"
-           or else Ada.Command_Line.Argument (J) = "-v"
-         then
-            OS_Exit (0);
-
-         elsif Ada.Command_Line.Argument (J) = "--dataview"
-           or else Ada.Command_Line.Argument (J) = "-d"
-         then
-            Previous_DataView := True;
-
-         elsif Ada.Command_Line.Argument (J) = "--debug"
-           or else Ada.Command_Line.Argument (J) = "-g"
-         then
-            null;
-
-         elsif Ada.Command_Line.Argument (J) = "--help"
-           or else Ada.Command_Line.Argument (J) = "-h"
-         then
-            Usage;
-            OS_Exit (0);
-
          else
             Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (J));
             FN := Ocarina.Files.Search_File (Name_Find);
@@ -240,25 +222,28 @@ procedure AADL_Parser is
               (AADL_Language, Deployment_Root, B);
          end if;
       end loop;
-   end Parse_Command_Line;
+   end Parse_Command_Line_Old;
 
    ----------------
    -- Initialize --
    ----------------
 
    procedure Initialize is
-      FN : Name_Id;
-      B  : Location;
+      FN     : Name_Id;
+      B      : Location;
+      Config : Taste_Configuration;
    begin
       --  Display the command line syntax
       if Ada.Command_Line.Argument_Count = 0 then
-         Usage;
-         raise AADL_Parser_Error with "Missing command line arguments";
+         raise AADL_Parser_Error
+           with "Missing command line arguments (try --help)";
       end if;
 
       AADL_Language := Get_String_Name ("aadl");
 
-      Parse_Command_Line;
+      Config := Parse_Command_Line;
+
+      Put_Line ("Interface View: " & Config.Interface_View.all);
       if Interface_View = 0 then
          --  Try default filename
          Set_Str_To_Name_Buffer ("InterfaceView.aadl");
@@ -328,6 +313,13 @@ procedure AADL_Parser is
       if not Success then
          raise AADL_Parser_Error with "Could not analyse model";
       end if;
+   exception
+      when GNAT.Command_Line.Exit_From_Command_Line =>
+         raise Exit_With_No_Error;  -- When --help is used
+      when GNAT.Command_Line.Invalid_Switch =>
+         Put (Red_Bold & "[ERROR] " & White_Bold);
+         Put_Line ("Invalid switch in command line (try --help)" & No_Color);
+         raise Exit_With_No_Error;
    end Initialize;
 
    IV_Root : Node_Id;
@@ -372,6 +364,11 @@ exception
       Put (Red_Bold & "[ERROR] " & White_Bold);
       Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);
+   when Exit_With_No_Error =>
+      New_Line;
+      Put (Yellow_Bold & "[INFO] " & No_Color);
+      Put ("For more information, visit " & Underline & White_Bold);
+      Put_Line ("https://taste.tools" & No_Color);
 
    when E : others =>
       Errors.Display_Bug_Box (E);

@@ -3,8 +3,8 @@ AADL_PARSER=../../aadl_parser
 all: test-parse
 
 test-parse:
-	$(AADL_PARSER) -gw \
-	               -glue \
+	$(AADL_PARSER) --gw \
+	               --glue \
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \

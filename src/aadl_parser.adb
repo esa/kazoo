@@ -3,8 +3,7 @@
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with Ada.Command_Line,  -- Remove this ASAP
-     GNAT.Command_Line,
+with GNAT.Command_Line,
      Ada.Exceptions,
      Ada.Text_IO,
      GNAT.OS_Lib,
@@ -39,268 +38,111 @@ use Ada.Text_IO,
     GNAT.OS_Lib;
 
 procedure AADL_Parser is
-
-   Exit_With_No_Error : exception;
-
    AADL_Language : Name_Id;
 
    Interface_Root    : Node_Id := No_Node;
    Deployment_root   : Node_Id := No_Node;
    Dataview_root     : Node_ID := No_Node;
    Success           : Boolean;
---   OutDir            : Natural := 0;
---   Stack_Val         : Natural := 0;
---   Timer_Resolution  : Natural := 0;
-   Interface_View    : Natural := 0;
-   Depl_View_Pos     : Natural := 0;
-   Data_View         : Natural := 0;
-   Generate_glue     : Boolean := false;
-
-   procedure Parse_Command_Line_Old with Unreferenced;
-   --  procedure Process_DataView (My_Root : Node_Id);
-
-   ----------------------------
-   -- Process_Interface_View --
-   ----------------------------
-
-         --  Set the output directory
---        if OutDir > 0 then
---           C_Set_OutDir (Ada.Command_Line.Argument (Outdir),
---                         Ada.Command_Line.Argument (Outdir)'Length);
---        end if;
---
---        --  Set the stack value
---        if Stack_Val > 0 then
---           C_Set_Stack (Ada.Command_Line.Argument (stack_val),
---                        Ada.Command_Line.Argument (stack_val)'Length);
---        end if;
---
---        --  Set the timer resolution value
---        if Timer_Resolution > 0 then
---           C_Set_Timer_Resolution
---             (Ada.Command_Line.Argument (Timer_Resolution),
---              Ada.Command_Line.Argument (Timer_Resolution)'Length);
---        end if;
-
-         --  Current_function is read from the list of system subcomponents
-
-   -----------------------------------
-   -- Browse_Deployment_View_System --
-   -----------------------------------
-
---   procedure Browse_Deployment_View_System
---       (My_System : Node_Id; NodeName : String) is
---      Processes         : Node_Id;
---      Processes2        : Node_Id;
---      Tmp_CI            : Node_Id;
---      Tmp_CI2           : Node_Id;
---      Ref               : Node_Id;
---      CPU               : Node_Id;
---      CPU_Name          : Name_Id := No_Name;
---      Pkg_Name          : Name_Id := No_Name;
---      CPU_Classifier    : Name_Id := No_Name;
---      CPU_Platform      : Supported_Execution_Platform := Platform_None;
-
-   ------------------------
-   -- Parse_Command_Line --
-   ------------------------
-
-   procedure Parse_Command_Line_Old is
-      FN                : Name_Id;
-      B                 : Location;
-      Previous_OutDir   : Boolean := False;
-      Previous_IFview   : Boolean := False;
-      Previous_CView    : Boolean := False;
-      Previous_DataView : Boolean := False;
-      Previous_TimerRes : Boolean := False;
-   begin
-      for J in 1 .. Ada.Command_Line.Argument_Count loop
-         --  Parse the file corresponding to the Jth argument of the
-         --  command line and enrich the global AADL tree.
-
-         if Previous_IfView then
-            Interface_View := J;
-            Previous_Ifview := false;
-
-         elsif Previous_Cview then
-            Depl_View_Pos := J;
-            Previous_Cview := false;
-
-         elsif Previous_DataView then
-            Data_View := J;
-            Previous_DataView := false;
-
-         elsif Previous_Outdir then
-            --  OutDir := J;
-            Previous_OutDir := false;
-
-         elsif Previous_TimerRes then
-            --  Timer_Resolution := J;
-            Previous_TimerRes := false;
-
-         elsif Ada.Command_Line.Argument (J) = "--polyorb-hi-c"
-           or else Ada.Command_Line.Argument (J) = "-p"
-           or else Ada.Command_Line.Argument (J) = "-polyorb-hi-c"
-         then
-            null;
-
-         elsif Ada.Command_Line.Argument (J) = "--glue"
-           or else Ada.Command_Line.Argument (J) = "-glue"
-           or else Ada.Command_Line.Argument (J) = "-l"
-         then
-            generate_glue := true;
-
-         elsif Ada.Command_Line.Argument (J) = "--smp2"
-           or else Ada.Command_Line.Argument (J) = "-m"
-         then
-            null;
-
-         elsif Ada.Command_Line.Argument (J) = "--gw"
-           or else Ada.Command_Line.Argument (J) = "-gw"
-           or else Ada.Command_Line.Argument (J) = "-w"
-         then
-            null;
-
-         --  The "test" flag activates a function in the parser,
-         --  used for debugging purposes (e.g. dump of the model after
-         --  all preprocessings). Users need not use it.
-         elsif Ada.Command_Line.Argument (J) = "--test"
-           or else Ada.Command_Line.Argument (J) = "-test"
-           or else Ada.Command_Line.Argument (J) = "-t"
-         then
-            null;
-
-         elsif Ada.Command_Line.Argument (J) = "--aadlv2"
-           or else Ada.Command_Line.Argument (J) = "-aadlv2"
-           or else Ada.Command_Line.Argument (J) = "-a"
-         then
-            AADL_Version := Ocarina.AADL_V2;
-
-         elsif Ada.Command_Line.Argument (J) = "--future" then
-            null;
-
-         elsif Ada.Command_Line.Argument (J) = "--output"
-           or else Ada.Command_Line.Argument (J) = "-o"
-         then
-            Previous_OutDir := True;
-
-         elsif Ada.Command_Line.Argument (J) = "--interfaceview"
-           or else Ada.Command_Line.Argument (J) = "-i"
-         then
-            Previous_Ifview := True;
-
-         elsif Ada.Command_Line.Argument (J) = "--timer"
-           or else Ada.Command_Line.Argument (J) = "-timer"
-           or else Ada.Command_Line.Argument (J) = "-x"
-         then
-            Previous_TimerRes := True;
-
-         elsif Ada.Command_Line.Argument (J) = "--deploymentview"
-           or else Ada.Command_Line.Argument (J) = "-c"
-         then
-            Previous_Cview := True;
-
-         else
-            Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (J));
-            FN := Ocarina.Files.Search_File (Name_Find);
-            if FN = No_Name then
-               raise AADL_Parser_Error with "File not found: "
-                 & Ada.Command_Line.Argument (J);
-            end if;
-
-            B := Ocarina.Files.Load_File (FN);
-            Interface_Root := Ocarina.Parser.Parse
-              (AADL_Language, Interface_Root, B);
-
-            --  the "else" makes the parser parse any additional aadl files
-            --  (in complement to the interface/deployment/data views)
-            --  they must therefore be part of Root AND Deployment_Root trees
-            Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (J));
-            FN := Ocarina.Files.Search_File (Name_Find);
-            B := Ocarina.Files.Load_File (FN);
-            Deployment_Root := Ocarina.Parser.Parse
-              (AADL_Language, Deployment_Root, B);
-         end if;
-      end loop;
-   end Parse_Command_Line_Old;
-
    ----------------
    -- Initialize --
    ----------------
 
    procedure Initialize is
-      FN     : Name_Id;
-      B      : Location;
-      Config : Taste_Configuration;
+      File_Name  : Name_Id;
+      File_Descr : Location;
    begin
-      --  Display the command line syntax
-      if Ada.Command_Line.Argument_Count = 0 then
-         raise AADL_Parser_Error
-           with "Missing command line arguments (try --help)";
-      end if;
-
       AADL_Language := Get_String_Name ("aadl");
 
-      Config := Parse_Command_Line;
+      Dump_Configuration (Current_Config);
 
-      Put_Line ("Interface View: " & Config.Interface_View.all);
-      if Interface_View = 0 then
-         --  Try default filename
-         Set_Str_To_Name_Buffer ("InterfaceView.aadl");
-      else
-         Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Interface_View));
+      if Current_Config.Interface_View.all'Length = 0 then
+         Current_Config.Interface_View := Default_Interface_View'Access;
       end if;
 
-      FN := Ocarina.Files.Search_File (Name_Find);
-      if FN = No_Name then
-         raise AADL_Parser_Error with "Interface View missing";
+      Set_Str_To_Name_Buffer (Current_Config.Interface_View.all);
+
+      File_Name := Ocarina.Files.Search_File (Name_Find);
+      if File_Name = No_Name then
+         raise AADL_Parser_Error
+           with "File not found : " & Current_Config.Interface_View.all;
       end if;
 
-      B := Ocarina.Files.Load_File (FN);
+      File_Descr := Ocarina.Files.Load_File (File_Name);
 
       Interface_Root := Ocarina.Parser.Parse
-        (AADL_Language, Interface_Root, B);
+        (AADL_Language, Interface_Root, File_Descr);
 
-      if Generate_Glue then
-         if Depl_View_Pos = 0 then
-            Set_Str_To_Name_Buffer ("DeploymentView.aadl");
-         else
-            Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Depl_View_Pos));
+      if Current_Config.Glue then
+         if Current_Config.Deployment_View.all'Length = 0 then
+            Current_Config.Deployment_View := Default_Deployment_View'Access;
          end if;
 
-         FN := Ocarina.Files.Search_File (Name_Find);
-         B := Ocarina.Files.Load_File (FN);
+         Set_Str_To_Name_Buffer (Current_Config.Deployment_View.all);
+
+         File_Name := Ocarina.Files.Search_File (Name_Find);
+         if File_Name = No_Name then
+            raise AADL_Parser_Error
+              with "File not found : " & Current_Config.Deployment_View.all;
+         end if;
+
+         File_Descr := Ocarina.Files.Load_File (File_Name);
          Deployment_Root := Ocarina.Parser.Parse
-           (AADL_Language, Deployment_Root, B);
+           (AADL_Language, Deployment_Root, File_Descr);
 
          if Deployment_Root = No_Node then
             raise AADL_Parser_Error with "Deployment View is incorrect";
          end if;
       end if;
 
+      for Each of Current_Config.Other_Files loop
+         Set_Str_To_Name_Buffer (Each);
+         File_Name := Ocarina.Files.Search_File (Name_Find);
+         if File_Name = No_Name then
+            raise AADL_Parser_Error with "File not found: " & Each;
+         end if;
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+
+         --  Add other files to the Interface and (if any) deployment roots
+         Interface_Root := Ocarina.Parser.Parse
+           (AADL_Language, Interface_Root, File_Descr);
+         if Deployment_Root /= No_Node then
+            Deployment_Root := Ocarina.Parser.Parse
+              (AADL_Language, Deployment_Root, File_Descr);
+         end if;
+      end loop;
+
       --  Missing data view is actually not an error.
       --  Systems can live with parameterless messages
-      if Data_View > 0 then
-         Set_Str_To_Name_Buffer (Ada.Command_Line.Argument (Data_View));
-         FN := Ocarina.Files.Search_File (Name_Find);
-         if FN = No_Name then
+      if Current_Config.Data_View.all'Length > 0 then
+         Set_Str_To_Name_Buffer (Current_Config.Data_View.all);
+         File_Name := Ocarina.Files.Search_File (Name_Find);
+         if File_Name = No_Name then
             raise AADL_Parser_Error with "Cannot find the Data View file";
          end if;
       else
          --  Try with default name
-         Set_Str_To_Name_Buffer ("DataView.aadl");
-         FN := Ocarina.Files.Search_File (Name_Find);
+         Set_Str_To_Name_Buffer (Default_Data_View);
+         File_Name := Ocarina.Files.Search_File (Name_Find);
+         if File_Name /= No_Name then
+            Current_Config.Data_View := Default_Data_View'Access;
+         end if;
       end if;
-      if FN /= No_Name then
-         B := Ocarina.Files.Load_File (FN);
+
+      if File_Name /= No_Name then
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+
+         --  Add the Data View to the Interface View root
          Interface_Root := Ocarina.Parser.Parse
-           (AADL_Language, Interface_Root, B);
+           (AADL_Language, Interface_Root, File_Descr);
+
+         --  Add the Data View to the Deployment View root, if any
          if Deployment_Root /= No_Node then
             Deployment_Root := Ocarina.Parser.Parse
-               (AADL_Language, Deployment_Root, B);
+               (AADL_Language, Deployment_Root, File_Descr);
          end if;
          Dataview_root := Ocarina.Parser.Parse
-                            (AADL_Language, Dataview_root, B);
+                            (AADL_Language, Dataview_root, File_Descr);
       end if;
 
       if No (Interface_Root) then
@@ -313,13 +155,6 @@ procedure AADL_Parser is
       if not Success then
          raise AADL_Parser_Error with "Could not analyse model";
       end if;
-   exception
-      when GNAT.Command_Line.Exit_From_Command_Line =>
-         raise Exit_With_No_Error;  -- When --help is used
-      when GNAT.Command_Line.Invalid_Switch =>
-         Put (Red_Bold & "[ERROR] " & White_Bold);
-         Put_Line ("Invalid switch in command line (try --help)" & No_Color);
-         raise Exit_With_No_Error;
    end Initialize;
 
    IV_Root : Node_Id;
@@ -328,8 +163,11 @@ procedure AADL_Parser is
 
 begin
    Banner;
-
+   --  Parse arguments before initializing Ocarina, otherwise Ocarina eats
+   --  some arguments (all file parameters).
+   Parse_Command_Line (Current_Config);
    Initialize_Ocarina;
+
    Initialize;
 
    --  First, we analyze the interface view.
@@ -345,8 +183,8 @@ begin
    --  Now, we are done with the interface view. We now analyze the
    --  deployment view.
 
-   if Depl_View_Pos > 0 then
-      AADL_Lib.Append (Ada.Command_Line.Argument (Interface_View));
+   if Current_Config.Deployment_View.all'Length > 0 then
+      AADL_Lib.Append (Current_Config.Interface_View.all);
       DV_AST := Parse_Deployment_View (Deployment_Root);
       DV_AST.Debug_Dump;
    end if;
@@ -364,12 +202,17 @@ exception
       Put (Red_Bold & "[ERROR] " & White_Bold);
       Put_Line (Exception_Message (Error) & No_Color);
       OS_Exit (1);
-   when Exit_With_No_Error =>
+   when GNAT.Command_Line.Exit_From_Command_Line =>
       New_Line;
       Put (Yellow_Bold & "[INFO] " & No_Color);
       Put ("For more information, visit " & Underline & White_Bold);
       Put_Line ("https://taste.tools" & No_Color);
-
+   when GNAT.Command_Line.Invalid_Switch
+         | GNAT.Command_Line.Invalid_Parameter
+         | GNAT.Command_Line.Invalid_Section =>
+         Put (Red_Bold & "[ERROR] " & White_Bold);
+      Put_Line ("Invalid switch or parameter (try --help)" & No_Color);
+      OS_Exit (1);
    when E : others =>
       Errors.Display_Bug_Box (E);
 end AADL_Parser;

@@ -26,6 +26,10 @@ use Ocarina,
 
 package Parser_Utils is
 
+   Default_Interface_View  : aliased String := "InterfaceView.aadl";
+   Default_Deployment_View : aliased String := "DeploymentView.aadl";
+   Default_Data_View       : aliased String := "DataView.aadl";
+
    package ATN renames Ocarina.ME_AADL.AADL_Tree.Nodes;
    package AIN renames Ocarina.ME_AADL.AADL_Instances.Nodes;
    function US (Source : String) return Unbounded_String renames
@@ -103,8 +107,13 @@ package Parser_Utils is
          Timer_Resolution : aliased Integer := 100;
          Debug_Flag       : aliased Boolean := False;
          Version          : aliased Boolean := False;
+         Other_Files      : String_Vectors.Vector;
       end record;
 
-   function Parse_Command_Line return Taste_Configuration;
+   Current_Config : Taste_Configuration;
+
+   procedure Parse_Command_Line (Result : out Taste_Configuration);
+
+   procedure Dump_Configuration (Config : Taste_Configuration);
 
 end Parser_Utils;

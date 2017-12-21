@@ -37,9 +37,8 @@ package body Parser_Utils is
       Put_Line (The_Banner);
    end Banner;
 
-   function Parse_Command_Line return Taste_Configuration is
+   procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config : Command_Line_Configuration;
-      Result : Taste_Configuration;
    begin
       Define_Switch (Config, Output => Result.Interface_View'Access,
                      Switch   => "-i:", Long_Switch => "--interfaceview=",
@@ -67,7 +66,7 @@ package body Parser_Utils is
                      Switch   => "-p", Long_Switch => "--polyorb-hi-c",
                      Help     => "Use PolyORB-HI-C runtime in place of Ada");
       Define_Switch (Config, Output => Result.Timer_Resolution'Access,
-                     Switch => "-x", Long_Switch => "--timer",
+                     Switch => "-x:", Long_Switch => "--timer=",
                      Help     => "Specify timer resolution (default 100 ms)");
       Define_Switch (Config, Output => Result.Debug_Flag'Access,
                      Switch   => "-g", Long_Switch => "--debug",
@@ -76,29 +75,38 @@ package body Parser_Utils is
                      Switch   => "-v", Long_Switch => "--version",
                      Help     => "Display tool version");
       Getopt (Config);
+
       loop
          declare
             S : constant String := Get_Argument;
          begin
             exit when S'Length = 0;
-            Put_Line ("File argument : " & S);
+            Result.Other_Files.Append (S);
          end;
       end loop;
-      --  Dump (Debug)
-      Put_Line ("Command line:");
-      Put_Line ("  |_ Interface View  : " & Result.Interface_View.all);
-      Put_Line ("  |_ Deployment View : " & Result.Deployment_View.all);
-      Put_Line ("  |_ Data View       : " & Result.Data_View.all);
-      Put_Line ("  |_ Output Dir      : " & Result.Output_Dir.all);
-      Put_Line ("  |_ Use POHIC       : " & Result.Use_POHIC'Img);
-      Put_Line ("  |_ Glue            : " & Result.Use_POHIC'Img);
-      Put_Line ("  |_ Skeletons       : " & Result.Skeletons'Img);
-      Put_Line ("  |_ Timer Res       : " & Result.Timer_Resolution'Img);
-      Put_Line ("  |_ Version         : " & Result.Version'Img);
-      Put_Line ("  |_ Debug           : " & Result.Debug_Flag'Img);
 
-      return Result;
+      if Result.Version then
+         raise Exit_From_Command_Line;
+      end if;
    end Parse_Command_Line;
+
+   procedure Dump_Configuration (Config : Taste_Configuration) is
+   begin
+      Put_Line ("Command line:");
+      Put_Line ("  |_ Interface View  : " & Config.Interface_View.all);
+      Put_Line ("  |_ Deployment View : " & Config.Deployment_View.all);
+      Put_Line ("  |_ Data View       : " & Config.Data_View.all);
+      Put_Line ("  |_ Output Dir      : " & Config.Output_Dir.all);
+      Put_Line ("  |_ Use POHIC       : " & Config.Use_POHIC'Img);
+      Put_Line ("  |_ Glue            : " & Config.Use_POHIC'Img);
+      Put_Line ("  |_ Skeletons       : " & Config.Skeletons'Img);
+      Put_Line ("  |_ Timer Res       : " & Config.Timer_Resolution'Img);
+      Put_Line ("  |_ Version         : " & Config.Version'Img);
+      Put_Line ("  |_ Debug           : " & Config.Debug_Flag'Img);
+      for Each of Config.Other_Files loop
+         Put_Line ("  |_ Other file      : " & Each);
+      end loop;
+   end Dump_Configuration;
 
    -----------------------
    -- Get_APLC_Binding --

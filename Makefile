@@ -35,7 +35,7 @@ endif
 	#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ; \
 
 	OCARINA_PATH=`ocarina-config --prefix` \
-            $(gnatpath)gprbuild -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
+            $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
 
 install:
 	$(MAKE)

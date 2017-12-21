@@ -11,12 +11,8 @@ with GNAT.Command_Line,
      Locations,
      Ocarina.Namet,
      Ocarina.Types,
-     Ocarina.Analyzer,
      Ocarina.Configuration,
      Ocarina.Files,
-     Ocarina.Options,
-     Ocarina.Instances,
-     Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.Parser,
      Parser_Utils,
      Interface_View,
@@ -28,22 +24,17 @@ use Ada.Text_IO,
     Ocarina.Namet,
     Ocarina.Types,
     Ocarina,
-    Ocarina.Analyzer,
-    Ocarina.Instances,
-    Ocarina.ME_AADL,
-    Ocarina.ME_AADL.AADL_Instances.Nodes,
     Parser_Utils,
     Interface_View,
     Deployment_View,
     GNAT.OS_Lib;
 
 procedure AADL_Parser is
-   AADL_Language : Name_Id;
-
-   Interface_Root    : Node_Id := No_Node;
-   Deployment_root   : Node_Id := No_Node;
-   Dataview_root     : Node_ID := No_Node;
-   Success           : Boolean;
+   IV_AST          : Complete_Interface_View;
+   DV_AST          : Complete_Deployment_View;
+   Interface_Root  : Node_Id := No_Node;
+   Deployment_root : Node_Id := No_Node;
+   Dataview_root   : Node_ID := No_Node;
    ----------------
    -- Initialize --
    ----------------
@@ -52,9 +43,15 @@ procedure AADL_Parser is
       File_Name  : Name_Id;
       File_Descr : Location;
    begin
-      AADL_Language := Get_String_Name ("aadl");
+      Banner;
+      --  Parse arguments before initializing Ocarina, otherwise Ocarina eats
+      --  some arguments (all file parameters).
+      Parse_Command_Line (Current_Config);
+      Initialize_Ocarina;
 
       Dump_Configuration (Current_Config);
+
+      AADL_Language := Get_String_Name ("aadl");
 
       if Current_Config.Interface_View.all'Length = 0 then
          Current_Config.Interface_View := Default_Interface_View'Access;
@@ -144,47 +141,16 @@ procedure AADL_Parser is
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;
-
-      if No (Interface_Root) then
-         raise AADL_Parser_Error with "Internal error - please report.";
-      end if;
-
-      --  Analyze the tree
-
-      Success := Ocarina.Analyzer.Analyze (AADL_Language, Interface_Root);
-      if not Success then
-         raise AADL_Parser_Error with "Could not analyse model";
-      end if;
    end Initialize;
 
-   IV_Root : Node_Id;
-   IV_AST : Complete_Interface_View;
-   DV_AST : Complete_Deployment_View;
-
 begin
-   Banner;
-   --  Parse arguments before initializing Ocarina, otherwise Ocarina eats
-   --  some arguments (all file parameters).
-   Parse_Command_Line (Current_Config);
-   Initialize_Ocarina;
-
    Initialize;
 
-   --  First, we analyze the interface view.
-
-   Ocarina.Options.Root_System_Name :=
-          Get_String_Name ("interfaceview.others");
-
-   IV_Root := Root_System (Instantiate_Model (Root => Interface_Root));
-   IV_AST := Parse_Interface_View (IV_Root);
+   IV_AST := Parse_Interface_View (Interface_Root);
 
    IV_AST.Debug_Dump;
 
-   --  Now, we are done with the interface view. We now analyze the
-   --  deployment view.
-
    if Current_Config.Deployment_View.all'Length > 0 then
-      AADL_Lib.Append (Current_Config.Interface_View.all);
       DV_AST := Parse_Deployment_View (Deployment_Root);
       DV_AST.Debug_Dump;
    end if;

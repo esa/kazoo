@@ -26,6 +26,7 @@ use Ocarina,
 
 package Parser_Utils is
 
+   AADL_Language           : Name_Id;
    Default_Interface_View  : aliased String := "InterfaceView.aadl";
    Default_Deployment_View : aliased String := "DeploymentView.aadl";
    Default_Data_View       : aliased String := "DataView.aadl";

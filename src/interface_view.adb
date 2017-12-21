@@ -7,9 +7,12 @@
 with Ada.Text_IO,
      Ada.Exceptions,
      Ocarina.Instances.Queries,
-     Ocarina.Namet,
+     Ocarina.Analyzer,
+     Ocarina.Options,
+     Ocarina.Instances,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
-     Ocarina.ME_AADL.AADL_Instances.Nutils,
+     Ocarina.Namet,
+      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities,
      Ocarina.Backends.Utils;
      --  Ada.Characters.Latin_1;
@@ -20,9 +23,11 @@ package body Interface_View is
        Ada.Exceptions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
+       Ocarina.Analyzer,
+       Ocarina.Options,
+       Ocarina.Instances,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
-       --  Ada.Characters.Latin_1,
        Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.ME_AADL,
        Ocarina.Backends.Utils;
@@ -250,7 +255,7 @@ package body Interface_View is
    -- AST Builder Functions --
    ---------------------------
 
-   function Parse_Interface_View (System : Node_Id)
+   function Parse_Interface_View (Interface_Root : Node_Id)
                                   return Complete_Interface_View
    is
       --  use type Functions.Vector;
@@ -258,6 +263,8 @@ package body Interface_View is
       use type Ctxt_Params.Vector;
       use type Parameters.Vector;
       use type Connection_Maps.Map;
+      System            : Node_Id;
+      Success           : Boolean;
       Functions         : Function_Maps.Map;
       Routes_Map        : Connection_Maps.Map;
       Current_Function  : Node_Id;
@@ -596,8 +603,23 @@ package body Interface_View is
          return Is_Terminal;
       end Rec_Function;
    begin
+      if No (Interface_Root) then
+         raise Interface_Error with "Interface View parsing error";
+      end if;
+
+      Success := Ocarina.Analyzer.Analyze (AADL_Language, Interface_Root);
+
+      if not Success then
+         raise Interface_Error with "Could not analyse Interface View";
+      end if;
+
+      Ocarina.Options.Root_System_Name :=
+        Get_String_Name ("interfaceview.others");
+
+      System := Root_System (Instantiate_Model (Root => Interface_Root));
+
       if No (System) then
-         raise Interface_Error with "Missing or erroneous interface view";
+         raise Interface_Error with "Could not instantiate Interface View";
       end if;
 
       Current_Function := AIN.First_Node (AIN.Subcomponents (System));

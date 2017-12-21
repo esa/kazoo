@@ -55,9 +55,10 @@ package body Deployment_View is
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
 
       --  Parse all AADL files possibly needed to instantiate the model
-      --  (Including the Interface View)
-      for each of AADL_Lib loop
-         Set_Str_To_Name_Buffer (each);
+      --  Add the interface view, first...
+      AADL_Lib.Append (Current_Config.Interface_View.all);
+      for Each of AADL_Lib loop
+         Set_Str_To_Name_Buffer (Each);
          F := Ocarina.Files.Search_File (Name_Find);
          Loc := Ocarina.Files.Load_File (F);
          Root_Depl := Ocarina.Parser.Parse (Get_String_Name ("aadl"),

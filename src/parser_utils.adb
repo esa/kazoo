@@ -66,7 +66,8 @@ package body Parser_Utils is
                      Switch   => "-p", Long_Switch => "--polyorb-hi-c",
                      Help     => "Use PolyORB-HI-C runtime in place of Ada");
       Define_Switch (Config, Output => Result.Timer_Resolution'Access,
-                     Switch => "-x:", Long_Switch => "--timer=",
+                     Switch   => "-x:", Long_Switch => "--timer=",
+                     Initial  => 100,
                      Help     => "Specify timer resolution (default 100 ms)");
       Define_Switch (Config, Output => Result.Debug_Flag'Access,
                      Switch   => "-g", Long_Switch => "--debug",

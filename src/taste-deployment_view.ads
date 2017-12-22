@@ -10,16 +10,16 @@ with Ocarina,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Ocarina.Backends.Properties,
-     Parser_Utils;
+     TASTE.Parser_Utils;
 
 use Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
     Ada.Containers,
     Ada.Strings.Unbounded,
-    Parser_Utils;
+    TASTE.Parser_Utils;
 
-package Deployment_View is
+package TASTE.Deployment_View is
 
    use Option_UString;
    use Option_ULL;
@@ -128,4 +128,4 @@ package Deployment_View is
    procedure Dump_Busses      (DV : Complete_Deployment_View);
    procedure Debug_Dump       (DV : Complete_Deployment_View);
 
-end Deployment_View;
+end TASTE.Deployment_View;

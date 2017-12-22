@@ -12,12 +12,11 @@ with Ada.Text_IO,
      Ocarina.Instances,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.Namet,
-      Ocarina.ME_AADL.AADL_Instances.Nutils,
+     Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities,
      Ocarina.Backends.Utils;
-     --  Ada.Characters.Latin_1;
 
-package body Interface_View is
+package body TASTE.Interface_View is
 
    use Ada.Text_IO,
        Ada.Exceptions,
@@ -845,4 +844,4 @@ package body Interface_View is
          New_Line;
       end loop;
    end Debug_Dump;
-end Interface_View;
+end TASTE.Interface_View;

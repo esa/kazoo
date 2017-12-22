@@ -8,7 +8,6 @@ with Ada.Text_IO,
      Ada.Exceptions,
      Ada.Strings.Fixed,
      System.Assertions,
-     --  Ada.Command_Line,
      Ocarina.Instances.Queries,
      Ocarina.Instances,
      Ocarina.Files,
@@ -21,9 +20,8 @@ with Ada.Text_IO,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities;
-     --  Ocarina.Backends.Utils;
 
-package body Deployment_View is
+package body TASTE.Deployment_View is
 
    use Ada.Text_IO,
        Ada.Exceptions,
@@ -38,11 +36,6 @@ package body Deployment_View is
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.ME_AADL;
-       --  Ocarina.Backends.Utils;
-
-   ----------------
-   -- Initialize --
-   ----------------
 
    function Initialize (Root : Node_Id) return Node_Id is
       Root_Depl      : Node_Id := Root;
@@ -55,8 +48,6 @@ package body Deployment_View is
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
 
       --  Parse all AADL files possibly needed to instantiate the model
-      --  Add the interface view, first...
-      AADL_Lib.Append (Current_Config.Interface_View.all);
       for Each of AADL_Lib loop
          Set_Str_To_Name_Buffer (Each);
          F := Ocarina.Files.Search_File (Name_Find);
@@ -545,4 +536,4 @@ package body Deployment_View is
       DV.Dump_Connections;
    end Debug_Dump;
 
-end Deployment_View;
+end TASTE.Deployment_View;

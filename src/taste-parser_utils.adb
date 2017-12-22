@@ -3,38 +3,33 @@
 --  LGPL license, see LICENSE file
 
 with Ada.Text_IO,
-     Parser_Version,
+     GNAT.OS_Lib,
+     GNAT.Command_Line,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
-     GNAT.OS_Lib,
-     GNAT.Command_Line;
+     TASTE.Parser_Version;
 
-package body Parser_Utils is
+package body TASTE.Parser_Utils is
 
    use Ada.Text_IO,
-       Ocarina.Instances.Queries,
        GNAT.OS_Lib,
-       Ocarina.ME_AADL,
-       GNAT.Command_Line;
-
-   ------------
-   -- Banner --
-   ------------
+       GNAT.Command_Line,
+       Ocarina.Instances.Queries,
+       Ocarina.ME_AADL;
 
    procedure Banner is
       The_Banner : constant String :=
         Yellow_Bold & "TASTE AADL Parser" & No_Color & " (Version "
-        & Parser_Version.Parser_Release & ") "
+        & TASTE.Parser_Version.Parser_Release & ")"
+        & ASCII.LF & ASCII.CR & White_Bold
+        & "Copyright (C) European Space Agency"
         & ASCII.LF & ASCII.CR & No_Color
-        & "Contact: " & Underline
-        & "Maxime.Perrotin@esa.int" & No_Color & " or " & Underline
-        & "Thanassis.Tsiodras@esa.int"
-        & ASCII.LF & ASCII.CR & No_Color
-        & "Based on " & Parser_Version.Ocarina_Version;
+        & "Based on " & TASTE.Parser_Version.Ocarina_Version;
    begin
       Put_Line (The_Banner);
+      New_Line;
    end Banner;
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
@@ -91,7 +86,7 @@ package body Parser_Utils is
       end if;
    end Parse_Command_Line;
 
-   procedure Dump_Configuration (Config : Taste_Configuration) is
+   procedure Debug_Dump (Config : Taste_Configuration) is
    begin
       Put_Line ("Command line:");
       Put_Line ("  |_ Interface View  : " & Config.Interface_View.all);
@@ -107,7 +102,7 @@ package body Parser_Utils is
       for Each of Config.Other_Files loop
          Put_Line ("  |_ Other file      : " & Each);
       end loop;
-   end Dump_Configuration;
+   end Debug_Dump;
 
    -----------------------
    -- Get_APLC_Binding --
@@ -199,4 +194,4 @@ package body Parser_Utils is
       Ocarina.Configuration.Init_Modules;
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
    end Initialize_Ocarina;
-end Parser_Utils;
+end TASTE.Parser_Utils;

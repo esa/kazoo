@@ -24,7 +24,7 @@ use Ocarina,
     Ada.Strings.Unbounded,
     Interfaces.C_Streams;
 
-package Parser_Utils is
+package TASTE.Parser_Utils is
 
    AADL_Language           : Name_Id;
    Default_Interface_View  : aliased String := "InterfaceView.aadl";
@@ -96,7 +96,7 @@ package Parser_Utils is
 
    procedure Initialize_Ocarina;
 
-   type Taste_Configuration is
+   type Taste_Configuration is tagged
       record
          Interface_View   : aliased GNAT.Strings.String_Access;
          Deployment_View  : aliased GNAT.Strings.String_Access;
@@ -111,10 +111,6 @@ package Parser_Utils is
          Other_Files      : String_Vectors.Vector;
       end record;
 
-   Current_Config : Taste_Configuration;
-
+   procedure Debug_Dump (Config : Taste_Configuration);
    procedure Parse_Command_Line (Result : out Taste_Configuration);
-
-   procedure Dump_Configuration (Config : Taste_Configuration);
-
-end Parser_Utils;
+end TASTE.Parser_Utils;

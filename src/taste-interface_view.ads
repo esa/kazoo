@@ -11,16 +11,16 @@ with Ocarina,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Option_Type,
-     Parser_Utils;
+     TASTE.Parser_Utils;
 
 use Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
     Ada.Containers,
     Ada.Strings.Unbounded,
-    Parser_Utils;
+    TASTE.Parser_Utils;
 
-package Interface_View is
+package TASTE.Interface_View is
 
    use Option_UString;
    use Option_ULL;
@@ -181,4 +181,4 @@ package Interface_View is
 
    procedure Debug_Dump (IV : Complete_Interface_View);
 
-end Interface_View;
+end TASTE.Interface_View;

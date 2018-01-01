@@ -4,11 +4,11 @@ use Text_IO;
 
 with TASTE,
      TASTE.AADL_Parser,
-     TASTE.Templates,
-     Templates_Parser;
+     TASTE.Templates;
 use TASTE.AADL_Parser,
-    TASTE.Templates,
-    Templates_Parser;
+    TASTE.Templates;
+with Templates_Parser;
+use Templates_Parser;
 
 procedure AADL_Parser is
    Model : TASTE_Model;

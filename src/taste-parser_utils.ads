@@ -98,6 +98,7 @@ package TASTE.Parser_Utils is
 
    type Taste_Configuration is tagged
       record
+         Binary_Path      : GNAT.Strings.String_Access;
          Interface_View   : aliased GNAT.Strings.String_Access;
          Deployment_View  : aliased GNAT.Strings.String_Access;
          Data_View        : aliased GNAT.Strings.String_Access;

@@ -32,7 +32,8 @@ procedure AADL_Parser is
       Map ("Version",          Model.Configuration.Version);
       Map ("Timer_Resolution", Model.Configuration.Timer_Resolution);
       Put_Line ("=== Template-generated debug output ===");
-      Put_Line (Generate ("configuration.tmplt"));
+      Put_Line (Generate (Model.Configuration.Binary_Path.all
+                          & "templates/configuration.tmplt"));
    end Dump_With_Templates;
 begin
    Model := Parse_Project;

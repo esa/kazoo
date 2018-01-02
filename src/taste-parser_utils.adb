@@ -3,6 +3,8 @@
 --  LGPL license, see LICENSE file
 
 with Ada.Text_IO,
+     Ada.Command_Line,
+     GNAT.Directory_Operations,
      GNAT.OS_Lib,
      GNAT.Command_Line,
      Ocarina.AADL_Values,
@@ -14,6 +16,7 @@ with Ada.Text_IO,
 package body TASTE.Parser_Utils is
 
    use Ada.Text_IO,
+       GNAT.Directory_Operations,
        GNAT.OS_Lib,
        GNAT.Command_Line,
        Ocarina.Instances.Queries,
@@ -35,6 +38,8 @@ package body TASTE.Parser_Utils is
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config : Command_Line_Configuration;
    begin
+      Result.Binary_Path :=
+          new String'(Dir_Name (Ada.Command_Line.Command_Name));
       Define_Switch (Config, Output => Result.Interface_View'Access,
                      Switch   => "-i:", Long_Switch => "--interfaceview=",
                      Help     => "Mandatory interface view (AADL model)",

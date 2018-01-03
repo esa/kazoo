@@ -7,11 +7,13 @@ with Ada.Text_IO,
      GNAT.Directory_Operations,
      GNAT.OS_Lib,
      GNAT.Command_Line,
+     Templates_Parser,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
-     TASTE.Parser_Version;
+     TASTE.Parser_Version,
+     TASTE.Templates;
 
 package body TASTE.Parser_Utils is
 
@@ -19,8 +21,10 @@ package body TASTE.Parser_Utils is
        GNAT.Directory_Operations,
        GNAT.OS_Lib,
        GNAT.Command_Line,
+       Templates_Parser,
        Ocarina.Instances.Queries,
-       Ocarina.ME_AADL;
+       Ocarina.ME_AADL,
+       TASTE.Templates;
 
    procedure Banner is
       The_Banner : constant String :=
@@ -92,8 +96,9 @@ package body TASTE.Parser_Utils is
    end Parse_Command_Line;
 
    procedure Debug_Dump (Config : Taste_Configuration) is
+      Vec : Tag;
    begin
-      Put_Line ("Command line:");
+      Put_Line ("Command line (raw dump):");
       Put_Line ("  |_ Interface View  : " & Config.Interface_View.all);
       Put_Line ("  |_ Deployment View : " & Config.Deployment_View.all);
       Put_Line ("  |_ Data View       : " & Config.Data_View.all);
@@ -107,6 +112,25 @@ package body TASTE.Parser_Utils is
       for Each of Config.Other_Files loop
          Put_Line ("  |_ Other file      : " & Each);
       end loop;
+
+      Put_Line ("Dump generated from a template file:");
+      New_Set;
+      Tmpl_Map ("Interface_View",  Config.Interface_View.all);
+      Tmpl_Map ("Deployment_View", Config.Deployment_View.all);
+      Tmpl_Map ("Data_View", Config.Data_View.all);
+      Tmpl_Map ("Output_Dir", Config.Output_Dir.all);
+      for Each of Config.Other_Files loop
+         Vec := Vec & Each;
+      end loop;
+      Tmpl_Map ("Other_Files",      Vec);
+      Tmpl_Map ("Skeletons",        Config.Skeletons);
+      Tmpl_Map ("Glue",             Config.Glue);
+      Tmpl_Map ("Use_POHIC",        Config.Use_POHIC);
+      Tmpl_Map ("Debug_Flag",       Config.Debug_Flag);
+      Tmpl_Map ("Version",          Config.Version);
+      Tmpl_Map ("Timer_Resolution", Config.Timer_Resolution);
+      Put_Line (Generate (Config.Binary_Path.all
+                          & "templates/configuration.tmplt"));
    end Debug_Dump;
 
    -----------------------

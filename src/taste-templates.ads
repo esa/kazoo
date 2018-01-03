@@ -7,11 +7,11 @@ package TASTE.Templates is
 
    procedure New_Set;
 
-   procedure Map (Name : String; Value : String);
-   procedure Map (Name : String; Value : Boolean);
-   procedure Map (Name : String; Value : Unbounded_String);
-   procedure Map (Name : String; Value : Integer);
-   procedure Map (Name : String; Value : Tag);
+   procedure Tmpl_Map (Name : String; Value : String);
+   procedure Tmpl_Map (Name : String; Value : Boolean);
+   procedure Tmpl_Map (Name : String; Value : Unbounded_String);
+   procedure Tmpl_Map (Name : String; Value : Integer);
+   procedure Tmpl_Map (Name : String; Value : Tag);
 
    function Generate (Template_File : String) return String;
 private

@@ -5,30 +5,30 @@ package body TASTE.Templates is
       Tmpl_Set := Null_Set;
    end New_Set;
 
-   procedure Map (Name : String; Value : String) is
+   procedure Tmpl_Map (Name : String; Value : String) is
    begin
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
-   end Map;
+   end Tmpl_Map;
 
-   procedure Map (Name : String; Value : Boolean) is
+   procedure Tmpl_Map (Name : String; Value : Boolean) is
    begin
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
-   end Map;
+   end Tmpl_Map;
 
-   procedure Map (Name : String; Value : Unbounded_String) is
+   procedure Tmpl_Map (Name : String; Value : Unbounded_String) is
    begin
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
-   end Map;
+   end Tmpl_Map;
 
-   procedure Map (Name : String; Value : Integer) is
+   procedure Tmpl_Map (Name : String; Value : Integer) is
    begin
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
-   end Map;
+   end Tmpl_Map;
 
-   procedure Map (Name : String; Value : Tag) is
+   procedure Tmpl_Map (Name : String; Value : Tag) is
    begin
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
-   end Map;
+   end Tmpl_Map;
 
    function Generate (Template_File : String) return String is
      (Parse (Template_File, Tmpl_Set));

@@ -40,9 +40,13 @@ INTERFACEVIEW=<Interface_View_Path>
 # Output path were the user code was generated
 SKELS=<Output_Path>
 
+@@TABLE@@
 <Generate_Code>
+@@END_TABLE@@
 
+@@TABLE@@
 <Zip_Code>
+@@END_TABLE@@
 
 if [ -f ConcurrencyView.pro ]
 then

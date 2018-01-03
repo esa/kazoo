@@ -1,0 +1,5 @@
+aadl_parser
+obj/
+templates-parser/
+src/*.swp
+*.swp

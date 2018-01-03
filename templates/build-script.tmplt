@@ -71,19 +71,19 @@ else
     OUTPUTDIR=binary.ada
 fi
 
-cd "$CWD" && \\
-assert-builder-ocarina.py \\
-   --fast      \\
-   --aadlv2    \\
-   --keep-case \\
-   $DEBUG_MODE \\
-   --interfaceView  "$INTERFACEVIEW"    \\
-   --deploymentView "$DEPLOYMENTVIEW"  \\
-   -o "$OUTPUTDIR" \\
-@@LIST@@
+cd "$CWD" && \
+assert-builder-ocarina.py \
+   --fast      \
+   --aadlv2    \
+   --keep-case \
+   $DEBUG_MODE \
+   --interfaceView  "$INTERFACEVIEW"    \
+   --deploymentView "$DEPLOYMENTVIEW"  \
+   -o "$OUTPUTDIR" \
+@@TABLE@@
    <Functions>
-@@END_LIST@@
-   <CodeCoverage> \\
+@@END_TABLE@@
+   <CodeCoverage> \
     $ORCHESTRATOR_OPTIONS
 
 if [ -f user_init_last.sh ]

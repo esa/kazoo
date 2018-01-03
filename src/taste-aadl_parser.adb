@@ -11,7 +11,8 @@ with GNAT.Command_Line,
      Ocarina.Namet,
      Ocarina.Configuration,
      Ocarina.Files,
-     Ocarina.Parser;
+     Ocarina.Parser,
+     TASTE.Backend.Build_Script;
 
 use Ada.Text_IO,
     Ada.Exceptions,
@@ -179,5 +180,10 @@ package body TASTE.AADL_Parser is
       Put_Line ("==== Dump of the Command Line ====");
       Model.Configuration.Debug_Dump;
    end Dump;
+
+   procedure Generate_Build_Script (Model : TASTE_Model) is
+   begin
+      TASTE.Backend.Build_Script.Generate (Model);
+   end Generate_Build_Script;
 
 end TASTE.AADL_Parser;

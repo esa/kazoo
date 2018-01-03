@@ -13,7 +13,7 @@ package TASTE.Templates is
    procedure Tmpl_Map (Name : String; Value : Integer);
    procedure Tmpl_Map (Name : String; Value : Tag);
 
-   function Generate (Template_File : String) return String;
+   function Generate (Template_Name : String) return String;
 private
    Tmpl_Set : Translate_Set;
 

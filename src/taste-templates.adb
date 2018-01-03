@@ -30,8 +30,8 @@ package body TASTE.Templates is
       Tmpl_Set := Tmpl_Set & Assoc (Name, Value);
    end Tmpl_Map;
 
-   function Generate (Template_File : String) return String is
-     (Parse (Template_File, Tmpl_Set));
+   function Generate (Template_Name : String) return String is
+     (Parse (Template_Name, Tmpl_Set));
 begin
       Set_Tag_Separators (Start_With => "<",
                           Stop_With  => ">");

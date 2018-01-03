@@ -8,6 +8,7 @@ procedure AADL_Parser is
 begin
    Model := Parse_Project;
    Model.Dump;
+   Model.Generate_Build_Script;
 exception
    when TASTE.Quit_TASTE =>
       GNAT.OS_Lib.OS_Exit (1);

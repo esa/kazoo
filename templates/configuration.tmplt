@@ -1,18 +1,18 @@
 -- TASTE CONFIGURATION ------------------------------------
 |
-|Interface View     : <Interface_View>
-|Deployment View    : <Deployment_View>
-|Data View          : <Data_View>
+|Interface View     : @_Interface_View_@
+|Deployment View    : @_Deployment_View_@
+|Data View          : @_Data_View_@
 |Other Files        :
  @@TABLE@@
-                      <Other_Files>
+                      @_Other_Files_@
 @@END_TABLE@@
-|Output Directory   : <Output_Directory>
-|Generate skeletons : <Skeletons>
-|Generate glue      : <Glue>
-|Debug mode         : <Debug_Flag>
-|Request Version    : <Version>
-|Timer resolution   : <Timer_Resolution>
-|Use PolyORB-HI-C   : <Use_POHIC>
+|Output Directory   : @_Output_Directory_@
+|Generate skeletons : @_YES_NO:Skeletons_@
+|Generate glue      : @_YES_NO:Glue_@
+|Debug mode         : @_YES_NO:Debug_Flag_@
+|Request Version    : @_YES_NO:Version_@
+|Timer resolution   : @_Timer_Resolution_@
+|Use PolyORB-HI-C   : @_YES_NO:Use_POHIC_@
 |
 -----------------------------------------------------------

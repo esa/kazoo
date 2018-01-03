@@ -23,9 +23,15 @@ package body TASTE.Backend.Build_Script is
             Element_Func : constant String :=
                Parse (Prefix & "build-script-func.tmplt", Template_Data);
          begin
-            Vec_Code := Vec_Code & Element_Code;
-            Vec_Zip  := Vec_Zip  & Element_Zip;
-            Vec_Func := Vec_Func & Element_Func;
+            if Element_Code'Length > 0 then
+               Vec_Code := Vec_Code & Element_Code;
+            end if;
+            if Element_Zip'Length > 0 then
+               Vec_Zip  := Vec_Zip  & Element_Zip;
+            end if;
+            if Element_Func'Length > 0 then
+               Vec_Func := Vec_Func & Element_Func;
+            end if;
          end;
       end loop;
       Put_Line ("==== Generating build script ====");

@@ -1,1 +1,3 @@
---sub<Language> <Function_Name> \
+@@IF@@ @_Language_@ /= "LANGUAGE_GUI"
+--sub@_REPLACE(Sdl/Ada):REPLACE(Ada_95/Ada):CAPITALIZE:SLICE(10 .. 0):Language_@ @_Function_Name_@ \
+@@END_IF@@

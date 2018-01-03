@@ -33,6 +33,8 @@ package body TASTE.Templates is
    function Generate (Template_Name : String) return String is
      (Parse (Template_Name, Tmpl_Set));
 begin
-      Set_Tag_Separators (Start_With => "<",
-                          Stop_With  => ">");
+   null;
+--    Don't change the separators, these could conflict with @@IF@@ syntax
+--     Set_Tag_Separators (Start_With => "<",
+--                         Stop_With  => ">");
 end TASTE.Templates;

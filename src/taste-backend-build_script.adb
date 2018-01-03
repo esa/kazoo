@@ -1,30 +1,27 @@
 with Text_IO,
-     Templates_Parser,
-     TASTE.Templates;
+     Templates_Parser;
 use  Text_IO,
-     Templates_Parser,
-     TASTE.Templates;
+     Templates_Parser;
 
 package body TASTE.Backend.Build_Script is
    procedure Generate (Model : TASTE_Model) is
+      Prefix : constant String := Model.Configuration.Binary_Path.all
+                                  & "templates/";
       Vec_Code : Tag;
       Vec_Zip  : Tag;
       Vec_Func : Tag;
    begin
       for Each of Model.Interface_View.Flat_Functions loop
-         New_Set;
-         Tmpl_Map ("Function_Name", Each.Name);
-         Tmpl_Map ("Language", Each.Language'Img);
          declare
-            Element_Code : constant String := TASTE.Templates.Generate
-                                  (Model.Configuration.Binary_Path.all
-                                   & "templates/build-script-gencode.tmplt");
-            Element_Zip : constant String := TASTE.Templates.Generate
-                                  (Model.Configuration.Binary_Path.all
-                                   & "templates/build-script-zip.tmplt");
-            Element_Func : constant String := TASTE.Templates.Generate
-                                  (Model.Configuration.Binary_Path.all
-                                   & "templates/build-script-func.tmplt");
+            Template_Data : constant Translate_Table :=
+               (1 => Assoc ("Function_Name", Each.Name),
+                2 => Assoc ("Language", Each.Language'Img));
+            Element_Code : constant String :=
+               Parse (Prefix & "build-script-gencode.tmplt", Template_Data);
+            Element_Zip : constant String :=
+               Parse (Prefix & "build-script-zip.tmplt", Template_Data);
+            Element_Func : constant String :=
+               Parse (Prefix & "build-script-func.tmplt", Template_Data);
          begin
             Vec_Code := Vec_Code & Element_Code;
             Vec_Zip  := Vec_Zip  & Element_Zip;
@@ -32,16 +29,17 @@ package body TASTE.Backend.Build_Script is
          end;
       end loop;
       Put_Line ("==== Generating build script ====");
-      New_Set;
-      Tmpl_Map ("Interface_View_Path", Model.Configuration.Interface_View.all);
-      Tmpl_Map ("Output_Path",         Model.Configuration.Output_Dir.all);
-      Tmpl_Map ("Generate_Code",       Vec_Code);
-      Tmpl_Map ("Zip_Code",            Vec_Zip);
-      Tmpl_Map ("Functions",           Vec_Func);
-      Tmpl_Map ("CodeCoverage",        "# TODO");
-
-      Put_Line (TASTE.Templates.Generate (Model.Configuration.Binary_Path.all
-                                          & "templates/build-script.tmplt"));
-
+      declare
+         Template_Data : constant Translate_Table :=
+            (1 => Assoc ("Interface_View_Path",
+                         Model.Configuration.Interface_View.all),
+             2 => Assoc ("Output_Path",   Model.Configuration.Output_Dir.all),
+             3 => Assoc ("Generate_Code", Vec_Code),
+             4 => Assoc ("Zip_Code",      Vec_Zip),
+             5 => Assoc ("Functions",     Vec_Func),
+             6 => Assoc ("CodeCoverage",  "# TODO"));
+      begin
+         Put_Line (Parse (Prefix & "build-script.tmplt", Template_Data));
+      end;
    end Generate;
 end TASTE.Backend.Build_Script;

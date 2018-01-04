@@ -15,7 +15,7 @@ package body TASTE.Backend.Build_Script is
          declare
             Template_Data : constant Translate_Table :=
                (1 => Assoc ("Function_Name", Each.Name),
-                2 => Assoc ("Language", Each.Language'Img));
+                2 => Assoc ("Language", Language_Spelling (Each)));
             Element_Code : constant String :=
                Parse (Prefix & "build-script-gencode.tmplt", Template_Data);
             Element_Zip : constant String :=

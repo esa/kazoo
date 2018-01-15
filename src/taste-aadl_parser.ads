@@ -6,12 +6,14 @@
 with Ocarina.Types,
      TASTE.Parser_Utils,
      TASTE.Interface_View,
-     TASTE.Deployment_View;
+     TASTE.Deployment_View,
+     TASTE.Data_View;
 
 use Ocarina.Types,
     TASTE.Parser_Utils,
     TASTE.Interface_View,
-    TASTE.Deployment_View;
+    TASTE.Deployment_View,
+    TASTE.Data_View;
 
 package TASTE.AADL_Parser is
    Interface_Root  : Node_Id := No_Node;
@@ -22,6 +24,7 @@ package TASTE.AADL_Parser is
       record
          Interface_View  : Complete_Interface_View;
          Deployment_View : Complete_Deployment_View;
+         Data_View       : Taste_Data_View;
          Configuration   : Taste_Configuration;
       end record;
 

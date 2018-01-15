@@ -547,4 +547,16 @@ PROPERTIES
     Data_Model::Data_Representation => Struct;
 END T_Boolean_Buffer.impl;
 
+--  Added manually to allow parsing of the data view even when no interface references a data type
+SYSTEM Taste_DataView
+END Taste_DataView;
+
+SYSTEM IMPLEMENTATION Taste_DataView.others
+SUBCOMPONENTS
+   T_Boolean : DATA T_BOOLEAN;
+   My_Enum   : DATA MyEnum;
+END Taste_DataView.others;
+
+
+
 end DataView;

@@ -1,6 +1,6 @@
 --  ************************ TASTE AADL Parser **************************  --
 --  Based on Ocarina ****************************************************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 with GNAT.Command_Line,
@@ -120,6 +120,7 @@ package body TASTE.AADL_Parser is
             Deployment_Root := Ocarina.Parser.Parse
                (AADL_Language, Deployment_Root, File_Descr);
          end if;
+         --  Also parse the data view as a root component
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;
@@ -138,6 +139,8 @@ package body TASTE.AADL_Parser is
          Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
       end if;
 
+      Result.Data_View := Parse_Data_View (Dataview_root);
+
       Ocarina.Configuration.Reset_Modules;
       Ocarina.Reset;
 
@@ -148,6 +151,7 @@ package body TASTE.AADL_Parser is
          | Function_Error
          | No_RCM_Error
          | Deployment_View_Error
+         | Data_View_Error
          | Device_Driver_Error =>
          Put (Red_Bold & "[ERROR] " & White_Bold);
          Put_Line (Exception_Message (Error) & No_Color);
@@ -177,6 +181,8 @@ package body TASTE.AADL_Parser is
          Put_Line ("==== Dump of the Deployment View ====");
          Model.Deployment_View.Debug_Dump;
       end if;
+      Put_Line ("==== Dump of the Data View ====");
+      Model.Data_View.Debug_Dump;
       Put_Line ("==== Dump of the Command Line ====");
       Model.Configuration.Debug_Dump;
    end Dump;

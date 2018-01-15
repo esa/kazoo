@@ -139,7 +139,14 @@ package body TASTE.AADL_Parser is
          Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
       end if;
 
-      Result.Data_View := Parse_Data_View (Dataview_root);
+      if Result.Configuration.Data_View.all'Length > 0 then
+         begin
+            Result.Data_View := Parse_Data_View (Dataview_root);
+         exception
+            when Constraint_Error =>
+               raise Data_View_Error with "Update your data view!";
+         end;
+      end if;
 
       Ocarina.Configuration.Reset_Modules;
       Ocarina.Reset;

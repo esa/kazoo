@@ -3,7 +3,8 @@
 --  (c) 2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with GNAT.Command_Line,
+with System.Assertions,
+     GNAT.Command_Line,
      Ada.Exceptions,
      Ada.Text_IO,
      Errors,
@@ -132,7 +133,12 @@ package body TASTE.AADL_Parser is
    begin
       Result.Configuration := Initialize;
 
-      Result.Interface_View := Parse_Interface_View (Interface_Root);
+      begin
+         Result.Interface_View := Parse_Interface_View (Interface_Root);
+      exception
+         when System.Assertions.Assert_Failure =>
+            raise AADL_Parser_Error with "Interface view parsing error";
+      end;
 
       if Result.Configuration.Deployment_View.all'Length > 0 then
          AADL_Lib.Append (Result.Configuration.Interface_View.all);

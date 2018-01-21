@@ -13,7 +13,8 @@ with System.Assertions,
      Ocarina.Configuration,
      Ocarina.Files,
      Ocarina.Parser,
-     TASTE.Backend.Build_Script;
+     TASTE.Backend.Build_Script,
+     TASTE.Backend.Skeletons;
 
 use Ada.Text_IO,
     Ada.Exceptions,
@@ -204,5 +205,10 @@ package body TASTE.AADL_Parser is
    begin
       TASTE.Backend.Build_Script.Generate (Model);
    end Generate_Build_Script;
+
+   procedure Generate_Skeletons (Model : TASTE_Model) is
+   begin
+      TASTE.Backend.Skeletons.Generate (Model);
+   end Generate_Skeletons;
 
 end TASTE.AADL_Parser;

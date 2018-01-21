@@ -1,5 +1,5 @@
 with "ocarina/ocarina";
-with "templates_parser";
+with "templates-parser/templates_parser";
 
 project AADL_Parser is
 

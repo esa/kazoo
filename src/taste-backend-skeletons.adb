@@ -1,8 +1,10 @@
 with Text_IO; use Text_IO;
 with Ada.Strings.Unbounded,
-     Ada.Characters.Handling;
+     Ada.Characters.Handling,
+     Ada.Exceptions;
 
-use Ada.Characters.Handling;
+use Ada.Characters.Handling,
+    Ada.Exceptions;
 
 --  with TASTE.Backend.Skeletons.C;
 
@@ -33,7 +35,8 @@ package body TASTE.Backend.Skeletons is
                   for Param of PI.Params loop
                      declare
                         P : constant String :=
-                          Parse (Path & "header-parameter.tmplt", Param);
+                          Parse
+                            (Path & "interface-header-parameter.tmplt", Param);
                      begin
                         Params := Params & P;
                      end;
@@ -46,8 +49,9 @@ package body TASTE.Backend.Skeletons is
             Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
          exception
-            when others =>
+            when E : others =>
                Put_Line ("no skeletons for language " & Language & " !");
+               Put_Line (Exception_Message (E));
          end;
       end loop;
    end Generate;

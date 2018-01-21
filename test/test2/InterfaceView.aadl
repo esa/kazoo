@@ -125,6 +125,16 @@ SUBPROGRAM IMPLEMENTATION RI_RI1.others
 END RI_RI1.others;
 
 SUBPROGRAM RI_coucou
+FEATURES
+  param1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  param2 : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => UPER;
+  };
+  result : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => ACN;
+  };
 END RI_coucou;
 
 SUBPROGRAM IMPLEMENTATION RI_coucou.others
@@ -220,6 +230,16 @@ SUBPROGRAM IMPLEMENTATION RI_ola.others
 END RI_ola.others;
 
 SUBPROGRAM RI_coucou
+FEATURES
+  param1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  param2 : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => UPER;
+  };
+  result : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => ACN;
+  };
 END RI_coucou;
 
 SUBPROGRAM IMPLEMENTATION RI_coucou.others
@@ -362,6 +382,16 @@ SUBPROGRAM IMPLEMENTATION RI_ola_bis.others
 END RI_ola_bis.others;
 
 SUBPROGRAM RI_coucou
+FEATURES
+  param1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  param2 : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => UPER;
+  };
+  result : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => ACN;
+  };
 END RI_coucou;
 
 SUBPROGRAM IMPLEMENTATION RI_coucou.others
@@ -514,6 +544,16 @@ PROPERTIES
 END PI_bonjour.others;
 
 SUBPROGRAM PI_coucou
+FEATURES
+  param1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  param2 : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => UPER;
+  };
+  result : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => ACN;
+  };
 END PI_coucou;
 
 SUBPROGRAM IMPLEMENTATION PI_coucou.others
@@ -533,6 +573,7 @@ FEATURES
   PI_coucou : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
     Taste::coordinates => "102645 112510";
     Taste::RCMoperationKind => unprotected;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "coucou";
   };
 PROPERTIES
@@ -563,6 +604,16 @@ PROPERTIES
 END PI_bonjour.others;
 
 SUBPROGRAM PI_coucou
+FEATURES
+  param1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  param2 : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => UPER;
+  };
+  result : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => ACN;
+  };
 END PI_coucou;
 
 SUBPROGRAM IMPLEMENTATION PI_coucou.others
@@ -582,6 +633,7 @@ FEATURES
   PI_coucou : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Y_Hidden::Z_Shown::PI_coucou.others {
     Taste::coordinates => "109817 111577";
     Taste::RCMoperationKind => unprotected;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "coucou";
   };
 PROPERTIES

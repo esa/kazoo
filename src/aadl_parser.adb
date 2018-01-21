@@ -9,6 +9,7 @@ begin
    Model := Parse_Project;
    Model.Dump;
    Model.Generate_Build_Script;
+   Model.Generate_Skeletons;
 exception
    when TASTE.Quit_TASTE =>
       GNAT.OS_Lib.OS_Exit (1);

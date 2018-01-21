@@ -1,4 +1,8 @@
 with Text_IO; use Text_IO;
+with Ada.Strings.Unbounded,
+     Ada.Characters.Handling;
+
+use Ada.Characters.Handling;
 
 --  with TASTE.Backend.Skeletons.C;
 
@@ -6,17 +10,26 @@ package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
       dummy_Template : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
+      Prefix : constant String := Model.Configuration.Binary_Path.all
+        & "templates/skeletons/";
+      use Ada.Strings.Unbounded;
    begin
       Put_Line ("=== Generate skeletons ===");
---             case Each.Language is
---               when Language_C =>
---                  TASTE.Backend.Skeletons.C.Generate (Model.Configuration,
---                                                      Template);
---               when others =>
---                  Put_Line (Each.Language'Img & "Not supported yet");
---            end case;
---         end;
---      end loop;
+      for Each of Model.Interface_View.Flat_Functions loop
+         declare
+            Language  : constant String := Language_Spelling (Each);
+            Path      : constant String := Prefix & To_Lower (Language) & "/";
+            Hdr_Tmpl  : constant Translate_Set := +Assoc ("Name", Each.Name);
+         begin
+            Put ("Generating ");
+            Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
+            Put ("Generating ");
+            Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
+         exception
+            when others =>
+               Put_Line ("no skeletons for language " & Language & " !");
+         end;
+      end loop;
    end Generate;
 
    function Parameter_Template (Param : ASN1_Parameter) return Translate_Set is
@@ -55,11 +68,13 @@ package body TASTE.Backend.Skeletons is
 
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template is
-      use Func_Vectors;
+      use Func_Maps;
+      use Ada.Strings.Unbounded;
       Result : IV_As_Template;
    begin
       for Each of IV.Flat_Functions loop
-         Result.Funcs := Result.Funcs & Func_Template (Each);
+         Result.Funcs.Insert (Key      => To_String (Each.Name),
+                              New_Item => Func_Template (Each));
       end loop;
       return Result;
    end Interface_View_Template;

@@ -1,4 +1,5 @@
 with Ada.Containers.Indefinite_Vectors,
+     Ada.Containers.Indefinite_Ordered_Maps,
      Templates_Parser,
      TASTE.AADL_Parser;
 
@@ -27,11 +28,11 @@ private
          Required : Interface_Vectors.Vector;
       end record;
 
-   package Func_Vectors is new Indefinite_Vectors (Natural, Func_As_Template);
+   package Func_Maps is new Indefinite_Ordered_Maps (String, Func_As_Template);
 
    type IV_As_Template is
       record
-         Funcs : Func_Vectors.Vector;
+         Funcs : Func_Maps.Map;
       end record;
 
    --  Set of functions translating the AST into Templates_Parser mappings

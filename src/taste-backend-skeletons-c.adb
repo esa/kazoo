@@ -5,7 +5,7 @@ use  Text_IO,
 
 package body TASTE.Backend.Skeletons.C is
    procedure Generate (Config   : Taste_Configuration;
-                       Template : Translate_Set) is
+                       Template : IV_As_Template) is
       dummy_Prefix : constant String := Config.Binary_Path.all
         & "templates/skeletons/c";
    begin

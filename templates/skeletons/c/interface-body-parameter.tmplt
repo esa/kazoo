@@ -1,0 +1,4 @@
+@@IF@@ @_Direction_@ = "PARAM_IN"
+const
+@@END_IF@@
+ asn1Scc@_Type_@ *IN_@_LOWER:Name_@

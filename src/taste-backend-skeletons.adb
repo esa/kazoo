@@ -8,7 +8,7 @@ use Ada.Characters.Handling;
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
-      dummy_Template : constant IV_As_Template :=
+      Template : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
       Prefix : constant String := Model.Configuration.Binary_Path.all
         & "templates/skeletons/";
@@ -20,10 +20,29 @@ package body TASTE.Backend.Skeletons is
             Language  : constant String := Language_Spelling (Each);
             Path      : constant String := Prefix & To_Lower (Language) & "/";
             Hdr_Tmpl  : constant Translate_Set := +Assoc ("Name", Each.Name);
+            Func_Tmpl : constant Func_As_Template :=
+              Template.Funcs.Element (To_String (Each.Name));
          begin
             Put ("***  Generating ");
             Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
-
+            for PI of Func_Tmpl.Provided loop
+               declare
+                  Header : Translate_Set := PI.Header;
+                  Params : Tag;
+               begin
+                  for Param of PI.Params loop
+                     declare
+                        P : constant String :=
+                          Parse (Path & "header-parameter.tmplt", Param);
+                     begin
+                        Params := Params & P;
+                     end;
+                  end loop;
+                  Header := Header & Assoc ("Parameters", Params);
+                  Put_Line (Parse
+                            (Path & "interface-signature.tmplt", Header));
+               end;
+            end loop;
             Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
          exception

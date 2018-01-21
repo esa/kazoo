@@ -46,12 +46,32 @@ package body TASTE.Backend.Skeletons is
                             (Path & "interface-signature.tmplt", Header));
                end;
             end loop;
+            for RI of Func_Tmpl.Required loop
+               declare
+                  Header : Translate_Set := RI.Header;
+                  Params : Tag;
+               begin
+                  for Param of RI.Params loop
+                     declare
+                        P : constant String := Parse
+                            (Path & "interface-header-parameter.tmplt", Param);
+                     begin
+                        Params := Params & P;
+                     end;
+                  end loop;
+                  Header := Header & Assoc ("Parameters", Params);
+                  Put_Line (Parse
+                            (Path & "interface-signature.tmplt", Header));
+               end;
+            end loop;
             Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
          exception
             when E : others =>
                Put_Line ("no skeletons for language " & Language & " !");
-               Put_Line (Exception_Message (E));
+               if Language /= "GUI" then
+                  Put_Line (Exception_Message (E));
+               end if;
          end;
       end loop;
    end Generate;

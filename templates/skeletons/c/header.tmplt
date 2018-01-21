@@ -15,11 +15,11 @@ extern "C" {
 void @_LOWER:Name_@_startup();
 
 @@TABLE@@
-void @_Provided_Interfaces_@;
+void @_LOWER:Name_@_PI_@_Provided_Interfaces_@;
 @@END_TABLE@@
 
 @@TABLE@@
-void @_Required_Interfaces_@;
+void @_LOWER:Name_@_RI_@_Required_Interfaces_@;
 @@END_TABLE@@
 
 @@TABLE@@

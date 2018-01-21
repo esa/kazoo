@@ -17,14 +17,14 @@ void @_LOWER:Name_@_startup()
 }
 
 @@TABLE@@
-void @_Provided_Interfaces_@
+void @_LOWER:Name_@_PI_@_Provided_Interfaces_@
 {
    /* Write your code here */
 }
 @@END_TABLE@@
 
 @@TABLE@@
-void @_Timers_@
+void @_LOWER:Name_@_PI_@_Timers_@
 {
    /* This function is called when the timer expires */
 }

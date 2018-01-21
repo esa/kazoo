@@ -21,9 +21,10 @@ package body TASTE.Backend.Skeletons is
             Path      : constant String := Prefix & To_Lower (Language) & "/";
             Hdr_Tmpl  : constant Translate_Set := +Assoc ("Name", Each.Name);
          begin
-            Put ("Generating ");
+            Put ("***  Generating ");
             Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
-            Put ("Generating ");
+
+            Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
          exception
             when others =>

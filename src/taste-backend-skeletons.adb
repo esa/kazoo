@@ -28,8 +28,6 @@ package body TASTE.Backend.Skeletons is
             RIs       : Tag;
             Func_Hdr  : Translate_Set := Func_Tmpl.Header;
          begin
-            Put ("***  Generating ");
-            Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
             for PI of Func_Tmpl.Provided loop
                declare
                   Header : Translate_Set := PI.Header;
@@ -77,9 +75,12 @@ package body TASTE.Backend.Skeletons is
                end;
             end loop;
             Func_Hdr := Func_Hdr & Assoc ("Required_Interfaces", RIs);
+            Put ("***  Generating ");
+            Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
             Put_Line (Parse (Path & "header.tmplt", Func_Hdr));
             Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
+            Put_Line (Parse (Path & "body.tmplt", Func_Hdr));
          exception
             when E : others =>
                Put_Line ("no skeletons for language " & Language & " !");

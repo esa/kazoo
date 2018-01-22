@@ -1,10 +1,10 @@
 with Text_IO; use Text_IO;
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
-     Ada.Exceptions;
+     Ada.Directories;
 
 use Ada.Characters.Handling,
-    Ada.Exceptions;
+    Ada.Directories;
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
@@ -13,78 +13,79 @@ package body TASTE.Backend.Skeletons is
       Prefix : constant String := Model.Configuration.Binary_Path.all
         & "templates/skeletons/";
       use Ada.Strings.Unbounded;
+      type Output is (Header, Code);
+      function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
+                                   Path       : String;
+                                   Target     : Output) return Tag
+      is
+         Interfaces_Tag : Tag;
+         Tmplt_Param : constant String :=
+           Path & "interface-" & (if Target = Header then "header" else "body")
+           & "-parameter.tmplt";
+         Tmplt_Sign  : constant String := Path & "interface-signature.tmplt";
+         Proceed : constant Boolean := Exists (Path)
+           and then Kind (Path) = Directory
+           and then Exists (Tmplt_Param) and then Exists (Tmplt_Sign);
+      begin
+         if not Proceed then
+            return Interfaces_Tag;
+         end if;
+         for Each of Interfaces loop
+            declare
+               Pool   : Translate_Set := Each.Header;
+               Params : Tag;
+            begin
+               for Param of Each.Params loop
+                  declare
+                     P : constant String := Parse (Tmplt_Param, Param);
+                  begin
+                     Params := Params & P;
+                  end;
+               end loop;
+               Pool := Pool & Assoc ("Parameters", Params);
+               declare
+                  New_Interface : constant String := Parse (Tmplt_Sign, Pool);
+               begin
+                  Interfaces_Tag := Interfaces_Tag & New_Interface;
+               end;
+            end;
+         end loop;
+         return Interfaces_Tag;
+      end Process_Interfaces;
    begin
       Put_Line ("=== Generate skeletons ===");
       for Each of Model.Interface_View.Flat_Functions loop
          declare
-            Language  : constant String := Language_Spelling (Each);
-            Path      : constant String := Prefix & To_Lower (Language) & "/";
-            Hdr_Tmpl  : constant Translate_Set := +Assoc ("Name", Each.Name);
-            Func_Tmpl : constant Func_As_Template :=
+            Language   : constant String := Language_Spelling (Each);
+            Path       : constant String := Prefix & To_Lower (Language) & "/";
+            Hdr_Tmpl   : constant Translate_Set := +Assoc ("Name", Each.Name);
+            Func_Tmpl  : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
-            PIs       : Tag;
-            RIs       : Tag;
-            Func_Hdr  : Translate_Set := Func_Tmpl.Header;
+            PIs_Header : constant Tag :=
+              Process_Interfaces (Func_Tmpl.Provided, Path, Header);
+            RIs_Header : constant Tag :=
+              Process_Interfaces (Func_Tmpl.Required, Path, Header);
+            PIs_Body   : constant Tag :=
+              Process_Interfaces (Func_Tmpl.Provided, Path, Code);
+            RIs_Body   : constant Tag :=
+              Process_Interfaces (Func_Tmpl.Required, Path, Code);
+            Func_Hdr   : constant Translate_Set := Func_Tmpl.Header
+              & Assoc ("Provided_Interfaces", PIs_Header)
+              & Assoc ("Required_Interfaces", RIs_Header);
+            Func_Body  : constant Translate_Set := Func_Tmpl.Header
+              & Assoc ("Provided_Interfaces", PIs_Body)
+              & Assoc ("Required_Interfaces", RIs_Body);
          begin
-            for PI of Func_Tmpl.Provided loop
-               declare
-                  Header : Translate_Set := PI.Header;
-                  Params : Tag;
-               begin
-                  for Param of PI.Params loop
-                     declare
-                        P : constant String :=
-                          Parse
-                            (Path & "interface-header-parameter.tmplt", Param);
-                     begin
-                        Params := Params & P;
-                     end;
-                  end loop;
-                  Header := Header & Assoc ("Parameters", Params);
-                  declare
-                     PI : constant String :=
-                       Parse (Path & "interface-signature.tmplt", Header);
-                  begin
-                     PIs := PIs & PI;
-                  end;
-               end;
-            end loop;
-            Func_Hdr := Func_Hdr & Assoc ("Provided_Interfaces", PIs);
-            for RI of Func_Tmpl.Required loop
-               declare
-                  Header : Translate_Set := RI.Header;
-                  Params : Tag;
-               begin
-                  for Param of RI.Params loop
-                     declare
-                        P : constant String := Parse
-                            (Path & "interface-header-parameter.tmplt", Param);
-                     begin
-                        Params := Params & P;
-                     end;
-                  end loop;
-                  Header := Header & Assoc ("Parameters", Params);
-                  declare
-                     RI : constant String :=
-                       Parse (Path & "interface-signature.tmplt", Header);
-                  begin
-                     RIs := RIs & RI;
-                  end;
-               end;
-            end loop;
-            Func_Hdr := Func_Hdr & Assoc ("Required_Interfaces", RIs);
-            Put ("***  Generating ");
-            Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
-            Put_Line (Parse (Path & "header.tmplt", Func_Hdr));
-            Put ("***  Generating ");
-            Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
-            Put_Line (Parse (Path & "body.tmplt", Func_Hdr));
-         exception
-            when E : others =>
-               Put_Line ("no skeletons for language " & Language & " !");
-               if Language /= "GUI" then
-                  Put_Line (Exception_Message (E));
-               end if;
+            if Size (PIs_Header) /= 0 or Size (RIs_Header) /= 0 then
+               Put ("***  Generating ");
+               Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
+               Put_Line (Parse (Path & "header.tmplt", Func_Hdr));
+               Put ("***  Generating ");
+               Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
+               Put_Line (Parse (Path & "body.tmplt", Func_Body));
+            else
+               Put_Line ("No skeletons for language " & Language & " !");
+            end if;
          end;
       end loop;
    end Generate;

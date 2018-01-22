@@ -6,8 +6,6 @@ with Ada.Strings.Unbounded,
 use Ada.Characters.Handling,
     Ada.Exceptions;
 
---  with TASTE.Backend.Skeletons.C;
-
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
       Template : constant IV_As_Template :=

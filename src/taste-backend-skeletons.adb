@@ -24,6 +24,9 @@ package body TASTE.Backend.Skeletons is
             Hdr_Tmpl  : constant Translate_Set := +Assoc ("Name", Each.Name);
             Func_Tmpl : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
+            PIs       : Tag;
+            RIs       : Tag;
+            Func_Hdr  : Translate_Set := Func_Tmpl.Header;
          begin
             Put ("***  Generating ");
             Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
@@ -42,10 +45,15 @@ package body TASTE.Backend.Skeletons is
                      end;
                   end loop;
                   Header := Header & Assoc ("Parameters", Params);
-                  Put_Line (Parse
-                            (Path & "interface-signature.tmplt", Header));
+                  declare
+                     PI : constant String :=
+                       Parse (Path & "interface-signature.tmplt", Header);
+                  begin
+                     PIs := PIs & PI;
+                  end;
                end;
             end loop;
+            Func_Hdr := Func_Hdr & Assoc ("Provided_Interfaces", PIs);
             for RI of Func_Tmpl.Required loop
                declare
                   Header : Translate_Set := RI.Header;
@@ -60,10 +68,16 @@ package body TASTE.Backend.Skeletons is
                      end;
                   end loop;
                   Header := Header & Assoc ("Parameters", Params);
-                  Put_Line (Parse
-                            (Path & "interface-signature.tmplt", Header));
+                  declare
+                     RI : constant String :=
+                       Parse (Path & "interface-signature.tmplt", Header);
+                  begin
+                     RIs := RIs & RI;
+                  end;
                end;
             end loop;
+            Func_Hdr := Func_Hdr & Assoc ("Required_Interfaces", RIs);
+            Put_Line (Parse (Path & "header.tmplt", Func_Hdr));
             Put ("***  Generating ");
             Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
          exception

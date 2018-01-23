@@ -4,6 +4,7 @@
 @@-- @_Language_@            : The implementation language
 @@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
+@@-- @_Timers_@              : List of timers (just names)
 @@-- @_Has_Context_@         : Flag, True if there are context parameters
 @@-- @_Provided_Interfaces_@ : List of Provided interfaces with parameters
 @@-- @_Required_Interfaces_@ : List of Required interfaces with parameters
@@ -36,7 +37,10 @@ void @_LOWER:Name_@_RI_@_Required_Interfaces_@;
 @@END_TABLE@@
 
 @@TABLE@@
-@_Timers_@
+void @_LOWER:Name_@_PI_@_Timers_@();
+/* Call these functions to set/reset @_Timers_@ (value in milliseconds)*/
+void @_LOWER:Name_@_RI_SET_@_Timers_@(asn1SccT_UInt32 *);
+void @_LOWER:Name_@_RI_RESET_@_Timers_@();
 @@END_TABLE@@
 
 #ifdef __cplusplus

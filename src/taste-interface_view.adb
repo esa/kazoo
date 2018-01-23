@@ -515,14 +515,23 @@ package body TASTE.Interface_View is
             Zip_Id          := Source_Text (1);
             Result.Zip_File := Just (US (Get_Name_String (Zip_Id)));
          end if;
-         --  Parse context parameters
+         --  Parse context parameters (including timers)
          if Present (AIN.Subcomponents (Inst)) then
             Subco := AIN.First_Node (AIN.Subcomponents (Inst));
             while Present (Subco) loop
                case Get_Category_Of_Component (Subco) is
                   when CC_Data =>
-                     Result.Context_Params := Result.Context_Params
-                                              & Parse_CP (Subco);
+                     declare
+                        CP : constant Context_Parameter := Parse_CP (Subco);
+                        use String_Vectors;
+                     begin
+                        if CP.Sort = "Timer" then
+                           Result.Timers := Result.Timers
+                                            & To_String (CP.Name);
+                        else
+                           Result.Context_Params := Result.Context_Params & CP;
+                        end if;
+                     end;
                   when others =>
                      null;
                end case;

@@ -702,6 +702,9 @@ END Z_Shown;
 
 SYSTEM IMPLEMENTATION Z_Shown.others
 SUBCOMPONENTS
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "toto";
+  };
   abc : DATA DataView::MyInteger {
     Taste::FS_Default_Value => "42";
   };

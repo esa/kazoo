@@ -139,6 +139,7 @@ package body TASTE.Backend.Skeletons is
       Result      : Func_As_Template;
       List_Of_PIs : Tag;
       List_Of_RIs : Tag;
+      Timers      : Tag;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
@@ -151,9 +152,13 @@ package body TASTE.Backend.Skeletons is
          Result.Required := Result.Required & Interface_Template (Each);
          List_Of_RIs := List_Of_RIs & Each.Name;
       end loop;
+      for Each of F.Timers loop
+         Timers := Timers & Each;
+      end loop;
       Result.Header := Result.Header
         & Assoc ("List_Of_PIs", List_Of_PIs)
-        & Assoc ("List_Of_RIs", List_Of_RIs);
+        & Assoc ("List_Of_RIs", List_Of_RIs)
+        & Assoc ("Timers", Timers);
       return Result;
    end Func_Template;
 

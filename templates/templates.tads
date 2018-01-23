@@ -1,0 +1,45 @@
+@@SET@@ PACKAGE = Templates
+@@--  The following tags are available in this template:
+@@--     @_VARIABLE_@:      Matrix of variable names for the current template,
+@@--                        sorted alphabetically
+@@--     @_FILENAME_@:      Vector of template file names. The name contains
+@@--                        directories relative to the directory given to
+@@--                        templates2ada
+@@--     @_BASENAME_@:      Same as @_FILENAME_@, but contains only the base
+@@--                        names of files, with no extension.
+@@--     @_VARIABLE_LIST_@: List of all variables defined in all templates,
+@@--                        sorted alphabetically
+@@--     @_INCLUDE_@:       List of templates included by the current template.
+@@--     @_SET_VAR_@        Name of SET constants in the template
+@@--                        Only variables with prefix SET_ are exported.
+@@--     @_SET_VAL@         Values of the above constants.
+@@--
+@@--  This template is processed through the tool templates2ada
+@@--  $ templates2ada -e tmplt -d . -o templates.ads  -r
+--  DO NOT EDIT, THIS FILE HAS BEEN GENERATED
+package @_PACKAGE_@ is
+   pragma Style_Checks (Off);
+
+@@TABLE@@
+   package @_REPLACE_ALL((-)/_):CAPITALIZE:REPLACE_ALL(\./_):BASENAME_@ is
+      Template : constant String := "@_BASENAME_@";
+
+      function Associate (
+   @@TABLE@@
+     @@IF@@ not @_IS_EMPTY:VARIABLE_@ and @_UPPER:SLICE(1..5):VARIABLE_@ /= "LAZY_"
+         @_CAPITALIZE:REPLACE_ALL(__/_):VARIABLE_@       : Association;
+     @@END_IF@@
+   @@END_TABLE@@
+      ) return Translate_Set is (blabla);
+@@IF@@ @_EXIST:SET_VAR_@
+
+       package Set is
+   @@TABLE@@
+         @_CAPITALIZE:REPLACE_ALL(__/_):SET_VAR_@ : constant String := "@_SET_VAL_@";
+   @@END_TABLE@@
+       end Set;
+@@END_IF@@
+   end @_REPLACE_ALL((-)/_):CAPITALIZE:REPLACE_ALL(\./_):BASENAME_@;
+
+@@END_TABLE@@
+end @_PACKAGE_@;

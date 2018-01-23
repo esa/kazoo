@@ -1,6 +1,7 @@
 @@-- The following tags are available in this template:
 @@--
 @@-- @_Name_@                : The name of the function
+@@-- @_Language_@            : The implementation language
 @@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
 @@-- @_Has_Context_@         : Flag, True if there are context parameters
@@ -18,7 +19,7 @@
 
 @@IF@@ @_Has_Context_@
 /* Include Context Parameters (constants defined in the Interface View) */
-#include "Context-@_REPLACE((_)/(-)):LOWER:Name_@.h"
+#include "Context-@_REPLACE((_)/-):LOWER:Name_@.h"
 @@END_IF@@
 
 void @_LOWER:Name_@_startup()

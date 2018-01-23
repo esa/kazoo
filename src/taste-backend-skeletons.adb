@@ -135,12 +135,14 @@ package body TASTE.Backend.Skeletons is
    function Func_Template (F : Taste_Terminal_Function) return Func_As_Template
    is
       use Interface_Vectors;
+      use Ctxt_Params;
       Result      : Func_As_Template;
       List_Of_PIs : Tag;
       List_Of_RIs : Tag;
    begin
       Result.Header := +Assoc ("Name", F.Name)
-                       & Assoc ("Language", F.Language'Img);
+        & Assoc ("Language", Language_Spelling (F))
+        & Assoc ("Has_Context", (Length (F.Context_Params) > 0));
       for Each of F.Provided loop
          Result.Provided := Result.Provided & Interface_Template (Each);
          List_Of_PIs := List_Of_PIs & Each.Name;

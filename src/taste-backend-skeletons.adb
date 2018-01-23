@@ -6,14 +6,35 @@ with Ada.Strings.Unbounded,
 use Ada.Characters.Handling,
     Ada.Directories;
 
+--  This package covers the generation of skeletons for all supported languages
+--  There is no code that is specific to one particular language. The package
+--  looks for a sub-directory with the name of the language and checks that all
+--  skeleton-related template files are present. Then it fills the Template
+--  mappings and generate the corresponding code.
+
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
       Template : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
+
       Prefix : constant String := Model.Configuration.Binary_Path.all
         & "templates/skeletons/";
+
       use Ada.Strings.Unbounded;
       type Output is (Header, Code);
+
+      --  Function checking that all templates files are available to support
+      --  a given language (based on the directory name).
+      function Is_Template_Present (Path : String) return Boolean is
+        (Exists (Path) and then Kind (Path) = Directory and then
+         Exists (Path & "interface-signature.tmplt") and then
+         Exists (Path & "header.tmplt") and then
+         Exists (Path & "body.tmplt") and then
+         Exists (Path & "body-filename.tmplt") and then
+         Exists (Path & "header-filename.tmplt") and then
+         Exists (Path & "interface-body-parameter.tmplt") and then
+         Exists (Path & "interface-header-parameter.tmplt"));
+
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String;
                                    Target     : Output) return Tag
@@ -23,13 +44,7 @@ package body TASTE.Backend.Skeletons is
            Path & "interface-" & (if Target = Header then "header" else "body")
            & "-parameter.tmplt";
          Tmplt_Sign  : constant String := Path & "interface-signature.tmplt";
-         Proceed : constant Boolean := Exists (Path)
-           and then Kind (Path) = Directory
-           and then Exists (Tmplt_Param) and then Exists (Tmplt_Sign);
       begin
-         if not Proceed then
-            return Interfaces_Tag;
-         end if;
          for Each of Interfaces loop
             declare
                Pool   : Translate_Set := Each.Header;
@@ -58,33 +73,42 @@ package body TASTE.Backend.Skeletons is
          declare
             Language   : constant String := Language_Spelling (Each);
             Path       : constant String := Prefix & To_Lower (Language) & "/";
+            Proceed    : constant Boolean := Is_Template_Present (Path);
             Hdr_Tmpl   : constant Translate_Set := +Assoc ("Name", Each.Name);
+
             Func_Tmpl  : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
-            PIs_Header : constant Tag :=
-              Process_Interfaces (Func_Tmpl.Provided, Path, Header);
-            RIs_Header : constant Tag :=
-              Process_Interfaces (Func_Tmpl.Required, Path, Header);
-            PIs_Body   : constant Tag :=
-              Process_Interfaces (Func_Tmpl.Provided, Path, Code);
-            RIs_Body   : constant Tag :=
-              Process_Interfaces (Func_Tmpl.Required, Path, Code);
-            Func_Hdr   : constant Translate_Set := Func_Tmpl.Header
-              & Assoc ("Provided_Interfaces", PIs_Header)
-              & Assoc ("Required_Interfaces", RIs_Header);
-            Func_Body  : constant Translate_Set := Func_Tmpl.Header
-              & Assoc ("Provided_Interfaces", PIs_Body)
-              & Assoc ("Required_Interfaces", RIs_Body);
+
+            Func_Hdr   : constant Translate_Set :=
+              (if Proceed then Func_Tmpl.Header
+              & Assoc ("Provided_Interfaces",
+                       Process_Interfaces (Func_Tmpl.Provided, Path, Header))
+              & Assoc ("Required_Interfaces",
+                       Process_Interfaces (Func_Tmpl.Required, Path, Header))
+               else Null_Set);
+
+            Header_Text : constant String :=
+             (if Proceed then Parse (Path & "header.tmplt", Func_Hdr) else "");
+
+            Func_Body  : constant Translate_Set :=
+              (if Proceed then Func_Tmpl.Header
+              & Assoc ("Provided_Interfaces",
+                       Process_Interfaces (Func_Tmpl.Provided, Path, Code))
+              & Assoc ("Required_Interfaces",
+                 Process_Interfaces (Func_Tmpl.Required, Path, Code))
+               else Null_Set);
+            Body_Text   : constant String :=
+              (if Proceed then Parse (Path & "body.tmplt", Func_Body) else "");
          begin
-            if Size (PIs_Header) /= 0 or Size (RIs_Header) /= 0 then
+            if Proceed then
                Put ("***  Generating ");
                Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
-               Put_Line (Parse (Path & "header.tmplt", Func_Hdr));
+               Put_Line (Header_Text);
                Put ("***  Generating ");
                Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
-               Put_Line (Parse (Path & "body.tmplt", Func_Body));
+               Put_Line (Body_Text);
             else
-               Put_Line ("No skeletons for language " & Language & " !");
+               Put_Line ("Ignoring function " & To_String (Each.Name));
             end if;
          end;
       end loop;
@@ -111,16 +135,23 @@ package body TASTE.Backend.Skeletons is
    function Func_Template (F : Taste_Terminal_Function) return Func_As_Template
    is
       use Interface_Vectors;
-      Result : Func_As_Template;
+      Result      : Func_As_Template;
+      List_Of_PIs : Tag;
+      List_Of_RIs : Tag;
    begin
       Result.Header := +Assoc ("Name", F.Name)
                        & Assoc ("Language", F.Language'Img);
       for Each of F.Provided loop
          Result.Provided := Result.Provided & Interface_Template (Each);
+         List_Of_PIs := List_Of_PIs & Each.Name;
       end loop;
       for Each of F.Required loop
          Result.Required := Result.Required & Interface_Template (Each);
+         List_Of_RIs := List_Of_RIs & Each.Name;
       end loop;
+      Result.Header := Result.Header
+        & Assoc ("List_Of_PIs", List_Of_PIs)
+        & Assoc ("List_Of_RIs", List_Of_RIs);
       return Result;
    end Func_Template;
 

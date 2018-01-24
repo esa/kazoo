@@ -11,8 +11,7 @@ with Ada.Text_IO,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
-     TASTE.Parser_Version,
-     TASTE.Templates;
+     TASTE.Parser_Version;
 
 package body TASTE.Parser_Utils is
 
@@ -22,8 +21,7 @@ package body TASTE.Parser_Utils is
        Templates_Parser,
        Templates_Parser.Utils,
        Ocarina.Instances.Queries,
-       Ocarina.ME_AADL,
-       TASTE.Templates;
+       Ocarina.ME_AADL;
 
    procedure Banner is
       The_Banner : constant String :=
@@ -91,44 +89,32 @@ package body TASTE.Parser_Utils is
       if Result.Version then
          raise Exit_From_Command_Line;
       end if;
+      if Result.Output_Dir.all'Length = 0 then
+         Result.Output_Dir := new String'(".");
+      end if;
    end Parse_Command_Line;
 
    procedure Debug_Dump (Config : Taste_Configuration) is
-      Vec : Tag;
+      Vec      : Tag;
+      Template : Translate_Set;
    begin
-      Put_Line ("Command line (raw dump):");
-      Put_Line ("  |_ Interface View  : " & Config.Interface_View.all);
-      Put_Line ("  |_ Deployment View : " & Config.Deployment_View.all);
-      Put_Line ("  |_ Data View       : " & Config.Data_View.all);
-      Put_Line ("  |_ Output Dir      : " & Config.Output_Dir.all);
-      Put_Line ("  |_ Use POHIC       : " & Config.Use_POHIC'Img);
-      Put_Line ("  |_ Glue            : " & Config.Use_POHIC'Img);
-      Put_Line ("  |_ Skeletons       : " & Config.Skeletons'Img);
-      Put_Line ("  |_ Timer Res       : " & Config.Timer_Resolution'Img);
-      Put_Line ("  |_ Version         : " & Config.Version'Img);
-      Put_Line ("  |_ Debug           : " & Config.Debug_Flag'Img);
-      for Each of Config.Other_Files loop
-         Put_Line ("  |_ Other file      : " & Each);
-      end loop;
-
-      Put_Line ("Dump generated from a template file:");
-      New_Set;
-      Tmpl_Map ("Interface_View",  Config.Interface_View.all);
-      Tmpl_Map ("Deployment_View", Config.Deployment_View.all);
-      Tmpl_Map ("Data_View", Config.Data_View.all);
-      Tmpl_Map ("Output_Dir", Config.Output_Dir.all);
+      Template := +Assoc ("Interface_View",  Config.Interface_View.all)
+        & Assoc ("Deployment_View",  Config.Deployment_View.all)
+        & Assoc ("Data_View",        Config.Data_View.all)
+        & Assoc ("Output_Dir",       Config.Output_Dir.all)
+        & Assoc ("Skeletons",        Config.Skeletons)
+        & Assoc ("Glue",             Config.Glue)
+        & Assoc ("Use_POHIC",        Config.Use_POHIC)
+        & Assoc ("Debug_Flag",       Config.Debug_Flag)
+        & Assoc ("Version",          Config.Version)
+        & Assoc ("Timer_Resolution", Config.Timer_Resolution);
       for Each of Config.Other_Files loop
          Vec := Vec & Each;
       end loop;
-      Tmpl_Map ("Other_Files",      Vec);
-      Tmpl_Map ("Skeletons",        Config.Skeletons);
-      Tmpl_Map ("Glue",             Config.Glue);
-      Tmpl_Map ("Use_POHIC",        Config.Use_POHIC);
-      Tmpl_Map ("Debug_Flag",       Config.Debug_Flag);
-      Tmpl_Map ("Version",          Config.Version);
-      Tmpl_Map ("Timer_Resolution", Config.Timer_Resolution);
-      Put_Line (Generate (Config.Binary_Path.all
-                          & "templates/configuration.tmplt"));
+      Template := Template & Assoc ("Other_Files", Vec);
+      Put_Line
+        (Parse (Config.Binary_Path.all & "templates/configuration.tmplt",
+         Template));
    end Debug_Dump;
 
    -----------------------

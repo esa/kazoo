@@ -98,9 +98,17 @@ package body TASTE.Backend.Skeletons is
                  Process_Interfaces (Func_Tmpl.Required, Path, Code))
                else Null_Set);
             Body_Text   : constant String :=
-              (if Proceed then Parse (Path & "body.tmplt", Func_Body) else "");
+                            (if Proceed
+                             then Parse (Path & "body.tmplt", Func_Body)
+                             else "");
+            Output_Src  : constant String :=
+                            Model.Configuration.Output_Dir.all
+                            & "/" & To_String (Each.Name)
+                            & "/" & Language
+                            & "/" & "src";
          begin
             if Proceed then
+               Create_Path (Output_Src);
                Put ("***  Generating ");
                Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
                Put_Line (Header_Text);

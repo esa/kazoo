@@ -1,9 +1,11 @@
 with Text_IO; use Text_IO;
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
+     Ada.Exceptions,
      Ada.Directories;
 
 use Ada.Characters.Handling,
+    Ada.Exceptions,
     Ada.Directories;
 
 --  This package covers the generation of skeletons for all supported languages
@@ -103,21 +105,48 @@ package body TASTE.Backend.Skeletons is
                              else "");
             Output_Src  : constant String :=
                             Model.Configuration.Output_Dir.all
-                            & "/" & To_String (Each.Name)
+                            & "/" & To_Lower (To_String (Each.Name))
                             & "/" & Language
-                            & "/" & "src";
+                            & "/" & "src" & "/";
+            --  Get header and body filenames from templates
+            Header_File : constant String :=
+                            (if Proceed then Parse
+                               (Path & "header-filename.tmplt", Hdr_Tmpl)
+                             else "");
+            Body_File   : constant String :=
+                            (if Proceed then Parse
+                               (Path & "body-filename.tmplt", Hdr_Tmpl)
+                             else "");
+            Output      : File_Type;
          begin
             if Proceed then
+               --  Create directory tree (output/function/language/src)
                Create_Path (Output_Src);
-               Put ("***  Generating ");
-               Put_Line (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
-               Put_Line (Header_Text);
-               Put ("***  Generating ");
-               Put_Line (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
-               Put_Line (Body_Text);
+               Put_Line ("***  Generating " & Header_File);
+               Create (File => Output,
+                       Mode => Out_File,
+                       Name => Output_Src & Header_File);
+               Put_Line (Output, Header_Text);
+               Close (Output);
+               if not Exists (Output_Src & Body_File) then
+                  Put_Line ("***  Generating " & Body_File);
+                  Create (File => Output,
+                          Mode => Out_File,
+                          Name => Output_Src & Body_File);
+                  Put_Line (Output, Body_Text);
+                  Close (Output);
+               end if;
             else
                Put_Line ("Ignoring function " & To_String (Each.Name));
             end if;
+         exception
+            when E : End_Error =>
+               if Is_Open (Output) then
+                  Close (Output);
+               end if;
+               raise Skeleton_Error with "Generation of skeleton for function "
+                 & To_String (Each.Name) & " failed : "
+                 & Exception_Message (E);
          end;
       end loop;
    end Generate;

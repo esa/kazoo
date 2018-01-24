@@ -166,6 +166,7 @@ package body TASTE.AADL_Parser is
          | No_RCM_Error
          | Deployment_View_Error
          | Data_View_Error
+         | TASTE.Backend.Skeletons.Skeleton_Error
          | Device_Driver_Error =>
          Put (Red_Bold & "[ERROR] " & White_Bold);
          Put_Line (Exception_Message (Error) & No_Color);

@@ -9,6 +9,7 @@ use Ada.Containers,
 
 package TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model);
+   Skeleton_Error : exception;
 private
    package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
 

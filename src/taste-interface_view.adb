@@ -4,8 +4,7 @@
 
 --  Interface View parser
 
-with Ada.Text_IO,
-     Ada.Exceptions,
+with Ada.Exceptions,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Options,
@@ -18,8 +17,7 @@ with Ada.Text_IO,
 
 package body TASTE.Interface_View is
 
-   use Ada.Text_IO,
-       Ada.Exceptions,
+   use Ada.Exceptions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.Analyzer,
@@ -782,75 +780,81 @@ package body TASTE.Interface_View is
       end loop;
    end Rename_Required_Interface;
 
-   procedure Debug_Dump (IV : Complete_Interface_View) is
+   procedure Debug_Dump (IV : Complete_Interface_View; Output : File_Type) is
       procedure Dump_Interface (Ind : String := "      ";
                                 I   : Taste_Interface) is
       begin
-         Put_Line ("    |_Name: " & To_String (I.Name) & " - in FV: "
+         Put_Line (Output, "    |_Name: " & To_String (I.Name) & " - in FV: "
                    & To_String (I.Parent_Function));
-         Put_Line (Ind & " |_RCM Kind    : " & I.RCM'Img);
-         Put_Line (Ind & " |_Period/MIAT : " & I.Period_Or_MIAT'Img);
-         Put_Line (Ind & " |_WCET (ms)   : " & Value_Or (I.WCET_ms, 0)'Img);
-         Put_Line (Ind & " |_Queue Size  : " & Value_Or (I.Queue_Size, 1)'Img);
-         Put_Line (Ind & " |_Parameters  :");
+         Put_Line (Output, Ind & " |_RCM Kind    : " & I.RCM'Img);
+         Put_Line (Output, Ind & " |_Period/MIAT : " & I.Period_Or_MIAT'Img);
+         Put_Line (Output, Ind & " |_WCET (ms)   : "
+                   & Value_Or (I.WCET_ms, 0)'Img);
+         Put_Line (Output, Ind & " |_Queue Size  : "
+                   & Value_Or (I.Queue_Size, 1)'Img);
+         Put_Line (Output, Ind & " |_Parameters  :");
          for Each of I.Params loop
-            Put_Line (Ind & "    |_Name         : " & To_String (Each.Name));
-            Put_Line (Ind & "       |_Type         : "
+            Put_Line (Output, Ind & "    |_Name         : "
+                      & To_String (Each.Name));
+            Put_Line (Output, Ind & "       |_Type         : "
                       & To_String (Each.Sort));
-            Put_Line (Ind & "       |_ASN.1 Module : "
+            Put_Line (Output, Ind & "       |_ASN.1 Module : "
                       & To_String (Each.ASN1_Module));
-            Put_Line (Ind & "       |_ASN.1 File   : "
+            Put_Line (Output, Ind & "       |_ASN.1 File   : "
                       & To_String (Each.ASN1_File_Name));
-            Put_Line (Ind & "       |_Basic type   : "
+            Put_Line (Output, Ind & "       |_Basic type   : "
                       & Each.ASN1_Basic_Type'Img);
-            Put_Line (Ind & "       |_Encoding     : " & Each.Encoding'Img);
-            Put_Line (Ind & "       |_Direction    : " & Each.Direction'Img);
+            Put_Line (Output, Ind & "       |_Encoding     : "
+                      & Each.Encoding'Img);
+            Put_Line (Output, Ind & "       |_Direction    : "
+                      & Each.Direction'Img);
          end loop;
-         Put_Line (Ind & " |_Connections :");
+         Put_Line (Output, Ind & " |_Connections :");
          for Each of I.Remote_Interfaces loop
-            Put_Line (Ind & "    |_Function " & To_String (Each.Function_Name)
+            Put_Line (Output, Ind & "    |_Function "
+                      & To_String (Each.Function_Name)
                       & ", interface " & To_String (Each.Interface_Name));
          end loop;
       end Dump_Interface;
    begin
       for Each of IV.Flat_Functions loop
-         Put_Line ("Function " & To_String (Each.Name)
+         Put_Line (Output, "Function " & To_String (Each.Name)
                    & " in context " & To_String (Each.Context));
 
-         Put_Line (" |_Full Prefix: " & To_String (Value_Or (Each.Full_Prefix,
-                                                             US ("(none)"))));
-         Put_Line (" |_Language   : " & Each.Language'Img);
-         Put_Line (" |_Zip file   : " & To_String (Value_Or (Each.Zip_File,
-                                                             US ("(none)"))));
-         Put_Line ("   Cxtx Params:");
+         Put_Line (Output, " |_Full Prefix: "
+                   & To_String (Value_Or (Each.Full_Prefix, US ("(none)"))));
+         Put_Line (Output, " |_Language   : " & Each.Language'Img);
+         Put_Line (Output, " |_Zip file   : "
+                   & To_String (Value_Or (Each.Zip_File, US ("(none)"))));
+         Put_Line (Output, "   Cxtx Params:");
          for CP of Each.Context_Params loop
-            Put_Line ("    |_" & To_String (CP.Name) & ":"
+            Put_Line (Output, "    |_" & To_String (CP.Name) & ":"
                       & To_String (CP.Sort) & "- default: "
                       & To_String (CP.Default_Value) & " - asn1 module: "
                       & To_String (CP.ASN1_Module) & " - file:"
                       & To_String (Value_Or (CP.ASN1_File_Name,
                                              US ("(none)"))));
-            New_Line;
+            New_Line (Output);
          end loop;
-         Put_Line (" |_User properties:");
+         Put_Line (Output, " |_User properties:");
          for Ppty of Each.User_Properties loop
-            Put_Line ("      " & To_String (Ppty.Name) & " = "
+            Put_Line (Output, "      " & To_String (Ppty.Name) & " = "
                       & To_String (Ppty.Value));
          end loop;
-         Put_Line (" |_Timers:");
+         Put_Line (Output, " |_Timers:");
          for Timer of Each.Timers loop
-            Put_Line ("    |_" & Timer);
+            Put_Line (Output, "    |_" & Timer);
          end loop;
-         Put_Line (" |_Provided interfaces:");
+         Put_Line (Output, " |_Provided interfaces:");
          for PI of Each.Provided loop
             Dump_Interface (I => PI);
          end loop;
-         New_Line;
-         Put_Line (" |_Required interfaces:");
+         New_Line (Output);
+         Put_Line (Output, " |_Required interfaces:");
          for RI of Each.Required loop
             Dump_Interface (I => RI);
          end loop;
-         New_Line;
+         New_Line (Output);
       end loop;
    end Debug_Dump;
 end TASTE.Interface_View;

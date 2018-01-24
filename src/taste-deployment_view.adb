@@ -4,8 +4,7 @@
 
 --  Deployment View parser
 
-with Ada.Text_IO,
-     Ada.Exceptions,
+with Ada.Exceptions,
      Ada.Strings.Fixed,
      System.Assertions,
      Ocarina.Instances.Queries,
@@ -23,8 +22,7 @@ with Ada.Text_IO,
 
 package body TASTE.Deployment_View is
 
-   use Ada.Text_IO,
-       Ada.Exceptions,
+   use Ada.Exceptions,
        Ada.Strings.Fixed,
        System.Assertions,
        Ocarina.Instances.Queries,
@@ -387,7 +385,7 @@ package body TASTE.Deployment_View is
                             (Corresponding_Declaration (P_CI)))));
                   exception
                      when Assert_Failure =>
-                        Put_Line ("Detected DV from TASTE version 1.2");
+                        Put_Info ("Detected DV from TASTE version 1.2");
                         Result.Bound_Functions.Append
                           (Get_Name_String (Name (Identifier (Processes))));
                   end;
@@ -423,7 +421,7 @@ package body TASTE.Deployment_View is
       end Parse_Node;
 
    begin
-      Put_Line ("Parsing deployment view");
+      Put_Info ("Parsing deployment view");
       My_Root_System := Initialize (System);
 
       if Is_Empty (Subcomponents (My_Root_System)) then
@@ -461,79 +459,86 @@ package body TASTE.Deployment_View is
          Busses         => Busses);
    end Parse_Deployment_View;
 
-   procedure Dump_Nodes (DV : Complete_Deployment_View) is
+   procedure Dump_Nodes (DV : Complete_Deployment_View; Output : File_Type) is
    begin
       for Each of DV.Nodes loop
-         Put_Line ("Node : " & White_Bold & To_String (Each.Name) & No_Color);
+         Put_Line (Output, "Node : " & To_String (Each.Name));
          for Partition of Each.Partitions loop
-            Put_Line ("  |_ Partition        : " & To_String (Partition.Name));
-            Put_Line ("    |_ Coverage       : " & Partition.Coverage'Img);
-            Put_Line ("    |_ Package        : "
+            Put_Line (Output, "  |_ Partition        : "
+                      & To_String (Partition.Name));
+            Put_Line (Output, "    |_ Coverage       : "
+                      & Partition.Coverage'Img);
+            Put_Line (Output, "    |_ Package        : "
                       & To_String (Partition.Package_Name));
-            Put_Line ("    |_ CPU Name       : "
+            Put_Line (Output, "    |_ CPU Name       : "
                       & To_String (Partition.CPU_Name));
-            Put_Line ("    |_ CPU Platform   : " & Partition.CPU_Platform'Img);
-            Put_Line ("    |_ CPU Classifier : "
+            Put_Line (Output, "    |_ CPU Platform   : "
+                      & Partition.CPU_Platform'Img);
+            Put_Line (Output, "    |_ CPU Classifier : "
                       & To_String (Partition.CPU_Classifier));
-            Put ("    |_ Contains       : ");
+            Put (Output, "    |_ Contains       : ");
             for Bounded of Partition.Bound_Functions loop
-               Put (Bounded & " ");
+               Put (Output, Bounded & " ");
             end loop;
-            Ada.Text_IO.New_Line;
+            New_Line (Output);
          end loop;
          for Driver of Each.Drivers loop
-            Put_Line ("  |_ Driver : " & To_String (Driver.Name));
-            Put_Line ("    |_ Package       : "
+            Put_Line (Output, "  |_ Driver : " & To_String (Driver.Name));
+            Put_Line (Output, "    |_ Package       : "
                       & To_String (Driver.Package_Name));
-            Put_Line ("    |_ Classifier    : "
+            Put_Line (Output, "    |_ Classifier    : "
                       & To_String (Driver.Device_Classifier));
-            Put_Line ("    |_ Processor     : "
+            Put_Line (Output, "    |_ Processor     : "
                       & To_String (Driver.Associated_Processor_Name));
-            Put_Line ("    |_ Configuration : "
+            Put_Line (Output, "    |_ Configuration : "
                       & To_String (Driver.Device_Configuration));
-            Put_Line ("    |_ Bus_Name      : "
+            Put_Line (Output, "    |_ Bus_Name      : "
                       & To_String (Driver.Accessed_Bus_Name));
-            Put_Line ("    |_ Port_Name     : "
+            Put_Line (Output, "    |_ Port_Name     : "
                       & To_String (Driver.Accessed_Port_Name));
-            Put_Line ("    |_ ASN.1 File    : "
+            Put_Line (Output, "    |_ ASN.1 File    : "
                       & To_String (Driver.ASN1_Filename));
-            Put_Line ("    |_ ASN.1 Type    : "
+            Put_Line (Output, "    |_ ASN.1 Type    : "
                       & To_String (Driver.ASN1_Typename));
-            Put_Line ("    |_ ASN.1 Module  : "
+            Put_Line (Output, "    |_ ASN.1 Module  : "
                       & To_String (Driver.ASN1_Module));
          end loop;
       end loop;
    end Dump_Nodes;
 
-   procedure Dump_Connections (DV : Complete_Deployment_View) is
+   procedure Dump_Connections (DV     : Complete_Deployment_View;
+                               Output : File_Type) is
    begin
       for Each of DV.Connections loop
-         Put_Line ("Connection on bus : " & To_String (Each.Bus_Name));
-         Put_Line ("  |_ Source Node : " & To_String (Each.Source_Node));
-         Put_Line ("  |_ Source Port : " & To_String (Each.Source_Port));
-         Put_Line ("  |_ Dest Node   : " & To_String (Each.Dest_Node));
-         Put_Line ("  |_ Dest Port   : " & To_String (Each.Dest_Port));
+         Put_Line (Output, "Connection on bus : " & To_String (Each.Bus_Name));
+         Put_Line (Output, "  |_ Source Node : "
+                   & To_String (Each.Source_Node));
+         Put_Line (Output, "  |_ Source Port : "
+                   & To_String (Each.Source_Port));
+         Put_Line (Output, "  |_ Dest Node   : " & To_String (Each.Dest_Node));
+         Put_Line (Output, "  |_ Dest Port   : " & To_String (Each.Dest_Port));
       end loop;
    end Dump_Connections;
 
-   procedure Dump_Busses (DV : Complete_Deployment_View) is
+   procedure Dump_Busses (DV : Complete_Deployment_View; Output : File_Type) is
    begin
       for Each of DV.Busses loop
-         Put_Line ("Bus : " & To_String (Each.Name));
-         Put_Line ("  |_ Package    : " & To_String (Each.AADL_Package));
-         Put_Line ("  |_ Classifier : " & To_String (Each.Classifier));
+         Put_Line (Output, "Bus : " & To_String (Each.Name));
+         Put_Line (Output, "  |_ Package    : "
+                   & To_String (Each.AADL_Package));
+         Put_Line (Output, "  |_ Classifier : " & To_String (Each.Classifier));
          for Prop of Each.Properties loop
-            Put_Line ("    |_ Property: " & To_String (Prop.Name)
+            Put_Line (Output, "    |_ Property: " & To_String (Prop.Name)
                       & " = " & To_String (Prop.Value));
          end loop;
       end loop;
    end Dump_Busses;
 
-   procedure Debug_Dump (DV : Complete_Deployment_View) is
+   procedure Debug_Dump (DV : Complete_Deployment_View; Output : File_Type) is
    begin
-      DV.Dump_Nodes;
-      DV.Dump_Busses;
-      DV.Dump_Connections;
+      DV.Dump_Nodes       (Output);
+      DV.Dump_Busses      (Output);
+      DV.Dump_Connections (Output);
    end Debug_Dump;
 
 end TASTE.Deployment_View;

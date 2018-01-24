@@ -5,6 +5,8 @@ package TASTE.Backend is
    use Ocarina.Backends.Properties,
        Interface_View;
 
+   Backend_Error : exception;
+
    function Language_Spelling (Func : Taste_Terminal_Function) return String is
       (case Func.Language is
           when Language_Ada_95        => "Ada",

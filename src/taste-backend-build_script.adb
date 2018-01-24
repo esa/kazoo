@@ -1,7 +1,13 @@
-with Text_IO,
+with System.OS_Lib,
+     Text_IO,
+     Ada.Exceptions,
+     Ada.Directories,
      Templates_Parser,
      TASTE.Parser_Utils;
-use  Text_IO,
+use  System.OS_Lib,
+     Text_IO,
+     Ada.Exceptions,
+     Ada.Directories,
      Templates_Parser,
      TASTE.Parser_Utils;
 
@@ -38,16 +44,41 @@ package body TASTE.Backend.Build_Script is
       end loop;
       Put_Info ("Generating build script");
       declare
-         Template_Data : constant Translate_Table :=
-            (1 => Assoc ("Interface_View_Path",
-                         Model.Configuration.Interface_View.all),
-             2 => Assoc ("Output_Path",   Model.Configuration.Output_Dir.all),
-             3 => Assoc ("Generate_Code", Vec_Code),
-             4 => Assoc ("Zip_Code",      Vec_Zip),
-             5 => Assoc ("Functions",     Vec_Func),
-             6 => Assoc ("CodeCoverage",  "# TODO"));
+         Template_Data : constant Translate_Set :=
+           +Assoc ("Interface_View_Path",
+                   Model.Configuration.Interface_View.all)
+           & Assoc ("Output_Path",   Model.Configuration.Output_Dir.all)
+           & Assoc ("Generate_Code", Vec_Code)
+           & Assoc ("Zip_Code",      Vec_Zip)
+           & Assoc ("Functions",     Vec_Func)
+           & Assoc ("CodeCoverage",  "# TODO");
+         Result : constant String := Parse (Prefix & "build-script.tmplt",
+                                            Template_Data);
+         Output_Path : constant String := Model.Configuration.Output_Dir.all;
+         Filename    : constant String := Output_Path & "/build-script.sh";
+         Output      : File_Type;
+         Success     : Boolean;
       begin
-         Put_Line (Parse (Prefix & "build-script.tmplt", Template_Data));
+         Create_Path (Output_Path);
+         if Exists (Filename) then
+            Put_Info ("Making backup of build script (build-script.sh.old)");
+            Rename_File (Old_Name => Filename,
+                         New_Name => Output_Path & "/build-script.sh.old",
+                         Success  => Success);
+            if not Success then
+               raise Backend_Error with "Impossible to rename build-script.sh";
+            end if;
+         end if;
+         Create (File => Output, Mode => Out_File, Name => Filename);
+         Put_Line (Output, Result);
+         Close (Output);
+      exception
+         when E : others =>
+            if Is_Open (Output) then
+               Close (Output);
+            end if;
+            raise Backend_Error with "Generation of build script failed: "
+              & Exception_Message (E);
       end;
    end Generate;
 end TASTE.Backend.Build_Script;

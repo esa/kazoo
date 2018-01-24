@@ -4,9 +4,10 @@
 --  LGPL license, see LICENSE file
 
 with System.Assertions,
-     GNAT.Command_Line,
      Ada.Exceptions,
      Ada.Text_IO,
+     Ada.Directories,
+     GNAT.Command_Line,
      Errors,
      Locations,
      Ocarina.Namet,
@@ -18,6 +19,7 @@ with System.Assertions,
 
 use Ada.Text_IO,
     Ada.Exceptions,
+    Ada.Directories,
     Locations,
     Ocarina.Namet,
     Ocarina;
@@ -185,17 +187,44 @@ package body TASTE.AADL_Parser is
    end Parse_Project;
 
    procedure Dump (Model : TASTE_Model) is
+      Output_Path : constant String := Model.Configuration.Output_Dir.all
+                      & "/Debug";
+      Output  : File_Type;
    begin
-      Put_Info ("==== Dump of the Interface View ====");
-      Model.Interface_View.Debug_Dump;
-      if Model.Configuration.Deployment_View.all'Length > 0 then
-         Put_Info ("==== Dump of the Deployment View ====");
-         Model.Deployment_View.Debug_Dump;
+      if Model.Configuration.Debug_Flag then
+         Create_Path (Output_Path);
+         Create (File => Output,
+                 Mode => Out_File,
+                 Name => Output_Path & "/InterfaceView.dump");
+         Put_Info ("Dump of the Interface View");
+         Model.Interface_View.Debug_Dump (Output);
+         Close (Output);
+
+         if Model.Configuration.Deployment_View.all'Length > 0 then
+            Create (File => Output,
+                    Mode => Out_File,
+                    Name => Output_Path & "/DeploymentView.dump");
+            Put_Info ("Dump of the Deployment View");
+            Model.Deployment_View.Debug_Dump (Output);
+            Close (Output);
+         end if;
+         Create (File => Output,
+                 Mode => Out_File,
+                 Name => Output_Path & "/DataView.dump");
+         Put_Info ("Dump of the Data View");
+         Model.Data_View.Debug_Dump;
+         Close (Output);
+         Create (File => Output,
+                 Mode => Out_File,
+                 Name => Output_Path & "/commandline.dump");
+         Put_Info ("Dump of the Command Line");
+         Model.Configuration.Debug_Dump;
+         Close (Output);
       end if;
-      Put_Info ("==== Dump of the Data View ====");
-      Model.Data_View.Debug_Dump;
-      Put_Info ("==== Dump of the Command Line ====");
-      Model.Configuration.Debug_Dump;
+   exception
+      when Error : others =>
+         Put_Error ("Debug Dump : " & Exception_Message (Error));
+         raise Quit_Taste;
    end Dump;
 
    procedure Generate_Build_Script (Model : TASTE_Model) is
@@ -210,8 +239,8 @@ package body TASTE.AADL_Parser is
       when Error : TASTE.Backend.Skeletons.Skeleton_Error =>
          Put_Error (Exception_Message (Error));
          raise Quit_Taste;
-      when E : others =>
-         Errors.Display_Bug_Box (E);
+      when Error : others =>
+         Errors.Display_Bug_Box (Error);
          raise Quit_Taste;
    end Generate_Skeletons;
 end TASTE.AADL_Parser;

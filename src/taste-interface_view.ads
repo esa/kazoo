@@ -4,20 +4,22 @@
 
 --  Interface View parser
 
-with Ocarina,
-     Ocarina.Types,
-     Ocarina.Backends.Properties,
-     Ada.Containers.Indefinite_Ordered_Maps,
+with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
+     Text_IO,
+     Ocarina,
+     Ocarina.Types,
+     Ocarina.Backends.Properties,
      Option_Type,
      TASTE.Parser_Utils;
 
-use Ocarina,
+use Ada.Containers,
+    Ada.Strings.Unbounded,
+    Text_IO,
+    Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
-    Ada.Containers,
-    Ada.Strings.Unbounded,
     TASTE.Parser_Utils;
 
 package TASTE.Interface_View is
@@ -179,6 +181,6 @@ package TASTE.Interface_View is
                                         Iface : String;
                                         To    : String);
 
-   procedure Debug_Dump (IV : Complete_Interface_View);
+   procedure Debug_Dump (IV : Complete_Interface_View; Output : File_Type);
 
 end TASTE.Interface_View;

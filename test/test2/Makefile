@@ -6,6 +6,7 @@ test-parse:
 	$(AADL_PARSER) --gw \
 	               -o output \
 	               --glue \
+		       --debug \
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \

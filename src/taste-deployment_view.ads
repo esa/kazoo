@@ -4,19 +4,21 @@
 
 --  Deployment View parser
 
-with Ocarina,
-     Ocarina.Types,
-     Ada.Containers.Indefinite_Ordered_Maps,
+with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
+     Text_IO,
+     Ocarina,
+     Ocarina.Types,
      Ocarina.Backends.Properties,
      TASTE.Parser_Utils;
 
-use Ocarina,
+use Ada.Containers,
+    Ada.Strings.Unbounded,
+    Text_IO,
+    Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
-    Ada.Containers,
-    Ada.Strings.Unbounded,
     TASTE.Parser_Utils;
 
 package TASTE.Deployment_View is
@@ -123,9 +125,13 @@ package TASTE.Deployment_View is
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View
    with Pre => System /= No_Node;
-   procedure Dump_Nodes       (DV : Complete_Deployment_View);
-   procedure Dump_Connections (DV : Complete_Deployment_View);
-   procedure Dump_Busses      (DV : Complete_Deployment_View);
-   procedure Debug_Dump       (DV : Complete_Deployment_View);
+   procedure Dump_Nodes       (DV     : Complete_Deployment_View;
+                               Output : File_Type);
+   procedure Dump_Connections (DV     : Complete_Deployment_View;
+                               Output : File_Type);
+   procedure Dump_Busses      (DV     : Complete_Deployment_View;
+                               Output : File_Type);
+   procedure Debug_Dump       (DV     : Complete_Deployment_View;
+                               Output : File_Type);
 
 end TASTE.Deployment_View;

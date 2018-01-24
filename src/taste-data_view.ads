@@ -4,16 +4,18 @@
 
 --  Data View parser
 
-with Ocarina,
-     Ocarina.Types,
+with Text_IO,
      Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Unbounded,
+     Ocarina,
+     Ocarina.Types,
      TASTE.Parser_Utils;
 
-use Ocarina,
-    Ocarina.Types,
+use Text_IO,
     Ada.Containers,
     Ada.Strings.Unbounded,
+    Ocarina,
+    Ocarina.Types,
     TASTE.Parser_Utils;
 
 package TASTE.Data_View is
@@ -49,6 +51,6 @@ package TASTE.Data_View is
    function Parse_Data_View (Dataview_Root : Node_Id) return Taste_Data_View
       with Pre => Dataview_Root /= No_Node;
 
-   procedure Debug_Dump (DV : Taste_Data_View);
+   procedure Debug_Dump (DV : Taste_Data_View; Output : File_Type);
 
 end TASTE.Data_View;

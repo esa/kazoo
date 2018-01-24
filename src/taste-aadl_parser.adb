@@ -212,7 +212,7 @@ package body TASTE.AADL_Parser is
                  Mode => Out_File,
                  Name => Output_Path & "/DataView.dump");
          Put_Info ("Dump of the Data View");
-         Model.Data_View.Debug_Dump;
+         Model.Data_View.Debug_Dump (Output);
          Close (Output);
          Create (File => Output,
                  Mode => Out_File,

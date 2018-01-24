@@ -1,11 +1,10 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Interface View parser
 
-with Ada.Text_IO,
-     Locations,
+with Locations,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Backends.Properties,
@@ -20,8 +19,7 @@ with Ada.Text_IO,
 
 package body TASTE.Data_View is
 
-   use Ada.Text_IO,
-       Locations,
+   use Locations,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.Analyzer,
@@ -104,12 +102,12 @@ package body TASTE.Data_View is
       return Data_AST : constant Taste_Data_View := (ASN1_Files => Files);
    end Parse_Data_View;
 
-   procedure Debug_Dump (DV : Taste_Data_View) is
+   procedure Debug_Dump (DV : Taste_Data_View; Output : File_Type) is
    begin
       for Each of DV.ASN1_Files loop
-         Put_Line ("Name : " & To_String (Each.Path));
+         Put_Line (Output, To_String (Each.Path));
          for Module of Each.Modules loop
-            Put_Line ("  |_Module : " & Module);
+            Put_Line (Output, "  |_Module : " & Module);
          end loop;
       end loop;
    end Debug_Dump;

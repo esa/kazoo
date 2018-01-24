@@ -166,22 +166,18 @@ package body TASTE.AADL_Parser is
          | No_RCM_Error
          | Deployment_View_Error
          | Data_View_Error
-         | TASTE.Backend.Skeletons.Skeleton_Error
          | Device_Driver_Error =>
-         Put (Red_Bold & "[ERROR] " & White_Bold);
-         Put_Line (Exception_Message (Error) & No_Color);
+         Put_Error (Exception_Message (Error));
          raise Quit_Taste;
       when GNAT.Command_Line.Exit_From_Command_Line =>
          New_Line;
-         Put (Yellow_Bold & "[INFO] " & No_Color);
-         Put ("For more information, visit " & Underline & White_Bold);
-         Put_Line ("https://taste.tools" & No_Color);
+         Put_Info ("For more information, visit " & Underline & White_Bold
+                   & "https://taste.tools");
          raise Quit_Taste;
       when GNAT.Command_Line.Invalid_Switch
          | GNAT.Command_Line.Invalid_Parameter
          | GNAT.Command_Line.Invalid_Section =>
-         Put (Red_Bold & "[ERROR] " & White_Bold);
-         Put_Line ("Invalid switch or parameter (try --help)" & No_Color);
+         Put_Error ("Invalid switch or parameter (try --help)" & No_Color);
          raise Quit_Taste;
       when E : others =>
          Errors.Display_Bug_Box (E);
@@ -190,15 +186,15 @@ package body TASTE.AADL_Parser is
 
    procedure Dump (Model : TASTE_Model) is
    begin
-      Put_Line ("==== Dump of the Interface View ====");
+      Put_Info ("==== Dump of the Interface View ====");
       Model.Interface_View.Debug_Dump;
       if Model.Configuration.Deployment_View.all'Length > 0 then
-         Put_Line ("==== Dump of the Deployment View ====");
+         Put_Info ("==== Dump of the Deployment View ====");
          Model.Deployment_View.Debug_Dump;
       end if;
-      Put_Line ("==== Dump of the Data View ====");
+      Put_Info ("==== Dump of the Data View ====");
       Model.Data_View.Debug_Dump;
-      Put_Line ("==== Dump of the Command Line ====");
+      Put_Info ("==== Dump of the Command Line ====");
       Model.Configuration.Debug_Dump;
    end Dump;
 
@@ -210,6 +206,12 @@ package body TASTE.AADL_Parser is
    procedure Generate_Skeletons (Model : TASTE_Model) is
    begin
       TASTE.Backend.Skeletons.Generate (Model);
+   exception
+      when Error : TASTE.Backend.Skeletons.Skeleton_Error =>
+         Put_Error (Exception_Message (Error));
+         raise Quit_Taste;
+      when E : others =>
+         Errors.Display_Bug_Box (E);
+         raise Quit_Taste;
    end Generate_Skeletons;
-
 end TASTE.AADL_Parser;

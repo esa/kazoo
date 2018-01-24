@@ -51,6 +51,9 @@ package TASTE.Parser_Utils is
      (if Is_Tty then ASCII.ESC & "[4m" else "");
    function White_Bold return String is (if Is_Tty then White & Bold else "");
 
+   procedure Put_Info  (Info  : String);
+   procedure Put_Error (Error : String);
+
    procedure Banner;
 
    AADL_Parser_Error : exception;

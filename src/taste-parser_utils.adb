@@ -23,6 +23,16 @@ package body TASTE.Parser_Utils is
        Ocarina.Instances.Queries,
        Ocarina.ME_AADL;
 
+   procedure Put_Info (Info : String) is
+   begin
+      Put_Line (Yellow_Bold & "[INFO] " & No_Color & Info & No_Color);
+   end Put_Info;
+
+   procedure Put_Error (Error : String) is
+   begin
+      Put_Line (Red_Bold & "[ERROR] " & White_Bold & Error & No_Color);
+   end Put_Error;
+
    procedure Banner is
       The_Banner : constant String :=
         Yellow_Bold & "TASTE AADL Parser" & No_Color & " (Version "

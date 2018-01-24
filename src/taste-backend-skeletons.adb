@@ -2,11 +2,13 @@ with Text_IO; use Text_IO;
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
      Ada.Exceptions,
-     Ada.Directories;
+     Ada.Directories,
+     TASTE.Parser_Utils;
 
 use Ada.Characters.Handling,
     Ada.Exceptions,
-    Ada.Directories;
+    Ada.Directories,
+    TASTE.Parser_Utils;
 
 --  This package covers the generation of skeletons for all supported languages
 --  There is no code that is specific to one particular language. The package
@@ -70,7 +72,7 @@ package body TASTE.Backend.Skeletons is
          return Interfaces_Tag;
       end Process_Interfaces;
    begin
-      Put_Line ("=== Generate skeletons ===");
+      Put_Info ("=== Generate skeletons ===");
       for Each of Model.Interface_View.Flat_Functions loop
          declare
             Language   : constant String := Language_Spelling (Each);
@@ -122,25 +124,28 @@ package body TASTE.Backend.Skeletons is
             if Proceed then
                --  Create directory tree (output/function/language/src)
                Create_Path (Output_Src);
-               Put_Line ("***  Generating " & Header_File);
+               Put_Info ("Generating " & Header_File);
                Create (File => Output,
                        Mode => Out_File,
                        Name => Output_Src & Header_File);
                Put_Line (Output, Header_Text);
                Close (Output);
                if not Exists (Output_Src & Body_File) then
-                  Put_Line ("***  Generating " & Body_File);
+                  Put_Info ("Generating " & Body_File);
                   Create (File => Output,
                           Mode => Out_File,
                           Name => Output_Src & Body_File);
                   Put_Line (Output, Body_Text);
                   Close (Output);
+               else
+                  Put_Info (Body_File & " already exists, ignoring");
                end if;
             else
-               Put_Line ("Ignoring function " & To_String (Each.Name));
+               Put_Info ("Ignoring function " & To_String (Each.Name));
             end if;
          exception
-            when E : End_Error =>
+            when E : End_Error
+               | Text_IO.Use_Error =>
                if Is_Open (Output) then
                   Close (Output);
                end if;

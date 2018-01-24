@@ -1,7 +1,9 @@
 with Text_IO,
-     Templates_Parser;
+     Templates_Parser,
+     TASTE.Parser_Utils;
 use  Text_IO,
-     Templates_Parser;
+     Templates_Parser,
+     TASTE.Parser_Utils;
 
 package body TASTE.Backend.Build_Script is
    procedure Generate (Model : TASTE_Model) is
@@ -34,7 +36,7 @@ package body TASTE.Backend.Build_Script is
             end if;
          end;
       end loop;
-      Put_Line ("==== Generating build script ====");
+      Put_Info ("Generating build script");
       declare
          Template_Data : constant Translate_Table :=
             (1 => Assoc ("Interface_View_Path",

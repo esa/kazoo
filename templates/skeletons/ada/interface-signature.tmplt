@@ -1,0 +1,1 @@
+@_CAPITALIZE:Name_@ (@_REPLACE_ALL((\n)/):Parameters_@) 

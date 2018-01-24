@@ -1,0 +1,5 @@
+@@IF@@ @_Direction_@ = "PARAM_IN"
+IN_@_CAPITALIZE:Name_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Type_@
+@@ELSE@@
+OUT_@_CAPITALIZE:Name_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Type_@
+@@END_IF@@

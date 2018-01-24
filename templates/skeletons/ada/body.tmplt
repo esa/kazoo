@@ -37,11 +37,11 @@ package body @_CAPITALIZE:Name_@ is
 
 @@END_TABLE@@
 @@TABLE@@
-   procedure @_CAPITZIZE:Name_@_@_Timers_@ is
+   procedure @_CAPITALIZE:Name_@_@_Timers_@ is
    begin
       null;
       -- This function is called when the timer expires
-   end @_CAPITZIZE:Name_@_@_Timers_@;
+   end @_CAPITALIZE:Name_@_@_Timers_@;
 
 }
 @@END_TABLE@@

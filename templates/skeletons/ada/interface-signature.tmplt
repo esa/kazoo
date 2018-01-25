@@ -1,1 +1,5 @@
-@_CAPITALIZE:Name_@ (@_REPLACE_ALL((\n)/):Parameters_@) 
+@@IF@@ @_EXIST:Parameters_@
+@_CAPITALIZE:Name_@ (@_REPLACE_ALL((\n)/):Parameters_@)
+@@ELSE@@
+@_CAPITALIZE:Name_@
+@@END_IF@@

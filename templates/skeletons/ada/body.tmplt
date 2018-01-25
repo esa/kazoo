@@ -4,6 +4,7 @@
 @@-- @_Language_@            : The implementation language
 @@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
+@@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
 @@-- @_Timers_@              : List of timers (just names)
 @@-- @_Has_Context_@         : Flag, True if there are context parameters
 @@-- @_Provided_Interfaces_@ : List of Provided interfaces with parameters

@@ -24,28 +24,27 @@
 
 package body @_CAPITALIZE:Name_@ is
 
-   procedure Startup is
-   begin
-      --  Write startup code here
-   end Startup;
-
 @@TABLE@@
-   procedure @_CAPITALIZE:Name_@_@_Provided_Interfaces_@ is
+   procedure @_REPLACE_ALL((\n)/):Provided_Interfaces_@ is
    begin
-      null;
       --  Write your code here
-   end @_CAPITALIZE:Name_@_@_Provided_Interfaces_@;
+      null;
+   end @_REPLACE_ALL((\n)/):REPLACE(^(\S+)\s+.*/\1):Provided_Interfaces_@;
 
 @@END_TABLE@@
 @@TABLE@@
-   procedure @_CAPITALIZE:Name_@_@_Timers_@ is
+   procedure @_CAPITALIZE:Timers_@ is
    begin
+      -- This function is called when the timer expires, add your code
       null;
-      -- This function is called when the timer expires
-   end @_CAPITALIZE:Name_@_@_Timers_@;
+   end @_CAPITALIZE:Timers_@;
 
 }
 @@END_TABLE@@
+
+   begin
+      --  Write your startup code here
+      null;
 
 end @_CAPITALIZE:Name_@;
 

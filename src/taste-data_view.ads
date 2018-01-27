@@ -36,8 +36,14 @@ package TASTE.Data_View is
                 "data_model.aadl" &
                 "deployment.aadl";
 
+   type ASN1_Module is
+      record
+         Name  : Unbounded_String;
+         Types : String_Vectors.Vector;
+      end record;
+
    package ASN1_Module_Maps is new Indefinite_Ordered_Maps
-                                              (String, String_Vectors.Vector);
+     (String, ASN1_Module);
 
    type ASN1_File is
       record

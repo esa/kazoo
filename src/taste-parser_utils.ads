@@ -1,19 +1,20 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2008-2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Set of helper functions for the parser
-with Ocarina,
+with Ada.Containers.Indefinite_Ordered_Maps,
+     Ada.Containers.Indefinite_Vectors,
+     Ada.Strings.Unbounded,
+     Text_IO,
+     GNAT.Strings,
+     Interfaces.C_Streams,
+     Ocarina,
      Ocarina.Types,
      Ocarina.Namet,
-     Ada.Containers.Indefinite_Ordered_Maps,
-     Ada.Containers.Indefinite_Vectors,
      Ocarina.ME_AADL.AADL_Tree.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
-     Ada.Strings.Unbounded,
-     Option_Type,
-     GNAT.Strings,
-     Interfaces.C_Streams;
+     Option_Type;
 
 use Ocarina,
     Ocarina.Types,
@@ -22,6 +23,7 @@ use Ocarina,
     Ocarina.ME_AADL.AADL_Instances.Nodes,
     Ada.Containers,
     Ada.Strings.Unbounded,
+    Text_IO,
     Interfaces.C_Streams;
 
 package TASTE.Parser_Utils is
@@ -115,6 +117,6 @@ package TASTE.Parser_Utils is
          Other_Files      : String_Vectors.Vector;
       end record;
 
-   procedure Debug_Dump (Config : Taste_Configuration);
+   procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type);
    procedure Parse_Command_Line (Result : out Taste_Configuration);
 end TASTE.Parser_Utils;

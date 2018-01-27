@@ -218,7 +218,7 @@ package body TASTE.AADL_Parser is
                  Mode => Out_File,
                  Name => Output_Path & "/commandline.dump");
          Put_Info ("Dump of the Command Line");
-         Model.Configuration.Debug_Dump;
+         Model.Configuration.Debug_Dump (Output);
          Close (Output);
       end if;
    exception

@@ -1,9 +1,8 @@
 --  *************************** taste aadl parser *************************  --
---  (c) 2008-2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2008-2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with Ada.Text_IO,
-     GNAT.OS_Lib,
+with GNAT.OS_Lib,
      GNAT.Command_Line,
      Templates_Parser,
      Templates_Parser.Utils,
@@ -15,8 +14,7 @@ with Ada.Text_IO,
 
 package body TASTE.Parser_Utils is
 
-   use Ada.Text_IO,
-       GNAT.OS_Lib,
+   use GNAT.OS_Lib,
        GNAT.Command_Line,
        Templates_Parser,
        Templates_Parser.Utils,
@@ -104,7 +102,7 @@ package body TASTE.Parser_Utils is
       end if;
    end Parse_Command_Line;
 
-   procedure Debug_Dump (Config : Taste_Configuration) is
+   procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is
       Vec      : Tag;
       Template : Translate_Set;
    begin
@@ -122,8 +120,8 @@ package body TASTE.Parser_Utils is
          Vec := Vec & Each;
       end loop;
       Template := Template & Assoc ("Other_Files", Vec);
-      Put_Line
-        (Parse (Config.Binary_Path.all & "templates/configuration.tmplt",
+      Put_Line (Output,
+        Parse (Config.Binary_Path.all & "templates/configuration.tmplt",
          Template));
    end Debug_Dump;
 

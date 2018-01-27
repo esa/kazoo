@@ -42,21 +42,21 @@ package body TASTE.Data_View is
       Files             : ASN1_Maps.Map;
       Current_Type      : Node_Id;
 
-      function Parse_Type (Data_Type : Node_Id) return ASN1_File is
-         Asntype : constant Node_Id := Corresponding_Instance (Data_Type);
-         Name    : constant String := Get_Name_String
-                                         (Get_Type_Source_Name (Asntype));
-      begin
-         Put_Line ("Data type : " & AIN_Case (Data_Type));
-         Put_Line (" |_" & Name);
-         Put_Line (" |_ Module : " & Get_Name_String
-                                          (Get_String_Property (Asntype,
-                               Get_String_Name ("taste::ada_package_name"))));
-         Put_Line (" |_ File : " & Get_Name_String
-                                         (Get_Source_Text (Asntype)(1)));
-         return ASN1_File'(Path => US (Name),
-                           Modules => String_Vectors.Empty_Vector); --  TODO
-      end Parse_Type;
+--     function Parse_Type (Data_Type : Node_Id) return ASN1_File is
+--        Asntype : constant Node_Id := Corresponding_Instance (Data_Type);
+--        Name    : constant String := Get_Name_String
+--                                        (Get_Type_Source_Name (Asntype));
+--     begin
+--        Put_Line ("Data type : " & AIN_Case (Data_Type));
+--        Put_Line (" |_" & Name);
+--        Put_Line (" |_ Module : " & Get_Name_String
+--                                         (Get_String_Property (Asntype,
+--                              Get_String_Name ("taste::ada_package_name"))));
+--        Put_Line (" |_ File : " & Get_Name_String
+--                                        (Get_Source_Text (Asntype)(1)));
+--        return ASN1_File'(Path => US (Name),
+--                          Modules => String_Vectors.Empty_Vector); --  TODO
+--     end Parse_Type;
 
       F   : Name_Id;
       Loc : Location;
@@ -91,8 +91,39 @@ package body TASTE.Data_View is
             raise Data_View_Error with "Component is not a data type!";
          end if;
          declare
-            Type_File : constant ASN1_File := Parse_Type (Current_Type);
+            Asntype  : constant Node_Id := Corresponding_Instance (Data_Type);
+            Sort     : constant String  := Get_Name_String
+                             (Get_Type_Source_Name (Asntype));
+            Module   : constant String  := Get_Name_String
+                             (Get_String_Property (Asntype,
+                                 Get_String_Name ("taste::ada_package_name")));
+            Filename : constant String  := Get_Name_String
+                             (Get_Source_Text (Asntype (1)));
+ --           Type_File : constant ASN1_File := Parse_Type (Current_Type);
          begin
+            if Files.Contains (Key => Filename) then
+                declare
+                    Current_File : ASN1_File := Files.Element (Filename);
+                begin
+                    if Current_File.Modules.Contains (Module) then
+                        Current_File.Modules.Element (Module).Append (Sort);
+                    else
+                        declare
+                           Types : String_Vectors.Vector;
+                        begin
+                            Types.Append (Sort);
+                            Current_File.Modules.Insert (Key => Module,
+                                                         New_Item => Types);
+                        end;
+                    end if;
+                end;
+            else
+                declare
+                    New_File : ASN1_File;
+                begin
+                    New_File.Path := Filename;
+                    --  etc
+
             Files.Insert (Key      => To_String (Type_File.Path),
                           New_Item => Type_File);
             Current_Type := AIN.Next_Node (Current_Type);

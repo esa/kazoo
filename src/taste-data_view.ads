@@ -36,16 +36,19 @@ package TASTE.Data_View is
                 "data_model.aadl" &
                 "deployment.aadl";
 
+   package ASN1_Module_Maps is new Indefinite_Ordered_Maps
+                                              (String, String_Vectors.Vector);
+
    type ASN1_File is
       record
          Path    : Unbounded_String;
-         Modules : String_Vectors.Vector;
+         Modules : ASN1_Module_Maps.Map;
       end record;
-   package ASN1_Maps is new Indefinite_Ordered_Maps (String, ASN1_File);
+   package ASN1_File_Maps is new Indefinite_Ordered_Maps (String, ASN1_File);
 
    type Taste_Data_View is tagged
       record
-         ASN1_Files : ASN1_Maps.Map;
+         ASN1_Files : ASN1_File_Maps.Map;
       end record;
 
    function Parse_Data_View (Dataview_Root : Node_Id) return Taste_Data_View

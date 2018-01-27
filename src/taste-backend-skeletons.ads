@@ -44,4 +44,8 @@ private
                            return Func_As_Template;
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template;
+
+   function Custom_Strip_Filter (Value   : String;
+                                 Context : Filter_Context) return String;
+
 end TASTE.Backend.Skeletons;

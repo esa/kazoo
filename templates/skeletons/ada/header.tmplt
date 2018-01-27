@@ -28,16 +28,16 @@ package @_CAPITALIZE:Name_@ is
 
    --  PROVIDED INTERFACES ---------------------------------------------------
 @@TABLE@@
-   procedure @_REPLACE_ALL((\n)/):Provided_Interfaces_@
-      with Export, Convention => C, Link_Name => "@_LOWER:Name_@_PI_@_REPLACE_ALL((\n)/):LOWER:REPLACE(^(\S+)\s+.*/\1):Provided_Interfaces_@";
+   procedure @_STRIP:Provided_Interfaces_@
+      with Export, Convention => C, Link_Name => "@_LOWER:Name_@_PI_@_STRIP:LOWER:REPLACE(^(\S+)\s+.*/\1):Provided_Interfaces_@";
 
 @@END_TABLE@@
 
    --  REQUIRED INTERFACES ---------------------------------------------------
 @@TABLE@@
-   procedure @_REPLACE_ALL((\n)/):Required_Interfaces_@
-      with Import, Convention => C, Link_Name => "@_LOWER:Name_@_RI_@_REPLACE_ALL((\n)/):LOWER:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@";
-   procedure RIÜ@_REPLACE_ALL((\n)/):Required_Interfaces_@ renames @_REPLACE_ALL((\n)/):CAPITALIZE:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@;
+   procedure @_STRIP:Required_Interfaces_@
+      with Import, Convention => C, Link_Name => "@_LOWER:Name_@_RI_@_STRIP:LOWER:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@";
+   procedure RIÜ@_STRIP:Required_Interfaces_@ renames @_STRIP:CAPITALIZE:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@;
 
 @@END_TABLE@@
 

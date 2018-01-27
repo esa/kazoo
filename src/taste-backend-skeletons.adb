@@ -71,6 +71,19 @@ package body TASTE.Backend.Skeletons is
          end loop;
          return Interfaces_Tag;
       end Process_Interfaces;
+
+      --  Return a Tag list of ASN.1 Modules for the skeleton headers
+      function Get_Module_List return Tag is
+         Result : Tag;
+      begin
+         for Each of Model.Data_View.ASN1_Files loop
+            for Module of Each.Modules loop
+               Result := Result & Module.Name;
+            end loop;
+         end loop;
+         return Result;
+      end Get_Module_List;
+
    begin
       Put_Info ("=== Generate skeletons ===");
       for Each of Model.Interface_View.Flat_Functions loop
@@ -85,10 +98,11 @@ package body TASTE.Backend.Skeletons is
 
             Func_Hdr   : constant Translate_Set :=
               (if Proceed then Func_Tmpl.Header
-              & Assoc ("Provided_Interfaces",
-                       Process_Interfaces (Func_Tmpl.Provided, Path, Header))
-              & Assoc ("Required_Interfaces",
-                       Process_Interfaces (Func_Tmpl.Required, Path, Header))
+               & Assoc ("Provided_Interfaces",
+                 Process_Interfaces (Func_Tmpl.Provided, Path, Header))
+               & Assoc ("Required_Interfaces",
+                 Process_Interfaces (Func_Tmpl.Required, Path, Header))
+               & Assoc ("ASN1_Modules", Get_Module_List)
                else Null_Set);
 
             Header_Text : constant String :=

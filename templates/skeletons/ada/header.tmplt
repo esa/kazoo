@@ -43,7 +43,7 @@ package @_CAPITALIZE:Name_@ is
 
 @@TABLE@@
    --  FUNCTIONS TO HANDLE TIMER @_Timers_@ ----------------------------------
-   procedure @_CAPITALIZE:Timers_@();
+   procedure @_CAPITALIZE:Timers_@;
    procedure Set_@_CAPITALIZE:Timers_@ (Value : access asn1SccT_UInt32);
    procedure Reset_@_CAPITALIZE:Timers_@;
 

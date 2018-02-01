@@ -230,40 +230,4 @@ package body TASTE.Backend.Skeletons is
       end loop;
       return Result;
    end Interface_View_Template;
-
-   --  Define a custom "Strip" filter for the templates
-   function Custom_Strip_Filter (Value   : String;
-                                 Context : Filter_Context) return String is
-      pragma Unreferenced (Context);
-      Pre_Count, Post_Count : Natural := 0;
-      Index   : Natural := 0;
-      Discard : Boolean := True;
-      Result  : String (1 .. Value'Length);
-   begin
-      for Each of Value loop
-         exit when Discard = False;
-         if Is_Line_Terminator (Each) or Is_Space (Each) then
-            Pre_Count := Pre_Count + 1;
-         else
-            Discard := False;
-         end if;
-      end loop;
-      Discard := True;
-      for Each of reverse Value loop
-         exit when Discard = False;
-         if Is_Line_Terminator (Each) or Is_Space (Each) then
-            Post_Count := Post_Count + 1;
-         else
-            Discard := False;
-         end if;
-      end loop;
-      for I in Value'First + Pre_Count .. Value'Last - Post_Count loop
-         Index := Index + 1;
-         Result (Index) := Value (I);
-      end loop;
-      return Result (1 .. Index);
-   end Custom_Strip_Filter;
-begin
-   Register_Filter ("STRIP", Custom_Strip_Filter'Access);
-
 end TASTE.Backend.Skeletons;

@@ -136,6 +136,8 @@ package TASTE.Interface_View is
          Timers          : String_Vectors.Vector;
          Provided        : Interfaces_Maps.Map;
          Required        : Interfaces_Maps.Map;
+         Is_Type         : Boolean := False;
+         Instance_Of     : Optional_Unbounded_String := Nothing;
       end record;
 
    package Function_Maps is new Indefinite_Ordered_Maps (String,

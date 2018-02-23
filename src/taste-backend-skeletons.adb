@@ -192,29 +192,47 @@ package body TASTE.Backend.Skeletons is
    is
       use Interface_Vectors;
       use Ctxt_Params;
-      Result      : Func_As_Template;
-      List_Of_PIs : Tag;
-      List_Of_RIs : Tag;
-      Timers      : Tag;
+      Result          : Func_As_Template;
+      List_Of_PIs     : Tag;
+      List_Of_RIs     : Tag;
+      Timers          : Tag;
+      Property_Names  : Vector_Tag;
+      Property_Values : Vector_Tag;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
         & Assoc ("Has_Context", (Length (F.Context_Params) > 0));
+
+      --  Add list of PI names
       for Each of F.Provided loop
          Result.Provided := Result.Provided & Interface_Template (Each);
          List_Of_PIs := List_Of_PIs & Each.Name;
       end loop;
+
+      --  Add list of RI names
       for Each of F.Required loop
          Result.Required := Result.Required & Interface_Template (Each);
          List_Of_RIs := List_Of_RIs & Each.Name;
       end loop;
+
+      --  Add list of timers (names)
       for Each of F.Timers loop
          Timers := Timers & Each;
       end loop;
+
+      --  Add all user-defined properties
+      for Each of F.User_Properties loop
+         Property_Names  := Property_Names & Each.Name;
+         Property_Values := Property_Values & Each.Value;
+      end loop;
+
+      --  Setup the mapping for the template
       Result.Header := Result.Header
-        & Assoc ("List_Of_PIs", List_Of_PIs)
-        & Assoc ("List_Of_RIs", List_Of_RIs)
-        & Assoc ("Timers", Timers);
+        & Assoc ("List_Of_PIs",     List_Of_PIs)
+        & Assoc ("List_Of_RIs",     List_Of_RIs)
+        & Assoc ("Property_Names",  Property_Names)
+        & Assoc ("Property_Values", Property_Values)
+        & Assoc ("Timers",          Timers);
       return Result;
    end Func_Template;
 

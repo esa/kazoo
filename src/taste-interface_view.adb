@@ -553,6 +553,20 @@ package body TASTE.Interface_View is
             end loop;
          end if;
          Result.User_Properties := Get_Properties_Map (Inst);
+
+         --  Check User properties for first-class attributes
+         --  Currently: component type and instance
+         for Each of Result.User_Properties loop
+            if Each.Name = "TASTE_IV_Properties::is_Component_Type" and then
+               Each.Value = "true"
+            then
+               Result.Is_Type := True;
+            end if;
+            if Each.Name = "TASTE_IV_Properties::is_instance_of" then
+               Result.Instance_Of := Just (Each.Value);
+            end if;
+         end loop;
+
          return Result;
       exception
          when Error : Interface_Error =>
@@ -823,9 +837,12 @@ package body TASTE.Interface_View is
 
          Put_Line (Output, " |_Full Prefix: "
                    & To_String (Value_Or (Each.Full_Prefix, US ("(none)"))));
-         Put_Line (Output, " |_Language   : " & Each.Language'Img);
-         Put_Line (Output, " |_Zip file   : "
+         Put_Line (Output, " |_Language    : " & Each.Language'Img);
+         Put_Line (Output, " |_Zip file    : "
                    & To_String (Value_Or (Each.Zip_File, US ("(none)"))));
+         Put_Line (Output, " |_Is type     : " & Each.Is_Type'Img);
+         Put_Line (Output, " |_Instance of : "
+                   & To_String (Value_Or (Each.Instance_Of, US ("(n/a)"))));
          Put_Line (Output, "   Cxtx Params:");
          for CP of Each.Context_Params loop
             Put_Line (Output, "    |_" & To_String (CP.Name) & ":"

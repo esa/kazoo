@@ -1,0 +1,60 @@
+TASTE-Dataview DEFINITIONS ::=
+BEGIN
+IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
+
+TASTE-Boolean ::= BOOLEAN
+Flight-Mode ::= ENUMERATED { land, fly }
+
+PID-Identifiers ::= ENUMERATED { pid-x, pid-y }
+PID-Location ::= REAL (-1024.0 .. 1024.0)
+PID-Gain ::= REAL (0.0 .. 20.0)
+PID-Velocity ::= REAL (-5.0 .. 5.0)
+PID-dt ::= REAL (0.0 .. 1.0)
+
+Velocity-Setpoint ::= SEQUENCE { vx PID-Velocity, vy PID-Velocity }
+Drone-ID ::= ENUMERATED { coronagraph, occulter }
+Trajectory-Setpoint ::= SEQUENCE { x PID-Location, y PID-Location }
+
+
+-- ASN.1 Type definitions must start with an uppercase
+-- Field names in records (SEQUENCE) must start with a lowercase
+-- Underscores are not allowed: use dash (hyphen) 
+
+-- Simple types:
+
+-- MyInteger   ::= INTEGER (0..255)
+-- MyReal      ::= REAL (0.0 .. 1000.0)
+-- MyBool      ::= BOOLEAN
+-- MyEnum      ::= ENUMERATED { hello, world, how-are-you }
+
+-- Complex types:
+
+--  MySeq       ::= SEQUENCE {
+--      input-data  MyInteger,
+--      output-data MyInteger,
+--      validity    ENUMERATED { valid, invalid }
+--  }
+--
+--  MyChoice    ::= CHOICE {
+--      a BOOLEAN,
+--      b MySeq
+--  }
+--
+--  MySeqOf     ::= SEQUENCE (SIZE (2)) OF MyEnum
+--
+--  MyOctStr    ::= OCTET STRING (SIZE (3))
+--
+--  -- You can also declare constants
+--  myVar       MySeqOf     ::= { hello, world }
+
+END
+
+
+
+
+
+
+
+
+
+

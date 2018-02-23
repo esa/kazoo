@@ -210,8 +210,6 @@ FEATURES
   trajectory_setpoint : OUT PARAMETER DataView::Trajectory_Setpoint {
     Taste::encoding => NATIVE;
   };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
 END PI_get_trajectory_setpoint;
 
 SUBPROGRAM IMPLEMENTATION PI_get_trajectory_setpoint.others
@@ -248,7 +246,7 @@ END RI_get_coronagraph_trajectory_setpoint.others;
 SYSTEM OcculterTrajectory
 FEATURES
   PI_trajectory_step : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OcculterTrajectory::PI_trajectory_step.others {
-    Taste::coordinates => "161624 97987";
+    Taste::coordinates => "182382 97987";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 20 ms;
     Taste::Deadline => 0 ms;
@@ -257,7 +255,6 @@ FEATURES
   PI_get_trajectory_setpoint : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OcculterTrajectory::PI_get_trajectory_setpoint.others {
     Taste::coordinates => "126575 102074";
     Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "get_trajectory_setpoint";
   };
@@ -304,8 +301,6 @@ FEATURES
   setpoint : IN PARAMETER DataView::Velocity_Setpoint {
     Taste::encoding => NATIVE;
   };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
 END PI_send_setpoint;
 
 SUBPROGRAM IMPLEMENTATION PI_send_setpoint.others
@@ -318,7 +313,6 @@ FEATURES
   PI_send_setpoint : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::DroneInterface::PI_send_setpoint.others {
     Taste::coordinates => "152161 136214";
     Taste::RCMoperationKind => protected;
-    Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "send_setpoint";
   };
@@ -622,31 +616,31 @@ FEATURES
     Taste::coordinates => "38005 150097";
     Taste::RCMoperationKind => unprotected;
     Taste::InterfaceName => "get_trajectory_setpoint";
-    Taste::labelInheritance => "true";
+    Taste::labelInheritance => "false";
   };
   RI_get_positions : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneController::RI_get_positions.others {
     Taste::coordinates => "64648 168262";
     Taste::RCMoperationKind => unprotected;
     Taste::InterfaceName => "get_positions";
-    Taste::labelInheritance => "true";
+    Taste::labelInheritance => "false";
   };
   RI_send_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneController::RI_send_setpoint.others {
     Taste::coordinates => "64648 156061";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "send_setpoint";
-    Taste::labelInheritance => "true";
+    Taste::labelInheritance => "false";
   };
   RI_initialize_PIDs : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneController::RI_initialize_PIDs.others {
     Taste::coordinates => "64648 158256";
     Taste::RCMoperationKind => unprotected;
     Taste::InterfaceName => "initialize_PIDs";
-    Taste::labelInheritance => "true";
+    Taste::labelInheritance => "false";
   };
   RI_calculate : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneController::RI_calculate.others {
     Taste::coordinates => "64648 160551";
     Taste::RCMoperationKind => unprotected;
     Taste::InterfaceName => "calculate";
-    Taste::labelInheritance => "true";
+    Taste::labelInheritance => "false";
   };
 PROPERTIES
   Source_Language => (SDL);
@@ -794,6 +788,330 @@ END PID_Controllers.others;
 
 END interfaceview::IV::PID_Controllers;
 
+PACKAGE interfaceview::IV::Coronograph_Ctrl
+PUBLIC
+
+WITH interfaceview::IV::DroneInterface;
+WITH interfaceview::IV::PID_Controllers;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_controller_step
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_controller_step;
+
+SUBPROGRAM IMPLEMENTATION PI_controller_step.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_controller_step.others;
+
+SUBPROGRAM PI_set_mode
+FEATURES
+  flight_mode : IN PARAMETER DataView::Flight_Mode {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_set_mode;
+
+SUBPROGRAM IMPLEMENTATION PI_set_mode.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_set_mode.others;
+
+SUBPROGRAM RI_get_trajectory_setpoint
+FEATURES
+  trajectory_setpoint : OUT PARAMETER DataView::Trajectory_Setpoint {
+    Taste::encoding => NATIVE;
+  };
+END RI_get_trajectory_setpoint;
+
+SUBPROGRAM IMPLEMENTATION RI_get_trajectory_setpoint.others
+END RI_get_trajectory_setpoint.others;
+
+SUBPROGRAM RI_get_positions
+FEATURES
+  drone_id : IN PARAMETER DataView::Drone_ID {
+    Taste::encoding => NATIVE;
+  };
+  position_x : OUT PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  position_y : OUT PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+END RI_get_positions;
+
+SUBPROGRAM IMPLEMENTATION RI_get_positions.others
+END RI_get_positions.others;
+
+SUBPROGRAM RI_send_setpoint
+FEATURES
+  drone : IN PARAMETER DataView::Drone_ID {
+    Taste::encoding => NATIVE;
+  };
+  setpoint : IN PARAMETER DataView::Velocity_Setpoint {
+    Taste::encoding => NATIVE;
+  };
+END RI_send_setpoint;
+
+SUBPROGRAM IMPLEMENTATION RI_send_setpoint.others
+END RI_send_setpoint.others;
+
+SUBPROGRAM RI_initialize_PIDs
+FEATURES
+  p_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+  i_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+  d_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+END RI_initialize_PIDs;
+
+SUBPROGRAM IMPLEMENTATION RI_initialize_PIDs.others
+END RI_initialize_PIDs.others;
+
+SUBPROGRAM RI_calculate
+FEATURES
+  pid_identifier : IN PARAMETER DataView::PID_Identifiers {
+    Taste::encoding => NATIVE;
+  };
+  set_point : IN PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  current_state : IN PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  velocity : OUT PARAMETER DataView::PID_Velocity {
+    Taste::encoding => NATIVE;
+  };
+END RI_calculate;
+
+SUBPROGRAM IMPLEMENTATION RI_calculate.others
+END RI_calculate.others;
+
+SYSTEM Coronograph_Ctrl
+FEATURES
+  PI_controller_step : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Coronograph_Ctrl::PI_controller_step.others {
+    Taste::coordinates => "132187 168448";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 20 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "controller_step";
+  };
+  PI_set_mode : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Coronograph_Ctrl::PI_set_mode.others {
+    Taste::coordinates => "124833 145120";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "set_mode";
+  };
+  RI_get_trajectory_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Coronograph_Ctrl::RI_get_trajectory_setpoint.others {
+    Taste::coordinates => "105393 145120";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "get_trajectory_setpoint";
+    Taste::labelInheritance => "false";
+  };
+  RI_get_positions : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Coronograph_Ctrl::RI_get_positions.others {
+    Taste::coordinates => "132187 162616";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "get_positions";
+    Taste::labelInheritance => "true";
+  };
+  RI_send_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneInterface::PI_send_setpoint.others {
+    Taste::coordinates => "132187 150952";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "send_setpoint";
+    Taste::labelInheritance => "false";
+  };
+  RI_initialize_PIDs : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PID_Controllers::PI_initialize_coronagraph_PIDs.others {
+    Taste::coordinates => "132187 152896";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "initialize_PIDs";
+    Taste::labelInheritance => "false";
+  };
+  RI_calculate : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PID_Controllers::PI_calculate_coronagraph.others {
+    Taste::coordinates => "132187 154840";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "calculate";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Coronograph_Ctrl;
+
+SYSTEM IMPLEMENTATION Coronograph_Ctrl.others
+END Coronograph_Ctrl.others;
+
+END interfaceview::IV::Coronograph_Ctrl;
+
+PACKAGE interfaceview::IV::Occulter_Ctrl
+PUBLIC
+
+WITH interfaceview::IV::DroneInterface;
+WITH interfaceview::IV::PID_Controllers;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_controller_step
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_controller_step;
+
+SUBPROGRAM IMPLEMENTATION PI_controller_step.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_controller_step.others;
+
+SUBPROGRAM PI_set_mode
+FEATURES
+  flight_mode : IN PARAMETER DataView::Flight_Mode {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_set_mode;
+
+SUBPROGRAM IMPLEMENTATION PI_set_mode.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_set_mode.others;
+
+SUBPROGRAM RI_get_trajectory_setpoint
+FEATURES
+  trajectory_setpoint : OUT PARAMETER DataView::Trajectory_Setpoint {
+    Taste::encoding => NATIVE;
+  };
+END RI_get_trajectory_setpoint;
+
+SUBPROGRAM IMPLEMENTATION RI_get_trajectory_setpoint.others
+END RI_get_trajectory_setpoint.others;
+
+SUBPROGRAM RI_get_positions
+FEATURES
+  drone_id : IN PARAMETER DataView::Drone_ID {
+    Taste::encoding => NATIVE;
+  };
+  position_x : OUT PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  position_y : OUT PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+END RI_get_positions;
+
+SUBPROGRAM IMPLEMENTATION RI_get_positions.others
+END RI_get_positions.others;
+
+SUBPROGRAM RI_send_setpoint
+FEATURES
+  drone : IN PARAMETER DataView::Drone_ID {
+    Taste::encoding => NATIVE;
+  };
+  setpoint : IN PARAMETER DataView::Velocity_Setpoint {
+    Taste::encoding => NATIVE;
+  };
+END RI_send_setpoint;
+
+SUBPROGRAM IMPLEMENTATION RI_send_setpoint.others
+END RI_send_setpoint.others;
+
+SUBPROGRAM RI_initialize_PIDs
+FEATURES
+  p_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+  i_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+  d_gain : IN PARAMETER DataView::PID_Gain {
+    Taste::encoding => NATIVE;
+  };
+END RI_initialize_PIDs;
+
+SUBPROGRAM IMPLEMENTATION RI_initialize_PIDs.others
+END RI_initialize_PIDs.others;
+
+SUBPROGRAM RI_calculate
+FEATURES
+  pid_identifier : IN PARAMETER DataView::PID_Identifiers {
+    Taste::encoding => NATIVE;
+  };
+  set_point : IN PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  current_state : IN PARAMETER DataView::PID_Location {
+    Taste::encoding => NATIVE;
+  };
+  velocity : OUT PARAMETER DataView::PID_Velocity {
+    Taste::encoding => NATIVE;
+  };
+END RI_calculate;
+
+SUBPROGRAM IMPLEMENTATION RI_calculate.others
+END RI_calculate.others;
+
+SYSTEM Occulter_Ctrl
+FEATURES
+  PI_controller_step : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Occulter_Ctrl::PI_controller_step.others {
+    Taste::coordinates => "128668 200138";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 20 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "controller_step";
+  };
+  PI_set_mode : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Occulter_Ctrl::PI_set_mode.others {
+    Taste::coordinates => "120944 178754";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "set_mode";
+  };
+  RI_get_trajectory_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Occulter_Ctrl::RI_get_trajectory_setpoint.others {
+    Taste::coordinates => "103448 178754";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "get_trajectory_setpoint";
+    Taste::labelInheritance => "false";
+  };
+  RI_get_positions : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Occulter_Ctrl::RI_get_positions.others {
+    Taste::coordinates => "128668 194306";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "get_positions";
+    Taste::labelInheritance => "true";
+  };
+  RI_send_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::DroneInterface::PI_send_setpoint.others {
+    Taste::coordinates => "128668 182642";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "send_setpoint";
+    Taste::labelInheritance => "false";
+  };
+  RI_initialize_PIDs : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PID_Controllers::PI_initialize_occulter_PIDs.others {
+    Taste::coordinates => "128668 184586";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "initialize_PIDs";
+    Taste::labelInheritance => "false";
+  };
+  RI_calculate : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PID_Controllers::PI_calculate_occulter.others {
+    Taste::coordinates => "128668 186530";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "calculate";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Occulter_Ctrl;
+
+SYSTEM IMPLEMENTATION Occulter_Ctrl.others
+END Occulter_Ctrl.others;
+
+END interfaceview::IV::Occulter_Ctrl;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -805,6 +1123,8 @@ WITH interfaceview::IV::Coordinator;
 WITH interfaceview::IV::GUI;
 WITH interfaceview::IV::DroneController;
 WITH interfaceview::IV::PID_Controllers;
+WITH interfaceview::IV::Coronograph_Ctrl;
+WITH interfaceview::IV::Occulter_Ctrl;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -820,7 +1140,7 @@ SUBCOMPONENTS
     Taste::coordinates => "68991 68257 115526 95658";
   };
   OcculterTrajectory : SYSTEM interfaceview::IV::OcculterTrajectory::OcculterTrajectory.others {
-    Taste::coordinates => "126575 81016 161624 106999";
+    Taste::coordinates => "126575 81016 182382 106999";
   };
   DroneInterface : SYSTEM interfaceview::IV::DroneInterface::DroneInterface.others {
     Taste::coordinates => "152161 118101 177200 146447";
@@ -834,10 +1154,20 @@ SUBCOMPONENTS
   DroneController : SYSTEM interfaceview::IV::DroneController::DroneController.others {
     Taste::coordinates => "18414 150097 64648 177183";
     TASTE_IV_Properties::is_Component_Type => TRUE;
-    Taste::Fill_Color => "#44a4c4";
+    Taste::Fill_Color => "#44A4C4";
   };
   PID_Controllers : SYSTEM interfaceview::IV::PID_Controllers::PID_Controllers.others {
     Taste::coordinates => "152619 150038 189541 173604";
+  };
+  Coronograph_Ctrl : SYSTEM interfaceview::IV::Coronograph_Ctrl::Coronograph_Ctrl.others {
+    Taste::coordinates => "85953 145120 132187 172206";
+    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_instance_of => "DroneController";
+  };
+  Occulter_Ctrl : SYSTEM interfaceview::IV::Occulter_Ctrl::Occulter_Ctrl.others {
+    Taste::coordinates => "85952 178754 128668 203779";
+    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_instance_of => "DroneController";
   };
 CONNECTIONS
   Positioning_PI_update_coronagraph_setpoint_CoronagraphTrajectory_RI_update_coronagraph_setpoint : SUBPROGRAM ACCESS Positioning.PI_update_coronagraph_setpoint -> CoronagraphTrajectory.RI_update_coronagraph_setpoint {
@@ -855,11 +1185,29 @@ CONNECTIONS
   OcculterTrajectory_PI_reset_occulter_trajectory_Coordinator_RI_reset_occulter_trajectory : SUBPROGRAM ACCESS OcculterTrajectory.PI_reset_occulter_trajectory -> Coordinator.RI_reset_occulter_trajectory {
     Taste::coordinates => "145309 50065 142494 50065 142494 81016";
   };
+  DroneInterface_PI_send_setpoint_Coronograph_Ctrl_RI_send_setpoint : SUBPROGRAM ACCESS DroneInterface.PI_send_setpoint -> Coronograph_Ctrl.RI_send_setpoint {
+    Taste::coordinates => "132187 150952 142174 150952 142174 136214 152161 136214";
+  };
+  DroneInterface_PI_send_setpoint_Occulter_Ctrl_RI_send_setpoint : SUBPROGRAM ACCESS DroneInterface.PI_send_setpoint -> Occulter_Ctrl.RI_send_setpoint {
+    Taste::coordinates => "128668 182642 140414 182642 140414 136214 152161 136214";
+  };
   Coordinator_PI_start_demo_GUI_RI_start_demo : SUBPROGRAM ACCESS Coordinator.PI_start_demo -> GUI.RI_start_demo {
     Taste::coordinates => "210024 62435 204583 62435 204583 57939 194436 57939";
   };
   Coordinator_PI_stop_demo_GUI_RI_stop_demo : SUBPROGRAM ACCESS Coordinator.PI_stop_demo -> GUI.RI_stop_demo {
     Taste::coordinates => "210024 65585 201506 65585 201506 61390 194436 61390";
+  };
+  PID_Controllers_PI_initialize_coronagraph_PIDs_Coronograph_Ctrl_RI_initialize_PIDs : SUBPROGRAM ACCESS PID_Controllers.PI_initialize_coronagraph_PIDs -> Coronograph_Ctrl.RI_initialize_PIDs {
+    Taste::coordinates => "132187 152896 142403 152896 142403 154378 152619 154378";
+  };
+  PID_Controllers_PI_calculate_coronagraph_Coronograph_Ctrl_RI_calculate : SUBPROGRAM ACCESS PID_Controllers.PI_calculate_coronagraph -> Coronograph_Ctrl.RI_calculate {
+    Taste::coordinates => "132187 154840 142403 154840 142403 166102 152619 166102";
+  };
+  PID_Controllers_PI_initialize_occulter_PIDs_Occulter_Ctrl_RI_initialize_PIDs : SUBPROGRAM ACCESS PID_Controllers.PI_initialize_occulter_PIDs -> Occulter_Ctrl.RI_initialize_PIDs {
+    Taste::coordinates => "128668 184586 140643 184586 140643 158208 152619 158208";
+  };
+  PID_Controllers_PI_calculate_occulter_Occulter_Ctrl_RI_calculate : SUBPROGRAM ACCESS PID_Controllers.PI_calculate_occulter -> Occulter_Ctrl.RI_calculate {
+    Taste::coordinates => "128668 186530 140643 186530 140643 169423 152619 169423";
   };
 END interfaceview.others;
 

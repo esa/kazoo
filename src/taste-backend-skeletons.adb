@@ -203,16 +203,28 @@ package body TASTE.Backend.Skeletons is
         & Assoc ("Language", Language_Spelling (F))
         & Assoc ("Has_Context", (Length (F.Context_Params) > 0));
 
-      --  Add list of PI names
+      --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
          Result.Provided := Result.Provided & Interface_Template (Each);
-         List_Of_PIs := List_Of_PIs & Each.Name;
+         List_Of_PIs     := List_Of_PIs & Each.Name;
+         case Each.RCM is
+            when Cyclic_Operation | Sporadic_Operation =>
+               null;
+            when others =>
+               null;
+         end case;
       end loop;
 
-      --  Add list of RI names
+      --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
          Result.Required := Result.Required & Interface_Template (Each);
-         List_Of_RIs := List_Of_RIs & Each.Name;
+         List_Of_RIs     := List_Of_RIs & Each.Name;
+         case Each.RCM is
+            when Cyclic_Operation | Sporadic_Operation =>
+               null;
+            when others =>
+               null;
+         end case;
       end loop;
 
       --  Add list of timers (names)
@@ -232,6 +244,8 @@ package body TASTE.Backend.Skeletons is
         & Assoc ("List_Of_RIs",     List_Of_RIs)
         & Assoc ("Property_Names",  Property_Names)
         & Assoc ("Property_Values", Property_Values)
+        & Assoc ("Is_Type",         F.Is_Type)
+        & Assoc ("Instance_Of",     F.Instance_Of.Value_Or (US ("")))
         & Assoc ("Timers",          Timers);
       return Result;
    end Func_Template;

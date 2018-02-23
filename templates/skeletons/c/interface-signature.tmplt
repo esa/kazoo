@@ -1,1 +1,1 @@
-@_LOWER:Name_@(@_REPLACE_ALL((\n)/):Parameters_@) 
+@_LOWER:Name_@(@_STRIP:Parameters_@) 

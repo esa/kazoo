@@ -177,18 +177,31 @@ package body TASTE.Backend.Skeletons is
      & Assoc ("Interface_Kind", TI.RCM'Img)
      & Assoc ("Direction", Param.Direction'Img));
 
+   --  MP: With the vector tags Param_Names/Types/Directions it should be
+   --  possible to completely avoid the templates specific to params
+   --  (Result.Params is probably unnecessary now) to be confirmed
    function Interface_Template (TI : Taste_Interface)
                                 return Interface_As_Template
    is
       use Template_Vectors;
-      Result : Interface_As_Template;
+      Result           : Interface_As_Template;
+      Param_Names      : Vector_Tag;
+      Param_Types      : Vector_Tag;
+      Param_Directions : Vector_Tag;
    begin
-      Result.Header :=  +Assoc ("Name",             TI.Name)
+      Result.Header :=  +Assoc  ("Name",            TI.Name)
                         & Assoc ("Kind",            TI.RCM'Img)
                         & Assoc ("Parent_Function", TI.Parent_Function);
       for Each of TI.Params loop
-         Result.Params := Result.Params & Parameter_Template (Each, TI);
+         Result.Params    := Result.Params & Parameter_Template (Each, TI);
+         Param_Names      := Param_Names & Each.Name;
+         Param_Types      := Param_Types & Each.Sort;
+         Param_Directions := Param_Directions & Each.Direction'Img;
       end loop;
+      Result.Header := Result.Header
+                       & Assoc ("Param_Names",      Param_Names)
+                       & Assoc ("Param_Types",      Param_Types)
+                       & Assoc ("Param_Directions", Param_Directions);
       return Result;
    end Interface_Template;
 

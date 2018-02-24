@@ -1,1 +1,25 @@
-@_LOWER:Name_@(@_REPLACE_ALL((\n)/):Parameters_@) 
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Parameters_@          : The template-generated parameters
+@@IF@@ @_LOWER:Kind_@ = "cyclic_operation" or @_LOWER:Kind_@ = "sporadic_operation"
+@@IF@@ @_Parameters'Length_@ > 0
+signal @_CAPITALIZE:Name_@ (@_STRIP:Parameters_@)
+@@ELSE@@
+signal @_CAPITALIZE:Name_@
+@@END_IF@@
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@;
+@@IF@@ @_Parameters'Length_@ > 0
+      fpar
+@@END_IF@@
+@@INLINE(         )(,\n         )()@@
+@@TABLE@@
+@_STRIP:Parameters_@
+@@END_TABLE@@
+@@END_INLINE@@
+
+   external
+@@END_IF@@

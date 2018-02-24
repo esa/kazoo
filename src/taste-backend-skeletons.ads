@@ -37,7 +37,8 @@ private
       end record;
 
    --  Set of functions translating the AST into Templates_Parser mappings
-   function Parameter_Template (Param : ASN1_Parameter) return Translate_Set;
+   function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
+       return Translate_Set;
    function Interface_Template (TI    : Taste_Interface)
                                 return Interface_As_Template;
    function Func_Template (F : Taste_Terminal_Function)

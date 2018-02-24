@@ -1,5 +1,15 @@
-@@IF@@ @_Direction_@ = "PARAM_IN"
-const asn1Scc@_REPLACE_ALL((-)/_):Type_@ *
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the parameter
+@@-- @_Type_@                : The type of the parameter
+@@-- @_Direction_@           : PARAM_IN or PARAM_OUT
+@@-- @_Interface_Kind_@      : The RCM Kind of the interface
+@@IF@@ @_LOWER:Interface_Kind_@ = "cyclic_operation" or @_LOWER:Interface_Kind_@ = "sporadic_operation"
+@_REPLACE_ALL((-)/_):Type_@
 @@ELSE@@
-asn1Scc@_REPLACE_ALL((-)/_):Type_@ *
+@@IF@@ @_Direction_@ = "PARAM_IN"
+in     @_CAPITALIZE:Name_@ @_REPLACE_ALL((-)/_):CAPITALIZE:Type_@
+@@ELSE@@
+in/out @_CAPITALIZE:Name_@ @_REPLACE_ALL((-)/_):CAPITALIZE:Type_@
+@@END_IF@@
 @@END_IF@@

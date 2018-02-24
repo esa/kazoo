@@ -170,8 +170,11 @@ package body TASTE.Backend.Skeletons is
       end loop;
    end Generate;
 
-   function Parameter_Template (Param : ASN1_Parameter) return Translate_Set is
+   function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
+       return Translate_Set
+   is
      (+Assoc ("Type", Param.Sort) & Assoc ("Name", Param.Name)
+     & Assoc ("Interface_Kind", TI.RCM'Img)
      & Assoc ("Direction", Param.Direction'Img));
 
    function Interface_Template (TI : Taste_Interface)
@@ -181,9 +184,10 @@ package body TASTE.Backend.Skeletons is
       Result : Interface_As_Template;
    begin
       Result.Header :=  +Assoc ("Name",             TI.Name)
+                        & Assoc ("Kind",            TI.RCM'Img)
                         & Assoc ("Parent_Function", TI.Parent_Function);
       for Each of TI.Params loop
-         Result.Params := Result.Params & Parameter_Template (Each);
+         Result.Params := Result.Params & Parameter_Template (Each, TI);
       end loop;
       return Result;
    end Interface_Template;
@@ -192,12 +196,16 @@ package body TASTE.Backend.Skeletons is
    is
       use Interface_Vectors;
       use Ctxt_Params;
-      Result          : Func_As_Template;
-      List_Of_PIs     : Tag;
-      List_Of_RIs     : Tag;
-      Timers          : Tag;
-      Property_Names  : Vector_Tag;
-      Property_Values : Vector_Tag;
+      Result            : Func_As_Template;
+      List_Of_PIs       : Tag;
+      List_Of_RIs       : Tag;
+      List_Of_Sync_PIs  : Tag;
+      List_Of_ASync_PIs : Tag;
+      List_Of_Sync_RIs  : Tag;
+      List_Of_ASync_RIs : Tag;
+      Timers            : Tag;
+      Property_Names    : Vector_Tag;
+      Property_Values   : Vector_Tag;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
@@ -209,9 +217,9 @@ package body TASTE.Backend.Skeletons is
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
-               null;
+               List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
             when others =>
-               null;
+               List_Of_Sync_PIs := List_Of_Sync_PIs & Each.Name;
          end case;
       end loop;
 
@@ -221,9 +229,9 @@ package body TASTE.Backend.Skeletons is
          List_Of_RIs     := List_Of_RIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
-               null;
+               List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
             when others =>
-               null;
+               List_Of_Sync_RIs := List_Of_Sync_RIs & Each.Name;
          end case;
       end loop;
 
@@ -240,13 +248,17 @@ package body TASTE.Backend.Skeletons is
 
       --  Setup the mapping for the template
       Result.Header := Result.Header
-        & Assoc ("List_Of_PIs",     List_Of_PIs)
-        & Assoc ("List_Of_RIs",     List_Of_RIs)
-        & Assoc ("Property_Names",  Property_Names)
-        & Assoc ("Property_Values", Property_Values)
-        & Assoc ("Is_Type",         F.Is_Type)
-        & Assoc ("Instance_Of",     F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",          Timers);
+        & Assoc ("List_Of_PIs",       List_Of_PIs)
+        & Assoc ("List_Of_RIs",       List_Of_RIs)
+        & Assoc ("List_Of_Sync_PIs",  List_Of_Sync_PIs)
+        & Assoc ("List_Of_Sync_RIs",  List_Of_Sync_RIs)
+        & Assoc ("List_Of_ASync_PIs", List_Of_ASync_PIs)
+        & Assoc ("List_Of_ASync_RIs", List_Of_ASync_RIs)
+        & Assoc ("Property_Names",    Property_Names)
+        & Assoc ("Property_Values",   Property_Values)
+        & Assoc ("Is_Type",           F.Is_Type)
+        & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
+        & Assoc ("Timers",            Timers);
       return Result;
    end Func_Template;
 

@@ -1,3 +1,12 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Parameters_@          : The template-generated parameters DEPRECATED
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@IF@@ @_EXIST:Parameters_@
 @_CAPITALIZE:Name_@ (@_REPLACE_ALL((\n)/):Parameters_@)
 @@ELSE@@

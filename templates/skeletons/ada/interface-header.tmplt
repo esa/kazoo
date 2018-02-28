@@ -9,8 +9,8 @@
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@IF@@ @_EXIST:Param_Names_@
 @@INLINE@@
-procedure @_CAPITALIZE:Name_@ (
-@@INLINE(; )@@
+procedure @_CAPITALIZE:Name_@
+@@INLINE(\()(; )()@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
 IN_@_CAPITALIZE:Param_Names_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@

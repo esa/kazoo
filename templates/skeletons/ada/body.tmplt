@@ -28,11 +28,7 @@
 package body @_CAPITALIZE:Name_@ is
 
 @@TABLE@@
-   procedure @_STRIP:Provided_Interfaces_@ is
-   begin
-      --  Write your code here
-      null;
-   end @_STRIP:REPLACE(^(\S+)\s+.*/\1):Provided_Interfaces_@;
+   @_Provided_Interfaces_@
 
 @@END_TABLE@@
 @@TABLE@@

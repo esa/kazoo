@@ -37,12 +37,14 @@ extern "C" {
 
 void @_LOWER:Name_@_startup();
 
+/* Provided interfaces */
 @@TABLE@@
-void @_LOWER:Name_@_PI_@_Provided_Interfaces_@;
+@_Provided_Interfaces_@
 @@END_TABLE@@
 
+/* Required interfaces */
 @@TABLE@@
-extern void @_LOWER:Name_@_RI_@_Required_Interfaces_@;
+@_Required_Interfaces_@
 @@END_TABLE@@
 
 @@TABLE@@

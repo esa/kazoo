@@ -40,10 +40,8 @@ void @_LOWER:Name_@_startup()
 }
 
 @@TABLE@@
-void @_LOWER:Name_@_PI_@_Provided_Interfaces_@
-{
-   // Write your code here
-}
+@_Provided_Interfaces_@
+
 @@END_TABLE@@
 
 @@TABLE@@

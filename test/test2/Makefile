@@ -2,7 +2,7 @@ AADL_PARSER=../../aadl_parser
 
 all: test-parse
 
-test-parse:
+test-parse: clean
 	$(AADL_PARSER) --gw \
 	               -o output \
 	               --glue \
@@ -15,6 +15,6 @@ test-parse:
 		       ../common/TASTE_DV_Properties.aadl
 
 clean:
-	rm -rf obj $(exec) *~
+	rm -rf output
 
 .PHONY: clean test-parse

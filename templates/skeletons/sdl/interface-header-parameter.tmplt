@@ -1,6 +1,0 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Name_@                : The name of the parameter
-@@-- @_Type_@                : The type of the parameter
-@@-- @_Direction_@           : PARAM_IN or PARAM_OUT
-@@-- @_Interface_Kind_@      : The RCM Kind of the interface

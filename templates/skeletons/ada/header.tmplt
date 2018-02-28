@@ -32,19 +32,14 @@ package @_CAPITALIZE:Name_@ is
 
    --  PROVIDED INTERFACES ---------------------------------------------------
 @@TABLE@@
-   procedure @_STRIP:Provided_Interfaces_@
-      with Export, Convention => C, Link_Name => "@_LOWER:Name_@_PI_@_STRIP:LOWER:REPLACE(^(\S+)\s+.*/\1):Provided_Interfaces_@";
+   @_Provided_Interfaces_@
 
 @@END_TABLE@@
-
    --  REQUIRED INTERFACES ---------------------------------------------------
 @@TABLE@@
-   procedure @_STRIP:Required_Interfaces_@
-      with Import, Convention => C, Link_Name => "@_LOWER:Name_@_RI_@_STRIP:LOWER:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@";
-   procedure RIÜ@_STRIP:Required_Interfaces_@ renames @_STRIP:CAPITALIZE:REPLACE(^(\S+)\s+.*/\1):Required_Interfaces_@;
+   @_Required_Interfaces_@
 
 @@END_TABLE@@
-
 @@TABLE@@
    --  FUNCTIONS TO HANDLE TIMER @_Timers_@ ----------------------------------
    procedure @_CAPITALIZE:Timers_@;

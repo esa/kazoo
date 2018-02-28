@@ -3,8 +3,13 @@
 @@-- @_Name_@                : The name of the interface
 @@-- @_Kind_@                : The RCM Kind
 @@-- @_Parent_Function_@     : The name of the function
-@@-- @_Parameters_@          : The template-generated parameters DEPRECATED
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@_LOWER:Name_@(@_STRIP:Parameters_@) 
+@_LOWER:Name_@(
+@@INLINE(, )@@
+@@TABLE@@
+asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *
+@@END_TABLE@@
+@@END_INLINE@@
+)

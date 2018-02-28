@@ -3,12 +3,17 @@
 @@-- @_Name_@                : The name of the interface
 @@-- @_Kind_@                : The RCM Kind
 @@-- @_Parent_Function_@     : The name of the function
-@@-- @_Parameters_@          : The template-generated parameters DEPRECATED
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@IF@@ @_EXIST:Parameters_@
-@_CAPITALIZE:Name_@ (@_REPLACE_ALL((\n)/):Parameters_@)
+@_LOWER:Name_@(
+@@INLINE@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+const asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *IN_@_LOWER:Param_Names_@
 @@ELSE@@
-@_CAPITALIZE:Name_@
+asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
 @@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+)

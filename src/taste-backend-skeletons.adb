@@ -31,45 +31,26 @@ package body TASTE.Backend.Skeletons is
       --  a given language (based on the directory name).
       function Is_Template_Present (Path : String) return Boolean is
         (Exists (Path) and then Kind (Path) = Directory and then
-         Exists (Path & "interface-signature.tmplt") and then
-         Exists (Path & "header.tmplt") and then
-         Exists (Path & "body.tmplt") and then
-         Exists (Path & "body-filename.tmplt") and then
-         Exists (Path & "header-filename.tmplt") and then
-         Exists (Path & "interface-body-parameter.tmplt") and then
-         Exists (Path & "interface-header-parameter.tmplt"));
+         Exists (Path & "interface-header.tmplt")       and then
+         Exists (Path & "interface-body.tmplt")         and then
+         Exists (Path & "header.tmplt")                 and then
+         Exists (Path & "body.tmplt")                   and then
+         Exists (Path & "body-filename.tmplt")          and then
+         Exists (Path & "header-filename.tmplt"));
 
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String;
                                    Target     : Output) return Tag
       is
-         Interfaces_Tag : Tag;
-         Tmplt_Param : constant String :=
-           Path & "interface-" & (if Target = Header then "header" else "body")
-           & "-parameter.tmplt";
-         Tmplt_Sign  : constant String := Path & "interface-signature.tmplt";
+         Result : Tag;
+         Tmplt_Sign  : constant String :=
+            Path & "interface-" & (if Target = Header then "header"
+                                                      else "body") & ".tmplt";
       begin
          for Each of Interfaces loop
-            declare
-               Pool   : Translate_Set := Each.Header;
-               Params : Tag;
-            begin
-               for Param of Each.Params loop
-                  declare
-                     P : constant String := Parse (Tmplt_Param, Param);
-                  begin
-                     Params := Params & P;
-                  end;
-               end loop;
-               Pool := Pool & Assoc ("Parameters", Params);
-               declare
-                  New_Interface : constant String := Parse (Tmplt_Sign, Pool);
-               begin
-                  Interfaces_Tag := Interfaces_Tag & New_Interface;
-               end;
-            end;
+            Result := Result & String'(Parse (Tmplt_Sign, Each.Header));
          end loop;
-         return Interfaces_Tag;
+         return Result;
       end Process_Interfaces;
 
       --  Return a Tag list of ASN.1 Modules for the skeleton headers
@@ -124,7 +105,7 @@ package body TASTE.Backend.Skeletons is
               & Assoc ("Provided_Interfaces",
                        Process_Interfaces (Func_Tmpl.Provided, Path, Code))
               & Assoc ("Required_Interfaces",
-                 Process_Interfaces (Func_Tmpl.Required, Path, Code))
+                       Process_Interfaces (Func_Tmpl.Required, Path, Code))
                else Null_Set);
             Body_Text   : constant String :=
                             (if Proceed
@@ -188,9 +169,6 @@ package body TASTE.Backend.Skeletons is
      & Assoc ("Interface_Kind", TI.RCM'Img)
      & Assoc ("Direction", Param.Direction'Img));
 
-   --  MP: With the vector tags Param_Names/Types/Directions it should be
-   --  possible to completely avoid the templates specific to params
-   --  (Result.Params is probably unnecessary now) to be confirmed
    function Interface_Template (TI : Taste_Interface)
                                 return Interface_As_Template
    is
@@ -220,16 +198,17 @@ package body TASTE.Backend.Skeletons is
    is
       use Interface_Vectors;
       use Ctxt_Params;
-      Result            : Func_As_Template;
-      List_Of_PIs       : Tag;
-      List_Of_RIs       : Tag;
-      List_Of_Sync_PIs  : Tag;
-      List_Of_ASync_PIs : Tag;
-      List_Of_Sync_RIs  : Tag;
-      List_Of_ASync_RIs : Tag;
-      Timers            : Tag;
-      Property_Names    : Vector_Tag;
-      Property_Values   : Vector_Tag;
+      Result             : Func_As_Template;
+      List_Of_PIs        : Tag;
+      List_Of_RIs        : Tag;
+      List_Of_Sync_PIs   : Tag;
+      List_Of_ASync_PIs  : Tag;
+      List_Of_Sync_RIs   : Tag;
+      List_Of_ASync_RIs  : Tag;
+      Timers             : Tag;
+      Property_Names     : Vector_Tag;
+      Property_Values    : Vector_Tag;
+      Interface_Tmplt    : Interface_As_Template;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
@@ -237,7 +216,10 @@ package body TASTE.Backend.Skeletons is
 
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
-         Result.Provided := Result.Provided & Interface_Template (Each);
+         Interface_Tmplt := Interface_Template (Each);
+         Interface_Tmplt.Header := Interface_Tmplt.Header
+                                   & Assoc ("Direction", "PI");
+         Result.Provided := Result.Provided & Interface_Tmplt;
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
@@ -249,7 +231,10 @@ package body TASTE.Backend.Skeletons is
 
       --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
-         Result.Required := Result.Required & Interface_Template (Each);
+         Interface_Tmplt := Interface_Template (Each);
+         Interface_Tmplt.Header := Interface_Tmplt.Header
+                                   & Assoc ("Direction", "RI");
+         Result.Required := Result.Required & Interface_Tmplt;
          List_Of_RIs     := List_Of_RIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>

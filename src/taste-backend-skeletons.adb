@@ -35,6 +35,7 @@ package body TASTE.Backend.Skeletons is
          Exists (Path & "interface-body.tmplt")         and then
          Exists (Path & "header.tmplt")                 and then
          Exists (Path & "body.tmplt")                   and then
+         Exists (Path & "makefile.tmplt")               and then
          Exists (Path & "body-filename.tmplt")          and then
          Exists (Path & "header-filename.tmplt"));
 

@@ -16,7 +16,7 @@ private
    type Interface_As_Template is
       record
          Header : Translate_Set;
-         Params : Template_Vectors.Vector;
+         --  Params : Template_Vectors.Vector;
       end record;
 
    package Interface_Vectors is new Indefinite_Vectors (Natural,
@@ -37,12 +37,15 @@ private
       end record;
 
    --  Set of functions translating the AST into Templates_Parser mappings
-   function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
-       return Translate_Set;
+--  function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
+--      return Translate_Set;
    function Interface_Template (TI    : Taste_Interface)
                                 return Interface_As_Template;
    function Func_Template (F : Taste_Terminal_Function)
                            return Func_As_Template;
+   function Makefile_Template (F       : Taste_Terminal_Function;
+                               Modules : Tag;
+                               Files   : Tag) return Translate_Set;
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template;
 

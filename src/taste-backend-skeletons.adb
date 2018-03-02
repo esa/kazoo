@@ -39,6 +39,14 @@ package body TASTE.Backend.Skeletons is
          Exists (Path & "body-filename.tmplt")          and then
          Exists (Path & "header-filename.tmplt"));
 
+      --  Generate the content of the Makefile per function
+      function Process_Makefile (Path    : String;
+                                 Content : Translate_Set) return String is
+         Tmplt_Makefile : constant String := Path & "makefile.tmplt";
+      begin
+         return Parse (Tmplt_Makefile, Content);
+      end Process_Makefile;
+
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String;
                                    Target     : Output) return Tag
@@ -84,6 +92,11 @@ package body TASTE.Backend.Skeletons is
             Path       : constant String := Prefix & To_Lower (Language) & "/";
             Proceed    : constant Boolean := Is_Template_Present (Path);
             Hdr_Tmpl   : constant Translate_Set := +Assoc ("Name", Each.Name);
+            Make_Tmpl  : constant Translate_Set := Makefile_Template
+                                        (F       => Each,
+                                         Modules => Get_Module_List,
+                                         Files   => Get_ASN1_File_List);
+            Make_Text  : constant String := Process_Makefile (Path, Make_Tmpl);
 
             Func_Tmpl  : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
@@ -126,6 +139,7 @@ package body TASTE.Backend.Skeletons is
                             (if Proceed then Parse
                                (Path & "body-filename.tmplt", Hdr_Tmpl)
                              else "");
+            Make_File   : constant String := "Makefile";
             Output      : File_Type;
          begin
             if Proceed then
@@ -147,6 +161,13 @@ package body TASTE.Backend.Skeletons is
                else
                   Put_Info (Body_File & " already exists, ignoring");
                end if;
+               Put_Info ("Generating " & Make_File & " for function "
+                         & To_String (Each.Name));
+               Create (File => Output,
+                       Mode => Out_File,
+                       Name => Output_Src & Make_File);
+               Put_Line (Output, Make_Text);
+               Close (Output);
             else
                Put_Info ("Ignoring function " & To_String (Each.Name));
             end if;
@@ -163,12 +184,20 @@ package body TASTE.Backend.Skeletons is
       end loop;
    end Generate;
 
-   function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
-       return Translate_Set
-   is
-     (+Assoc ("Type", Param.Sort) & Assoc ("Name", Param.Name)
-     & Assoc ("Interface_Kind", TI.RCM'Img)
-     & Assoc ("Direction", Param.Direction'Img));
+--  function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
+--      return Translate_Set
+--  is
+--    (+Assoc ("Type", Param.Sort) & Assoc ("Name", Param.Name)
+--    & Assoc ("Interface_Kind", TI.RCM'Img)
+--    & Assoc ("Direction", Param.Direction'Img));
+
+   --  Makefiles need the function name and the list of ASN.1 files/modules
+   function Makefile_Template (F       : Taste_Terminal_Function;
+                               Modules : Tag;
+                               Files   : Tag) return Translate_Set
+   is (Translate_Set'(+Assoc  ("Name",         F.Name)
+                      & Assoc ("ASN1_Files",   Files)
+                      & Assoc ("ASN1_Modules", Modules)));
 
    function Interface_Template (TI : Taste_Interface)
                                 return Interface_As_Template
@@ -183,7 +212,7 @@ package body TASTE.Backend.Skeletons is
                         & Assoc ("Kind",            TI.RCM'Img)
                         & Assoc ("Parent_Function", TI.Parent_Function);
       for Each of TI.Params loop
-         Result.Params    := Result.Params & Parameter_Template (Each, TI);
+         --  Result.Params    := Result.Params & Parameter_Template (Each, TI);
          Param_Names      := Param_Names & Each.Name;
          Param_Types      := Param_Types & Each.Sort;
          Param_Directions := Param_Directions & Each.Direction'Img;

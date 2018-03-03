@@ -1,4 +1,9 @@
-all:
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Function_Names_@      : Combined table: list of fuction names...
+@@-- @_Language_@            : ... and corresponding implementation language
+@@-- @_Unique_Languages_@    : List of all languages used in the system
+all: @_Unique_Languages_@
 	@@TABLE@@
 	@_Function_Names_@ in @_Language_@
 	@@END_TABLE@@

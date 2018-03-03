@@ -1,6 +1,7 @@
 with Text_IO; use Text_IO;
 with Ada.Strings.Unbounded,
      Ada.Characters.Handling,
+     Ada.Containers.Ordered_Sets,
      Ada.Exceptions,
      Ada.Directories,
      TASTE.Parser_Utils;
@@ -49,21 +50,32 @@ package body TASTE.Backend.Skeletons is
       end Function_Makefile;
 
       --  Generate string for a global Makefile (processing all functions)
+      --  The template contains a set of languages, and a list of
+      --  combined function name/language
       function Global_Makefile return String is
-         Functions_Tag : Vector_Tag;
-         Language_Tag  : Vector_Tag;
-         Content_Set   : Translate_Set;
+         package Languages_Set is new Ordered_Sets (Unbounded_String);
+         use Languages_Set;
+         Languages        : Set;
+         Unique_Languages : Tag;
+         Functions_Tag    : Vector_Tag;
+         Language_Tag     : Vector_Tag;
+         Content_Set      : Translate_Set;
          Tmplt   : constant String := Prefix & "makefile.tmplt";
       begin
          if not Exists (Tmplt) then
             raise Skeleton_Error with "Missing makefile.tmplt";
          end if;
-         for each of Model.Interface_View.Flat_Functions loop
+         for Each of Model.Interface_View.Flat_Functions loop
+            Languages := Languages or To_Set (US (Language_Spelling (Each)));
             Functions_Tag := Functions_Tag & Each.Name;
             Language_Tag  := Language_Tag & Language_Spelling (Each);
          end loop;
-         Content_Set := +Assoc ("Function_Names", Functions_Tag)
-                        & Assoc ("Language", Language_Tag);
+         for Each of Languages loop
+            Unique_Languages := Unique_Languages & To_String (Each);
+         end loop;
+         Content_Set := +Assoc  ("Function_Names",   Functions_Tag)
+                        & Assoc ("Language",         Language_Tag)
+                        & Assoc ("Unique_Languages", Unique_Languages);
          return Parse (Tmplt, Content_Set);
       end Global_Makefile;
 

@@ -18,7 +18,8 @@ use Ada.Characters.Handling,
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
-      Template : constant IV_As_Template :=
+      Output_File : File_Type;
+      Template    : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
 
       Prefix : constant String := Model.Configuration.Binary_Path.all
@@ -40,12 +41,31 @@ package body TASTE.Backend.Skeletons is
          Exists (Path & "header-filename.tmplt"));
 
       --  Generate the content of the Makefile per function
-      function Process_Makefile (Path    : String;
+      function Function_Makefile (Path    : String;
                                  Content : Translate_Set) return String is
          Tmplt_Makefile : constant String := Path & "makefile.tmplt";
       begin
          return Parse (Tmplt_Makefile, Content);
-      end Process_Makefile;
+      end Function_Makefile;
+
+      --  Generate string for a global Makefile (processing all functions)
+      function Global_Makefile return String is
+         Functions_Tag : Vector_Tag;
+         Language_Tag  : Vector_Tag;
+         Content_Set   : Translate_Set;
+         Tmplt   : constant String := Prefix & "makefile.tmplt";
+      begin
+         if not Exists (Tmplt) then
+            raise Skeleton_Error with "Missing makefile.tmplt";
+         end if;
+         for each of Model.Interface_View.Flat_Functions loop
+            Functions_Tag := Functions_Tag & Each.Name;
+            Language_Tag  := Language_Tag & Language_Spelling (Each);
+         end loop;
+         Content_Set := +Assoc ("Function_Names", Functions_Tag)
+                        & Assoc ("Language", Language_Tag);
+         return Parse (Tmplt, Content_Set);
+      end Global_Makefile;
 
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String;
@@ -92,11 +112,12 @@ package body TASTE.Backend.Skeletons is
             Path       : constant String := Prefix & To_Lower (Language) & "/";
             Proceed    : constant Boolean := Is_Template_Present (Path);
             Hdr_Tmpl   : constant Translate_Set := +Assoc ("Name", Each.Name);
-            Make_Tmpl  : constant Translate_Set := Makefile_Template
+            Make_Tmpl  : constant Translate_Set := Function_Makefile_Template
                                         (F       => Each,
                                          Modules => Get_Module_List,
                                          Files   => Get_ASN1_File_List);
-            Make_Text  : constant String := Process_Makefile (Path, Make_Tmpl);
+            Make_Text  : constant String := (if Proceed
+                             then Function_Makefile (Path, Make_Tmpl) else "");
 
             Func_Tmpl  : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
@@ -140,61 +161,59 @@ package body TASTE.Backend.Skeletons is
                                (Path & "body-filename.tmplt", Hdr_Tmpl)
                              else "");
             Make_File   : constant String := "Makefile";
-            Output      : File_Type;
          begin
             if Proceed then
                --  Create directory tree (output/function/language/src)
                Create_Path (Output_Src);
                Put_Info ("Generating " & Header_File);
-               Create (File => Output,
+               Create (File => Output_File,
                        Mode => Out_File,
                        Name => Output_Src & Header_File);
-               Put_Line (Output, Header_Text);
-               Close (Output);
+               Put_Line (Output_File, Header_Text);
+               Close (Output_File);
                if not Exists (Output_Src & Body_File) then
                   Put_Info ("Generating " & Body_File);
-                  Create (File => Output,
+                  Create (File => Output_File,
                           Mode => Out_File,
                           Name => Output_Src & Body_File);
-                  Put_Line (Output, Body_Text);
-                  Close (Output);
+                  Put_Line (Output_File, Body_Text);
+                  Close (Output_File);
                else
                   Put_Info (Body_File & " already exists, ignoring");
                end if;
                Put_Info ("Generating " & Make_File & " for function "
                          & To_String (Each.Name));
-               Create (File => Output,
+               Create (File => Output_File,
                        Mode => Out_File,
                        Name => Output_Src & Make_File);
-               Put_Line (Output, Make_Text);
-               Close (Output);
+               Put_Line (Output_File, Make_Text);
+               Close (Output_File);
             else
                Put_Info ("Ignoring function " & To_String (Each.Name));
             end if;
          exception
             when E : End_Error
                | Text_IO.Use_Error =>
-               if Is_Open (Output) then
-                  Close (Output);
+               if Is_Open (Output_File) then
+                  Close (Output_File);
                end if;
                raise Skeleton_Error with "Generation of skeleton for function "
                  & To_String (Each.Name) & " failed : "
                  & Exception_Message (E);
          end;
       end loop;
+      Put_Info ("Generating global Makefile");
+      Create (File => Output_File,
+              Mode => Out_File,
+              Name => Model.Configuration.Output_Dir.all & "/" & "Makefile");
+      Put_Line (Output_File, Global_Makefile);
+      Close (Output_File);
    end Generate;
 
---  function Parameter_Template (Param : ASN1_Parameter; TI : Taste_Interface)
---      return Translate_Set
---  is
---    (+Assoc ("Type", Param.Sort) & Assoc ("Name", Param.Name)
---    & Assoc ("Interface_Kind", TI.RCM'Img)
---    & Assoc ("Direction", Param.Direction'Img));
-
    --  Makefiles need the function name and the list of ASN.1 files/modules
-   function Makefile_Template (F       : Taste_Terminal_Function;
-                               Modules : Tag;
-                               Files   : Tag) return Translate_Set
+   function Function_Makefile_Template (F       : Taste_Terminal_Function;
+                                        Modules : Tag;
+                                        Files   : Tag) return Translate_Set
    is (Translate_Set'(+Assoc  ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules)));

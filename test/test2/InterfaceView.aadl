@@ -381,6 +381,10 @@ PROPERTIES
 END MotherClass_Appear;
 
 SYSTEM IMPLEMENTATION MotherClass_Appear.others
+SUBCOMPONENTS
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
 END MotherClass_Appear.others;
 
 END interfaceview::IV::Function1_ShouldNotAppear::MotherClass_Appear;
@@ -829,12 +833,52 @@ END Y_Hidden.others;
 
 END interfaceview::IV::Y_Hidden;
 
+PACKAGE interfaceview::IV::Instance_of_MotherClass_Appear
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_run;
+
+SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run.others;
+
+SYSTEM Instance_of_MotherClass_Appear
+FEATURES
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Instance_of_MotherClass_Appear::PI_run.others {
+    Taste::coordinates => "153225 127241";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Instance_of_MotherClass_Appear;
+
+SYSTEM IMPLEMENTATION Instance_of_MotherClass_Appear.others
+SUBCOMPONENTS
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Instance_of_MotherClass_Appear.others;
+
+END interfaceview::IV::Instance_of_MotherClass_Appear;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
 WITH interfaceview::IV::Function1_ShouldNotAppear;
 WITH interfaceview::IV::Level0_Appear;
 WITH interfaceview::IV::Y_Hidden;
+WITH interfaceview::IV::Instance_of_MotherClass_Appear;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -851,6 +895,11 @@ SUBCOMPONENTS
   };
   Y_Hidden : SYSTEM interfaceview::IV::Y_Hidden::Y_Hidden.others {
     Taste::coordinates => "81833 95002 109817 119693";
+  };
+  Instance_of_MotherClass_Appear : SYSTEM interfaceview::IV::Instance_of_MotherClass_Appear::Instance_of_MotherClass_Appear.others {
+    Taste::coordinates => "133540 127241 174169 140057";
+    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_instance_of => "MotherClass_Appear";
   };
 CONNECTIONS
   Function1_ShouldNotAppear_PI_hello_Level0_Appear_RI_I_say_hello : SUBPROGRAM ACCESS Function1_ShouldNotAppear.PI_hello -> Level0_Appear.RI_I_say_hello {

@@ -123,7 +123,10 @@ package body TASTE.Backend.Skeletons is
             Language   : constant String := Language_Spelling (Each);
             Path       : constant String := Prefix & To_Lower (Language) & "/";
             Proceed    : constant Boolean := Is_Template_Present (Path);
-            Hdr_Tmpl   : constant Translate_Set := +Assoc ("Name", Each.Name);
+            Hdr_Tmpl   : constant Translate_Set :=
+                +Assoc ("Name", Each.Name)
+                & Assoc ("Is_Type", Each.Is_Type)
+                & Assoc ("Instance_Of", Each.Instance_Of.Value_Or (US ("")));
             Make_Tmpl  : constant Translate_Set := Function_Makefile_Template
                                         (F       => Each,
                                          Modules => Get_Module_List,
@@ -164,11 +167,11 @@ package body TASTE.Backend.Skeletons is
                             & "/" & Language
                             & "/" & "src" & "/";
             --  Get header and body filenames from templates
-            Header_File : constant String :=
+            Header_File : constant String := Strip_String
                             (if Proceed then Parse
                                (Path & "header-filename.tmplt", Hdr_Tmpl)
                              else "");
-            Body_File   : constant String :=
+            Body_File   : constant String := Strip_String
                             (if Proceed then Parse
                                (Path & "body-filename.tmplt", Hdr_Tmpl)
                              else "");
@@ -177,13 +180,19 @@ package body TASTE.Backend.Skeletons is
             if Proceed then
                --  Create directory tree (output/function/language/src)
                Create_Path (Output_Src);
-               Put_Info ("Generating " & Header_File);
-               Create (File => Output_File,
-                       Mode => Out_File,
-                       Name => Output_Src & Header_File);
-               Put_Line (Output_File, Header_Text);
-               Close (Output_File);
-               if not Exists (Output_Src & Body_File) then
+               if Header_File /= "" then
+                  Put_Info ("Generating " & Output_Src & Header_File);
+                  Create (File => Output_File,
+                          Mode => Out_File,
+                          Name => Output_Src & Header_File);
+                  Put_Line (Output_File, Header_Text);
+                  Close (Output_File);
+               else
+                  Put_Info ("No header file needed for function "
+                             & To_String (Each.Name));
+               end if;
+               if Body_File /= "" and then not Exists (Output_Src & Body_File)
+               then
                   Put_Info ("Generating " & Body_File);
                   Create (File => Output_File,
                           Mode => Out_File,
@@ -191,7 +200,8 @@ package body TASTE.Backend.Skeletons is
                   Put_Line (Output_File, Body_Text);
                   Close (Output_File);
                else
-                  Put_Info (Body_File & " already exists, ignoring");
+                  Put_Info ("No body file generated for function "
+                            & To_String (Each.Name));
                end if;
                Put_Info ("Generating " & Make_File & " for function "
                          & To_String (Each.Name));

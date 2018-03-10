@@ -2,7 +2,11 @@
 --  (c) 2008-2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with GNAT.OS_Lib,
+with Ada.Characters.Latin_1,
+     Ada.Strings.Maps,
+     Ada.Strings.Fixed,
+     Ada.Strings,
+     GNAT.OS_Lib,
      GNAT.Command_Line,
      Templates_Parser,
      Templates_Parser.Utils,
@@ -43,6 +47,16 @@ package body TASTE.Parser_Utils is
       Put_Line (The_Banner);
       New_Line;
    end Banner;
+
+   --  Strip function as in Python
+   function Strip_String (Input_String : String) return String is
+      use Ada.Characters.Latin_1;
+      Strip_Set : constant Ada.Strings.Maps.Character_Set :=
+           Ada.Strings.Maps.To_Set
+              (" " & HT & VT & NUL & LF & CR & BS & EOT & FF);
+   begin
+      return Ada.Strings.Fixed.Trim (Input_String, Strip_Set, Strip_Set);
+   end Strip_String;
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config : Command_Line_Configuration;

@@ -151,28 +151,28 @@ END RI_update_coronagraph_setpoint.others;
 SYSTEM CoronagraphTrajectory
 FEATURES
   PI_trajectory_step : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::CoronagraphTrajectory::PI_trajectory_step.others {
-    Taste::coordinates => "68991 88126";
+    Taste::coordinates => "69463 88126";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "trajectory_step";
   };
   PI_get_coronagraph_trajectory_setpoint : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::CoronagraphTrajectory::PI_get_coronagraph_trajectory_setpoint.others {
-    Taste::coordinates => "115526 76732";
+    Taste::coordinates => "115998 76732";
     Taste::RCMoperationKind => unprotected;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "get_coronagraph_trajectory_setpoint";
   };
   PI_reset_coronagraph_trajectory : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::CoronagraphTrajectory::PI_reset_coronagraph_trajectory.others {
-    Taste::coordinates => "92984 68257";
+    Taste::coordinates => "93456 68257";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "reset_coronagraph_trajectory";
   };
   RI_update_coronagraph_setpoint : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Positioning::PI_update_coronagraph_setpoint.others {
-    Taste::coordinates => "101196 95658";
+    Taste::coordinates => "101668 95658";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "update_coronagraph_setpoint";
     Taste::labelInheritance => "true";
@@ -210,6 +210,8 @@ FEATURES
   trajectory_setpoint : OUT PARAMETER DataView::Trajectory_Setpoint {
     Taste::encoding => NATIVE;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_get_trajectory_setpoint;
 
 SUBPROGRAM IMPLEMENTATION PI_get_trajectory_setpoint.others
@@ -255,6 +257,7 @@ FEATURES
   PI_get_trajectory_setpoint : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OcculterTrajectory::PI_get_trajectory_setpoint.others {
     Taste::coordinates => "126575 102074";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "get_trajectory_setpoint";
   };
@@ -283,6 +286,10 @@ PROPERTIES
 END OcculterTrajectory;
 
 SYSTEM IMPLEMENTATION OcculterTrajectory.others
+SUBCOMPONENTS
+  flags : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compile-flag: ""-I toto""";
+  };
 END OcculterTrajectory.others;
 
 END interfaceview::IV::OcculterTrajectory;
@@ -301,6 +308,8 @@ FEATURES
   setpoint : IN PARAMETER DataView::Velocity_Setpoint {
     Taste::encoding => NATIVE;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_send_setpoint;
 
 SUBPROGRAM IMPLEMENTATION PI_send_setpoint.others
@@ -313,6 +322,7 @@ FEATURES
   PI_send_setpoint : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::DroneInterface::PI_send_setpoint.others {
     Taste::coordinates => "152161 136214";
     Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "send_setpoint";
   };
@@ -1137,7 +1147,7 @@ SUBCOMPONENTS
     Taste::coordinates => "84991 112256 118792 136980";
   };
   CoronagraphTrajectory : SYSTEM interfaceview::IV::CoronagraphTrajectory::CoronagraphTrajectory.others {
-    Taste::coordinates => "68991 68257 115526 95658";
+    Taste::coordinates => "69463 68257 115998 95658";
   };
   OcculterTrajectory : SYSTEM interfaceview::IV::OcculterTrajectory::OcculterTrajectory.others {
     Taste::coordinates => "126575 81016 182382 106999";
@@ -1154,33 +1164,32 @@ SUBCOMPONENTS
   DroneController : SYSTEM interfaceview::IV::DroneController::DroneController.others {
     Taste::coordinates => "18414 150097 64648 177183";
     TASTE_IV_Properties::is_Component_Type => TRUE;
-    Taste::Fill_Color => "#44A4C4";
   };
   PID_Controllers : SYSTEM interfaceview::IV::PID_Controllers::PID_Controllers.others {
     Taste::coordinates => "152619 150038 189541 173604";
   };
   Coronograph_Ctrl : SYSTEM interfaceview::IV::Coronograph_Ctrl::Coronograph_Ctrl.others {
     Taste::coordinates => "85953 145120 132187 172206";
-    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_Component_Type => FALSE;
     TASTE_IV_Properties::is_instance_of => "DroneController";
   };
   Occulter_Ctrl : SYSTEM interfaceview::IV::Occulter_Ctrl::Occulter_Ctrl.others {
     Taste::coordinates => "85952 178754 128668 203779";
-    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_Component_Type => FALSE;
     TASTE_IV_Properties::is_instance_of => "DroneController";
   };
 CONNECTIONS
   Positioning_PI_update_coronagraph_setpoint_CoronagraphTrajectory_RI_update_coronagraph_setpoint : SUBPROGRAM ACCESS Positioning.PI_update_coronagraph_setpoint -> CoronagraphTrajectory.RI_update_coronagraph_setpoint {
-    Taste::coordinates => "101196 95658 101196 106530 97499 106530 97499 112256";
+    Taste::coordinates => "101668 95658 101668 106530 97499 106530 97499 112256";
   };
   Positioning_PI_update_occulter_setpoint_OcculterTrajectory_RI_update_occulter_setpoint : SUBPROGRAM ACCESS Positioning.PI_update_occulter_setpoint -> OcculterTrajectory.RI_update_occulter_setpoint {
     Taste::coordinates => "139884 106999 139884 118057 118792 118057";
   };
   CoronagraphTrajectory_PI_get_coronagraph_trajectory_setpoint_OcculterTrajectory_RI_get_coronagraph_trajectory_setpoint : SUBPROGRAM ACCESS CoronagraphTrajectory.PI_get_coronagraph_trajectory_setpoint -> OcculterTrajectory.RI_get_coronagraph_trajectory_setpoint {
-    Taste::coordinates => "126575 86270 119147 86270 119147 76732 115526 76732";
+    Taste::coordinates => "126575 86270 119147 86270 119147 76732 115998 76732";
   };
   CoronagraphTrajectory_PI_reset_coronagraph_trajectory_Coordinator_RI_reset_coronagraph_trajectory : SUBPROGRAM ACCESS CoronagraphTrajectory.PI_reset_coronagraph_trajectory -> Coordinator.RI_reset_coronagraph_trajectory {
-    Taste::coordinates => "145309 47120 92984 47120 92984 68257";
+    Taste::coordinates => "145309 47120 93456 47120 93456 68257";
   };
   OcculterTrajectory_PI_reset_occulter_trajectory_Coordinator_RI_reset_occulter_trajectory : SUBPROGRAM ACCESS OcculterTrajectory.PI_reset_occulter_trajectory -> Coordinator.RI_reset_occulter_trajectory {
     Taste::coordinates => "145309 50065 142494 50065 142494 81016";

@@ -279,11 +279,19 @@ package body TASTE.Backend.Skeletons is
       Timers             : Tag;
       Property_Names     : Vector_Tag;
       Property_Values    : Vector_Tag;
+      CP_Names           : Vector_Tag;   -- For Context Parameters
+      CP_Types           : Vector_Tag;   -- For Context Parameters
       Interface_Tmplt    : Interface_As_Template;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
         & Assoc ("Has_Context", (Length (F.Context_Params) > 0));
+
+      --  Add context parameters details
+      for Each of F.Context_Params loop
+         CP_Names := CP_Names & Each.Name;
+         CP_Types := CP_Types & Each.Sort;
+      end loop;
 
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
@@ -336,6 +344,8 @@ package body TASTE.Backend.Skeletons is
         & Assoc ("List_Of_ASync_RIs", List_Of_ASync_RIs)
         & Assoc ("Property_Names",    Property_Names)
         & Assoc ("Property_Values",   Property_Values)
+        & Assoc ("CP_Names",          CP_Names)
+        & Assoc ("CP_Types",          CP_Types)
         & Assoc ("Is_Type",           F.Is_Type)
         & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
         & Assoc ("Timers",            Timers);

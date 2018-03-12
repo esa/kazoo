@@ -207,6 +207,12 @@ SUBCOMPONENTS
   a_param : DATA DataView::MyBool {
     Taste::FS_Default_Value => "true";
   };
+  b : DATA DataView::MyReal {
+    Taste::FS_Default_Value => "42.0";
+  };
+  someDirective_NOT_PARAM : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compile-option: ""-I/path/to/toto""";
+  };
 END Nested2_Appear.others;
 
 END interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear;
@@ -898,7 +904,7 @@ SUBCOMPONENTS
   };
   Instance_of_MotherClass_Appear : SYSTEM interfaceview::IV::Instance_of_MotherClass_Appear::Instance_of_MotherClass_Appear.others {
     Taste::coordinates => "133540 127241 174169 140057";
-    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_Component_Type => FALSE;
     TASTE_IV_Properties::is_instance_of => "MotherClass_Appear";
   };
 CONNECTIONS

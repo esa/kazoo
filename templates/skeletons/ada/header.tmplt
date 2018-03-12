@@ -27,8 +27,21 @@ use  adaasn1rtl;
 with @_CAPITALIZE:ASN1_Modules_@;
 use  @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@
+@@--
+@@-- Include package with context parameters, if present
+@@--
+@@IF@@ @_Has_Context_@
+with Context_@_CAPITALIZE:Name_@;
+@@END_IF@@
 
 package @_CAPITALIZE:Name_@ is
+
+@@-- Iterate over each context parameter
+@@-- The pragma Export makes them visible as globals, e.g. for PeekPoke
+@@TABLE@@
+    @_CAPITALIZE:CP_Names_@ : asn1Scc@_CAPITALIZE:CP_Types_@ := Context_@_CAPITALIZE:Name_@.@_CAPITALIZE:Name_@_Ctxt.@_CAPITALIZE:CP_Names_@;
+    pragma Export (C, @_CAPITALIZE:CP_Names_@, "@_LOWER:Name_@_@_LOWER:CP_Names_@");
+@@END_TABLE@@
 
    --  PROVIDED INTERFACES ---------------------------------------------------
 @@TABLE@@

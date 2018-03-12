@@ -526,7 +526,12 @@ package body TASTE.Interface_View is
                         if CP.Sort = "Timer" then
                            Result.Timers := Result.Timers
                                             & To_String (CP.Name);
+                        elsif CP.Sort = "Taste-directive" then
+                           Result.Directives := Result.Directives & CP;
+                        elsif CP.Sort = "Simulink-Tunable-Parameter" then
+                           Result.Simulink := Result.Simulink & CP;
                         else
+                           --  Standard Context Parameter (for C/C++/Ada)
                            Result.Context_Params := Result.Context_Params & CP;
                         end if;
                      end;
@@ -843,16 +848,26 @@ package body TASTE.Interface_View is
          Put_Line (Output, " |_Is type     : " & Each.Is_Type'Img);
          Put_Line (Output, " |_Instance of : "
                    & To_String (Value_Or (Each.Instance_Of, US ("(n/a)"))));
-         Put_Line (Output, "   Cxtx Params:");
+         Put_Line (Output, " |_Cxtx Params:");
          for CP of Each.Context_Params loop
-            Put_Line (Output, "    |_" & To_String (CP.Name) & ":"
+            Put_Line (Output, "    |_" & To_String (CP.Name) & ": "
                       & To_String (CP.Sort) & "- default: "
                       & To_String (CP.Default_Value) & " - asn1 module: "
                       & To_String (CP.ASN1_Module) & " - file:"
                       & To_String (Value_Or (CP.ASN1_File_Name,
                                              US ("(none)"))));
-            New_Line (Output);
          end loop;
+         Put_Line (Output, " |_Directives:");
+         for CP of Each.Directives loop
+            Put_Line (Output, "    |_" & To_String (CP.Name) & " = "
+                      & To_String (CP.Default_Value));
+         end loop;
+         Put_Line (Output, " |_Simulink Tuneable Parameters:");
+         for CP of Each.Simulink loop
+            Put_Line (Output, "    |_" & To_String (CP.Name) & " = "
+                      & To_String (CP.Default_Value));
+         end loop;
+
          Put_Line (Output, " |_User properties:");
          for Ppty of Each.User_Properties loop
             Put_Line (Output, "      " & To_String (Ppty.Name) & " = "

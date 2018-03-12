@@ -132,6 +132,8 @@ package TASTE.Interface_View is
          Language        : Supported_Source_Language;
          Zip_File        : Optional_Unbounded_String := Nothing;
          Context_Params  : Ctxt_Params.Vector;
+         Directives      : Ctxt_Params.Vector;  --  TASTE Directives
+         Simulink        : Ctxt_Params.Vector;  --  Simulink Tuneable Params
          User_Properties : Property_Maps.Map;
          Timers          : String_Vectors.Vector;
          Provided        : Interfaces_Maps.Map;

@@ -8,9 +8,8 @@ test-parse:
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \
-		       ../common/TASTE_IV_Properties.aadl \
 		       ocarina_components.aadl \
-		       ../common/TASTE_DV_Properties.aadl 2>&1 | tail -1 | diff expected -
+		       2>&1 | tail -1 | diff expected -
 
 clean:
 	rm -rf obj $(exec) *~

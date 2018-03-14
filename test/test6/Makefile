@@ -6,7 +6,6 @@ test-parse:
 	$(AADL_PARSER) --gw \
 	               --debug \
 	               -o output \
-		       ../common/TASTE_IV_Properties.aadl
 #		       2>&1 | tail -1 | diff expected -
 
 clean:

@@ -1,0 +1,2 @@
+[ERROR] File not found: /Non/Existing/Path/Are/You/Detected?
+[ERROR] ASN.1 files missing (wrong path in DataView.aadl). Run taste-update-data-view [list of ASN.1 files]

@@ -209,6 +209,8 @@ package body TASTE.AADL_Parser is
          | GNAT.Command_Line.Invalid_Section =>
          Put_Error ("Invalid switch or parameter (try --help)" & No_Color);
          raise Quit_Taste;
+      when Quit_Taste =>
+         raise;
       when E : others =>
          Errors.Display_Bug_Box (E);
          raise Quit_Taste;

@@ -45,7 +45,7 @@ package body TASTE.Data_View is
       F                 : Name_Id;
       Loc               : Location;
    begin
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
 
       --  Parse all AADL files possibly needed to instantiate the model
       for Each of Data_View_AADL_Lib loop

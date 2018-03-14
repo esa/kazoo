@@ -39,7 +39,7 @@ package body TASTE.AADL_Parser is
 
       AADL_Language := Get_String_Name ("aadl");
 
-      if Cfg.Interface_View.all'Length = 0 then
+      if Cfg.Interface_View.all'Length = 0 and not Cfg.Check_Data_View then
          --  Use "InterfaceView.aadl" by default, if nothing else is specified
          --  and if the tool is not only called to check the data view
          Cfg.Interface_View := Default_Interface_View'Access;

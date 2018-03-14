@@ -14,6 +14,7 @@ with System.Assertions,
      Ocarina.Configuration,
      Ocarina.Files,
      Ocarina.Parser,
+     Ocarina.FE_AADL.Parser,
      TASTE.Backend.Build_Script,
      TASTE.Backend.Skeletons;
 
@@ -145,6 +146,7 @@ package body TASTE.AADL_Parser is
                (AADL_Language, Deployment_Root, File_Descr);
          end if;
          --  Also parse the data view as a root component
+         Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;

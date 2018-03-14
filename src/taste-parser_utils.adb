@@ -241,6 +241,7 @@ package body TASTE.Parser_Utils is
       Ocarina.Initialize;
       Ocarina.AADL_Version := Ocarina.AADL_V2;
       Ocarina.Configuration.Init_Modules;
+      --  Following is needed to parse the interface view
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
    end Initialize_Ocarina;
 end TASTE.Parser_Utils;

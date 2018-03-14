@@ -63,40 +63,54 @@ package body TASTE.Parser_Utils is
    begin
       Result.Binary_Path := new String'(Get_Program_Directory);
       Define_Switch (Config, Output => Result.Interface_View'Access,
-                     Switch   => "-i:", Long_Switch => "--interfaceview=",
-                     Help     => "Mandatory interface view (AADL model)",
-                     Argument => "InterfaceView.aadl");
+                     Switch         => "-i:",
+                     Long_Switch    => "--interfaceview=",
+                     Help           => "Mandatory interface view (AADL model)",
+                     Argument       => "InterfaceView.aadl");
       Define_Switch (Config, Output => Result.Deployment_View'Access,
-                     Switch   => "-c:", Long_Switch => "--deploymentview=",
-                     Help     => "Optional deployment view (AADL model)",
-                     Argument => "DeploymentView.aadl");
+                     Switch         => "-c:",
+                     Long_Switch    => "--deploymentview=",
+                     Help           => "Optional deployment view (AADL model)",
+                     Argument       => "DeploymentView.aadl");
       Define_Switch (Config, Output => Result.Data_View'Access,
-                     Switch   => "-d:", Long_Switch => "--dataview=",
-                     Help     => "Optional data view (AADL model)",
-                     Argument => "DataView.aadl");
+                     Switch         => "-d:",
+                     Long_Switch    => "--dataview=",
+                     Help           => "Optional data view (AADL model)",
+                     Argument       => "DataView.aadl");
+      Define_Switch (Config, Output => Result.Check_Data_View'Access,
+                     Switch         => "-y",
+                     Long_Switch    => "--check-dataview",
+                     Help           => "Check Data View");
       Define_Switch (Config, Output => Result.Output_Dir'Access,
-                     Switch   => "-o:", Long_Switch => "--output=",
-                     Help     => "Output directory (to be created if absent)",
-                     Argument => "Folder");
+                     Switch         => "-o:",
+                     Long_Switch    => "--output=",
+                     Help           => "Output directory (created if absent)",
+                     Argument       => "Folder");
       Define_Switch (Config, Output => Result.Skeletons'Access,
-                     Switch   => "-w", Long_Switch => "--gw",
-                     Help     => "Generate models and code skeletons");
+                     Switch         => "-w",
+                     Long_Switch    => "--gw",
+                     Help           => "Generate models and code skeletons");
       Define_Switch (Config, Output => Result.Glue'Access,
-                     Switch   => "-l", Long_Switch => "--glue",
-                     Help     => "Generate glue code");
+                     Switch         => "-l",
+                     Long_Switch    => "--glue",
+                     Help           => "Generate glue code");
       Define_Switch (Config, Output => Result.Use_POHIC'Access,
-                     Switch   => "-p", Long_Switch => "--polyorb-hi-c",
-                     Help     => "Use PolyORB-HI-C runtime in place of Ada");
+                     Switch         => "-p",
+                     Long_Switch    => "--polyorb-hi-c",
+                     Help           => "Use PolyORB-HI-C runtime");
       Define_Switch (Config, Output => Result.Timer_Resolution'Access,
-                     Switch   => "-x:", Long_Switch => "--timer=",
-                     Initial  => 100,
-                     Help     => "Specify timer resolution (default 100 ms)");
+                     Switch         => "-x:",
+                     Long_Switch    => "--timer=",
+                     Initial        => 100,
+                     Help           => "Timer resolution (default 100 ms)");
       Define_Switch (Config, Output => Result.Debug_Flag'Access,
-                     Switch   => "-g", Long_Switch => "--debug",
-                     Help     => "Set debug mode");
+                     Switch         => "-g",
+                     Long_Switch    => "--debug",
+                     Help           => "Set debug mode");
       Define_Switch (Config, Output => Result.Version'Access,
-                     Switch   => "-v", Long_Switch => "--version",
-                     Help     => "Display tool version");
+                     Switch         => "-v",
+                     Long_Switch    => "--version",
+                     Help           => "Display tool version");
       Getopt (Config);
 
       loop

@@ -110,6 +110,7 @@ package TASTE.Parser_Utils is
          Deployment_View  : aliased GNAT.Strings.String_Access;
          Data_View        : aliased GNAT.Strings.String_Access;
          Output_Dir       : aliased GNAT.Strings.String_Access;
+         Check_Data_View  : aliased Boolean := False;
          Skeletons        : aliased Boolean := False;
          Glue             : aliased Boolean := False;
          Use_POHIC        : aliased Boolean := False;

@@ -27,46 +27,60 @@ use Ada.Text_IO,
 package body TASTE.AADL_Parser is
 
    function Initialize return Taste_Configuration is
-      File_Name      : Name_Id;
-      File_Descr     : Location;
-      Current_Config : Taste_Configuration;
+      File_Name  : Name_Id;
+      File_Descr : Location;
+      Cfg        : Taste_Configuration;
    begin
       Banner;
       --  Parse arguments before initializing Ocarina, otherwise Ocarina eats
       --  some arguments (all file parameters).
-      Parse_Command_Line (Current_Config);
+      Parse_Command_Line (Cfg);
       Initialize_Ocarina;
 
       AADL_Language := Get_String_Name ("aadl");
 
-      if Current_Config.Interface_View.all'Length = 0 then
-         Current_Config.Interface_View := Default_Interface_View'Access;
+      if Cfg.Interface_View.all'Length = 0 and not Cfg.Check_Data_View then
+         --  Use "InterfaceView.aadl" by default, if nothing else is specified
+         --  and if the tool is not only called to check the data view
+         Cfg.Interface_View := Default_Interface_View'Access;
       end if;
 
-      Set_Str_To_Name_Buffer (Current_Config.Interface_View.all);
-
-      File_Name := Ocarina.Files.Search_File (Name_Find);
-      if File_Name = No_Name then
-         raise AADL_Parser_Error
-           with "File not found : " & Current_Config.Interface_View.all;
-      end if;
-
-      File_Descr := Ocarina.Files.Load_File (File_Name);
-
-      Interface_Root := Ocarina.Parser.Parse
-        (AADL_Language, Interface_Root, File_Descr);
-
-      if Current_Config.Glue then
-         if Current_Config.Deployment_View.all'Length = 0 then
-            Current_Config.Deployment_View := Default_Deployment_View'Access;
-         end if;
-
-         Set_Str_To_Name_Buffer (Current_Config.Deployment_View.all);
+      --  An interface view is expected, look for it and parse it
+      if Cfg.Interface_View.all'Length > 0 then
+         Set_Str_To_Name_Buffer (Cfg.Interface_View.all);
 
          File_Name := Ocarina.Files.Search_File (Name_Find);
          if File_Name = No_Name then
             raise AADL_Parser_Error
-              with "File not found : " & Current_Config.Deployment_View.all;
+              with "File not found : " & Cfg.Interface_View.all;
+         end if;
+
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+
+         Interface_Root := Ocarina.Parser.Parse
+           (AADL_Language, Interface_Root, File_Descr);
+
+         --  Parse TASTE_IV_Properties.aadl
+         Set_Str_To_Name_Buffer ("TASTE_IV_Properties.aadl");
+         File_Name  := Ocarina.Files.Search_File (Name_Find);
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+         Interface_Root := Ocarina.Parser.Parse (AADL_Language,
+                                                 Interface_Root, File_Descr);
+      end if;
+
+      if Cfg.Glue then
+         --  Look for a deployment view (or DeploymentView.aadl by default)
+         --  if the glue generation is requested. Not needed for skeletons.
+         if Cfg.Deployment_View.all'Length = 0 then
+            Cfg.Deployment_View := Default_Deployment_View'Access;
+         end if;
+
+         Set_Str_To_Name_Buffer (Cfg.Deployment_View.all);
+
+         File_Name := Ocarina.Files.Search_File (Name_Find);
+         if File_Name = No_Name then
+            raise AADL_Parser_Error
+              with "File not found : " & Cfg.Deployment_View.all;
          end if;
 
          File_Descr := Ocarina.Files.Load_File (File_Name);
@@ -78,7 +92,9 @@ package body TASTE.AADL_Parser is
          end if;
       end if;
 
-      for Each of Current_Config.Other_Files loop
+      for Each of Cfg.Other_Files loop
+         --  Add other files to the Interface and (if any) deployment roots
+         --  (List of files specified in the command line)
          Set_Str_To_Name_Buffer (Each);
          File_Name := Ocarina.Files.Search_File (Name_Find);
          if File_Name = No_Name then
@@ -86,7 +102,6 @@ package body TASTE.AADL_Parser is
          end if;
          File_Descr := Ocarina.Files.Load_File (File_Name);
 
-         --  Add other files to the Interface and (if any) deployment roots
          Interface_Root := Ocarina.Parser.Parse
            (AADL_Language, Interface_Root, File_Descr);
          if Deployment_Root /= No_Node then
@@ -95,29 +110,34 @@ package body TASTE.AADL_Parser is
          end if;
       end loop;
 
-      --  Missing data view is actually not an error.
-      --  Systems can live with parameterless messages
-      if Current_Config.Data_View.all'Length > 0 then
-         Set_Str_To_Name_Buffer (Current_Config.Data_View.all);
+      if Cfg.Data_View.all'Length > 0 then
+         Set_Str_To_Name_Buffer (Cfg.Data_View.all);
          File_Name := Ocarina.Files.Search_File (Name_Find);
          if File_Name = No_Name then
-            raise AADL_Parser_Error with "Cannot find the Data View file";
+            raise AADL_Parser_Error with "Could not find " & Cfg.Data_View.all;
          end if;
       else
-         --  Try with default name
+         --  Try with default name (DataView.aadl)
          Set_Str_To_Name_Buffer (Default_Data_View);
          File_Name := Ocarina.Files.Search_File (Name_Find);
          if File_Name /= No_Name then
-            Current_Config.Data_View := Default_Data_View'Access;
+            Cfg.Data_View := Default_Data_View'Access;
+         elsif Cfg.Check_Data_View then
+            --  No dataview found, while user asked explicitly for a check
+            raise AADL_Parser_Error with "Could not find DataView.aadl";
          end if;
       end if;
 
       if File_Name /= No_Name then
+         Put_Info ("Parsing " & Cfg.Data_View.all);
+
          File_Descr := Ocarina.Files.Load_File (File_Name);
 
-         --  Add the Data View to the Interface View root
-         Interface_Root := Ocarina.Parser.Parse
-           (AADL_Language, Interface_Root, File_Descr);
+         --  Add the Data View to the Interface View root, if any
+         if Interface_Root /= No_Node then
+            Interface_Root := Ocarina.Parser.Parse
+              (AADL_Language, Interface_Root, File_Descr);
+         end if;
 
          --  Add the Data View to the Deployment View root, if any
          if Deployment_Root /= No_Node then
@@ -128,7 +148,7 @@ package body TASTE.AADL_Parser is
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;
-      return Current_Config;
+      return Cfg;
    end Initialize;
 
    function Parse_Project return TASTE_Model is
@@ -136,16 +156,19 @@ package body TASTE.AADL_Parser is
    begin
       Result.Configuration := Initialize;
 
-      begin
-         Result.Interface_View := Parse_Interface_View (Interface_Root);
-      exception
-         when System.Assertions.Assert_Failure =>
-            raise AADL_Parser_Error with "Interface view parsing error";
-      end;
+      if Interface_Root /= No_Node then
+         --  Parse Interface and Deployment View
+         begin
+            Result.Interface_View := Parse_Interface_View (Interface_Root);
+         exception
+            when System.Assertions.Assert_Failure =>
+               raise AADL_Parser_Error with "Interface view parsing error";
+         end;
 
-      if Result.Configuration.Deployment_View.all'Length > 0 then
-         AADL_Lib.Append (Result.Configuration.Interface_View.all);
-         Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
+         if Result.Configuration.Deployment_View.all'Length > 0 then
+            AADL_Lib.Append (Result.Configuration.Interface_View.all);
+            Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
+         end if;
       end if;
 
       if Result.Configuration.Data_View.all'Length > 0 then
@@ -160,6 +183,10 @@ package body TASTE.AADL_Parser is
 
       Ocarina.Configuration.Reset_Modules;
       Ocarina.Reset;
+
+      if Result.Configuration.Check_Data_View then
+         raise Quit_Taste;
+      end if;
 
       return Result;
    exception

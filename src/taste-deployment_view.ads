@@ -34,6 +34,8 @@ package TASTE.Deployment_View is
 
    --  List of Ocarina AADL models needed to parse the deployment view
    AADL_Lib : String_Vectors.Vector := Empty_Vector &
+                "TASTE_DV_Properties.aadl" &
+                "TASTE_IV_Properties.aadl" &
                 "aadl_project.aadl" &
                 "taste_properties.aadl" &
                 "Cheddar_Properties.aadl" &

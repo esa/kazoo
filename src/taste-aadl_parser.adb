@@ -151,6 +151,7 @@ package body TASTE.AADL_Parser is
       if Result.Configuration.Data_View.all'Length > 0 then
          begin
             Result.Data_View := Parse_Data_View (Dataview_root);
+            Result.Data_View.Check_Files;
          exception
             when Constraint_Error =>
                raise Data_View_Error with "Update your data view!";

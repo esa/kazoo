@@ -58,7 +58,9 @@ package TASTE.Data_View is
       end record;
 
    function Parse_Data_View (Dataview_Root : Node_Id) return Taste_Data_View
-      with Pre => Dataview_Root /= No_Node;
+     with Pre => Dataview_Root /= No_Node;
+
+   procedure Check_Files (DV : Taste_Data_View);
 
    procedure Debug_Dump (DV : Taste_Data_View; Output : File_Type);
 

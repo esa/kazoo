@@ -4,7 +4,8 @@
 
 --  Interface View parser
 
-with Locations,
+with Ada.Directories,
+     Locations,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Backends.Properties,
@@ -118,6 +119,25 @@ package body TASTE.Data_View is
       end loop;
       return Data_AST : constant Taste_Data_View := (ASN1_Files => Files);
    end Parse_Data_View;
+
+   --  Function checking the actual file presence of the ASN.1 models that
+   --  are referenced in the input file DataView.aadl. Raise an exception
+   --  if any file is missing.
+   procedure Check_Files (DV : Taste_Data_View) is
+      Success : Boolean := True;
+   begin
+      for Each of DV.ASN1_Files loop
+         if not Ada.Directories.Exists (To_String (Each.Path)) then
+            Put_Error ("File not found: " & To_String (Each.Path));
+            Success := False;
+         end if;
+      end loop;
+      if not Success then
+         raise Data_View_Error with
+           "ASN.1 files missing (wrong path in DataView.aadl). "
+           & "Run taste-update-data-view [list of ASN.1 files]";
+      end if;
+   end Check_Files;
 
    procedure Debug_Dump (DV : Taste_Data_View; Output : File_Type) is
    begin

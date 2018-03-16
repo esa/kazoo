@@ -18,13 +18,13 @@ dataviews:
 	@@-- Then generate Dataviews once per target language
 	@@TABLE@@
         @@IF@@ @_Unique_Languages_@ /= "GUI" and @_Unique_Languages_@ /= "SDL"
-	mkdir -p dataview/@_Unique_Languages_@
-	@@IF@@ @_Unique_Languages_@ = "Ada"
-	asn1.exe -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn
+	@@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
+	mkdir dataview/Ada && asn1.exe -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
 	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP"
-	asn1.exe -c -typePrefix asn1Scc -o dataview/@_Unique_Languages_@ dataview/dataview-uniq.asn
+	mkdir dataview/C && asn1.exe -c -typePrefix asn1Scc -o dataview/@_Unique_Languages_@ dataview/dataview-uniq.asn
 	@@ELSE@@
+	mkdir -p dataview/@_Unique_Languages_@
 	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn
 	@@END_IF@@
 	@@END_IF@@

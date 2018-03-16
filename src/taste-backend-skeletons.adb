@@ -162,11 +162,11 @@ package body TASTE.Backend.Skeletons is
                             (if Proceed
                              then Parse (Path & "body.tmplt", Func_Body)
                              else "");
-            Output_Src  : constant String :=
+            Output_Base : constant String :=
                             Model.Configuration.Output_Dir.all
                             & "/" & To_Lower (To_String (Each.Name))
-                            & "/" & Language
-                            & "/" & "src" & "/";
+                            & "/" & Language & "/";
+            Output_Src  : constant String := Output_Base & "src/";
             --  Get header and body filenames from templates
             Header_File : constant String := Strip_String
                             (if Proceed then Parse
@@ -208,7 +208,7 @@ package body TASTE.Backend.Skeletons is
                          & To_String (Each.Name));
                Create (File => Output_File,
                        Mode => Out_File,
-                       Name => Output_Src & Make_File);
+                       Name => Output_Base & Make_File);
                Put_Line (Output_File, Make_Text);
                Close (Output_File);
             else

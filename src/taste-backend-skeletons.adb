@@ -41,6 +41,28 @@ package body TASTE.Backend.Skeletons is
          Exists (Path & "body-filename.tmplt")          and then
          Exists (Path & "header-filename.tmplt"));
 
+      --  Return a Tag list of ASN.1 Modules for the skeleton headers
+      function Get_Module_List return Tag is
+         Result : Tag;
+      begin
+         for Each of Model.Data_View.ASN1_Files loop
+            for Module of Each.Modules loop
+               Result := Result & Module.Name;
+            end loop;
+         end loop;
+         return Result;
+      end Get_Module_List;
+
+      --  Return a Tag list of ASN.1 Files
+      function Get_ASN1_File_List return Tag is
+         Result : Tag;
+      begin
+         for Each of Model.Data_View.ASN1_Files loop
+            Result := Result & Each.Path;
+         end loop;
+         return Result;
+      end Get_ASN1_File_List;
+
       --  Generate the content of the Makefile per function
       function Function_Makefile (Path    : String;
                                  Content : Translate_Set) return String is
@@ -75,7 +97,9 @@ package body TASTE.Backend.Skeletons is
          end loop;
          Content_Set := +Assoc  ("Function_Names",   Functions_Tag)
                         & Assoc ("Language",         Language_Tag)
-                        & Assoc ("Unique_Languages", Unique_Languages);
+                        & Assoc ("Unique_Languages", Unique_Languages)
+                        & Assoc ("ASN1_Files",       Get_ASN1_File_List)
+                        & Assoc ("ASN1_Modules",     Get_Module_List);
          return Parse (Tmplt, Content_Set);
       end Global_Makefile;
 
@@ -93,29 +117,6 @@ package body TASTE.Backend.Skeletons is
          end loop;
          return Result;
       end Process_Interfaces;
-
-      --  Return a Tag list of ASN.1 Modules for the skeleton headers
-      function Get_Module_List return Tag is
-         Result : Tag;
-      begin
-         for Each of Model.Data_View.ASN1_Files loop
-            for Module of Each.Modules loop
-               Result := Result & Module.Name;
-            end loop;
-         end loop;
-         return Result;
-      end Get_Module_List;
-
-      --  Return a Tag list of ASN.1 Files for the skeleton headers
-      function Get_ASN1_File_List return Tag is
-         Result : Tag;
-      begin
-         for Each of Model.Data_View.ASN1_Files loop
-            Result := Result & Each.Path;
-         end loop;
-         return Result;
-      end Get_ASN1_File_List;
-
    begin
       Put_Info ("=== Generate skeletons ===");
       for Each of Model.Interface_View.Flat_Functions loop

@@ -3,7 +3,39 @@
 @@-- @_Function_Names_@      : Combined table: list of fuction names...
 @@-- @_Language_@            : ... and corresponding implementation language
 @@-- @_Unique_Languages_@    : List of all languages used in the system
-all: @_Unique_Languages_@
+@@-- @_ASN1_Files_@          : List of all ASN.1 files
+@@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+dataviews:
+	@@-- First generate Dataviews once per target language
 	@@TABLE@@
-	@_Function_Names_@ in @_Language_@
+	@@IF@@ @_Unique_Languages_@ /= "GUI"
+	mkdir -p dataview/@_Unique_Languages_@
+	@@IF@@ @_Unique_Languages_@ = "SDL"
+	@@INLINE(	)( )(\n)@@
+           cat
+           @@TABLE@@
+              @_ASN1_Files_@ 
+           @@END_TABLE@@
+           > dataview/@_Unique_Languages_@/dataview-uniq.asn
+        @@END_INLINE@@
+	@@ELSE@@
+        @@INLINE(	)( )(\n)@@
+           asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ 
+           @@TABLE@@
+              @_ASN1_Files_@
+           @@END_TABLE@@
+        @@END_INLINE@@
+	@@END_IF@@
+	@@IF@@ @_Unique_Languages_@ = "Ada"
+	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	@@END_IF@@
+	@@END_IF@@
+        @@END_TABLE@@
+	@@-- Then symlink the files for each function
+	@@TABLE@@
+	@@IF@@ @_Language_@ /= "GUI"
+	ln -fs ${PWD}/dataview/@_Language_@/* @_LOWER:Function_Names_@/@_Language_@/src
+	@@END_IF@@
 	@@END_TABLE@@
+
+all: dataviews

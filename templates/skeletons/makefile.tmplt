@@ -6,34 +6,36 @@
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 dataviews:
-	@@-- First generate Dataviews once per target language
-	@@TABLE@@
-	@@IF@@ @_Unique_Languages_@ /= "GUI"
-	mkdir -p dataview/@_Unique_Languages_@
-	@@IF@@ @_Unique_Languages_@ = "SDL"
+	mkdir -p dataview
+	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
-           cat
-           @@TABLE@@
-              @_ASN1_Files_@ 
-           @@END_TABLE@@
-           > dataview/@_Unique_Languages_@/dataview-uniq.asn
-        @@END_INLINE@@
-	@@ELSE@@
-        @@INLINE(	)( )(\n)@@
-           asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ 
-           @@TABLE@@
-              @_ASN1_Files_@
-           @@END_TABLE@@
-        @@END_INLINE@@
-	@@END_IF@@
+        cat
+        @@TABLE@@
+           @_ASN1_Files_@ 
+        @@END_TABLE@@
+        > dataview/dataview-uniq.asn
+	@@END_INLINE@@
+	@@-- Then generate Dataviews once per target language
+	@@TABLE@@
+        @@IF@@ @_Unique_Languages_@ /= "GUI" and @_Unique_Languages_@ /= "SDL"
+	mkdir -p dataview/@_Unique_Languages_@
 	@@IF@@ @_Unique_Languages_@ = "Ada"
+	asn1.exe -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP"
+	asn1.exe -c -typePrefix asn1Scc -o dataview/@_Unique_Languages_@ dataview/dataview-uniq.asn
+	@@ELSE@@
+	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn
 	@@END_IF@@
 	@@END_IF@@
         @@END_TABLE@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@
-	@@IF@@ @_Language_@ /= "GUI"
+	@@IF@@ @_Language_@ = "Ada"
+	ln -fs ${PWD}/dataview/Ada/*.ads @_LOWER:Function_Names_@/Ada/src
+	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
+	ln -fs ${PWD}/dataview/@_Language_@/*.h @_LOWER:Function_Names_@/@_Language_@/src
+	@@ELSIF@@ @_Language_@ /= "GUI"
 	ln -fs ${PWD}/dataview/@_Language_@/* @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@

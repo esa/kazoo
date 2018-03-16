@@ -1,0 +1,14 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The function name
+@@-- @_ASN1_Files_@          : List of all ASN.1 files
+@@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+
+all: compile-linux
+
+clean:
+	rm -rf obj
+
+compile-linux:
+	mkdir -p obj && cd obj && opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
+	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make @_LOWER:Name_@

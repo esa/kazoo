@@ -11,4 +11,4 @@ clean:
 
 compile-linux:
 	mkdir -p obj && cd obj && opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
-	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make @_LOWER:Name_@
+	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make ../src/@_LOWER:Name_@

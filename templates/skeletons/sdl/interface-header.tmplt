@@ -18,7 +18,8 @@ procedure @_CAPITALIZE:Name_@;
 @@IF@@ @_Param_Names'Length_@ > 0
       fpar
 @@END_IF@@
-@@INLINE(         )(,\n         )()@@
+@@IF@@ @_EXIST:Param_Names_@
+@@INLINE(         )(,\n         )(;\n   external)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
 in     @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
@@ -27,6 +28,7 @@ in/out @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
-;
+@@ELSE@@
    external
+@@END_IF@@
 @@END_IF@@

@@ -5,6 +5,8 @@
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+all: compile-all-linux
+
 dataviews:
 	mkdir -p dataview
 	@@-- Create dataview-uniq.asn
@@ -22,7 +24,7 @@ dataviews:
 	mkdir dataview/Ada && asn1.exe -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn || :
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
 	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP"
-	mkdir dataview/C && asn1.exe -c -typePrefix asn1Scc -o dataview/@_Unique_Languages_@ dataview/dataview-uniq.asn || :
+	mkdir dataview/C && asn1.exe -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn || :
 	@@ELSE@@
 	mkdir -p dataview/@_Unique_Languages_@
 	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn
@@ -34,7 +36,7 @@ dataviews:
 	@@IF@@ @_Language_@ = "Ada"
 	ln -fs ${PWD}/dataview/Ada/*.ads @_LOWER:Function_Names_@/Ada/src
 	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
-	ln -fs ${PWD}/dataview/@_Language_@/*.h @_LOWER:Function_Names_@/@_Language_@/src
+	ln -fs ${PWD}/dataview/C/*.h @_LOWER:Function_Names_@/@_Language_@/src
 	@@ELSIF@@ @_Language_@ = "SDL"
 	ln -fs ${PWD}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
 	@@ELSIF@@ @_Language_@ /= "GUI"
@@ -42,4 +44,7 @@ dataviews:
 	@@END_IF@@
 	@@END_TABLE@@
 
-all: dataviews
+compile-all-linux: dataviews
+	@@TABLE@@
+	cd @_LOWER:Function_Names_@/@_Language_@ && make compile-linux
+	@@END_TABLE@@

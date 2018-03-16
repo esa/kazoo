@@ -40,7 +40,7 @@
 #ifndef __USER_CODE_H_@_UPPER:Name_@
 #define __USER_CODE_H_@_UPPER:Name_@
 
-#include "C_ASN1_Types.h"
+#include "dataview-uniq.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +68,7 @@ class @_LOWER:Name_@
 @@END_TABLE@@
 }
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif  /* __USER_CODE_H_@_UPPER:Name_@ */

@@ -239,7 +239,10 @@ package body TASTE.Backend.Skeletons is
                                         Files   : Tag) return Translate_Set
    is (Translate_Set'(+Assoc  ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
-                      & Assoc ("ASN1_Modules", Modules)));
+                      & Assoc ("ASN1_Modules", Modules))
+                      & Assoc ("Is_Type", F.Is_Type)
+                      & Assoc ("Instance_Of",
+                                F.Instance_Of.Value_Or (US (""))));
 
    function Interface_Template (TI : Taste_Interface)
                                 return Interface_As_Template

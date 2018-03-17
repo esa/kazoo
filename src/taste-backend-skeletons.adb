@@ -81,6 +81,7 @@ package body TASTE.Backend.Skeletons is
          Unique_Languages : Tag;
          Functions_Tag    : Vector_Tag;
          Language_Tag     : Vector_Tag;
+         Is_Type_Tag      : Vector_Tag;
          Content_Set      : Translate_Set;
          Tmplt   : constant String := Prefix & "makefile.tmplt";
       begin
@@ -91,12 +92,14 @@ package body TASTE.Backend.Skeletons is
             Languages := Languages or To_Set (US (Language_Spelling (Each)));
             Functions_Tag := Functions_Tag & Each.Name;
             Language_Tag  := Language_Tag & Language_Spelling (Each);
+            Is_Type_Tag   := Is_Type_Tag & Each.Is_Type;
          end loop;
          for Each of Languages loop
             Unique_Languages := Unique_Languages & To_String (Each);
          end loop;
          Content_Set := +Assoc  ("Function_Names",   Functions_Tag)
                         & Assoc ("Language",         Language_Tag)
+                        & Assoc ("Is_Type",          Is_Type_Tag)
                         & Assoc ("Unique_Languages", Unique_Languages)
                         & Assoc ("ASN1_Files",       Get_ASN1_File_List)
                         & Assoc ("ASN1_Modules",     Get_Module_List);

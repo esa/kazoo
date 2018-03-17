@@ -44,7 +44,18 @@ dataviews:
 	@@END_IF@@
 	@@END_TABLE@@
 
-compile-all-linux: dataviews
+function-types-linux:
 	@@TABLE@@
+	@@IF@@ @_Is_Type_@
 	cd @_LOWER:Function_Names_@/@_Language_@ && make compile-linux
+	@@END_IF@@
 	@@END_TABLE@@
+
+function-instances-linux: function-types-linux
+	@@TABLE@@
+	@@IF@@ not @_Is_Type_@
+	cd @_LOWER:Function_Names_@/@_Language_@ && make compile-linux
+	@@END_IF@@
+	@@END_TABLE@@
+
+compile-all-linux: dataviews function-instances-linux

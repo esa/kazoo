@@ -35,11 +35,11 @@ dataviews:
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "Ada"
 	ln -fs ${PWD}/dataview/Ada/*.ads @_LOWER:Function_Names_@/Ada/src
-	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
+	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP" or @_Language_@ = "GUI"
 	ln -fs ${PWD}/dataview/C/*.h @_LOWER:Function_Names_@/@_Language_@/src
 	@@ELSIF@@ @_Language_@ = "SDL"
 	ln -fs ${PWD}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
-	@@ELSIF@@ @_Language_@ /= "GUI"
+	@@ELSE@@
 	ln -fs ${PWD}/dataview/@_Language_@/* @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@

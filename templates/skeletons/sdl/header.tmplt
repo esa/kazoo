@@ -38,7 +38,6 @@ use Datamodel;
 
 system @_CAPITALIZE:Name_@;
 
-
 @@TABLE@@
    @_STRIP:Provided_Interfaces_@;
 @@END_TABLE@@

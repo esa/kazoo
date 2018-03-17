@@ -205,7 +205,7 @@ END Nested2_Appear;
 SYSTEM IMPLEMENTATION Nested2_Appear.others
 SUBCOMPONENTS
   a_param : DATA DataView::MyBool {
-    Taste::FS_Default_Value => "true";
+    Taste::FS_Default_Value => "TRUE";
   };
   b : DATA DataView::MyReal {
     Taste::FS_Default_Value => "42.0";

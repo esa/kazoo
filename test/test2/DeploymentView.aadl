@@ -83,6 +83,7 @@ WITH interfaceview::IV::Function1_ShouldNotAppear::Nested1_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::MotherClass_Appear;
 WITH interfaceview::IV::Y_Hidden::Z_Shown;
+WITH interfaceview::IV::Instance_of_MotherClass_Appear;
 WITH deploymentview::DV::Node2;
 WITH ocarina_buses;
 WITH Taste;
@@ -101,7 +102,7 @@ SUBCOMPONENTS
   };
   first_binary : PROCESS deploymentview::DV::Node1::first_binary.others {
     Taste::coordinates => "97495 54172 119317 74971";
-    TASTE_DV_Properties::CoverageEnabled => true;
+    TASTE_DV_Properties::CoverageEnabled => TRUE;
     Deployment::Port_Number => 0;
   };
   x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
@@ -137,6 +138,9 @@ SUBCOMPONENTS
   IV_Z_Shown : SYSTEM interfaceview::IV::Y_Hidden::Z_Shown::Z_Shown.others {
     Taste::FunctionName => "Z_Shown";
   };
+  IV_Instance_of_MotherClass_Appear : SYSTEM interfaceview::IV::Instance_of_MotherClass_Appear::Instance_of_MotherClass_Appear.others {
+    Taste::FunctionName => "Instance_of_MotherClass_Appear";
+  };
   second_binary : PROCESS deploymentview::DV::Node2::second_binary.others {
     Taste::coordinates => "158753 54524 184337 75323";
     Deployment::Port_Number => 0;
@@ -154,6 +158,7 @@ PROPERTIES
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Nested2_Appear;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_MotherClass_Appear;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Z_Shown;
+  Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Instance_of_MotherClass_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO second_binary;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END Node2.others;
@@ -183,6 +188,7 @@ CONNECTIONS
 PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear_PI_hello_Level0_Appear_RI_I_say_hello;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Function1_ShouldNotAppear_RI_my_final_result;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Y_Hidden_RI_final_result;
 END deploymentview.others;
 
 PROPERTIES

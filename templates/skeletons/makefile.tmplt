@@ -21,10 +21,10 @@ dataviews:
 	@@TABLE@@
         @@IF@@ @_Unique_Languages_@ /= "GUI"
 	@@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-	mkdir dataview/Ada && asn1.exe -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn || :
+	mkdir dataview/Ada && mono $(shell which asn1.exe) -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn || :
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
 	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP"
-	mkdir dataview/C && asn1.exe -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn || :
+	mkdir dataview/C && mono $(shell which asn1.exe) -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn || :
 	@@ELSE@@
 	mkdir -p dataview/@_Unique_Languages_@
 	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn

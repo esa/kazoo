@@ -43,93 +43,27 @@ system @_CAPITALIZE:Name_@;
    @_STRIP:Provided_Interfaces_@;
 @@END_TABLE@@
 
-@@-- Instances: timers have to be treated as signals
-@@IF@@ @_Instance_Of_@ /= ""
-@@TABLE@@
-   signal @_Timers_@;
-   signal Set_@_Timers_@ (T_UInt32);
-   signal Reset_@_Timers_@;
-@@END_TABLE@@
-   procedure Check_Queue;
-      fpar
-         in/out res T_Boolean;
-    external;
-@@END_IF@@
-
 @@TABLE@@
    @_STRIP:Required_Interfaces_@;
 
 @@END_TABLE@@
    channel c
-@@IF@@ @_List_Of_ASync_PIs'Length_@ > 0
-@@IF@@ not @_EXIST:Timers_@ or @_Instance_Of_@ = ""
+@@IF@@ @_EXIST:List_Of_ASync_PIs_@
       from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@;
-@@ELSIF@@ @_Instance_Of_@ /= ""
-      from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@, @_Timers_@;
 @@END_IF@@
-@@ELSIF@@ @_EXIST:Timers_@ and @_Instance_Of_@ /= ""
-      from env to @_CAPITALIZE:Name_@ with @_Timers_@;
-@@END_IF@@
-@@-- Same with required interfaces
-@@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
-@@IF@@ not @_EXIST:Timers_@ or @_Instance_Of_@ = ""
+@@IF@@ @_EXIST:List_Of_ASync_RIs_@
       from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@;
-@@ELSIF@@ @_Instance_Of_@ /= ""
-      @@INLINE(      )()()@@
-      from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@,
-      @@INLINE( )(, )(;\n)@@
-      @@TABLE@@
-      Set_@_Timers_@, Reset_@_Timers_@
-      @@END_TABLE@@
-      @@END_INLINE@@
-      @@END_INLINE@@
-@@END_IF@@
-@@ELSIF@@ @_EXIST:Timers_@ and @_Instance_Of_@ /= ""
-      @@INLINE(      )()()@@
-      from @_CAPITALIZE:Name_@ to env with 
-      @@INLINE( )(, )(;\n)@@
-      @@TABLE@@
-      Set_@_Timers_@, Reset_@_Timers_@
-      @@END_TABLE@@
-      @@END_INLINE@@
-      @@END_INLINE@@
 @@END_IF@@
    endchannel;
 
    block @_CAPITALIZE:Name_@;
 
       signalroute r
-@@IF@@ @_List_Of_ASync_PIs'Length_@ > 0
-@@IF@@ @_Timers'Length_@ = 0 or @_Instance_Of_@ = ""
+@@IF@@ @_EXIST:List_Of_ASync_PIs_@
          from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@;
-@@ELSIF@@ @_Instance_Of_@ /= ""
-         from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@, @_Timers_@;
 @@END_IF@@
-@@ELSIF@@ @_Timers'Length_@ > 0 and @_Instance_Of_@ /= ""
-         from env to @_CAPITALIZE:Name_@ with @_Timers_@;
-@@END_IF@@
-@@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
-@@IF@@ not @_EXIST:Timers_@ or @_Instance_Of_@ = ""
+@@IF@@ @_EXIST:List_Of_ASync_RIs_@
       from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@;
-@@ELSIF@@ @_Instance_Of_@ /= ""
-      @@INLINE(         )()()@@
-      from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@,
-      @@INLINE( )(, )(;\n)@@
-      @@TABLE@@
-      Set_@_Timers_@, Reset_@_Timers_@
-      @@END_TABLE@@
-      @@END_INLINE@@
-      @@END_INLINE@@
-@@END_IF@@
-@@ELSIF@@ @_EXIST:Timers_@ and @_Instance_Of_@ /= ""
-      @@INLINE(         )()()@@
-      from @_CAPITALIZE:Name_@ to env with 
-      @@INLINE( )(, )(;\n)@@
-      @@TABLE@@
-      Set_@_Timers_@, Reset_@_Timers_@
-      @@END_TABLE@@
-      @@END_INLINE@@
-      @@END_INLINE@@
 @@END_IF@@
       connect c and r;
 

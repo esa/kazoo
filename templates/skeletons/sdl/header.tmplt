@@ -73,7 +73,13 @@ system @_CAPITALIZE:Name_@;
 
       signalroute r
 @@IF@@ @_List_Of_ASync_PIs'Length_@ > 0
+@@IF@@ @_Timers'Length_@ = 0 or @_Instance_Of_@ = ""
          from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@;
+@@ELSIF@@ @_Instance_Of_@ /= ""
+         from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@, @_Timers_@;
+@@END_IF@@
+@@ELSIF@@ @_Timers'Length_@ > 0 and @_Instance_Of_@ /= ""
+         from env to @_CAPITALIZE:Name_@ with @_Timers_@;
 @@END_IF@@
 @@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
          from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@;

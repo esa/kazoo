@@ -65,11 +65,17 @@ package body TASTE.Backend.Skeletons is
 
       --  Generate the content of the Makefile per function
       function Function_Makefile (Path    : String;
-                                 Content : Translate_Set) return String is
+                                  Content : Translate_Set) return String is
          Tmplt_Makefile : constant String := Path & "makefile.tmplt";
       begin
          return Parse (Tmplt_Makefile, Content);
       end Function_Makefile;
+
+      function CP_To_ASN1 (Content : Translate_Set) return String is
+         Tmplt_CP : constant String := Prefix & "context_parameters.tmplt";
+      begin
+         return Parse (Tmplt_CP, Content);
+      end CP_To_ASN1;
 
       --  Generate string for a global Makefile (processing all functions)
       --  The template contains a set of languages, and a list of
@@ -83,7 +89,7 @@ package body TASTE.Backend.Skeletons is
          Language_Tag     : Vector_Tag;
          Is_Type_Tag      : Vector_Tag;
          Content_Set      : Translate_Set;
-         Tmplt   : constant String := Prefix & "makefile.tmplt";
+         Tmplt            : constant String := Prefix & "makefile.tmplt";
       begin
          if not Exists (Tmplt) then
             raise Skeleton_Error with "Missing makefile.tmplt";
@@ -137,6 +143,12 @@ package body TASTE.Backend.Skeletons is
                                          Files   => Get_ASN1_File_List);
             Make_Text  : constant String := (if Proceed
                              then Function_Makefile (Path, Make_Tmpl) else "");
+            --  Associations for (optional) context parameters:
+            CP_Tmpl    : constant Translate_Set := CP_Template (F => Each);
+            CP_Text    : constant String := CP_To_ASN1 (CP_Tmpl);
+            CP_File    : constant String := "Context-"
+                                            & To_String (Each.Name)
+                                            & ".asn";
 
             Func_Tmpl  : constant Func_As_Template :=
               Template.Funcs.Element (To_String (Each.Name));
@@ -214,6 +226,15 @@ package body TASTE.Backend.Skeletons is
                        Name => Output_Base & Make_File);
                Put_Line (Output_File, Make_Text);
                Close (Output_File);
+               --  Generate context parameters if any
+               if not Each.Context_Params.Is_Empty then
+                  Put_Info ("Generating " & CP_File);
+                  Create (File => Output_File,
+                          Mode => Out_File,
+                          Name => Output_Base & CP_File);
+                  Put_Line (Output_File, CP_Text);
+                  Close (Output_File);
+               end if;
             else
                Put_Info ("Ignoring function " & To_String (Each.Name));
             end if;
@@ -236,6 +257,41 @@ package body TASTE.Backend.Skeletons is
       Close (Output_File);
    end Generate;
 
+   --  Context Parameters
+   function CP_Template (F : Taste_Terminal_Function) return Translate_Set is
+      use Ada.Strings.Unbounded;
+      package Sort_Set is new Ordered_Sets (Unbounded_String);
+      use Sort_Set;
+      Sorts_Set     : Set;
+      Unique_Sorts : Vector_Tag;
+      Corr_Module  : Vector_Tag;
+      Names        : Vector_Tag;
+      Sorts        : Vector_Tag;
+      ASN1_Modules : Vector_Tag;
+      Values       : Vector_Tag;
+   begin
+      for Each of F.Context_Params loop
+         if not Sorts_Set.Contains (Each.Sort) then
+            --  Build up a set of unique types, needed for the IMPORTS section
+            --  in the ASN.1 module
+            Sorts_Set.Insert (Each.Sort);
+            Unique_Sorts := Unique_Sorts & Each.Sort;
+            Corr_Module  := Corr_Module & Each.ASN1_Module;
+         end if;
+         Names        := Names        & Each.Name;
+         Sorts        := Sorts        & Each.Sort;
+         ASN1_Modules := ASN1_Modules & Each.ASN1_Module;
+         Values       := Values       & Each.Default_Value;
+      end loop;
+      return Result : constant Translate_Set := +Assoc ("Name",  F.Name)
+                                      & Assoc ("Sort_Set",       Unique_Sorts)
+                                      & Assoc ("Module_Set",     Corr_Module)
+                                      & Assoc ("CP_Name",        Names)
+                                      & Assoc ("CP_Sort",        Sorts)
+                                      & Assoc ("CP_ASN1_Module", ASN1_Modules)
+                                      & Assoc ("CP_Value",       Values);
+   end CP_Template;
+
    --  Makefiles need the function name and the list of ASN.1 files/modules
    function Function_Makefile_Template (F       : Taste_Terminal_Function;
                                         Modules : Tag;
@@ -243,7 +299,7 @@ package body TASTE.Backend.Skeletons is
    is (Translate_Set'(+Assoc  ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules))
-                      & Assoc ("Is_Type", F.Is_Type)
+                      & Assoc ("Is_Type",      F.Is_Type)
                       & Assoc ("Instance_Of",
                                 F.Instance_Of.Value_Or (US (""))));
 

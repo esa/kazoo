@@ -1,0 +1,37 @@
+@@-- Generate an ASN.1 module for context parameters
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@           : Function name
+@@-- @_Sort_Set_@       : Set of types used for this Context Parameter file
+@@-- @_Module_Set_@     : ... corresponding module (needed for ASN.1 "IMPORTS")
+@@-- @_CP_Name_@        : Table of context parameter names
+@@-- @_CP_Sort_@        : ... corresponding ASN.1 type
+@@-- @_CP_ASN1_Module_@ : ... in ASN.1 module
+@@-- @_CP_Value_@       : ... with default value
+Context-@_REPLACE((_)/-):LOWER:Name_@ DEFINITIONS ::=
+BEGIN
+   IMPORTS
+@@INLINE(      )(\n      )(;\n)@@
+   @@TABLE@@
+      @_Sort_Set_@ FROM @_Module_Set_@
+   @@END_TABLE@@
+@@END_INLINE@@
+
+--  Group all context parameters of this function in a record
+Context-@_REPLACE((_)/-):LOWER:Name_@ ::= SEQUENCE {
+@@INLINE(   )(,\n   )(\n)@@
+   @@TABLE@@
+      @_REPLACE((_)/-):LOWER:CP_Name_@ @_CP_Sort_@
+   @@END_TABLE@@
+@@END_INLINE@@
+}
+
+--  Declare a constant with the values set by the user in the interface view
+@_REPLACE((_)/-):LOWER:Name_@-ctxt Context-@_REPLACE((_)/-):LOWER:Name_@ ::= {
+@@INLINE(   )(,\n   )(\n)@@
+   @@TABLE@@
+      @_REPLACE((_)/-):LOWER:CP_Name_@ @_CP_Value_@
+   @@END_TABLE@@
+@@END_INLINE@@
+}
+END

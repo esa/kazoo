@@ -41,6 +41,7 @@ private
                                 return Interface_As_Template;
    function Func_Template (F : Taste_Terminal_Function)
                            return Func_As_Template;
+   function CP_Template (F : Taste_Terminal_Function) return Translate_Set;
    function Function_Makefile_Template (F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag) return Translate_Set;

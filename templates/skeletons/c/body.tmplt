@@ -36,7 +36,7 @@
 
 @@IF@@ @_Has_Context_@
 /* Include Context Parameters (constants defined in the Interface View) */
-#include "Context-@_REPLACE((_)/-):LOWER:Name_@.h"
+#include "Context-@_LOWER:Name_@.h"
 @@END_IF@@
 
 void @_LOWER:Name_@_startup()

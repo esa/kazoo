@@ -19,8 +19,9 @@ use Ada.Characters.Handling,
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
-      Output_File : File_Type;
-      Template    : constant IV_As_Template :=
+      All_CP_Files :  Tag;  --  List of Context Parameters ASN.1 files
+      Output_File  : File_Type;
+      Template     : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
 
       Prefix : constant String := Model.Configuration.Binary_Path.all
@@ -106,6 +107,7 @@ package body TASTE.Backend.Skeletons is
          Content_Set := +Assoc  ("Function_Names",   Functions_Tag)
                         & Assoc ("Language",         Language_Tag)
                         & Assoc ("Is_Type",          Is_Type_Tag)
+                        & Assoc ("CP_Files",         All_CP_Files)
                         & Assoc ("Unique_Languages", Unique_Languages)
                         & Assoc ("ASN1_Files",       Get_ASN1_File_List)
                         & Assoc ("ASN1_Modules",     Get_Module_List);
@@ -147,7 +149,7 @@ package body TASTE.Backend.Skeletons is
             CP_Tmpl    : constant Translate_Set := CP_Template (F => Each);
             CP_Text    : constant String := CP_To_ASN1 (CP_Tmpl);
             CP_File    : constant String := "Context-"
-                                            & To_String (Each.Name)
+                                            & To_Lower (To_String (Each.Name))
                                             & ".asn";
 
             Func_Tmpl  : constant Func_As_Template :=
@@ -234,6 +236,8 @@ package body TASTE.Backend.Skeletons is
                           Name => Output_Base & CP_File);
                   Put_Line (Output_File, CP_Text);
                   Close (Output_File);
+                  All_CP_Files :=
+                     All_CP_Files & ("../" & Output_Base & CP_File);
                end if;
             else
                Put_Info ("Ignoring function " & To_String (Each.Name));

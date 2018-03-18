@@ -800,40 +800,48 @@ package body TASTE.Interface_View is
    end Rename_Required_Interface;
 
    procedure Debug_Dump (IV : Complete_Interface_View; Output : File_Type) is
-      procedure Dump_Interface (I : Taste_Interface; Last : Boolean := False)
+      procedure Dump_Interface (I         : Taste_Interface;
+                                Last_Leaf : Boolean := False;
+                                Last_IF    : Boolean := False)
       is
-         Ind : constant String := (if not Last then "│" else " ");
+         Ind : constant String := (if not Last_Leaf then "│  " else "   ");
+         Bar : constant String := (if not Last_IF then "│  " else "   ");
+         Pre : constant String := Ind & Bar;
       begin
-         Put_Line (Output, Ind & "  └─ Name: "
+         Put_Line (Output, Ind & (if Last_IF then "└─" else "├─")
+                               & " Name : "
                    & To_String (I.Name) & " - in FV: "
                    & To_String (I.Parent_Function));
-         Put_Line (Output, Ind & "     ├─ RCM Kind    : " & I.RCM'Img);
-         Put_Line (Output, Ind & "     ├─ Period/MIAT : "
+         Put_Line (Output, Pre & "├─ RCM Kind    : " & I.RCM'Img);
+         Put_Line (Output, Pre & "├─ Period/MIAT : "
                                & I.Period_Or_MIAT'Img);
-         Put_Line (Output, Ind & "     ├─ WCET (ms)   : "
+         Put_Line (Output, Pre & "├─ WCET (ms)   : "
                    & Value_Or (I.WCET_ms, 0)'Img);
-         Put_Line (Output, Ind & "     ├─ Queue Size  : "
+         Put_Line (Output, Pre & "├─ Queue Size  : "
                    & Value_Or (I.Queue_Size, 1)'Img);
-         Put_Line (Output, Ind & "     ├─ Parameters  :");
+         Put_Line (Output, Pre & "├─ Parameters  :");
          for Each of I.Params loop
-            Put_Line (Output, Ind & "     │  ├─ Name         : "
+            Put_Line (Output, Pre & "│  ├─ Name            : "
                       & To_String (Each.Name));
-            Put_Line (Output, Ind & "     │  │  ├─ Type         : "
+            Put_Line (Output, Pre & "│  │  ├─ Type         : "
                       & To_String (Each.Sort));
-            Put_Line (Output, Ind & "     │  │  ├─ ASN.1 Module : "
+            Put_Line (Output, Pre & "│  │  ├─ ASN.1 Module : "
                       & To_String (Each.ASN1_Module));
-            Put_Line (Output, Ind & "     │  │  ├─ ASN.1 File   : "
+            Put_Line (Output, Pre & "│  │  ├─ ASN.1 File   : "
                       & To_String (Each.ASN1_File_Name));
-            Put_Line (Output, Ind & "     │  │  ├─ Basic type   : "
+            Put_Line (Output, Pre & "│  │  ├─ Basic type   : "
                       & Each.ASN1_Basic_Type'Img);
-            Put_Line (Output, Ind & "     │  │  ├─ Encoding     : "
+            Put_Line (Output, Pre & "│  │  ├─ Encoding     : "
                       & Each.Encoding'Img);
-            Put_Line (Output, Ind & "     │  │  └─ Direction    : "
+            Put_Line (Output, Pre & "│  │  └─ Direction    : "
                       & Each.Direction'Img);
          end loop;
-         Put_Line (Output, Ind & "     └─ Connections :");
+         Put_Line (Output, Pre & "└─ Connections :");
          for Each of I.Remote_Interfaces loop
-            Put_Line (Output, Ind & "        └─ Function "
+            Put_Line (Output, Pre & "   "
+                      & (if I.Remote_Interfaces.Last_Element = Each
+                         then "└─" else "├─")
+                      & " Function "
                       & To_String (Each.Function_Name)
                       & ", interface " & To_String (Each.Interface_Name));
          end loop;
@@ -851,42 +859,61 @@ package body TASTE.Interface_View is
          Put_Line (Output, "├─ Is type     : " & Each.Is_Type'Img);
          Put_Line (Output, "├─ Instance of : "
                    & To_String (Value_Or (Each.Instance_Of, US ("(n/a)"))));
-         Put_Line (Output, "├─ Cxtx Params:");
+         Put_Line (Output, "├─ Context Parameters :");
          for CP of Each.Context_Params loop
-            Put_Line (Output, "│  ├─ " & To_String (CP.Name) & ": "
-                      & To_String (CP.Sort) & "- default: "
-                      & To_String (CP.Default_Value) & " - asn1 module: "
-                      & To_String (CP.ASN1_Module) & " - file:"
+            Put_Line (Output, "│  "
+                      & (if Each.Context_Params.Last_Element /= CP
+                         then "├─ " else "└─ ")
+                      & To_String (CP.Name) & " : "
+                      & To_String (CP.Sort) & "- default : "
+                      & To_String (CP.Default_Value) & " - asn1 module : "
+                      & To_String (CP.ASN1_Module) & " - file : "
                       & To_String (Value_Or (CP.ASN1_File_Name,
                                              US ("(none)"))));
          end loop;
          Put_Line (Output, "├─ Directives:");
          for CP of Each.Directives loop
-            Put_Line (Output, "│  ├─ " & To_String (CP.Name) & " = "
+            Put_Line (Output, "│  "
+                      & (if Each.Directives.Last_Element /= CP
+                         then "├─ " else "└─ ")
+                      & To_String (CP.Name) & " = "
                       & To_String (CP.Default_Value));
          end loop;
          Put_Line (Output, "├─ Simulink Tuneable Parameters:");
          for CP of Each.Simulink loop
-            Put_Line (Output, "│  ├─ " & To_String (CP.Name) & " = "
+            Put_Line (Output, "│  "
+                      & (if Each.Simulink.Last_Element /= CP
+                         then "├─ " else "└─ ")
+                      & To_String (CP.Name) & " = "
                       & To_String (CP.Default_Value));
          end loop;
 
          Put_Line (Output, "├─ User properties:");
          for Ppty of Each.User_Properties loop
-            Put_Line (Output, "│  ├─ " & To_String (Ppty.Name) & " = "
+            Put_Line (Output, "│  "
+                      & (if Ppty /= Each.User_Properties.Last_Element
+                         then "├─ " else "└─ ")
+                      & To_String (Ppty.Name) & " = "
                       & To_String (Ppty.Value));
          end loop;
          Put_Line (Output, "├─ Timers:");
          for Timer of Each.Timers loop
-            Put_Line (Output, "│  ├─ " & Timer);
+            Put_Line (Output, "│  "
+               & (if Each.Timers.Last_Element /= Timer
+                  then "├─ " else "└─ ")
+               & Timer);
          end loop;
          Put_Line (Output, "├─ Provided interfaces:");
          for PI of Each.Provided loop
-            Dump_Interface (I => PI);
+            Dump_Interface (I         => PI,
+                            Last_Leaf => False,
+                            Last_IF   => Each.Provided.Last_Element = PI);
          end loop;
          Put_Line (Output, "└─ Required interfaces:");
          for RI of Each.Required loop
-            Dump_Interface (I => RI, Last => True);
+            Dump_Interface (I         => RI,
+                            Last_Leaf => True,
+                            Last_IF   => Each.Required.Last_Element = RI);
          end loop;
          New_Line (Output);
       end loop;

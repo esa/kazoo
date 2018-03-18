@@ -1,12 +1,12 @@
 AADL_PARSER=../../aadl_parser
 
 all: test-parse
+	cd output && make
 
 test-parse: clean
 	$(AADL_PARSER) --gw \
 	               --debug \
-	               -o output \
-#		       2>&1 | tail -1 | diff expected -
+	               -o output
 
 clean:
 	rm -rf output

@@ -36,6 +36,16 @@ package body TASTE.Semantic_Check is
                   & "interfaces, and dead code is not allowed";
             end if;
 
+            --  Check that Simulink functions have exactly one PI and no RI
+            if Each.Language = Language_Simulink and then
+               (Each.Provided.Length /= 1 or Each.Required.Length /= 0)
+            then
+               raise Semantic_Error with
+                  "Simulink function " & To_String (Each.Name)
+                  & " must contain only one Provided Interface and no "
+                  & "required interface";
+            end if;
+
          end loop;
       end if;
    end Check_Model;

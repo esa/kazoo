@@ -22,10 +22,8 @@ END deploymentview::DV::Node1;
 PACKAGE deploymentview::DV
 PUBLIC
 
-WITH interfaceview::IV::Worker;
-WITH interfaceview::IV::BB_Device_Zero_Interface;
-WITH interfaceview::IV::GUI_Zero_PI;
-WITH interfaceview::IV::Dead_Code;
+WITH interfaceview::IV::Zimulink_Function;
+WITH interfaceview::IV::Orchestrator;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -37,17 +35,11 @@ END Node1;
 
 SYSTEM IMPLEMENTATION Node1.others
 SUBCOMPONENTS
-  IV_Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
-    Taste::FunctionName => "Worker";
+  IV_Zimulink_Function : SYSTEM interfaceview::IV::Zimulink_Function::Zimulink_Function.others {
+    Taste::FunctionName => "Zimulink_Function";
   };
-  IV_BB_Device_Zero_Interface : SYSTEM interfaceview::IV::BB_Device_Zero_Interface::BB_Device_Zero_Interface.others {
-    Taste::FunctionName => "BB_Device_Zero_Interface";
-  };
-  IV_GUI_Zero_PI : SYSTEM interfaceview::IV::GUI_Zero_PI::GUI_Zero_PI.others {
-    Taste::FunctionName => "GUI_Zero_PI";
-  };
-  IV_Dead_Code : SYSTEM interfaceview::IV::Dead_Code::Dead_Code.others {
-    Taste::FunctionName => "Dead_Code";
+  IV_Orchestrator : SYSTEM interfaceview::IV::Orchestrator::Orchestrator.others {
+    Taste::FunctionName => "Orchestrator";
   };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "122454 73037 154706 93871";
@@ -57,10 +49,8 @@ SUBCOMPONENTS
     Taste::coordinates => "118579 65668 158894 95430";
   };
 PROPERTIES
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Worker;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_BB_Device_Zero_Interface;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_GUI_Zero_PI;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Dead_Code;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Zimulink_Function;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Orchestrator;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 

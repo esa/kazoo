@@ -6,6 +6,7 @@
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
+     Ada.Strings.Equal_Case_Insensitive,
      Text_IO,
      GNAT.Strings,
      Interfaces.C_Streams,
@@ -75,7 +76,8 @@ package TASTE.Parser_Utils is
    package Property_Maps is new Indefinite_Ordered_Maps (String,
                                                          User_Property);
    use Property_Maps;
-   package String_Vectors is new Indefinite_Vectors (Natural, String);
+   package String_Vectors is new Indefinite_Vectors (Natural, String,
+                                           Ada.Strings.Equal_Case_Insensitive);
    function Get_Properties_Map (D : Node_Id) return Property_Maps.Map;
 
    --  Shortcut to read an identifier from the parser, in lowercase

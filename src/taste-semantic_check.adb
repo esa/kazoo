@@ -13,13 +13,14 @@ use Ada.Strings.Unbounded,
     TASTE.Parser_Utils;
 
 package body TASTE.Semantic_Check is
+   use String_Vectors;
    procedure Check_Model (Model : TASTE_Model) is
       use Option_Partition;
-      Opt_Part : Option_Partition.Option;
+      Opt_Part     : Option_Partition.Option;
    begin
       if Model.Configuration.Glue then
          for Each of Model.Interface_View.Flat_Functions loop
-            Opt_Part := Model.Find_Binding (Each.Name);
+            Opt_Part  := Model.Find_Binding (Each.Name);
             --  Check that each function is placed on a partition
             if not Each.Is_Type and then not Opt_Part.Has_Value then
                raise Semantic_Error with
@@ -69,15 +70,36 @@ package body TASTE.Semantic_Check is
 
             --  GUI checks:
             --  1) interfaces must all have a parameter
-            --  2) interfaces must all be sporadic
+            --  2) interfaces must all be sporadic (TODO)
             if Each.Language = Language_Gui and then
                ((for all I of Each.Provided => I.Params.Length /= 1) or else
-               (for all I of Each.Required => I.Params.Length = 1))
+               (for all I of Each.Required  => I.Params.Length /= 1))
             then
                raise Semantic_Error with
                      "Function " & To_String (Each.Name) & "'s interfaces"
                      & " must all have exactly one parameter";
             end if;
+
+            --  Check that functions including at least one (un)protected
+            --  interface are located on the same partition as their caller(s)
+            for PI of Each.Provided loop
+               if not Each.Is_Type and then (PI.RCM = Protected_Operation
+                                          or PI.RCM = Unprotected_Operation)
+               then
+                  for Remote of PI.Remote_Interfaces loop
+                     if Opt_Part.Unsafe_Just.Bound_Functions.Find
+                 (To_String (Remote.Function_Name)) = String_Vectors.No_Element
+                     then
+                        raise Semantic_Error with "Function "
+                        & To_String (Each.Name) & " and function "
+                        & To_String (Remote.Function_Name) & " must be located"
+                        & " on the same partition in the deployment view, "
+                        & "because they share a synchronous interface";
+                     end if;
+                  end loop;
+               end if;
+            end loop;
+
          end loop;
       end if;
    end Check_Model;

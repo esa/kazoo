@@ -1,1 +1,1 @@
-[ERROR] Function QgenAda must contain only one Provided Interface and no Required Interfaces
+[ERROR] Function FaultyGUI's interfaces must all have exactly one parameter

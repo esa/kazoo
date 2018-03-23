@@ -5,81 +5,10 @@
 -- generated code: do not edit
 ---------------------------------------------------
 
-PACKAGE interfaceview::IV::QgenAda
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_doSomething
-FEATURES
-  a : IN PARAMETER DataView::MyBool {
-    Taste::encoding => NATIVE;
-  };
-  b : OUT PARAMETER DataView::MyBool {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_doSomething;
-
-SUBPROGRAM IMPLEMENTATION PI_doSomething.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_doSomething.others;
-
-SUBPROGRAM PI_hoho
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_hoho;
-
-SUBPROGRAM IMPLEMENTATION PI_hoho.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_hoho.others;
-
-SUBPROGRAM RI_RI1
-END RI_RI1;
-
-SUBPROGRAM IMPLEMENTATION RI_RI1.others
-END RI_RI1.others;
-
-SYSTEM QgenAda
-FEATURES
-  PI_doSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::QgenAda::PI_doSomething.others {
-    Taste::coordinates => "91651 79054";
-    Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "doSomething";
-  };
-  PI_hoho : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::QgenAda::PI_hoho.others {
-    Taste::coordinates => "125351 83779";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "hoho";
-  };
-  RI_RI1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::QgenAda::RI_RI1.others {
-    Taste::coordinates => "91651 87559";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "RI1";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (QGenAda);
-  Taste::Active_Interfaces => any;
-END QgenAda;
-
-SYSTEM IMPLEMENTATION QgenAda.others
-END QgenAda.others;
-
-END interfaceview::IV::QgenAda;
-
 PACKAGE interfaceview::IV::Orchestrator
 PUBLIC
 
-WITH interfaceview::IV::QgenAda;
+WITH interfaceview::IV::FaultyGUI;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -93,18 +22,21 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_pulse.others;
 
-SUBPROGRAM RI_doSomething
-FEATURES
-  a : IN PARAMETER DataView::MyBool {
-    Taste::encoding => NATIVE;
-  };
-  b : OUT PARAMETER DataView::MyBool {
-    Taste::encoding => NATIVE;
-  };
-END RI_doSomething;
+SUBPROGRAM PI_toto
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_toto;
 
-SUBPROGRAM IMPLEMENTATION RI_doSomething.others
-END RI_doSomething.others;
+SUBPROGRAM IMPLEMENTATION PI_toto.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_toto.others;
+
+SUBPROGRAM RI_ArgUI
+END RI_ArgUI;
+
+SUBPROGRAM IMPLEMENTATION RI_ArgUI.others
+END RI_ArgUI.others;
 
 SYSTEM Orchestrator
 FEATURES
@@ -115,10 +47,15 @@ FEATURES
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "pulse";
   };
-  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::QgenAda::PI_doSomething.others {
-    Taste::coordinates => "111178 64251";
+  PI_toto : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Orchestrator::PI_toto.others {
+    Taste::coordinates => "111178 60472";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "toto";
+  };
+  RI_ArgUI : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::FaultyGUI::PI_ArgUI.others {
+    Taste::coordinates => "111178 65196";
     Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "doSomething";
+    Taste::InterfaceName => "ArgUI";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -131,11 +68,55 @@ END Orchestrator.others;
 
 END interfaceview::IV::Orchestrator;
 
+PACKAGE interfaceview::IV::FaultyGUI
+PUBLIC
+
+WITH interfaceview::IV::Orchestrator;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_ArgUI
+END PI_ArgUI;
+
+SUBPROGRAM IMPLEMENTATION PI_ArgUI.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_ArgUI.others;
+
+SUBPROGRAM RI_toto
+END RI_toto;
+
+SUBPROGRAM IMPLEMENTATION RI_toto.others
+END RI_toto.others;
+
+SYSTEM FaultyGUI
+FEATURES
+  PI_ArgUI : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FaultyGUI::PI_ArgUI.others {
+    Taste::coordinates => "129918 68189";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "ArgUI";
+  };
+  RI_toto : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Orchestrator::PI_toto.others {
+    Taste::coordinates => "129918 63465";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "toto";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END FaultyGUI;
+
+SYSTEM IMPLEMENTATION FaultyGUI.others
+END FaultyGUI.others;
+
+END interfaceview::IV::FaultyGUI;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
-WITH interfaceview::IV::QgenAda;
 WITH interfaceview::IV::Orchestrator;
+WITH interfaceview::IV::FaultyGUI;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -144,15 +125,18 @@ END interfaceview;
 
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
-  QgenAda : SYSTEM interfaceview::IV::QgenAda::QgenAda.others {
-    Taste::coordinates => "91651 74329 125351 91809";
-  };
   Orchestrator : SYSTEM interfaceview::IV::Orchestrator::Orchestrator.others {
     Taste::coordinates => "89761 56376 111178 65983";
   };
+  FaultyGUI : SYSTEM interfaceview::IV::FaultyGUI::FaultyGUI.others {
+    Taste::coordinates => "129918 58739 169129 93541";
+  };
 CONNECTIONS
-  QgenAda_PI_doSomething_Orchestrator_RI_doSomething : SUBPROGRAM ACCESS QgenAda.PI_doSomething -> Orchestrator.RI_doSomething {
-    Taste::coordinates => "111178 64251 114721 64251 114721 71652 88108 71652 88108 79054 91651 79054";
+  Orchestrator_PI_toto_FaultyGUI_RI_toto : SUBPROGRAM ACCESS Orchestrator.PI_toto -> FaultyGUI.RI_toto {
+    Taste::coordinates => "129918 63465 120548 63465 120548 60472 111178 60472";
+  };
+  FaultyGUI_PI_ArgUI_Orchestrator_RI_ArgUI : SUBPROGRAM ACCESS FaultyGUI.PI_ArgUI -> Orchestrator.RI_ArgUI {
+    Taste::coordinates => "111178 65196 120548 65196 120548 68189 129918 68189";
   };
 END interfaceview.others;
 

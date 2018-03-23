@@ -67,6 +67,17 @@ package body TASTE.Semantic_Check is
                end loop;
             end if;
 
+            --  GUI checks:
+            --  1) interfaces must all have a parameter
+            --  2) interfaces must all be sporadic
+            if Each.Language = Language_Gui and then
+               ((for all I of Each.Provided => I.Params.Length /= 1) or else
+               (for all I of Each.Required => I.Params.Length = 1))
+            then
+               raise Semantic_Error with
+                     "Function " & To_String (Each.Name) & "'s interfaces"
+                     & " must all have exactly one parameter";
+            end if;
          end loop;
       end if;
    end Check_Model;

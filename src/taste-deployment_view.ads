@@ -11,6 +11,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ocarina,
      Ocarina.Types,
      Ocarina.Backends.Properties,
+     Option_Type,
      TASTE.Parser_Utils;
 
 use Ada.Containers,
@@ -103,6 +104,8 @@ package TASTE.Deployment_View is
          CPU_Classifier  : Unbounded_String;
          Bound_Functions : String_Vectors.Vector;
       end record;
+
+   package Option_Partition is new Option_Type (Taste_Partition);
 
    package Taste_Partitions is
       new Indefinite_Ordered_Maps (String, Taste_Partition);

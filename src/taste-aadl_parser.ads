@@ -3,13 +3,15 @@
 --  (c) 2017 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
-with Ocarina.Types,
+with Ada.Strings.Unbounded,
+     Ocarina.Types,
      TASTE.Parser_Utils,
      TASTE.Interface_View,
      TASTE.Deployment_View,
      TASTE.Data_View;
 
-use Ocarina.Types,
+use Ada.Strings.Unbounded,
+    Ocarina.Types,
     TASTE.Parser_Utils,
     TASTE.Interface_View,
     TASTE.Deployment_View,
@@ -29,6 +31,9 @@ package TASTE.AADL_Parser is
       end record;
 
    function Parse_Project return TASTE_Model;
+   function Find_Binding (Model : TASTE_Model;
+                          F     : Unbounded_String)
+                          return Option_Partition.Option;
 
    procedure Dump                  (Model : TASTE_Model);
    procedure Generate_Build_Script (Model : TASTE_Model);

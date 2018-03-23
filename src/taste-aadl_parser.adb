@@ -16,7 +16,8 @@ with System.Assertions,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
      TASTE.Backend.Build_Script,
-     TASTE.Backend.Skeletons;
+     TASTE.Backend.Skeletons,
+     TASTE.Semantic_Check;
 
 use Ada.Text_IO,
     Ada.Exceptions,
@@ -190,6 +191,8 @@ package body TASTE.AADL_Parser is
          raise Quit_Taste;
       end if;
 
+      Semantic_Check.Check_Model (Result);
+
       return Result;
    exception
       when Error : AADL_Parser_Error
@@ -217,6 +220,24 @@ package body TASTE.AADL_Parser is
          Errors.Display_Bug_Box (E);
          raise Quit_Taste;
    end Parse_Project;
+
+   function Find_Binding (Model : TASTE_Model;
+                          F     : Unbounded_String)
+                          return Option_Partition.Option is
+      use Option_Partition;
+      Function_Name : constant String := To_String (F);
+   begin
+      for Node of Model.Deployment_View.Nodes loop
+         for Each of Node.Partitions loop
+            for Binding of Each.Bound_Functions loop
+               if Binding = Function_Name then
+                  return Just (Each);
+               end if;
+            end loop;
+         end loop;
+      end loop;
+      return Nothing;
+   end Find_Binding;
 
    procedure Dump (Model : TASTE_Model) is
       Output_Path : constant String := Model.Configuration.Output_Dir.all

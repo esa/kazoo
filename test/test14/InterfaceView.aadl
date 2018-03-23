@@ -1,0 +1,152 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Orchestrator
+PUBLIC
+
+WITH interfaceview::IV::ABC;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_toto
+END PI_toto;
+
+SUBPROGRAM IMPLEMENTATION PI_toto.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_toto.others;
+
+SUBPROGRAM RI_ArgUI
+END RI_ArgUI;
+
+SUBPROGRAM IMPLEMENTATION RI_ArgUI.others
+END RI_ArgUI.others;
+
+SYSTEM Orchestrator
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Orchestrator::PI_pulse.others {
+    Taste::coordinates => "102361 56376";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 12 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_toto : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Orchestrator::PI_toto.others {
+    Taste::coordinates => "111178 60472";
+    Taste::RCMoperationKind => protected;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "toto";
+  };
+  RI_ArgUI : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::ABC::PI_ArgUI.others {
+    Taste::coordinates => "111178 65196";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "ArgUI";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Orchestrator;
+
+SYSTEM IMPLEMENTATION Orchestrator.others
+END Orchestrator.others;
+
+END interfaceview::IV::Orchestrator;
+
+PACKAGE interfaceview::IV::ABC
+PUBLIC
+
+WITH interfaceview::IV::Orchestrator;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_ArgUI
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_ArgUI;
+
+SUBPROGRAM IMPLEMENTATION PI_ArgUI.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_ArgUI.others;
+
+SUBPROGRAM RI_toto
+END RI_toto;
+
+SUBPROGRAM IMPLEMENTATION RI_toto.others
+END RI_toto.others;
+
+SYSTEM ABC
+FEATURES
+  PI_ArgUI : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::ABC::PI_ArgUI.others {
+    Taste::coordinates => "129918 68189";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "ArgUI";
+  };
+  RI_toto : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Orchestrator::PI_toto.others {
+    Taste::coordinates => "129918 63465";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "toto";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END ABC;
+
+SYSTEM IMPLEMENTATION ABC.others
+END ABC.others;
+
+END interfaceview::IV::ABC;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Orchestrator;
+WITH interfaceview::IV::ABC;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Orchestrator : SYSTEM interfaceview::IV::Orchestrator::Orchestrator.others {
+    Taste::coordinates => "89761 56376 111178 65983";
+  };
+  ABC : SYSTEM interfaceview::IV::ABC::ABC.others {
+    Taste::coordinates => "129918 58739 169129 93541";
+  };
+CONNECTIONS
+  Orchestrator_PI_toto_ABC_RI_toto : SUBPROGRAM ACCESS Orchestrator.PI_toto -> ABC.RI_toto {
+    Taste::coordinates => "129918 63465 120548 63465 120548 60472 111178 60472";
+  };
+  ABC_PI_ArgUI_Orchestrator_RI_ArgUI : SUBPROGRAM ACCESS ABC.PI_ArgUI -> Orchestrator.RI_ArgUI {
+    Taste::coordinates => "111178 65196 120548 65196 120548 68189 129918 68189";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

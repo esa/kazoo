@@ -1,0 +1,1 @@
+[ERROR] Function Orchestrator and function ABC must be located on the same partition in the deployment view, because they share a synchronous interface

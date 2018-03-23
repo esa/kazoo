@@ -2,12 +2,14 @@ with Ada.Strings.Unbounded,
      Ada.Containers,
      Ocarina.Backends.Properties,
      TASTE.Deployment_View,
+     TASTE.Interface_View,
      TASTE.Parser_Utils;
 
 use Ada.Strings.Unbounded,
     Ada.Containers,
     Ocarina.Backends.Properties,
     TASTE.Deployment_View,
+    TASTE.Interface_View,
     TASTE.Parser_Utils;
 
 package body TASTE.Semantic_Check is
@@ -37,13 +39,32 @@ package body TASTE.Semantic_Check is
             end if;
 
             --  Check that Simulink functions have exactly one PI and no RI
-            if Each.Language = Language_Simulink and then
+            if (case Each.Language is
+               when
+                 Language_Simulink | Language_QGenAda | Language_QGenC => True,
+               when others => False) and then
                (Each.Provided.Length /= 1 or Each.Required.Length /= 0)
             then
                raise Semantic_Error with
-                  "Simulink function " & To_String (Each.Name)
-                  & " must contain only one Provided Interface and no "
-                  & "required interface";
+                  "Function " & To_String (Each.Name) & " must contain only "
+                  & "one Provided Interface and no Required Interfaces";
+            end if;
+
+            --  Check that Simulink/QGen functions's PI is synchronous
+            if (case Each.Language is
+               when
+                 Language_Simulink | Language_QGenAda | Language_QGenC => True,
+               when others => False)
+            then
+               for PI of Each.Provided loop
+                  if PI.RCM /= Unprotected_Operation
+                     and PI.RCM /= Protected_Operation
+                  then
+                     raise Semantic_Error with "The provided interface of "
+                     & "function " & To_String (Each.Name) & " must be either"
+                     & " protected or unprotected, but not sporadic or cyclic";
+                  end if;
+               end loop;
             end if;
 
          end loop;

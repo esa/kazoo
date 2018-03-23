@@ -7,6 +7,7 @@ with System.Assertions,
      Ada.Exceptions,
      Ada.Text_IO,
      Ada.Directories,
+     Ada.Strings.Equal_Case_Insensitive,
      GNAT.Command_Line,
      Errors,
      Locations,
@@ -201,6 +202,7 @@ package body TASTE.AADL_Parser is
          | No_RCM_Error
          | Deployment_View_Error
          | Data_View_Error
+         | Semantic_Check.Semantic_Error
          | Device_Driver_Error =>
          Put_Error (Exception_Message (Error));
          raise Quit_Taste;
@@ -225,12 +227,14 @@ package body TASTE.AADL_Parser is
                           F     : Unbounded_String)
                           return Option_Partition.Option is
       use Option_Partition;
+      function Is_Equal (Left, Right : String) return Boolean
+         renames Ada.Strings.Equal_Case_Insensitive;
       Function_Name : constant String := To_String (F);
    begin
       for Node of Model.Deployment_View.Nodes loop
          for Each of Node.Partitions loop
             for Binding of Each.Bound_Functions loop
-               if Binding = Function_Name then
+               if Is_Equal (Binding, Function_Name) then
                   return Just (Each);
                end if;
             end loop;

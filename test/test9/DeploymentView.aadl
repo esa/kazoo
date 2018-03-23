@@ -23,7 +23,6 @@ PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::Worker;
-WITH interfaceview::IV::Son;
 WITH interfaceview::IV::Daughter;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
@@ -39,9 +38,6 @@ SUBCOMPONENTS
   IV_Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
     Taste::FunctionName => "Worker";
   };
-  IV_Son : SYSTEM interfaceview::IV::Son::Son.others {
-    Taste::FunctionName => "Son";
-  };
   IV_Daughter : SYSTEM interfaceview::IV::Daughter::Daughter.others {
     Taste::FunctionName => "Daughter";
   };
@@ -54,7 +50,6 @@ SUBCOMPONENTS
   };
 PROPERTIES
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Worker;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Son;
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Daughter;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;

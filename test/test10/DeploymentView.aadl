@@ -23,7 +23,9 @@ PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::Worker;
-WITH interfaceview::IV::Daughter;
+WITH interfaceview::IV::BB_Device_Zero_Interface;
+WITH interfaceview::IV::GUI_Zero_PI;
+WITH interfaceview::IV::Dead_Code;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -38,8 +40,14 @@ SUBCOMPONENTS
   IV_Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
     Taste::FunctionName => "Worker";
   };
-  IV_Daughter : SYSTEM interfaceview::IV::Daughter::Daughter.others {
-    Taste::FunctionName => "Daughter";
+  IV_BB_Device_Zero_Interface : SYSTEM interfaceview::IV::BB_Device_Zero_Interface::BB_Device_Zero_Interface.others {
+    Taste::FunctionName => "BB_Device_Zero_Interface";
+  };
+  IV_GUI_Zero_PI : SYSTEM interfaceview::IV::GUI_Zero_PI::GUI_Zero_PI.others {
+    Taste::FunctionName => "GUI_Zero_PI";
+  };
+  IV_Dead_Code : SYSTEM interfaceview::IV::Dead_Code::Dead_Code.others {
+    Taste::FunctionName => "Dead_Code";
   };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "122454 73037 154706 93871";
@@ -50,7 +58,9 @@ SUBCOMPONENTS
   };
 PROPERTIES
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Worker;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Daughter;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_BB_Device_Zero_Interface;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_GUI_Zero_PI;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Dead_Code;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 

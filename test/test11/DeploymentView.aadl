@@ -1,0 +1,84 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS demo
+END demo;
+
+PROCESS IMPLEMENTATION demo.others
+END demo.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH interfaceview::IV::BB_Device_Zero_Interface;
+WITH interfaceview::IV::GUI_Zero_PI;
+WITH interfaceview::IV::Dead_Code;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
+    Taste::FunctionName => "Worker";
+  };
+  IV_BB_Device_Zero_Interface : SYSTEM interfaceview::IV::BB_Device_Zero_Interface::BB_Device_Zero_Interface.others {
+    Taste::FunctionName => "BB_Device_Zero_Interface";
+  };
+  IV_GUI_Zero_PI : SYSTEM interfaceview::IV::GUI_Zero_PI::GUI_Zero_PI.others {
+    Taste::FunctionName => "GUI_Zero_PI";
+  };
+  IV_Dead_Code : SYSTEM interfaceview::IV::Dead_Code::Dead_Code.others {
+    Taste::FunctionName => "Dead_Code";
+  };
+  demo : PROCESS deploymentview::DV::Node1::demo.others {
+    Taste::coordinates => "122454 73037 154706 93871";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "118579 65668 158894 95430";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Worker;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_BB_Device_Zero_Interface;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_GUI_Zero_PI;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Dead_Code;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "113540 57164 163933 99682";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

@@ -1,0 +1,177 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Worker
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Hello
+END PI_Hello;
+
+SUBPROGRAM IMPLEMENTATION PI_Hello.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Hello.others;
+
+SYSTEM Worker
+FEATURES
+  PI_Hello : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_Hello.others {
+    Taste::coordinates => "170706 97635";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "Hello";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => any;
+END Worker;
+
+SYSTEM IMPLEMENTATION Worker.others
+END Worker.others;
+
+END interfaceview::IV::Worker;
+
+PACKAGE interfaceview::IV::BB_Device_Zero_Interface
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_Hello
+END RI_Hello;
+
+SUBPROGRAM IMPLEMENTATION RI_Hello.others
+END RI_Hello.others;
+
+SYSTEM BB_Device_Zero_Interface
+FEATURES
+  RI_Hello : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_Hello.others {
+    Taste::coordinates => "183775 68032";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Hello";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (Blackbox_device);
+  Taste::Active_Interfaces => any;
+END BB_Device_Zero_Interface;
+
+SYSTEM IMPLEMENTATION BB_Device_Zero_Interface.others
+END BB_Device_Zero_Interface.others;
+
+END interfaceview::IV::BB_Device_Zero_Interface;
+
+PACKAGE interfaceview::IV::GUI_Zero_PI
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_Hello
+END RI_Hello;
+
+SUBPROGRAM IMPLEMENTATION RI_Hello.others
+END RI_Hello.others;
+
+SYSTEM GUI_Zero_PI
+FEATURES
+  RI_Hello : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_Hello.others {
+    Taste::coordinates => "157790 90549";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Hello";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END GUI_Zero_PI;
+
+SYSTEM IMPLEMENTATION GUI_Zero_PI.others
+END GUI_Zero_PI.others;
+
+END interfaceview::IV::GUI_Zero_PI;
+
+PACKAGE interfaceview::IV::Dead_Code
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_Hello
+END RI_Hello;
+
+SUBPROGRAM IMPLEMENTATION RI_Hello.others
+END RI_Hello.others;
+
+SYSTEM Dead_Code
+FEATURES
+  RI_Hello : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_Hello.others {
+    Taste::coordinates => "120154 97008";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Hello";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Dead_Code;
+
+SYSTEM IMPLEMENTATION Dead_Code.others
+END Dead_Code.others;
+
+END interfaceview::IV::Dead_Code;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH interfaceview::IV::BB_Device_Zero_Interface;
+WITH interfaceview::IV::GUI_Zero_PI;
+WITH interfaceview::IV::Dead_Code;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
+    Taste::coordinates => "156531 97635 179208 113383";
+  };
+  BB_Device_Zero_Interface : SYSTEM interfaceview::IV::BB_Device_Zero_Interface::BB_Device_Zero_Interface.others {
+    Taste::coordinates => "142988 51337 183775 72124";
+  };
+  GUI_Zero_PI : SYSTEM interfaceview::IV::GUI_Zero_PI::GUI_Zero_PI.others {
+    Taste::coordinates => "145035 72911 177160 90549";
+  };
+  Dead_Code : SYSTEM interfaceview::IV::Dead_Code::Dead_Code.others {
+    Taste::coordinates => "79998 79683 120154 103304";
+  };
+CONNECTIONS
+  Worker_PI_Hello_GUI_Zero_PI_RI_Hello : SUBPROGRAM ACCESS Worker.PI_Hello -> GUI_Zero_PI.RI_Hello {
+    Taste::coordinates => "157790 90549 157790 94092 170706 94092 170706 97635";
+  };
+  Worker_PI_Hello_BB_Device_Zero_Interface_RI_Hello : SUBPROGRAM ACCESS Worker.PI_Hello -> BB_Device_Zero_Interface.RI_Hello {
+    Taste::coordinates => "183775 68032 187854 68032 187854 91430 170706 91430 170706 97635";
+  };
+  Worker_PI_Hello_Dead_Code_RI_Hello : SUBPROGRAM ACCESS Worker.PI_Hello -> Dead_Code.RI_Hello {
+    Taste::coordinates => "120154 97008 170706 97008 170706 97635";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

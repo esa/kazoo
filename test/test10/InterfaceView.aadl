@@ -1,0 +1,251 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Mother
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run
+END PI_run;
+
+SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run.others;
+
+SUBPROGRAM RI_doSomething
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_doSomething.others
+END RI_doSomething.others;
+
+SYSTEM Mother
+FEATURES
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Mother::PI_run.others {
+    Taste::coordinates => "93698 57479";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::InterfaceName => "run";
+  };
+  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Mother::RI_doSomething.others {
+    Taste::coordinates => "105824 63149";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "doSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Mother;
+
+SYSTEM IMPLEMENTATION Mother.others
+SUBCOMPONENTS
+  mytimer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Mother.others;
+
+END interfaceview::IV::Mother;
+
+PACKAGE interfaceview::IV::Worker
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_doSomething
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END PI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION PI_doSomething.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_doSomething.others;
+
+SYSTEM Worker
+FEATURES
+  PI_doSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_doSomething.others {
+    Taste::coordinates => "156531 103619";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "doSomething";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => any;
+END Worker;
+
+SYSTEM IMPLEMENTATION Worker.others
+END Worker.others;
+
+END interfaceview::IV::Worker;
+
+PACKAGE interfaceview::IV::Son
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run
+END PI_run;
+
+SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run.others;
+
+SUBPROGRAM RI_doSomething
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_doSomething.others
+END RI_doSomething.others;
+
+SYSTEM Son
+FEATURES
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Son::PI_run.others {
+    Taste::coordinates => "119841 86139";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::InterfaceName => "run";
+  };
+  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_doSomething.others {
+    Taste::coordinates => "133068 91494";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "doSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Son;
+
+SYSTEM IMPLEMENTATION Son.others
+SUBCOMPONENTS
+  mytimer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Son.others;
+
+END interfaceview::IV::Son;
+
+PACKAGE interfaceview::IV::Daughter
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run
+END PI_run;
+
+SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run.others;
+
+SUBPROGRAM RI_doSomething
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_doSomething.others
+END RI_doSomething.others;
+
+SYSTEM Daughter
+FEATURES
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Daughter::PI_run.others {
+    Taste::coordinates => "120155 108186";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::InterfaceName => "run";
+  };
+  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_doSomething.others {
+    Taste::coordinates => "133382 112911";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "doSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Daughter;
+
+SYSTEM IMPLEMENTATION Daughter.others
+SUBCOMPONENTS
+  mytimer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Daughter.others;
+
+END interfaceview::IV::Daughter;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Mother;
+WITH interfaceview::IV::Worker;
+WITH interfaceview::IV::Son;
+WITH interfaceview::IV::Daughter;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Mother : SYSTEM interfaceview::IV::Mother::Mother.others {
+    Taste::coordinates => "83147 57479 105824 76848";
+    TASTE_IV_Properties::is_Component_Type => true;
+    Taste::Fill_Color => "#73a4f8";
+  };
+  Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
+    Taste::coordinates => "156531 97635 179208 113383";
+  };
+  Son : SYSTEM interfaceview::IV::Son::Son.others {
+    Taste::coordinates => "110391 86139 133068 105508";
+    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_instance_of => "Mother";
+    Taste::Fill_Color => "#73e970";
+  };
+  Daughter : SYSTEM interfaceview::IV::Daughter::Daughter.others {
+    Taste::coordinates => "110705 108186 133382 127555";
+    TASTE_IV_Properties::is_Component_Type => false;
+    TASTE_IV_Properties::is_instance_of => "Mother";
+    Taste::Fill_Color => "#73e653";
+  };
+CONNECTIONS
+  Worker_PI_doSomething_Son_RI_doSomething : SUBPROGRAM ACCESS Worker.PI_doSomething -> Son.RI_doSomething {
+    Taste::coordinates => "133068 91494 146453 91494 146453 103619 156531 103619";
+  };
+  Worker_PI_doSomething_Daughter_RI_doSomething : SUBPROGRAM ACCESS Worker.PI_doSomething -> Daughter.RI_doSomething {
+    Taste::coordinates => "133382 112911 146453 112911 146453 103619 156531 103619";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

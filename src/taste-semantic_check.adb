@@ -80,9 +80,9 @@ package body TASTE.Semantic_Check is
                      & " must all have exactly one parameter";
             end if;
 
-            --  Check that functions including at least one (un)protected
-            --  interface are located on the same partition as their caller(s)
             for PI of Each.Provided loop
+               --  Check that functions including at least one (un)protected
+               --  interface are located on the same partition as their callers
                if not Each.Is_Type and then (PI.RCM = Protected_Operation
                                           or PI.RCM = Unprotected_Operation)
                then
@@ -97,6 +97,25 @@ package body TASTE.Semantic_Check is
                         & "because they share a synchronous interface";
                      end if;
                   end loop;
+               end if;
+
+               --  Check that Cyclic PIs are not connected and that they have
+               --  no parameters.
+               if PI.RCM = Cyclic_Operation and then
+                  (PI.Remote_Interfaces.Length > 0 or PI.Params.Length > 0)
+               then
+                  raise Semantic_Error with "Interface " & To_String (PI.Name)
+                  & " in function " & To_String (Each.Name) & " is incorrect: "
+                  & "it shall have no parameters and shall not be connected";
+
+                  --  Check that sporadic PIs have at most one IN pararmeter
+               elsif PI.RCM = Sporadic_Operation and then
+                  (PI.Params.Length > 1 or (PI.Params.Length = 1 and
+                  (for all Param of PI.Params => Param.Direction /= param_in)))
+               then
+                  raise Semantic_Error with "Interface " & To_String (PI.Name)
+                  & " in function " & To_String (Each.Name) & " is incorrect: "
+                  & "it shall have at most one IN parameter (no OUT param)";
                end if;
             end loop;
 

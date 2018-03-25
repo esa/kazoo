@@ -1,0 +1,109 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_abc
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_abc;
+
+SUBPROGRAM IMPLEMENTATION PI_abc.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_abc.others;
+
+SYSTEM Function1
+FEATURES
+  PI_abc : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_abc.others {
+    Taste::coordinates => "105825 61573";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 123 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "abc";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_abc
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_abc;
+
+SUBPROGRAM IMPLEMENTATION PI_abc.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_abc.others;
+
+SYSTEM Function2
+FEATURES
+  PI_abc : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_abc.others {
+    Taste::coordinates => "107243 91336";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "abc";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+END Function2.others;
+
+END interfaceview::IV::Function2;
+
+PACKAGE interfaceview::IV
+-- { interfaceview::IV - 131335 61888 154327 73069 
+--test instance of non-existing type 
+--}
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "90549 61573 121572 82045";
+    TASTE_IV_Properties::is_instance_of => "SomethingThatDoesNotExist";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::coordinates => "93068 91336 126296 112281";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

@@ -7,6 +7,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Ada.Strings.Equal_Case_Insensitive,
+     Ada.Strings.Less_Case_Insensitive,
      Text_IO,
      GNAT.Strings,
      Interfaces.C_Streams,
@@ -33,6 +34,13 @@ package TASTE.Parser_Utils is
    Default_Interface_View  : aliased String := "InterfaceView.aadl";
    Default_Deployment_View : aliased String := "DeploymentView.aadl";
    Default_Data_View       : aliased String := "DataView.aadl";
+
+   --  Create a case insensitive string type, that can be used as keys for maps
+   subtype Case_Insensitive_String is String;
+   function "="(Left, Right : Case_Insensitive_String) return Boolean
+      renames Ada.Strings.Equal_Case_Insensitive;
+   function "<"(Left, Right : Case_Insensitive_String) return Boolean
+      renames Ada.Strings.Less_Case_Insensitive;
 
    package ATN renames Ocarina.ME_AADL.AADL_Tree.Nodes;
    package AIN renames Ocarina.ME_AADL.AADL_Instances.Nodes;

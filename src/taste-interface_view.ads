@@ -142,8 +142,10 @@ package TASTE.Interface_View is
          Instance_Of     : Optional_Unbounded_String := Nothing;
       end record;
 
-   package Function_Maps is new Indefinite_Ordered_Maps (String,
-                                                      Taste_Terminal_Function);
+   --  Key for the function map is case insensitive
+   package Function_Maps is new Indefinite_Ordered_Maps
+                                   (Case_Insensitive_String,
+                                    Taste_Terminal_Function);
 
    type Connection is
       record

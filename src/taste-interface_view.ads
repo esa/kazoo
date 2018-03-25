@@ -7,6 +7,8 @@
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
+     Ada.Strings.Equal_Case_Insensitive,
+     Ada.Strings.Less_Case_Insensitive,
      Text_IO,
      Ocarina,
      Ocarina.Types,
@@ -143,6 +145,10 @@ package TASTE.Interface_View is
       end record;
 
    --  Key for the function map is case insensitive
+   function "="(Left, Right : Case_Insensitive_String) return Boolean
+       renames Ada.Strings.Equal_Case_Insensitive;
+   function "<"(Left, Right : Case_Insensitive_String) return Boolean
+       renames Ada.Strings.Less_Case_Insensitive;
    package Function_Maps is new Indefinite_Ordered_Maps
                                    (Case_Insensitive_String,
                                     Taste_Terminal_Function);

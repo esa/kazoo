@@ -22,8 +22,8 @@ END deploymentview::DV::Node1;
 PACKAGE deploymentview::DV
 PUBLIC
 
-WITH interfaceview::IV::Orchestrator;
-WITH interfaceview::IV::FaultyGUI;
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -35,11 +35,11 @@ END Node1;
 
 SYSTEM IMPLEMENTATION Node1.others
 SUBCOMPONENTS
-  IV_Orchestrator : SYSTEM interfaceview::IV::Orchestrator::Orchestrator.others {
-    Taste::FunctionName => "Orchestrator";
+  IV_Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::FunctionName => "Function1";
   };
-  IV_FaultyGUI : SYSTEM interfaceview::IV::FaultyGUI::FaultyGUI.others {
-    Taste::FunctionName => "FaultyGUI";
+  IV_Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::FunctionName => "Function2";
   };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "122454 73037 154706 93871";
@@ -49,8 +49,8 @@ SUBCOMPONENTS
     Taste::coordinates => "118579 65668 158894 95430";
   };
 PROPERTIES
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Orchestrator;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_FaultyGUI;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function1;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function2;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 

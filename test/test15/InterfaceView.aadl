@@ -12,6 +12,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_abc
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_abc;
 
 SUBPROGRAM IMPLEMENTATION PI_abc.others
@@ -25,6 +27,7 @@ FEATURES
     Taste::coordinates => "105825 61573";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 123 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "abc";
   };
 PROPERTIES
@@ -44,6 +47,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_abc
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_abc;
 
 SUBPROGRAM IMPLEMENTATION PI_abc.others
@@ -54,8 +59,10 @@ END PI_abc.others;
 SYSTEM Function2
 FEATURES
   PI_abc : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_abc.others {
-    Taste::coordinates => "107243 90234";
+    Taste::coordinates => "107243 91336";
     Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "abc";
   };
 PROPERTIES
@@ -83,10 +90,10 @@ SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
     Taste::coordinates => "90549 61573 121572 82045";
-    TASTE_IV_Properties::is_instance_of => "function2";
+    TASTE_IV_Properties::is_instance_of => "Function2";
   };
   Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
-    Taste::coordinates => "93068 90234 126296 111179";
+    Taste::coordinates => "93068 91336 126296 112281";
   };
 END interfaceview.others;
 

@@ -119,6 +119,37 @@ package body TASTE.Semantic_Check is
                end if;
             end loop;
 
+            --  Component type/instance checks
+            if Each.Is_Type and then not (case Each.Language is
+               when Language_Ada_95 | Language_SDL | Language_CPP => True,
+               when others => False)
+            then
+               raise Semantic_Error with "Function " & To_String (Each.Name)
+               & " can be a type only if it is implemented in Ada, C++ or SDL";
+            end if;
+
+            if Each.Instance_Of.Has_Value then
+               begin
+                  declare
+                     Corresponding_Type : constant Taste_Terminal_Function :=
+                        Model.Interface_View.Flat_Functions.Element
+                           (To_String (Each.Instance_Of.Unsafe_Just));
+                  begin
+                     if not Corresponding_Type.Is_Type then
+                        raise Semantic_Error with "Function "
+                        & To_String (Each.Name) & " is an instance of "
+                        & To_String (Corresponding_Type.Name) & " which is NOT"
+                        & " a type";
+                     end if;
+                  end;
+               exception
+                  when Constraint_Error =>
+                     --  if call to Element did not return anything
+                     raise Semantic_Error with "Function not found : "
+                     & To_String (Each.Instance_Of.Unsafe_Just) & " (specified"
+                     & " as type of function " & To_String (Each.Name) & ")";
+               end;
+            end if;
          end loop;
       end if;
    end Check_Model;

@@ -10,6 +10,7 @@ use Ada.Strings.Unbounded,
     Ocarina.Backends.Properties,
     TASTE.Deployment_View,
     TASTE.Interface_View,
+    TASTE.Interface_View.Interfaces_Maps,
     TASTE.Parser_Utils;
 
 package body TASTE.Semantic_Check is
@@ -141,6 +142,19 @@ package body TASTE.Semantic_Check is
                         & To_String (Corresponding_Type.Name) & " which is NOT"
                         & " a type";
                      end if;
+
+                     --  Much check that PIs and RIs of type and instance match
+                     for PI of Each.Provided loop
+                        null;
+                     end loop;
+
+                     for RI of Each.Required loop
+                        null;
+                     end loop;
+
+--                      raise Semantic_Error with "Interface mismatch between "
+--                      & "functions " & To_String (Corresponding_Type.Name) &
+--                      " (type) and " & To_String (Each.Name) & " (instance)";
                   end;
                exception
                   when Constraint_Error =>

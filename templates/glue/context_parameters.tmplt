@@ -1,0 +1,10 @@
+@@-- Generate an ASN.1 module for context parameters
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@           : Function name
+@@-- @_Sort_Set_@       : Set of types used for this Context Parameter file
+@@-- @_Module_Set_@     : ... corresponding module (needed for ASN.1 "IMPORTS")
+@@-- @_CP_Name_@        : Table of context parameter names
+@@-- @_CP_Sort_@        : ... corresponding ASN.1 type
+@@-- @_CP_ASN1_Module_@ : ... in ASN.1 module
+@@-- @_CP_Value_@       : ... with default value

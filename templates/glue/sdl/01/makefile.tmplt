@@ -1,0 +1,27 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The function name
+@@-- @_ASN1_Files_@          : List of all ASN.1 files
+@@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+@@-- @_Is_Type_@             : Flag set to True for function type
+@@-- @_Instance_Of_@         : Name of function type if instance
+
+all: compile-linux
+
+clean:
+	rm -rf obj
+
+compile-linux:
+	mkdir -p obj && cd obj && \
+	@@IF@@ @_EXIST:Instance_Of_@
+	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
+	       rm ../src/@_LOWER:Instance_Of_@.ad? && \
+	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/src/:../../../dataview/Ada gnat make ../src/@_LOWER:Name_@
+ 	@@ELSE@@
+	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
+	@@END_IF@@
+	   @@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
+	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make ../src/@_LOWER:Name_@
+	@@ELSE@@
+	:
+	@@END_IF@@

@@ -1,0 +1,53 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the function
+@@-- @_Language_@            : The implementation language
+@@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
+@@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
+@@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
+@@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
+@@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
+@@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
+@@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
+@@-- @_ASN1_Files_@          : List of ASN.1 Files with path
+@@-- @_Timers_@              : List of timers (just names)
+@@-- @_Has_Context_@         : Flag, True if there are context parameters
+@@-- @_CP_Names_@            : List of Context Parameter names
+@@-- @_CP_Types_@            : List of Context Parameter types
+@@-- @_Provided_Interfaces_@ : List of Provided interfaces with parameters
+@@-- @_Required_Interfaces_@ : List of Required interfaces with parameters
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@     : List of User-defined properties (values)
+@@-- @_Is_Type_@             : Flag, True if function is a component type
+@@-- @_Instance_Of_@         : Optional name of component type
+@@IF@@ @_Is_Type_@
+process type @_CAPITALIZE:Name_@;
+@@ELSE@@
+process @_CAPITALIZE:Name_@;
+@@END_IF@@
+
+@@IF@@ @_Timers'Length_@ > 0
+/* CIF TEXT (10, 10), (200, 250) */
+-- Timers defined in the interface view
+-- Use SET_TIMER (value, timer name)
+-- and RESET_TIMER (timer name) in a
+-- PROCEDURE CALL symbol to use them
+@@TABLE@@
+timer @_Timers_@;
+@@END_TABLE@@
+/* CIF ENDTEXT */
+@@END_IF@@
+
+   /* CIF START (320, 10), (70, 35) */
+   start;
+     nextstate Wait;
+
+   /* CIF STATE (450, 10), (70, 35) */
+   state Wait;
+   endstate;
+
+@@IF@@ @_Is_Type_@
+endprocess type;
+@@ELSE@@
+endprocess;
+@@END_IF@@

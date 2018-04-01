@@ -121,7 +121,7 @@ package TASTE.Parser_Utils is
          Data_View        : aliased GNAT.Strings.String_Access;
          Output_Dir       : aliased GNAT.Strings.String_Access;
          Check_Data_View  : aliased Boolean := False;
-         Skeletons        : aliased Boolean := False;
+         Skeletons        : aliased Boolean := True;
          Glue             : aliased Boolean := False;
          Use_POHIC        : aliased Boolean := False;
          Timer_Resolution : aliased Integer := 100;

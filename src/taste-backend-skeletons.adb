@@ -19,8 +19,7 @@ use Ada.Characters.Handling,
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
-      All_CP_Files     :  Tag;  --  List of Context Parameters ASN.1 files
-      Output_File      : File_Type;
+      All_CP_Files     : Tag;  --  List of Context Parameters ASN.1 files
       Template         : constant IV_As_Template :=
                                 Interface_View_Template (Model.Interface_View);
 
@@ -28,6 +27,7 @@ package body TASTE.Backend.Skeletons is
                                             & "templates/";
 
       Prefix_Skeletons : constant String := Prefix & "skeletons/";
+      Prefix_Glue      : constant String := Prefix & "glue/";
 
       use Ada.Strings.Unbounded;
       type Output is (Header, Code);
@@ -81,12 +81,11 @@ package body TASTE.Backend.Skeletons is
          return Parse (Tmplt_CP, Content);
       end CP_To_ASN1;
 
-      --  Generate string for a global Makefile (processing all functions)
-      --  The template contains a set of languages, and a list of
-      --  combined function name/language
-      function Global_Makefile return String is
+      --  Generate a global Makefile (processing all functions)
+      procedure Generate_Global_Makefile is
          package Languages_Set is new Ordered_Sets (Unbounded_String);
          use Languages_Set;
+         Output_File      : File_Type;
          Languages        : Set;
          Unique_Languages : Tag;
          Functions_Tag    : Vector_Tag;
@@ -115,9 +114,16 @@ package body TASTE.Backend.Skeletons is
                         & Assoc ("Unique_Languages", Unique_Languages)
                         & Assoc ("ASN1_Files",       Get_ASN1_File_List)
                         & Assoc ("ASN1_Modules",     Get_Module_List);
-         return Parse (Tmplt, Content_Set);
-      end Global_Makefile;
+         Put_Info ("Generating global Makefile");
+         Create (File => Output_File,
+                 Mode => Out_File,
+                 Name => Model.Configuration.Output_Dir.all
+                         & "/" & "Makefile");
+         Put_Line (Output_File, Parse (Tmplt, Content_Set));
+         Close (Output_File);
+      end Generate_Global_Makefile;
 
+      --  Render an set (Tag) of interfaces by applying a template
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String;
                                    Target     : Output) return Tag
@@ -133,30 +139,33 @@ package body TASTE.Backend.Skeletons is
          return Result;
       end Process_Interfaces;
 
-      procedure Process_Function (F    : Taste_Terminal_Function;
-                                  Path : String) is
-         Language   : constant String        := Language_Spelling (F);
-         Hdr_Tmpl   : constant Translate_Set :=
+      --  Write header and body files for a function
+      procedure Process_Function (F          : Taste_Terminal_Function;
+                                  Path       : String;
+                                  Output_Sub : String := "src/") is
+         Output_File : File_Type;
+         Language    : constant String        := Language_Spelling (F);
+         Hdr_Tmpl    : constant Translate_Set :=
                                     +Assoc  ("Name", F.Name)
                                     & Assoc ("Is_Type", F.Is_Type)
                                     & Assoc ("Instance_Of",
                                              F.Instance_Of.Value_Or (US ("")));
-         Make_Tmpl  : constant Translate_Set := Function_Makefile_Template
+         Make_Tmpl   : constant Translate_Set := Function_Makefile_Template
                                      (F       => F,
                                       Modules => Get_Module_List,
                                       Files   => Get_ASN1_File_List);
-         Make_Text  : constant String := Function_Makefile (Path, Make_Tmpl);
+         Make_Text   : constant String := Function_Makefile (Path, Make_Tmpl);
          --  Associations for (optional) context parameters:
-         CP_Tmpl    : constant Translate_Set := CP_Template (F => F);
-         CP_Text    : constant String := CP_To_ASN1 (CP_Tmpl);
-         CP_File    : constant String := "Context-"
+         CP_Tmpl     : constant Translate_Set := CP_Template (F => F);
+         CP_Text     : constant String := CP_To_ASN1 (CP_Tmpl);
+         CP_File     : constant String := "Context-"
                                          & To_Lower (To_String (F.Name))
                                          & ".asn";
 
-         Func_Tmpl  : constant Func_As_Template :=
+         Func_Tmpl   : constant Func_As_Template :=
                                 Template.Funcs.Element (To_String (F.Name));
 
-         Func_Hdr   : constant Translate_Set :=
+         Func_Hdr    : constant Translate_Set :=
                          Func_Tmpl.Header
                          & Assoc ("Provided_Interfaces",
                                   Process_Interfaces
@@ -170,7 +179,7 @@ package body TASTE.Backend.Skeletons is
          Header_Text : constant String :=
                                     Parse (Path & "header.tmplt", Func_Hdr);
 
-         Func_Body  : constant Translate_Set :=
+         Func_Body   : constant Translate_Set :=
              Func_Tmpl.Header
              & Assoc ("Provided_Interfaces",
                       Process_Interfaces (Func_Tmpl.Provided, Path, Code))
@@ -182,7 +191,7 @@ package body TASTE.Backend.Skeletons is
                          Model.Configuration.Output_Dir.all
                          & "/" & To_Lower (To_String (F.Name))
                          & "/" & Language & "/";
-         Output_Src  : constant String := Output_Base & "src/";
+         Output_Src  : constant String := Output_Base & Output_Sub;
          --  Get header and body filenames from templates
          Header_File : constant String := Strip_String
                          (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
@@ -246,7 +255,8 @@ package body TASTE.Backend.Skeletons is
       end Process_Function;
 
       --  Main loop generating skeletons for each function
-      procedure Generate_Skeletons is
+      procedure Generate_From_Templates (Prefix     : String;
+                                         Output_Sub : String) is
       begin
          Put_Info ("==== Generate skeletons for all supported languages ====");
          for Each of Model.Interface_View.Flat_Functions loop
@@ -254,7 +264,7 @@ package body TASTE.Backend.Skeletons is
             --  generate more than one set of skeleton files.
             declare
                Language   : constant String := Language_Spelling (Each);
-               Path       : constant String := Prefix_Skeletons
+               Path       : constant String := Prefix
                                                & To_Lower (Language) & "/";
                ST         : Search_Type;
                Current    : Directory_Entry_Type;
@@ -267,15 +277,16 @@ package body TASTE.Backend.Skeletons is
                              Pattern   => Pattern,
                              Filter    => Filter);
                if not More_Entries (ST) then
-                  Put_Info ("No skeleton templates exist for language "
+                  Put_Info ("No templates exist for language "
                             & Language & " used in function "
                             & To_String (Each.Name));
                end if;
                while More_Entries (ST) loop
                   Get_Next_Entry (ST, Current);
                   if Is_Template_Present (Full_Name (Current)) then
-                     Process_Function (F    => Each,
-                                       Path => Full_Name (Current) & "/");
+                     Process_Function (F          => Each,
+                                       Path       => Full_Name (Current) & "/",
+                                       Output_Sub => Output_Sub);
                   else
                      Put_Info ("Incomplete set of templates in folder "
                                & Full_Name (Current));
@@ -284,17 +295,25 @@ package body TASTE.Backend.Skeletons is
                End_Search (ST);
             end;
          end loop;
-      end Generate_Skeletons;
+      end Generate_From_Templates;
 
    begin
-      Generate_Skeletons;
-      Put_Info ("Generating global Makefile");
-      Create (File => Output_File,
-              Mode => Out_File,
-              Name => Model.Configuration.Output_Dir.all & "/" & "Makefile");
-      Put_Line (Output_File, Global_Makefile);
-      Close (Output_File);
+      Generate_From_Templates (Prefix     => Prefix_Skeletons,
+                               Output_Sub => "src/");
+      Generate_Global_Makefile;
+      Put_Info (Prefix_Glue);
+      if Model.Configuration.Glue then
+         Generate_From_Templates (Prefix     => Prefix_Glue,
+                                  Output_Sub => "glue/");
+      end if;
    end Generate;
+
+   --  Functions that transform the AST into Templates:
+   --  * Context Parameters
+   --  * Makefile (per function)
+   --  * A single interface
+   --  * A single taste function
+   --  * The complete interface view
 
    --  Context Parameters
    function CP_Template (F : Taste_Terminal_Function) return Translate_Set is

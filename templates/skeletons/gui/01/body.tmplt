@@ -20,4 +20,4 @@
 @@-- @_Property_Values_@     : List of User-defined properties (values)
 @@-- @_Is_Type_@             : Flag, True if function is a component type
 @@-- @_Instance_Of_@         : Optional name of component type
-@@INCLUDE@@ ../c/header.tmplt
+@@INCLUDE@@ ../../c/01/body.tmplt

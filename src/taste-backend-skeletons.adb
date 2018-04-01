@@ -34,13 +34,13 @@ package body TASTE.Backend.Skeletons is
       --  a given language (based on the directory name).
       function Is_Template_Present (Path : String) return Boolean is
         (Exists (Path) and then Kind (Path) = Directory and then
-         Exists (Path & "interface-header.tmplt")       and then
-         Exists (Path & "interface-body.tmplt")         and then
-         Exists (Path & "header.tmplt")                 and then
-         Exists (Path & "body.tmplt")                   and then
-         Exists (Path & "makefile.tmplt")               and then
-         Exists (Path & "body-filename.tmplt")          and then
-         Exists (Path & "header-filename.tmplt"));
+         Exists (Path & "/interface-header.tmplt")       and then
+         Exists (Path & "/interface-body.tmplt")         and then
+         Exists (Path & "/header.tmplt")                 and then
+         Exists (Path & "/body.tmplt")                   and then
+         Exists (Path & "/makefile.tmplt")               and then
+         Exists (Path & "/body-filename.tmplt")          and then
+         Exists (Path & "/header-filename.tmplt"));
 
       --  Return a Tag list of ASN.1 Modules for the skeleton headers
       function Get_Module_List return Tag is
@@ -128,129 +128,153 @@ package body TASTE.Backend.Skeletons is
          end loop;
          return Result;
       end Process_Interfaces;
+
+      procedure Process_Function (F    : Taste_Terminal_Function;
+                                  Path : String) is
+         Language   : constant String        := Language_Spelling (F);
+         Hdr_Tmpl   : constant Translate_Set :=
+                                    +Assoc  ("Name", F.Name)
+                                    & Assoc ("Is_Type", F.Is_Type)
+                                    & Assoc ("Instance_Of",
+                                             F.Instance_Of.Value_Or (US ("")));
+         Make_Tmpl  : constant Translate_Set := Function_Makefile_Template
+                                     (F       => F,
+                                      Modules => Get_Module_List,
+                                      Files   => Get_ASN1_File_List);
+         Make_Text  : constant String := Function_Makefile (Path, Make_Tmpl);
+         --  Associations for (optional) context parameters:
+         CP_Tmpl    : constant Translate_Set := CP_Template (F => F);
+         CP_Text    : constant String := CP_To_ASN1 (CP_Tmpl);
+         CP_File    : constant String := "Context-"
+                                         & To_Lower (To_String (F.Name))
+                                         & ".asn";
+
+         Func_Tmpl  : constant Func_As_Template :=
+                                Template.Funcs.Element (To_String (F.Name));
+
+         Func_Hdr   : constant Translate_Set :=
+                         Func_Tmpl.Header
+                         & Assoc ("Provided_Interfaces",
+                                  Process_Interfaces
+                                     (Func_Tmpl.Provided, Path, Header))
+                         & Assoc ("Required_Interfaces",
+                                  Process_Interfaces
+                                     (Func_Tmpl.Required, Path, Header))
+                         & Assoc ("ASN1_Modules", Get_Module_List)
+                         & Assoc ("ASN1_Files", Get_ASN1_File_List);
+
+         Header_Text : constant String :=
+                                    Parse (Path & "header.tmplt", Func_Hdr);
+
+         Func_Body  : constant Translate_Set :=
+             Func_Tmpl.Header
+             & Assoc ("Provided_Interfaces",
+                      Process_Interfaces (Func_Tmpl.Provided, Path, Code))
+             & Assoc ("Required_Interfaces",
+                      Process_Interfaces (Func_Tmpl.Required, Path, Code));
+         Body_Text   : constant String :=
+                                        Parse (Path & "body.tmplt", Func_Body);
+         Output_Base : constant String :=
+                         Model.Configuration.Output_Dir.all
+                         & "/" & To_Lower (To_String (F.Name))
+                         & "/" & Language & "/";
+         Output_Src  : constant String := Output_Base & "src/";
+         --  Get header and body filenames from templates
+         Header_File : constant String := Strip_String
+                         (Parse (Path & "header-filename.tmplt", Hdr_Tmpl));
+         Body_File   : constant String := Strip_String
+                         (Parse (Path & "body-filename.tmplt", Hdr_Tmpl));
+         Make_File   : constant String := "Makefile";
+
+      begin
+         --  Create directory tree (output/function/language/src)
+         Create_Path (Output_Src);
+         if Header_File /= "" then
+            Put_Info ("Generating " & Output_Src & Header_File);
+            Create (File => Output_File,
+                    Mode => Out_File,
+                    Name => Output_Src & Header_File);
+            Put_Line (Output_File, Header_Text);
+            Close (Output_File);
+         else
+            Put_Info ("No header file needed for function "
+                       & To_String (F.Name));
+         end if;
+         if Body_File /= "" and then not Exists (Output_Src & Body_File)
+         then
+            Put_Info ("Generating " & Body_File);
+            Create (File => Output_File,
+                    Mode => Out_File,
+                    Name => Output_Src & Body_File);
+            Put_Line (Output_File, Body_Text);
+            Close (Output_File);
+         else
+            Put_Info ("No body file generated for function "
+                      & To_String (F.Name));
+         end if;
+         Put_Info ("Generating " & Make_File & " for function "
+                   & To_String (F.Name));
+         Create (File => Output_File,
+                 Mode => Out_File,
+                 Name => Output_Base & Make_File);
+         Put_Line (Output_File, Make_Text);
+         Close (Output_File);
+         --  Generate context parameters if any
+         if not F.Context_Params.Is_Empty then
+            Put_Info ("Generating " & CP_File);
+            Create (File => Output_File,
+                    Mode => Out_File,
+                    Name => Output_Base & CP_File);
+            Put_Line (Output_File, CP_Text);
+            Close (Output_File);
+            All_CP_Files :=
+               All_CP_Files & ("../" & Output_Base & CP_File);
+         end if;
+      exception
+         when E : End_Error
+         | Text_IO.Use_Error =>
+            if Is_Open (Output_File) then
+               Close (Output_File);
+            end if;
+            raise Skeleton_Error with "Generation of skeleton for function "
+                                      & To_String (F.Name) & " failed : "
+                                      & Exception_Message (E);
+      end Process_Function;
+
    begin
-      Put_Info ("=== Generate skeletons ===");
+      Put_Info ("===== Generate skeletons for all supported languages =====");
       for Each of Model.Interface_View.Flat_Functions loop
+         --  There can be multiple folders for a given language, allowing to
+         --  generate more than one set of skeleton files.
          declare
             Language   : constant String := Language_Spelling (Each);
             Path       : constant String := Prefix & To_Lower (Language) & "/";
-            Proceed    : constant Boolean := Is_Template_Present (Path);
-            Hdr_Tmpl   : constant Translate_Set :=
-                +Assoc ("Name", Each.Name)
-                & Assoc ("Is_Type", Each.Is_Type)
-                & Assoc ("Instance_Of", Each.Instance_Of.Value_Or (US ("")));
-            Make_Tmpl  : constant Translate_Set := Function_Makefile_Template
-                                        (F       => Each,
-                                         Modules => Get_Module_List,
-                                         Files   => Get_ASN1_File_List);
-            Make_Text  : constant String := (if Proceed
-                             then Function_Makefile (Path, Make_Tmpl) else "");
-            --  Associations for (optional) context parameters:
-            CP_Tmpl    : constant Translate_Set := CP_Template (F => Each);
-            CP_Text    : constant String := CP_To_ASN1 (CP_Tmpl);
-            CP_File    : constant String := "Context-"
-                                            & To_Lower (To_String (Each.Name))
-                                            & ".asn";
-
-            Func_Tmpl  : constant Func_As_Template :=
-              Template.Funcs.Element (To_String (Each.Name));
-
-            Func_Hdr   : constant Translate_Set :=
-              (if Proceed then Func_Tmpl.Header
-               & Assoc ("Provided_Interfaces",
-                 Process_Interfaces (Func_Tmpl.Provided, Path, Header))
-               & Assoc ("Required_Interfaces",
-                 Process_Interfaces (Func_Tmpl.Required, Path, Header))
-               & Assoc ("ASN1_Modules", Get_Module_List)
-               & Assoc ("ASN1_Files", Get_ASN1_File_List)
-               else Null_Set);
-
-            Header_Text : constant String :=
-             (if Proceed then Parse (Path & "header.tmplt", Func_Hdr) else "");
-
-            Func_Body  : constant Translate_Set :=
-              (if Proceed then Func_Tmpl.Header
-              & Assoc ("Provided_Interfaces",
-                       Process_Interfaces (Func_Tmpl.Provided, Path, Code))
-              & Assoc ("Required_Interfaces",
-                       Process_Interfaces (Func_Tmpl.Required, Path, Code))
-               else Null_Set);
-            Body_Text   : constant String :=
-                            (if Proceed
-                             then Parse (Path & "body.tmplt", Func_Body)
-                             else "");
-            Output_Base : constant String :=
-                            Model.Configuration.Output_Dir.all
-                            & "/" & To_Lower (To_String (Each.Name))
-                            & "/" & Language & "/";
-            Output_Src  : constant String := Output_Base & "src/";
-            --  Get header and body filenames from templates
-            Header_File : constant String := Strip_String
-                            (if Proceed then Parse
-                               (Path & "header-filename.tmplt", Hdr_Tmpl)
-                             else "");
-            Body_File   : constant String := Strip_String
-                            (if Proceed then Parse
-                               (Path & "body-filename.tmplt", Hdr_Tmpl)
-                             else "");
-            Make_File   : constant String := "Makefile";
+            ST         : Search_Type;
+            Current    : Directory_Entry_Type;
+            Pattern    : constant String      := "[0-9][0-9]";
+            Filter     : constant Filter_Type := (Directory => True,
+                                                  others    => False);
          begin
-            if Proceed then
-               --  Create directory tree (output/function/language/src)
-               Create_Path (Output_Src);
-               if Header_File /= "" then
-                  Put_Info ("Generating " & Output_Src & Header_File);
-                  Create (File => Output_File,
-                          Mode => Out_File,
-                          Name => Output_Src & Header_File);
-                  Put_Line (Output_File, Header_Text);
-                  Close (Output_File);
-               else
-                  Put_Info ("No header file needed for function "
-                             & To_String (Each.Name));
-               end if;
-               if Body_File /= "" and then not Exists (Output_Src & Body_File)
-               then
-                  Put_Info ("Generating " & Body_File);
-                  Create (File => Output_File,
-                          Mode => Out_File,
-                          Name => Output_Src & Body_File);
-                  Put_Line (Output_File, Body_Text);
-                  Close (Output_File);
-               else
-                  Put_Info ("No body file generated for function "
-                            & To_String (Each.Name));
-               end if;
-               Put_Info ("Generating " & Make_File & " for function "
+            Start_Search (Search    => ST,
+                          Directory => Path,
+                          Pattern   => Pattern,
+                          Filter    => Filter);
+            if not More_Entries (ST) then
+               Put_Info ("No skeleton templates exist for language "
+                         & Language & " used in function "
                          & To_String (Each.Name));
-               Create (File => Output_File,
-                       Mode => Out_File,
-                       Name => Output_Base & Make_File);
-               Put_Line (Output_File, Make_Text);
-               Close (Output_File);
-               --  Generate context parameters if any
-               if not Each.Context_Params.Is_Empty then
-                  Put_Info ("Generating " & CP_File);
-                  Create (File => Output_File,
-                          Mode => Out_File,
-                          Name => Output_Base & CP_File);
-                  Put_Line (Output_File, CP_Text);
-                  Close (Output_File);
-                  All_CP_Files :=
-                     All_CP_Files & ("../" & Output_Base & CP_File);
-               end if;
-            else
-               Put_Info ("Ignoring function " & To_String (Each.Name));
             end if;
-         exception
-            when E : End_Error
-               | Text_IO.Use_Error =>
-               if Is_Open (Output_File) then
-                  Close (Output_File);
+            while More_Entries (ST) loop
+               Get_Next_Entry (ST, Current);
+               if Is_Template_Present (Full_Name (Current)) then
+                  Process_Function (F    => Each,
+                                    Path => Full_Name (Current) & "/");
+               else
+                  Put_Info ("Incomplete set of templates in folder "
+                            & Full_Name (Current));
                end if;
-               raise Skeleton_Error with "Generation of skeleton for function "
-                 & To_String (Each.Name) & " failed : "
-                 & Exception_Message (E);
+            end loop;
+            End_Search (ST);
          end;
       end loop;
       Put_Info ("Generating global Makefile");

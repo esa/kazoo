@@ -19,13 +19,15 @@ use Ada.Characters.Handling,
 
 package body TASTE.Backend.Skeletons is
    procedure Generate (Model : TASTE_Model) is
-      All_CP_Files :  Tag;  --  List of Context Parameters ASN.1 files
-      Output_File  : File_Type;
-      Template     : constant IV_As_Template :=
-        Interface_View_Template (Model.Interface_View);
+      All_CP_Files     :  Tag;  --  List of Context Parameters ASN.1 files
+      Output_File      : File_Type;
+      Template         : constant IV_As_Template :=
+                                Interface_View_Template (Model.Interface_View);
 
-      Prefix : constant String := Model.Configuration.Binary_Path.all
-        & "templates/skeletons/";
+      Prefix           : constant String := Model.Configuration.Binary_Path.all
+                                            & "templates/";
+
+      Prefix_Skeletons : constant String := Prefix & "skeletons/";
 
       use Ada.Strings.Unbounded;
       type Output is (Header, Code);
@@ -33,7 +35,7 @@ package body TASTE.Backend.Skeletons is
       --  Function checking that all templates files are available to support
       --  a given language (based on the directory name).
       function Is_Template_Present (Path : String) return Boolean is
-        (Exists (Path) and then Kind (Path) = Directory and then
+        (Exists (Path) and then Kind (Path) = Directory  and then
          Exists (Path & "/interface-header.tmplt")       and then
          Exists (Path & "/interface-body.tmplt")         and then
          Exists (Path & "/header.tmplt")                 and then
@@ -42,7 +44,7 @@ package body TASTE.Backend.Skeletons is
          Exists (Path & "/body-filename.tmplt")          and then
          Exists (Path & "/header-filename.tmplt"));
 
-      --  Return a Tag list of ASN.1 Modules for the skeleton headers
+      --  Return a Tag list of ASN.1 Modules for the headers
       function Get_Module_List return Tag is
          Result : Tag;
       begin
@@ -73,7 +75,8 @@ package body TASTE.Backend.Skeletons is
       end Function_Makefile;
 
       function CP_To_ASN1 (Content : Translate_Set) return String is
-         Tmplt_CP : constant String := Prefix & "context_parameters.tmplt";
+         Tmplt_CP : constant String := Prefix_Skeletons
+                                       & "context_parameters.tmplt";
       begin
          return Parse (Tmplt_CP, Content);
       end CP_To_ASN1;
@@ -90,7 +93,8 @@ package body TASTE.Backend.Skeletons is
          Language_Tag     : Vector_Tag;
          Is_Type_Tag      : Vector_Tag;
          Content_Set      : Translate_Set;
-         Tmplt            : constant String := Prefix & "makefile.tmplt";
+         Tmplt            : constant String := Prefix_Skeletons
+                                               & "makefile.tmplt";
       begin
          if not Exists (Tmplt) then
             raise Skeleton_Error with "Missing makefile.tmplt";
@@ -241,42 +245,49 @@ package body TASTE.Backend.Skeletons is
                                       & Exception_Message (E);
       end Process_Function;
 
-   begin
-      Put_Info ("===== Generate skeletons for all supported languages =====");
-      for Each of Model.Interface_View.Flat_Functions loop
-         --  There can be multiple folders for a given language, allowing to
-         --  generate more than one set of skeleton files.
-         declare
-            Language   : constant String := Language_Spelling (Each);
-            Path       : constant String := Prefix & To_Lower (Language) & "/";
-            ST         : Search_Type;
-            Current    : Directory_Entry_Type;
-            Pattern    : constant String      := "[0-9][0-9]";
-            Filter     : constant Filter_Type := (Directory => True,
-                                                  others    => False);
-         begin
-            Start_Search (Search    => ST,
-                          Directory => Path,
-                          Pattern   => Pattern,
-                          Filter    => Filter);
-            if not More_Entries (ST) then
-               Put_Info ("No skeleton templates exist for language "
-                         & Language & " used in function "
-                         & To_String (Each.Name));
-            end if;
-            while More_Entries (ST) loop
-               Get_Next_Entry (ST, Current);
-               if Is_Template_Present (Full_Name (Current)) then
-                  Process_Function (F    => Each,
-                                    Path => Full_Name (Current) & "/");
-               else
-                  Put_Info ("Incomplete set of templates in folder "
-                            & Full_Name (Current));
+      --  Main loop generating skeletons for each function
+      procedure Generate_Skeletons is
+      begin
+         Put_Info ("==== Generate skeletons for all supported languages ====");
+         for Each of Model.Interface_View.Flat_Functions loop
+            --  There can be multiple folders for a given language, allowing to
+            --  generate more than one set of skeleton files.
+            declare
+               Language   : constant String := Language_Spelling (Each);
+               Path       : constant String := Prefix_Skeletons
+                                               & To_Lower (Language) & "/";
+               ST         : Search_Type;
+               Current    : Directory_Entry_Type;
+               Pattern    : constant String      := "[0-9][0-9]";
+               Filter     : constant Filter_Type := (Directory => True,
+                                                     others    => False);
+            begin
+               Start_Search (Search    => ST,
+                             Directory => Path,
+                             Pattern   => Pattern,
+                             Filter    => Filter);
+               if not More_Entries (ST) then
+                  Put_Info ("No skeleton templates exist for language "
+                            & Language & " used in function "
+                            & To_String (Each.Name));
                end if;
-            end loop;
-            End_Search (ST);
-         end;
-      end loop;
+               while More_Entries (ST) loop
+                  Get_Next_Entry (ST, Current);
+                  if Is_Template_Present (Full_Name (Current)) then
+                     Process_Function (F    => Each,
+                                       Path => Full_Name (Current) & "/");
+                  else
+                     Put_Info ("Incomplete set of templates in folder "
+                               & Full_Name (Current));
+                  end if;
+               end loop;
+               End_Search (ST);
+            end;
+         end loop;
+      end Generate_Skeletons;
+
+   begin
+      Generate_Skeletons;
       Put_Info ("Generating global Makefile");
       Create (File => Output_File,
               Mode => Out_File,

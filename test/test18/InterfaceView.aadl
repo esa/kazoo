@@ -13,8 +13,6 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_pulse
-PROPERTIES
-  Taste::Associated_Queue_Size => 2;
 END PI_pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_pulse.others
@@ -27,6 +25,8 @@ FEATURES
   a : IN PARAMETER DataView::MyEnum {
     Taste::encoding => ACN;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_called_by_sync;
 
 SUBPROGRAM IMPLEMENTATION PI_called_by_sync.others
@@ -54,7 +54,7 @@ SYSTEM Function1
 FEATURES
   PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_pulse.others {
     Taste::coordinates => "101731 62203";
-    Taste::RCMoperationKind => sporadic;
+    Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 1 ms;
     Taste::InterfaceName => "pulse";
@@ -62,6 +62,8 @@ FEATURES
   PI_called_by_sync : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_called_by_sync.others {
     Taste::coordinates => "107398 92911";
     Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "called_by_sync";
   };
   RI_spo1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo1.others {
@@ -93,6 +95,30 @@ WITH interfaceview::IV::function_with_sync;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
+SUBPROGRAM PI_spo1
+FEATURES
+  a : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_spo1;
+
+SUBPROGRAM IMPLEMENTATION PI_spo1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_spo1.others;
+
+SUBPROGRAM PI_spo2_paramless
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_spo2_paramless;
+
+SUBPROGRAM IMPLEMENTATION PI_spo2_paramless.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_spo2_paramless.others;
+
 SUBPROGRAM RI_run_a_pro
 FEATURES
   a : IN PARAMETER DataView::MyBool {
@@ -116,28 +142,22 @@ END RI_run_b_unpro;
 SUBPROGRAM IMPLEMENTATION RI_run_b_unpro.others
 END RI_run_b_unpro.others;
 
-SUBPROGRAM PI_spo1
-FEATURES
-  a : IN PARAMETER DataView::MyInteger {
-    Taste::encoding => NATIVE;
-  };
-END PI_spo1;
-
-SUBPROGRAM IMPLEMENTATION PI_spo1.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_spo1.others;
-
-SUBPROGRAM PI_spo2_paramless
-END PI_spo2_paramless;
-
-SUBPROGRAM IMPLEMENTATION PI_spo2_paramless.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_spo2_paramless.others;
-
 SYSTEM function_with_sporadics
 FEATURES
+  PI_spo1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo1.others {
+    Taste::coordinates => "139524 70235";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 123 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "spo1";
+  };
+  PI_spo2_paramless : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo2_paramless.others {
+    Taste::coordinates => "139524 73385";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "spo2_paramless";
+  };
   RI_run_a_pro : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_a_pro.others {
     Taste::coordinates => "144090 86612";
     Taste::RCMoperationKind => any;
@@ -149,17 +169,6 @@ FEATURES
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "run_b_unpro";
     Taste::labelInheritance => "true";
-  };
-  PI_spo1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo1.others {
-    Taste::coordinates => "139524 70235";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 123 ms;
-    Taste::InterfaceName => "spo1";
-  };
-  PI_spo2_paramless : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo2_paramless.others {
-    Taste::coordinates => "139524 73385";
-    Taste::RCMoperationKind => sporadic;
-    Taste::InterfaceName => "spo2_paramless";
   };
 PROPERTIES
   Source_Language => (C);
@@ -183,6 +192,8 @@ FEATURES
   a : IN PARAMETER DataView::MyBool {
     Taste::encoding => NATIVE;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_run_a_pro;
 
 SUBPROGRAM IMPLEMENTATION PI_run_a_pro.others
@@ -198,6 +209,8 @@ FEATURES
   b : OUT PARAMETER DataView::MySeq {
     Taste::encoding => UPER;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_run_b_unpro;
 
 SUBPROGRAM IMPLEMENTATION PI_run_b_unpro.others
@@ -220,11 +233,15 @@ FEATURES
   PI_run_a_pro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_a_pro.others {
     Taste::coordinates => "146927 108973";
     Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "run_a_pro";
   };
   PI_run_b_unpro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_b_unpro.others {
     Taste::coordinates => "156377 108973";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "run_b_unpro";
   };
   RI_called_by_sync : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_called_by_sync.others {

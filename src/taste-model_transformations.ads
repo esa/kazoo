@@ -1,5 +1,7 @@
-with TASTE.AADL_Parser;
-use  TASTE.AADL_Parser;
+with TASTE.AADL_Parser,
+     TASTE.Interface_View;
+use  TASTE.AADL_Parser,
+     TASTE.Interface_View;
 
 package TASTE.Model_Transformations is
    --  Transform: apply TASTE "Preprocessing" on IV/DV and return a new model
@@ -14,4 +16,7 @@ package TASTE.Model_Transformations is
    --  * Create Timer manager functions
    function Transform (Model : TASTE_Model) return TASTE_Model;
    Transformation_Error : exception;
+
+private
+   procedure Process_Function (F : in out Taste_Terminal_Function);
 end TASTE.Model_Transformations;

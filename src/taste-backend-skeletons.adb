@@ -11,7 +11,7 @@ use Ada.Characters.Handling,
     Ada.Directories,
     TASTE.Parser_Utils;
 
---  This package covers the generation of skeletons for all supported languages
+--  This package covers the generation of code for all supported languages
 --  There is no code that is specific to one particular language. The package
 --  looks for a sub-directory with the name of the language and checks that all
 --  skeleton-related template files are present. Then it fills the Template

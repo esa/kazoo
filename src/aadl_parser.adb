@@ -1,15 +1,20 @@
 with GNAT.OS_Lib,
      TASTE,
-     TASTE.AADL_Parser;
-use TASTE.AADL_Parser;
+     TASTE.AADL_Parser,
+     TASTE.Model_Transformations;
+use TASTE.AADL_Parser,
+    TASTE.Model_Transformations;
 
 procedure AADL_Parser is
-   Model : TASTE_Model;
 begin
-   Model := Parse_Project;
-   Model.Dump;
-   Model.Generate_Build_Script;
-   Model.Generate_Skeletons;
+   declare
+      Model       : constant TASTE_Model := Parse_Project;
+      dummy_Trans : constant TASTE_Model := Transform (Model);
+   begin
+      Model.Dump;
+      Model.Generate_Build_Script;
+      Model.Generate_Skeletons;
+   end;
 exception
    when TASTE.Quit_TASTE =>
       GNAT.OS_Lib.OS_Exit (1);

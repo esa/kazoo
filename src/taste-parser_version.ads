@@ -1,6 +1,6 @@
 package TASTE.Parser_Version is
    Parser_Release : constant String :=
-      "1a96848 ; Commit Date:   Sun Apr 1 15:38:35 2018 ";
+      "a7aa20a ; Commit Date:   Sat Apr 28 14:13:36 2018 ";
    Ocarina_Version : constant String :=
-      "Ocarina 2017.x (Working Copy from r2a52334)";
+      "Ocarina 2017.x (Working Copy from r59b19f4)";
 end TASTE.Parser_Version;

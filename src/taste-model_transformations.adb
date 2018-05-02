@@ -10,7 +10,10 @@ with Text_IO; use Text_IO;
 
 package body TASTE.Model_Transformations is
 
-   procedure Process_Function (F : in out Taste_Terminal_Function) is
+   function Process_Function (F : in out Taste_Terminal_Function)
+      return Function_Maps.Map
+   is
+      New_Functions    : Function_Maps.Map;
       Count_Active_PI  : Natural := 0;
       Count_Passive_PI : Natural := 0;
    begin
@@ -41,13 +44,31 @@ package body TASTE.Model_Transformations is
          end if;
       end loop;
 
+      return New_Functions;
    end Process_Function;
 
    function Transform (Model : TASTE_Model) return TASTE_Model is
-      Result : TASTE_Model := Model;
+      Result        : TASTE_Model := Model;
+      New_Functions : Function_Maps.Map;
    begin
+      --  Processing of user-defined functions (may return a list of new
+      --  functions that will be added to the model)
       for F of Result.Interface_View.Flat_Functions loop
-         Process_Function (F);
+         declare
+            Functions : constant Function_Maps.Map := Process_Function (F);
+         begin
+            for Each of Functions loop
+               New_Functions.Insert (Key      => To_String (Each.Name),
+                                     New_Item => Each);
+            end loop;
+         end;
+      end loop;
+
+      --  Add all newly-created functions to the new model
+      for F of New_Functions loop
+         Result.Interface_View.Flat_Functions.Insert
+                                               (Key      => To_String (F.Name),
+                                                New_Item => F);
       end loop;
 
       --  Test / Debug:

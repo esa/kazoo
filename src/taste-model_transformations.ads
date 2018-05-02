@@ -18,5 +18,8 @@ package TASTE.Model_Transformations is
    Transformation_Error : exception;
 
 private
-   procedure Process_Function (F : in out Taste_Terminal_Function);
+   --  Perform various processing on a function. Return a map of possibly
+   --  created new functions, to be added to the new Model
+   function Process_Function (F : in out Taste_Terminal_Function)
+      return Function_Maps.Map;
 end TASTE.Model_Transformations;

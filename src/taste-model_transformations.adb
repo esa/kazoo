@@ -38,9 +38,37 @@ package body TASTE.Model_Transformations is
          end if;
       end loop;
 
+      --  When a function contains several active interfaces, create a new
+      --  separate function for each of them; this is needed to keep the
+      --  system analyzable by having a 1-to-1 mapping between a function and
+      --  a thread.
       for PI of F.Provided loop
-         if PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation then
-            null;
+         if (PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation)
+             and then Count_Passive_PI + Count_Active_PI > 1
+         then
+            --  Create a separate function to handle this PI
+            --  It will be later translated into a thread
+            declare
+               New_F    : Taste_Terminal_Function :=
+                             (Name     => F.Name & "_" & PI.Name,
+                              Language => Language_Device,
+                              Context  => F.Context,
+                              others   => <>);
+               New_F_PI : Taste_Interface := PI;
+               New_F_RI : Taste_Interface := PI;
+            begin
+               New_F_PI.Parent_Function := New_F.Name;
+               New_F_RI.Parent_Function := New_F.Name;
+
+               New_F.Provided.Insert (Key      => To_String (PI.Name),
+                                      New_Item => New_F_PI);
+               New_F.Required.Insert (Key      => To_String (New_F_RI.Name),
+                                      New_Item => New_F_RI);
+
+               --  Add to the list of newly created functions
+               New_Functions.Insert (Key      => To_String (New_F.Name),
+                                     New_Item => New_F);
+            end;
          end if;
       end loop;
 

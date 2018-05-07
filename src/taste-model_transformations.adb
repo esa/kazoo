@@ -46,8 +46,6 @@ package body TASTE.Model_Transformations is
          if (PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation)
              and then Count_Passive_PI + Count_Active_PI > 1
          then
-            --  Create a separate function to handle this PI
-            --  It will be later translated into a thread
             declare
                New_F    : Taste_Terminal_Function :=
                              (Name     => F.Name & "_" & PI.Name,
@@ -56,10 +54,31 @@ package body TASTE.Model_Transformations is
                               others   => <>);
                New_F_PI : Taste_Interface := PI;
                New_F_RI : Taste_Interface := PI;
+               Remote   : constant Remote_Entity :=
+                             (Function_Name  => F.Name,
+                              Interface_Name => PI.Name);
             begin
                New_F_PI.Parent_Function := New_F.Name;
                New_F_RI.Parent_Function := New_F.Name;
 
+               --  Set the information about the function to which the new
+               --  RI is connected.
+               New_F_RI.Remote_Interfaces.Clear;
+               New_F_RI.Remote_Interfaces.Append (Remote);
+
+               --  Update the Remote interfaces of the callers of the PI to
+               --  make them point to the new function
+               --  TODO (need access to the model..)
+               --  we can probably do it after we return, since we will have
+               --  both the list of new funcxtions and the model
+
+               --  Change the nature of the PI that triggered a new function
+               --  (Unprotected if the function only contained one active PI,
+               --  and possibly any number of other unprotected PIs)
+               PI.RCM := (if Count_Active_PI > 1
+                          then Protected_Operation else Unprotected_Operation);
+
+               --  Add the PI and RI to the new function
                New_F.Provided.Insert (Key      => To_String (PI.Name),
                                       New_Item => New_F_PI);
                New_F.Required.Insert (Key      => To_String (New_F_RI.Name),

@@ -277,6 +277,10 @@ package body TASTE.AADL_Parser is
          Put_Info ("Dump of the Command Line");
          Model.Configuration.Debug_Dump (Output);
          Close (Output);
+
+         Put_Info ("Make a local copy of ASN.1 files for export");
+         Create_Path (Output_Path & "/Export");
+         Model.Data_View.Export_ASN1_Files (Output_Path & "/Export/");
       end if;
    exception
       when Error : others =>

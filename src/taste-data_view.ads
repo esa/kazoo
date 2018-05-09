@@ -64,4 +64,7 @@ package TASTE.Data_View is
 
    procedure Debug_Dump (DV : Taste_Data_View; Output : File_Type);
 
+   --  Make a local copy of ASN.1 files to allow project export
+   procedure Export_ASN1_Files (DV : Taste_Data_View; Output_Path : String);
+
 end TASTE.Data_View;

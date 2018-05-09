@@ -151,4 +151,14 @@ package body TASTE.Data_View is
          end loop;
       end loop;
    end Debug_Dump;
+
+   procedure Export_ASN1_Files (DV : Taste_Data_View; Output_Path : String) is
+   begin
+      for Each of DV.ASN1_Files loop
+         Ada.Directories.Copy_File
+                    (Source_Name => To_String (Each.Path),
+                     Target_Name => Output_Path
+                        & Ada.Directories.Simple_Name (To_String (Each.path)));
+      end loop;
+   end Export_ASN1_Files;
 end TASTE.Data_View;

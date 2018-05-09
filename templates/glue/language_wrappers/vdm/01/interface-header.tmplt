@@ -1,0 +1,24 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@INLINE(   )(, )( ==> )@@
+public PI_@_Name_@:
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+@_REPLACE_ALL((-)/_):Param_ASN1_Modules_@`@_REPLACE_ALL((-)/_):Param_ASN1_Types_@
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+@@-- To be continued... Add ASN.1 module reference...add (unique) OUT param..
+@@-- Ada code has to set "Has_Input_Params, Has_Output_Params 
+@@-- check Buildsupport C code to complete this section
+@@IF@@ @_Has_Input_Params_@
+   @_Name_@ (-) == is subclass responsibility;
+@@ELSE@@
+   @_Name_@ () == is subclass responsibility;
+@@END_IF@@

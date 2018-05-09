@@ -1,0 +1,31 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@IF@@ @_EXIST:Param_Names_@
+@@INLINE@@
+procedure @_CAPITALIZE:Name_@
+@@INLINE(\()(; )()@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+IN_@_CAPITALIZE:Param_Names_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
+@@ELSE@@
+OUT_@_CAPITALIZE:Param_Names_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+@@END_INLINE@@
+)
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@
+@@END_IF@@
+@@IF@@ @_Direction_@ = "PI"
+      with Export, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_PI_@_LOWER:Name_@";
+@@ELSE@@
+      with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_RI_@_LOWER:Name_@";
+@@--   procedure RIÜ@_CAPITALIZE:Name_@ renames @_CAPITALIZE:Name_@;

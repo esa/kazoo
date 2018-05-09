@@ -1,0 +1,15 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The function name
+@@-- @_ASN1_Files_@          : List of all ASN.1 files
+@@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+@@-- @_Is_Type_@             : Flag set to True for function type
+@@-- @_Instance_Of_@         : Name of function type if instance
+
+all: compile-linux
+
+clean:
+	rm -rf obj
+
+compile-linux:
+	mkdir -p obj && cd obj

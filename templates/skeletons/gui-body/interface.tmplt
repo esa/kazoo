@@ -7,4 +7,4 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@INCLUDE@@ ../../c/01/interface-header.tmplt
+@@INCLUDE@@ ../c-header/interface.tmplt

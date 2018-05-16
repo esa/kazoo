@@ -21,7 +21,7 @@
 @@-- @_Is_Type_@             : Flag, True if function is a component type
 @@-- @_Instance_Of_@         : Optional name of component type
 @@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
-@@INCLUDE@@ ../../c/01/header.tmplt
+@@INCLUDE@@ ../c-header/function.tmplt
 @@ELSE@@
 /* C++ Type or Instance
  * (Full template to to be completed)

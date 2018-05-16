@@ -5,4 +5,4 @@
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
-@@INCLUDE@@ ../../c/01/makefile.tmplt
+@@INCLUDE@@ ../c-header/makefile.tmplt

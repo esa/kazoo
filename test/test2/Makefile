@@ -3,7 +3,7 @@ AADL_PARSER=../../aadl_parser
 all: test-parse
 	cd output && make
 
-test-parse: clean
+generate:
 	$(AADL_PARSER) --gw \
 	               -o output \
 	               --glue \
@@ -12,6 +12,8 @@ test-parse: clean
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \
 		       ../common/ocarina_components.aadl \
+
+test-parse: clean generate
 
 clean:
 	rm -rf output

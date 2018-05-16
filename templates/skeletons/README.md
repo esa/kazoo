@@ -8,21 +8,23 @@ Adding or modifying the templates does not require recompilation of the tool. It
 The format of the template file is the one of the _templates-parser_ engine from Adacore. Complete documentation is available online (http://docs.adacore.com/live/wave/aws/html/template_parser/index.html)
 
 How to add or modify a template
--------------------------------
+==
 
 You can create your own template files. We will show how the C templates are defined, as if we had to do them from scratch.
 
 Each set of template allows to generate one file corresponding to a build script (e.g. a Makefile) and one file with content related to a TASTE function. For both, you are free to set the name of the file and all its content.
 In this example we will create a set of template that generate the _header files_, as part of the C function skeletons.
 
-1. Create a new folder (any name)
+Create a new folder (any name)
+--
 
 ```
 $ mkdir c-header
 $ cd  c-header
 ```
 
-2. List the template files
+List the template files
+--
 
 These files are needed:
 
@@ -36,7 +38,8 @@ c-header/
 └── trigger.tmplt              # Condition that triggers the application of this template
 ```
 
-3. Define the trigger
+Define the trigger
+--
 
 The file trigger.tmplt defines the condition that has to be fulfilled for the tool to actually process the templates in the current folder.
 It has to return the string TRUE if the condition is met. Any other value means FALSE.
@@ -61,9 +64,10 @@ TRUE
 
 Here, we want to generate the file _only if it is not already there_, to prevent overwritting user code.
 
-4. Define the filenames
+Define the filenames
+--
 
-The `function-filename.tmplt` and `makefile-filename.tmplt" are used to determine the output file name:
+The `function-filename.tmplt` and `makefile-filename.tmplt` are used to determine the output file name:
 
 ```
 $ cat function-filename.tmplt
@@ -77,7 +81,8 @@ $ cat makefile-filename.tmplt
 Makefile
 ```
 
-5. Define the content of the function template
+Define the content of the function template
+--
 
 Many template variables are available as attributes derived from the parsing of the Interface View:
 
@@ -155,7 +160,8 @@ extern void function_RI_interface_name(
 
 And this is followed by the list of typed parameters.
 
-6. Define the template of the buildscript
+Define the template of the buildscript
+--
 
 In the case of a Makefile, the content can be:
 
@@ -171,6 +177,7 @@ compile-linux:
 
 But it can obviously be much more complex and use the available template variables.
 
-7. Test it!
+Test it!
+--
 
 If the trigger condition you defined return TRUE, the template will be exectuted.

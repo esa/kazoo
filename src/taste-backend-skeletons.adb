@@ -324,8 +324,9 @@ package body TASTE.Backend.Skeletons is
                                           Output_Lang => Output_Lang,
                                           Output_Sub  => Output_Sub);
                      else
-                        Put_Info ("Nothing to generate from templates in "
-                                  & Path);
+                        null;  -- Too much noise
+                        --  Put_Info ("Nothing to generate from templates in "
+                        --          & Path);
                      end if;
                   end;
                end loop;

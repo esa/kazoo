@@ -122,7 +122,8 @@ package body TASTE.Model_Transformations is
       for F of Result.Interface_View.Flat_Functions loop
          if F.Language = Language_GUI then
             for I of F.Provided loop
-               Put_Line (To_String (I.Name));
+               null;
+               --  Put_Line (To_String (I.Name));
             end loop;
          end if;
       end loop;

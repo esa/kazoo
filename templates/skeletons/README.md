@@ -189,4 +189,4 @@ But it can obviously be much more complex and use the available template variabl
 Test it!
 --
 
-If the trigger condition you defined return TRUE, the template will be exectuted.
+If the trigger condition you defined returns TRUE, the template will be executed.

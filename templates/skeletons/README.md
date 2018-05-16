@@ -160,8 +160,9 @@ extern void function_RI_interface_name(
 
 And this is followed by the list of typed parameters.
 
-*IMPORTANT* 
-In some cases, you may want to share templates (or _part of them_) between several templates folder, and avoid copy-pasting the content. For example, the format of the function content in C and in C++ are currently identical (but the file names are different). In that case, you can _include_ one template in another one:
+**IMPORTANT**
+
+In some cases, you may want to share templates (or _part of them_) between several template folders, and avoid copy-pasting the content. For example, the function content in C and in C++ are currently identical (but the file names are different). In that case, you can _include_ one template in another one:
 
 ```
 $ cat cpp-header/function.tmplt

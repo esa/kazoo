@@ -55,14 +55,6 @@ package body TASTE.Backend.Skeletons is
          return Result;
       end Get_ASN1_File_List;
 
-      --  Generate the content of the Makefile per function
-      function Function_Makefile (Path    : String;
-                                  Content : Translate_Set) return String is
-         Tmplt_Makefile : constant String := Path & "makefile.tmplt";
-      begin
-         return Parse (Tmplt_Makefile, Content);
-      end Function_Makefile;
-
       function CP_To_ASN1 (Content : Translate_Set) return String is
          Tmplt_CP : constant String := Prefix_Skeletons
                                        & "context_parameters.tmplt";
@@ -173,7 +165,11 @@ package body TASTE.Backend.Skeletons is
                                      (F       => F,
                                       Modules => Get_Module_List,
                                       Files   => Get_ASN1_File_List);
-         Make_Text   : constant String := Function_Makefile (Path, Make_Tmpl);
+
+         Make_Path   : constant String := Path & "makefile.tmplt";
+         Make_Text   : constant String :=
+            (if Make_File /= "" and then Exists (Make_Path)
+             then Parse (Make_Path, Make_Tmpl) else "");
 
          Func_Tmpl   : constant Func_As_Template :=
                                 Template.Funcs.Element (To_String (F.Name));
@@ -204,13 +200,15 @@ package body TASTE.Backend.Skeletons is
             Put_Line (Output_File, Content);
             Close (Output_File);
          end if;
-         Put_Info ("Generating " & Make_File & " for function "
-                   & To_String (F.Name));
-         Create (File => Output_File,
-                 Mode => Out_File,
-                 Name => Output_Lang & Make_File);
-         Put_Line (Output_File, Make_Text);
-         Close (Output_File);
+         if Make_File /= "" then
+            Put_Info ("Generating " & Make_File & " for function "
+                      & To_String (F.Name));
+            Create (File => Output_File,
+                    Mode => Out_File,
+                    Name => Output_Lang & Make_File);
+            Put_Line (Output_File, Make_Text);
+            Close (Output_File);
+         end if;
       exception
          when E : End_Error
          | Text_IO.Use_Error =>
@@ -314,7 +312,7 @@ package body TASTE.Backend.Skeletons is
                      --  Trigger is set to True by the template
                      Trigger    : constant Boolean :=
                         (Exists (Path & "/trigger.tmplt")
-                         and then String'(Parse
+                         and then Strip_String (Parse
                             (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
                   begin
                      if Trigger then

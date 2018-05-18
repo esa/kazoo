@@ -259,14 +259,17 @@ package body TASTE.Backend.Code_Generators is
                   declare
                      --  Path is where the template files are located
                      Path      : constant String := Full_Name (Current);
+
                      --  Do_Func is true if there is a template for the
                      --  generation of a function template
                      Do_Func   : constant Boolean :=
                         Exists (Path & "/function-filename.tmplt");
-                     --  Do_Func is true if there is a template for the
+
+                     --  Do_Make is true if there is a template for the
                      --  generation of a build script/Makefile template
                      Do_Make   : constant Boolean :=
                         Exists (Path & "/makefile-filename.tmplt");
+
                      --  File_Name is the output file to generate,
                      --  as parsed from the template file
                      File_Name : constant String :=
@@ -275,34 +278,35 @@ package body TASTE.Backend.Code_Generators is
                             Strip_String (Parse
                                (Path & "/function-filename.tmplt", File_Tmpl))
                          else "");
+
                      --  User can define the name of the build script
-                     --  to generate.. Typycally, for a function, "Makefile"
+                     --  to generate (typically, for a function, "Makefile")
                      Make_Name : constant String :=
                         (if Do_Make
                          then
                             Strip_String (Parse
                                (Path & "/makefile-filename.tmplt", File_Tmpl))
                          else "");
+
                      --  Present_F is True if the function file already exists
                      Present_F : constant Boolean :=
                         (File_Name /= "" and Exists (Output_Dir & File_Name));
+
                      --  Present_M is True if the Makefile already exists
                      Present_M : constant Boolean :=
                         (Make_Name /= "" and Exists (Output_Dir & Make_Name));
+
                      --  Data needed to process trigger.tmplt
                      Trig_Tmpl  : constant Translate_Set :=
-                                          +Assoc  ("Name", Each.Name)
-                                          & Assoc ("Language",
-                                                   Language_Spelling (Each))
-                                          & Assoc ("Is_Type", Each.Is_Type)
-                                          & Assoc ("Instance_Of",
-                                           Each.Instance_Of.Value_Or (US ("")))
-                                          & Assoc ("C_Middleware",
-                                                 Model.Configuration.Use_POHIC)
-                                          & Assoc ("Filename_Is_Present",
-                                                   Present_F)
-                                          & Assoc ("Makefile_Is_Present",
-                                                   Present_M);
+                        +Assoc  ("Name", Each.Name)
+                        & Assoc ("Language", Language_Spelling (Each))
+                        & Assoc ("Is_Type", Each.Is_Type)
+                        & Assoc ("Instance_Of",
+                                         Each.Instance_Of.Value_Or (US ("")))
+                        & Assoc ("C_Middleware", Model.Configuration.Use_POHIC)
+                        & Assoc ("Filename_Is_Present", Present_F)
+                        & Assoc ("Makefile_Is_Present", Present_M);
+
                      --  Trigger is set to True by the template
                      Trigger    : constant Boolean :=
                         (Exists (Path & "/trigger.tmplt")
@@ -317,10 +321,6 @@ package body TASTE.Backend.Code_Generators is
                                           Path        => Path & "/",
                                           Output_Lang => Output_Lang,
                                           Output_Sub  => Output_Sub);
-                     else
-                        null;  -- Too much noise
-                        --  Put_Info ("Nothing to generate from templates in "
-                        --          & Path);
                      end if;
                   end;
                end loop;

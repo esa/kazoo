@@ -13,7 +13,7 @@ begin
    begin
       Model.Dump;
       Model.Generate_Build_Script;
-      Model.Generate_Skeletons;
+      Model.Generate_Code;
    end;
 exception
    when TASTE.Quit_TASTE =>

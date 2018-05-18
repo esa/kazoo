@@ -17,7 +17,7 @@ with System.Assertions,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
      TASTE.Backend.Build_Script,
-     TASTE.Backend.Skeletons,
+     TASTE.Backend.Code_Generators,
      TASTE.Semantic_Check;
 
 use Ada.Text_IO,
@@ -293,15 +293,15 @@ package body TASTE.AADL_Parser is
       TASTE.Backend.Build_Script.Generate (Model);
    end Generate_Build_Script;
 
-   procedure Generate_Skeletons (Model : TASTE_Model) is
+   procedure Generate_Code (Model : TASTE_Model) is
    begin
-      TASTE.Backend.Skeletons.Generate (Model);
+      TASTE.Backend.Code_Generators.Generate (Model);
    exception
-      when Error : TASTE.Backend.Skeletons.Skeleton_Error =>
+      when Error : TASTE.Backend.Code_Generators.ACG_Error =>
          Put_Error (Exception_Message (Error));
          raise Quit_Taste;
       when Error : others =>
          Errors.Display_Bug_Box (Error);
          raise Quit_Taste;
-   end Generate_Skeletons;
+   end Generate_Code;
 end TASTE.AADL_Parser;

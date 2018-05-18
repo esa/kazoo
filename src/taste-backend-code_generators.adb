@@ -17,12 +17,13 @@ use Ada.Characters.Handling,
 --  skeleton-related template files are present. Then it fills the Template
 --  mappings and generate the corresponding code.
 
-package body TASTE.Backend.Skeletons is
+package body TASTE.Backend.Code_Generators is
    procedure Generate (Model : TASTE_Model) is
       All_CP_Files     : Tag;  --  List of Context Parameters ASN.1 files
       Template         : constant IV_As_Template :=
                                 Interface_View_Template (Model.Interface_View);
 
+      --  Path to the input templates files
       Prefix           : constant String := Model.Configuration.Binary_Path.all
                                             & "templates/";
 
@@ -55,13 +56,6 @@ package body TASTE.Backend.Skeletons is
          return Result;
       end Get_ASN1_File_List;
 
-      function CP_To_ASN1 (Content : Translate_Set) return String is
-         Tmplt_CP : constant String := Prefix_Skeletons
-                                       & "context_parameters.tmplt";
-      begin
-         return Parse (Tmplt_CP, Content);
-      end CP_To_ASN1;
-
       --  Generate a global Makefile (processing all functions)
       procedure Generate_Global_Makefile is
          package Languages_Set is new Ordered_Sets (Unbounded_String);
@@ -77,7 +71,7 @@ package body TASTE.Backend.Skeletons is
                                                & "makefile.tmplt";
       begin
          if not Exists (Tmplt) then
-            raise Skeleton_Error with "Missing makefile.tmplt";
+            raise ACG_Error with "Missing makefile.tmplt";
          end if;
          for Each of Model.Interface_View.Flat_Functions loop
             Languages := Languages or To_Set (US (Language_Spelling (Each)));
@@ -104,7 +98,7 @@ package body TASTE.Backend.Skeletons is
          Close (Output_File);
       end Generate_Global_Makefile;
 
-      --  Render an set (Tag) of interfaces by applying a template
+      --  Render a set (Tag) of interfaces by applying a template
       function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
                                    Path       : String) return Tag
       is
@@ -117,15 +111,15 @@ package body TASTE.Backend.Skeletons is
          return Result;
       end Process_Interfaces;
 
-      --  Generate the ASN.1 files that represent Context Parameters for
-      --  a function
+      --  Generate the ASN.1 files translating Context Parameters
       procedure Process_Context_Parameters
                                (F           : Taste_Terminal_Function;
                                 Output_Lang : String)
       is
          Output_File : File_Type;
          CP_Tmpl     : constant Translate_Set := CP_Template (F => F);
-         CP_Text     : constant String := CP_To_ASN1 (CP_Tmpl);
+         CP_Text     : constant String :=
+            (Parse (Prefix_Skeletons & "context_parameters.tmplt", CP_Tmpl));
          CP_File     : constant String := "Context-"
                                          & To_Lower (To_String (F.Name))
                                          & ".asn";
@@ -147,9 +141,9 @@ package body TASTE.Backend.Skeletons is
             if Is_Open (Output_File) then
                Close (Output_File);
             end if;
-            raise Skeleton_Error with "Generation of code for function "
-                                      & To_String (F.Name) & " failed : "
-                                      & Exception_Message (E);
+            raise ACG_Error with "Generation of code for function "
+                                 & To_String (F.Name) & " failed : "
+                                 & Exception_Message (E);
       end Process_Context_Parameters;
 
       --  Write a header or body file for a function, a corresponding
@@ -215,9 +209,9 @@ package body TASTE.Backend.Skeletons is
             if Is_Open (Output_File) then
                Close (Output_File);
             end if;
-            raise Skeleton_Error with "Generation of code for function "
-                                      & To_String (F.Name) & " failed : "
-                                      & Exception_Message (E);
+            raise ACG_Error with "Generation of code for function "
+                                 & To_String (F.Name) & " failed : "
+                                 & Exception_Message (E);
       end Process_Template;
 
       --  Main loop generating skeletons for each function
@@ -487,7 +481,7 @@ package body TASTE.Backend.Skeletons is
             when Cyclic_Operation | Sporadic_Operation =>
                List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
             when others =>
-               List_Of_Sync_RIs := List_Of_Sync_RIs & Each.Name;
+               List_Of_Sync_RIs  := List_Of_Sync_RIs  & Each.Name;
          end case;
       end loop;
 
@@ -498,7 +492,7 @@ package body TASTE.Backend.Skeletons is
 
       --  Add all user-defined properties
       for Each of F.User_Properties loop
-         Property_Names  := Property_Names & Each.Name;
+         Property_Names  := Property_Names  & Each.Name;
          Property_Values := Property_Values & Each.Value;
       end loop;
 
@@ -532,4 +526,4 @@ package body TASTE.Backend.Skeletons is
       end loop;
       return Result;
    end Interface_View_Template;
-end TASTE.Backend.Skeletons;
+end TASTE.Backend.Code_Generators;

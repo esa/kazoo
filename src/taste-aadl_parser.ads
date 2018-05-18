@@ -37,7 +37,7 @@ package TASTE.AADL_Parser is
 
    procedure Dump                  (Model : TASTE_Model);
    procedure Generate_Build_Script (Model : TASTE_Model);
-   procedure Generate_Skeletons    (Model : TASTE_Model);
+   procedure Generate_Code         (Model : TASTE_Model);
 
 private
    function Initialize return Taste_Configuration;

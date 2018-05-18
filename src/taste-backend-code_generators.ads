@@ -7,9 +7,9 @@ use Ada.Containers,
     Templates_Parser,
     TASTE.AADL_Parser;
 
-package TASTE.Backend.Skeletons is
+package TASTE.Backend.Code_Generators is
    procedure Generate (Model : TASTE_Model);
-   Skeleton_Error : exception;
+   ACG_Error : exception;
 private
    package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
 
@@ -48,4 +48,4 @@ private
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template;
 
-end TASTE.Backend.Skeletons;
+end TASTE.Backend.Code_Generators;

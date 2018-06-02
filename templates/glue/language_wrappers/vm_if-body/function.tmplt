@@ -36,6 +36,20 @@
 
 void init_@_LOWER:Name_@()
 {
+   static bool init = false;
+
+   if (!init) {
+      init = true;
+
+@@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
+      // Call user code startup function
+      @_LOWER:Name_@_startup();
+@@END_IF@@
+
+      // Now we must iterate over all synchronous RIs, and call their parent's
+      // init function. Multiple calls are prevented by the "init" guard
+      // TODO, we miss a tag giving the parent function of Sync RI
+   }
 }
 
 @@TABLE@@

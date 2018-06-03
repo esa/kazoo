@@ -75,6 +75,8 @@ FEATURES
   b : OUT PARAMETER DataView::MySeq {
     Taste::encoding => ACN;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_do_something;
 
 SUBPROGRAM IMPLEMENTATION PI_do_something.others
@@ -100,6 +102,8 @@ FEATURES
   PI_do_something : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::my_blackbox::PI_do_something.others {
     Taste::coordinates => "128973 71652";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "do_something";
   };
   RI_some_operation : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::sync_called_by_bb::PI_some_operation.others {
@@ -109,7 +113,7 @@ FEATURES
     Taste::labelInheritance => "true";
   };
 PROPERTIES
-  Source_Language => (C);
+  Source_Language => (Blackbox_device);
   Taste::Active_Interfaces => any;
 END my_blackbox;
 
@@ -132,6 +136,8 @@ FEATURES
   b : IN PARAMETER DataView::MyChoice {
     Taste::encoding => UPER;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_some_operation;
 
 SUBPROGRAM IMPLEMENTATION PI_some_operation.others
@@ -144,6 +150,8 @@ FEATURES
   PI_some_operation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::sync_called_by_bb::PI_some_operation.others {
     Taste::coordinates => "136218 105824";
     Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "some_operation";
   };
 PROPERTIES

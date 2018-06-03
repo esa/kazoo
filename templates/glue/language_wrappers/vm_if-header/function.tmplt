@@ -73,15 +73,19 @@ void init_@_LOWER:Name_@();
 extern void adainit();
 @@END_IF@@
 
+@@IF@@ @_EXIST:Provided_Interfaces_@ and @_Language_@ /= "Blackbox_C"
 /* Provided interfaces */
 @@TABLE@@
 @_Provided_Interfaces_@
 @@END_TABLE@@
+@@END_IF@@
 
+@@IF@@ @_EXIST:Required_Interfaces_@
 /* Required interfaces */
 @@TABLE@@
 @_Required_Interfaces_@
 @@END_TABLE@@
+@@END_IF@@
 
 #ifdef __cplusplus
 }

@@ -483,12 +483,17 @@ package body TASTE.Backend.Code_Generators is
             when Cyclic_Operation | Sporadic_Operation =>
                List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
                --  Find remote function name (only one remote per RI)
-               Async_RIs_Parent  := Async_RIs_Parent
-                  & Each.Remote_Interfaces.First_Element.Function_Name;
+               if not Each.Remote_Interfaces.Is_Empty then
+                  --  We can spot non-connected RIs..
+                  Async_RIs_Parent  := Async_RIs_Parent
+                     & Each.Remote_Interfaces.First_Element.Function_Name;
+               end if;
             when others =>
                List_Of_Sync_RIs  := List_Of_Sync_RIs & Each.Name;
-               Sync_RIs_Parent   := Sync_RIs_Parent
-                  & Each.Remote_Interfaces.First_Element.Function_Name;
+               if not Each.Remote_Interfaces.Is_Empty then
+                  Sync_RIs_Parent   := Sync_RIs_Parent
+                     & Each.Remote_Interfaces.First_Element.Function_Name;
+               end if;
          end case;
       end loop;
 

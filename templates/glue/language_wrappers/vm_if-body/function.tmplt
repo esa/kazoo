@@ -47,15 +47,19 @@ void init_@_LOWER:Name_@()
       // Call user code startup function
       @_LOWER:Name_@_startup();
 @@END_IF@@
-
+@@IF@@ @_EXIST:Sync_RIs_Parent_@
       // Iterate over all synchronous RIs, and call their parent's
       // init function. Multiple calls are prevented by the "init" guard.
+@@END_IF@@
 @@TABLE@@
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
    }
 }
-
+@@-- For blackbox devices, don't generate the PI functions, they will be
+@@-- generated as skeleton functions. The init function only must be there.
+@@IF@@ @_Language_@ /= "Blackbox_C"
 @@TABLE@@
 @_Provided_Interfaces_@
 @@END_TABLE@@
+@@END_IF@@

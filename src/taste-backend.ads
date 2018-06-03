@@ -13,7 +13,7 @@ package TASTE.Backend is
           when Language_ASN1          => "ASN1",
           when Language_C             => "C",
           when Language_Esterel       => "Esterel",     --  Not supported
-          when Language_Device        => "C",
+          when Language_Device        => "Blackbox_C",
           when Language_Gui           => "GUI",
           when Language_Lua           => "Lua",         --  Not supported
           when Language_Lustre        => "SCADE",       --  Not supported

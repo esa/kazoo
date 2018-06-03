@@ -23,8 +23,8 @@ PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::Function1;
-WITH interfaceview::IV::function_with_sporadics;
-WITH interfaceview::IV::function_with_sync;
+WITH interfaceview::IV::my_blackbox;
+WITH interfaceview::IV::sync_called_by_bb;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -39,11 +39,11 @@ SUBCOMPONENTS
   IV_Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
     Taste::FunctionName => "Function1";
   };
-  IV_function_with_sporadics : SYSTEM interfaceview::IV::function_with_sporadics::function_with_sporadics.others {
-    Taste::FunctionName => "function_with_sporadics";
+  IV_my_blackbox : SYSTEM interfaceview::IV::my_blackbox::my_blackbox.others {
+    Taste::FunctionName => "my_blackbox";
   };
-  IV_function_with_sync : SYSTEM interfaceview::IV::function_with_sync::function_with_sync.others {
-    Taste::FunctionName => "function_with_sync";
+  IV_sync_called_by_bb : SYSTEM interfaceview::IV::sync_called_by_bb::sync_called_by_bb.others {
+    Taste::FunctionName => "sync_called_by_bb";
   };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "122454 73037 154706 93871";
@@ -54,8 +54,8 @@ SUBCOMPONENTS
   };
 PROPERTIES
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function1;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_function_with_sporadics;
-  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_function_with_sync;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_my_blackbox;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_sync_called_by_bb;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 

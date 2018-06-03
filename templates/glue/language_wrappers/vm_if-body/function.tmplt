@@ -6,8 +6,10 @@
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
 @@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
 @@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
+@@-- @_Sync_RIs_Parent@      : ... and corresponding Parent function name
 @@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
 @@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
+@@-- @_Async_RIs_Parent@     : ... and corresponding Parent function name
 @@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
 @@-- @_ASN1_Files_@          : List of ASN.1 Files with path
 @@-- @_Timers_@              : List of timers (just names)
@@ -46,9 +48,11 @@ void init_@_LOWER:Name_@()
       @_LOWER:Name_@_startup();
 @@END_IF@@
 
-      // Now we must iterate over all synchronous RIs, and call their parent's
-      // init function. Multiple calls are prevented by the "init" guard
-      // TODO, we miss a tag giving the parent function of Sync RI
+      // Iterate over all synchronous RIs, and call their parent's
+      // init function. Multiple calls are prevented by the "init" guard.
+@@TABLE@@
+      init_@_LOWER:Sync_RIs_Parent_@();
+@@END_TABLE@@
    }
 }
 

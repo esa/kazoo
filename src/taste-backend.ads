@@ -30,6 +30,7 @@ package TASTE.Backend is
           when Language_System_C      => "System_C",    --  Not supported
           when Language_VDM           => "VDM",         --  Partial support
           when Language_VHDL          => "VHDL",
+          when Language_VHDL_BRAVE    => "VHDL_BRAVE",
           when Language_MicroPython   => "MicroPython",
           when Language_None          => "None");
 end TASTE.Backend;

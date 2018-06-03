@@ -6,8 +6,10 @@
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
 @@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
 @@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
+@@-- @_Sync_RIs_Parent@      : ... and corresponding Parent function name
 @@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
 @@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
+@@-- @_Async_RIs_Parent@     : ... and corresponding Parent function name
 @@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
 @@-- @_ASN1_Files_@          : List of ASN.1 Files with path
 @@-- @_Timers_@              : List of timers (just names)

@@ -436,13 +436,15 @@ package body TASTE.Backend.Code_Generators is
       List_Of_RIs        : Tag;
       List_Of_Sync_PIs   : Tag;
       List_Of_ASync_PIs  : Tag;
-      List_Of_Sync_RIs   : Tag;
-      List_Of_ASync_RIs  : Tag;
+      List_Of_Sync_RIs   : Vector_Tag;
+      Sync_RIs_Parent    : Vector_Tag;   --  Parent function of the sync RI
+      List_Of_ASync_RIs  : Vector_Tag;
+      Async_RIs_Parent   : Vector_Tag;   --  Parent function of the async RI
       Timers             : Tag;
       Property_Names     : Vector_Tag;
       Property_Values    : Vector_Tag;
-      CP_Names           : Vector_Tag;   -- For Context Parameters
-      CP_Types           : Vector_Tag;   -- For Context Parameters
+      CP_Names           : Vector_Tag;   --  For Context Parameters
+      CP_Types           : Vector_Tag;   --  For Context Parameters
       Interface_Tmplt    : Interface_As_Template;
    begin
       Result.Header := +Assoc ("Name", F.Name)
@@ -480,8 +482,13 @@ package body TASTE.Backend.Code_Generators is
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
                List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
+               --  Find remote function name (only one remote per RI)
+               Async_RIs_Parent  := Async_RIs_Parent
+                  & Each.Remote_Interfaces.First_Element.Function_Name;
             when others =>
-               List_Of_Sync_RIs  := List_Of_Sync_RIs  & Each.Name;
+               List_Of_Sync_RIs  := List_Of_Sync_RIs & Each.Name;
+               Sync_RIs_Parent   := Sync_RIs_Parent
+                  & Each.Remote_Interfaces.First_Element.Function_Name;
          end case;
       end loop;
 
@@ -502,8 +509,10 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("List_Of_RIs",       List_Of_RIs)
         & Assoc ("List_Of_Sync_PIs",  List_Of_Sync_PIs)
         & Assoc ("List_Of_Sync_RIs",  List_Of_Sync_RIs)
+        & Assoc ("Sync_RIs_Parent",   Sync_RIs_Parent)
         & Assoc ("List_Of_ASync_PIs", List_Of_ASync_PIs)
         & Assoc ("List_Of_ASync_RIs", List_Of_ASync_RIs)
+        & Assoc ("Async_RIs_Parent",  Async_RIs_Parent)
         & Assoc ("Property_Names",    Property_Names)
         & Assoc ("Property_Values",   Property_Values)
         & Assoc ("CP_Names",          CP_Names)

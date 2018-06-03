@@ -1,0 +1,36 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
+@@IF@@ @_EXIST:Param_Names_@
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(      \()(,\n       )(\)\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         const char *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
+      @@ELSE@@
+         char *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+@@INLINE(   /*\n    * )(\n    * )(\n   */\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_@_LOWER:Param_Names_@ type: @_Param_Types_@ ; encoding: @_Param_Encodings_@
+      @@ELSE@@
+         OUT_@_LOWER:Param_Names_@ type: @_Param_Types_@ ; encoding: @_Param_Encodings_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+@@ELSE@@
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
+@@END_IF@@
+{
+   // Write your code here
+}

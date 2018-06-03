@@ -1,0 +1,4 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the function
+@_LOWER:Name_@.h

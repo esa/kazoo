@@ -410,6 +410,7 @@ package body TASTE.Backend.Code_Generators is
       Param_Names      : Vector_Tag;
       Param_Types      : Vector_Tag;
       Param_Directions : Vector_Tag;
+      Param_Encodings  : Vector_Tag;
    begin
       Result.Header :=  +Assoc  ("Name",            TI.Name)
                         & Assoc ("Kind",            TI.RCM'Img)
@@ -419,10 +420,12 @@ package body TASTE.Backend.Code_Generators is
          Param_Names      := Param_Names & Each.Name;
          Param_Types      := Param_Types & Each.Sort;
          Param_Directions := Param_Directions & Each.Direction'Img;
+         Param_Encodings  := Param_Encodings & Each.Encoding'Img;
       end loop;
       Result.Header := Result.Header
                        & Assoc ("Param_Names",      Param_Names)
                        & Assoc ("Param_Types",      Param_Types)
+                       & Assoc ("Param_Encodings",  Param_Encodings)
                        & Assoc ("Param_Directions", Param_Directions);
       return Result;
    end Interface_Template;

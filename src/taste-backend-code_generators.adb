@@ -460,11 +460,20 @@ package body TASTE.Backend.Code_Generators is
          CP_Types := CP_Types & Each.Sort;
       end loop;
 
+      --  Add all user-defined properties
+      for Each of F.User_Properties loop
+         Property_Names  := Property_Names  & Each.Name;
+         Property_Values := Property_Values & Each.Value;
+      end loop;
+
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
          Interface_Tmplt := Interface_Template (Each);
          Interface_Tmplt.Header := Interface_Tmplt.Header
-                                   & Assoc ("Direction", "PI");
+                                   & Assoc ("Direction", "PI")
+                                   & Assoc ("Property_Names", Property_Names)
+                                   & Assoc ("Property_Values", Property_Values)
+                                   & Assoc ("Language", Language_Spelling (F));
          Result.Provided := Result.Provided & Interface_Tmplt;
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
@@ -479,7 +488,10 @@ package body TASTE.Backend.Code_Generators is
       for Each of F.Required loop
          Interface_Tmplt := Interface_Template (Each);
          Interface_Tmplt.Header := Interface_Tmplt.Header
-                                   & Assoc ("Direction", "RI");
+                                   & Assoc ("Direction", "RI")
+                                   & Assoc ("Property_Names", Property_Names)
+                                   & Assoc ("Property_Values", Property_Values)
+                                   & Assoc ("Language", Language_Spelling (F));
          Result.Required := Result.Required & Interface_Tmplt;
          List_Of_RIs     := List_Of_RIs & Each.Name;
          case Each.RCM is
@@ -503,12 +515,6 @@ package body TASTE.Backend.Code_Generators is
       --  Add list of timers (names)
       for Each of F.Timers loop
          Timers := Timers & Each;
-      end loop;
-
-      --  Add all user-defined properties
-      for Each of F.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
       end loop;
 
       --  Setup the mapping for the template

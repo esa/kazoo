@@ -41,6 +41,13 @@
 extern "C" {
 #endif
 
+#ifdef __unix__
+   #include <stdlib.h>
+   #include <stdio.h>
+#else
+   typedef unsigned size_t;
+#endif
+
 void @_LOWER:Name_@_startup();
 
 /* Provided interfaces */

@@ -1,0 +1,310 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH interfaceview::IV::function_with_sporadics;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 100 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_called_by_sync
+FEATURES
+  a : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => ACN;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_called_by_sync;
+
+SUBPROGRAM IMPLEMENTATION PI_called_by_sync.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_called_by_sync.others;
+
+SUBPROGRAM RI_spo1
+FEATURES
+  a : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_spo1;
+
+SUBPROGRAM IMPLEMENTATION RI_spo1.others
+END RI_spo1.others;
+
+SUBPROGRAM RI_spo2_paramless
+END RI_spo2_paramless;
+
+SUBPROGRAM IMPLEMENTATION RI_spo2_paramless.others
+END RI_spo2_paramless.others;
+
+SYSTEM Function1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_pulse.others {
+    Taste::coordinates => "101731 62203";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_called_by_sync : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_called_by_sync.others {
+    Taste::coordinates => "107398 92911";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "called_by_sync";
+  };
+  RI_spo1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo1.others {
+    Taste::coordinates => "120469 70864";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "spo1";
+    Taste::labelInheritance => "true";
+  };
+  RI_spo2_paramless : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo2_paramless.others {
+    Taste::coordinates => "120469 74329";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "spo2_paramless";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::function_with_sporadics
+PUBLIC
+
+WITH interfaceview::IV::function_with_sync;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_spo1
+FEATURES
+  a : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_spo1;
+
+SUBPROGRAM IMPLEMENTATION PI_spo1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_spo1.others;
+
+SUBPROGRAM PI_spo2_paramless
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_spo2_paramless;
+
+SUBPROGRAM IMPLEMENTATION PI_spo2_paramless.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_spo2_paramless.others;
+
+SUBPROGRAM RI_run_a_pro
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_run_a_pro;
+
+SUBPROGRAM IMPLEMENTATION RI_run_a_pro.others
+END RI_run_a_pro.others;
+
+SUBPROGRAM RI_run_b_unpro
+FEATURES
+  a : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::MySeq {
+    Taste::encoding => UPER;
+  };
+END RI_run_b_unpro;
+
+SUBPROGRAM IMPLEMENTATION RI_run_b_unpro.others
+END RI_run_b_unpro.others;
+
+SYSTEM function_with_sporadics
+FEATURES
+  PI_spo1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo1.others {
+    Taste::coordinates => "139524 70235";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 123 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "spo1";
+  };
+  PI_spo2_paramless : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sporadics::PI_spo2_paramless.others {
+    Taste::coordinates => "139524 73385";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "spo2_paramless";
+  };
+  RI_run_a_pro : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_a_pro.others {
+    Taste::coordinates => "144090 86612";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run_a_pro";
+    Taste::labelInheritance => "true";
+  };
+  RI_run_b_unpro : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_b_unpro.others {
+    Taste::coordinates => "159208 86612";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run_b_unpro";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END function_with_sporadics;
+
+SYSTEM IMPLEMENTATION function_with_sporadics.others
+END function_with_sporadics.others;
+
+END interfaceview::IV::function_with_sporadics;
+
+PACKAGE interfaceview::IV::function_with_sync
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run_a_pro
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_run_a_pro;
+
+SUBPROGRAM IMPLEMENTATION PI_run_a_pro.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run_a_pro.others;
+
+SUBPROGRAM PI_run_b_unpro
+FEATURES
+  a : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::MySeq {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_run_b_unpro;
+
+SUBPROGRAM IMPLEMENTATION PI_run_b_unpro.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run_b_unpro.others;
+
+SUBPROGRAM RI_called_by_sync
+FEATURES
+  a : IN PARAMETER DataView::MyEnum {
+    Taste::encoding => ACN;
+  };
+END RI_called_by_sync;
+
+SUBPROGRAM IMPLEMENTATION RI_called_by_sync.others
+END RI_called_by_sync.others;
+
+SYSTEM function_with_sync
+FEATURES
+  PI_run_a_pro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_a_pro.others {
+    Taste::coordinates => "146927 108973";
+    Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run_a_pro";
+  };
+  PI_run_b_unpro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function_with_sync::PI_run_b_unpro.others {
+    Taste::coordinates => "156377 108973";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run_b_unpro";
+  };
+  RI_called_by_sync : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_called_by_sync.others {
+    Taste::coordinates => "139052 110548";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "called_by_sync";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END function_with_sync;
+
+SYSTEM IMPLEMENTATION function_with_sync.others
+END function_with_sync.others;
+
+END interfaceview::IV::function_with_sync;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::function_with_sporadics;
+WITH interfaceview::IV::function_with_sync;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "93856 62203 120469 92911";
+  };
+  function_with_sporadics : SYSTEM interfaceview::IV::function_with_sporadics::function_with_sporadics.others {
+    Taste::coordinates => "139524 67085 169444 86612";
+  };
+  function_with_sync : SYSTEM interfaceview::IV::function_with_sync::function_with_sync.others {
+    Taste::coordinates => "139052 108973 167240 126768";
+  };
+CONNECTIONS
+  Function1_PI_called_by_sync_function_with_sync_RI_called_by_sync : SUBPROGRAM ACCESS Function1.PI_called_by_sync -> function_with_sync.RI_called_by_sync {
+    Taste::coordinates => "139052 110548 107398 110548 107398 92911";
+  };
+  function_with_sporadics_PI_spo1_Function1_RI_spo1 : SUBPROGRAM ACCESS function_with_sporadics.PI_spo1 -> Function1.RI_spo1 {
+    Taste::coordinates => "120469 70864 133146 70864 133146 70235 139524 70235";
+  };
+  function_with_sporadics_PI_spo2_paramless_Function1_RI_spo2_paramless : SUBPROGRAM ACCESS function_with_sporadics.PI_spo2_paramless -> Function1.RI_spo2_paramless {
+    Taste::coordinates => "120469 74329 133146 74329 133146 73385 139524 73385";
+  };
+  function_with_sync_PI_run_a_pro_function_with_sporadics_RI_run_a_pro : SUBPROGRAM ACCESS function_with_sync.PI_run_a_pro -> function_with_sporadics.RI_run_a_pro {
+    Taste::coordinates => "144090 86612 144090 97792 146927 97792 146927 108973";
+  };
+  function_with_sync_PI_run_b_unpro_function_with_sporadics_RI_run_b_unpro : SUBPROGRAM ACCESS function_with_sync.PI_run_b_unpro -> function_with_sporadics.RI_run_b_unpro {
+    Taste::coordinates => "159208 86612 159208 97792 156377 97792 156377 108973";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

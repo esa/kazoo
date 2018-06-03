@@ -8,7 +8,7 @@
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@IF@@ @_EXIST:Param_Names_@
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@(
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"

@@ -7,13 +7,10 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@INLINE@@
 @@IF@@ @_Direction_@ = "PI"
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@(
-@@ELSE@@
-// Check invoke_ri for required interface @_Name_@(
-@@END_IF@@
-@@INLINE(, )@@
+@@IF@@ @_EXIST:Param_Names_@
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(      \()(,\n       )(\);\n)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
 void *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
@@ -22,5 +19,9 @@ void *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
-);
-@@END_INLINE@@
+@@ELSE@@
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@();
+@@ELSE@@
+// Check invoke_ri for required interface @_Name_@
+@@END_IF@@
+@@END_IF@@

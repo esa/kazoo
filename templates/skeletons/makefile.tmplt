@@ -25,7 +25,7 @@ dataviews:
 	@@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
 	if [ ! -d dataview/Ada ]; then mkdir dataview/Ada && mono $(shell which asn1.exe) -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn @_REPLACE(,/ ):CP_Files_@ ; fi
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
-	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP"
+	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
 	if [ ! -d dataview/C ]; then mkdir dataview/C && mono $(shell which asn1.exe) -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn @_REPLACE(,/ ):CP_Files_@ ; fi
 	@@ELSE@@
 	mkdir -p dataview/@_Unique_Languages_@
@@ -37,7 +37,7 @@ dataviews:
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "Ada"
 	ln -fs ${PWD}/dataview/Ada/*.ads @_LOWER:Function_Names_@/Ada/src
-	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP" or @_Language_@ = "GUI"
+	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP" or @_Language_@ = "GUI" or @_Language_@ = "Blackbox_C"
 	ln -fs ${PWD}/dataview/C/*.h @_LOWER:Function_Names_@/@_Language_@/src
 	@@ELSIF@@ @_Language_@ = "SDL"
 	ln -fs ${PWD}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src

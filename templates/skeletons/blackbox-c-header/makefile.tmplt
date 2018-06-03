@@ -13,3 +13,4 @@ clean:
 
 compile-linux:
 	mkdir -p obj && cd obj && gcc -c ../src/*.c
+	if [ -d wrappers ]; then cd obj && gcc -c ../wrappers/*.c; fi

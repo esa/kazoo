@@ -9,17 +9,25 @@
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
 @@IF@@ @_Direction_@ = "PI"
-extern void @_LOWER:Parent_Function_@_@_LOWER:Name_@(
+extern void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@ELSE@@
-extern void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(
+extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_IF@@
-@@INLINE(, )@@
-@@TABLE@@
-@@IF@@ @_Param_Directions_@ = "PARAM_IN"
-const char *IN_@_Param_Names_@, size_t IN_@_Param_Names_@_len
-@@ELSE@@
-char *OUT_@_Param_Names_@, size_t *OUT_@_Param_Names_@_len
-@@END_IF@@
-@@END_TABLE@@
+@@INLINE(      \()(,\n       )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         const char *IN_@_Param_Names_@, size_t IN_@_Param_Names_@_len
+      @@ELSE@@
+         char *OUT_@_Param_Names_@, size_t *OUT_@_Param_Names_@_len
+      @@END_IF@@
+   @@END_TABLE@@
 @@END_INLINE@@
-);
+@@INLINE(   /* ASN.1 Type and encoding of the parameters:\n    * )(\n    * )(\n   */\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_@_LOWER:Param_Names_@ type: @_Param_Types_@ ; encoding: @_Param_Encodings_@
+      @@ELSE@@
+         OUT_@_LOWER:Param_Names_@ type: @_Param_Types_@ ; encoding: @_Param_Encodings_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@

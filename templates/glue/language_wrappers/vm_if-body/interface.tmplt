@@ -7,6 +7,7 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
 @@IF@@ @_EXIST:Param_Names_@
 void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@

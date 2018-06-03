@@ -4,6 +4,9 @@
 @@-- @_Direction_@           : "PI" or "RI"
 @@-- @_Kind_@                : The RCM Kind
 @@-- @_Parent_Function_@     : The name of the function
+@@-- @_Language_@            : The implementation language of the function
+@@-- @_Property_Names_@      : All AADL properties (names) associated to the function
+@@-- @_Property_Values_@     : ... and corresponding values
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
@@ -14,31 +17,52 @@ FEATURES
 @@INLINE(   )(\n   )(\n)@@
    @@TABLE@@
       @@IF@@ (@_Param_Directions_@ = "PARAM_IN" and @_Direction_@ = "PI") or (@_Param_Directions_@ = "PARAM_OUT" and @_Direction_@ = "RI")
-         @_Param_Names_@ : IN PARAMETER DataView::@_REPLACE(-,_):Param_Types_@ {encoding=>@_Param_Encodings;};
+         @_Param_Names_@ : IN PARAMETER DataView::@_REPLACE_ALL(-/_):Param_Types_@ {encoding=>@_Param_Encodings_@;};
       @@ELSE@@
-         @_Param_Names_@ : OUT PARAMETER DataView::@_REPLACE(-,_):Param_Types_@ {encoding=>@_Param_Encodings;};
+         @_Param_Names_@ : OUT PARAMETER DataView::@_REPLACE_ALL(-/_):Param_Types_@ {encoding=>@_Param_Encodings_@;};
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
 @@END_IF@@
 END @_Name_@;
 
-@@IF@@ @_Language_@ =
-SUBPROGRAM IMPLEMENTATION 
-
-@@IF@@ @_Direction_@ = "PI"
-@@IF@@ @_EXIST:Param_Names_@
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@
-@@INLINE(      \()(,\n       )(\);\n)@@
-@@TABLE@@
-@@IF@@ @_Param_Directions_@ = "PARAM_IN"
-void *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
+@@IF@@ @_Language_@ = "GUI" and @_Direction_@ = "PI"
+SUBPROGRAM IMPLEMENTATION @_Name_@.GUI_PI
+@@ELSIF@@ @_Language_@ = "GUI" and @_Direction_@ = "RI"
+SUBPROGRAM IMPLEMENTATION @_Name_@.GUI_RI
+@@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
+SUBPROGRAM IMPLEMENTATION @_Name_@.VHDL
+@@ELSIF@@ @_Language_@ = "Blackbox_C"
+SUBPROGRAM IMPLEMENTATION @_Name_@.C
 @@ELSE@@
-void *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
+SUBPROGRAM IMPLEMENTATION @_Name_@.@_Language_@
 @@END_IF@@
-@@END_TABLE@@
-@@END_INLINE@@
+PROPERTIES
+   FV_Name => "@_Parent_Function_@";
+@@IF@@ @_Language_@ = "GUI" and @_Direction_@ = "PI"
+   Source_Language => GUI_PI;
+@@ELSIF@@ @_Language_@ = "GUI" and @_Direction_@ = "RI"
+   Source_Language => GUI_RI;
+@@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
+   Source_Language => VHDL;
+@@ELSIF@@ @_Language_@ = "Blackbox_C"
+   Source_Language => C;
 @@ELSE@@
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@();
+   Source_Language => @_Language_@;
 @@END_IF@@
+   @@INLINE(   )(\n   )(\n)@@
+      @@TABLE@@
+         @_Property_Names_@ => "@_Property_Values_@";
+      @@END_TABLE@@
+   @@END_INLINE@@
+@@IF@@ @_Language_@ = "GUI" and @_Direction_@ = "PI"
+END @_Name_@.GUI_PI;
+@@ELSIF@@ @_Language_@ = "GUI" and @_Direction_@ = "RI"
+END @_Name_@.GUI_RI;
+@@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
+END @_Name_@.VHDL;
+@@ELSIF@@ @_Language_@ = "Blackbox_C"
+END @_Name_@.C;
+@@ELSE@@
+END @_Name_@.@_Language_@;
 @@END_IF@@

@@ -1,0 +1,108 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the function
+@@-- @_Language_@            : The implementation language
+@@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
+@@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
+@@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
+@@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
+@@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
+@@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
+@@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
+@@-- @_ASN1_Files_@          : List of ASN.1 Files with path
+@@-- @_Timers_@              : List of timers (just names)
+@@-- @_Has_Context_@         : Flag, True if there are context parameters
+@@-- @_CP_Names_@            : List of Context Parameter names
+@@-- @_CP_Types_@            : List of Context Parameter types
+@@-- @_Provided_Interfaces_@ : From template: Provided interfaces with params
+@@-- @_Required_Interfaces_@ : From template: Required interfaces with params
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@     : List of User-defined properties (values)
+@@-- @_Is_Type_@             : Flag, True if function is a component type
+@@-- @_Instance_Of_@         : Optional name of component type
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Diagram SYSTEM "rtdsDiagram.dtd">
+
+<Diagram language="sdl" type="sys" defaultColorsNeedFixing="FALSE" name="sdl_studio" showMsgData="full" linksCrossingAllowed="FALSE" cellWidthMm="4">
+
+<DiagramPartition name="Declarations" nbPagesH="1" nbPagesV="1">
+<PageSpecification pageWidth="29.7" pageHeight="21.0" topMargin="0.0" bottomMargin="0.0" leftMargin="0.0" rightMargin="0.0" pageFooter="FALSE"/>
+
+<Symbol symbolId="SYMB5" type="sdlSysDgmFrm" xCenter="420" yCenter="297" fixedDimensions="TRUE" width="797" height="529" color="-" fillColor="-">
+<Description></Description>
+<Text></Text>
+
+<Symbol symbolId="SYMB10" type="sdlText" xCenter="407" yCenter="198" fixedDimensions="FALSE" width="418" height="132" color="-" fillColor="-">
+<Description></Description>
+<Text>use ASN1Types;
+
+@@TABLE@@
+@_Provided_Interfaces_@
+@@END_TABLE@@
+
+@@TABLE@@
+@_Required_Interfaces_@
+@@END_TABLE@@
+
+</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB15" type="sdlPrcs" xCenter="506" yCenter="451" fixedDimensions="FALSE" width="132" height="44" color="#000000" fillColor="#C4EFED">
+<Description></Description>
+<Text>@_Name_@
+</Text>
+</Symbol>
+</Symbol>
+
+<Link linkId="LINK8" type="chnl" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>ch
+</Text>
+<Connector attachedSymbolId="SYMB15" type="chnl" isOutside="TRUE" side="y" position="0.0" endType="midarrow">
+<Text id="1">[RunSystem]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB5" type="chnl" isOutside="FALSE" side="w" position="0.706994328922" endType="midarrow">
+<Text id="1">[ReturnValue]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="-506"/>
+
+</Link>
+</DiagramPartition>
+
+<DiagramPartition name="Architecture" nbPagesH="1" nbPagesV="1">
+<PageSpecification pageWidth="21.0" pageHeight="29.7" topMargin="0.0" bottomMargin="0.0" leftMargin="0.0" rightMargin="0.0" pageFooter="FALSE"/>
+
+<Symbol symbolId="SYMB1" type="sdlSysDgmFrm" xCenter="297" yCenter="420" fixedDimensions="TRUE" width="551" height="775" color="-" fillColor="-">
+<Description></Description>
+<Text></Text>
+
+<Symbol symbolId="SYMB2" type="sdlPrcs" xCenter="352" yCenter="231" fixedDimensions="TRUE" width="110" height="22" color="-" fillColor="-">
+<Description></Description>
+<Text>sdl_studio_p</Text>
+</Symbol>
+</Symbol>
+
+<Link linkId="LINK5" type="chnl" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>taste_envl</Text>
+<Connector attachedSymbolId="SYMB1" type="chnl" isOutside="FALSE" side="w" position="-0.402580645161" endType="midarrow">
+<Text id="1">
+[ReturnValue]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB2" type="chnl" isOutside="TRUE" side="y" position="0.0" endType="midarrow">
+<Text id="1">
+[RunSystem]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="352"/>
+
+</Link>
+</DiagramPartition>
+
+</Diagram>

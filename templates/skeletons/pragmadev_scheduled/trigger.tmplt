@@ -1,0 +1,20 @@
+@@-- This template must return either TRUE or something else (meaning FALSE)
+@@-- It is used to determine if the other templates in this folder will be
+@@-- processed or ignored.
+@@-- One folder can contain two templates: one for a function, and one for
+@@-- a corresponding makefile (or build script)
+@@-- The name of the function is read from template "function-filename.tmplt"
+@@-- The name of the makefile is read from template "makefile-filename.tmplt"
+@@-- These files are optional, if absent no error is raised
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the function
+@@-- @_Is_Type_@             : True if function type
+@@-- @_Instance_Of_@         : Name of instance or empty string
+@@-- @_Language_@            : Implementation language for the function
+@@-- @_Filename_Is_Present_@ : True if target function output already exists
+@@-- @_Makefile_Is_Present_@ : True if target build script already exists
+@@-- @_C_Middleware_@        : True if middleware is in C (e.g. PO-HI-C)
+@@IF@@ @_Language_@ = "RTDS"
+TRUE
+@@END_IF@@

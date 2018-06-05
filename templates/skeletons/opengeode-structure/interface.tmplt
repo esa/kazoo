@@ -4,9 +4,13 @@
 @@-- @_Direction_@           : "PI" or "RI"
 @@-- @_Kind_@                : The RCM Kind
 @@-- @_Parent_Function_@     : The name of the function
+@@-- @_Language_@            : The implementation language of the function
+@@-- @_Property_Names_@      : All AADL properties (names) associated to the function
+@@-- @_Property_Values_@     : ... and corresponding values
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
 @@IF@@ @_LOWER:Kind_@ = "cyclic_operation" or @_LOWER:Kind_@ = "sporadic_operation"
 @@IF@@ @_Param_Names'Length_@ > 0
 /* CIF Keep Specific Geode PARAMNAMES @_Param_Names_@ */
@@ -16,10 +20,8 @@ signal @_CAPITALIZE:Name_@
 @@END_IF@@
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@;
-@@IF@@ @_Param_Names'Length_@ > 0
-      fpar
-@@END_IF@@
 @@IF@@ @_EXIST:Param_Names_@
+      fpar
 @@INLINE(         )(,\n         )(;\n   external)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"

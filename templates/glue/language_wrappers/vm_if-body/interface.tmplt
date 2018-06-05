@@ -5,6 +5,8 @@
 @@-- @_Kind_@                : The RCM Kind
 @@-- @_Parent_Function_@     : The name of the function
 @@-- @_Language_@            : The implementation language of the function
+@@-- @_Property_Names_@      : All AADL properties (names) associated to the function
+@@-- @_Property_Values_@     : ... and corresponding values
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction

@@ -21,7 +21,7 @@ signal @_Name_@;
 @@IF@@ @_EXIST:Param_Names_@
 @@INLINE@@
 procedure @_Name_@ (
-@@INLINE()(, )(\); external;)@@
+@@INLINE()(, )(\) external;)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
          in @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
@@ -32,6 +32,6 @@ procedure @_Name_@ (
 @@END_INLINE@@
 @@END_INLINE@@
 @@ELSE@@
-procedure @_Name_@; external;
+procedure @_Name_@ external;
 @@END_IF@@
 @@END_IF@@

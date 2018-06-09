@@ -1,8 +1,8 @@
 with Ada.Containers,
-     Ocarina.Backends.Properties,
+     --  Ocarina.Backends.Properties,
      TASTE.Parser_Utils;
 use  Ada.Containers,
-     Ocarina.Backends.Properties,
+     --  Ocarina.Backends.Properties,
      TASTE.Parser_Utils;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -18,7 +18,7 @@ package body TASTE.Model_Transformations is
       Count_Passive_PI : Natural := 0;
    begin
       --  Look for GUIs and add a Poll PI (if there is at least one RI)
-      if F.Required.Length > 0 and F.Language = Language_GUI then
+      if F.Required.Length > 0 and F.Language = "gui" then
          F.Provided.Insert (Key      => "Poll",
                             New_Item => (Name            => US ("Poll"),
                                          Parent_Function => F.Name,
@@ -49,7 +49,8 @@ package body TASTE.Model_Transformations is
             declare
                New_F    : Taste_Terminal_Function :=
                              (Name     => F.Name & "_" & PI.Name,
-                              Language => Language_Device,
+                              Language => US ("blackbox_device"),
+                              --  Language_Device,
                               Context  => F.Context,
                               others   => <>);
                New_F_PI : Taste_Interface := PI;
@@ -120,7 +121,7 @@ package body TASTE.Model_Transformations is
 
       --  Test / Debug:
       for F of Result.Interface_View.Flat_Functions loop
-         if F.Language = Language_GUI then
+         if F.Language = "gui" then
             for I of F.Provided loop
                null;
                --  Put_Line (To_String (I.Name));

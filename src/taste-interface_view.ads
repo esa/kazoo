@@ -12,7 +12,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Text_IO,
      Ocarina,
      Ocarina.Types,
-     Ocarina.Backends.Properties,
+     --  Ocarina.Backends.Properties,
      Option_Type,
      TASTE.Parser_Utils;
 
@@ -21,7 +21,7 @@ use Ada.Containers,
     Text_IO,
     Ocarina,
     Ocarina.Types,
-    Ocarina.Backends.Properties,
+    --  Ocarina.Backends.Properties,
     TASTE.Parser_Utils;
 
 package TASTE.Interface_View is
@@ -35,6 +35,8 @@ package TASTE.Interface_View is
    Function_Error    : exception;   -- Any kind of function parsing error
 
    type Synchronism is (Sync, Async);
+
+   function Get_Language (E : Node_Id) return String;
 
    type Supported_RCM_Operation_Kind is (Unprotected_Operation,
                                          Protected_Operation,
@@ -131,7 +133,8 @@ package TASTE.Interface_View is
          Name            : Unbounded_String;
          Context         : Unbounded_String          := Null_Unbounded_String;
          Full_Prefix     : Optional_Unbounded_String := Nothing;
-         Language        : Supported_Source_Language;
+         --  Language        : Supported_Source_Language;
+         Language        : Unbounded_String;
          Zip_File        : Optional_Unbounded_String := Nothing;
          Context_Params  : Ctxt_Params.Vector;
          Directives      : Ctxt_Params.Vector;  --  TASTE Directives

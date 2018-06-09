@@ -1,6 +1,5 @@
 with Text_IO; use Text_IO;
-with Ada.Strings.Unbounded,
-     Ada.Characters.Handling,
+with Ada.Characters.Handling,
      Ada.Containers.Ordered_Sets,
      Ada.Exceptions,
      Ada.Directories,
@@ -31,8 +30,6 @@ package body TASTE.Backend.Code_Generators is
       Prefix_Wrappers   : constant String := Prefix & "glue/language_wrappers";
       Prefix_Middleware : constant String :=
                                           Prefix & "glue/middleware_interface";
-
-      use Ada.Strings.Unbounded;
 
       --  Return a Tag list of ASN.1 Modules for the headers
       function Get_Module_List return Tag is
@@ -358,7 +355,6 @@ package body TASTE.Backend.Code_Generators is
 
    --  Context Parameters
    function CP_Template (F : Taste_Terminal_Function) return Translate_Set is
-      use Ada.Strings.Unbounded;
       package Sort_Set is new Ordered_Sets (Unbounded_String);
       use Sort_Set;
       Sorts_Set     : Set;
@@ -540,7 +536,6 @@ package body TASTE.Backend.Code_Generators is
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template is
       use Func_Maps;
-      use Ada.Strings.Unbounded;
       Result : IV_As_Template;
    begin
       for Each of IV.Flat_Functions loop

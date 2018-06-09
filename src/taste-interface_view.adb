@@ -9,8 +9,11 @@ with Ada.Exceptions,
      Ocarina.Analyzer,
      Ocarina.Options,
      Ocarina.Instances,
+     Ocarina.Backends.Properties,
+     Ocarina.ME_AADL.AADL_Tree.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.Namet,
+     Ocarina.ME_AADL.AADL_Tree.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities,
      Ocarina.Backends.Utils;
@@ -23,11 +26,41 @@ package body TASTE.Interface_View is
        Ocarina.Analyzer,
        Ocarina.Options,
        Ocarina.Instances,
+     Ocarina.Backends.Properties,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.ME_AADL,
        Ocarina.Backends.Utils;
+
+   package ATN  renames Ocarina.ME_AADL.AADL_Tree.Nodes;
+   package ATNU renames Ocarina.ME_AADL.AADL_Tree.Nutils;
+
+   ------------------------------
+   -- Get_Language (as string) --
+   ------------------------------
+
+   function Get_Language (E : Node_Id) return String is
+      Source_Property : constant Name_Id :=
+         Get_String_Name ("source_language");
+   begin
+      if Is_Defined_List_Property (E, Source_Property) then
+         declare
+            Source_Language_List : constant List_Id :=
+               Get_List_Property (E, Source_Property);
+         begin
+            if ATNU.Length (Source_Language_List) > 1 then
+               raise Interface_Error with "Cannot use more than one language";
+            end if;
+
+            return Get_Name_String
+               (ATN.Name
+                  (ATN.Identifier (ATN.First_Node (Source_Language_List))));
+         end;
+      else
+         return "None";
+      end if;
+   end Get_Language;
 
    ----------------------------
    -- Get_RCM_Operation_Kind --
@@ -508,7 +541,8 @@ package body TASTE.Interface_View is
          Result.Name          := US (Name);
          Result.Full_Prefix   := (if Prefix'Length > 0 then Just (US (Prefix))
                                  else Nothing);
-         Result.Language      := Get_Source_Language (Inst);
+         --  Result.Language      := Get_Source_Language (Inst);
+         Result.Language      := US (Get_Language (Inst));
          if Source_Text'Length /= 0 then
             Zip_Id          := Source_Text (1);
             Result.Zip_File := Just (US (Get_Name_String (Zip_Id)));
@@ -853,7 +887,8 @@ package body TASTE.Interface_View is
 
          Put_Line (Output, "├─ Full Prefix : "
                    & To_String (Value_Or (Each.Full_Prefix, US ("(none)"))));
-         Put_Line (Output, "├─ Language    : " & Each.Language'Img);
+         Put_Line (Output, "├─ Language    : "
+                   & To_String (Each.Language));
          Put_Line (Output, "├─ Zip file    : "
                    & To_String (Value_Or (Each.Zip_File, US ("(none)"))));
          Put_Line (Output, "├─ Is type     : " & Each.Is_Type'Img);

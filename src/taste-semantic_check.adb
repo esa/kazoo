@@ -1,13 +1,13 @@
 with Ada.Strings.Unbounded,
      Ada.Containers,
-     Ocarina.Backends.Properties,
+     --  Ocarina.Backends.Properties,
      TASTE.Deployment_View,
      TASTE.Interface_View,
      TASTE.Parser_Utils;
 
 use Ada.Strings.Unbounded,
     Ada.Containers,
-    Ocarina.Backends.Properties,
+    --  Ocarina.Backends.Properties,
     TASTE.Deployment_View,
     TASTE.Interface_View,
     TASTE.Interface_View.Interfaces_Maps,
@@ -31,8 +31,8 @@ package body TASTE.Semantic_Check is
 
             --  Check that functions have at least one PI
             --  with the exception of GUIs and Blackbox devices
-            if Each.Language /= Language_Gui
-               and then Each.Language /= Language_Device
+            if Each.Language /= "gui"
+               and then Each.Language /= "blackbox_device"
                and then Each.Provided.Length = 0
             then
                raise Semantic_Error with
@@ -41,11 +41,11 @@ package body TASTE.Semantic_Check is
             end if;
 
             --  Check that Simulink functions have exactly one PI and no RI
-            if (case Each.Language is
-               when
-                 Language_Simulink | Language_QGenAda | Language_QGenC => True,
-               when others => False) and then
-               (Each.Provided.Length /= 1 or Each.Required.Length /= 0)
+            if (Each.Language    = "simulink"
+                or Each.Language = "qgenada"
+                or Each.Language = "qgenc")
+                and then (Each.Provided.Length /= 1
+                          or Each.Required.Length /= 0)
             then
                raise Semantic_Error with
                   "Function " & To_String (Each.Name) & " must contain only "
@@ -53,10 +53,9 @@ package body TASTE.Semantic_Check is
             end if;
 
             --  Check that Simulink/QGen functions's PI is synchronous
-            if (case Each.Language is
-               when
-                 Language_Simulink | Language_QGenAda | Language_QGenC => True,
-               when others => False)
+            if Each.Language    = "simulink"
+               or Each.Language = "qgenada"
+               or Each.Language = "qgenc"
             then
                for PI of Each.Provided loop
                   if PI.RCM /= Unprotected_Operation
@@ -72,7 +71,7 @@ package body TASTE.Semantic_Check is
             --  GUI checks:
             --  1) interfaces must all have a parameter
             --  2) interfaces must all be sporadic (TODO)
-            if Each.Language = Language_Gui and then
+            if Each.Language = "gui" and then
                ((for all I of Each.Provided => I.Params.Length /= 1) or else
                (for all I of Each.Required  => I.Params.Length /= 1))
             then
@@ -121,12 +120,14 @@ package body TASTE.Semantic_Check is
             end loop;
 
             --  Component type/instance checks
-            if Each.Is_Type and then not (case Each.Language is
-               when Language_Ada_95 | Language_SDL | Language_CPP => True,
-               when others => False)
+            if Each.Is_Type
+               and Each.Language /= "ada"
+               and Each.Language /= "sdl"
+               and Each.Language /= "cpp"
             then
                raise Semantic_Error with "Function " & To_String (Each.Name)
-               & " can be a type only if it is implemented in Ada, C++ or SDL";
+               & " can be a type only if it is implemented in Ada, C++ or SDL"
+               & " (not " & To_String (Each.Language) & ")";
             end if;
 
             if Each.Instance_Of.Has_Value then

@@ -13,11 +13,11 @@ dataviews:
 	mkdir -p dataview
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
-        cat
+        for f in
         @@TABLE@@
            @_ASN1_Files_@ 
         @@END_TABLE@@
-        > dataview/dataview-uniq.asn
+; do cat $$f; echo; done > dataview/dataview-uniq.asn
 	@@END_INLINE@@
 	@@-- Then generate Dataviews once per target language
 	@@TABLE@@

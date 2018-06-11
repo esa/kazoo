@@ -23,10 +23,20 @@ dataviews:
 	@@TABLE@@
         @@IF@@ @_Unique_Languages_@ /= "GUI"
 	@@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-	if [ ! -d dataview/Ada ]; then mkdir dataview/Ada && mono $(shell which asn1.exe) -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn @_REPLACE(,/ ):CP_Files_@ ; fi
+	@@INLINE()()(; fi\n)@@
+	if [ ! -d dataview/Ada ]; then mkdir dataview/Ada && mono $(shell which asn1.exe) -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn 
+	   @@TABLE@@
+	      @_REPLACE(,/ ):CP_Files_@
+	   @@END_TABLE@@
+	@@END_INLINE@@
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
 	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
-	if [ ! -d dataview/C ]; then mkdir dataview/C && mono $(shell which asn1.exe) -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn @_REPLACE(,/ ):CP_Files_@ ; fi
+	@@INLINE()()(; fi\n)@@
+	if [ ! -d dataview/C ]; then mkdir dataview/C && mono $(shell which asn1.exe) -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn 
+	   @@TABLE@@
+	      @_REPLACE(,/ ):CP_Files_@
+	   @@END_TABLE@@
+	@@END_INLINE@@
 	@@ELSE@@
 	mkdir -p dataview/@_Unique_Languages_@
 	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn

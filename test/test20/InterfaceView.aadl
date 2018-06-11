@@ -1,0 +1,202 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH interfaceview::IV::my_pragmadev;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 100 ms;
+END PI_pulse.others;
+
+SUBPROGRAM RI_do_something
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_do_something;
+
+SUBPROGRAM IMPLEMENTATION RI_do_something.others
+END RI_do_something.others;
+
+SYSTEM Function1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_pulse.others {
+    Taste::coordinates => "94802 65667";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_do_something : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::my_pragmadev::PI_do_something.others {
+    Taste::coordinates => "113540 71652";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "do_something";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::my_pragmadev
+PUBLIC
+
+WITH interfaceview::IV::sync_called_by_pragmadev;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_do_something
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_do_something;
+
+SUBPROGRAM IMPLEMENTATION PI_do_something.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_do_something.others;
+
+SUBPROGRAM RI_some_operation
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  b : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END RI_some_operation;
+
+SUBPROGRAM IMPLEMENTATION RI_some_operation.others
+END RI_some_operation.others;
+
+SYSTEM my_pragmadev
+FEATURES
+  PI_do_something : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::my_pragmadev::PI_do_something.others {
+    Taste::coordinates => "128973 71652";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "do_something";
+  };
+  RI_some_operation : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::sync_called_by_pragmadev::PI_some_operation.others {
+    Taste::coordinates => "136217 95273";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "some_operation";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (RTDS);
+  Taste::Active_Interfaces => any;
+END my_pragmadev;
+
+SYSTEM IMPLEMENTATION my_pragmadev.others
+END my_pragmadev.others;
+
+END interfaceview::IV::my_pragmadev;
+
+PACKAGE interfaceview::IV::sync_called_by_pragmadev
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_some_operation
+FEATURES
+  a : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+  b : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_some_operation;
+
+SUBPROGRAM IMPLEMENTATION PI_some_operation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_some_operation.others;
+
+SYSTEM sync_called_by_pragmadev
+FEATURES
+  PI_some_operation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::sync_called_by_pragmadev::PI_some_operation.others {
+    Taste::coordinates => "136218 105824";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "some_operation";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END sync_called_by_pragmadev;
+
+SYSTEM IMPLEMENTATION sync_called_by_pragmadev.others
+END sync_called_by_pragmadev.others;
+
+END interfaceview::IV::sync_called_by_pragmadev;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::my_pragmadev;
+WITH interfaceview::IV::sync_called_by_pragmadev;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "86927 65667 113540 96375";
+  };
+  my_pragmadev : SYSTEM interfaceview::IV::my_pragmadev::my_pragmadev.others {
+    Taste::coordinates => "128973 68502 156216 95273";
+  };
+  sync_called_by_pragmadev : SYSTEM interfaceview::IV::sync_called_by_pragmadev::sync_called_by_pragmadev.others {
+    Taste::coordinates => "128343 105824 156689 129603";
+  };
+CONNECTIONS
+  my_pragmadev_PI_do_something_Function1_RI_do_something : SUBPROGRAM ACCESS my_pragmadev.PI_do_something -> Function1.RI_do_something {
+    Taste::coordinates => "113540 71652 121256 71652 121256 71652 128973 71652";
+  };
+  sync_called_by_pragmadev_PI_some_operation_my_pragmadev_RI_some_operation : SUBPROGRAM ACCESS sync_called_by_pragmadev.PI_some_operation -> my_pragmadev.RI_some_operation {
+    Taste::coordinates => "136217 95273 136217 100548 136218 100548 136218 105824";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

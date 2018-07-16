@@ -113,14 +113,16 @@ package body TASTE.Model_Transformations is
    function Transform (Model : TASTE_Model) return TASTE_Model is
       Result        : TASTE_Model := Model;
       New_Functions : Function_Maps.Map;
+      Functions     : Function_Maps.Map
+         renames Result.Interface_View.Flat_Functions;
    begin
       --  Processing of user-defined functions (may return a list of new
       --  functions that will be added to the model)
       for F of Result.Interface_View.Flat_Functions loop
          declare
-            Functions : constant Function_Maps.Map := Process_Function (F);
+            Funcs : constant Function_Maps.Map := Process_Function (F);
          begin
-            for Each of Functions loop
+            for Each of Funcs loop
                New_Functions.Insert (Key      => To_String (Each.Name),
                                      New_Item => Each);
             end loop;
@@ -129,53 +131,50 @@ package body TASTE.Model_Transformations is
 
       --  Update the PI/RI connections of the existing functions:
       --  For each PI and RI of newly-created function, look for all remote
-      --  functions, and check if the corresponding PI or RI already existed.
-      --  (1) If so, replace the old remote function with the new one
-      --  (2) If not, add corresponding PI or RI (not done yet TODO)
-      --  Then add all newly-created functions to the new model
-      --  NOTE: the following should be using the maps, not the nested
-      --  for loop/conditions...
+      --  functions, and find the corresponding PI or RI
+      --  Then replace the old remote function with the new one
       for F of New_Functions loop
          for PI of F.Provided loop
             for Remote of PI.Remote_Interfaces loop
-               for Each of Result.Interface_View.Flat_Functions loop
-                  if Each.Name = Remote.Function_Name then
-                     for RI of Each.Required loop
-                        if RI.Name = Remote.Interface_Name then
-                           for RI_Remote of RI.Remote_Interfaces loop
-                              if RI_Remote.Function_Name = F.Context then
-                                 --  Found it! Change the remote function name
-                                 RI_Remote.Function_Name := F.Name;
-                              end if;
-                           end loop;
-                        end if;
-                     end loop;
-                  end if;
-               end loop;
+               declare
+                  Remote_Function  : constant Function_Maps.Cursor :=
+                     Functions.Find (To_String (Remote.Function_Name));
+                  Corresponding_RI : constant Interfaces_Maps.Cursor :=
+                     Functions (Remote_Function).Required.Find
+                        (To_String (Remote.Interface_Name));
+               begin
+                  for RI_Remote of Functions (Remote_Function).Required
+                     (Corresponding_RI).Remote_Interfaces
+                  loop
+                     if RI_Remote.Function_Name = F.Context then
+                        RI_Remote.Function_Name := F.Name;
+                     end if;
+                  end loop;
+               end;
             end loop;
          end loop;
 
---        for RI of F.Required loop
---           for Remote of RI.Remote_Interfaces loop
---              declare
---                 Remote_Function : Function_Maps.Cursor :=
---                    Result.Interface_View.Flat_Functions.Find
---                       (To_String (Remote.Function_Name));
---                 Corresponding_PI : Interfaces_Maps.Cursor :=
---                    Function_Maps.Element (Remote_Function).Provided.Find
---                       (To_String (Remote.Interface_Name));
---              begin
---                 for PI_Remote of Interfaces_Maps.Element
---                    (Corresponding_PI).Remote_Interfaces
---                 loop
---                    if PI_Remote.Function_Name = F.Context then
---                       PI_Remote.Function_Name := F.Name;
---                    end if;
---                 end loop;
---              end;
---           end loop;
---        end loop;
+         for RI of F.Required loop
+            for Remote of RI.Remote_Interfaces loop
+               declare
+                  Remote_Function  : constant Function_Maps.Cursor :=
+                     Functions.Find (To_String (Remote.Function_Name));
+                  Corresponding_PI : constant Interfaces_Maps.Cursor :=
+                     Functions (Remote_Function).Provided.Find
+                        (To_String (Remote.Interface_Name));
+               begin
+                  for PI_Remote of Functions (Remote_Function).Provided
+                     (Corresponding_PI).Remote_Interfaces
+                  loop
+                     if PI_Remote.Function_Name = F.Context then
+                        PI_Remote.Function_Name := F.Name;
+                     end if;
+                  end loop;
+               end;
+            end loop;
+         end loop;
 
+         --  Finally, add all newly-created functions to the new model
          Result.Interface_View.Flat_Functions.Insert
                                                (Key      => To_String (F.Name),
                                                 New_Item => F);

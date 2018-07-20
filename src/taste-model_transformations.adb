@@ -177,7 +177,6 @@ package body TASTE.Model_Transformations is
 
          --  Add the function to the deployment view
          for Node of Result.Deployment_View.Nodes loop
-            Put_Info ("Node "  & To_String (Node.Name));
             for Partition of Node.Partitions loop
                if Partition.Bound_Functions.Contains (To_String (F.Context))
                then
@@ -198,16 +197,6 @@ package body TASTE.Model_Transformations is
          Result.Interface_View.Flat_Functions.Insert
                                                (Key      => To_String (F.Name),
                                                 New_Item => F);
-      end loop;
-
-      --  Test / Debug:
-      for F of Result.Interface_View.Flat_Functions loop
-         if F.Language = "gui" then
-            for I of F.Provided loop
-               null;
-               --  Put_Line (To_String (I.Name));
-            end loop;
-         end if;
       end loop;
 
       return Result;

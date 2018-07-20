@@ -4,6 +4,7 @@
 
 --  Set of helper functions for the parser
 with Ada.Containers.Indefinite_Ordered_Maps,
+     Ada.Containers.Indefinite_Ordered_Sets,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Ada.Strings.Equal_Case_Insensitive,
@@ -86,6 +87,11 @@ package TASTE.Parser_Utils is
    use Property_Maps;
    package String_Vectors is new Indefinite_Vectors (Natural, String,
                                            Ada.Strings.Equal_Case_Insensitive);
+   package String_Sets is new Indefinite_Ordered_Sets
+      (Element_Type => String,
+       "<"          => Ada.Strings.Less_Case_Insensitive,
+       "="          => Ada.Strings.Equal_Case_Insensitive);
+
    function Get_Properties_Map (D : Node_Id) return Property_Maps.Map;
 
    --  Shortcut to read an identifier from the parser, in lowercase

@@ -87,8 +87,8 @@ package body TASTE.Semantic_Check is
                                           or PI.RCM = Unprotected_Operation)
                then
                   for Remote of PI.Remote_Interfaces loop
-                     if Opt_Part.Unsafe_Just.Bound_Functions.Find
-                 (To_String (Remote.Function_Name)) = String_Vectors.No_Element
+                     if not Opt_Part.Unsafe_Just.Bound_Functions.Contains
+                       (To_String (Remote.Function_Name))
                      then
                         raise Semantic_Error with "Function "
                         & To_String (Each.Name) & " and function "

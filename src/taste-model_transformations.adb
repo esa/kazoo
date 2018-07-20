@@ -172,6 +172,26 @@ package body TASTE.Model_Transformations is
                   end loop;
                end;
             end loop;
+
+         end loop;
+
+         --  Add the function to the deployment view
+         for Node of Result.Deployment_View.Nodes loop
+            Put_Info ("Node "  & To_String (Node.Name));
+            for Partition of Node.Partitions loop
+               if Partition.Bound_Functions.Contains (To_String (F.Context))
+               then
+                  begin
+                     Partition.Bound_Functions.Insert (To_String (F.Name));
+                  exception
+                     when Constraint_Error =>
+                        --  Insert error, value already exists in the set
+                        Put_Error ("Vertical Transformation Error: generated "
+                           & "name conflicts with user function "
+                           & To_String (F.Name));
+                  end;
+               end if;
+            end loop;
          end loop;
 
          --  Finally, add all newly-created functions to the new model

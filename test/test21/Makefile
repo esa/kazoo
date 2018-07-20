@@ -12,7 +12,17 @@ test-parse: clean
 		       -d DataView.aadl \
 		       ../common/ocarina_components.aadl && cd output && time make dataviews
 
+gdb: clean
+	gdb --args $(AADL_PARSER) --gw \
+	               -o output \
+	               --glue \
+		       --debug \
+		       -i InterfaceView.aadl \
+		       -c DeploymentView.aadl \
+		       -d DataView.aadl \
+		       ../common/ocarina_components.aadl && cd output && time make dataviews
+
 clean:
 	rm -rf output
 
-.PHONY: clean test-parse
+.PHONY: clean test-parse gdb

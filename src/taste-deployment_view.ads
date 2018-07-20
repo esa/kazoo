@@ -24,9 +24,10 @@ use Ada.Containers,
 
 package TASTE.Deployment_View is
 
-   use Option_UString;
-   use Option_ULL;
-   use String_Vectors;
+   use Option_UString,
+       Option_ULL,
+       String_Vectors,
+       String_Sets;
 
    --  Exceptions specific to the deployment view
    Deployment_View_Error       : exception;
@@ -102,7 +103,7 @@ package TASTE.Deployment_View is
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
-         Bound_Functions : String_Vectors.Vector;
+         Bound_Functions : String_Sets.Set;
       end record;
 
    package Option_Partition is new Option_Type (Taste_Partition);

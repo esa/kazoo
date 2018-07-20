@@ -1,5 +1,5 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2018 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Deployment View parser
@@ -380,14 +380,18 @@ package body TASTE.Deployment_View is
 
                if Ref = CI then
                   begin
-                     Result.Bound_Functions.Append (Get_Name_String (ATN.Name
+                     Result.Bound_Functions.Insert (Get_Name_String (ATN.Name
                         (ATN.Component_Type_Identifier
                             (Corresponding_Declaration (P_CI)))));
                   exception
                      when Assert_Failure =>
                         Put_Info ("Detected DV from TASTE version 1.2");
-                        Result.Bound_Functions.Append
+                        Result.Bound_Functions.Insert
                           (Get_Name_String (Name (Identifier (Processes))));
+                     when Constraint_Error =>
+                        --  If the call to Insert in the set failed
+                        Put_Info ("Duplicate bounded function in partition: "
+                           & To_String (Result.Name));
                   end;
                end if;
             end if;

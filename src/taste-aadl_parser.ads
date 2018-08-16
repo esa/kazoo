@@ -8,8 +8,9 @@ with Ada.Strings.Unbounded,
      TASTE.Parser_Utils,
      TASTE.Interface_View,
      TASTE.Deployment_View,
+     TASTE.Concurrency_View,
      TASTE.Data_View;
-
+pragma Unreferenced (TASTE.Concurrency_View);
 use Ada.Strings.Unbounded,
     Ocarina.Types,
     TASTE.Parser_Utils,

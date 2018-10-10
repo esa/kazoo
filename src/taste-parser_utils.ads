@@ -111,10 +111,10 @@ package TASTE.Parser_Utils is
        (Get_Name_String (AIN.Display_Name (AIN.Identifier (N))));
 
    package Option_UString is new Option_Type (Unbounded_String);
-   use Option_UString;
+   --  use Option_UString;
    subtype Optional_Unbounded_String is Option_UString.Option;
    package Option_ULL is new Option_Type (Unsigned_Long_Long);
-   use Option_ULL;
+   --  use Option_ULL;
    subtype Optional_Long_Long is Option_ULL.Option;
 
    procedure Initialize_Ocarina;

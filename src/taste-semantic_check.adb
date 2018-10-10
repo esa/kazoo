@@ -14,7 +14,7 @@ use Ada.Strings.Unbounded,
     TASTE.Parser_Utils;
 
 package body TASTE.Semantic_Check is
-   use String_Vectors;
+   --  use String_Vectors;
    procedure Check_Model (Model : TASTE_Model) is
       use Option_Partition;
       Opt_Part     : Option_Partition.Option;

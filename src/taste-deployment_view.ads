@@ -24,9 +24,7 @@ use Ada.Containers,
 
 package TASTE.Deployment_View is
 
-   use Option_UString,
-       Option_ULL,
-       String_Vectors,
+   use String_Vectors,
        String_Sets;
 
    --  Exceptions specific to the deployment view

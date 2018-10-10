@@ -27,7 +27,7 @@ package body TASTE.Deployment_View is
        System.Assertions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       Ocarina.Files,
+       --  Ocarina.Files,
        Ocarina.FE_AADL.Parser,
        Locations,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
@@ -75,8 +75,8 @@ package body TASTE.Deployment_View is
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View
    is
-      use type Node_Maps.Map;
-      use type Taste_Busses.Vector;
+      --  use type Node_Maps.Map;
+      --  use type Taste_Busses.Vector;
       use type Bus_Connections.Vector;
 
       Nodes          : Node_Maps.Map;

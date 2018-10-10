@@ -23,7 +23,7 @@ package body TASTE.Data_View is
    use Locations,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       Ocarina.Analyzer,
+       --  Ocarina.Analyzer,
        Ocarina.Backends.Properties,
        Ocarina.Options,
        Ocarina.Instances,

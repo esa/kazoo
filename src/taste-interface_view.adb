@@ -23,10 +23,10 @@ package body TASTE.Interface_View is
    use Ada.Exceptions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       Ocarina.Analyzer,
+       --  Ocarina.Analyzer,
        Ocarina.Options,
        Ocarina.Instances,
-     Ocarina.Backends.Properties,
+       Ocarina.Backends.Properties,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ocarina.ME_AADL.AADL_Instances.Entities,
@@ -292,7 +292,7 @@ package body TASTE.Interface_View is
       use type Channels.Vector;
       use type Ctxt_Params.Vector;
       use type Parameters.Vector;
-      use type Connection_Maps.Map;
+      --  use type Connection_Maps.Map;
       System            : Node_Id;
       Success           : Boolean;
       Functions         : Function_Maps.Map;

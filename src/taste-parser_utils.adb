@@ -22,8 +22,8 @@ package body TASTE.Parser_Utils is
        GNAT.Command_Line,
        Templates_Parser,
        Templates_Parser.Utils,
-       Ocarina.Instances.Queries,
-       Ocarina.ME_AADL;
+       Ocarina.Instances.Queries;
+       --  Ocarina.ME_AADL;
 
    procedure Put_Info (Info : String) is
    begin

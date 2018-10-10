@@ -401,7 +401,7 @@ package body TASTE.Backend.Code_Generators is
    function Interface_Template (TI : Taste_Interface)
                                 return Interface_As_Template
    is
-      use Template_Vectors;
+      --  use Template_Vectors;
       Result           : Interface_As_Template;
       Param_Names      : Vector_Tag;
       Param_Types      : Vector_Tag;

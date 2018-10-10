@@ -20,8 +20,8 @@ use Ada.Containers,
 
 package TASTE.Concurrency_View is
 
-   use Option_UString;
-   use Option_ULL;
+   --  use Option_UString;
+   --  use Option_ULL;
 
    --  Exceptions specific to the Concurrency View
    Concurrency_View_Error : exception;

@@ -8,6 +8,7 @@ with System.Assertions,
      Ada.Text_IO,
      Ada.Directories,
      Ada.Strings.Equal_Case_Insensitive,
+     Ada.Containers,
      GNAT.Command_Line,
      Errors,
      Locations,
@@ -23,6 +24,7 @@ with System.Assertions,
 use Ada.Text_IO,
     Ada.Exceptions,
     Ada.Directories,
+    Ada.Containers,
     Locations,
     Ocarina.Namet,
     Ocarina;
@@ -246,6 +248,35 @@ package body TASTE.AADL_Parser is
    procedure Add_Concurrency_View (Model : in out TASTE_Model) is
       Result : Taste_Concurrency_View;
    begin
+      --  Create one thread per Cyclic and Sporadic interface
+      --  Create one protected block per application code
+      for F of Model.Interface_View.Flat_Functions loop
+         declare
+            New_Block : Protected_Block := (Name   => F.Name,
+                                            others => <>);
+         begin
+            for PI of F.Provided loop
+               declare
+                  New_PI : Protected_Block_PI := (Name   => PI.Name,
+                                                  PI     => PI,
+                                                  others => <>);
+               begin
+                  New_PI.PI.RCM := (if F.Provided.Length = 1
+                                    then Unprotected_Operation
+                                    else Protected_Operation);
+                  --  (Todo) Check in the DV if any caller is remote
+                  New_Block.Provided.Insert (Key      => To_String (PI.Name),
+                                             New_Item => New_PI);
+               end;
+            end loop;
+            New_Block.Required := F.Required;
+            --  Find calling threads and add them to New_Block.Calling_Threads
+            --  Add the block to the Concurrency View
+            Result.Blocks.Insert (Key      => To_String (New_Block.Name),
+                                  New_Item => New_Block);
+         end;
+      end loop;
+
       Model.Concurrency_View := Result;
    end Add_Concurrency_View;
 

@@ -1,11 +1,9 @@
 with Ada.Containers,
      --  Ocarina.Backends.Properties,
-     TASTE.Parser_Utils,
-     TASTE.Concurrency_View;
+     TASTE.Parser_Utils;
 use  Ada.Containers,
      --  Ocarina.Backends.Properties,
-     TASTE.Parser_Utils,
-     TASTE.Concurrency_View;
+     TASTE.Parser_Utils;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Text_IO; use Text_IO;
@@ -203,11 +201,4 @@ package body TASTE.Model_Transformations is
 
       return Result;
    end Transform;
-
-   procedure Create_Concurrency_View (Model : in out TASTE_Model) is
-      Result : Taste_Concurrency_View;
-   begin
-      Model.Concurrency_View := Result;
-   end Create_Concurrency_View;
-
 end TASTE.Model_Transformations;

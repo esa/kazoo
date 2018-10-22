@@ -16,8 +16,6 @@ package TASTE.Model_Transformations is
    --  * Create Timer manager functions
    function Transform (Model : TASTE_Model) return TASTE_Model;
 
-   procedure Create_Concurrency_View (Model : in out TASTE_Model);
-
    Transformation_Error : exception;
 
 private

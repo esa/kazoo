@@ -243,6 +243,12 @@ package body TASTE.AADL_Parser is
       return Nothing;
    end Find_Binding;
 
+   procedure Add_Concurrency_View (Model : in out TASTE_Model) is
+      Result : Taste_Concurrency_View;
+   begin
+      Model.Concurrency_View := Result;
+   end Add_Concurrency_View;
+
    procedure Dump (Model : TASTE_Model) is
       Output_Path : constant String := Model.Configuration.Output_Dir.all
                       & "/Debug";

@@ -35,6 +35,8 @@ package TASTE.AADL_Parser is
 
    function Parse_Project return TASTE_Model;
 
+   procedure Add_Concurrency_View (Model : in out TASTE_Model);
+
    function Find_Binding (Model : TASTE_Model;
                           F     : Unbounded_String)
                           return Option_Partition.Option;

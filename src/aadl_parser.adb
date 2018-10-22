@@ -9,11 +9,12 @@ procedure AADL_Parser is
 begin
    declare
       Model       : constant TASTE_Model := Parse_Project;
-      dummy_Trans : constant TASTE_Model := Transform (Model);
+      Transformed : TASTE_Model := Transform (Model);
    begin
-      Model.Dump;
-      Model.Generate_Build_Script;
-      Model.Generate_Code;
+      Create_Concurrency_View (Transformed);
+      Transformed.Dump;
+      Transformed.Generate_Build_Script;
+      Transformed.Generate_Code;
    end;
 exception
    when TASTE.Quit_TASTE =>

@@ -12,7 +12,6 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Text_IO,
      Ocarina,
      Ocarina.Types,
-     --  Ocarina.Backends.Properties,
      Option_Type,
      TASTE.Parser_Utils;
 
@@ -21,7 +20,6 @@ use Ada.Containers,
     Text_IO,
     Ocarina,
     Ocarina.Types,
-    --  Ocarina.Backends.Properties,
     TASTE.Parser_Utils;
 
 package TASTE.Interface_View is

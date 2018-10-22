@@ -10,12 +10,13 @@ with Ada.Strings.Unbounded,
      TASTE.Deployment_View,
      TASTE.Concurrency_View,
      TASTE.Data_View;
-pragma Unreferenced (TASTE.Concurrency_View);
+--  pragma Unreferenced (TASTE.Concurrency_View);
 use Ada.Strings.Unbounded,
     Ocarina.Types,
     TASTE.Parser_Utils,
     TASTE.Interface_View,
     TASTE.Deployment_View,
+    TASTE.Concurrency_View,
     TASTE.Data_View;
 
 package TASTE.AADL_Parser is
@@ -25,13 +26,15 @@ package TASTE.AADL_Parser is
 
    type TASTE_Model is tagged
       record
-         Interface_View  : Complete_Interface_View;
-         Deployment_View : Complete_Deployment_View;
-         Data_View       : Taste_Data_View;
-         Configuration   : Taste_Configuration;
+         Interface_View   : Complete_Interface_View;
+         Deployment_View  : Complete_Deployment_View;
+         Data_View        : Taste_Data_View;
+         Concurrency_View : Taste_Concurrency_View;
+         Configuration    : Taste_Configuration;
       end record;
 
    function Parse_Project return TASTE_Model;
+
    function Find_Binding (Model : TASTE_Model;
                           F     : Unbounded_String)
                           return Option_Partition.Option;

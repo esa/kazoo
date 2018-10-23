@@ -273,18 +273,13 @@ package body TASTE.AADL_Parser is
                           Model.Deployment_View.Find_Node
                             (To_String (Remote.Function_Name));
                      begin
-                        if not Remote_Node.Has_Value then
+                        if not Remote_Node.Has_Value
+                          or not Block.Node.Has_Value
+                        then
                            raise Concurrency_View_Error with
-                             "Calling function "
-                             & To_String (Remote.Function_Name)
-                             & ": could not find binding (parser bug?)";
+                             "Concurrency Generation Error (parser bug?)";
                         end if;
-                        if not Block.Node.Has_Value then
-                           raise Concurrency_View_Error with
-                             "Function "
-                             & To_String (F.Name)
-                             & ": cound not find binding (parser bug?)";
-                        end if;
+
                         if Block.Node.Unsafe_Just /= Remote_Node.Unsafe_Just
                         then
                            --  At least one caller is on a different node
@@ -292,10 +287,25 @@ package body TASTE.AADL_Parser is
                         end if;
                      end;
                   end loop;
-
                   Block.Provided.Insert (Key      => To_String (PI.Name),
-                                             New_Item => New_PI);
+                                         New_Item => New_PI);
                end;
+               if PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation then
+                  declare
+                     Thread : AADL_Thread :=
+                       (Name                 => F.Name & "_" & PI.Name,
+                        Entry_Port_Name      => PI.Name,
+                        Protected_Block_name => Block.Name,
+                        Node                 => Block.Node,
+                        others               => <>);
+                  begin
+                     --  Todo: add Thread.Output_Ports
+                     Result.Threads.Include
+                       (Key      => To_String (Thread.Name),
+                        New_Item => Thread);
+                  end;
+               end if;
+
             end loop;
             Block.Required := F.Required;
             --  Find calling threads and add them to New_Block.Calling_Threads

@@ -252,7 +252,7 @@ package body TASTE.AADL_Parser is
       --  Create one protected block per application code
       for F of Model.Interface_View.Flat_Functions loop
          declare
-            New_Block : Protected_Block :=
+            Block : Protected_Block :=
               (Name   => F.Name,
                Node   => Model.Deployment_View.Find_Node (To_String (F.Name)),
                others => <>);
@@ -267,19 +267,41 @@ package body TASTE.AADL_Parser is
                                     then Unprotected_Operation
                                     else Protected_Operation);
                   --  Check in the DV if any caller is remote
-                  for Caller of PI.Remote_Interfaces loop
-                     null;
+                  for Remote of PI.Remote_Interfaces loop
+                     declare
+                        Remote_Node : constant Option_Node.Option :=
+                          Model.Deployment_View.Find_Node
+                            (To_String (Remote.Function_Name));
+                     begin
+                        if not Remote_Node.Has_Value then
+                           raise Concurrency_View_Error with
+                             "Calling function "
+                             & To_String (Remote.Function_Name)
+                             & ": could not find binding (parser bug?)";
+                        end if;
+                        if not Block.Node.Has_Value then
+                           raise Concurrency_View_Error with
+                             "Function "
+                             & To_String (F.Name)
+                             & ": cound not find binding (parser bug?)";
+                        end if;
+                        if Block.Node.Unsafe_Just /= Remote_Node.Unsafe_Just
+                        then
+                           --  At least one caller is on a different node
+                           New_PI.Local_Caller := False;
+                        end if;
+                     end;
                   end loop;
 
-                  New_Block.Provided.Insert (Key      => To_String (PI.Name),
+                  Block.Provided.Insert (Key      => To_String (PI.Name),
                                              New_Item => New_PI);
                end;
             end loop;
-            New_Block.Required := F.Required;
+            Block.Required := F.Required;
             --  Find calling threads and add them to New_Block.Calling_Threads
             --  Add the block to the Concurrency View
-            Result.Blocks.Insert (Key      => To_String (New_Block.Name),
-                                  New_Item => New_Block);
+            Result.Blocks.Insert (Key      => To_String (Block.Name),
+                                  New_Item => Block);
          end;
       end loop;
 

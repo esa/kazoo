@@ -271,7 +271,7 @@ package body TASTE.Interface_View is
    -- Get Optional Worse Case Execution Time (Upper bound in ms) --
    ----------------------------------------------------------------
 
-   function Get_Upper_WCET (Func : Node_Id) return Optional_Long_Long is
+   function Get_Upper_WCET (Func : Node_Id) return Option_ULL.Option is
       (if Is_Subprogram_Access (Func) and then Sources (Func) /= No_List
          and then AIN.First_Node (Sources (Func)) /= No_Node
          and then Get_Execution_Time (Corresponding_Instance (AIN.Item
@@ -279,7 +279,7 @@ package body TASTE.Interface_View is
                            /= Empty_Time_Array
       then Just (To_Milliseconds (Get_Execution_Time (Corresponding_Instance
                              (AIN.Item (AIN.First_Node (Sources (Func)))))(1)))
-         else Nothing);
+         else Option_ULL.Nothing);
 
    ---------------------------
    -- AST Builder Functions --
@@ -323,7 +323,7 @@ package body TASTE.Interface_View is
          if Get_RCM_Operation_Kind
            (Get_Referenced_Entity (AIN.Destination (Conn))) = Cyclic_Operation
          then
-            return Nothing;
+            return Option_Connection.Nothing;
          end if;
 
          PI_Name := Get_Interface_Name
@@ -377,7 +377,7 @@ package body TASTE.Interface_View is
             ASN1_Module    => US (Get_ASN1_Module_Name (CP_ASN1)),
             ASN1_File_Name => (if NA'Length > 0 then
                                Just (US (Get_Name_String (NA (1))))
-                               else Nothing));
+                               else Option_UString.Nothing));
       end Parse_CP;
 
       --  Parse a single parameter of an interface
@@ -428,7 +428,7 @@ package body TASTE.Interface_View is
                                    (CI, "taste::associated_queue_size")
                                then Just (Get_Integer_Property
                                    (CI, " taste::associated_queue_size"))
-                               else Nothing);
+                               else Option_ULL.Nothing);
          Result.RCM := Get_RCM_Operation_Kind (If_I);
          Result.Period_Or_MIAT := Get_RCM_Period (If_I);
          Result.WCET_ms := Get_Upper_WCET (If_I);
@@ -540,7 +540,7 @@ package body TASTE.Interface_View is
       begin
          Result.Name          := US (Name);
          Result.Full_Prefix   := (if Prefix'Length > 0 then Just (US (Prefix))
-                                 else Nothing);
+                                 else Option_UString.Nothing);
          --  Result.Language      := Get_Source_Language (Inst);
          Result.Language      := US (Get_Language (Inst));
          if Source_Text'Length /= 0 then

@@ -463,6 +463,19 @@ package body TASTE.Deployment_View is
          Busses         => Busses);
    end Parse_Deployment_View;
 
+   function Find_Node (Deployment    : Complete_Deployment_View;
+                       Function_Name : String) return Option_Node.Option is
+   begin
+      for Node of Deployment.Nodes loop
+         for Partition of Node.Partitions loop
+            if Partition.Bound_Functions.Contains (Function_Name) then
+               return Option_Node.Just (Node);
+            end if;
+         end loop;
+      end loop;
+      return Option_Node.Nothing;
+   end Find_Node;
+
    procedure Dump_Nodes (DV : Complete_Deployment_View; Output : File_Type) is
    begin
       for Each of DV.Nodes loop

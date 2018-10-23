@@ -107,8 +107,8 @@ package TASTE.Interface_View is
          Params            : Parameters.Vector;
          RCM               : Supported_RCM_Operation_Kind;
          Period_Or_MIAT    : Unsigned_Long_Long;
-         WCET_ms           : Optional_Long_Long := Nothing;
-         Queue_Size        : Optional_Long_Long := Nothing;
+         WCET_ms           : Option_ULL.Option := Option_ULL.Nothing;
+         Queue_Size        : Option_ULL.Option := Option_ULL.Nothing;
          User_Properties   : Property_Maps.Map;
       end record;
 
@@ -121,7 +121,7 @@ package TASTE.Interface_View is
          Sort           : Unbounded_String;
          Default_Value  : Unbounded_String;
          ASN1_Module    : Unbounded_String;
-         ASN1_File_Name : Optional_Unbounded_String := Nothing;
+         ASN1_File_Name : Option_UString.Option := Option_UString.Nothing;
       end record;
 
    package Ctxt_Params is new Indefinite_Vectors (Natural, Context_Parameter);
@@ -130,10 +130,10 @@ package TASTE.Interface_View is
       record
          Name            : Unbounded_String;
          Context         : Unbounded_String          := Null_Unbounded_String;
-         Full_Prefix     : Optional_Unbounded_String := Nothing;
+         Full_Prefix     : Option_UString.Option := Option_UString.Nothing;
          --  Language        : Supported_Source_Language;
          Language        : Unbounded_String;
-         Zip_File        : Optional_Unbounded_String := Nothing;
+         Zip_File        : Option_UString.Option := Option_UString.Nothing;
          Context_Params  : Ctxt_Params.Vector;
          Directives      : Ctxt_Params.Vector;  --  TASTE Directives
          Simulink        : Ctxt_Params.Vector;  --  Simulink Tuneable Params
@@ -142,7 +142,7 @@ package TASTE.Interface_View is
          Provided        : Interfaces_Maps.Map;
          Required        : Interfaces_Maps.Map;
          Is_Type         : Boolean := False;
-         Instance_Of     : Optional_Unbounded_String := Nothing;
+         Instance_Of     : Option_UString.Option := Option_UString.Nothing;
       end record;
 
    --  Key for the function map is case insensitive

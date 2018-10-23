@@ -7,14 +7,14 @@
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Unbounded,
      TASTE.Parser_Utils,
-     --  TASTE.AADL_Parser,
-     TASTE.Interface_View;
+     TASTE.Interface_View,
+     TASTE.Deployment_View;
 
 use Ada.Containers,
     Ada.Strings.Unbounded,
     TASTE.Parser_Utils,
-    --  TASTE.AADL_Parser,
-    TASTE.Interface_View;
+    TASTE.Interface_View,
+    TASTE.Deployment_View;
 
 package TASTE.Concurrency_View is
 
@@ -36,6 +36,7 @@ package TASTE.Concurrency_View is
          Provided        : Protected_Block_PIs.Map;
          Required        : Interfaces_Maps.Map;
          Calling_Threads : String_Vectors.Vector;
+         Node            : Option_Node.Option;
       end record;
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
@@ -55,6 +56,7 @@ package TASTE.Concurrency_View is
          Entry_Port_Name      : Unbounded_String;
          Protected_Block_Name : Unbounded_String;
          Output_Ports         : Ports.Map;
+         Node                 : Option_Node.Option;
       end record;
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);

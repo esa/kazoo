@@ -125,6 +125,11 @@ package TASTE.Deployment_View is
          Busses      : Taste_Busses.Vector;
       end record;
 
+   --  Helper function: find the node of a given function
+   package Option_Node is new Option_Type (Taste_Node);
+   function Find_Node (Deployment    : Complete_Deployment_View;
+                       Function_Name : String) return Option_Node.Option;
+
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View

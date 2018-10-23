@@ -252,8 +252,10 @@ package body TASTE.AADL_Parser is
       --  Create one protected block per application code
       for F of Model.Interface_View.Flat_Functions loop
          declare
-            New_Block : Protected_Block := (Name   => F.Name,
-                                            others => <>);
+            New_Block : Protected_Block :=
+              (Name   => F.Name,
+               Node   => Model.Deployment_View.Find_Node (To_String (F.Name)),
+               others => <>);
          begin
             for PI of F.Provided loop
                declare
@@ -264,7 +266,11 @@ package body TASTE.AADL_Parser is
                   New_PI.PI.RCM := (if F.Provided.Length = 1
                                     then Unprotected_Operation
                                     else Protected_Operation);
-                  --  (Todo) Check in the DV if any caller is remote
+                  --  Check in the DV if any caller is remote
+                  for Caller of PI.Remote_Interfaces loop
+                     null;
+                  end loop;
+
                   New_Block.Provided.Insert (Key      => To_String (PI.Name),
                                              New_Item => New_PI);
                end;

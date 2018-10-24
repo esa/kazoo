@@ -125,7 +125,7 @@ package body TASTE.Parser_Utils is
       if Result.Version then
          raise Exit_From_Command_Line;
       end if;
-      if Result.Output_Dir.all'Length = 0 then
+      if Result.Output_Dir = null or else Result.Output_Dir.all'Length = 0 then
          Result.Output_Dir := new String'(".");
       end if;
    end Parse_Command_Line;

@@ -35,7 +35,7 @@ package TASTE.Concurrency_View is
          Name            : Unbounded_String;
          Provided        : Protected_Block_PIs.Map;
          Required        : Interfaces_Maps.Map;
-         Calling_Threads : String_Vectors.Vector;
+         Calling_Threads : String_Sets.Set;
          Node            : Option_Node.Option;
       end record;
 

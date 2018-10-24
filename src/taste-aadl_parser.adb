@@ -245,6 +245,62 @@ package body TASTE.AADL_Parser is
       return Nothing;
    end Find_Binding;
 
+   --  Find the output ports of a thread by following the connections
+   function Get_Output_Ports (Model : TASTE_Model;
+                              F     : Taste_Terminal_Function) return Ports.Map
+   is
+      Result            : Ports.Map;
+      Visited_Functions : String_Sets.Set;
+      procedure Rec_Find_Thread (Ports_Map  : in out Ports.Map;
+                                 Visited    : in out String_Sets.Set;
+                                 Func       : Taste_Terminal_Function) is
+         use String_Sets;
+         Current_Function : constant String_Sets.Set :=
+           String_Sets.To_Set (To_String (Func.Name));
+      begin
+         --  Recursively find distand threads by following (un)pro RI paths
+         --  Ignore already visited nodes (system may have circular paths)
+         if Current_Function.Is_Subset (Of_Set => Visited) then
+            return;
+         else
+            Visited := Visited or Current_Function;
+         end if;
+
+         for RI of Func.Required loop
+            if RI.RCM = Unprotected_Operation or RI.RCM = Protected_Operation
+            then
+               Rec_Find_Thread (Ports_Map => Ports_Map,
+                                Visited   => Visited,
+                                Func      =>
+                                  Model.Interface_View.Flat_Functions
+                                  (To_String
+                          (RI.Remote_Interfaces.First_Element.Function_Name)));
+            else
+               declare
+                  --  Assume only one remote connection per RI
+                  --  Have to iterate on Remote_Interfaces if that changes
+                  Dist  : constant Remote_Entity :=
+                    RI.Remote_Interfaces.First_Element;
+                  New_P : constant Port :=
+                    (Remote_Thread =>
+                       Dist.Function_Name & "_" & Dist.Interface_Name,
+                     Remote_PI     => Dist.Interface_Name);
+               begin
+                  Ports_Map.Include
+                    (Key => To_String
+                       (New_P.Remote_Thread & "_" & New_P.Remote_PI),
+                     New_Item => New_P);
+               end;
+            end if;
+         end loop;
+      end Rec_Find_Thread;
+   begin
+      Rec_Find_Thread (Ports_Map => Result,
+                       Visited   => Visited_Functions,
+                       Func      => F);
+      return Result;
+   end Get_Output_Ports;
+
    procedure Add_Concurrency_View (Model : in out TASTE_Model) is
       Result : Taste_Concurrency_View;
    begin
@@ -292,12 +348,12 @@ package body TASTE.AADL_Parser is
                end;
                if PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation then
                   declare
-                     Thread : AADL_Thread :=
+                     Thread : constant AADL_Thread :=
                        (Name                 => F.Name & "_" & PI.Name,
                         Entry_Port_Name      => PI.Name,
                         Protected_Block_name => Block.Name,
                         Node                 => Block.Node,
-                        others               => <>);
+                        Output_Ports         => Get_Output_Ports (Model, F));
                   begin
                      --  Todo: add Thread.Output_Ports
                      Result.Threads.Include
@@ -308,7 +364,7 @@ package body TASTE.AADL_Parser is
 
             end loop;
             Block.Required := F.Required;
-            --  Find calling threads and add them to New_Block.Calling_Threads
+            --  Find calling threads and add them to Block.Calling_Threads
             --  Add the block to the Concurrency View
             Result.Blocks.Insert (Key      => To_String (Block.Name),
                                   New_Item => Block);

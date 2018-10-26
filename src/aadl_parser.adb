@@ -11,7 +11,9 @@ begin
       Model       : constant TASTE_Model := Parse_Project;
       Transformed : TASTE_Model := Transform (Model);
    begin
-      Transformed.Add_Concurrency_View;
+      if Transformed.Configuration.Glue then
+         Transformed.Add_Concurrency_View;
+      end if;
       Transformed.Dump;
       Transformed.Generate_Build_Script;
       Transformed.Generate_Code;

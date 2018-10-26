@@ -245,6 +245,43 @@ package body TASTE.AADL_Parser is
       return Nothing;
    end Find_Binding;
 
+   procedure Set_Calling_Threads (CV : in out Taste_Concurrency_View) is
+      Visited_Threads : String_Sets.Set;
+      procedure Rec_Add_Calling_Thread (Thread_Id : String;
+                                        Block_Id  : String;
+                                        Visited   : in out String_Sets.Set) is
+         use String_Sets;
+         Current_Thread : constant String_Sets.Set := To_Set (Thread_Id);
+      begin
+         if Current_Thread.Is_Subset (Of_Set => Visited) then
+            return;
+         else
+            Visited := Visited or Current_Thread;
+         end if;
+         --  First add thread to its corresponding protected function
+         CV.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
+         --  Then recurse on its (Un)protected RIs.
+         for RI of CV.Blocks (Block_Id).Required loop
+            if RI.RCM = Protected_Operation or RI.RCM = Unprotected_Operation
+            then
+               for Remote of RI.Remote_Interfaces loop
+                  Rec_Add_Calling_Thread
+                    (Thread_Id => Thread_Id,
+                     Block_Id  => To_String (Remote.Function_Name),
+                     Visited   => Visited);
+               end loop;
+            end if;
+         end loop;
+      end Rec_Add_Calling_Thread;
+   begin
+      for Each of CV.Threads loop
+         Rec_Add_Calling_Thread (Thread_Id => To_String (Each.Name),
+                                 Block_Id  => To_String
+                                   (Each.Protected_Block_Name),
+                                 Visited   => Visited_Threads);
+      end loop;
+   end Set_Calling_Threads;
+
    --  Find the output ports of a thread by following the connections
    function Get_Output_Ports (Model : TASTE_Model;
                               F     : Taste_Terminal_Function) return Ports.Map
@@ -264,6 +301,10 @@ package body TASTE.AADL_Parser is
             return;
          else
             Visited := Visited or Current_Function;
+         end if;
+         if Func.Is_Type then
+            --  Ignore function types, only work with instances
+            return;
          end if;
 
          for RI of Func.Required loop
@@ -355,7 +396,6 @@ package body TASTE.AADL_Parser is
                         Node                 => Block.Node,
                         Output_Ports         => Get_Output_Ports (Model, F));
                   begin
-                     --  Todo: add Thread.Output_Ports
                      Result.Threads.Include
                        (Key      => To_String (Thread.Name),
                         New_Item => Thread);
@@ -364,12 +404,13 @@ package body TASTE.AADL_Parser is
 
             end loop;
             Block.Required := F.Required;
-            --  Find calling threads and add them to Block.Calling_Threads
             --  Add the block to the Concurrency View
             Result.Blocks.Insert (Key      => To_String (Block.Name),
                                   New_Item => Block);
          end;
       end loop;
+      --  Find and set protected blocks calling threads
+      Set_Calling_Threads (Result);
 
       Model.Concurrency_View := Result;
    end Add_Concurrency_View;

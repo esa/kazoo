@@ -437,12 +437,23 @@ package body TASTE.AADL_Parser is
             Model.Deployment_View.Debug_Dump (Output);
             Close (Output);
          end if;
+
+         if Model.Configuration.Glue then
+            Create (File => Output,
+                    Mode => Out_File,
+                    Name => Output_Path & "/ConcurrencyView.dump");
+            Put_Info ("Dump of the Concurrency View");
+            Model.Concurrency_View.Debug_Dump (Output);
+            Close (Output);
+         end if;
+
          Create (File => Output,
                  Mode => Out_File,
                  Name => Output_Path & "/DataView.dump");
          Put_Info ("Dump of the Data View");
          Model.Data_View.Debug_Dump (Output);
          Close (Output);
+
          Create (File => Output,
                  Mode => Out_File,
                  Name => Output_Path & "/commandline.dump");

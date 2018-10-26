@@ -6,12 +6,14 @@
 
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Unbounded,
+     Text_IO,
      TASTE.Parser_Utils,
      TASTE.Interface_View,
      TASTE.Deployment_View;
 
 use Ada.Containers,
     Ada.Strings.Unbounded,
+    Text_IO,
     TASTE.Parser_Utils,
     TASTE.Interface_View,
     TASTE.Deployment_View;
@@ -61,10 +63,13 @@ package TASTE.Concurrency_View is
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
 
-   type Taste_Concurrency_View is
+   type Taste_Concurrency_View is tagged
       record
          Threads : AADL_Threads.Map;
          Blocks  : Protected_Blocks.Map;
       end record;
+
+   procedure Debug_Dump (CV     : Taste_Concurrency_View;
+                         Output : File_Type);
 
 end TASTE.Concurrency_View;

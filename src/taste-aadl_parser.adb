@@ -246,18 +246,9 @@ package body TASTE.AADL_Parser is
    end Find_Binding;
 
    procedure Set_Calling_Threads (CV : in out Taste_Concurrency_View) is
-      Visited_Threads : String_Sets.Set;
       procedure Rec_Add_Calling_Thread (Thread_Id : String;
-                                        Block_Id  : String;
-                                        Visited   : in out String_Sets.Set) is
-         use String_Sets;
-         Current_Thread : constant String_Sets.Set := To_Set (Thread_Id);
+                                        Block_Id  : String) is
       begin
-         if Current_Thread.Is_Subset (Of_Set => Visited) then
-            return;
-         else
-            Visited := Visited or Current_Thread;
-         end if;
          --  First add thread to its corresponding protected function
          CV.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
          --  Then recurse on its (Un)protected RIs.
@@ -267,8 +258,7 @@ package body TASTE.AADL_Parser is
                for Remote of RI.Remote_Interfaces loop
                   Rec_Add_Calling_Thread
                     (Thread_Id => Thread_Id,
-                     Block_Id  => To_String (Remote.Function_Name),
-                     Visited   => Visited);
+                     Block_Id  => To_String (Remote.Function_Name));
                end loop;
             end if;
          end loop;
@@ -277,8 +267,7 @@ package body TASTE.AADL_Parser is
       for Each of CV.Threads loop
          Rec_Add_Calling_Thread (Thread_Id => To_String (Each.Name),
                                  Block_Id  => To_String
-                                   (Each.Protected_Block_Name),
-                                 Visited   => Visited_Threads);
+                                   (Each.Protected_Block_Name));
       end loop;
    end Set_Calling_Threads;
 

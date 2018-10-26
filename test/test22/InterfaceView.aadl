@@ -1,0 +1,285 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::f1
+PUBLIC
+
+WITH interfaceview::IV::f2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_a_cyc
+END PI_a_cyc;
+
+SUBPROGRAM IMPLEMENTATION PI_a_cyc.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_a_cyc.others;
+
+SUBPROGRAM PI_b_spo
+FEATURES
+  p1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END PI_b_spo;
+
+SUBPROGRAM IMPLEMENTATION PI_b_spo.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_b_spo.others;
+
+SUBPROGRAM RI_c_spo
+END RI_c_spo;
+
+SUBPROGRAM IMPLEMENTATION RI_c_spo.others
+END RI_c_spo.others;
+
+SUBPROGRAM RI_d_pro
+END RI_d_pro;
+
+SUBPROGRAM IMPLEMENTATION RI_d_pro.others
+END RI_d_pro.others;
+
+SYSTEM f1
+FEATURES
+  PI_a_cyc : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f1::PI_a_cyc.others {
+    Taste::coordinates => "82045 61888";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 100 ms;
+    Taste::InterfaceName => "a_cyc";
+  };
+  PI_b_spo : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f1::PI_b_spo.others {
+    Taste::coordinates => "95116 78738";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "b_spo";
+  };
+  RI_c_spo : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::f2::PI_c_spo.others {
+    Taste::coordinates => "107399 63463";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "c_spo";
+    Taste::labelInheritance => "true";
+  };
+  RI_d_pro : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::f2::PI_d_pro.others {
+    Taste::coordinates => "107399 72913";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "d_pro";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END f1;
+
+SYSTEM IMPLEMENTATION f1.others
+END f1.others;
+
+END interfaceview::IV::f1;
+
+PACKAGE interfaceview::IV::f2
+PUBLIC
+
+WITH interfaceview::IV::f3;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_c_spo
+END PI_c_spo;
+
+SUBPROGRAM IMPLEMENTATION PI_c_spo.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_c_spo.others;
+
+SUBPROGRAM PI_d_pro
+END PI_d_pro;
+
+SUBPROGRAM IMPLEMENTATION PI_d_pro.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_d_pro.others;
+
+SUBPROGRAM RI_e_unpro
+END RI_e_unpro;
+
+SUBPROGRAM IMPLEMENTATION RI_e_unpro.others
+END RI_e_unpro.others;
+
+SYSTEM f2
+FEATURES
+  PI_c_spo : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f2::PI_c_spo.others {
+    Taste::coordinates => "132437 67243";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "c_spo";
+  };
+  PI_d_pro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f2::PI_d_pro.others {
+    Taste::coordinates => "132437 76693";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "d_pro";
+  };
+  RI_e_unpro : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::f3::PI_e_unpro.others {
+    Taste::coordinates => "156689 71968";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "e_unpro";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END f2;
+
+SYSTEM IMPLEMENTATION f2.others
+END f2.others;
+
+END interfaceview::IV::f2;
+
+PACKAGE interfaceview::IV::f3
+PUBLIC
+
+WITH interfaceview::IV::f4;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_e_unpro
+END PI_e_unpro;
+
+SUBPROGRAM IMPLEMENTATION PI_e_unpro.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_e_unpro.others;
+
+SUBPROGRAM RI_f_spo
+END RI_f_spo;
+
+SUBPROGRAM IMPLEMENTATION RI_f_spo.others
+END RI_f_spo.others;
+
+SYSTEM f3
+FEATURES
+  PI_e_unpro : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f3::PI_e_unpro.others {
+    Taste::coordinates => "178106 79527";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "e_unpro";
+  };
+  RI_f_spo : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::f4::PI_f_spo.others {
+    Taste::coordinates => "189129 91021";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "f_spo";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END f3;
+
+SYSTEM IMPLEMENTATION f3.others
+END f3.others;
+
+END interfaceview::IV::f3;
+
+PACKAGE interfaceview::IV::f4
+PUBLIC
+
+WITH interfaceview::IV::f1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_f_spo
+END PI_f_spo;
+
+SUBPROGRAM IMPLEMENTATION PI_f_spo.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_f_spo.others;
+
+SUBPROGRAM RI_b_spo
+FEATURES
+  p1 : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_b_spo;
+
+SUBPROGRAM IMPLEMENTATION RI_b_spo.others
+END RI_b_spo.others;
+
+SYSTEM f4
+FEATURES
+  PI_f_spo : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::f4::PI_f_spo.others {
+    Taste::coordinates => "188974 111336";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "f_spo";
+  };
+  RI_b_spo : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::f1::PI_b_spo.others {
+    Taste::coordinates => "174799 119211";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "b_spo";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END f4;
+
+SYSTEM IMPLEMENTATION f4.others
+END f4.others;
+
+END interfaceview::IV::f4;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::f1;
+WITH interfaceview::IV::f2;
+WITH interfaceview::IV::f3;
+WITH interfaceview::IV::f4;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  f1 : SYSTEM interfaceview::IV::f1::f1.others {
+    Taste::coordinates => "82045 60313 107399 78738";
+  };
+  f2 : SYSTEM interfaceview::IV::f2::f2.others {
+    Taste::coordinates => "132437 64093 156689 82203";
+  };
+  f3 : SYSTEM interfaceview::IV::f3::f3.others {
+    Taste::coordinates => "178106 71652 204247 91021";
+  };
+  f4 : SYSTEM interfaceview::IV::f4::f4.others {
+    Taste::coordinates => "174799 111336 203459 133382";
+  };
+CONNECTIONS
+  f1_PI_b_spo_f4_RI_b_spo : SUBPROGRAM ACCESS f1.PI_b_spo -> f4.RI_b_spo {
+    Taste::coordinates => "174799 119211 95116 119211 95116 78738";
+  };
+  f2_PI_c_spo_f1_RI_c_spo : SUBPROGRAM ACCESS f2.PI_c_spo -> f1.RI_c_spo {
+    Taste::coordinates => "107399 63463 119918 63463 119918 67243 132437 67243";
+  };
+  f2_PI_d_pro_f1_RI_d_pro : SUBPROGRAM ACCESS f2.PI_d_pro -> f1.RI_d_pro {
+    Taste::coordinates => "107399 72913 119918 72913 119918 76693 132437 76693";
+  };
+  f3_PI_e_unpro_f2_RI_e_unpro : SUBPROGRAM ACCESS f3.PI_e_unpro -> f2.RI_e_unpro {
+    Taste::coordinates => "156689 71968 167397 71968 167397 79527 178106 79527";
+  };
+  f4_PI_f_spo_f3_RI_f_spo : SUBPROGRAM ACCESS f4.PI_f_spo -> f3.RI_f_spo {
+    Taste::coordinates => "189129 91021 189129 101178 188974 101178 188974 111336";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

@@ -348,6 +348,9 @@ package body TASTE.AADL_Parser is
       --  Create one thread per Cyclic and Sporadic interface
       --  Create one protected block per application code
       for F of Model.Interface_View.Flat_Functions loop
+         if F.Is_Type then
+            goto Continue;
+         end if;
          declare
             Block : Protected_Block :=
               (Name   => F.Name,
@@ -401,13 +404,13 @@ package body TASTE.AADL_Parser is
                         New_Item => Thread);
                   end;
                end if;
-
             end loop;
             Block.Required := F.Required;
             --  Add the block to the Concurrency View
             Result.Blocks.Insert (Key      => To_String (Block.Name),
                                   New_Item => Block);
          end;
+         <<Continue>>
       end loop;
       --  Find and set protected blocks calling threads
       Set_Calling_Threads (Result);

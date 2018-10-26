@@ -250,7 +250,15 @@ package body TASTE.AADL_Parser is
                                         Block_Id  : String) is
       begin
          --  First add thread to its corresponding protected function
-         CV.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
+         --  Stop recursion if thread is already there...
+         if not String_Sets.To_Set (Thread_Id).Is_Subset
+           (Of_Set => CV.Blocks (Block_Id).Calling_Threads)
+         then
+            CV.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
+         else
+            return;
+         end if;
+
          --  Then recurse on its (Un)protected RIs.
          for RI of CV.Blocks (Block_Id).Required loop
             if RI.RCM = Protected_Operation or RI.RCM = Unprotected_Operation
@@ -297,6 +305,10 @@ package body TASTE.AADL_Parser is
          end if;
 
          for RI of Func.Required loop
+            if RI.Remote_Interfaces.Is_Empty then
+               goto Continue;
+            end if;
+
             if RI.RCM = Unprotected_Operation or RI.RCM = Protected_Operation
             then
                Rec_Find_Thread (Ports_Map => Ports_Map,
@@ -322,6 +334,7 @@ package body TASTE.AADL_Parser is
                      New_Item => New_P);
                end;
             end if;
+            <<Continue>>
          end loop;
       end Rec_Find_Thread;
    begin

@@ -706,6 +706,11 @@ package body TASTE.Interface_View is
             begin
                if Remote.Function_Name /= "Not found!" then
                   RI.Remote_Interfaces.Append (Remote);
+                  --  Update RCM of the RI to match the one of the remote PI
+                  --  (by default it is set to Any)
+                  RI.RCM :=
+                    Functions (To_String (Remote.Function_Name)).Provided
+                      (To_String (Remote.Interface_Name)).RCM;
                end if;
             end;
          end loop;

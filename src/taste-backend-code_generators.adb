@@ -357,7 +357,7 @@ package body TASTE.Backend.Code_Generators is
    function CP_Template (F : Taste_Terminal_Function) return Translate_Set is
       package Sort_Set is new Ordered_Sets (Unbounded_String);
       use Sort_Set;
-      Sorts_Set     : Set;
+      Sorts_Set    : Set;
       Unique_Sorts : Vector_Tag;
       Corr_Module  : Vector_Tag;
       Names        : Vector_Tag;

@@ -5,8 +5,10 @@
 --  Model of the Concurrency View
 
 with Ada.Containers.Indefinite_Ordered_Maps,
+     Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Text_IO,
+     Templates_Parser,
      TASTE.Parser_Utils,
      TASTE.Interface_View,
      TASTE.Deployment_View;
@@ -14,6 +16,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
 use Ada.Containers,
     Ada.Strings.Unbounded,
     Text_IO,
+    Templates_Parser,
     TASTE.Parser_Utils,
     TASTE.Interface_View,
     TASTE.Deployment_View;
@@ -71,5 +74,32 @@ package TASTE.Concurrency_View is
 
    procedure Debug_Dump (CV     : Taste_Concurrency_View;
                          Output : File_Type);
+
+   --  Set of types to transform the AST into String Template entities
+
+   type ST_port is
+      record
+         Header : Translate_Set;
+      end record;
+
+   package ST_Ports is new Indefinite_Vectors (Natural, ST_Port);
+
+   type ST_Thread is
+      record
+         Header       : Translate_Set;
+         Output_Ports : ST_Ports.Vector;
+      end record;
+
+   package ST_Threads is new Indefinite_Ordered_Maps (String, ST_Thread);
+   --  package ST_Blocks  is new Indefinite_Ordered_Maps (String, ST_Block);
+
+   type CV_As_Template is
+      record
+         Threads : ST_Threads.Map;
+         --  Blocks  : ST_Blocks.Map;
+      end record;
+
+   function Concurrency_View_Template (CV : Taste_Concurrency_View)
+     return CV_As_Template;
 
 end TASTE.Concurrency_View;

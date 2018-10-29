@@ -41,4 +41,12 @@ package body TASTE.Concurrency_View is
       end loop;
    end Debug_Dump;
 
+   function Concurrency_View_Template (CV : Taste_Concurrency_View)
+                                       return CV_As_Template is
+      Result : CV_As_Template;
+      pragma Unreferenced (CV);
+   begin
+      return Result;
+   end Concurrency_View_Template;
+
 end TASTE.Concurrency_View;

@@ -42,7 +42,7 @@ package body TASTE.Concurrency_View is
    end Debug_Dump;
 
    --  This function translates a protected block into a template
-   function Pro_To_ST (B : Protected_Block) return Translate_Set is
+   function To_Template (B : Protected_Block) return Translate_Set is
       Calling_Threads : Tag;
       --  TODO: Provided and Required
    begin
@@ -55,10 +55,10 @@ package body TASTE.Concurrency_View is
          & Assoc ("Calling_Threads", Calling_Threads)
          & Assoc ("Node_Name",       To_String (B.Node.Value_Or
            (Taste_Node'(Name => US (""), others => <>)).Name)));
-   end Pro_To_ST;
+   end To_Template;
 
    --  This function translates a thread definition into a template
-   function Thread_To_ST (T : AADL_Thread) return Translate_Set is
+   function To_Template (T : AADL_Thread) return Translate_Set is
       Remote_Thread : Vector_Tag;
       Remote_PI     : Vector_Tag;
       Ports_Matrix  : Matrix_Tag;
@@ -77,7 +77,7 @@ package body TASTE.Concurrency_View is
          & Assoc ("Node_Name",       To_String (T.Node.Value_Or
            (Taste_Node'(Name => US (""), others => <>)).Name))
          & Assoc ("Out_Ports",       Ports_Matrix));
-   end Thread_To_ST;
+   end To_Template;
 
    function Concurrency_View_Template (CV : Taste_Concurrency_View)
                                        return CV_As_Template
@@ -85,10 +85,10 @@ package body TASTE.Concurrency_View is
       Result : CV_As_Template;
    begin
       for Thread of CV.Threads loop
-         Result.Threads.Append (Thread_To_ST (Thread));
+         Result.Threads.Append (Thread.To_Template);
       end loop;
       for Pro of CV.Blocks loop
-         Result.Blocks.Append (Pro_To_ST (Pro));
+         Result.Blocks.Append (Pro.To_Template);
       end loop;
       return Result;
    end Concurrency_View_Template;

@@ -13,20 +13,13 @@ package TASTE.Backend.Code_Generators is
 private
    package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
 
-   type Interface_As_Template is
-      record
-         Header : Translate_Set;
-         --  Params : Template_Vectors.Vector;
-      end record;
-
-   package Interface_Vectors is new Indefinite_Vectors (Natural,
-                                                     Interface_As_Template);
+   package ST_Interfaces is new Indefinite_Vectors (Natural, Translate_Set);
 
    type Func_As_Template is
       record
          Header   : Translate_set;
-         Provided : Interface_Vectors.Vector;
-         Required : Interface_Vectors.Vector;
+         Provided : ST_Interfaces.Vector;
+         Required : ST_Interfaces.Vector;
       end record;
 
    package Func_Maps is new Indefinite_Ordered_Maps (String, Func_As_Template);
@@ -37,8 +30,6 @@ private
       end record;
 
    --  Set of functions translating the AST into Templates_Parser mappings
-   function Interface_Template (TI    : Taste_Interface)
-                                return Interface_As_Template;
    function Func_Template (F : Taste_Terminal_Function)
                            return Func_As_Template;
    function CP_Template (F : Taste_Terminal_Function) return Translate_Set;

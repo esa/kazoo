@@ -96,14 +96,14 @@ package body TASTE.Backend.Code_Generators is
       end Generate_Global_Makefile;
 
       --  Render a set (Tag) of interfaces by applying a template
-      function Process_Interfaces (Interfaces : Interface_Vectors.Vector;
+      function Process_Interfaces (Interfaces : ST_Interfaces.Vector;
                                    Path       : String) return Tag
       is
          Result : Tag;
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
       begin
          for Each of Interfaces loop
-            Result := Result & String'(Parse (Tmplt_Sign, Each.Header));
+            Result := Result & String'(Parse (Tmplt_Sign, Each));
          end loop;
          return Result;
       end Process_Interfaces;
@@ -398,38 +398,10 @@ package body TASTE.Backend.Code_Generators is
                       & Assoc ("Instance_Of",
                                 F.Instance_Of.Value_Or (US (""))));
 
-   function Interface_Template (TI : Taste_Interface)
-                                return Interface_As_Template
-   is
-      --  use Template_Vectors;
-      Result           : Interface_As_Template;
-      Param_Names      : Vector_Tag;
-      Param_Types      : Vector_Tag;
-      Param_Directions : Vector_Tag;
-      Param_Encodings  : Vector_Tag;
-   begin
-      Result.Header :=  +Assoc  ("Name",            TI.Name)
-                        & Assoc ("Kind",            TI.RCM'Img)
-                        & Assoc ("Parent_Function", TI.Parent_Function);
-      for Each of TI.Params loop
-         --  Result.Params    := Result.Params & Parameter_Template (Each, TI);
-         Param_Names      := Param_Names & Each.Name;
-         Param_Types      := Param_Types & Each.Sort;
-         Param_Directions := Param_Directions & Each.Direction'Img;
-         Param_Encodings  := Param_Encodings & Each.Encoding'Img;
-      end loop;
-      Result.Header := Result.Header
-                       & Assoc ("Param_Names",      Param_Names)
-                       & Assoc ("Param_Types",      Param_Types)
-                       & Assoc ("Param_Encodings",  Param_Encodings)
-                       & Assoc ("Param_Directions", Param_Directions);
-      return Result;
-   end Interface_Template;
-
    function Func_Template (F : Taste_Terminal_Function) return Func_As_Template
    is
-      use Interface_Vectors;
       use Ctxt_Params;
+      use ST_Interfaces;
       Result             : Func_As_Template;
       List_Of_PIs        : Tag;
       List_Of_RIs        : Tag;
@@ -444,7 +416,7 @@ package body TASTE.Backend.Code_Generators is
       Property_Values    : Vector_Tag;
       CP_Names           : Vector_Tag;   --  For Context Parameters
       CP_Types           : Vector_Tag;   --  For Context Parameters
-      Interface_Tmplt    : Interface_As_Template;
+      Interface_Tmplt    : Translate_Set;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
@@ -456,7 +428,7 @@ package body TASTE.Backend.Code_Generators is
          CP_Types := CP_Types & Each.Sort;
       end loop;
 
-      --  Add all user-defined properties
+      --  Add all function user-defined properties
       for Each of F.User_Properties loop
          Property_Names  := Property_Names  & Each.Name;
          Property_Values := Property_Values & Each.Value;
@@ -464,12 +436,16 @@ package body TASTE.Backend.Code_Generators is
 
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
-         Interface_Tmplt := Interface_Template (Each);
-         Interface_Tmplt.Header := Interface_Tmplt.Header
-                                   & Assoc ("Direction", "PI")
-                                   & Assoc ("Property_Names", Property_Names)
-                                   & Assoc ("Property_Values", Property_Values)
-                                   & Assoc ("Language", Language_Spelling (F));
+         --  Note: some backends need to have access to the function
+         --  user defined properties, and implementation language
+         --  They are added here. At the moment the user-defined properties
+         --  of the interfaces themselves are not part of the template
+         --  This could be be added later if needed.
+         Interface_Tmplt := Each.To_Template
+                            & Assoc ("Direction",       "PI")
+                            & Assoc ("Property_Names",  Property_Names)
+                            & Assoc ("Property_Values", Property_Values)
+                            & Assoc ("Language",        Language_Spelling (F));
          Result.Provided := Result.Provided & Interface_Tmplt;
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
@@ -482,12 +458,11 @@ package body TASTE.Backend.Code_Generators is
 
       --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
-         Interface_Tmplt := Interface_Template (Each);
-         Interface_Tmplt.Header := Interface_Tmplt.Header
-                                   & Assoc ("Direction", "RI")
-                                   & Assoc ("Property_Names", Property_Names)
-                                   & Assoc ("Property_Values", Property_Values)
-                                   & Assoc ("Language", Language_Spelling (F));
+         Interface_Tmplt := Each.To_Template
+                            & Assoc ("Direction", "RI")
+                            & Assoc ("Property_Names", Property_Names)
+                            & Assoc ("Property_Values", Property_Values)
+                            & Assoc ("Language", Language_Spelling (F));
          Result.Required := Result.Required & Interface_Tmplt;
          List_Of_RIs     := List_Of_RIs & Each.Name;
          case Each.RCM is

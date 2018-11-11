@@ -10,6 +10,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Equal_Case_Insensitive,
      Ada.Strings.Less_Case_Insensitive,
      Text_IO,
+     Templates_Parser,
      Ocarina,
      Ocarina.Types,
      Option_Type,
@@ -18,6 +19,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
 use Ada.Containers,
     Ada.Strings.Unbounded,
     Text_IO,
+    Templates_Parser,
     Ocarina,
     Ocarina.Types,
     TASTE.Parser_Utils;
@@ -99,7 +101,7 @@ package TASTE.Interface_View is
 
    package Remote_Entities is new Indefinite_Vectors (Natural, Remote_Entity);
 
-   type Taste_Interface is
+   type Taste_Interface is tagged
       record
          Name              : Unbounded_String;
          Parent_Function   : Unbounded_String;
@@ -111,6 +113,8 @@ package TASTE.Interface_View is
          Queue_Size        : Option_ULL.Option := Option_ULL.Nothing;
          User_Properties   : Property_Maps.Map;
       end record;
+
+   function To_Template (TI : Taste_Interface) return Translate_Set;
 
    package Interfaces_Maps is new Indefinite_Ordered_Maps (String,
                                                            Taste_Interface);
@@ -129,7 +133,7 @@ package TASTE.Interface_View is
    type Taste_Terminal_Function is
       record
          Name            : Unbounded_String;
-         Context         : Unbounded_String          := Null_Unbounded_String;
+         Context         : Unbounded_String      := Null_Unbounded_String;
          Full_Prefix     : Option_UString.Option := Option_UString.Nothing;
          --  Language        : Supported_Source_Language;
          Language        : Unbounded_String;
@@ -151,8 +155,7 @@ package TASTE.Interface_View is
    function "<"(Left, Right : Case_Insensitive_String) return Boolean
        renames Ada.Strings.Less_Case_Insensitive;
    package Function_Maps is new Indefinite_Ordered_Maps
-                                   (Case_Insensitive_String,
-                                    Taste_Terminal_Function);
+     (Case_Insensitive_String, Taste_Terminal_Function);
 
    type Connection is
       record

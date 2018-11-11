@@ -35,7 +35,7 @@ package TASTE.Concurrency_View is
    package Protected_Block_PIs is new Indefinite_Ordered_Maps
      (String, Protected_Block_PI);
 
-   type Protected_Block is
+   type Protected_Block is tagged
       record
          Name            : Unbounded_String;
          Provided        : Protected_Block_PIs.Map;
@@ -43,6 +43,8 @@ package TASTE.Concurrency_View is
          Calling_Threads : String_Sets.Set;
          Node            : Option_Node.Option;
       end record;
+
+   function To_Template (B : Protected_Block) return Translate_Set;
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);
@@ -55,7 +57,7 @@ package TASTE.Concurrency_View is
 
    package Ports is new Indefinite_Ordered_Maps (String, Port);
 
-   type AADL_Thread is
+   type AADL_Thread is tagged
       record
          Name                 : Unbounded_String;
          Entry_Port_Name      : Unbounded_String;
@@ -63,6 +65,8 @@ package TASTE.Concurrency_View is
          Output_Ports         : Ports.Map;
          Node                 : Option_Node.Option;
       end record;
+
+   function To_Template (T : AADL_Thread) return Translate_Set;
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
 

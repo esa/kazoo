@@ -958,4 +958,29 @@ package body TASTE.Interface_View is
          New_Line (Output);
       end loop;
    end Debug_Dump;
+
+   --  Create a Templates_Parser translate set for an interface (PI or RI)
+   function To_Template (TI : Taste_Interface) return Translate_Set is
+      Result           : Translate_Set;
+      Param_Names      : Vector_Tag;
+      Param_Types      : Vector_Tag;
+      Param_Directions : Vector_Tag;
+      Param_Encodings  : Vector_Tag;
+   begin
+      Result :=  +Assoc  ("Name",            TI.Name)
+                 & Assoc ("Kind",            TI.RCM'Img)
+                 & Assoc ("Parent_Function", TI.Parent_Function);
+      for Each of TI.Params loop
+         Param_Names      := Param_Names & Each.Name;
+         Param_Types      := Param_Types & Each.Sort;
+         Param_Directions := Param_Directions & Each.Direction'Img;
+         Param_Encodings  := Param_Encodings & Each.Encoding'Img;
+      end loop;
+      Result := Result & Assoc ("Param_Names",      Param_Names)
+                       & Assoc ("Param_Types",      Param_Types)
+                       & Assoc ("Param_Encodings",  Param_Encodings)
+                       & Assoc ("Param_Directions", Param_Directions);
+      return Result;
+   end To_Template;
+
 end TASTE.Interface_View;

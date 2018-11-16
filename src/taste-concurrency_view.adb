@@ -42,19 +42,33 @@ package body TASTE.Concurrency_View is
    end Debug_Dump;
 
    --  This function translates a protected block into a template
-   function To_Template (B : Protected_Block) return Translate_Set is
+   function To_Template (B : Protected_Block) return Block_As_Template is
       Calling_Threads : Tag;
-      --  TODO: Provided and Required
+      Result : Block_As_Template;
    begin
       for Thread of B.Calling_Threads loop
          Calling_Threads := Calling_Threads & Thread;
       end loop;
 
-      return Result : constant Translate_Set :=
-        (+Assoc  ("Name",            To_String (B.Name))
-         & Assoc ("Calling_Threads", Calling_Threads)
-         & Assoc ("Node_Name",       To_String (B.Node.Value_Or
-           (Taste_Node'(Name => US (""), others => <>)).Name)));
+      for PI of B.Provided loop
+         declare
+            Basic : constant Translate_Set := PI.PI.To_Template
+              & Assoc ("Protected_Block_Name", To_String (PI.Name))
+              & Assoc ("Caller_Is_Local", PI.Local_Caller);
+         begin
+            Result.Provided.Append (Basic);
+         end;
+      end loop;
+
+      for RI of B.Required loop
+         Result.Required.Append (RI.To_Template);
+      end loop;
+
+      Result.Header := +Assoc  ("Name",            To_String (B.Name))
+                       & Assoc ("Calling_Threads", Calling_Threads)
+                       & Assoc ("Node_Name",       To_String (B.Node.Value_Or
+                         (Taste_Node'(Name => US (""), others => <>)).Name));
+      return Result;
    end To_Template;
 
    --  This function translates a thread definition into a template

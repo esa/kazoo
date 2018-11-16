@@ -44,7 +44,14 @@ package TASTE.Concurrency_View is
          Node            : Option_Node.Option;
       end record;
 
-   function To_Template (B : Protected_Block) return Translate_Set;
+   --  Data model for the template backends (templates_parser)
+   type Block_As_Template is
+      record
+         Header   : Translate_Set;
+         Provided : Translate_Sets.Vector;
+         Required : Translate_Sets.Vector;
+      end record;
+   function To_Template (B : Protected_Block) return Block_As_Template;
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);
@@ -80,12 +87,11 @@ package TASTE.Concurrency_View is
                          Output : File_Type);
 
    --  Set of constructs for transforming the AST into Template entities
-   package ST_Threads is new Indefinite_Vectors (Natural, Translate_Set);
-   package ST_Blocks  is new Indefinite_Vectors (Natural, Translate_Set);
+   package ST_Blocks is new Indefinite_Vectors (Natural, Block_As_Template);
 
    type CV_As_Template is
       record
-         Threads : ST_Threads.Vector;
+         Threads : Translate_Sets.Vector;
          Blocks  : ST_Blocks.Vector;
       end record;
 

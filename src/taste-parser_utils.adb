@@ -8,7 +8,6 @@ with Ada.Characters.Latin_1,
      Ada.Strings,
      GNAT.OS_Lib,
      GNAT.Command_Line,
-     Templates_Parser,
      Templates_Parser.Utils,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
@@ -20,10 +19,8 @@ package body TASTE.Parser_Utils is
 
    use GNAT.OS_Lib,
        GNAT.Command_Line,
-       Templates_Parser,
        Templates_Parser.Utils,
        Ocarina.Instances.Queries;
-       --  Ocarina.ME_AADL;
 
    procedure Put_Info (Info : String) is
    begin

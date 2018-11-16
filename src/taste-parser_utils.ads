@@ -12,6 +12,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Text_IO,
      GNAT.Strings,
      Interfaces.C_Streams,
+     Templates_Parser,
      Ocarina,
      Ocarina.Types,
      Ocarina.Namet,
@@ -27,7 +28,8 @@ use Ocarina,
     Ada.Containers,
     Ada.Strings.Unbounded,
     Text_IO,
-    Interfaces.C_Streams;
+    Interfaces.C_Streams,
+    Templates_Parser;
 
 package TASTE.Parser_Utils is
 
@@ -138,4 +140,8 @@ package TASTE.Parser_Utils is
 
    procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type);
    procedure Parse_Command_Line (Result : out Taste_Configuration);
+
+   --  Define a vector for template_parser translate sets
+   package Translate_Sets is new Indefinite_Vectors (Natural, Translate_Set);
+
 end TASTE.Parser_Utils;

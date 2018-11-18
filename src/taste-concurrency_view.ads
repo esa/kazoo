@@ -96,6 +96,12 @@ package TASTE.Concurrency_View is
       end record;
 
    function Concurrency_View_Template (CV : Taste_Concurrency_View)
-     return CV_As_Template;
+                                       return CV_As_Template;
+
+   --  Function to generate the concurrency view
+   --  Base_Template_Path comes from Model.Configuration.Binary.Path
+   procedure Generate_CV (CV                 : Taste_Concurrency_View;
+                          Base_Template_Path : String;
+                          Base_Output_Path   : String);
 
 end TASTE.Concurrency_View;

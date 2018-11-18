@@ -4,6 +4,12 @@
 
 --  Concurrency View
 
+with Ada.Directories,
+     Ada.IO_Exceptions,
+     Ada.Exceptions;
+
+use Ada.Directories;
+
 package body TASTE.Concurrency_View is
 
    procedure Debug_Dump (CV : Taste_Concurrency_View; Output : File_Type) is
@@ -106,4 +112,66 @@ package body TASTE.Concurrency_View is
       end loop;
       return Result;
    end Concurrency_View_Template;
+
+   --  Parse the template files to generate the CV output with Templates_parser
+   procedure Generate_CV (CV                 : Taste_Concurrency_View;
+                          Base_Template_Path : String;
+                          Base_Output_Path   : String)
+   is
+      Prefix   : constant String := Base_Template_Path
+        & "templates/concurrency_view";
+      Template : constant CV_As_Template := CV.Concurrency_View_Template;
+      pragma Unreferenced (Template);
+      --  To iterate over template folders
+      ST       : Search_Type;
+      Current  : Directory_Entry_Type;
+      Filter   : constant Filter_Type := (Directory => True,
+                                          others    => False);
+      Output_File : File_Type;
+      Output_Dir  : constant String := Base_Output_Path & "/concurrency_view";
+      Content  : constant String := "Hello";
+      File_Name : constant String := "Concurrency_View.aadl";
+   begin
+      Put_Info ("Generating Concurrency View");
+      --  All files are created in the same folder - create it
+      Create_Path (Output_Dir);
+
+      Start_Search (Search    => ST,
+                    Pattern   => "",
+                    Directory => Prefix,
+                    Filter    => Filter);
+
+      if not More_Entries (ST) then
+         --  On Unix, this will never happen because "." and ".." are part
+         --  of the search result. We'll only get an IO Error if the
+         --  concurrency_view folder itself does not exist
+         raise Concurrency_View_Error with
+           "No folders with templates for concurrency view";
+      end if;
+
+      --  Iterate over the folders and process templates
+      while More_Entries (ST) loop
+         Get_Next_Entry (ST, Current);
+
+         --  Ignore Unix special directories
+         if Simple_Name (Current) = "." or Simple_Name (Current) = ".." then
+            goto continue;
+         end if;
+
+         Put_Info ("Generating from " & Full_Name (Current));
+
+         Create (File => Output_File,
+                 Mode => Out_File,
+                 Name => Output_Dir & File_Name);
+         Put_Line (Output_File, Content);
+
+         Close (Output_File);
+         <<continue>>
+      end loop;
+   exception
+      when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>
+         Put_Error ("Concurrency View : "
+                    & Ada.Exceptions.Exception_Message (Error));
+         raise Quit_Taste;
+   end Generate_CV;
 end TASTE.Concurrency_View;

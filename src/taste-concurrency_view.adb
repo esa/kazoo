@@ -128,9 +128,7 @@ package body TASTE.Concurrency_View is
       Filter   : constant Filter_Type := (Directory => True,
                                           others    => False);
       Output_File : File_Type;
-      Output_Dir  : constant String := Base_Output_Path & "/concurrency_view";
-      Content  : constant String := "Hello";
-      File_Name : constant String := "Concurrency_View.aadl";
+      Output_Dir  : constant String := Base_Output_Path & "/concurrency_view/";
    begin
       Put_Info ("Generating Concurrency View");
       --  All files are created in the same folder - create it
@@ -158,16 +156,36 @@ package body TASTE.Concurrency_View is
             goto continue;
          end if;
 
-         Put_Info ("Generating from " & Full_Name (Current));
-
-         Create (File => Output_File,
-                 Mode => Out_File,
-                 Name => Output_Dir & File_Name);
-         Put_Line (Output_File, Content);
-
-         Close (Output_File);
+         declare
+            Path : constant String := Full_Name (Current);
+            Do_It : constant Boolean := Exists (Path & "/filename.tmplt");
+            --  Get output file name from template
+            File_Name : constant String :=
+              (if Do_It then
+                  Strip_String (Parse (Path & "/filename.tmplt"))
+               else "");
+            --  Check if file already exists
+            Present : constant Boolean :=
+              (File_Name /= "" and Exists (Output_Dir & File_Name));
+            Trig_Tmpl : constant Translate_Set :=
+              +Assoc ("Filename_Is_Present", Present);
+            Trigger : constant Boolean :=
+              (Exists (Path & "/trigger.tmplt") and then
+               Strip_String
+                 (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+         begin
+            if Trigger then
+               Put_Info ("Generating from " & Path);
+               Create (File => Output_File,
+                       Mode => Out_File,
+                       Name => Output_Dir & File_Name);
+               Put_Line (Output_File, "Hello");
+               Close (Output_File);
+            end if;
+         end;
          <<continue>>
       end loop;
+      End_Search (ST);
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>
          Put_Error ("Concurrency View : "

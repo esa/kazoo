@@ -81,14 +81,11 @@ package body TASTE.Concurrency_View is
    function To_Template (T : AADL_Thread) return Translate_Set is
       Remote_Thread : Vector_Tag;
       Remote_PI     : Vector_Tag;
-      Ports_Matrix  : Matrix_Tag;
    begin
       for Out_Port of T.Output_Ports loop
          Remote_Thread := Remote_Thread & To_String (Out_Port.Remote_Thread);
          Remote_PI     := Remote_PI     & To_String (Out_Port.Remote_PI);
       end loop;
-
-      Ports_Matrix := +Remote_Thread & Remote_PI;
 
       return Result : constant Translate_Set :=
         (+Assoc  ("Name",            To_String (T.Name))
@@ -96,7 +93,8 @@ package body TASTE.Concurrency_View is
          & Assoc ("Pro_Block_Name",  To_String (T.Protected_Block_Name))
          & Assoc ("Node_Name",       To_String (T.Node.Value_Or
            (Taste_Node'(Name => US (""), others => <>)).Name))
-         & Assoc ("Out_Ports",       Ports_Matrix));
+         & Assoc ("Remote_Threads",  Remote_Thread)
+         & Assoc ("Remote_PIs",      Remote_PI));
    end To_Template;
 
    function Concurrency_View_Template (CV : Taste_Concurrency_View)

@@ -4,7 +4,8 @@
 @@-- @_Entry_Port_Name_@ : Name of the PI
 @@-- @_Pro_Block_Name_@  : Name of the protected function
 @@-- @_Node_Name_@       : Name of the deployment node
-@@-- @_Out_Ports_@       : Matrix of output ports
+@@-- @_Remote_Threads_@  : Vector tag: output remote thread list
+@@-- @_Remote_PIs_@      :    |_ Associated PI Name
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI 
 Thread : @_Name_@
@@ -13,8 +14,5 @@ Thread : @_Name_@
    |_ Node            : @_Node_Name_@
    |_ Out_Ports       :
 @@TABLE@@
-Out port:
-@@TABLE@@
- @_Out_Ports_@
-@@END_TABLE@@
+@_Remote_Threads_@ -> @_Remote_PIs_@
 @@END_TABLE@@

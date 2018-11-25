@@ -121,7 +121,6 @@ package body TASTE.Concurrency_View is
       Prefix   : constant String := Base_Template_Path
         & "templates/concurrency_view";
       Template : constant CV_As_Template := CV.Concurrency_View_Template;
-      pragma Unreferenced (Template);
       --  To iterate over template folders
       ST       : Search_Type;
       Current  : Directory_Entry_Type;
@@ -174,13 +173,35 @@ package body TASTE.Concurrency_View is
                Strip_String
                  (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
          begin
+            --  We have threads and blocks
+            --  Threads: it is a vector of translate set meaning that we can
+            --  render them directly from a template and keep them in a vector
+            --  of strings.
             if Trigger then
-               Put_Info ("Generating from " & Path);
-               Create (File => Output_File,
-                       Mode => Out_File,
-                       Name => Output_Dir & File_Name);
-               Put_Line (Output_File, "Hello");
-               Close (Output_File);
+               declare
+                  Threads : Tag;
+                  Blocks  : Tag;
+                  Result  : Translate_Set;
+               begin
+                  Put_Info ("Generating from " & Path);
+                  for Thread of Template.Threads loop
+                     --  Render each thread
+                     Threads := Threads
+                       & String'(Parse (Path & "/thread.tmplt", Thread));
+                  end loop;
+                  for Block of Template.Blocks loop
+                     --  Render each block
+                     null;
+                  end loop;
+                  Result := +Assoc  ("Threads", Threads)
+                            & Assoc ("Blocks",  Blocks);
+
+                  Create (File => Output_File,
+                          Mode => Out_File,
+                          Name => Output_Dir & File_Name);
+                  Put_Line (Output_File, Parse (Path & "/cv.tmplt", Result));
+                  Close (Output_File);
+               end;
             end if;
          end;
          <<continue>>

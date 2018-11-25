@@ -11,4 +11,10 @@ Thread : @_Name_@
    |_ Port            : @_Entry_Port_Name_@
    |_ Protected Block : @_Pro_Block_Name_@
    |_ Node            : @_Node_Name_@
-   |_ Out_Ports       : @_Out_Ports_@
+   |_ Out_Ports       :
+@@TABLE@@
+Out port:
+@@TABLE@@
+ @_Out_Ports_@
+@@END_TABLE@@
+@@END_TABLE@@

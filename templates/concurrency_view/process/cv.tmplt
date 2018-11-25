@@ -1,0 +1,13 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Threads_@ : List of threads
+@@-- @_Blocks_@  : List of protected blocks
+@@TABLE@@
+   --  THREAD
+   @_Threads_@
+@@END_TABLE@@
+
+@@TABLE@@
+   --  BLOCK
+   @_Blocks_@
+@@END_TABLE@@

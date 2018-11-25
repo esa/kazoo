@@ -1,0 +1,14 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@            : Thread name
+@@-- @_Entry_Port_Name_@ : Name of the PI
+@@-- @_Pro_Block_Name_@  : Name of the protected function
+@@-- @_Node_Name_@       : Name of the deployment node
+@@-- @_Out_Ports_@       : Matrix of output ports
+@@--
+@@-- Matrix of output ports: Remote thread/corresponding remote PI 
+Thread : @_Name_@
+   |_ Port            : @_Entry_Port_Name_@
+   |_ Protected Block : @_Pro_Block_Name_@
+   |_ Node            : @_Node_Name_@
+   |_ Out_Ports       : @_Out_Ports_@

@@ -7,6 +7,7 @@ with Ada.Characters.Latin_1,
      Ada.Strings.Fixed,
      Ada.Strings,
      GNAT.OS_Lib,
+     GNAT.Strings,
      GNAT.Command_Line,
      Templates_Parser.Utils,
      Ocarina.AADL_Values,
@@ -57,19 +58,22 @@ package body TASTE.Parser_Utils is
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config : Command_Line_Configuration;
+      use String_Holders;
+
+      IV, DeplV, DataV, OutDir : aliased GNAT.Strings.String_Access := null;
    begin
-      Result.Binary_Path := new String'(Get_Program_Directory);
-      Define_Switch (Config, Output => Result.Interface_View'Access,
+      Result.Binary_Path := To_Holder (Get_Program_Directory);
+      Define_Switch (Config, Output => IV'Access,
                      Switch         => "-i:",
                      Long_Switch    => "--interfaceview=",
                      Help           => "Mandatory interface view (AADL model)",
                      Argument       => "InterfaceView.aadl");
-      Define_Switch (Config, Output => Result.Deployment_View'Access,
+      Define_Switch (Config, Output => DeplV'Access,
                      Switch         => "-c:",
                      Long_Switch    => "--deploymentview=",
                      Help           => "Optional deployment view (AADL model)",
                      Argument       => "DeploymentView.aadl");
-      Define_Switch (Config, Output => Result.Data_View'Access,
+      Define_Switch (Config, Output => DataV'Access,
                      Switch         => "-d:",
                      Long_Switch    => "--dataview=",
                      Help           => "Optional data view (AADL model)",
@@ -78,7 +82,7 @@ package body TASTE.Parser_Utils is
                      Switch         => "-y",
                      Long_Switch    => "--check-dataview",
                      Help           => "Check Data View");
-      Define_Switch (Config, Output => Result.Output_Dir'Access,
+      Define_Switch (Config, Output => OutDir'Access,
                      Switch         => "-o:",
                      Long_Switch    => "--output=",
                      Help           => "Output directory (created if absent)",
@@ -119,12 +123,28 @@ package body TASTE.Parser_Utils is
          end;
       end loop;
 
+      --  We must set the values in the holders based on the parsed strings
+      Result.Interface_View :=
+        (if IV /= null and then IV.all'Length > 0
+         then To_Holder (IV.all) else Empty_Holder);
+
+      Result.Deployment_View :=
+        (if DeplV /= null and then DeplV.all'Length > 0
+         then To_Holder (DeplV.all) else Empty_Holder);
+
+      Result.Data_View :=
+        (if DataV /= null and then DataV.all'Length > 0
+         then To_Holder (DataV.all) else Empty_Holder);
+
+      Result.Output_Dir :=
+        (if OutDir /= null and then OutDir.all'Length > 0
+         then To_Holder (OutDir.all)
+         else To_Holder ("."));
+
       if Result.Version then
          raise Exit_From_Command_Line;
       end if;
-      if Result.Output_Dir = null or else Result.Output_Dir.all'Length = 0 then
-         Result.Output_Dir := new String'(".");
-      end if;
+
    end Parse_Command_Line;
 
    function To_Template_Tag (SS : String_Sets.Set) return Tag is
@@ -140,10 +160,12 @@ package body TASTE.Parser_Utils is
       Vec      : Tag;
       Template : Translate_Set;
    begin
-      Template := +Assoc ("Interface_View",  Config.Interface_View.all)
-        & Assoc ("Deployment_View",  Config.Deployment_View.all)
-        & Assoc ("Data_View",        Config.Data_View.all)
-        & Assoc ("Output_Dir",       Config.Output_Dir.all)
+      Template := +Assoc ("Interface_View",  Config.Interface_View.Element)
+        & Assoc ("Deployment_View",
+                 (if Config.Deployment_View.Is_Empty then "<none>"
+                    else Config.Deployment_View.Element))
+        & Assoc ("Data_View",        Config.Data_View.Element)
+        & Assoc ("Output_Dir",       Config.Output_Dir.Element)
         & Assoc ("Skeletons",        Config.Skeletons)
         & Assoc ("Glue",             Config.Glue)
         & Assoc ("Use_POHIC",        Config.Use_POHIC)
@@ -155,7 +177,7 @@ package body TASTE.Parser_Utils is
       end loop;
       Template := Template & Assoc ("Other_Files", Vec);
       Put_Line (Output,
-        Parse (Config.Binary_Path.all & "templates/configuration.tmplt",
+        Parse (Config.Binary_Path.Element & "templates/configuration.tmplt",
          Template));
    end Debug_Dump;
 

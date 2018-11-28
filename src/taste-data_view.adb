@@ -128,7 +128,7 @@ package body TASTE.Data_View is
    begin
       for Each of DV.ASN1_Files loop
          if not Ada.Directories.Exists (To_String (Each.Path)) then
-            Put_Error ("File not found: " & To_String (Each.Path));
+            Put_Error ("ASN.1 File not found: " & To_String (Each.Path));
             Success := False;
          end if;
       end loop;

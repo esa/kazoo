@@ -11,7 +11,6 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Equal_Case_Insensitive,
      Ada.Strings.Less_Case_Insensitive,
      Text_IO,
-     GNAT.Strings,
      Interfaces.C_Streams,
      Templates_Parser,
      Ocarina,
@@ -35,9 +34,9 @@ use Ocarina,
 package TASTE.Parser_Utils is
 
    AADL_Language           : Name_Id;
-   Default_Interface_View  : aliased String := "InterfaceView.aadl";
-   Default_Deployment_View : aliased String := "DeploymentView.aadl";
-   Default_Data_View       : aliased String := "DataView.aadl";
+   Default_Interface_View  : constant String := "InterfaceView.aadl";
+   Default_Deployment_View : constant String := "DeploymentView.aadl";
+   Default_Data_View       : constant String := "DataView.aadl";
 
    --  Create a case insensitive string type, that can be used as keys for maps
    subtype Case_Insensitive_String is String;
@@ -127,13 +126,15 @@ package TASTE.Parser_Utils is
 
    procedure Initialize_Ocarina;
 
+   subtype String_Holder is String_Holders.Holder;
    type Taste_Configuration is tagged
       record
-         Binary_Path      : GNAT.Strings.String_Access;
-         Interface_View   : aliased GNAT.Strings.String_Access;
-         Deployment_View  : aliased GNAT.Strings.String_Access;
-         Data_View        : aliased GNAT.Strings.String_Access;
-         Output_Dir       : aliased GNAT.Strings.String_Access;
+         Binary_Path      : String_Holder;
+         Interface_View   : String_Holder;
+         Deployment_View  : String_Holder;
+         Data_View        : String_Holder;
+         Output_Dir       : String_Holder;
+         --  aliased GNAT.Strings.String_Access;
          Check_Data_View  : aliased Boolean := False;
          Skeletons        : aliased Boolean := True;
          Glue             : aliased Boolean := False;

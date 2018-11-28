@@ -23,8 +23,8 @@ package body TASTE.Backend.Code_Generators is
                                 Interface_View_Template (Model.Interface_View);
 
       --  Path to the input templates files
-      Prefix           : constant String := Model.Configuration.Binary_Path.all
-                                            & "templates/";
+      Prefix           : constant String :=
+        Model.Configuration.Binary_Path.Element & "/templates/";
 
       Prefix_Skeletons  : constant String := Prefix & "skeletons/";
       Prefix_Wrappers   : constant String := Prefix & "glue/language_wrappers";
@@ -89,8 +89,7 @@ package body TASTE.Backend.Code_Generators is
          Put_Info ("Generating global Makefile");
          Create (File => Output_File,
                  Mode => Out_File,
-                 Name => Model.Configuration.Output_Dir.all
-                         & "/" & "Makefile");
+                 Name => Model.Configuration.Output_Dir.Element & "/Makefile");
          Put_Line (Output_File, Parse (Tmplt, Content_Set));
          Close (Output_File);
       end Generate_Global_Makefile;
@@ -331,17 +330,19 @@ package body TASTE.Backend.Code_Generators is
    begin
       Generate_From_Templates (Prefix      => Prefix_Skeletons,
                                Output_Base =>
-                                  Model.Configuration.Output_Dir.all & "/",
+                                  Model.Configuration.Output_Dir.Element & "/",
                                Output_Sub  => "src/");
       Generate_Global_Makefile;
       if Model.Configuration.Glue then
          Generate_From_Templates (Prefix     => Prefix_Wrappers,
                                   Output_Base =>
-                                     Model.Configuration.Output_Dir.all & "/",
+                                    Model.Configuration.Output_Dir.Element
+                                       & "/",
                                   Output_Sub => "wrappers/");
          Generate_From_Templates (Prefix     => Prefix_Middleware,
                                   Output_Base =>
-                                     Model.Configuration.Output_Dir.all & "/",
+                                    Model.Configuration.Output_Dir.Element
+                                       & "/",
                                   Output_Sub => "middleware_glue/");
       end if;
    end Generate;

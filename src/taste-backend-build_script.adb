@@ -13,8 +13,8 @@ use  System.OS_Lib,
 
 package body TASTE.Backend.Build_Script is
    procedure Generate (Model : TASTE_Model) is
-      Prefix : constant String := Model.Configuration.Binary_Path.all
-                                  & "templates/";
+      Prefix : constant String :=
+        Model.Configuration.Binary_Path.Element & "templates/";
       Vec_Code : Tag;
       Vec_Zip  : Tag;
       Vec_Func : Tag;
@@ -46,15 +46,16 @@ package body TASTE.Backend.Build_Script is
       declare
          Template_Data : constant Translate_Set :=
            +Assoc ("Interface_View_Path",
-                   Model.Configuration.Interface_View.all)
-           & Assoc ("Output_Path",   Model.Configuration.Output_Dir.all)
+                   Model.Configuration.Interface_View.Element)
+           & Assoc ("Output_Path",   Model.Configuration.Output_Dir.Element)
            & Assoc ("Generate_Code", Vec_Code)
            & Assoc ("Zip_Code",      Vec_Zip)
            & Assoc ("Functions",     Vec_Func)
            & Assoc ("CodeCoverage",  "# TODO");
          Result : constant String := Parse (Prefix & "build-script.tmplt",
                                             Template_Data);
-         Output_Path : constant String := Model.Configuration.Output_Dir.all;
+         Output_Path : constant String :=
+           Model.Configuration.Output_Dir.Element;
          Filename    : constant String := Output_Path & "/build-script.sh";
          Output      : File_Type;
          Success     : Boolean;

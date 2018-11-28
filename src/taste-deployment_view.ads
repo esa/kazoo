@@ -8,6 +8,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Text_IO,
+     Templates_Parser,
      Ocarina,
      Ocarina.Types,
      Ocarina.Backends.Properties,
@@ -17,6 +18,7 @@ with Ada.Containers.Indefinite_Ordered_Maps,
 use Ada.Containers,
     Ada.Strings.Unbounded,
     Text_IO,
+    Templates_Parser,
     Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
@@ -33,27 +35,28 @@ package TASTE.Deployment_View is
    Empty_Deployment_View_Error : exception;
 
    --  List of Ocarina AADL models needed to parse the deployment view
-   AADL_Lib : String_Vectors.Vector := Empty_Vector &
-                "TASTE_DV_Properties.aadl" &
-                "TASTE_IV_Properties.aadl" &
-                "aadl_project.aadl" &
-                "taste_properties.aadl" &
-                "Cheddar_Properties.aadl" &
-                "communication_properties.aadl" &
-                "deployment_properties.aadl" &
-                "thread_properties.aadl" &
-                "timing_properties.aadl" &
-                "programming_properties.aadl" &
-                "memory_properties.aadl" &
-                "modeling_properties.aadl" &
-                "arinc653.aadl" &
-                "base_types.aadl" &
-                "data_model.aadl" &
-                "deployment.aadl";
+   AADL_Lib : String_Vectors.Vector :=
+     Empty_Vector
+     & "TASTE_DV_Properties.aadl"
+     & "TASTE_IV_Properties.aadl"
+     & "aadl_project.aadl"
+     & "taste_properties.aadl"
+     & "Cheddar_Properties.aadl"
+     & "communication_properties.aadl"
+     & "deployment_properties.aadl"
+     & "thread_properties.aadl"
+     & "timing_properties.aadl"
+     & "programming_properties.aadl"
+     & "memory_properties.aadl"
+     & "modeling_properties.aadl"
+     & "arinc653.aadl"
+     & "base_types.aadl"
+     & "data_model.aadl"
+     & "deployment.aadl";
 
    --  Initialize Ocarina and instantiate the deployment view, return root.
    function Initialize (Root : Node_Id) return Node_Id
-   with Pre => Root /= No_Node;
+     with Pre => Root /= No_Node;
 
    type Taste_Bus is
       record
@@ -65,7 +68,7 @@ package TASTE.Deployment_View is
 
    package Taste_Busses is new Indefinite_Vectors (Natural, Taste_Bus);
 
-   type Bus_Connection is
+   type Bus_Connection is tagged
       record
          Source_Node : Unbounded_String;
          Source_Port : Unbounded_String;
@@ -74,9 +77,16 @@ package TASTE.Deployment_View is
          Dest_Port   : Unbounded_String;
       end record;
 
+   function To_Template (B : Bus_Connection) return Translate_Set is
+     (+Assoc ("Source_Node",  B.Source_Node)
+      & Assoc ("Source_Port", B.Source_Port)
+      & Assoc ("Bus_Name",    B.Bus_Name)
+      & Assoc ("Dest_Node",   B.Dest_Node)
+      & Assoc ("Dest_Port",   B.Dest_Port));
+
    package Bus_Connections is new Indefinite_Vectors (Natural, Bus_Connection);
 
-   type Taste_Device_Driver is
+   type Taste_Device_Driver is tagged
       record
          Name                      : Unbounded_String;
          Package_Name              : Unbounded_String;
@@ -90,10 +100,26 @@ package TASTE.Deployment_View is
          ASN1_Module               : Unbounded_String;
       end record;
 
+   function To_Template (D : Taste_Device_Driver) return Translate_Set is
+     (+Assoc ("Name",                       D.Name)
+      & Assoc ("Package_Name",              D.Package_Name)
+      & Assoc ("Device_Classifier",         D.Device_Classifier)
+      & Assoc ("Associated_Processor_Name", D.Associated_Processor_Name)
+      & Assoc ("Device_Configuration",      D.Device_Configuration)
+      & Assoc ("Accessed_Bus_Name",         D.Accessed_Bus_Name)
+      & Assoc ("Accessed_Port_Name",        D.Accessed_Port_Name)
+      & Assoc ("ASN1_Filename",             D.ASN1_Filename)
+      & Assoc ("ASN1_Typename",             D.ASN1_Typename)
+      & Assoc ("ASN1_Module",               D.ASN1_Module));
+
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);
 
-   type Taste_Partition is
+   --  Partition in the deployment view
+   --  Supported_Execution_Platform is defined in:
+   --  ocarina/src/backends/ocarina-backends-properties.ads
+   --  Values are Plaform_Native, Platform_Leon_Rtems, etc.
+   type Taste_Partition is tagged
       record
          Name            : Unbounded_String;
          Coverage        : Boolean := False;
@@ -103,6 +129,16 @@ package TASTE.Deployment_View is
          CPU_Classifier  : Unbounded_String;
          Bound_Functions : String_Sets.Set;
       end record;
+
+   --  Make a Templates Parser translate set, to generate code
+   function To_Template (P : Taste_Partition) return Translate_Set is
+      (+Assoc  ("Name",            P.Name)
+       & Assoc ("Coverage",        P.Coverage)
+       & Assoc ("Package_Name",    P.Package_Name)
+       & Assoc ("CPU_Name",        P.CPU_Name)
+       & Assoc ("CPU_Platform",    P.CPU_Platform'Img)
+       & Assoc ("CPU_Classifier",  P.CPU_Classifier)
+       & Assoc ("Bound_Functions", To_Template_Tag (P.Bound_Functions)));
 
    package Option_Partition is new Option_Type (Taste_Partition);
 

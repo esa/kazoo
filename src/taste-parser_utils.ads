@@ -6,6 +6,7 @@
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Ordered_Sets,
      Ada.Containers.Indefinite_Vectors,
+     Ada.Containers.Indefinite_Holders,
      Ada.Strings.Unbounded,
      Ada.Strings.Equal_Case_Insensitive,
      Ada.Strings.Less_Case_Insensitive,
@@ -72,6 +73,8 @@ package TASTE.Parser_Utils is
 
    procedure Banner;
 
+   package String_Holders is new Indefinite_Holders (String);
+
    AADL_Parser_Error : exception;
 
    function Get_APLC_Binding (E : Node_Id) return List_Id;
@@ -93,6 +96,9 @@ package TASTE.Parser_Utils is
       (Element_Type => String,
        "<"          => Ada.Strings.Less_Case_Insensitive,
        "="          => Ada.Strings.Equal_Case_Insensitive);
+
+   --  Helper function translating directly a string set to a templates Tag
+   function To_Template_Tag (SS : String_Sets.Set) return Tag;
 
    function Get_Properties_Map (D : Node_Id) return Property_Maps.Map;
 

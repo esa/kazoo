@@ -27,7 +27,6 @@ package body TASTE.Deployment_View is
        System.Assertions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       --  Ocarina.Files,
        Ocarina.FE_AADL.Parser,
        Locations,
        Ocarina.ME_AADL.AADL_Instances.Nodes,

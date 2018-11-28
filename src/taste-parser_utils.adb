@@ -127,6 +127,15 @@ package body TASTE.Parser_Utils is
       end if;
    end Parse_Command_Line;
 
+   function To_Template_Tag (SS : String_Sets.Set) return Tag is
+      Result : Tag;
+   begin
+      for Each of SS loop
+         Result := Result & Each;
+      end loop;
+      return Result;
+   end To_Template_Tag;
+
    procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is
       Vec      : Tag;
       Template : Translate_Set;

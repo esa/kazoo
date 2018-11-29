@@ -134,18 +134,17 @@ package TASTE.Parser_Utils is
          Deployment_View  : String_Holder;
          Data_View        : String_Holder;
          Output_Dir       : String_Holder;
-         --  aliased GNAT.Strings.String_Access;
          Check_Data_View  : aliased Boolean := False;
          Skeletons        : aliased Boolean := True;
          Glue             : aliased Boolean := False;
          Use_POHIC        : aliased Boolean := False;
          Timer_Resolution : aliased Integer := 100;
          Debug_Flag       : aliased Boolean := False;
-         Version          : aliased Boolean := False;
          Other_Files      : String_Vectors.Vector;
       end record;
 
-   procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type);
+   procedure Debug_Dump         (Config :     Taste_Configuration;
+                                 Output :     File_Type);
    procedure Parse_Command_Line (Result : out Taste_Configuration);
 
    --  Define a vector for template_parser translate sets

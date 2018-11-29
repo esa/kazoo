@@ -616,7 +616,10 @@ package body TASTE.Interface_View is
       --  Recursive parsing of a system made of nested functions (TASTE v2)
       function Rec_Function (Prefix : String  := "";
                              Context : String := "_Root";
-                             Func   : Node_Id) return Boolean is
+                             Func   : Node_Id) return Boolean
+        with Pre => Prefix'Length <= Integer'Last - 1
+      is
+
          Inner        : Node_Id;
          Is_Terminal  : Boolean := True;
          CI           : constant Node_Id := Corresponding_Instance (Func);

@@ -8,7 +8,7 @@ all: build
 
 build:
 	if [ -d "templates-parser" ]; then cd templates-parser && git pull; else git clone https://github.com/AdaCore/templates-parser; fi
-	make -C templates-parser -j
+	--  make -C templates-parser -j
 ifeq ($(UNAME), Linux)
 	@echo "package TASTE.Parser_Version is" > src/taste-parser_version.ads.new
 	@echo "   Parser_Release : constant String :=" >> src/taste-parser_version.ads.new
@@ -35,7 +35,7 @@ ifeq ($(UNAME), Linux)
 	fi
 endif
 	@#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ;
-	ADA_PROJECT_PATH=templates-parser/:${ADA_PROJECT_PATH} OCARINA_PATH=`ocarina-config --prefix` \
+	OCARINA_PATH=`ocarina-config --prefix` \
             $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
 
 install:

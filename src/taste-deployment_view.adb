@@ -238,6 +238,7 @@ package body TASTE.Deployment_View is
                   end if;
                   for Index in ST'Range loop
                      Get_Name_String (ST (Index));
+                     pragma Assert (Name_Len >= 1 and then Name_Len <= 16384);
                      if Tail (Source => Name_Buffer (1 .. Name_Len),
                               Count  => 4) = ".asn"
                      then

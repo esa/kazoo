@@ -21,14 +21,13 @@ project AADL_Parser is
    package Compiler is
       for Default_Switches ("Ada") use
         ("-g",
-         "-Ada2012",
          "-gnatf",
          "-gnaty",
          "-gnatwa",
          "-gnatoa",
          "-gnatg",
-         "-fstack-check",
-         "-no-pie");
+         "-fstack-check");
+--         "-no-pie");
    end Compiler;
 
 end AADL_Parser;

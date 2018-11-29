@@ -57,7 +57,8 @@ package body TASTE.Parser_Utils is
    end Strip_String;
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
-      Config : Command_Line_Configuration;
+      Config  : Command_Line_Configuration;
+      Version : aliased Boolean := False;
       use String_Holders;
 
       IV, DeplV, DataV, OutDir : aliased GNAT.Strings.String_Access := null;
@@ -108,7 +109,7 @@ package body TASTE.Parser_Utils is
                      Switch         => "-g",
                      Long_Switch    => "--debug",
                      Help           => "Set debug mode");
-      Define_Switch (Config, Output => Result.Version'Access,
+      Define_Switch (Config, Output => Version'Access,
                      Switch         => "-v",
                      Long_Switch    => "--version",
                      Help           => "Display tool version");
@@ -141,7 +142,7 @@ package body TASTE.Parser_Utils is
          then To_Holder (OutDir.all)
          else To_Holder ("."));
 
-      if Result.Version then
+      if Version then
          raise Exit_From_Command_Line;
       end if;
 
@@ -170,7 +171,6 @@ package body TASTE.Parser_Utils is
         & Assoc ("Glue",             Config.Glue)
         & Assoc ("Use_POHIC",        Config.Use_POHIC)
         & Assoc ("Debug_Flag",       Config.Debug_Flag)
-        & Assoc ("Version",          Config.Version)
         & Assoc ("Timer_Resolution", Config.Timer_Resolution);
       for Each of Config.Other_Files loop
          Vec := Vec & Each;

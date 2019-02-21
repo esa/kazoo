@@ -15,13 +15,12 @@ compile-linux:
 	mkdir -p obj && cd obj && \
 	@@IF@@ @_EXIST:Instance_Of_@
 	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
-	       rm ../src/@_LOWER:Instance_Of_@.ad? && \
-	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/src/:../../../dataview/Ada gnat make ../src/@_LOWER:Name_@
+	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/obj/:../../../dataview/Ada gnat make @_LOWER:Name_@
  	@@ELSE@@
 	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
 	   @@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
-	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make ../src/@_LOWER:Name_@
+	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make @_LOWER:Name_@
 	@@ELSE@@
 	:
 	@@END_IF@@

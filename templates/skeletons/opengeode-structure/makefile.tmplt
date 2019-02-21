@@ -12,15 +12,16 @@ clean:
 	rm -rf obj
 
 compile-linux:
-	mkdir -p obj && cd obj && \
+	mkdir -p code && cd code && \
 	@@IF@@ @_EXIST:Instance_Of_@
 	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
-	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/obj/:../../../dataview/Ada gnat make @_LOWER:Name_@
+	       mv *.gpr .. && cd .. && \
+	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/code/:../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
  	@@ELSE@@
 	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
-	   @@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
-	ADA_INCLUDE_PATH=../../../dataview/Ada gnat make @_LOWER:Name_@
+	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
+	   mv *.gpr .. && cd .. && ADA_INCLUDE_PATH=../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
 	@@ELSE@@
 	:
 	@@END_IF@@

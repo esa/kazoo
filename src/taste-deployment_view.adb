@@ -476,6 +476,18 @@ package body TASTE.Deployment_View is
       return Option_Node.Nothing;
    end Find_Node;
 
+   function Find_Partition (Node          : Taste_Node;
+                            Function_Name : String)
+                            return Option_Partition.Option is
+   begin
+      for Partition of Node.Partitions loop
+         if Partition.Bound_Functions.Contains (Function_Name) then
+            return Option_Partition.Just (Partition);
+         end if;
+      end loop;
+      return Option_Partition.Nothing;
+   end Find_Partition;
+
    procedure Dump_Nodes (DV : Complete_Deployment_View; Output : File_Type) is
    begin
       for Each of DV.Nodes loop

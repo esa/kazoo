@@ -25,9 +25,26 @@ package body TASTE.Concurrency_View is
          for Thread of Block.Calling_Threads loop
             Put_Line (Output, " |_ Calling_Thread : " & Thread);
          end loop;
-         Put_Line (Output, " |_ Node : "
-                   & To_String (Block.Node.Value_Or
-                     (Taste_Node'(Name => US ("(none)"), others => <>)).Name));
+         if Block.Node.Has_Value then
+            Put_Line (Output, " |_ Node : "
+                      & To_String (Block.Node.Unsafe_Just.Name));
+            declare
+               P : constant Taste_Partition :=
+                 Block.Node.Unsafe_Just.Find_Partition
+                   (To_String (Block.Name)).Unsafe_Just;
+            begin
+               Put_Line (Output, " |_ Partition : " & To_String (P.Name));
+               Put_Line (Output, "   |_ Coverage       : " & P.Coverage'Img);
+               Put_Line (Output, "   |_ Package        : "
+                         & To_String (P.Package_Name));
+               Put_Line (Output, "   |_ CPU Name       : "
+                         & To_String (P.CPU_Name));
+               Put_Line (Output, "   |_ CPU Platform   : "
+                         & P.CPU_Platform'Img);
+               Put_Line (Output, "   |_ CPU Classifier : "
+                         & To_String (P.CPU_Classifier));
+            end;
+         end if;
       end loop;
 
       for Thread of CV.Threads loop

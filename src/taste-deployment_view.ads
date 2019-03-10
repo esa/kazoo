@@ -145,12 +145,17 @@ package TASTE.Deployment_View is
    package Taste_Partitions is
       new Indefinite_Ordered_Maps (String, Taste_Partition);
 
-   type Taste_Node is
+   type Taste_Node is tagged
       record
          Name       : Unbounded_String;
          Drivers    : Taste_Drivers.Vector;
          Partitions : Taste_Partitions.Map;
       end record;
+
+   --  Helper function: find the partition where a function is bounded
+   function Find_Partition (Node          : Taste_Node;
+                            Function_Name : String)
+                            return Option_Partition.Option;
 
    package Node_Maps is new Indefinite_Ordered_Maps (String, Taste_Node);
 

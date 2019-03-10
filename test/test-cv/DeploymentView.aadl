@@ -1,0 +1,79 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS demo_partition
+END demo_partition;
+
+PROCESS IMPLEMENTATION demo_partition.others
+END demo_partition.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::obsw;
+WITH interfaceview::IV::GNC;
+WITH interfaceview::IV::ground;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_obsw : SYSTEM interfaceview::IV::obsw::obsw.others {
+    Taste::FunctionName => "obsw";
+  };
+  IV_GNC : SYSTEM interfaceview::IV::GNC::GNC.others {
+    Taste::FunctionName => "GNC";
+  };
+  IV_ground : SYSTEM interfaceview::IV::ground::ground.others {
+    Taste::FunctionName => "ground";
+  };
+  demo_partition : PROCESS deploymentview::DV::Node1::demo_partition.others {
+    Taste::coordinates => "120727 61794 150761 81857";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "116973 56062 154515 84723";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo_partition)) APPLIES TO IV_obsw;
+  Taste::APLC_Binding => (reference (demo_partition)) APPLIES TO IV_GNC;
+  Taste::APLC_Binding => (reference (demo_partition)) APPLIES TO IV_ground;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo_partition;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "112280 47873 159208 88817";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

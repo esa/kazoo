@@ -250,22 +250,22 @@ package body TASTE.AADL_Parser is
       return Nothing;
    end Find_Binding;
 
-   procedure Set_Calling_Threads (CV : in out Taste_Concurrency_View) is
+   procedure Set_Calling_Threads (Partition : in out CV_Partition) is
       procedure Rec_Add_Calling_Thread (Thread_Id : String;
                                         Block_Id  : String) is
       begin
          --  First add thread to its corresponding protected function
          --  Stop recursion if thread is already there...
          if not String_Sets.To_Set (Thread_Id).Is_Subset
-           (Of_Set => CV.Blocks (Block_Id).Calling_Threads)
+           (Of_Set => Partition.Blocks (Block_Id).Calling_Threads)
          then
-            CV.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
+            Partition.Blocks (Block_Id).Calling_Threads.Insert (Thread_Id);
          else
             return;
          end if;
 
          --  Then recurse on its (Un)protected RIs.
-         for RI of CV.Blocks (Block_Id).Required loop
+         for RI of Partition.Blocks (Block_Id).Required loop
             if RI.RCM = Protected_Operation or RI.RCM = Unprotected_Operation
             then
                for Remote of RI.Remote_Interfaces loop
@@ -277,7 +277,7 @@ package body TASTE.AADL_Parser is
          end loop;
       end Rec_Add_Calling_Thread;
    begin
-      for Each of CV.Threads loop
+      for Each of Partition.Threads loop
          Rec_Add_Calling_Thread (Thread_Id => To_String (Each.Name),
                                  Block_Id  => To_String
                                    (Each.Protected_Block_Name));
@@ -350,20 +350,61 @@ package body TASTE.AADL_Parser is
    end Get_Output_Ports;
 
    procedure Add_Concurrency_View (Model : in out TASTE_Model) is
-      Result : Taste_Concurrency_View;
+      CV : Taste_Concurrency_View :=
+        (Base_Template_Path => Model.Configuration.Binary_Path,
+         Base_Output_Path   => Model.Configuration.Output_Dir,
+         others             => <>);
    begin
+      --  Initialize the lists of nodes and partitions based on the DV
+      for Node of Model.Deployment_View.Nodes loop
+         declare
+            New_Node : CV_Node;
+         begin
+            for Partition of Node.Partitions loop
+               declare
+                  New_Partition : CV_Partition;
+               begin
+                  New_Node.Partitions.Insert
+                    (Key      => To_String (Partition.Name),
+                     New_Item => New_Partition);
+               end;
+            end loop;
+            CV.Nodes.Insert (Key      => To_String (Node.Name),
+                             New_Item => New_Node);
+         end;
+      end loop;
+
       --  Create one thread per Cyclic and Sporadic interface
       --  Create one protected block per application code
+      --  and map them on the Concurrency View nodes/partitions
       for F of Model.Interface_View.Flat_Functions loop
          if F.Is_Type then
             goto Continue;
          end if;
          declare
+            Function_Name : constant String := To_String (F.Name);
+            Node : constant Option_Node.Option :=
+              Model.Deployment_View.Find_Node (Function_Name);
+            Node_Name : constant String :=
+              (if Node.Has_Value
+               then To_String (Node.Unsafe_Just.Name)
+               else "");
+            Partition_Name : constant String :=
+              (if Node.Has_Value
+               then To_String (Node.Unsafe_Just.Find_Partition
+                 (Function_Name).Unsafe_Just.Name)
+               else "");
+
             Block : Protected_Block :=
               (Name   => F.Name,
-               Node   => Model.Deployment_View.Find_Node (To_String (F.Name)),
+               Node   => Node,
                others => <>);
          begin
+            if not Node.Has_Value then
+               --  Ignore functions that are not mapped to a node/partition
+               goto Continue;
+            end if;
+
             for PI of F.Provided loop
                declare
                   New_PI : Protected_Block_PI := (Name   => PI.Name,
@@ -406,7 +447,8 @@ package body TASTE.AADL_Parser is
                         Node                 => Block.Node,
                         Output_Ports         => Get_Output_Ports (Model, F));
                   begin
-                     Result.Threads.Include
+                     CV.Nodes
+                       (Node_Name).Partitions (Partition_Name).Threads.Include
                        (Key      => To_String (Thread.Name),
                         New_Item => Thread);
                   end;
@@ -414,15 +456,20 @@ package body TASTE.AADL_Parser is
             end loop;
             Block.Required := F.Required;
             --  Add the block to the Concurrency View
-            Result.Blocks.Insert (Key      => To_String (Block.Name),
-                                  New_Item => Block);
+            CV.Nodes (Node_Name).Partitions (Partition_Name).Blocks.Insert
+              (Key      => To_String (Block.Name),
+               New_Item => Block);
          end;
          <<Continue>>
       end loop;
       --  Find and set protected blocks calling threads
-      Set_Calling_Threads (Result);
+      for Node of CV.Nodes loop
+         for Partition of Node.Partitions loop
+            Set_Calling_Threads (Partition);
+         end loop;
+      end loop;
 
-      Model.Concurrency_View := Result;
+      Model.Concurrency_View := CV;
    end Add_Concurrency_View;
 
    procedure Dump (Model : TASTE_Model) is

@@ -52,6 +52,7 @@ package TASTE.Concurrency_View is
          Required : Translate_Sets.Vector;
       end record;
    function To_Template (B : Protected_Block) return Block_As_Template;
+   package ST_Blocks is new Indefinite_Vectors (Natural, Block_As_Template);
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);
@@ -77,31 +78,46 @@ package TASTE.Concurrency_View is
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
 
-   type Taste_Concurrency_View is tagged
-      record
-         Threads : AADL_Threads.Map;
-         Blocks  : Protected_Blocks.Map;
-      end record;
-
-   procedure Debug_Dump (CV     : Taste_Concurrency_View;
-                         Output : File_Type);
-
-   --  Set of constructs for transforming the AST into Template entities
-   package ST_Blocks is new Indefinite_Vectors (Natural, Block_As_Template);
-
-   type CV_As_Template is
+   --  a Partition is eventually a process (binaray) or a TSP partition
+   type CV_Partition_As_Template is
       record
          Threads : Translate_Sets.Vector;
          Blocks  : ST_Blocks.Vector;
       end record;
 
-   function Concurrency_View_Template (CV : Taste_Concurrency_View)
-                                       return CV_As_Template;
+   type CV_Partition is tagged
+      record
+         Threads : AADL_Threads.Map;
+         Blocks  : Protected_Blocks.Map;
+      end record;
 
-   --  Function to generate the concurrency view
-   --  Base_Template_Path comes from Model.Configuration.Binary.Path
-   procedure Generate_CV (CV                 : Taste_Concurrency_View;
-                          Base_Template_Path : String;
-                          Base_Output_Path   : String);
+   package CV_Partitions is new Indefinite_Ordered_Maps (String, CV_Partition);
+
+   --  A node may contain several partitions (in case of TSP)
+   type CV_Node is tagged
+      record
+         Partitions : CV_Partitions.Map;
+      end record;
+
+   package CV_Nodes is new Indefinite_Ordered_Maps (String, CV_Node);
+
+   --  CV is made of a list of nodes, each containing a list of partitions
+   --  Partitions contain threads and passive functions as created during
+   --  Vertical transformation
+   --  Nodes contain drivers, and nodes are connected via busses, but this
+   --  information is already in the deployment view. It is not repeated here.
+   type Taste_Concurrency_View is tagged
+      record
+         Nodes              : CV_Nodes.Map;
+         Base_Template_Path : String_Holder;
+         Base_Output_Path   : String_Holder;
+      end record;
+
+   procedure Debug_Dump (CV     : Taste_Concurrency_View;
+                         Output : File_Type);
+
+   --  Functions to generate the concurrency view
+   procedure Generate_Node (CV : Taste_Concurrency_View; Node_Name : String);
+   procedure Generate_CV   (CV : Taste_Concurrency_View);
 
 end TASTE.Concurrency_View;

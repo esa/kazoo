@@ -13,9 +13,7 @@ begin
    begin
       if Transformed.Configuration.Glue then
          Transformed.Add_Concurrency_View;
-         Transformed.Concurrency_View.Generate_CV
-           (Base_Template_Path => Model.Configuration.Binary_Path.Element,
-            Base_Output_Path   => Model.Configuration.Output_Dir.Element);
+         Transformed.Concurrency_View.Generate_CV;
       end if;
       Transformed.Dump;
       Transformed.Generate_Build_Script;

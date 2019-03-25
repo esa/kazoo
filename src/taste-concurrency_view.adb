@@ -184,10 +184,11 @@ package body TASTE.Concurrency_View is
                  (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
 
             function Generate_Partition (Partition : CV_Partition)
-                                         return Translate_Set
+                                         return String
             is
-               Threads : Tag;
-               Blocks  : Tag;
+               Threads         : Tag;
+               Blocks          : Tag;
+               Partition_Assoc : Translate_Set;
             begin
                for T of Partition.Threads loop
                   declare
@@ -222,28 +223,28 @@ package body TASTE.Concurrency_View is
                        String'(Parse (Path & "/block.tmplt", Block_Assoc));
                   end;
                end loop;
-               return Translate_Set'(+Assoc  ("Threads", Threads)
-                                     & Assoc ("Blocks",  Blocks));
+               Partition_Assoc := +Assoc  ("Threads", Threads)
+                 & Assoc ("Blocks",  Blocks);
+               return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
+
+            Partitions : Tag;
+            Node_Assoc : Translate_Set;
+
          begin
-            --  A node contains partitions, we must render them all separately
-            --  using their own templates (threads and blocks), and then call
-            --  use the node template with these tags.
             if Trigger then
                for Partition of CV.Nodes (Node_Name).Partitions loop
-                  declare
-                     Partition_Assoc : constant Translate_Set :=
-                       Generate_Partition (Partition);
-                  begin
-                     Put_Info ("Generating from " & Path);
-                     Create (File => Output_File,
-                             Mode => Out_File,
-                             Name => Output_Dir & File_Name);
-                     Put_Line (Output_File,
-                               Parse (Path & "/node.tmplt", Partition_Assoc));
-                     Close (Output_File);
-                  end;
+                  Partitions := Partitions & Generate_Partition (Partition);
                end loop;
+               Node_Assoc := +Assoc ("Partitions", Partitions);
+
+               Put_Info ("Generating from " & Path);
+               Create (File => Output_File,
+                       Mode => Out_File,
+                       Name => Output_Dir & File_Name);
+               Put_Line (Output_File,
+                         Parse (Path & "/node.tmplt", Node_Assoc));
+               Close (Output_File);
             end if;
          end;
          <<continue>>

@@ -16,4 +16,4 @@ task @_CAPITALIZE:Name_@ is
    @@TABLE@@
       @_Remote_Threads_@ -> @_Remote_PIs_@
    @@END_TABLE@@
-end @_CAPITALIZE:Name_@
+end @_CAPITALIZE:Name_@;

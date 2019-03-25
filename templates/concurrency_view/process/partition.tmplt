@@ -6,11 +6,11 @@
 package @_CAPITALIZE:Partition_Name_@ is
 
 @@TABLE@@
-   @_Threads'INDENT_@
+   @_Threads_@   @@-- should have 'Indent
 @@END_TABLE@@
 
 @@TABLE@@
-   @_Blocks'INDENT_@
+   @_Blocks_@   @@-- should have 'Indent
 @@END_TABLE@@
 
 end @_CAPITALIZE:Partition_Name_@;

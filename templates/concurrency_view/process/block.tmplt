@@ -15,4 +15,4 @@ protected @_CAPITALIZE:Name_@ is  -- part of node "@_CAPITALIZE:Node_Name_@"
    @@TABLE@@
       @_Required'INDENT_@
    @@END_TABLE@@
-end @_CAPITALIZE:Name_@
+end @_CAPITALIZE:Name_@;

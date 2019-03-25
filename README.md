@@ -1,8 +1,8 @@
-aadl-parser is a low-level TASTE command
+kazoo is a low-level TASTE command
 
 License: LGPL (see LICENSE file)
 
-Copyright (c) 2008-2017 European Space Agency
+Copyright (c) 2019 Maxime Perrotin / European Space Agency
 
 
 

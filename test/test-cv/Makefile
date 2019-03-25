@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 
 all: test-parse
 
 test-parse: clean
-	$(AADL_PARSER) --gw \
+	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
 		       --debug \
@@ -13,7 +13,7 @@ test-parse: clean
 		       ../common/ocarina_components.aadl
 
 gdb: clean
-	gdb --args $(AADL_PARSER) --gw \
+	gdb --args $(KAZOO) --gw \
 	               -o output \
 	               --glue \
 		       --debug \

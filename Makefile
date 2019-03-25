@@ -2,7 +2,7 @@ UNAME := $(shell uname)
 ARCH := $(shell getconf LONG_BIT)
 
 CC=gcc
-exec = aadl_parser
+exec = kazoo
 
 all: build
 
@@ -36,12 +36,11 @@ ifeq ($(UNAME), Linux)
 endif
 	@#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ;
 	OCARINA_PATH=`ocarina-config --prefix` \
-            $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P aadl_parser.gpr -XBUILD="debug" $$EXTRAFLAG
+            $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P kazoo.gpr -XBUILD="debug" $$EXTRAFLAG
 
 install:
 	$(MAKE)
-	mv aadl_parser taste-aadl-parser
-	cp taste-aadl-parser `ocarina-config --prefix`/bin/
+	cp kazoo `ocarina-config --prefix`/bin/
 
 edit:
 	OCARINA_PATH=`ocarina-config --prefix` gps

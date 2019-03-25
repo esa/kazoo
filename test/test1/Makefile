@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 
 all: test-parse
 
 test-parse:
-	$(AADL_PARSER) --glue -i interfaceview.aadl \
+	$(KAZOO) --glue -i interfaceview.aadl \
 	                      -c deploymentview.aadl \
 			      -d dataview.aadl \
 			      ../common/ocarina_components.aadl \

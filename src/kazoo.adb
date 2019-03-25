@@ -5,7 +5,7 @@ with GNAT.OS_Lib,
 use TASTE.AADL_Parser,
     TASTE.Model_Transformations;
 
-procedure AADL_Parser is
+procedure Kazoo is
 begin
    declare
       Model       : constant TASTE_Model := Parse_Project;
@@ -22,4 +22,4 @@ begin
 exception
    when TASTE.Quit_TASTE =>
       GNAT.OS_Lib.OS_Exit (1);
-end AADL_Parser;
+end Kazoo;

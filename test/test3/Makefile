@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 all: test-parse
  		
 
 test-parse: clean
-	$(AADL_PARSER) -o output -i InterfaceView.aadl -d DataView.aadl
+	$(KAZOO) -o output -i InterfaceView.aadl -d DataView.aadl
 		
 
 clean:

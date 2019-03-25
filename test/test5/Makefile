@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 
 all: test-parse
 
 test-parse:
-	$(AADL_PARSER) --gw \
+	$(KAZOO) --gw \
 	               --glue \
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \

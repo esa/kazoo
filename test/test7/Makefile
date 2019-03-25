@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 all: test-parse
  		
 
 test-parse: clean
-	$(AADL_PARSER) --check-dataview \
+	$(KAZOO) --check-dataview \
         2>&1 | tail -2 | diff expected -
 
 clean:

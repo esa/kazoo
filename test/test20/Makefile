@@ -1,9 +1,9 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 
 all: test-parse
 
 test-parse: clean
-	$(AADL_PARSER) --gw \
+	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
 		       --debug \

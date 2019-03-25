@@ -35,10 +35,10 @@ package body TASTE.Parser_Utils is
 
    procedure Banner is
       The_Banner : constant String :=
-        Yellow_Bold & "TASTE AADL Parser" & No_Color & " (Version "
+        Yellow_Bold & "TASTE/Kazoo" & No_Color & " (Version "
         & TASTE.Parser_Version.Parser_Release & ")"
         & ASCII.LF & ASCII.CR & White_Bold
-        & "Copyright (C) European Space Agency"
+        & "Copyright (C) Maxime Perrotin / European Space Agency"
         & ASCII.LF & ASCII.CR & No_Color
         & "Based on " & TASTE.Parser_Version.Ocarina_Version;
    begin

@@ -1,10 +1,10 @@
-AADL_PARSER=../../aadl_parser
+KAZOO=../../kazoo
 
 all: test-parse
 	cd output && make
 
 generate:
-	$(AADL_PARSER) --gw \
+	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
 		       --debug \

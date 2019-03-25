@@ -1,13 +1,12 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Threads_@ : List of threads
-@@-- @_Blocks_@  : List of protected blocks
+@@-- @_Node_Name_@   : Name of the node from deployment view
+@@-- @_Partitions_@  : List of rendered code for partitions
+@@-- In standard TASTE systems there is only one partition per node
+package body @_CAPITALIZE:Node_Name_@ is
+   @_Partitions_@
 @@TABLE@@
-   --  THREAD
-   @_Threads_@
+   @_Partitions'Indent_@
 @@END_TABLE@@
 
-@@TABLE@@
-   --  BLOCK
-   @_Blocks_@
-@@END_TABLE@@
+end @_CAPITALIZE:Node_Name_@;

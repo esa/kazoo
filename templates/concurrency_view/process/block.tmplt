@@ -1,0 +1,18 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@             : Protected block name
+@@-- @_Calling_Threads_@  : List of calling threads
+@@-- @_Node name_@        : Node name
+@@-- @_Provided_@         : Provided interfaces (from pi.tmplt)
+@@-- @_Required_@         : Required interfaces (from ri.tmplt)
+protected @_CAPITALIZE:Name_@ is  -- part of node "@_CAPITALIZE:Node_Name_@"
+   --  Calling Threads: @_Calling_Threads_@
+
+   @@TABLE@@
+      @_Provided'INDENT_@
+   @@END_TABLE@@
+
+   @@TABLE@@
+      @_Required'INDENT_@
+   @@END_TABLE@@
+end @_CAPITALIZE:Name_@

@@ -1,1 +1,5 @@
-process.aadl
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@        : Name of the node as defined in the Deployment View
+@@-- The content of this file is generated from node.tmplt
+@_LOWER:Node_Name_@.adb

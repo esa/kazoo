@@ -1,0 +1,16 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Partition_Name_@ : Partition name (usually the name of the binary)
+@@-- @_Threads_@        : List of threads
+@@-- @_Blocks_@         : List of protected functions
+package @_CAPITALIZE:Partition_Name_@ is
+
+@@TABLE@@
+   @_Threads'INDENT_@
+@@END_TABLE@@
+
+@@TABLE@@
+   @_Blocks'INDENT_@
+@@END_TABLE@@
+
+end @_CAPITALIZE:Partition_Name_@;

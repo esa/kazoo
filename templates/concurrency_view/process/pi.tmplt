@@ -7,4 +7,8 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-
+procedure @_CAPITALIZE:Name_@ is  -- @_Direction_@ of function @_Parent_Function_@
+@@TABLE@@
+  --  @_Param_Names_@ : @_Param_Types_@ (@_Param_Directions_@)
+@@END_TABLE@@
+end @_CAPITALIZE:Name_@

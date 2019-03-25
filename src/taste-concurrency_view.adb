@@ -168,10 +168,12 @@ package body TASTE.Concurrency_View is
          declare
             Path  : constant String  := Full_Name (Current);
             Do_It : constant Boolean := Exists (Path & "/filename.tmplt");
+            Filename_Set : constant Translate_Set :=
+              +Assoc ("Node_Name", Node_Name);
             --  Get output file name from template
             File_Name : constant String :=
               (if Do_It then
-                  Strip_String (Parse (Path & "/filename.tmplt"))
+                  Strip_String (Parse (Path & "/filename.tmplt", Filename_Set))
                else "");
             --  Check if file already exists
             Present : constant Boolean :=
@@ -183,9 +185,11 @@ package body TASTE.Concurrency_View is
                Strip_String
                  (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
 
-            function Generate_Partition (Partition : CV_Partition)
+            function Generate_Partition (Partition_Name : String)
                                          return String
             is
+               Partition       : constant CV_Partition :=
+                 CV.Nodes (Node_Name).Partitions (Partition_Name);
                Threads         : Tag;
                Blocks          : Tag;
                Partition_Assoc : Translate_Set;
@@ -224,7 +228,8 @@ package body TASTE.Concurrency_View is
                   end;
                end loop;
                Partition_Assoc := +Assoc  ("Threads", Threads)
-                 & Assoc ("Blocks",  Blocks);
+                 & Assoc ("Blocks",         Blocks)
+                 & Assoc ("Partition_Name", Partition_Name);
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
 
@@ -233,15 +238,17 @@ package body TASTE.Concurrency_View is
 
          begin
             if Trigger then
-               for Partition of CV.Nodes (Node_Name).Partitions loop
-                  Partitions := Partitions & Generate_Partition (Partition);
+               for Partition in CV.Nodes (Node_Name).Partitions.Iterate loop
+                  Partitions := Partitions
+                    & Generate_Partition (CV_Partitions.Key (Partition));
                end loop;
-               Node_Assoc := +Assoc ("Partitions", Partitions);
+               Node_Assoc := +Assoc ("Partitions", Partitions)
+                  & Assoc ("Node_Name", Node_Name);
 
                Put_Info ("Generating from " & Path);
                Create (File => Output_File,
                        Mode => Out_File,
-                       Name => Output_Dir & File_Name);
+                       Name => Output_Dir & "/" & File_Name);
                Put_Line (Output_File,
                          Parse (Path & "/node.tmplt", Node_Assoc));
                Close (Output_File);

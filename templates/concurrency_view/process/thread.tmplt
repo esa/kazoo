@@ -8,11 +8,12 @@
 @@-- @_Remote_PIs_@      :    |_ Associated PI Name
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI 
-Thread : @_Name_@
-   |_ Port            : @_Entry_Port_Name_@
-   |_ Protected Block : @_Pro_Block_Name_@
-   |_ Node            : @_Node_Name_@
-   |_ Out_Ports       :
-@@TABLE@@
-@_Remote_Threads_@ -> @_Remote_PIs_@
-@@END_TABLE@@
+task @_CAPITALIZE:Name_@ is
+   Port            : @_Entry_Port_Name_@
+   Protected Block : @_Pro_Block_Name_@
+   Node            : @_Node_Name_@
+   Out_Ports       :
+   @@TABLE@@
+      @_Remote_Threads_@ -> @_Remote_PIs_@
+   @@END_TABLE@@
+end @_CAPITALIZE:Name_@

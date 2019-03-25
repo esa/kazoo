@@ -76,7 +76,7 @@ package body TASTE.Concurrency_View is
    end Debug_Dump;
 
    --  This function translates a protected block into a template
-   function To_Template (B : Protected_Block) return Block_As_Template is
+   function Prepare_Template (B : Protected_Block) return Block_As_Template is
       Calling_Threads : Tag;
       Result : Block_As_Template;
    begin
@@ -103,7 +103,7 @@ package body TASTE.Concurrency_View is
                        & Assoc ("Node_Name",       To_String (B.Node.Value_Or
                          (Taste_Node'(Name => US (""), others => <>)).Name));
       return Result;
-   end To_Template;
+   end Prepare_Template;
 
    --  This function translates a thread definition into a template
    function To_Template (T : AADL_Thread) return Translate_Set is
@@ -189,15 +189,38 @@ package body TASTE.Concurrency_View is
                Threads : Tag;
                Blocks  : Tag;
             begin
-               for Thread of Partition.Threads loop
-                  --  Render each thread
-                  Threads := Threads & "This_Thread";
-                  --  & String'(Parse (Path & "/thread.tmplt", Thread_Assoc));
+               for T of Partition.Threads loop
+                  declare
+                     --  Render each thread
+                     Thread_Assoc : constant Translate_Set := T.To_Template;
+                     Result : constant String :=
+                       (Parse (Path & "/thread.tmplt", Thread_Assoc));
+                  begin
+                     Threads := Threads & Result;
+                  end;
                end loop;
-               for Block of Partition.Blocks loop
-                  --  Render each block
-                  Blocks := Blocks & "This block";
-                  --  String'(Parse (Path & "/block.tmplt", Block_Assoc));
+               for B of Partition.Blocks loop
+                  declare
+                     Tmpl : constant Block_As_Template := B.Prepare_Template;
+                     Block_Assoc : Translate_Set := Tmpl.Header;
+                     PI_Tag : Tag;
+                     RI_Tag : Tag;
+                  begin
+                     for PI_Assoc of Tmpl.Provided loop
+                        PI_Tag := PI_Tag
+                          & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
+                     end loop;
+                     for RI_Assoc of Tmpl.Required loop
+                        RI_Tag := RI_Tag
+                          & String'(Parse (Path & "/ri.tmplt", RI_Assoc));
+                     end loop;
+                     Block_Assoc := Block_Assoc
+                       & Assoc ("Provided", PI_Tag)
+                       & Assoc ("Required", RI_Tag);
+
+                     Blocks := Blocks &
+                       String'(Parse (Path & "/block.tmplt", Block_Assoc));
+                  end;
                end loop;
                return Translate_Set'(+Assoc  ("Threads", Threads)
                                      & Assoc ("Blocks",  Blocks));

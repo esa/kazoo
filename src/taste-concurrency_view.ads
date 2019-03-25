@@ -5,7 +5,6 @@
 --  Model of the Concurrency View
 
 with Ada.Containers.Indefinite_Ordered_Maps,
-     Ada.Containers.Indefinite_Vectors,
      Ada.Strings.Unbounded,
      Text_IO,
      Templates_Parser,
@@ -51,8 +50,7 @@ package TASTE.Concurrency_View is
          Provided : Translate_Sets.Vector;
          Required : Translate_Sets.Vector;
       end record;
-   function To_Template (B : Protected_Block) return Block_As_Template;
-   package ST_Blocks is new Indefinite_Vectors (Natural, Block_As_Template);
+   function Prepare_Template (B : Protected_Block) return Block_As_Template;
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);
@@ -77,13 +75,6 @@ package TASTE.Concurrency_View is
    function To_Template (T : AADL_Thread) return Translate_Set;
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
-
-   --  a Partition is eventually a process (binaray) or a TSP partition
-   type CV_Partition_As_Template is
-      record
-         Threads : Translate_Sets.Vector;
-         Blocks  : ST_Blocks.Vector;
-      end record;
 
    type CV_Partition is tagged
       record

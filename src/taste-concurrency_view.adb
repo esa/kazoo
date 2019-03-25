@@ -262,7 +262,9 @@ package body TASTE.Concurrency_View is
    procedure Generate_CV (CV : Taste_Concurrency_View) is
    begin
       for Node in CV.Nodes.Iterate loop
-         CV.Generate_Node (CV_Nodes.Key (Node));
+         if CV_Nodes.Key (Node) /= "interfaceview" then
+            CV.Generate_Node (CV_Nodes.Key (Node));
+         end if;
       end loop;
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>

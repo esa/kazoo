@@ -78,8 +78,9 @@ package TASTE.Concurrency_View is
 
    type CV_Partition is tagged
       record
-         Threads : AADL_Threads.Map;
-         Blocks  : Protected_Blocks.Map;
+         Deployment_Partition : aliased Taste_Partition;
+         Threads              : AADL_Threads.Map;
+         Blocks               : Protected_Blocks.Map;
       end record;
 
    package CV_Partitions is new Indefinite_Ordered_Maps (String, CV_Partition);
@@ -87,7 +88,8 @@ package TASTE.Concurrency_View is
    --  A node may contain several partitions (in case of TSP)
    type CV_Node is tagged
       record
-         Partitions : CV_Partitions.Map;
+         Deployment_Node : aliased Taste_Node;
+         Partitions      : CV_Partitions.Map;
       end record;
 
    package CV_Nodes is new Indefinite_Ordered_Maps (String, CV_Node);

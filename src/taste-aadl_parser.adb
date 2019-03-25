@@ -358,11 +358,13 @@ package body TASTE.AADL_Parser is
       --  Initialize the lists of nodes and partitions based on the DV
       for Node of Model.Deployment_View.Nodes loop
          declare
-            New_Node : CV_Node;
+            New_Node : CV_Node :=
+              (Deployment_Node => Node, others => <>);
          begin
             for Partition of Node.Partitions loop
                declare
-                  New_Partition : CV_Partition;
+                  New_Partition : constant CV_Partition :=
+                    (Deployment_Partition => Partition, others => <>);
                begin
                   New_Node.Partitions.Insert
                     (Key      => To_String (Partition.Name),

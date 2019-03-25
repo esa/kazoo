@@ -227,9 +227,12 @@ package body TASTE.Concurrency_View is
                        String'(Parse (Path & "/block.tmplt", Block_Assoc));
                   end;
                end loop;
-               Partition_Assoc := +Assoc  ("Threads", Threads)
-                 & Assoc ("Blocks",         Blocks)
-                 & Assoc ("Partition_Name", Partition_Name);
+               --  Association includes Name, Coverage, CPU Info, etc.
+               --  (see taste-deployment_view.ads for the complete list)
+               Partition_Assoc := Partition.Deployment_Partition.To_Template
+                 & Assoc ("Threads", Threads)
+                 & Assoc ("Blocks",   Blocks);
+
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
 

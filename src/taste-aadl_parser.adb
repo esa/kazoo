@@ -353,6 +353,7 @@ package body TASTE.AADL_Parser is
       CV : Taste_Concurrency_View :=
         (Base_Template_Path => Model.Configuration.Binary_Path,
          Base_Output_Path   => Model.Configuration.Output_Dir,
+         Deployment         => Model.Deployment_View,
          others             => <>);
    begin
       --  Initialize the lists of nodes and partitions based on the DV

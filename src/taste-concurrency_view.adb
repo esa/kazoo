@@ -261,14 +261,23 @@ package body TASTE.Concurrency_View is
       end loop;
       End_Search (ST);
    end Generate_Node;
+   procedure Generate_System (CV : Taste_Concurrency_View) is
+   begin
+      null;
+   end Generate_System;
 
    procedure Generate_CV (CV : Taste_Concurrency_View) is
    begin
+      --  In this first iteration Nodes are generated in standalone files,
+      --  and they include their processes. It would be useful to be able
+      --  to decide if processes could also have their own files, since
+      --  in the future they may be more than one process per node (for TSP).
       for Node in CV.Nodes.Iterate loop
          if CV_Nodes.Key (Node) /= "interfaceview" then
             CV.Generate_Node (CV_Nodes.Key (Node));
          end if;
       end loop;
+      CV.Generate_System;
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>
          Put_Error ("Concurrency View : "

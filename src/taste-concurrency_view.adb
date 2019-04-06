@@ -232,14 +232,22 @@ package body TASTE.Concurrency_View is
                return Parse (Path & "/node.tmplt", Node_Assoc);
             end Generate_Node;
 
-            Nodes : Unbounded_String;
+            Nodes      : Unbounded_String;
+            CV_Out_Dir : constant String  :=
+              CV.Base_Output_Path.Element & "/concurrency_view/";
+            Tmpl_File  : constant String  := Path & "/filesys.tmplt";
+            Tmpl_Sys   : constant String  := Path & "/system.tmplt";
+            Valid_Dir  : constant Boolean := Exists (Tmpl_File);
+            File_Sys   : constant String  :=
+              (if Valid_Dir then Strip_String (Parse (Tmpl_File)) else "");
+            Trig_Sys   : constant Boolean := Exists (Tmpl_Sys);
+            Set_Sys    : Translate_Set;
+            Node_Names : Tag;
          begin
             for Node in CV.Nodes.Iterate loop
                declare
                   Node_Name    : constant String := CV_Nodes.Key (Node);
-                  Output_Dir   : constant String :=
-                    CV.Base_Output_Path.Element
-                    & "/concurrency_view/" & Node_Name;
+                  Output_Dir   : constant String := CV_Out_Dir & Node_Name;
                   Do_It        : constant Boolean :=
                     Exists (Path & "/filenode.tmplt");
                   Filename_Set : constant Translate_Set :=
@@ -265,7 +273,8 @@ package body TASTE.Concurrency_View is
                      else "");
                begin
                   if Trigger then
-                     Nodes := Nodes & Newline & Node_Content;
+                     Node_Names := Node_Names & Node_Name;
+                     Nodes      := Nodes & Newline & Node_Content;
                      if File_Name /= "" then
                         Create_Path (Output_Dir);
                         Create (File => Output_File,
@@ -277,6 +286,17 @@ package body TASTE.Concurrency_View is
                   end if;
                end;
             end loop;
+            if Trig_Sys and File_Sys /= "" then
+               Put_Info ("Generating system concurrency view");
+               Set_Sys := +Assoc ("Nodes", Nodes)
+                 & Assoc ("Node_Names", Node_Names);
+               Create_Path (CV_Out_Dir);
+               Create (File => Output_File,
+                       Mode => Out_File,
+                       Name => CV_Out_Dir & File_Sys);
+               Put_Line (Output_File, Parse (Tmpl_Sys, Set_Sys));
+               Close (Output_File);
+            end if;
          end;
          <<continue>>
       end loop;

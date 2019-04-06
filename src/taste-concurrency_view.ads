@@ -1,5 +1,5 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2018 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2019 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Model of the Concurrency View

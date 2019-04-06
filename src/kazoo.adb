@@ -9,7 +9,7 @@ procedure Kazoo is
 begin
    declare
       Model       : constant TASTE_Model := Parse_Project;
-      Transformed : TASTE_Model := Transform (Model);
+      Transformed :          TASTE_Model := Transform (Model);
    begin
       if Transformed.Configuration.Glue then
          Transformed.Add_Concurrency_View;

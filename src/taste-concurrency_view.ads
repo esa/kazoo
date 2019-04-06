@@ -110,8 +110,7 @@ package TASTE.Concurrency_View is
    procedure Debug_Dump (CV     : Taste_Concurrency_View;
                          Output : File_Type);
 
-   --  Functions to generate the concurrency view
-   procedure Generate_Node (CV : Taste_Concurrency_View; Node_Name : String);
-   procedure Generate_CV   (CV : Taste_Concurrency_View);
+   --  Generate the concurrency view using templates
+   procedure Generate_CV (CV : Taste_Concurrency_View);
 
 end TASTE.Concurrency_View;

@@ -1,4 +1,4 @@
---  *************************** taste aadl parser ***********************  --
+--  *************************** kazoo ***********************  --
 --  (c) 2019 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
@@ -126,8 +126,8 @@ package body TASTE.Concurrency_View is
          & Assoc ("Remote_PIs",      Remote_PI));
    end To_Template;
 
-   --  Generate the output file for one node
-   procedure Generate_Node (CV : Taste_Concurrency_View; Node_Name : String)
+   --  Generate the the code by iterating over template folders
+   procedure Generate_Code (CV : Taste_Concurrency_View)
    is
       Prefix   : constant String := CV.Base_Template_Path.Element
         & "templates/concurrency_view";
@@ -137,13 +137,8 @@ package body TASTE.Concurrency_View is
       Filter   : constant Filter_Type := (Directory => True,
                                           others    => False);
       Output_File : File_Type;
-      Output_Dir  : constant String :=
-        CV.Base_Output_Path.Element & "/concurrency_view/" & Node_Name;
-   begin
-      Put_Info ("Generating Concurrency View for node " & Node_Name);
-      --  All files for one node are created in the same folder - create it
-      Create_Path (Output_Dir);
 
+   begin
       Start_Search (Search    => ST,
                     Pattern   => "",
                     Directory => Prefix,
@@ -157,7 +152,7 @@ package body TASTE.Concurrency_View is
            "No folders with templates for concurrency view";
       end if;
 
-      --  Iterate over the folders and process templates
+      --  Iterate over the folders containing template files
       while More_Entries (ST) loop
          Get_Next_Entry (ST, Current);
 
@@ -168,25 +163,9 @@ package body TASTE.Concurrency_View is
 
          declare
             Path  : constant String  := Full_Name (Current);
-            Do_It : constant Boolean := Exists (Path & "/filename.tmplt");
-            Filename_Set : constant Translate_Set :=
-              +Assoc ("Node_Name", Node_Name);
-            --  Get output file name from template
-            File_Name : constant String :=
-              (if Do_It then
-                  Strip_String (Parse (Path & "/filename.tmplt", Filename_Set))
-               else "");
-            --  Check if file already exists
-            Present : constant Boolean :=
-              (File_Name /= "" and Exists (Output_Dir & File_Name));
-            Trig_Tmpl : constant Translate_Set :=
-              +Assoc ("Filename_Is_Present", Present);
-            Trigger : constant Boolean :=
-              (Exists (Path & "/trigger.tmplt") and then
-               Strip_String
-                 (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
 
-            function Generate_Partition (Partition_Name : String)
+            function Generate_Partition (Node_Name      : String;
+                                         Partition_Name : String)
                                          return String
             is
                Partition       : constant CV_Partition :=
@@ -237,35 +216,72 @@ package body TASTE.Concurrency_View is
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
 
-            Partitions : Unbounded_String;
-            Node_Assoc : Translate_Set;
-
-         begin
-            if Trigger then
+            --  Generate the code for one node
+            function Generate_Node (Node_Name : String) return String is
+               Partitions : Unbounded_String;
+               Node_Assoc : Translate_Set;
+            begin
                for Partition in CV.Nodes (Node_Name).Partitions.Iterate loop
-                  Partitions := Partitions
-                    & Generate_Partition (CV_Partitions.Key (Partition));
+                  Partitions := Partitions & Newline
+                    & Generate_Partition
+                    (Partition_Name => CV_Partitions.Key (Partition),
+                     Node_Name      => Node_Name);
                end loop;
                Node_Assoc := +Assoc ("Partitions", Partitions)
                   & Assoc ("Node_Name", Node_Name);
+               return Parse (Path & "/node.tmplt", Node_Assoc);
+            end Generate_Node;
 
-               Put_Info ("Generating from " & Path);
-               Create (File => Output_File,
-                       Mode => Out_File,
-                       Name => Output_Dir & "/" & File_Name);
-               Put_Line (Output_File,
-                         Parse (Path & "/node.tmplt", Node_Assoc));
-               Close (Output_File);
-            end if;
+            Nodes : Unbounded_String;
+         begin
+            for Node in CV.Nodes.Iterate loop
+               declare
+                  Node_Name    : constant String := CV_Nodes.Key (Node);
+                  Output_Dir   : constant String :=
+                    CV.Base_Output_Path.Element
+                    & "/concurrency_view/" & Node_Name;
+                  Do_It        : constant Boolean :=
+                    Exists (Path & "/filenode.tmplt");
+                  Filename_Set : constant Translate_Set :=
+                    +Assoc ("Node_Name", Node_Name);
+                  --  Get output file name from template
+                  File_Name    : constant String :=
+                    (if Do_It then
+                        Strip_String
+                       (Parse (Path & "/filenode.tmplt", Filename_Set))
+                     else "");
+                  --  Check if file already exists
+                  Present      : constant Boolean :=
+                    (File_Name /= "" and Exists (Output_Dir & File_Name));
+                  Trig_Tmpl    : constant Translate_Set :=
+                    +Assoc ("Filename_Is_Present", Present);
+                  Trigger      : constant Boolean :=
+                    (Node_Name /= "interfaceview"
+                     and then Exists (Path & "/trigger.tmplt") and then
+                     Strip_String
+                       (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                  Node_Content : constant String :=
+                    (if Trigger then Generate_Node (Node_Name)
+                     else "");
+               begin
+                  if Trigger then
+                     Nodes := Nodes & Newline & Node_Content;
+                     if File_Name /= "" then
+                        Create_Path (Output_Dir);
+                        Create (File => Output_File,
+                                Mode => Out_File,
+                                Name => Output_Dir & "/" & File_Name);
+                        Put_Line (Output_File, Node_Content);
+                        Close (Output_File);
+                     end if;
+                  end if;
+               end;
+            end loop;
          end;
          <<continue>>
       end loop;
       End_Search (ST);
-   end Generate_Node;
-   procedure Generate_System (CV : Taste_Concurrency_View) is
-   begin
-      null;
-   end Generate_System;
+   end Generate_Code;
 
    procedure Generate_CV (CV : Taste_Concurrency_View) is
    begin
@@ -273,12 +289,14 @@ package body TASTE.Concurrency_View is
       --  and they include their processes. It would be useful to be able
       --  to decide if processes could also have their own files, since
       --  in the future they may be more than one process per node (for TSP).
-      for Node in CV.Nodes.Iterate loop
-         if CV_Nodes.Key (Node) /= "interfaceview" then
-            CV.Generate_Node (CV_Nodes.Key (Node));
-         end if;
-      end loop;
-      CV.Generate_System;
+      CV.Generate_Code;
+
+--      for Node in CV.Nodes.Iterate loop
+--         if CV_Nodes.Key (Node) /= "interfaceview" then
+--            CV.Generate_Node (CV_Nodes.Key (Node));
+--         end if;
+--      end loop;
+
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>
          Put_Error ("Concurrency View : "

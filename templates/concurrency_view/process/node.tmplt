@@ -4,9 +4,8 @@
 @@-- @_Partitions_@  : List of rendered code for partitions
 @@-- In standard TASTE systems there is only one partition per node
 package body @_CAPITALIZE:Node_Name_@ is
+
    @_Partitions_@
-@@TABLE@@
-   @_Partitions'Indent_@
-@@END_TABLE@@
 
 end @_CAPITALIZE:Node_Name_@;
+

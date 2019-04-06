@@ -25,16 +25,17 @@ package TASTE.Data_View is
    Data_View_Error   : exception;
 
    --  Extra files needed to parse the Data view (dependency hell)
-   Data_View_AADL_Lib : String_Vectors.Vector := Empty_Vector &
-                "aadl_project.aadl" &
-                "taste_properties.aadl" &
-                "communication_properties.aadl" &
-                "timing_properties.aadl" &
-                "programming_properties.aadl" &
-                "memory_properties.aadl" &
-                "base_types.aadl" &
-                "data_model.aadl" &
-                "deployment.aadl";
+   Data_View_AADL_Lib : String_Vectors.Vector :=
+     Empty_Vector
+     & "aadl_project.aadl"
+     & "taste_properties.aadl"
+     & "communication_properties.aadl"
+     & "timing_properties.aadl"
+     & "programming_properties.aadl"
+     & "memory_properties.aadl"
+     & "base_types.aadl"
+     & "data_model.aadl"
+     & "deployment.aadl";
 
    type ASN1_Module is
       record

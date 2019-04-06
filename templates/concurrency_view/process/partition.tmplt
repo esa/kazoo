@@ -1,8 +1,8 @@
 @@-- The following tags are available in this template:
 @@--
 @@-- @_Name_@            : Partition name (usually the name of the binary)
-@@-- @_Threads_@         : List of threads
-@@-- @_Blocks_@          :  List of protected functions
+@@-- @_Threads_@         : Code generated for the threads
+@@-- @_Blocks_@          : Code generated for protected functions
 @@-- @_Coverage_@        : True if user requested code coverage enable
 @@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
@@ -19,12 +19,8 @@ package @_CAPITALIZE:Partition_Name_@ is
 --  CPU Classifier  : @_CPU_Classifier_@
 --  Bound Functions : @_Bound_Functions_@
 
-@@TABLE@@
-   @_Threads_@   @@-- should have 'Indent
-@@END_TABLE@@
+   @_Threads'Indent_@
 
-@@TABLE@@
-   @_Blocks_@   @@-- should have 'Indent
-@@END_TABLE@@
+   @_Blocks'Indent_@
 
 end @_CAPITALIZE:Partition_Name_@;

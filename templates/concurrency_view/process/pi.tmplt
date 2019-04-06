@@ -11,4 +11,4 @@ procedure @_CAPITALIZE:Name_@ is  -- @_Direction_@ of function @_Parent_Function
 @@TABLE@@
   --  @_Param_Names_@ : @_Param_Types_@ (@_Param_Directions_@)
 @@END_TABLE@@
-end @_CAPITALIZE:Name_@
+end @_CAPITALIZE:Name_@;

@@ -8,11 +8,8 @@
 protected @_CAPITALIZE:Name_@ is  -- part of node "@_CAPITALIZE:Node_Name_@"
    --  Calling Threads: @_Calling_Threads_@
 
-   @@TABLE@@
-      @_Provided'INDENT_@
-   @@END_TABLE@@
+   @_Provided'Indent_@
 
-   @@TABLE@@
-      @_Required'INDENT_@
-   @@END_TABLE@@
+   @_Required'Indent_@
+
 end @_CAPITALIZE:Name_@;

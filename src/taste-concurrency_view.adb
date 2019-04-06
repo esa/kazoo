@@ -4,11 +4,14 @@
 
 with Ada.Directories,
      Ada.IO_Exceptions,
-     Ada.Exceptions;
+     Ada.Exceptions,
+     Ada.Characters.Latin_1;
 
 use Ada.Directories;
 
 package body TASTE.Concurrency_View is
+
+   Newline : Character renames Ada.Characters.Latin_1.LF;
 
    procedure Debug_Dump (CV : Taste_Concurrency_View; Output : File_Type) is
       procedure Dump_Partition (Partition : CV_Partition) is
@@ -188,8 +191,8 @@ package body TASTE.Concurrency_View is
             is
                Partition       : constant CV_Partition :=
                  CV.Nodes (Node_Name).Partitions (Partition_Name);
-               Threads         : Tag;
-               Blocks          : Tag;
+               Threads         : Unbounded_String;
+               Blocks          : Unbounded_String;
                Partition_Assoc : Translate_Set;
             begin
                for T of Partition.Threads loop
@@ -199,29 +202,29 @@ package body TASTE.Concurrency_View is
                      Result : constant String :=
                        (Parse (Path & "/thread.tmplt", Thread_Assoc));
                   begin
-                     Threads := Threads & Result;
+                     Threads := Threads & Newline & Result;
                   end;
                end loop;
                for B of Partition.Blocks loop
                   declare
                      Tmpl : constant Block_As_Template := B.Prepare_Template;
                      Block_Assoc : Translate_Set := Tmpl.Header;
-                     PI_Tag : Tag;
-                     RI_Tag : Tag;
+                     PI_Tag : Unbounded_String;
+                     RI_Tag : Unbounded_String;
                   begin
                      for PI_Assoc of Tmpl.Provided loop
-                        PI_Tag := PI_Tag
+                        PI_Tag := PI_Tag & Newline
                           & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
                      end loop;
                      for RI_Assoc of Tmpl.Required loop
-                        RI_Tag := RI_Tag
+                        RI_Tag := RI_Tag & Newline
                           & String'(Parse (Path & "/ri.tmplt", RI_Assoc));
                      end loop;
                      Block_Assoc := Block_Assoc
                        & Assoc ("Provided", PI_Tag)
                        & Assoc ("Required", RI_Tag);
 
-                     Blocks := Blocks &
+                     Blocks := Blocks & Newline &
                        String'(Parse (Path & "/block.tmplt", Block_Assoc));
                   end;
                end loop;
@@ -229,12 +232,12 @@ package body TASTE.Concurrency_View is
                --  (see taste-deployment_view.ads for the complete list)
                Partition_Assoc := Partition.Deployment_Partition.To_Template
                  & Assoc ("Threads", Threads)
-                 & Assoc ("Blocks",   Blocks);
+                 & Assoc ("Blocks",  Blocks);
 
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
 
-            Partitions : Tag;
+            Partitions : Unbounded_String;
             Node_Assoc : Translate_Set;
 
          begin

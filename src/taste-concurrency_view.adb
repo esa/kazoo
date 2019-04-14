@@ -218,16 +218,20 @@ package body TASTE.Concurrency_View is
 
             --  Generate the code for one node
             function Generate_Node (Node_Name : String) return String is
-               Partitions : Unbounded_String;
-               Node_Assoc : Translate_Set;
+               Partitions      : Unbounded_String;
+               Partition_Names : Tag;
+               Node_Assoc      : Translate_Set;
             begin
                for Partition in CV.Nodes (Node_Name).Partitions.Iterate loop
+                  Partition_Names := Partition_Names
+                    & CV_Partitions.Key (Partition);
                   Partitions := Partitions & Newline
                     & Generate_Partition
                     (Partition_Name => CV_Partitions.Key (Partition),
                      Node_Name      => Node_Name);
                end loop;
                Node_Assoc := +Assoc ("Partitions", Partitions)
+                  & Assoc ("Partition_Names", Partition_Names)
                   & Assoc ("Node_Name", Node_Name);
                return Parse (Path & "/node.tmplt", Node_Assoc);
             end Generate_Node;

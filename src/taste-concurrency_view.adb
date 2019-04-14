@@ -119,6 +119,7 @@ package body TASTE.Concurrency_View is
       return Result : constant Translate_Set :=
         (+Assoc  ("Name",            To_String (T.Name))
          & Assoc ("Entry_Port_Name", To_String (T.Entry_Port_Name))
+         & Assoc ("RCM",             To_String (T.RCM))
          & Assoc ("Pro_Block_Name",  To_String (T.Protected_Block_Name))
          & Assoc ("Node_Name",       To_String (T.Node.Value_Or
            (Taste_Node'(Name => US (""), others => <>)).Name))

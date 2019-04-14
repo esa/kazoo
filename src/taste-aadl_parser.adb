@@ -1,6 +1,6 @@
 --  ************************ TASTE AADL Parser **************************  --
 --  Based on Ocarina ****************************************************  --
---  (c) 2018 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2019 Maxime Perrotin / European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 with System.Assertions,
@@ -445,6 +445,7 @@ package body TASTE.AADL_Parser is
                   declare
                      Thread : constant AADL_Thread :=
                        (Name                 => F.Name & "_" & PI.Name,
+                        RCM                  => US (PI.RCM'Img),
                         Entry_Port_Name      => PI.Name,
                         Protected_Block_name => Block.Name,
                         Node                 => Block.Node,

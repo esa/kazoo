@@ -5,11 +5,3 @@
 @@-- @_Node name_@        : Node name
 @@-- @_Provided_@         : Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-protected @_CAPITALIZE:Name_@ is  -- part of node "@_CAPITALIZE:Node_Name_@"
-   --  Calling Threads: @_Calling_Threads_@
-
-   @_Provided'Indent_@
-
-   @_Required'Indent_@
-
-end @_CAPITALIZE:Name_@;

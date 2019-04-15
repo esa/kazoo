@@ -1,0 +1,31 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@            : Partition name (usually the name of the binary)
+@@-- @_Threads_@         : Code generated for the threads
+@@-- @_Thread_Names_@    : Tag: list of thread names
+@@-- @_Node_Name_@       : Name of the node containing this partition
+@@-- @_Blocks_@          : Code generated for protected functions
+@@-- @_Coverage_@        : True if user requested code coverage enable
+@@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
+@@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
+@@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
+@@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+@@-- @_Bound_Functions_@ : List of user functions from Interface view
+@_Threads_@
+
+   with @_Package_Name_@;
+@@TABLE@@
+   with @_Thread_Names_@_Thread;
+@@END_TABLE@@
+
+process @_Name_@ extends DeploymentView::DV::@_Node_Name_@
+end @_Name_@;
+
+process implementation @_Name_@.final
+subcomponents
+@@TABLE@@
+   @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
+@@END_TABLE@@
+connections
+   <MISSING>
+end @_Name_@.final;

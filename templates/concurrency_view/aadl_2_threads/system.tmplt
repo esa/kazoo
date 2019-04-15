@@ -1,0 +1,29 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Nodes_@      : Code generated for the nodes
+@@-- @_Node_Names_@ : Tag (list) of node names
+
+--  Input file for the taste orchestrator: do not edit
+--  This file was generated automatically by taste/kazoo
+package process_package
+public
+   with Deployment;
+   with DataView;
+   with interfaceview::IV;
+   with deploymentview::DV;
+
+@_Nodes_@
+
+system deploymentview
+end deploymentview;
+
+system implementation deploymentview.final
+subcomponents
+   <MISSING>
+properties
+   <MISSING>
+end deploymentview.final;
+
+end process_package;
+
+-- deploymenttview.final

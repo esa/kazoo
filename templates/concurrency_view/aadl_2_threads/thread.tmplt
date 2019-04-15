@@ -1,0 +1,45 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@            : Thread name
+@@-- @_Entry_Port_Name_@ : Name of the PI
+@@-- @_RCM_@             : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
+@@-- @_Pro_Block_Name_@  : Name of the protected function
+@@-- @_Node_Name_@       : Name of the deployment node
+@@-- @_Remote_Threads_@  : Vector tag: output remote thread list
+@@-- @_Remote_PIs_@      :    |_ Associated PI Name
+@@--
+@@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+package @_Name_@_Thread
+public
+   with Deployment;
+   with process_package;
+   with Dataview;
+
+thread @_Name_@
+features
+   INPORT_@_Entry_Port_Name_@ : in event <MISSING> port <MISSING>
+      { Compute_Execution_Time => <MISSING>;
+        Queue_Size => <MISSING>;
+        Compute_Entrypoint_Source_Text => "@_Name_@_Wrappers.@_Entry_Port_Name_@"; };
+   @@TABLE@@
+   OUTPUT_@_Remote_PIs_@ : out event <MISSING> port <MISSING>;
+   @@END_TABLE@@
+end @_Name_@;
+
+thread implementation @_Name_@.others
+properties
+   Initialize_Entrypoint_Source_Text => "@_Name_@_Wrappers.C_Init_@_Name_@";
+   Dispatch_Protocol                 =>
+@@IF@@ @_RCM_@ = "SPORADIC_OPERATION"
+Sporadic;
+@@ELSE@@
+Periodic;
+@@END_IF@@
+   Period                            => <MISSING>;
+   Dispatch_Offset                   => <MISSING>;
+   Compute_Execution_Time            => <MISSING>;
+   Stack_Size                        => <MISSING>;
+   Priority                          => <MISSING>;
+end @_Name_@.others;
+
+end @_Name_@_Thread;

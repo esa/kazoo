@@ -1,0 +1,31 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@       : Name of the node from deployment view
+@@-- @_Partition_Names_@ : Tag listing the partitions in this node
+@@-- @_Partitions_@      : List of rendered code for partitions
+@@-- In standard TASTE systems there is only one partition per node
+@@-- Ada basic runtime (source)
+with System,
+     Ada.Real_Time;
+
+use System;
+
+package @_CAPITALIZE:Node_Name_@ is
+   --  Partitions contained in this package: @_Partition_Names_@
+   System_Start_Time : constant Time := Ada.Real_Time.Clock;
+
+   generic
+      with procedure Cyclic_Operation;
+      with procedure Init;
+   package Periodic_Task is
+      task type Periodic_Thread (Thread_Priority : Priority;
+                                 Period          : Positive;
+                                 Offset          : Time)
+         with Priority => Thread_Priority;
+      end Periodic_Thread;
+   end Periodic_Task;
+
+   @_Partitions'Indent_@
+
+end @_CAPITALIZE:Node_Name_@;
+

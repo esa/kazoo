@@ -11,8 +11,18 @@
 @@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 @@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
 @@-- @_Bound_Functions_@ : List of user functions from Interface view
-* @_LOWER:Name_@ @_CPU_Platform_@
-@@TABLE@@
-@_Bound_Functions_@
-@@END_TABLE@@
-@_LOWER:Name_@_taste_api@_Threads_@
+
+package @_CAPITALIZE:Name_@ is
+
+--  Coverage        : @_Coverage_@
+--  Package Name    : @_Package_Name_@
+--  CPU Name        : @_CPU_Name_@
+--  CPU Platform    : @_CPU_Platform_@
+--  CPU Classifier  : @_CPU_Classifier_@
+--  Bound Functions : @_Bound_Functions_@
+
+   @_Threads'Indent_@
+
+   @_Blocks'Indent_@
+
+end @_CAPITALIZE:Name_@;

@@ -1,0 +1,12 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Nodes_@      : Code generated for the nodes
+@@-- @_Node_Names_@ : Tag (list) of node names
+
+--  The system contains these nodes:
+@@TABLE@@
+--    @_TABLE_LINE_@ @_Node_Names_@
+@@END_TABLE@@
+
+-- Content:
+   @_Nodes'Indent_@

@@ -172,6 +172,7 @@ package body TASTE.Concurrency_View is
                Partition       : constant CV_Partition :=
                  CV.Nodes (Node_Name).Partitions (Partition_Name);
                Threads         : Unbounded_String;
+               Thread_Names    : Tag;
                Blocks          : Unbounded_String;
                Partition_Assoc : Translate_Set;
             begin
@@ -183,6 +184,7 @@ package body TASTE.Concurrency_View is
                        (Parse (Path & "/thread.tmplt", Thread_Assoc));
                   begin
                      Threads := Threads & Newline & Result;
+                     Thread_Names := Thread_Names & To_String (T.Name);
                   end;
                end loop;
                for B of Partition.Blocks loop
@@ -211,8 +213,10 @@ package body TASTE.Concurrency_View is
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
                Partition_Assoc := Partition.Deployment_Partition.To_Template
-                 & Assoc ("Threads", Threads)
-                 & Assoc ("Blocks",  Blocks);
+                 & Assoc ("Threads",      Threads)
+                 & Assoc ("Thread_Names", Thread_Names)
+                 & Assoc ("Node_Name",    Node_Name)
+                 & Assoc ("Blocks",       Blocks);
 
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;

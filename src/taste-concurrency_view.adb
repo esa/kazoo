@@ -117,14 +117,15 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        (+Assoc  ("Thread_Name",     To_String (T.Name))
+         T.PI.To_Template   --  Template of the PI used to create the thread
+         & Assoc  ("Thread_Name",     To_String (T.Name))
          & Assoc ("Entry_Port_Name", To_String (T.Entry_Port_Name))
          & Assoc ("RCM",             To_String (T.RCM))
          & Assoc ("Pro_Block_Name",  To_String (T.Protected_Block_Name))
          & Assoc ("Node_Name",       To_String (T.Node.Value_Or
            (Taste_Node'(Name => US (""), others => <>)).Name))
          & Assoc ("Remote_Threads",  Remote_Thread)
-         & Assoc ("Remote_PIs",      Remote_PI));
+         & Assoc ("Remote_PIs",      Remote_PI);
    end To_Template;
 
    --  Generate the the code by iterating over template folders

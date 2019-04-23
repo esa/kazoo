@@ -970,9 +970,13 @@ package body TASTE.Interface_View is
       Param_Directions : Vector_Tag;
       Param_Encodings  : Vector_Tag;
    begin
-      Result :=  +Assoc  ("Name",            TI.Name)
-                 & Assoc ("Kind",            TI.RCM'Img)
-                 & Assoc ("Parent_Function", TI.Parent_Function);
+      --  Result misses User_Properties TODO (important)
+      Result := +Assoc  ("Name",    TI.Name)
+        & Assoc ("Kind",            TI.RCM'Img)
+        & Assoc ("Parent_Function", TI.Parent_Function)
+        & Assoc ("Period",          TI.Period_Or_MIAT'Img)
+        & Assoc ("WCET",            TI.WCET_ms.Value_Or (0)'Img)
+        & Assoc ("Queue_Size",      TI.Queue_Size.Value_Or (1)'Img);
       for Each of TI.Params loop
          Param_Names      := Param_Names & Each.Name;
          Param_Types      := Param_Types & Each.Sort;

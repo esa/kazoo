@@ -1,6 +1,6 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Name_@            : Thread name
+@@-- @_Thread_Name_@            : Thread name
 @@-- @_Entry_Port_Name_@ : Name of the PI
 @@-- @_RCM_@             : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 @@-- @_Pro_Block_Name_@  : Name of the protected function
@@ -9,7 +9,7 @@
 @@-- @_Remote_PIs_@      :    |_ Associated PI Name
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI 
-task @_CAPITALIZE:Name_@ is
+task @_CAPITALIZE:Thread_Name_@ is
    Port            : @_Entry_Port_Name_@
    Protected Block : @_Pro_Block_Name_@
    Node            : @_Node_Name_@
@@ -17,4 +17,4 @@ task @_CAPITALIZE:Name_@ is
    @@TABLE@@
       @_Remote_Threads_@ -> @_Remote_PIs_@
    @@END_TABLE@@
-end @_CAPITALIZE:Name_@;
+end @_CAPITALIZE:Thread_Name_@;

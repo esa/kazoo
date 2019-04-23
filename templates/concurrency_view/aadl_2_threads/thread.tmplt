@@ -1,6 +1,6 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Name_@            : Thread name
+@@-- @_Thread_Name_@     : Thread name
 @@-- @_Entry_Port_Name_@ : Name of the PI
 @@-- @_RCM_@             : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 @@-- @_Pro_Block_Name_@  : Name of the protected function
@@ -9,22 +9,22 @@
 @@-- @_Remote_PIs_@      :    |_ Associated PI Name
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-package @_Name_@_Thread
+package @_Thread_Name_@_Thread
 public
    with Deployment;
    with process_package;
    with Dataview;
 
-thread @_Name_@
+thread @_Thread_Name_@
 features
    INPORT_@_Entry_Port_Name_@ : in event <MISSING> port <MISSING>
       { Compute_Execution_Time => <MISSING>;
         Queue_Size => <MISSING>;
-        Compute_Entrypoint_Source_Text => "@_Name_@_Wrappers.@_Entry_Port_Name_@"; };
+        Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
    @@TABLE@@
    OUTPUT_@_Remote_PIs_@ : out event <MISSING> port <MISSING>;
    @@END_TABLE@@
-end @_Name_@;
+end @_Thread_Name_@;
 
 thread implementation @_Name_@.others
 properties

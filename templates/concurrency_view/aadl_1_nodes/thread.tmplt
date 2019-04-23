@@ -1,6 +1,6 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Name_@            : Thread name
+@@-- @_Thread_Name_@     : Thread name
 @@-- @_Entry_Port_Name_@ : Name of the PI
 @@-- @_RCM_@             : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 @@-- @_Pro_Block_Name_@  : Name of the protected function
@@ -9,4 +9,4 @@
 @@-- @_Remote_PIs_@      :    |_ Associated PI Name
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI 
-@_Name_@
+@_Thread_Name_@

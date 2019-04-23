@@ -79,7 +79,7 @@ package body TASTE.Concurrency_View is
    --  This function translates a protected block into a template
    function Prepare_Template (B : Protected_Block) return Block_As_Template is
       Calling_Threads : Tag;
-      Result : Block_As_Template;
+      Result          : Block_As_Template;
    begin
       for Thread of B.Calling_Threads loop
          Calling_Threads := Calling_Threads & Thread;
@@ -117,7 +117,7 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        (+Assoc  ("Name",            To_String (T.Name))
+        (+Assoc  ("Thread_Name",     To_String (T.Name))
          & Assoc ("Entry_Port_Name", To_String (T.Entry_Port_Name))
          & Assoc ("RCM",             To_String (T.RCM))
          & Assoc ("Pro_Block_Name",  To_String (T.Protected_Block_Name))

@@ -175,24 +175,41 @@ package body TASTE.Concurrency_View is
                Thread_Names    : Tag;
                Blocks          : Unbounded_String;
                Partition_Assoc : Translate_Set;
+               --  Connections between threads:
+               Thread_Src_Name : Vector_Tag;
+               Thread_Src_Port : Vector_Tag;
+               Thread_Dst_Name : Vector_Tag;
+               Thread_Dst_Port : Vector_Tag;
             begin
                for T of Partition.Threads loop
                   declare
                      --  Render each thread
+                     Name         : constant String := To_String (T.Name);
                      Thread_Assoc : constant Translate_Set := T.To_Template;
-                     Result : constant String :=
+                     Result       : constant String :=
                        (Parse (Path & "/thread.tmplt", Thread_Assoc));
                   begin
-                     Threads := Threads & Newline & Result;
-                     Thread_Names := Thread_Names & To_String (T.Name);
+                     Threads      := Threads & Newline & Result;
+                     Thread_Names := Thread_Names & Name;
+                     for P of T.Output_Ports loop
+                        Thread_Src_Name := Thread_Src_Name & Name;
+                        Thread_Src_Port := Thread_Src_Port
+                          & To_String (P.Name);
+                        Thread_Dst_Name := Thread_Dst_Name
+                          & To_String (P.Remote_Thread);
+                        Thread_Dst_Port := Thread_Dst_Port
+                          & To_String (P.Remote_PI);
+                     end loop;
                   end;
                end loop;
+
                for B of Partition.Blocks loop
                   declare
-                     Tmpl : constant Block_As_Template := B.Prepare_Template;
+                     Tmpl        : constant Block_As_Template :=
+                       B.Prepare_Template;
                      Block_Assoc : Translate_Set := Tmpl.Header;
-                     PI_Tag : Unbounded_String;
-                     RI_Tag : Unbounded_String;
+                     PI_Tag      : Unbounded_String;
+                     RI_Tag      : Unbounded_String;
                   begin
                      for PI_Assoc of Tmpl.Provided loop
                         PI_Tag := PI_Tag & Newline
@@ -213,11 +230,14 @@ package body TASTE.Concurrency_View is
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
                Partition_Assoc := Partition.Deployment_Partition.To_Template
-                 & Assoc ("Threads",      Threads)
-                 & Assoc ("Thread_Names", Thread_Names)
-                 & Assoc ("Node_Name",    Node_Name)
-                 & Assoc ("Blocks",       Blocks);
-
+                 & Assoc ("Threads",         Threads)
+                 & Assoc ("Thread_Names",    Thread_Names)
+                 & Assoc ("Node_Name",       Node_Name)
+                 & Assoc ("Blocks",          Blocks)
+                 & Assoc ("Thread_Src_Name", Thread_Src_Name)
+                 & Assoc ("Thread_Src_Port", Thread_Src_Port)
+                 & Assoc ("Thread_Dst_Name", Thread_Dst_Name)
+                 & Assoc ("Thread_Dst_Port", Thread_Dst_Port);
                return Parse (Path & "/partition.tmplt", Partition_Assoc);
             end Generate_Partition;
 

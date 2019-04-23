@@ -11,6 +11,10 @@
 @@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 @@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
 @@-- @_Bound_Functions_@ : List of user functions from Interface view
+@@-- @_Thread_Src_Name_@ : Vector tag : connection thread name (source)
+@@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
+@@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
+@@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
 
 package @_CAPITALIZE:Name_@ is
 

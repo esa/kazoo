@@ -453,6 +453,7 @@ package body TASTE.AADL_Parser is
                         Entry_Port_Name      => PI.Name,
                         Protected_Block_name => Block.Name,
                         Node                 => Block.Node,
+                        PI                   => PI,
                         Output_Ports         => Get_Output_Ports (Model, F));
                   begin
                      CV.Nodes

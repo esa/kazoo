@@ -72,6 +72,7 @@ package TASTE.Concurrency_View is
          Protected_Block_Name : Unbounded_String;
          Output_Ports         : Ports.Map;
          Node                 : Option_Node.Option;
+         PI                   : Taste_Interface; --  Contains period, etc.
       end record;
 
    function To_Template (T : AADL_Thread) return Translate_Set;

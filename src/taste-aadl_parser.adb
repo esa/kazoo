@@ -290,6 +290,7 @@ package body TASTE.AADL_Parser is
    is
       Result            : Ports.Map;
       Visited_Functions : String_Sets.Set;
+
       procedure Rec_Find_Thread (Ports_Map  : in out Ports.Map;
                                  Visited    : in out String_Sets.Set;
                                  Func       : Taste_Terminal_Function) is
@@ -326,17 +327,20 @@ package body TASTE.AADL_Parser is
                declare
                   --  Assume only one remote connection per RI
                   --  Have to iterate on Remote_Interfaces if that changes
-                  Dist  : constant Remote_Entity :=
+
+                  Dist      : constant Remote_Entity :=
                     RI.Remote_Interfaces.First_Element;
-                  New_P : constant Port :=
-                    (Remote_Thread =>
-                       Dist.Function_Name & "_" & Dist.Interface_Name,
+                  Remote_Thread_Name : constant Unbounded_String :=
+                    Dist.Function_Name & "_" & Dist.Interface_Name;
+                  Port_Name : constant Unbounded_String :=
+                    Remote_Thread_Name & "_" & Dist.Interface_Name;
+                  New_P     : constant Port :=
+                    (Name          => Port_Name,
+                     Remote_Thread => Remote_Thread_Name,
                      Remote_PI     => Dist.Interface_Name);
                begin
-                  Ports_Map.Include
-                    (Key => To_String
-                       (New_P.Remote_Thread & "_" & New_P.Remote_PI),
-                     New_Item => New_P);
+                  Ports_Map.Include (Key      => To_String (Port_Name),
+                                     New_Item => New_P);
                end;
             end if;
             <<Continue>>

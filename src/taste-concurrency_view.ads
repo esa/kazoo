@@ -57,6 +57,7 @@ package TASTE.Concurrency_View is
 
    type Port is
       record
+         Name          : Unbounded_String;
          Remote_Thread : Unbounded_String;
          Remote_PI     : Unbounded_String;
       end record;

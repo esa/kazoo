@@ -337,7 +337,8 @@ package body TASTE.AADL_Parser is
                   New_P     : constant Port :=
                     (Name          => Port_Name,
                      Remote_Thread => Remote_Thread_Name,
-                     Remote_PI     => Dist.Interface_Name);
+                     Remote_PI     => Dist.Interface_Name,
+                     RI            => RI);
                begin
                   Ports_Map.Include (Key      => To_String (Port_Name),
                                      New_Item => New_P);

@@ -1,12 +1,13 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Thread_Name_@     : Thread name
-@@-- @_Entry_Port_Name_@ : Name of the PI
-@@-- @_RCM_@             : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
-@@-- @_Pro_Block_Name_@  : Name of the protected function
-@@-- @_Node_Name_@       : Name of the deployment node
-@@-- @_Remote_Threads_@  : Vector tag: output remote thread list
-@@-- @_Remote_PIs_@      :    |_ Associated PI Name
+@@-- @_Thread_Name_@      : Thread name
+@@-- @_Entry_Port_Name_@  : Name of the PI
+@@-- @_RCM_@              : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
+@@-- @_Pro_Block_Name_@   : Name of the protected function
+@@-- @_Node_Name_@        : Name of the deployment node
+@@-- @_Remote_Threads_@   : Vector tag: output remote thread list
+@@-- @_Remote_PIs_@       :    |_ Associated PI Name
+@@-- @_Remote_PI_Params_@ :    |_ Optional param of the remote thread
 @@-- Tags related to the PI that is at the origin of the thread creation:
 @@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
 @@-- @_Param_Names_@, _Types_@, _Encodings_@, _Directions_@ : param vector tag
@@ -22,29 +23,42 @@ public
 
 thread @_Thread_Name_@
 features
-   INPORT_@_Entry_Port_Name_@ : in event <MISSING> port <MISSING>
+@@INLINE(   )()()@@
+@@IF@@ @_Param_Names'Length_@ > 0
+   INPORT_@_Entry_Port_Name_@ : in event data port @_Param_Types_@
+@@ELSE@@
+   INPORT_@_Entry_Port_Name_@ : in event port
+@@END_IF@@   
+@@END_INLINE@@
       { Compute_Execution_Time => @_WCET_@ .. @_WCET_@ ms;
         Queue_Size => @_Queue_Size_@;
         Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
    @@TABLE@@
-   OUTPUT_@_Remote_PIs_@ : out event <MISSING> port <MISSING>;
+@@INLINE(   )(\n   )()@@
+@@IF@@ @_Param_Names'Length_@ > 0
+OUTPUT @_Remote_PIs_@ : out event data port @_Param_Types_@;
+@@ELSE@@
+OUTPUT @_Remote_PIs_@ : out event port;
+@@END_IF@@
+@@END_INLINE@@
    @@END_TABLE@@
 end @_Thread_Name_@;
 
 thread implementation @_Name_@.others
 properties
    Initialize_Entrypoint_Source_Text => "@_Name_@_Wrappers.C_Init_@_Name_@";
-   Dispatch_Protocol                 =>
+@@INLINE(   )()()@@
 @@IF@@ @_RCM_@ = "SPORADIC_OPERATION"
-Sporadic;
+   Dispatch_Protocol                 = Sporadic;
 @@ELSE@@
-Periodic;
+   Dispatch_Protocol                 => Periodic;
 @@END_IF@@
+@@END_INLINE@@
    Period                            => @_Period_@;
-   Dispatch_Offset                   => 0;
+   Dispatch_Offset                   =>  0;
    Compute_Execution_Time            => @_WCET_@ .. @_WCET_@ ms;
    Stack_Size                        => 50 KBytes;
-   Priority                          => <How should I know?>;
+   Priority                          => 1;
 end @_Name_@.others;
 
 end @_Name_@_Thread;

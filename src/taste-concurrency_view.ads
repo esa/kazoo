@@ -59,7 +59,8 @@ package TASTE.Concurrency_View is
       record
          Name          : Unbounded_String;
          Remote_Thread : Unbounded_String;
-         Remote_PI     : Unbounded_String;
+         Remote_PI     : Unbounded_String;  -- Remote PI name
+         RI            : Taste_Interface;
       end record;
 
    package Ports is new Indefinite_Ordered_Maps (String, Port);

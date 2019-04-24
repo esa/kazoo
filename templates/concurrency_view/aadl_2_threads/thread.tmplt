@@ -11,6 +11,7 @@
 @@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
 @@-- @_Param_Names_@, _Types_@, _Encodings_@, _Directions_@ : param vector tag
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
+@@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
 package @_Thread_Name_@_Thread

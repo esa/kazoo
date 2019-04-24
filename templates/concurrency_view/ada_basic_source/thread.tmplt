@@ -7,6 +7,11 @@
 @@-- @_Node_Name_@       : Name of the deployment node
 @@-- @_Remote_Threads_@  : Vector tag: output remote thread list
 @@-- @_Remote_PIs_@      :    |_ Associated PI Name
+@@-- Tags related to the PI that is at the origin of the thread creation:
+@@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
+@@-- @_Param_Names_@, _Types_@, _Encodings_@, _Directions_@ : param vector tag
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
+@@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI
 @@IF@@ @_RCM_@ = "CYCLIC_OPERATION"

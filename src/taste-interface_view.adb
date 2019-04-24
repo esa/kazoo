@@ -964,30 +964,37 @@ package body TASTE.Interface_View is
 
    --  Create a Templates_Parser translate set for an interface (PI or RI)
    function To_Template (TI : Taste_Interface) return Translate_Set is
-      Result           : Translate_Set;
       Param_Names      : Vector_Tag;
       Param_Types      : Vector_Tag;
       Param_Directions : Vector_Tag;
       Param_Encodings  : Vector_Tag;
+      Property_Names   : Vector_Tag;
+      Property_Values  : Vector_Tag;
    begin
-      --  Result misses User_Properties TODO (important)
-      Result := +Assoc  ("Name",    TI.Name)
-        & Assoc ("Kind",            TI.RCM'Img)
-        & Assoc ("Parent_Function", TI.Parent_Function)
-        & Assoc ("Period",          TI.Period_Or_MIAT'Img)
-        & Assoc ("WCET",            TI.WCET_ms.Value_Or (0)'Img)
-        & Assoc ("Queue_Size",      TI.Queue_Size.Value_Or (1)'Img);
       for Each of TI.Params loop
          Param_Names      := Param_Names & Each.Name;
          Param_Types      := Param_Types & Each.Sort;
          Param_Directions := Param_Directions & Each.Direction'Img;
          Param_Encodings  := Param_Encodings & Each.Encoding'Img;
       end loop;
-      Result := Result & Assoc ("Param_Names",      Param_Names)
-                       & Assoc ("Param_Types",      Param_Types)
-                       & Assoc ("Param_Encodings",  Param_Encodings)
-                       & Assoc ("Param_Directions", Param_Directions);
-      return Result;
+      --  Add all function user-defined properties
+      for Each of TI.User_Properties loop
+         Property_Names  := Property_Names  & Each.Name;
+         Property_Values := Property_Values & Each.Value;
+      end loop;
+
+      return +Assoc ("Name",           TI.Name)
+        & Assoc ("Kind",               TI.RCM'Img)
+        & Assoc ("Parent_Function",    TI.Parent_Function)
+        & Assoc ("Period",             TI.Period_Or_MIAT'Img)
+        & Assoc ("WCET",               TI.WCET_ms.Value_Or (0)'Img)
+        & Assoc ("Queue_Size",         TI.Queue_Size.Value_Or (1)'Img)
+        & Assoc ("Param_Names",        Param_Names)
+        & Assoc ("Param_Types",        Param_Types)
+        & Assoc ("Param_Encodings",    Param_Encodings)
+        & Assoc ("Param_Directions",   Param_Directions)
+        & Assoc ("IF_Property_Names",  Property_Names)
+        & Assoc ("IF_Property_Values", Property_Values);
    end To_Template;
 
 end TASTE.Interface_View;

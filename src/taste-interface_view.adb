@@ -427,7 +427,7 @@ package body TASTE.Interface_View is
                                and then Is_Defined_Property
                                    (CI, "taste::associated_queue_size")
                                then Just (Get_Integer_Property
-                                   (CI, " taste::associated_queue_size"))
+                                   (CI, "taste::associated_queue_size"))
                                else Option_ULL.Nothing);
          Result.RCM := Get_RCM_Operation_Kind (If_I);
          Result.Period_Or_MIAT := Get_RCM_Period (If_I);
@@ -858,9 +858,9 @@ package body TASTE.Interface_View is
          Put_Line (Output, Pre & "├─ Period/MIAT : "
                                & I.Period_Or_MIAT'Img);
          Put_Line (Output, Pre & "├─ WCET (ms)   : "
-                   & Value_Or (I.WCET_ms, 0)'Img);
+                   & I.WCET_ms.Value_Or (0)'Img);
          Put_Line (Output, Pre & "├─ Queue Size  : "
-                   & Value_Or (I.Queue_Size, 1)'Img);
+                   & I.Queue_Size.Value_Or (1)'Img);
          Put_Line (Output, Pre & "├─ Parameters  :");
          for Each of I.Params loop
             Put_Line (Output, Pre & "│  ├─ Name            : "

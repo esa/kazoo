@@ -16,24 +16,28 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-package @_Thread_Name_@_Thread
+package @_CAPITALIZE:Thread_Name_@_Thread
 public
    with Deployment;
-   with process_package;
+   with Process_Package;
    with Dataview;
 
-thread @_Thread_Name_@
+thread @_CAPITALIZE:Thread_Name_@
+@@IF@@ @_RCM_@ /= "CYCLIC_OPERATION" or @_Remote_Threads'Length_@ > 0
 features
-@@INLINE(   )()()@@
-@@IF@@ @_Param_Names'Length_@ > 0
-   INPORT_@_Entry_Port_Name_@ : in event data port DataView::@_REPLACE_ALL((-)/_):Param_Types_@_Buffer.impl
-@@ELSE@@
-   INPORT_@_Entry_Port_Name_@ : in event port
-@@END_IF@@   
-@@END_INLINE@@
+@@END_IF@@
+@@IF@@ @_RCM_@ /= "CYCLIC_OPERATION"
+   @@INLINE(   )()()@@
+      @@IF@@ @_Param_Names'Length_@ > 0
+         INPORT_@_Entry_Port_Name_@ : in event data port DataView::@_REPLACE_ALL((-)/_):Param_Types_@_Buffer.impl
+      @@ELSE@@
+         INPORT_@_Entry_Port_Name_@ : in event port
+      @@END_IF@@   
+      @@END_INLINE@@
       { Compute_Execution_Time => @_WCET_@ ms .. @_WCET_@ ms;
         Queue_Size => @_Queue_Size_@;
         Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
+@@END_IF@@
    @@TABLE@@
 @@INLINE(   )()()@@
 @@IF@@ @_Remote_PI_Sorts_@ /= ""
@@ -43,15 +47,16 @@ features
 @@END_IF@@
 @@END_INLINE@@
    @@END_TABLE@@
-end @_Thread_Name_@;
+end @_CAPITALIZE:Thread_Name_@;
 
-thread implementation @_Name_@.others
+thread implementation @_CAPITALIZE:Thread_Name_@.others
 properties
-   Initialize_Entrypoint_Source_Text => "@_Name_@_Wrappers.C_Init_@_Name_@";
-@@INLINE(   )()()@@
+   Initialize_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.C_Init_@_Thread_Name_@";
+@@INLINE(   )(\n   )()@@
 @@IF@@ @_RCM_@ = "SPORADIC_OPERATION"
    Dispatch_Protocol                 => Sporadic;
 @@ELSE@@
+   Compute_Entrypoint_Source_Text    => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@";
    Dispatch_Protocol                 => Periodic;
 @@END_IF@@
 @@END_INLINE@@
@@ -60,6 +65,6 @@ properties
    Compute_Execution_Time            => @_WCET_@ ms .. @_WCET_@ ms;
    Stack_Size                        => 50 KBytes;
    Priority                          => 1;
-end @_Name_@.others;
+end @_CAPITALIZE:Thread_Name_@.others;
 
-end @_Name_@_Thread;
+end @_CAPITALIZE:Thread_Name_@_Thread;

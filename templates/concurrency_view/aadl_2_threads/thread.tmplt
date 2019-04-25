@@ -41,9 +41,9 @@ features
    @@TABLE@@
 @@INLINE(   )()()@@
 @@IF@@ @_Remote_PI_Sorts_@ /= ""
-   OUTPUT @_Remote_PIs_@ : out event data port DataView::@_REPLACE_ALL((-)/_):Remote_PI_Sorts_@_Buffer.impl;
+   OUTPORT_@_Remote_PIs_@ : out event data port DataView::@_REPLACE_ALL((-)/_):Remote_PI_Sorts_@_Buffer.impl;
 @@ELSE@@
-   OUTPUT @_Remote_PIs_@ : out event port;
+   OUTPORT_@_Remote_PIs_@ : out event port;
 @@END_IF@@
 @@END_INLINE@@
    @@END_TABLE@@
@@ -60,7 +60,7 @@ properties
    Dispatch_Protocol                 => Periodic;
 @@END_IF@@
 @@END_INLINE@@
-   Period                            => @_Period_@;
+   Period                            => @_Period_@ ms;
    Dispatch_Offset                   =>  0;
    Compute_Execution_Time            => @_WCET_@ ms .. @_WCET_@ ms;
    Stack_Size                        => 50 KBytes;

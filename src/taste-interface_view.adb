@@ -964,18 +964,20 @@ package body TASTE.Interface_View is
 
    --  Create a Templates_Parser translate set for an interface (PI or RI)
    function To_Template (TI : Taste_Interface) return Translate_Set is
-      Param_Names      : Vector_Tag;
-      Param_Types      : Vector_Tag;
-      Param_Directions : Vector_Tag;
-      Param_Encodings  : Vector_Tag;
-      Property_Names   : Vector_Tag;
-      Property_Values  : Vector_Tag;
+      Param_Names,
+      Param_Types,
+      Param_ASN1_Modules,
+      Param_Directions,
+      Param_Encodings,
+      Property_Names,
+      Property_Values    : Vector_Tag;
    begin
       for Each of TI.Params loop
-         Param_Names      := Param_Names & Each.Name;
-         Param_Types      := Param_Types & Each.Sort;
-         Param_Directions := Param_Directions & Each.Direction'Img;
-         Param_Encodings  := Param_Encodings & Each.Encoding'Img;
+         Param_Names        := Param_Names & Each.Name;
+         Param_Types        := Param_Types & Each.Sort;
+         Param_ASN1_Modules := Param_ASN1_Modules & Each.ASN1_Module;
+         Param_Directions   := Param_Directions & Each.Direction'Img;
+         Param_Encodings    := Param_Encodings & Each.Encoding'Img;
       end loop;
       --  Add all function user-defined properties
       for Each of TI.User_Properties loop
@@ -991,6 +993,7 @@ package body TASTE.Interface_View is
         & Assoc ("Queue_Size",         TI.Queue_Size.Value_Or (1)'Img)
         & Assoc ("Param_Names",        Param_Names)
         & Assoc ("Param_Types",        Param_Types)
+        & Assoc ("Param_ASN1_Modules", Param_ASN1_Modules)
         & Assoc ("Param_Encodings",    Param_Encodings)
         & Assoc ("Param_Directions",   Param_Directions)
         & Assoc ("IF_Property_Names",  Property_Names)

@@ -108,30 +108,38 @@ package body TASTE.Concurrency_View is
 
    --  This function translates a thread definition into a template
    function To_Template (T : AADL_Thread) return Translate_Set is
-      Remote_Thread   : Vector_Tag;
-      Remote_PI       : Vector_Tag;
-      Remote_PI_Param : Vector_Tag;
+      Remote_Thread    : Vector_Tag;
+      Remote_PI        : Vector_Tag;  --  Name of the remote PI
+      Remote_PI_Sort   : Vector_Tag;  --  ASN.1 type of the parameter
+      Remote_PI_Module : Vector_Tag;  --  ASN.1 module containing the type
    begin
       for Out_Port of T.Output_Ports loop
          Remote_Thread := Remote_Thread & To_String (Out_Port.Remote_Thread);
          Remote_PI     := Remote_PI     & To_String (Out_Port.Remote_PI);
-         Remote_PI_Param := Remote_PI_Param
-           & (if Out_Port.RI.Params.Length > 0
-              then Out_Port.RI.Params.First_Element.Sort
-              else US (""));
+         --  Set the Asn.1 module and type of the optional RI parameter
+         if Out_Port.RI.Params.Length > 0 then
+            Remote_PI_Sort := Remote_PI_Sort
+              & Out_Port.RI.Params.First_Element.Sort;
+            Remote_PI_Module := Remote_PI_Module
+              & Out_Port.RI.Params.First_Element.ASN1_Module;
+         else
+            Remote_PI_Sort   := Remote_PI_Sort   & "";
+            Remote_PI_Module := Remote_PI_Module & "";
+         end if;
       end loop;
 
       return Result : constant Translate_Set :=
-         T.PI.To_Template   --  Template of the PI used to create the thread
-         & Assoc ("Thread_Name",      To_String (T.Name))
-         & Assoc ("Entry_Port_Name",  To_String (T.Entry_Port_Name))
-         & Assoc ("RCM",              To_String (T.RCM))
-         & Assoc ("Pro_Block_Name",   To_String (T.Protected_Block_Name))
-         & Assoc ("Node_Name",        To_String (T.Node.Value_Or
-           (Taste_Node'(Name => US (""), others => <>)).Name))
-         & Assoc ("Remote_Threads",   Remote_Thread)
-         & Assoc ("Remote_PIs",       Remote_PI)
-         & Assoc ("Remote_PI_Params", Remote_PI_Param);
+        T.PI.To_Template   --  Template of the PI used to create the thread
+        & Assoc ("Thread_Name",       To_String (T.Name))
+        & Assoc ("Entry_Port_Name",   To_String (T.Entry_Port_Name))
+        & Assoc ("RCM",               To_String (T.RCM))
+        & Assoc ("Pro_Block_Name",    To_String (T.Protected_Block_Name))
+        & Assoc ("Node_Name",         To_String (T.Node.Value_Or
+          (Taste_Node'(Name => US (""), others => <>)).Name))
+        & Assoc ("Remote_Threads",    Remote_Thread)
+        & Assoc ("Remote_PIs",        Remote_PI)
+        & Assoc ("Remote_PI_Sorts",   Remote_PI_Sort)
+        & Assoc ("Remote_PI_Modules", Remote_PI_Module);
    end To_Template;
 
    --  Generate the the code by iterating over template folders

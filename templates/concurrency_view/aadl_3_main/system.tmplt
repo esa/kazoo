@@ -1,0 +1,31 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Nodes_@               : Code generated for the nodes
+@@-- @_Node_Names_@          : Vector Tag of node names
+@@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
+@@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
+@@-- @_Partition_Names_@     : Vector Tag of partition names
+@@-- @_Partition_Node_@      :  |_ Corresponding node name
+@@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Threads_@             : Code generated for the threads
+--  Input file for the taste orchestrator: do not edit
+--  This file was generated automatically by taste/kazoo
+system Taste
+properties
+ Ocarina_Config::AADL_Files => ("InterfaceView.aadl", "DeploymentView.aadl", "system.aadl", "D_view.aadl", "ocarina_components.aadl", "TASTE_IV_Properties.aadl", "TASTE_DV_Properties.aadl");
+ Ocarina_Config::Generator => polyorb_hi_ada;
+ Ocarina_Config::Generator_Options => ();
+ Ocarina_Config::AADL_Version => AADLv2;
+ Ocarina_Config::Needed_Property_Sets => (
+   
+  "data_model",
+  "base_types",
+  value (Ocarina_Config::arinc653_properties),
+  value (Ocarina_Config::Deployment),
+  value (Ocarina_Config::Cheddar_Properties),
+  value (Ocarina_Config::TASTE_Properties));
+  Ocarina_Config::Root_System_name => "deploymentview.final";
+end Taste;
+
+system implementation Taste.impl
+end Taste.impl;

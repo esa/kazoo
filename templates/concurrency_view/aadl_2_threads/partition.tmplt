@@ -30,6 +30,6 @@ subcomponents
 @@END_TABLE@@
 connections
 @@TABLE@@
-   port @_LOWER:Thread_Src_Name_@.@_LOWER:Thread_Src_Port_@ -> @_LOWER:Thread_Dst_Name_@.@_LOWER:Thread_Dst_Port_@;
+   port @_LOWER:Thread_Src_Name_@.OUTPORT_@_LOWER:Thread_Src_Port_@ -> @_LOWER:Thread_Dst_Name_@.INPORT_@_LOWER:Thread_Dst_Port_@;
 @@END_TABLE@@
 end @_Name_@.final;

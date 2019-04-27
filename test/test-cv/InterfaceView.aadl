@@ -1,5 +1,5 @@
 ---------------------------------------------------
--- AADL2.1
+-- AADL2.2
 -- TASTE type interfaceview
 -- 
 -- generated code: do not edit
@@ -161,15 +161,15 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_result.others;
 
-SUBPROGRAM RI_run
+SUBPROGRAM RI_run_forrest
 FEATURES
   a : IN PARAMETER DataView::T_Boolean {
     Taste::encoding => UPER;
   };
-END RI_run;
+END RI_run_forrest;
 
-SUBPROGRAM IMPLEMENTATION RI_run.others
-END RI_run.others;
+SUBPROGRAM IMPLEMENTATION RI_run_forrest.others
+END RI_run_forrest.others;
 
 SYSTEM ground
 FEATURES
@@ -180,10 +180,10 @@ FEATURES
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "result";
   };
-  RI_run : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::obsw::PI_run.others {
+  RI_run_forrest : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::obsw::PI_run.others {
     Taste::coordinates => "115273 89446";
     Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "run";
+    Taste::InterfaceName => "run_forrest";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -223,7 +223,7 @@ SUBCOMPONENTS
     Taste::coordinates => "112123 89446 143776 112595";
   };
 CONNECTIONS
-  obsw_PI_run_ground_RI_run : SUBPROGRAM ACCESS obsw.PI_run -> ground.RI_run {
+  obsw_PI_run_ground_RI_run_forrest : SUBPROGRAM ACCESS obsw.PI_run -> ground.RI_run_forrest {
     Taste::coordinates => "115273 89446 115273 82517 112280 82517 112280 75589";
   };
   GNC_PI_guidance_obsw_RI_guidance : SUBPROGRAM ACCESS GNC.PI_guidance -> obsw.RI_guidance {
@@ -238,6 +238,6 @@ PROPERTIES
   Taste::dataView => ("DataView");
   Taste::dataViewPath => ("DataView.aadl");
   Taste::coordinates => "0 0 297000 210000";
-  Taste::version => "2.0";
+  Taste::version => "2.2";
 END interfaceview::IV;
 

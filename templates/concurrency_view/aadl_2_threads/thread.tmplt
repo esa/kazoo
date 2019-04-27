@@ -61,10 +61,14 @@ properties
    Dispatch_Protocol                 => Periodic;
 @@END_IF@@
 @@END_INLINE@@
+@@IF@@ @_TRIM:Period_@ /= "0"
    Period                            => @_Period_@ ms;
-   Dispatch_Offset                   =>  0;
+@@ELSE@@
+   Period                            => 1 ms;
+@@END_IF@@ 
+   Dispatch_Offset                   =>  0 ms;
    Compute_Execution_Time            => @_WCET_@ ms .. @_WCET_@ ms;
-   Stack_Size                        => 50 KBytes;
+   Stack_Size                        => 50 KByte;
    Priority                          => 1;
 end @_CAPITALIZE:Thread_Name_@.others;
 

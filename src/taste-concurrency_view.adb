@@ -109,11 +109,13 @@ package body TASTE.Concurrency_View is
    --  This function translates a thread definition into a template
    function To_Template (T : AADL_Thread) return Translate_Set is
       Remote_Thread    : Vector_Tag;
+      RI_Port_Name     : Vector_Tag;  --  Name of the local RI (= port name)
       Remote_PI        : Vector_Tag;  --  Name of the remote PI
       Remote_PI_Sort   : Vector_Tag;  --  ASN.1 type of the parameter
       Remote_PI_Module : Vector_Tag;  --  ASN.1 module containing the type
    begin
       for Out_Port of T.Output_Ports loop
+         RI_Port_Name  := RI_Port_Name & Out_Port.Name;
          Remote_Thread := Remote_Thread & To_String (Out_Port.Remote_Thread);
          Remote_PI     := Remote_PI     & To_String (Out_Port.Remote_PI);
          --  Set the Asn.1 module and type of the optional RI parameter
@@ -137,6 +139,7 @@ package body TASTE.Concurrency_View is
         & Assoc ("Node_Name",         To_String (T.Node.Value_Or
           (Taste_Node'(Name => US (""), others => <>)).Name))
         & Assoc ("Remote_Threads",    Remote_Thread)
+        & Assoc ("RI_Port_Names",     RI_Port_Name)
         & Assoc ("Remote_PIs",        Remote_PI)
         & Assoc ("Remote_PI_Sorts",   Remote_PI_Sort)
         & Assoc ("Remote_PI_Modules", Remote_PI_Module);

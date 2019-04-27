@@ -332,8 +332,8 @@ package body TASTE.AADL_Parser is
                     RI.Remote_Interfaces.First_Element;
                   Remote_Thread_Name : constant Unbounded_String :=
                     Dist.Function_Name & "_" & Dist.Interface_Name;
-                  Port_Name : constant Unbounded_String :=
-                    Remote_Thread_Name & "_" & Dist.Interface_Name;
+                  Port_Name : constant Unbounded_String := RI.Name;
+                  --  Remote_Thread_Name & "_" & Dist.Interface_Name;
                   New_P     : constant Port :=
                     (Name          => Port_Name,
                      Remote_Thread => Remote_Thread_Name,

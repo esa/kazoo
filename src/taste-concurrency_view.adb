@@ -153,7 +153,7 @@ package body TASTE.Concurrency_View is
       Filter   : constant Filter_Type := (Directory => True,
                                           others    => False);
       Output_File : File_Type;
-
+      Threads     : Unbounded_String;
    begin
       Start_Search (Search    => ST,
                     Pattern   => "",
@@ -186,7 +186,6 @@ package body TASTE.Concurrency_View is
             is
                Partition       : constant CV_Partition :=
                  CV.Nodes (Node_Name).Partitions (Partition_Name);
-               Threads         : Unbounded_String;
                Thread_Names    : Tag;
                Blocks          : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -286,7 +285,12 @@ package body TASTE.Concurrency_View is
               (if Valid_Dir then Strip_String (Parse (Tmpl_File)) else "");
             Trig_Sys   : constant Boolean := Exists (Tmpl_Sys);
             Set_Sys    : Translate_Set;
-            Node_Names : Tag;
+            Node_Names   : Vector_Tag;       --  List of nodes
+            Node_CPU     : Vector_Tag;       --  Corresponding CPU name
+            Node_CPU_Cls : Vector_Tag;       --  Corresponding CPU classifier
+            Partition_Names : Vector_Tag;  --  List of processes
+            Partition_Node  : Vector_Tag;  --  Corresponding node name
+            Partition_CPU   : Vector_Tag;  --  Corresponding CPU name
          begin
             for Node in CV.Nodes.Iterate loop
                declare
@@ -317,8 +321,28 @@ package body TASTE.Concurrency_View is
                      else "");
                begin
                   if Trigger then
+
+                     --  Associate node name, CPU name and CPU classifier
+                     --  (this is needed for AADL backends)
                      Node_Names := Node_Names & Node_Name;
-                     Nodes      := Nodes & Newline & Node_Content;
+                     Node_CPU := Node_CPU
+                       & CV.Nodes (Node_Name).Deployment_Node.CPU_Name;
+                     Node_CPU_Cls := Node_CPU_Cls
+                       & CV.Nodes (Node_Name).Deployment_Node.CPU_Classifier;
+
+                     --  Associate partition name, corresponding node and CPU
+                     --  for AADL backends
+                     for Partition in CV.Nodes (Node_Name).Partitions.Iterate
+                     loop
+                        Partition_Names := Partition_Names
+                          & CV_Partitions.Key (Partition);
+                        Partition_CPU := Partition_CPU
+                          & CV_Partitions.Element (Partition)
+                          .Deployment_Partition.CPU_Name;
+                        Partition_Node := Partition_Node & Node_Name;
+                     end loop;
+
+                     Nodes := Nodes & Newline & Node_Content;
                      if File_Name /= "" then
                         Create_Path (Output_Dir);
                         Create (File => Output_File,
@@ -332,8 +356,15 @@ package body TASTE.Concurrency_View is
             end loop;
             if Trig_Sys and File_Sys /= "" then
                Put_Info ("Generating system concurrency view");
-               Set_Sys := +Assoc ("Nodes", Nodes)
-                 & Assoc ("Node_Names", Node_Names);
+               Set_Sys := +Assoc ("Nodes",       Nodes)
+                 & Assoc ("Node_Names",          Node_Names)
+                 & Assoc ("Node_CPU",            Node_CPU)
+                 & Assoc ("Node_CPU_Classifier", Node_CPU_Cls)
+                 & Assoc ("Partition_Names",     Partition_Names)
+                 & Assoc ("Partition_Node",      Partition_Node)
+                 & Assoc ("Partition_CPU",       Partition_CPU)
+                 & Assoc ("Threads",             Threads);
+               Threads := US ("");  --  Reset for next template folder
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,
                        Mode => Out_File,
@@ -354,13 +385,6 @@ package body TASTE.Concurrency_View is
       --  to decide if processes could also have their own files, since
       --  in the future they may be more than one process per node (for TSP).
       CV.Generate_Code;
-
---      for Node in CV.Nodes.Iterate loop
---         if CV_Nodes.Key (Node) /= "interfaceview" then
---            CV.Generate_Node (CV_Nodes.Key (Node));
---         end if;
---      end loop;
-
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>
          Put_Error ("Concurrency View : "

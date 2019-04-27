@@ -1,11 +1,19 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Nodes_@      : Code generated for the nodes
-@@-- @_Node_Names_@ : Tag (list) of node names
+@@-- @_Nodes_@               : Code generated for the nodes
+@@-- @_Node_Names_@          : Vector Tag of node names
+@@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
+@@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
+@@-- @_Partition_Names_@     : Vector Tag of partition names
+@@-- @_Partition_Node_@      :  |_ Corresponding node name
+@@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Threads_@             : Code generated for the threads
 
 --  Input file for the taste orchestrator: do not edit
 --  This file was generated automatically by taste/kazoo
-package process_package
+@_Threads_@
+
+package Process_Package
 public
    with Deployment;
    with DataView;
@@ -14,16 +22,23 @@ public
 
 @_Nodes_@
 
-system deploymentview
-end deploymentview;
+system DeploymentView
+end DeploymentView;
 
-system implementation deploymentview.final
+system implementation DeploymentView.final
 subcomponents
-   <MISSING>
+@@TABLE@@
+   @_CAPITALIZE:Partition_Names_@ : process @_CAPITALIZE:Partition_Names_@.final;
+@@END_TABLE@@
+@@TABLE@@
+   @_CAPITALIZE:Node_Names_@_@_Node_CPU_@ : processor @_CAPITALIZE:Node_CPU_Classifier_@;
+@@END_TABLE@@
 properties
-   <MISSING>
-end deploymentview.final;
+@@TABLE@@
+   Actual_Processor_Binding => (reference (@_CAPITALIZE:Partition_Node_@_@_Partition_CPU_@)) applies to @_CAPITALIZE:Partition_Names_@;
+@@END_TABLE@@
+end DeploymentView.final;
 
-end process_package;
+end Process_Package;
 
 -- deploymenttview.final

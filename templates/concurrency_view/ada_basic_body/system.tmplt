@@ -2,6 +2,8 @@
 @@--
 @@-- @_Nodes_@      : Code generated for the nodes
 @@-- @_Node_Names_@ : Tag (list) of node names
+@@-- @_Partition_Names_@ : Tag (list) of partition names
+@@-- @_Threads_@    : Code generated for the threads
 
 --  The system contains these nodes:
 @@TABLE@@

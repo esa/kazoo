@@ -417,6 +417,9 @@ package body TASTE.Deployment_View is
                Partition := Parse_Partition (CI, Depl_View_System);
                Result.Partitions.Insert (Key => To_String (Partition.Name),
                                          New_Item => Partition);
+               Result.CPU_Name       := Partition.CPU_Name;
+               Result.CPU_Platform   := Partition.CPU_Platform;
+               Result.CPU_Classifier := Partition.CPU_Classifier;
             end if;
 
             Processes := Next_Node (Processes);

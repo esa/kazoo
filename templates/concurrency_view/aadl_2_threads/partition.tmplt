@@ -15,17 +15,15 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
-@_Threads_@
-
    with @_Package_Name_@;
 @@TABLE@@
    with @_Thread_Names_@_Thread;
 @@END_TABLE@@
 
-process @_Name_@ extends DeploymentView::DV::@_Node_Name_@
+process @_CAPITALIZE:Name_@ extends DeploymentView::DV::@_CAPITALIZE:Node_Name_@::@_CAPITALIZE:Name_@
 end @_Name_@;
 
-process implementation @_Name_@.final
+process implementation @_CAPITALIZE:Name_@.final
 subcomponents
 @@TABLE@@
    @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;

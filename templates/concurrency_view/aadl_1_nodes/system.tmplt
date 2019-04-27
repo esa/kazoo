@@ -1,7 +1,9 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Nodes_@      : Code generated for the nodes
-@@-- @_Node_Names_@ : Tag (list) of node names
+@@-- @_Nodes_@           : Code generated for the nodes
+@@-- @_Node_Names_@      : Tag (list) of node names
+@@-- @_Partition_Names_@ : Tag (list) of partition names
+@@-- @_Threads_@         : Code generated for the threads
 
 --  Input file for the taste orchestrator: do not edit
 --  This file was generated automatically by taste/kazoo

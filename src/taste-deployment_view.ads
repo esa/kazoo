@@ -147,9 +147,12 @@ package TASTE.Deployment_View is
 
    type Taste_Node is tagged
       record
-         Name       : Unbounded_String;
-         Drivers    : Taste_Drivers.Vector;
-         Partitions : Taste_Partitions.Map;
+         Name            : Unbounded_String;
+         Drivers         : Taste_Drivers.Vector;
+         Partitions      : Taste_Partitions.Map;
+         CPU_Name        : Unbounded_String;
+         CPU_Platform    : Supported_Execution_Platform;
+         CPU_Classifier  : Unbounded_String;
       end record;
 
    --  Helper function: find the partition where a function is bounded

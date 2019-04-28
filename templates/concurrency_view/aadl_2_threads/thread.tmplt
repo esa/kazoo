@@ -33,7 +33,7 @@ features
          INPORT_@_CAPITALIZE:Entry_Port_Name_@ : in event data port DataView::@_REPLACE_ALL((-)/_):Param_Types_@_Buffer.impl
       @@ELSE@@
          INPORT_@_CAPITALIZE:Entry_Port_Name_@ : in event port
-      @@END_IF@@   
+      @@END_IF@@
       @@END_INLINE@@
       { Compute_Execution_Time => @_WCET_@ ms .. @_WCET_@ ms;
         Queue_Size => @_Queue_Size_@;

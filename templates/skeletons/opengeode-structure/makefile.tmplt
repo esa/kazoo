@@ -21,7 +21,7 @@ compile-linux:
 	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
 	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
-	   mv *.gpr .. && cd .. && ADA_INCLUDE_PATH=../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
+	   mv *.gpr .. && cd .. && CODE_PATH=code ADA_INCLUDE_PATH=../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
 	@@ELSE@@
 	:
 	@@END_IF@@

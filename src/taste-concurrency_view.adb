@@ -217,6 +217,19 @@ package body TASTE.Concurrency_View is
                      Thread_Assoc : constant Translate_Set := T.To_Template;
                      Result       : constant String :=
                        (Parse (Path & "/thread.tmplt", Thread_Assoc));
+
+                     --  Optionally generate thread code in separate files
+                     --  (if filethread.tmplt present and contains a filename)
+                     Thread_File_Id   : constant String :=
+                       Path & "/filethread.tmplt";
+                     Thread_Check     : constant Boolean :=
+                       Exists (Thread_File_Id);
+                     Thread_Tag       : constant Translate_Set :=
+                       +Assoc ("Thread_Name", Name);
+                     Thread_File_Name : constant String :=
+                       (if Thread_Check
+                        then Strip_String (Parse (Thread_File_Id, Thread_Tag))
+                        else "");
                   begin
                      Threads      := Threads & Newline & Result;
                      Thread_Names := Thread_Names & Name;
@@ -229,6 +242,18 @@ package body TASTE.Concurrency_View is
                         Thread_Dst_Port := Thread_Dst_Port
                           & To_String (P.Remote_PI);
                      end loop;
+                     --  Save the content of the thread in a file
+                     --  (if required at template folder level)
+                     if Thread_File_Name /= "" then
+                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create (File => Output_File,
+                                Mode => Out_File,
+                                Name =>
+                                  CV_Out_Dir & Node_Name
+                                & "/" & Thread_File_Name);
+                        Put_Line (Output_File, Result);
+                        Close (Output_File);
+                     end if;
                   end;
                end loop;
 

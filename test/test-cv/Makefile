@@ -8,17 +8,15 @@ all: test-parse
 
 test-parse: clean
 	$(KAZOO) --gw \
-	               -o output \
-	               --glue \
-		       --debug \
-		       ../common/ocarina_components.aadl
+	         -o output \
+	         --glue \
+	         --debug
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
 	               -o output \
 	               --glue \
-		       --debug \
-		       ../common/ocarina_components.aadl
+		       --debug
 
 clean:
 	rm -rf output

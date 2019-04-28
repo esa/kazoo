@@ -39,6 +39,7 @@ package TASTE.Deployment_View is
      Empty_Vector
      & "TASTE_DV_Properties.aadl"
      & "TASTE_IV_Properties.aadl"
+     & "ocarina_components.aadl"
      & "aadl_project.aadl"
      & "taste_properties.aadl"
      & "Cheddar_Properties.aadl"

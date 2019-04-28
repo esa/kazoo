@@ -157,6 +157,8 @@ package body TASTE.Concurrency_View is
                                           others    => False);
       Output_File : File_Type;
       Threads     : Unbounded_String;
+      CV_Out_Dir  : constant String  :=
+        CV.Base_Output_Path.Element & "/concurrency_view/";
    begin
       Start_Search (Search    => ST,
                     Pattern   => "",
@@ -197,6 +199,16 @@ package body TASTE.Concurrency_View is
                Thread_Src_Port : Vector_Tag;
                Thread_Dst_Name : Vector_Tag;
                Thread_Dst_Port : Vector_Tag;
+               --  Optionally generate partition code in separate files
+               --  (if filepart.tmplt is present and contains a filename)
+               File_Id         : constant String := Path & "/filepart.tmplt";
+               Part_Check      : constant Boolean := Exists (File_Id);
+               Part_Tag        : constant Translate_Set :=
+                 +Assoc ("Partition_Name", Partition_Name);
+               Part_File_Name  : constant String :=
+                 (if Part_Check then Strip_String (Parse (File_Id, Part_Tag))
+                  else "");
+               Part_Content    : Unbounded_String;
             begin
                for T of Partition.Threads loop
                   declare
@@ -255,7 +267,23 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Thread_Src_Port", Thread_Src_Port)
                  & Assoc ("Thread_Dst_Name", Thread_Dst_Name)
                  & Assoc ("Thread_Dst_Port", Thread_Dst_Port);
-               return Parse (Path & "/partition.tmplt", Partition_Assoc);
+
+               Part_Content :=
+                 Parse (Path & "/partition.tmplt", Partition_Assoc);
+
+               --  Save the content of the partition in a file
+               --  (if required at template folder level)
+               if Part_File_Name /= "" then
+                  Create_Path (CV_Out_Dir & Node_Name);
+                  Create (File => Output_File,
+                          Mode => Out_File,
+                          Name =>
+                            CV_Out_Dir & Node_Name & "/" & Part_File_Name);
+                  Put_Line (Output_File, To_String (Part_Content));
+                  Close (Output_File);
+               end if;
+
+               return To_String (Part_Content);
             end Generate_Partition;
 
             --  Generate the code for one node
@@ -278,19 +306,17 @@ package body TASTE.Concurrency_View is
                return Parse (Path & "/node.tmplt", Node_Assoc);
             end Generate_Node;
 
-            Nodes      : Unbounded_String;
-            CV_Out_Dir : constant String  :=
-              CV.Base_Output_Path.Element & "/concurrency_view/";
-            Tmpl_File  : constant String  := Path & "/filesys.tmplt";
-            Tmpl_Sys   : constant String  := Path & "/system.tmplt";
-            Valid_Dir  : constant Boolean := Exists (Tmpl_File);
-            File_Sys   : constant String  :=
+            Nodes           : Unbounded_String;
+            Tmpl_File       : constant String  := Path & "/filesys.tmplt";
+            Tmpl_Sys        : constant String  := Path & "/system.tmplt";
+            Valid_Dir       : constant Boolean := Exists (Tmpl_File);
+            File_Sys        : constant String  :=
               (if Valid_Dir then Strip_String (Parse (Tmpl_File)) else "");
-            Trig_Sys   : constant Boolean := Exists (Tmpl_Sys);
-            Set_Sys    : Translate_Set;
-            Node_Names   : Vector_Tag;       --  List of nodes
-            Node_CPU     : Vector_Tag;       --  Corresponding CPU name
-            Node_CPU_Cls : Vector_Tag;       --  Corresponding CPU classifier
+            Trig_Sys        : constant Boolean := Exists (Tmpl_Sys);
+            Set_Sys         : Translate_Set;
+            Node_Names      : Vector_Tag;  --  List of nodes
+            Node_CPU        : Vector_Tag;  --  Corresponding CPU name
+            Node_CPU_Cls    : Vector_Tag;  --  Corresponding CPU classifier
             Partition_Names : Vector_Tag;  --  List of processes
             Partition_Node  : Vector_Tag;  --  Corresponding node name
             Partition_CPU   : Vector_Tag;  --  Corresponding CPU name
@@ -311,7 +337,8 @@ package body TASTE.Concurrency_View is
                      else "");
                   --  Check if file already exists
                   Present      : constant Boolean :=
-                    (File_Name /= "" and Exists (Output_Dir & File_Name));
+                    (File_Name /= ""
+                     and then Exists (Output_Dir & "/" & File_Name));
                   Trig_Tmpl    : constant Translate_Set :=
                     +Assoc ("Filename_Is_Present", Present);
                   Trigger      : constant Boolean :=

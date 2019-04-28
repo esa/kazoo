@@ -264,6 +264,20 @@ package body TASTE.Concurrency_View is
                      Block_Assoc : Translate_Set := Tmpl.Header;
                      PI_Tag      : Unbounded_String;
                      RI_Tag      : Unbounded_String;
+                     Result      : Unbounded_String;
+
+                     --  Optionally generate block code in separate files
+                     --  (if fileblock.tmplt present and contains a filename)
+                     Block_File_Id   : constant String :=
+                       Path & "/fileblock.tmplt";
+                     Block_Check     : constant Boolean :=
+                       Exists (Block_File_Id);
+                     Block_Tag       : constant Translate_Set :=
+                       +Assoc ("Block_Name", B.Name);
+                     Block_File_Name : constant String :=
+                       (if Block_Check
+                        then Strip_String (Parse (Block_File_Id, Block_Tag))
+                        else "");
                   begin
                      for PI_Assoc of Tmpl.Provided loop
                         PI_Tag := PI_Tag & Newline
@@ -277,8 +291,21 @@ package body TASTE.Concurrency_View is
                        & Assoc ("Provided", PI_Tag)
                        & Assoc ("Required", RI_Tag);
 
-                     Blocks := Blocks & Newline &
-                       String'(Parse (Path & "/block.tmplt", Block_Assoc));
+                     Result := Parse (Path & "/block.tmplt", Block_Assoc);
+
+                     Blocks := Blocks & Newline & To_String (Result);
+
+                     --  Save the content of the block in a file
+                     --  (if required at template folder level)
+                     if Block_File_Name /= "" then
+                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create (File => Output_File,
+                                Mode => Out_File,
+                                Name => CV_Out_Dir & Node_Name
+                                        & "/" & Block_File_Name);
+                        Put_Line (Output_File, To_String (Result));
+                        Close (Output_File);
+                     end if;
                   end;
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.

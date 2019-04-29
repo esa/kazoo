@@ -353,8 +353,16 @@ package body TASTE.Concurrency_View is
                      Node_Name      => Node_Name);
                end loop;
                Node_Assoc := +Assoc ("Partitions", Partitions)
-                  & Assoc ("Partition_Names", Partition_Names)
-                  & Assoc ("Node_Name", Node_Name);
+                 & Assoc ("Partition_Names", Partition_Names)
+                 & Assoc ("Node_Name", Node_Name)
+                 & Assoc ("CPU_Name",
+                         CV.Nodes (Node_Name).Deployment_Node.CPU_Name)
+                 & Assoc ("CPU_Platform",
+                         CV.Nodes (Node_Name).Deployment_Node.CPU_Platform'Img)
+                 & Assoc ("CPU_Classifier",
+                         CV.Nodes (Node_Name).Deployment_Node.CPU_Classifier)
+                 & Assoc ("Ada_Runtime",
+                         CV.Nodes (Node_Name).Deployment_Node.Ada_Runtime);
                return Parse (Path & "/node.tmplt", Node_Assoc);
             end Generate_Node;
 

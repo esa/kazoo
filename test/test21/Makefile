@@ -6,11 +6,7 @@ test-parse: clean
 	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
-		       --debug \
-		       -i InterfaceView.aadl \
-		       -c DeploymentView.aadl \
-		       -d DataView.aadl \
-		       ../common/ocarina_components.aadl && cd output && time make dataviews
+		       --debug && cd output && time make dataviews
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \

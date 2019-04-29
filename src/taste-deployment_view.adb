@@ -344,6 +344,11 @@ package body TASTE.Deployment_View is
           US (Get_Name_String (Name (Identifier (Parent_Subcomponent (CPU)))));
 
          Result.CPU_Platform := Get_Execution_Platform (CPU);
+         if Result.CPU_Platform = Platform_GNAT_Runtime then
+            Result.Ada_Runtime := US (Get_Name_String (Get_Ada_Runtime (CPU)));
+         else
+            Result.Ada_Runtime := US ("");
+         end if;
 
          if ATN.Namespace (Corresponding_Declaration (CPU)) /= No_Node
          then
@@ -420,6 +425,7 @@ package body TASTE.Deployment_View is
                Result.CPU_Name       := Partition.CPU_Name;
                Result.CPU_Platform   := Partition.CPU_Platform;
                Result.CPU_Classifier := Partition.CPU_Classifier;
+               Result.Ada_Runtime    := Partition.Ada_Runtime;
             end if;
 
             Processes := Next_Node (Processes);

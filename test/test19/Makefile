@@ -10,7 +10,6 @@ test-parse: clean
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \
-		       ../common/ocarina_components.aadl \
 	#2>&1 | tail -1 | diff expected -
 
 clean:

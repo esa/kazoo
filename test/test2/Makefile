@@ -7,11 +7,7 @@ generate:
 	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
-		       --debug \
-		       -i InterfaceView.aadl \
-		       -c DeploymentView.aadl \
-		       -d DataView.aadl \
-		       ../common/ocarina_components.aadl \
+		       --debug
 
 test-parse: clean generate
 

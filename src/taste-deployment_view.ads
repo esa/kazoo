@@ -128,6 +128,7 @@ package TASTE.Deployment_View is
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
+         Ada_Runtime     : Unbounded_String;  --  when Platform = GNAT_Runtime
          Bound_Functions : String_Sets.Set;
       end record;
 
@@ -139,6 +140,7 @@ package TASTE.Deployment_View is
        & Assoc ("CPU_Name",        P.CPU_Name)
        & Assoc ("CPU_Platform",    P.CPU_Platform'Img)
        & Assoc ("CPU_Classifier",  P.CPU_Classifier)
+       & Assoc ("Ada_Runtime",     P.Ada_Runtime)
        & Assoc ("Bound_Functions", To_Template_Tag (P.Bound_Functions)));
 
    package Option_Partition is new Option_Type (Taste_Partition);
@@ -154,6 +156,7 @@ package TASTE.Deployment_View is
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
+         Ada_Runtime     : Unbounded_String;  --  when Platform = GNAT_Runtime
       end record;
 
    --  Helper function: find the partition where a function is bounded

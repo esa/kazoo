@@ -1,0 +1,58 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@            : Partition name (usually the name of the binary)
+@@-- @_Threads_@         : Code generated for the threads
+@@-- @_Thread_Names_@    : Tag: list of thread names
+@@-- @_Node_Name_@       : Name of the node containing this partition
+@@-- @_Blocks_@          : Code generated for protected functions
+@@-- @_Coverage_@        : True if user requested code coverage enable
+@@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
+@@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
+@@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
+@@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+@@-- @_Ada_Runtime_@     : Set if CPU_Platform = PLATFORM_GNAT_RUNTIME
+@@-- @_Bound_Functions_@ : List of user functions from Interface view
+@@-- @_Thread_Src_Name_@ : Vector tag : connection thread name (source)
+@@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
+@@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
+@@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+--  Node name          : @_Name_@
+--  Execution platform : @_CPU_Platform_@
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+--  Ada runtime        : @_Ada_Runtime_@
+@@END_IF@@
+
+--  with "polyorb_hi";
+with "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada/polyorb_hi";
+
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+project @_CAPITALIZE:Name_@ extends "@_Ada_Runtime_@" is
+@@ELSE@@
+project @_CAPITALIZE:Name_@ is
+@@END_IF@@
+
+   --  following to be updated with all relevant source dirs
+   for Source_Dirs use
+      (".",
+       "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada",
+       "../deploymentview_final/@_LOWER:Name_@")
+        & external_as_list("ADA_INCLUDE_PATH", ":");
+
+   for Languages use ("Ada", "C");
+
+   for Main use ("@_LOWER:Name_@.adb");
+
+   package Naming is
+      --  Custom middleware file names
+      for Body ("PolyORB_HI.Output_Low_Level") use "polyorb_hi-output_low_level_native.adb";
+   end Naming;
+
+   package Compiler renames PolyORB_HI.Compiler;
+   package Builder renames PolyORB_HI.Builder;
+   package Binder renames PolyORB_HI.Binder;
+   package Linker renames PolyORB_HI.Linker;
+   package Check renames PolyORB_HI.Check;
+   package Prove renames PolyORB_HI.Prove;
+end @_CAPITALIZE:Name_@;
+
+

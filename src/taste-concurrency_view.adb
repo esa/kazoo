@@ -145,7 +145,7 @@ package body TASTE.Concurrency_View is
         & Assoc ("Remote_PI_Modules", Remote_PI_Module);
    end To_Template;
 
-   --  Generate the the code by iterating over template folders
+   --  Generate the code by iterating over template folders
    procedure Generate_Code (CV : Taste_Concurrency_View)
    is
       Prefix   : constant String := CV.Base_Template_Path.Element

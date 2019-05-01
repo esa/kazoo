@@ -12,7 +12,7 @@ test-parse: clean
 	         --glue \
 		 --no-stdlib \
 	         --debug \
-		 libhw.aadl
+		 ../common/libhw.aadl
 
 
 gdb: clean

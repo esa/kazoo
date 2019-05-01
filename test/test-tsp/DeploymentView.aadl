@@ -1,0 +1,265 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Platform
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+
+with deploymentview::dv;  -- that was missing in the original file
+PROCESS Partition0
+END Partition0;
+
+PROCESS IMPLEMENTATION Partition0.others
+END Partition0.others;
+
+VIRTUAL PROCESSOR Partition0_VP
+END Partition0_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION Partition0_VP.others
+END Partition0_VP.others;
+
+PROCESS Partition1
+END Partition1;
+
+PROCESS IMPLEMENTATION Partition1.others
+END Partition1.others;
+
+VIRTUAL PROCESSOR Partition1_VP
+END Partition1_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION Partition1_VP.others
+END Partition1_VP.others;
+
+DEVICE generic_serial_raw
+EXTENDS ocarina_drivers::generic_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "113782 105575";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "143923 98316" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "generic_serial_raw";
+  Deployment::Config => "/home/maxime/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END generic_serial_raw;
+
+DEVICE IMPLEMENTATION generic_serial_raw.others
+EXTENDS ocarina_drivers::generic_serial.raw
+END generic_serial_raw.others;
+
+MEMORY main_memory
+END main_memory;
+
+MEMORY IMPLEMENTATION main_memory.others
+SUBCOMPONENTS
+  Partition0_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#A000#;
+    Memory_Size => 16#1000# Bytes;
+  };
+  Partition1_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#B000#;
+    Memory_Size => 16#1000# Bytes;
+  };
+END main_memory.others;
+
+END deploymentview::DV::Platform;
+
+PACKAGE deploymentview::DV::Payload
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS x86_partition
+END x86_partition;
+
+PROCESS IMPLEMENTATION x86_partition.others
+END x86_partition.others;
+
+DEVICE generic_serial_raw
+EXTENDS ocarina_drivers::generic_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "166175 65118";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "143450 71961" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "generic_serial_raw";
+  Deployment::Config => "/home/maxime/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END generic_serial_raw;
+
+DEVICE IMPLEMENTATION generic_serial_raw.others
+EXTENDS ocarina_drivers::generic_serial.raw
+END generic_serial_raw.others;
+
+END deploymentview::DV::Payload;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::AOCS;
+WITH interfaceview::IV::TM_TC;
+WITH ocarina_processors_leon;
+WITH ARINC653;
+WITH deploymentview::DV::Platform;
+WITH interfaceview::IV::Payload1;
+WITH interfaceview::IV::Payload2;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Payload;
+WITH ocarina_buses;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+MEMORY partition_memory
+END partition_memory;
+
+MEMORY IMPLEMENTATION partition_memory.others
+END partition_memory.others;
+
+SYSTEM Platform
+FEATURES
+  generic_serial_raw_serial_generic : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END Platform;
+
+SYSTEM IMPLEMENTATION Platform.others
+SUBCOMPONENTS
+  IV_AOCS : SYSTEM interfaceview::IV::AOCS::AOCS.others {
+    Taste::FunctionName => "AOCS";
+  };
+  Partition0 : PROCESS deploymentview::DV::Platform::Partition0.others {
+    Taste::coordinates => "99891 69515 126252 83797";
+    Deployment::Port_Number => 0;
+  };
+  Partition0_VP : VIRTUAL PROCESSOR deploymentview::DV::Platform::Partition0_VP.others {
+    Scheduling_Protocol => (POSIX_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  IV_TM_TC : SYSTEM interfaceview::IV::TM_TC::TM_TC.others {
+    Taste::FunctionName => "TM_TC";
+  };
+  Partition1 : PROCESS deploymentview::DV::Platform::Partition1.others {
+    Taste::coordinates => "99737 86322 125933 97685";
+    Deployment::Port_Number => 0;
+  };
+  Partition1_VP : VIRTUAL PROCESSOR deploymentview::DV::Platform::Partition1_VP.others {
+    Scheduling_Protocol => (POSIX_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  leon_rtems_posix : PROCESSOR ocarina_processors_leon::leon.rtems_posix {
+    Taste::coordinates => "96438 63440 129389 99342";
+    Scheduling_Protocol => (ARINC653);
+  };
+  generic_serial_raw : DEVICE deploymentview::DV::Platform::generic_serial_raw.others {
+    Taste::coordinates => "103682 103208 113782 108258";
+    Taste::Fill_Color => "#408080";
+  };
+  main_memory : MEMORY deploymentview::DV::Platform::main_memory.others;
+CONNECTIONS
+  generic_serial_raw_serial_generic_link : BUS ACCESS generic_serial_raw_serial_generic -> generic_serial_raw.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (Partition0)) APPLIES TO IV_AOCS;
+  Actual_Processor_Binding => (reference (leon_rtems_posix)) APPLIES TO Partition0_VP;
+  Actual_Processor_Binding => (reference (Partition0_VP)) APPLIES TO Partition0;
+  Actual_Memory_Binding  => (reference (main_memory.Partition0_Segment)) APPLIES TO Partition0;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_TM_TC;
+  Actual_Processor_Binding => (reference (leon_rtems_posix)) APPLIES TO Partition1_VP;
+  Actual_Processor_Binding => (reference (Partition1_VP)) APPLIES TO Partition1;
+  Actual_Memory_Binding  => (reference (main_memory.Partition1_Segment)) APPLIES TO Partition1;
+  ARINC653::Module_Major_Frame => 100ms APPLIES TO leon_rtems_posix;
+  ARINC653::Module_Schedule => (
+	[ Partition => reference(Partition0_VP);
+	  Duration => 50ms;
+	  Periodic_Processing_Start => False; ],
+	[ Partition => reference(Partition1_VP);
+	  Duration => 50ms;
+	  Periodic_Processing_Start => False; ]
+) APPLIES TO leon_rtems_posix;
+  Actual_Processor_Binding => (reference (leon_rtems_posix)) APPLIES TO generic_serial_raw;
+END Platform.others;
+
+SYSTEM Payload
+FEATURES
+  generic_serial_raw_serial_generic : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END Payload;
+
+SYSTEM IMPLEMENTATION Payload.others
+SUBCOMPONENTS
+  IV_Payload1 : SYSTEM interfaceview::IV::Payload1::Payload1.others {
+    Taste::FunctionName => "Payload1";
+  };
+  IV_Payload2 : SYSTEM interfaceview::IV::Payload2::Payload2.others {
+    Taste::FunctionName => "Payload2";
+  };
+  x86_partition : PROCESS deploymentview::DV::Payload::x86_partition.others {
+    Taste::coordinates => "163703 80044 190267 94213";
+    Deployment::Port_Number => 0;
+    Taste::Fill_Color => "#ff80c0";
+  };
+  x86_linux32 : PROCESSOR ocarina_processors_x86::x86.linux32 {
+    Taste::coordinates => "160383 72687 193587 109473";
+  };
+  generic_serial_raw : DEVICE deploymentview::DV::Payload::generic_serial_raw.others {
+    Taste::coordinates => "166175 62651 178326 67584";
+    Taste::Fill_Color => "#408080";
+  };
+CONNECTIONS
+  generic_serial_raw_serial_generic_link : BUS ACCESS generic_serial_raw_serial_generic -> generic_serial_raw.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_Payload1;
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_Payload2;
+  Actual_Processor_Binding => (reference (x86_linux32)) APPLIES TO x86_partition;
+  Actual_Processor_Binding => (reference (x86_linux32)) APPLIES TO generic_serial_raw;
+END Payload.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Platform : SYSTEM Platform.others {
+    Taste::coordinates => "92319 59179 133508 110468";
+  };
+  Payload : SYSTEM Payload.others {
+    Taste::coordinates => "156233 59179 197737 111730";
+  };
+  serial_generic : BUS ocarina_buses::serial.generic {
+    Taste::coordinates => "139189 71961 148099 98316";
+    Taste::Fill_Color => "#408080";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+CONNECTIONS
+  Connection1 : BUS ACCESS serial_generic -> Platform.generic_serial_raw_serial_generic {
+    Taste::coordinates => "113782 105575 143923 105575 143923 98316";
+  };
+  Connection2 : BUS ACCESS serial_generic -> Payload.generic_serial_raw_serial_generic {
+    Taste::coordinates => "166175 65118 143450 65118 143450 71961";
+  };
+PROPERTIES
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.Payload1_PI_receiveP1_TC_TM_TC_RI_receiveP1_TC;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.Payload2_PI_receiveP2_TC_TM_TC_RI_receiveP2_TC;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.TM_TC_PI_receiveP1_TM_Payload1_RI_receiveP1_TM;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.TM_TC_PI_receiveP2_TM_Payload2_RI_receiveP2_TM;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "interfaceview.aadl";
+  Taste::HWLibraries => ("libhw.aadl");
+END deploymentview::DV;
+

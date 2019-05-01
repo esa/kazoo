@@ -109,6 +109,10 @@ package body TASTE.Parser_Utils is
                      Switch         => "-g",
                      Long_Switch    => "--debug",
                      Help           => "Set debug mode");
+      Define_Switch (Config, Output => Result.No_Stdlib'Access,
+                     Switch         => "-s",
+                     Long_Switch    => "--no-stdlib",
+                     Help           => "Don't use ocarina_components.aadl");
       Define_Switch (Config, Output => Version'Access,
                      Switch         => "-v",
                      Long_Switch    => "--version",
@@ -171,6 +175,7 @@ package body TASTE.Parser_Utils is
         & Assoc ("Glue",             Config.Glue)
         & Assoc ("Use_POHIC",        Config.Use_POHIC)
         & Assoc ("Debug_Flag",       Config.Debug_Flag)
+        & Assoc ("No_StdLib_Flag",   Config.No_Stdlib)
         & Assoc ("Timer_Resolution", Config.Timer_Resolution);
       for Each of Config.Other_Files loop
          Vec := Vec & Each;

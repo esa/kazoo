@@ -11,6 +11,7 @@
 |Generate skeletons : @_YES_NO:Skeletons_@
 |Generate glue      : @_YES_NO:Glue_@
 |Debug mode         : @_YES_NO:Debug_Flag_@
+|No stdlib          : @_YES_NO:No_Stdlib_Flag_@
 |Timer resolution   : @_Timer_Resolution_@
 |Use PolyORB-HI-C   : @_YES_NO:Use_POHIC_@
 |

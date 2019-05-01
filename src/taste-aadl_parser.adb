@@ -179,6 +179,10 @@ package body TASTE.AADL_Parser is
                raise AADL_Parser_Error with "Interface view parsing error";
          end;
 
+         if not Result.Configuration.No_Stdlib then
+            AADL_Lib.Append ("ocarina_components.aadl");
+         end if;
+
          if Deployment_Root /= No_Node
            and not Result.Configuration.Deployment_View.Is_Empty
          then

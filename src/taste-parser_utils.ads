@@ -140,6 +140,7 @@ package TASTE.Parser_Utils is
          Use_POHIC        : aliased Boolean := False;
          Timer_Resolution : aliased Integer := 100;
          Debug_Flag       : aliased Boolean := False;
+         No_Stdlib        : aliased Boolean := False;
          Other_Files      : String_Vectors.Vector;
       end record;
 

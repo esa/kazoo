@@ -1,5 +1,6 @@
---  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  *************************** taste/kazoo ***********************  --
+--  (c) 2019 Maxime Perrotin / European Space Agency
+--  contact: maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Deployment View parser
@@ -39,7 +40,6 @@ package TASTE.Deployment_View is
      Empty_Vector
      & "TASTE_DV_Properties.aadl"
      & "TASTE_IV_Properties.aadl"
-     & "ocarina_components.aadl"
      & "aadl_project.aadl"
      & "taste_properties.aadl"
      & "Cheddar_Properties.aadl"

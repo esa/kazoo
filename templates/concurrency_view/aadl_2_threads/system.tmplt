@@ -8,6 +8,8 @@
 @@-- @_Partition_Node_@      :  |_ Corresponding node name
 @@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
 @@-- @_Threads_@             : Code generated for the threads
+@@-- @_Thread_Names_@        : List of all threads in the complete system
+@@-- @_Target_Packages_@     : List of all target package names in the complete system
 
 --  Input file for the taste orchestrator: do not edit
 --  This file was generated automatically by taste/kazoo
@@ -19,6 +21,12 @@ public
    with DataView;
    with interfaceview::IV;
    with deploymentview::DV;
+@@TABLE@@
+   with @_CAPITALIZE:Thread_Names_@_Thread;
+@@END_TABLE@@
+@@TABLE@@
+   with @_CAPITALIZE:Target_Packages_@;
+@@END_TABLE@@
 
 @_Nodes_@
 

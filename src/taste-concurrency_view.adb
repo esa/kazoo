@@ -155,10 +155,16 @@ package body TASTE.Concurrency_View is
       Current  : Directory_Entry_Type;
       Filter   : constant Filter_Type := (Directory => True,
                                           others    => False);
-      Output_File : File_Type;
-      Threads     : Unbounded_String;
+      Output_File      : File_Type;
+
       CV_Out_Dir  : constant String  :=
         CV.Base_Output_Path.Element & "/concurrency_view/";
+
+      --  Tags that are built over the whole system
+      --  and cleant up between each template folder:
+      Threads          : Unbounded_String;
+      All_Thread_Names : Tag;  --  Complete list of threads
+      All_Target_Names : Tag;  --  List of all targets used (AADL packages)
    begin
       Start_Search (Search    => ST,
                     Pattern   => "",
@@ -175,6 +181,11 @@ package body TASTE.Concurrency_View is
 
       --  Iterate over the folders containing template files
       while More_Entries (ST) loop
+         --  Clean-up system-wise tags before the next template folder:
+         Threads := US ("");
+         Clear (All_Thread_Names);
+         Clear (All_Target_Names);
+
          Get_Next_Entry (ST, Current);
 
          --  Ignore Unix special directories
@@ -233,6 +244,7 @@ package body TASTE.Concurrency_View is
                   begin
                      Threads      := Threads & Newline & Result;
                      Thread_Names := Thread_Names & Name;
+                     All_Thread_Names := All_Thread_Names & Name;
                      for P of T.Output_Ports loop
                         Thread_Src_Name := Thread_Src_Name & Name;
                         Thread_Src_Port := Thread_Src_Port
@@ -319,6 +331,9 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Thread_Src_Port", Thread_Src_Port)
                  & Assoc ("Thread_Dst_Name", Thread_Dst_Name)
                  & Assoc ("Thread_Dst_Port", Thread_Dst_Port);
+
+               All_Target_Names := All_Target_Names
+                 & String'(Get (Get (Partition_Assoc, "Package_Name")));
 
                Part_Content :=
                  Parse (Path & "/partition.tmplt", Partition_Assoc);
@@ -453,8 +468,9 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Partition_Names",     Partition_Names)
                  & Assoc ("Partition_Node",      Partition_Node)
                  & Assoc ("Partition_CPU",       Partition_CPU)
-                 & Assoc ("Threads",             Threads);
-               Threads := US ("");  --  Reset for next template folder
+                 & Assoc ("Threads",             Threads)
+                 & Assoc ("Thread_Names",        All_Thread_Names)
+                 & Assoc ("Target_Packages",     All_Target_Names);
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,
                        Mode => Out_File,

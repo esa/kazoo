@@ -61,9 +61,11 @@ package body TASTE.Data_View is
       end if;
 
       Ocarina.Options.Root_System_Name :=
-                                    Get_String_Name ("taste_dataview.others");
+        Get_String_Name ("taste_dataview.others");
 
-      System := Root_System (Instantiate_Model (Root => DV_Root));
+      if DV_Root /= No_Node then
+         System := Root_System (Instantiate_Model (Root => DV_Root));
+      end if;
 
       if No (System) then
          raise Data_View_Error with "Could not instantiate Data View";

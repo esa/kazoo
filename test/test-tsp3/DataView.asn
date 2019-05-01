@@ -1,0 +1,30 @@
+TASTE-Dataview DEFINITIONS ::=
+BEGIN
+
+-- A few simple types to start with ASN.1
+MyInteger   ::= INTEGER (0..255)
+
+MyReal	    ::= REAL (0.0 .. 1000.0)
+
+MyEnum	    ::= ENUMERATED { hello, world, howareyou }
+
+MySeq	    ::= SEQUENCE {
+		    a MyInteger,
+		    b ENUMERATED { taste(1), welcomes(2), you(3) }
+}
+
+MyChoice    ::= CHOICE {
+		    a BOOLEAN,
+		    b MySeq
+}
+
+MySeqOf	    ::= SEQUENCE (SIZE (2)) OF MyEnum
+
+MyOctStr    ::= OCTET STRING (SIZE (3))
+
+-- You can also declare variables (they will be visible in C, Ada and RTDS)
+myVar	    MySeqOf	::= { hello, world }
+-- myVar2	    MyChoice	::= a:TRUE
+
+END
+

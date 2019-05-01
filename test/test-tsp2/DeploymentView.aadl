@@ -1,0 +1,151 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::TSPNode
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS part1
+END part1;
+
+PROCESS IMPLEMENTATION part1.others
+END part1.others;
+
+VIRTUAL PROCESSOR part1_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 0;
+END part1_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION part1_VP.others
+END part1_VP.others;
+
+PROCESS part2
+END part2;
+
+PROCESS IMPLEMENTATION part2.others
+END part2.others;
+
+VIRTUAL PROCESSOR part2_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 1;
+END part2_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION part2_VP.others
+END part2_VP.others;
+
+MEMORY main_memory
+END main_memory;
+
+MEMORY IMPLEMENTATION main_memory.others
+SUBCOMPONENTS
+  part1_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#100000#;
+    Memory_Size => 16#100# Bytes;
+    Byte_Count => 16#100#;
+  };
+  part2_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#600000#;
+    Memory_Size => 16#100# Bytes;
+    Byte_Count => 16#100#;
+  };
+END main_memory.others;
+
+END deploymentview::DV::TSPNode;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::helloworld1;
+WITH interfaceview::IV::helloworld2;
+WITH ocarina_processors_leon;
+WITH ARINC653;
+WITH deploymentview::DV::TSPNode;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+MEMORY partition_memory
+END partition_memory;
+
+MEMORY IMPLEMENTATION partition_memory.others
+END partition_memory.others;
+
+SYSTEM TSPNode
+END TSPNode;
+
+SYSTEM IMPLEMENTATION TSPNode.others
+SUBCOMPONENTS
+  IV_helloworld1 : SYSTEM interfaceview::IV::helloworld1::helloworld1.others {
+    Taste::FunctionName => "helloworld1";
+  };
+  part1 : PROCESS deploymentview::DV::TSPNode::part1.others {
+    Taste::coordinates => "101403 57909 133666 69594";
+    Deployment::Port_Number => 0;
+  };
+  part1_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part1_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  IV_helloworld2 : SYSTEM interfaceview::IV::helloworld2::helloworld2.others {
+    Taste::FunctionName => "helloworld2";
+  };
+  part2 : PROCESS deploymentview::DV::TSPNode::part2.others {
+    Taste::coordinates => "101412 72100 133823 82850";
+    Deployment::Port_Number => 0;
+  };
+  part2_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part2_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  proc1 : PROCESSOR ocarina_processors_leon::leon3.AIR {
+    Taste::coordinates => "95948 49619 140767 87742";
+    Taste::Fill_Color => "#ffff80";
+  };
+  main_memory : MEMORY deploymentview::DV::TSPNode::main_memory.others;
+PROPERTIES
+  Taste::APLC_Binding => (reference (part1)) APPLIES TO IV_helloworld1;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO part1_VP;
+  Actual_Processor_Binding => (reference (part1_VP)) APPLIES TO part1;
+  Actual_Memory_Binding => (reference (main_memory.part1_Segment)) APPLIES TO part1;
+  Taste::APLC_Binding => (reference (part2)) APPLIES TO IV_helloworld2;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO part2_VP;
+  Actual_Processor_Binding => (reference (part2_VP)) APPLIES TO part2;
+  Actual_Memory_Binding => (reference (main_memory.part2_Segment)) APPLIES TO part2;
+  ARINC653::Module_Major_Frame => 3000 ms APPLIES TO proc1;
+  ARINC653::Module_Schedule => (
+	[ Partition => reference(part1_VP);
+	  Duration => 1500 ms;
+	  Periodic_Processing_Start => False; ],
+	[ Partition => reference(part2_VP);
+	  Duration => 1500 ms;
+	  Periodic_Processing_Start => False; ]
+) APPLIES TO proc1;
+END TSPNode.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  TSPNode : SYSTEM TSPNode.others {
+    Taste::coordinates => "90865 45668 144870 92319";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("");
+END deploymentview::DV;
+

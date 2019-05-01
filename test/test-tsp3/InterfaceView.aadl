@@ -1,0 +1,2471 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::OSRA_Component1
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component2;
+WITH interfaceview::IV::Partition1_EventDistributionandReporting;
+WITH interfaceview::IV::Partition1_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_op1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op1;
+
+SUBPROGRAM IMPLEMENTATION PI_op1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op1.others;
+
+SUBPROGRAM PI_C1_EventName1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C1_EventName1;
+
+SUBPROGRAM IMPLEMENTATION PI_C1_EventName1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C1_EventName1.others;
+
+SUBPROGRAM RI_DoIF
+END RI_DoIF;
+
+SUBPROGRAM IMPLEMENTATION RI_DoIF.others
+END RI_DoIF.others;
+
+SUBPROGRAM RI_C1_event1
+END RI_C1_event1;
+
+SUBPROGRAM IMPLEMENTATION RI_C1_event1.others
+END RI_C1_event1.others;
+
+SUBPROGRAM RI_getParam1
+END RI_getParam1;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam1.others
+END RI_getParam1.others;
+
+SYSTEM OSRA_Component1
+FEATURES
+  PI_op1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component1::PI_op1.others {
+    Taste::coordinates => "20130 31038";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op1";
+  };
+  PI_C1_EventName1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component1::PI_C1_EventName1.others {
+    Taste::coordinates => "80951 44262";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C1_EventName1";
+  };
+  RI_DoIF : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_DoIF.others {
+    Taste::coordinates => "80951 22995";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "DoIF";
+    Taste::labelInheritance => "true";
+  };
+  RI_C1_event1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDistributionandReporting::PI_C1_event1.others {
+    Taste::coordinates => "80951 38042";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C1_event1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam1.others {
+    Taste::coordinates => "20130 22633";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam1";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component1;
+
+SYSTEM IMPLEMENTATION OSRA_Component1.others
+END OSRA_Component1.others;
+
+END interfaceview::IV::OSRA_Component1;
+
+PACKAGE interfaceview::IV::OSRA_Component2
+PUBLIC
+
+WITH interfaceview::IV::Partition1_EventPublishing;
+WITH interfaceview::IV::OSRA_Component3;
+WITH interfaceview::IV::Partition1_EventDistributionandReporting;
+WITH interfaceview::IV::Partition1_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_C2_DatasetName
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C2_DatasetName;
+
+SUBPROGRAM IMPLEMENTATION PI_C2_DatasetName.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C2_DatasetName.others;
+
+SUBPROGRAM PI_op2
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op2;
+
+SUBPROGRAM IMPLEMENTATION PI_op2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op2.others;
+
+SUBPROGRAM PI_DoIF
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_DoIF;
+
+SUBPROGRAM IMPLEMENTATION PI_DoIF.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_DoIF.others;
+
+SUBPROGRAM RI_Event1
+END RI_Event1;
+
+SUBPROGRAM IMPLEMENTATION RI_Event1.others
+END RI_Event1.others;
+
+SUBPROGRAM RI_processData
+END RI_processData;
+
+SUBPROGRAM IMPLEMENTATION RI_processData.others
+END RI_processData.others;
+
+SUBPROGRAM RI_C2_data1
+END RI_C2_data1;
+
+SUBPROGRAM IMPLEMENTATION RI_C2_data1.others
+END RI_C2_data1.others;
+
+SUBPROGRAM RI_getParam2
+END RI_getParam2;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam2.others
+END RI_getParam2.others;
+
+SYSTEM OSRA_Component2
+FEATURES
+  PI_C2_DatasetName : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_C2_DatasetName.others {
+    Taste::coordinates => "115977 37349";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C2_DatasetName";
+  };
+  PI_op2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_op2.others {
+    Taste::coordinates => "137843 19111";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op2";
+  };
+  PI_DoIF : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_DoIF.others {
+    Taste::coordinates => "115977 22980";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "DoIF";
+  };
+  RI_Event1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventPublishing::PI_Event1.others {
+    Taste::coordinates => "171275 41214";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Event1";
+    Taste::labelInheritance => "true";
+  };
+  RI_processData : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component3::PI_processData.others {
+    Taste::coordinates => "171275 26847";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "processData";
+    Taste::labelInheritance => "true";
+  };
+  RI_C2_data1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDistributionandReporting::PI_C2_data1.others {
+    Taste::coordinates => "115977 42044";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C2_data1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam2.others {
+    Taste::coordinates => "156796 19111";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam2";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component2;
+
+SYSTEM IMPLEMENTATION OSRA_Component2.others
+END OSRA_Component2.others;
+
+END interfaceview::IV::OSRA_Component2;
+
+PACKAGE interfaceview::IV::Partition1_DatasetPublishing
+PUBLIC
+
+WITH interfaceview::IV::Partition1_DatasetTable;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Dataset1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Dataset1;
+
+SUBPROGRAM IMPLEMENTATION PI_Dataset1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Dataset1.others;
+
+SUBPROGRAM RI_registerDataset
+END RI_registerDataset;
+
+SUBPROGRAM IMPLEMENTATION RI_registerDataset.others
+END RI_registerDataset.others;
+
+SYSTEM Partition1_DatasetPublishing
+FEATURES
+  PI_Dataset1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetPublishing::PI_Dataset1.others {
+    Taste::coordinates => "85289 62367";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Dataset1";
+  };
+  RI_registerDataset : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetTable::PI_registerDataset.others {
+    Taste::coordinates => "43178 74417";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "registerDataset";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_DatasetPublishing;
+
+SYSTEM IMPLEMENTATION Partition1_DatasetPublishing.others
+END Partition1_DatasetPublishing.others;
+
+END interfaceview::IV::Partition1_DatasetPublishing;
+
+PACKAGE interfaceview::IV::Partition1_DatasetDispatching
+PUBLIC
+
+WITH interfaceview::IV::Partition1_DatasetTable;
+WITH interfaceview::IV::OSRA_Component2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getDatasetDescription
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getDatasetDescription;
+
+SUBPROGRAM IMPLEMENTATION PI_getDatasetDescription.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getDatasetDescription.others;
+
+SUBPROGRAM RI_requestDataset
+END RI_requestDataset;
+
+SUBPROGRAM IMPLEMENTATION RI_requestDataset.others
+END RI_requestDataset.others;
+
+SUBPROGRAM RI_C2_DatasetName
+END RI_C2_DatasetName;
+
+SUBPROGRAM IMPLEMENTATION RI_C2_DatasetName.others
+END RI_C2_DatasetName.others;
+
+SYSTEM Partition1_DatasetDispatching
+FEATURES
+  PI_getDatasetDescription : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetDispatching::PI_getDatasetDescription.others {
+    Taste::coordinates => "40931 122191";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getDatasetDescription";
+  };
+  RI_requestDataset : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetTable::PI_requestDataset.others {
+    Taste::coordinates => "71721 122191";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "requestDataset";
+    Taste::labelInheritance => "true";
+  };
+  RI_C2_DatasetName : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_C2_DatasetName.others {
+    Taste::coordinates => "85176 134359";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C2_DatasetName";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_DatasetDispatching;
+
+SYSTEM IMPLEMENTATION Partition1_DatasetDispatching.others
+END Partition1_DatasetDispatching.others;
+
+END interfaceview::IV::Partition1_DatasetDispatching;
+
+PACKAGE interfaceview::IV::Partition1_DatasetTable
+PUBLIC
+
+WITH interfaceview::IV::Partition1_DatasetDispatching;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_requestDataset
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_requestDataset;
+
+SUBPROGRAM IMPLEMENTATION PI_requestDataset.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_requestDataset.others;
+
+SUBPROGRAM PI_registerDataset
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_registerDataset;
+
+SUBPROGRAM IMPLEMENTATION PI_registerDataset.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_registerDataset.others;
+
+SUBPROGRAM RI_getDatasetDescription
+END RI_getDatasetDescription;
+
+SUBPROGRAM IMPLEMENTATION RI_getDatasetDescription.others
+END RI_getDatasetDescription.others;
+
+SYSTEM Partition1_DatasetTable
+FEATURES
+  PI_requestDataset : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetTable::PI_requestDataset.others {
+    Taste::coordinates => "71713 111724";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "requestDataset";
+  };
+  PI_registerDataset : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetTable::PI_registerDataset.others {
+    Taste::coordinates => "66719 83815";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "registerDataset";
+  };
+  RI_getDatasetDescription : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetDispatching::PI_getDatasetDescription.others {
+    Taste::coordinates => "40924 111724";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getDatasetDescription";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_DatasetTable;
+
+SYSTEM IMPLEMENTATION Partition1_DatasetTable.others
+END Partition1_DatasetTable.others;
+
+END interfaceview::IV::Partition1_DatasetTable;
+
+PACKAGE interfaceview::IV::Partition1_EventPublishing
+PUBLIC
+
+WITH interfaceview::IV::Partition1_EventTable;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Event1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Event1;
+
+SUBPROGRAM IMPLEMENTATION PI_Event1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Event1.others;
+
+SUBPROGRAM RI_registerEvent
+END RI_registerEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_registerEvent.others
+END RI_registerEvent.others;
+
+SYSTEM Partition1_EventPublishing
+FEATURES
+  PI_Event1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventPublishing::PI_Event1.others {
+    Taste::coordinates => "150385 79147";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Event1";
+  };
+  RI_registerEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventTable::PI_registerEvent.others {
+    Taste::coordinates => "195453 82429";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "registerEvent";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_EventPublishing;
+
+SYSTEM IMPLEMENTATION Partition1_EventPublishing.others
+END Partition1_EventPublishing.others;
+
+END interfaceview::IV::Partition1_EventPublishing;
+
+PACKAGE interfaceview::IV::Partition1_EventDispatching
+PUBLIC
+
+WITH interfaceview::IV::Partition1_EventTable;
+WITH interfaceview::IV::OSRA_Component1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getEventDescription
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getEventDescription;
+
+SUBPROGRAM IMPLEMENTATION PI_getEventDescription.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getEventDescription.others;
+
+SUBPROGRAM RI_requestEvent
+END RI_requestEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_requestEvent.others
+END RI_requestEvent.others;
+
+SUBPROGRAM RI_C1_EventName1
+END RI_C1_EventName1;
+
+SUBPROGRAM IMPLEMENTATION RI_C1_EventName1.others
+END RI_C1_EventName1.others;
+
+SYSTEM Partition1_EventDispatching
+FEATURES
+  PI_getEventDescription : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDispatching::PI_getEventDescription.others {
+    Taste::coordinates => "165095 128018";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getEventDescription";
+  };
+  RI_requestEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventTable::PI_requestEvent.others {
+    Taste::coordinates => "210409 128018";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "requestEvent";
+    Taste::labelInheritance => "true";
+  };
+  RI_C1_EventName1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component1::PI_C1_EventName1.others {
+    Taste::coordinates => "146308 141765";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C1_EventName1";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_EventDispatching;
+
+SYSTEM IMPLEMENTATION Partition1_EventDispatching.others
+END Partition1_EventDispatching.others;
+
+END interfaceview::IV::Partition1_EventDispatching;
+
+PACKAGE interfaceview::IV::Partition1_EventTable
+PUBLIC
+
+WITH interfaceview::IV::Partition1_EventDispatching;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_requestEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_requestEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_requestEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_requestEvent.others;
+
+SUBPROGRAM PI_registerEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_registerEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_registerEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_registerEvent.others;
+
+SUBPROGRAM RI_getEventDescription
+END RI_getEventDescription;
+
+SUBPROGRAM IMPLEMENTATION RI_getEventDescription.others
+END RI_getEventDescription.others;
+
+SYSTEM Partition1_EventTable
+FEATURES
+  PI_requestEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventTable::PI_requestEvent.others {
+    Taste::coordinates => "203749 118900";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "requestEvent";
+  };
+  PI_registerEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventTable::PI_registerEvent.others {
+    Taste::coordinates => "176909 92099";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "registerEvent";
+  };
+  RI_getEventDescription : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDispatching::PI_getEventDescription.others {
+    Taste::coordinates => "173632 118900";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getEventDescription";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_EventTable;
+
+SYSTEM IMPLEMENTATION Partition1_EventTable.others
+END Partition1_EventTable.others;
+
+END interfaceview::IV::Partition1_EventTable;
+
+PACKAGE interfaceview::IV::Partition1_ApplicationCommanding
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component2;
+WITH interfaceview::IV::OSRA_Component1;
+WITH interfaceview::IV::OSRA_Component3;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_executeTC
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_executeTC;
+
+SUBPROGRAM IMPLEMENTATION PI_executeTC.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_executeTC.others;
+
+SUBPROGRAM RI_op2
+END RI_op2;
+
+SUBPROGRAM IMPLEMENTATION RI_op2.others
+END RI_op2.others;
+
+SUBPROGRAM RI_op1
+END RI_op1;
+
+SUBPROGRAM IMPLEMENTATION RI_op1.others
+END RI_op1.others;
+
+SUBPROGRAM RI_op3
+END RI_op3;
+
+SUBPROGRAM IMPLEMENTATION RI_op3.others
+END RI_op3.others;
+
+SYSTEM Partition1_ApplicationCommanding
+FEATURES
+  PI_executeTC : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_ApplicationCommanding::PI_executeTC.others {
+    Taste::coordinates => "50361 179455";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "executeTC";
+  };
+  RI_op2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component2::PI_op2.others {
+    Taste::coordinates => "16739 159576";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op2";
+    Taste::labelInheritance => "true";
+  };
+  RI_op1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component1::PI_op1.others {
+    Taste::coordinates => "16739 154866";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op1";
+    Taste::labelInheritance => "true";
+  };
+  RI_op3 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component3::PI_op3.others {
+    Taste::coordinates => "16739 175393";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op3";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_ApplicationCommanding;
+
+SYSTEM IMPLEMENTATION Partition1_ApplicationCommanding.others
+END Partition1_ApplicationCommanding.others;
+
+END interfaceview::IV::Partition1_ApplicationCommanding;
+
+PACKAGE interfaceview::IV::Partition1_Parameter_Acquisition
+PUBLIC
+
+WITH interfaceview::IV::Partition1_LibPUS;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getParam3
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam3;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam3.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam3.others;
+
+SUBPROGRAM PI_getParam2
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam2;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam2.others;
+
+SUBPROGRAM PI_getParam1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam1;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam1.others;
+
+SUBPROGRAM RI_sendTM
+END RI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION RI_sendTM.others
+END RI_sendTM.others;
+
+SYSTEM Partition1_Parameter_Acquisition
+FEATURES
+  PI_getParam3 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam3.others {
+    Taste::coordinates => "252255 157478";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam3";
+  };
+  PI_getParam2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam2.others {
+    Taste::coordinates => "252255 161561";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam2";
+  };
+  PI_getParam1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam1.others {
+    Taste::coordinates => "252255 166359";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam1";
+  };
+  RI_sendTM : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "202818 183278";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sendTM";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_Parameter_Acquisition;
+
+SYSTEM IMPLEMENTATION Partition1_Parameter_Acquisition.others
+END Partition1_Parameter_Acquisition.others;
+
+END interfaceview::IV::Partition1_Parameter_Acquisition;
+
+PACKAGE interfaceview::IV::Partition1_LibPUS
+PUBLIC
+
+WITH interfaceview::IV::Partition1_ApplicationCommanding;
+WITH interfaceview::IV::Partition1_IORouter;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_sendTM
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION PI_sendTM.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_sendTM.others;
+
+SUBPROGRAM PI_raiseEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_raiseEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_raiseEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_raiseEvent.others;
+
+SUBPROGRAM RI_executeTC
+END RI_executeTC;
+
+SUBPROGRAM IMPLEMENTATION RI_executeTC.others
+END RI_executeTC.others;
+
+SUBPROGRAM RI_send
+END RI_send;
+
+SUBPROGRAM IMPLEMENTATION RI_send.others
+END RI_send.others;
+
+SUBPROGRAM RI_receive
+END RI_receive;
+
+SUBPROGRAM IMPLEMENTATION RI_receive.others
+END RI_receive.others;
+
+SYSTEM Partition1_LibPUS
+FEATURES
+  PI_sendTM : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "159597 153883";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "sendTM";
+  };
+  PI_raiseEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_LibPUS::PI_raiseEvent.others {
+    Taste::coordinates => "124457 171931";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "raiseEvent";
+  };
+  RI_executeTC : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_ApplicationCommanding::PI_executeTC.others {
+    Taste::coordinates => "137179 180129";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "executeTC";
+    Taste::labelInheritance => "true";
+  };
+  RI_send : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_send.others {
+    Taste::coordinates => "154336 180129";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "send";
+    Taste::labelInheritance => "true";
+  };
+  RI_receive : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_receive.others {
+    Taste::coordinates => "168359 180129";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "receive";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_LibPUS;
+
+SYSTEM IMPLEMENTATION Partition1_LibPUS.others
+END Partition1_LibPUS.others;
+
+END interfaceview::IV::Partition1_LibPUS;
+
+PACKAGE interfaceview::IV::Partition1_IORouter
+PUBLIC
+
+WITH interfaceview::IV::Partition2_IORouter;
+WITH interfaceview::IV::IOPartition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_send_Partition1_Partition2
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_send_Partition1_Partition2;
+
+SUBPROGRAM IMPLEMENTATION PI_send_Partition1_Partition2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_send_Partition1_Partition2.others;
+
+SUBPROGRAM PI_sendToHw
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_sendToHw;
+
+SUBPROGRAM IMPLEMENTATION PI_sendToHw.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_sendToHw.others;
+
+SUBPROGRAM RI_send_Partition2_Partition1
+END RI_send_Partition2_Partition1;
+
+SUBPROGRAM IMPLEMENTATION RI_send_Partition2_Partition1.others
+END RI_send_Partition2_Partition1.others;
+
+SUBPROGRAM RI_readFromHw
+END RI_readFromHw;
+
+SUBPROGRAM IMPLEMENTATION RI_readFromHw.others
+END RI_readFromHw.others;
+
+SUBPROGRAM PI_send
+END PI_send;
+
+SUBPROGRAM IMPLEMENTATION PI_send.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_send.others;
+
+SUBPROGRAM PI_receive
+END PI_receive;
+
+SUBPROGRAM IMPLEMENTATION PI_receive.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_receive.others;
+
+SYSTEM Partition1_IORouter
+FEATURES
+  PI_send_Partition1_Partition2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_send_Partition1_Partition2.others {
+    Taste::coordinates => "143910 228340";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "send_Partition1_Partition2";
+  };
+  PI_sendToHw : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_sendToHw.others {
+    Taste::coordinates => "82736 228340";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "sendToHw";
+  };
+  RI_send_Partition2_Partition1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_IORouter::PI_send_Partition2_Partition1.others {
+    Taste::coordinates => "221410 228340";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "send_Partition2_Partition1";
+    Taste::labelInheritance => "true";
+  };
+  RI_readFromHw : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::IOPartition::PI_readFromHw.others {
+    Taste::coordinates => "44180 228340";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "readFromHw";
+    Taste::labelInheritance => "true";
+  };
+  PI_send : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_send.others {
+    Taste::coordinates => "147143 207247";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "send";
+  };
+  PI_receive : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_receive.others {
+    Taste::coordinates => "170243 207247";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "receive";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_IORouter;
+
+SYSTEM IMPLEMENTATION Partition1_IORouter.others
+END Partition1_IORouter.others;
+
+END interfaceview::IV::Partition1_IORouter;
+
+PACKAGE interfaceview::IV::OSRA_Component3
+PUBLIC
+
+WITH interfaceview::IV::Partition1_DatasetPublishing;
+WITH interfaceview::IV::Partition1_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_op3
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op3;
+
+SUBPROGRAM IMPLEMENTATION PI_op3.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op3.others;
+
+SUBPROGRAM PI_processData
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_processData;
+
+SUBPROGRAM IMPLEMENTATION PI_processData.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_processData.others;
+
+SUBPROGRAM RI_Dataset1
+END RI_Dataset1;
+
+SUBPROGRAM IMPLEMENTATION RI_Dataset1.others
+END RI_Dataset1.others;
+
+SUBPROGRAM RI_getParam3
+END RI_getParam3;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam3.others
+END RI_getParam3.others;
+
+SYSTEM OSRA_Component3
+FEATURES
+  PI_op3 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component3::PI_op3.others {
+    Taste::coordinates => "251189 21934";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op3";
+  };
+  PI_processData : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component3::PI_processData.others {
+    Taste::coordinates => "195891 26908";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "processData";
+  };
+  RI_Dataset1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_DatasetPublishing::PI_Dataset1.others {
+    Taste::coordinates => "195891 42657";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Dataset1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam3 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_Parameter_Acquisition::PI_getParam3.others {
+    Taste::coordinates => "251189 42353";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam3";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component3;
+
+SYSTEM IMPLEMENTATION OSRA_Component3.others
+END OSRA_Component3.others;
+
+END interfaceview::IV::OSRA_Component3;
+
+PACKAGE interfaceview::IV::Partition1_EventDistributionandReporting
+PUBLIC
+
+WITH interfaceview::IV::Partition1_LibPUS;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_C1_event1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C1_event1;
+
+SUBPROGRAM IMPLEMENTATION PI_C1_event1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C1_event1.others;
+
+SUBPROGRAM PI_C2_data1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C2_data1;
+
+SUBPROGRAM IMPLEMENTATION PI_C2_data1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C2_data1.others;
+
+SUBPROGRAM RI_raiseEvent
+END RI_raiseEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_raiseEvent.others
+END RI_raiseEvent.others;
+
+SUBPROGRAM RI_sendTM
+END RI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION RI_sendTM.others
+END RI_sendTM.others;
+
+SYSTEM Partition1_EventDistributionandReporting
+FEATURES
+  PI_C1_event1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDistributionandReporting::PI_C1_event1.others {
+    Taste::coordinates => "92016 153652";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C1_event1";
+  };
+  PI_C2_data1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition1_EventDistributionandReporting::PI_C2_data1.others {
+    Taste::coordinates => "104780 153652";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C2_data1";
+  };
+  RI_raiseEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_LibPUS::PI_raiseEvent.others {
+    Taste::coordinates => "113714 172453";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "raiseEvent";
+    Taste::labelInheritance => "true";
+  };
+  RI_sendTM : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "113714 161570";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sendTM";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition1_EventDistributionandReporting;
+
+SYSTEM IMPLEMENTATION Partition1_EventDistributionandReporting.others
+END Partition1_EventDistributionandReporting.others;
+
+END interfaceview::IV::Partition1_EventDistributionandReporting;
+
+PACKAGE interfaceview::IV::OSRA_Component4
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component5;
+WITH interfaceview::IV::Partition2_EventDistributionandReporting;
+WITH interfaceview::IV::Partition2_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_op1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op1;
+
+SUBPROGRAM IMPLEMENTATION PI_op1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op1.others;
+
+SUBPROGRAM PI_C1_EventName1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C1_EventName1;
+
+SUBPROGRAM IMPLEMENTATION PI_C1_EventName1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C1_EventName1.others;
+
+SUBPROGRAM RI_DoIF
+END RI_DoIF;
+
+SUBPROGRAM IMPLEMENTATION RI_DoIF.others
+END RI_DoIF.others;
+
+SUBPROGRAM RI_C1_event1
+END RI_C1_event1;
+
+SUBPROGRAM IMPLEMENTATION RI_C1_event1.others
+END RI_C1_event1.others;
+
+SUBPROGRAM RI_getParam1
+END RI_getParam1;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam1.others
+END RI_getParam1.others;
+
+SYSTEM OSRA_Component4
+FEATURES
+  PI_op1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component4::PI_op1.others {
+    Taste::coordinates => "309543 34474";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op1";
+  };
+  PI_C1_EventName1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component4::PI_C1_EventName1.others {
+    Taste::coordinates => "370358 48667";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C1_EventName1";
+  };
+  RI_DoIF : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_DoIF.others {
+    Taste::coordinates => "370358 25012";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "DoIF";
+    Taste::labelInheritance => "true";
+  };
+  RI_C1_event1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDistributionandReporting::PI_C1_event1.others {
+    Taste::coordinates => "370358 39205";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C1_event1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam1.others {
+    Taste::coordinates => "309543 25012";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam1";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component4;
+
+SYSTEM IMPLEMENTATION OSRA_Component4.others
+END OSRA_Component4.others;
+
+END interfaceview::IV::OSRA_Component4;
+
+PACKAGE interfaceview::IV::OSRA_Component5
+PUBLIC
+
+WITH interfaceview::IV::Partition2_EventPublishing;
+WITH interfaceview::IV::OSRA_Component6;
+WITH interfaceview::IV::Partition2_EventDistributionandReporting;
+WITH interfaceview::IV::Partition2_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_C2_DatasetName
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C2_DatasetName;
+
+SUBPROGRAM IMPLEMENTATION PI_C2_DatasetName.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C2_DatasetName.others;
+
+SUBPROGRAM PI_op2
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op2;
+
+SUBPROGRAM IMPLEMENTATION PI_op2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op2.others;
+
+SUBPROGRAM PI_DoIF
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_DoIF;
+
+SUBPROGRAM IMPLEMENTATION PI_DoIF.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_DoIF.others;
+
+SUBPROGRAM RI_Event1
+END RI_Event1;
+
+SUBPROGRAM IMPLEMENTATION RI_Event1.others
+END RI_Event1.others;
+
+SUBPROGRAM RI_processData
+END RI_processData;
+
+SUBPROGRAM IMPLEMENTATION RI_processData.others
+END RI_processData.others;
+
+SUBPROGRAM RI_C2_data1
+END RI_C2_data1;
+
+SUBPROGRAM IMPLEMENTATION RI_C2_data1.others
+END RI_C2_data1.others;
+
+SUBPROGRAM RI_getParam2
+END RI_getParam2;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam2.others
+END RI_getParam2.others;
+
+SYSTEM OSRA_Component5
+FEATURES
+  PI_C2_DatasetName : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_C2_DatasetName.others {
+    Taste::coordinates => "405632 37833";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C2_DatasetName";
+  };
+  PI_op2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_op2.others {
+    Taste::coordinates => "424556 23640";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op2";
+  };
+  PI_DoIF : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_DoIF.others {
+    Taste::coordinates => "405632 23640";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "DoIF";
+  };
+  RI_Event1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventPublishing::PI_Event1.others {
+    Taste::coordinates => "460925 42564";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Event1";
+    Taste::labelInheritance => "true";
+  };
+  RI_processData : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component6::PI_processData.others {
+    Taste::coordinates => "460925 28371";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "processData";
+    Taste::labelInheritance => "true";
+  };
+  RI_C2_data1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDistributionandReporting::PI_C2_data1.others {
+    Taste::coordinates => "405632 42564";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C2_data1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam2.others {
+    Taste::coordinates => "443480 23640";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam2";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component5;
+
+SYSTEM IMPLEMENTATION OSRA_Component5.others
+END OSRA_Component5.others;
+
+END interfaceview::IV::OSRA_Component5;
+
+PACKAGE interfaceview::IV::Partition2_DatasetPublishing
+PUBLIC
+
+WITH interfaceview::IV::Partition2_DatasetTable;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Dataset1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Dataset1;
+
+SUBPROGRAM IMPLEMENTATION PI_Dataset1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Dataset1.others;
+
+SUBPROGRAM RI_registerDataset
+END RI_registerDataset;
+
+SUBPROGRAM IMPLEMENTATION RI_registerDataset.others
+END RI_registerDataset.others;
+
+SYSTEM Partition2_DatasetPublishing
+FEATURES
+  PI_Dataset1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetPublishing::PI_Dataset1.others {
+    Taste::coordinates => "375403 63937";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Dataset1";
+  };
+  RI_registerDataset : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetTable::PI_registerDataset.others {
+    Taste::coordinates => "375403 78130";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "registerDataset";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_DatasetPublishing;
+
+SYSTEM IMPLEMENTATION Partition2_DatasetPublishing.others
+END Partition2_DatasetPublishing.others;
+
+END interfaceview::IV::Partition2_DatasetPublishing;
+
+PACKAGE interfaceview::IV::Partition2_DatasetDispatching
+PUBLIC
+
+WITH interfaceview::IV::Partition2_DatasetTable;
+WITH interfaceview::IV::OSRA_Component5;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getDatasetDescription
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getDatasetDescription;
+
+SUBPROGRAM IMPLEMENTATION PI_getDatasetDescription.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getDatasetDescription.others;
+
+SUBPROGRAM RI_requestDataset
+END RI_requestDataset;
+
+SUBPROGRAM IMPLEMENTATION RI_requestDataset.others
+END RI_requestDataset.others;
+
+SUBPROGRAM RI_C2_DatasetName
+END RI_C2_DatasetName;
+
+SUBPROGRAM IMPLEMENTATION RI_C2_DatasetName.others
+END RI_C2_DatasetName.others;
+
+SYSTEM Partition2_DatasetDispatching
+FEATURES
+  PI_getDatasetDescription : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetDispatching::PI_getDatasetDescription.others {
+    Taste::coordinates => "326796 126710";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getDatasetDescription";
+  };
+  RI_requestDataset : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetTable::PI_requestDataset.others {
+    Taste::coordinates => "359913 126710";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "requestDataset";
+    Taste::labelInheritance => "true";
+  };
+  RI_C2_DatasetName : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_C2_DatasetName.others {
+    Taste::coordinates => "375086 139944";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C2_DatasetName";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_DatasetDispatching;
+
+SYSTEM IMPLEMENTATION Partition2_DatasetDispatching.others
+END Partition2_DatasetDispatching.others;
+
+END interfaceview::IV::Partition2_DatasetDispatching;
+
+PACKAGE interfaceview::IV::Partition2_DatasetTable
+PUBLIC
+
+WITH interfaceview::IV::Partition2_DatasetDispatching;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_requestDataset
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_requestDataset;
+
+SUBPROGRAM IMPLEMENTATION PI_requestDataset.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_requestDataset.others;
+
+SUBPROGRAM PI_registerDataset
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_registerDataset;
+
+SUBPROGRAM IMPLEMENTATION PI_registerDataset.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_registerDataset.others;
+
+SUBPROGRAM RI_getDatasetDescription
+END RI_getDatasetDescription;
+
+SUBPROGRAM IMPLEMENTATION RI_getDatasetDescription.others
+END RI_getDatasetDescription.others;
+
+SYSTEM Partition2_DatasetTable
+FEATURES
+  PI_requestDataset : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetTable::PI_requestDataset.others {
+    Taste::coordinates => "378179 111993";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "requestDataset";
+  };
+  PI_registerDataset : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetTable::PI_registerDataset.others {
+    Taste::coordinates => "354751 88338";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "registerDataset";
+  };
+  RI_getDatasetDescription : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetDispatching::PI_getDatasetDescription.others {
+    Taste::coordinates => "378179 107262";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getDatasetDescription";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_DatasetTable;
+
+SYSTEM IMPLEMENTATION Partition2_DatasetTable.others
+END Partition2_DatasetTable.others;
+
+END interfaceview::IV::Partition2_DatasetTable;
+
+PACKAGE interfaceview::IV::Partition2_EventPublishing
+PUBLIC
+
+WITH interfaceview::IV::Partition2_EventTable;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Event1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Event1;
+
+SUBPROGRAM IMPLEMENTATION PI_Event1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Event1.others;
+
+SUBPROGRAM RI_registerEvent
+END RI_registerEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_registerEvent.others
+END RI_registerEvent.others;
+
+SYSTEM Partition2_EventPublishing
+FEATURES
+  PI_Event1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventPublishing::PI_Event1.others {
+    Taste::coordinates => "440288 82728";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Event1";
+  };
+  RI_registerEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventTable::PI_registerEvent.others {
+    Taste::coordinates => "519615 82728";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "registerEvent";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_EventPublishing;
+
+SYSTEM IMPLEMENTATION Partition2_EventPublishing.others
+END Partition2_EventPublishing.others;
+
+END interfaceview::IV::Partition2_EventPublishing;
+
+PACKAGE interfaceview::IV::Partition2_EventDispatching
+PUBLIC
+
+WITH interfaceview::IV::Partition2_EventTable;
+WITH interfaceview::IV::OSRA_Component4;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getEventDescription
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getEventDescription;
+
+SUBPROGRAM IMPLEMENTATION PI_getEventDescription.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getEventDescription.others;
+
+SUBPROGRAM RI_requestEvent
+END RI_requestEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_requestEvent.others
+END RI_requestEvent.others;
+
+SUBPROGRAM RI_C1_EventName1
+END RI_C1_EventName1;
+
+SUBPROGRAM IMPLEMENTATION RI_C1_EventName1.others
+END RI_C1_EventName1.others;
+
+SYSTEM Partition2_EventDispatching
+FEATURES
+  PI_getEventDescription : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDispatching::PI_getEventDescription.others {
+    Taste::coordinates => "450404 132536";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getEventDescription";
+  };
+  RI_requestEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventTable::PI_requestEvent.others {
+    Taste::coordinates => "497714 132536";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "requestEvent";
+    Taste::labelInheritance => "true";
+  };
+  RI_C1_EventName1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component4::PI_C1_EventName1.others {
+    Taste::coordinates => "436211 146021";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "C1_EventName1";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_EventDispatching;
+
+SYSTEM IMPLEMENTATION Partition2_EventDispatching.others
+END Partition2_EventDispatching.others;
+
+END interfaceview::IV::Partition2_EventDispatching;
+
+PACKAGE interfaceview::IV::Partition2_EventTable
+PUBLIC
+
+WITH interfaceview::IV::Partition2_EventDispatching;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_requestEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_requestEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_requestEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_requestEvent.others;
+
+SUBPROGRAM PI_registerEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_registerEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_registerEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_registerEvent.others;
+
+SUBPROGRAM RI_getEventDescription
+END RI_getEventDescription;
+
+SUBPROGRAM IMPLEMENTATION RI_getEventDescription.others
+END RI_getEventDescription.others;
+
+SYSTEM Partition2_EventTable
+FEATURES
+  PI_requestEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventTable::PI_requestEvent.others {
+    Taste::coordinates => "508841 120276";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "requestEvent";
+  };
+  PI_registerEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventTable::PI_registerEvent.others {
+    Taste::coordinates => "462802 96621";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "registerEvent";
+  };
+  RI_getEventDescription : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDispatching::PI_getEventDescription.others {
+    Taste::coordinates => "508841 115545";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getEventDescription";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_EventTable;
+
+SYSTEM IMPLEMENTATION Partition2_EventTable.others
+END Partition2_EventTable.others;
+
+END interfaceview::IV::Partition2_EventTable;
+
+PACKAGE interfaceview::IV::Partition2_ApplicationCommanding
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component5;
+WITH interfaceview::IV::OSRA_Component4;
+WITH interfaceview::IV::OSRA_Component6;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_executeTC
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_executeTC;
+
+SUBPROGRAM IMPLEMENTATION PI_executeTC.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_executeTC.others;
+
+SUBPROGRAM RI_op2
+END RI_op2;
+
+SUBPROGRAM IMPLEMENTATION RI_op2.others
+END RI_op2.others;
+
+SUBPROGRAM RI_op1
+END RI_op1;
+
+SUBPROGRAM IMPLEMENTATION RI_op1.others
+END RI_op1.others;
+
+SUBPROGRAM RI_op3
+END RI_op3;
+
+SUBPROGRAM IMPLEMENTATION RI_op3.others
+END RI_op3.others;
+
+SYSTEM Partition2_ApplicationCommanding
+FEATURES
+  PI_executeTC : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_ApplicationCommanding::PI_executeTC.others {
+    Taste::coordinates => "334139 183968";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "executeTC";
+  };
+  RI_op2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component5::PI_op2.others {
+    Taste::coordinates => "306656 162345";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op2";
+    Taste::labelInheritance => "true";
+  };
+  RI_op1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component4::PI_op1.others {
+    Taste::coordinates => "306656 157614";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op1";
+    Taste::labelInheritance => "true";
+  };
+  RI_op3 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component6::PI_op3.others {
+    Taste::coordinates => "306656 176538";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "op3";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_ApplicationCommanding;
+
+SYSTEM IMPLEMENTATION Partition2_ApplicationCommanding.others
+END Partition2_ApplicationCommanding.others;
+
+END interfaceview::IV::Partition2_ApplicationCommanding;
+
+PACKAGE interfaceview::IV::Partition2_Parameter_Acquisition
+PUBLIC
+
+WITH interfaceview::IV::Partition2_LibPUS;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getParam3
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam3;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam3.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam3.others;
+
+SUBPROGRAM PI_getParam2
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam2;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam2.others;
+
+SUBPROGRAM PI_getParam1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getParam1;
+
+SUBPROGRAM IMPLEMENTATION PI_getParam1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getParam1.others;
+
+SUBPROGRAM RI_sendTM
+END RI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION RI_sendTM.others
+END RI_sendTM.others;
+
+SYSTEM Partition2_Parameter_Acquisition
+FEATURES
+  PI_getParam3 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam3.others {
+    Taste::coordinates => "542147 158633";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam3";
+  };
+  PI_getParam2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam2.others {
+    Taste::coordinates => "542147 163364";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam2";
+  };
+  PI_getParam1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam1.others {
+    Taste::coordinates => "542147 168095";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getParam1";
+  };
+  RI_sendTM : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "492715 187019";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sendTM";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_Parameter_Acquisition;
+
+SYSTEM IMPLEMENTATION Partition2_Parameter_Acquisition.others
+END Partition2_Parameter_Acquisition.others;
+
+END interfaceview::IV::Partition2_Parameter_Acquisition;
+
+PACKAGE interfaceview::IV::Partition2_LibPUS
+PUBLIC
+
+WITH interfaceview::IV::Partition2_ApplicationCommanding;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_sendTM
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION PI_sendTM.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_sendTM.others;
+
+SUBPROGRAM PI_send
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_send;
+
+SUBPROGRAM IMPLEMENTATION PI_send.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_send.others;
+
+SUBPROGRAM PI_raiseEvent
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_raiseEvent;
+
+SUBPROGRAM IMPLEMENTATION PI_raiseEvent.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_raiseEvent.others;
+
+SUBPROGRAM PI_receive
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_receive;
+
+SUBPROGRAM IMPLEMENTATION PI_receive.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_receive.others;
+
+SUBPROGRAM RI_executeTC
+END RI_executeTC;
+
+SUBPROGRAM IMPLEMENTATION RI_executeTC.others
+END RI_executeTC.others;
+
+SYSTEM Partition2_LibPUS
+FEATURES
+  PI_sendTM : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "447097 158781";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "sendTM";
+  };
+  PI_send : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_send.others {
+    Taste::coordinates => "441813 185025";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "send";
+  };
+  PI_raiseEvent : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_raiseEvent.others {
+    Taste::coordinates => "413980 172974";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "raiseEvent";
+  };
+  PI_receive : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_receive.others {
+    Taste::coordinates => "455412 185025";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "receive";
+  };
+  RI_executeTC : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_ApplicationCommanding::PI_executeTC.others {
+    Taste::coordinates => "425064 185025";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "executeTC";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_LibPUS;
+
+SYSTEM IMPLEMENTATION Partition2_LibPUS.others
+END Partition2_LibPUS.others;
+
+END interfaceview::IV::Partition2_LibPUS;
+
+PACKAGE interfaceview::IV::OSRA_Component6
+PUBLIC
+
+WITH interfaceview::IV::Partition2_DatasetPublishing;
+WITH interfaceview::IV::Partition2_Parameter_Acquisition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_op3
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_op3;
+
+SUBPROGRAM IMPLEMENTATION PI_op3.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_op3.others;
+
+SUBPROGRAM PI_processData
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_processData;
+
+SUBPROGRAM IMPLEMENTATION PI_processData.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_processData.others;
+
+SUBPROGRAM RI_Dataset1
+END RI_Dataset1;
+
+SUBPROGRAM IMPLEMENTATION RI_Dataset1.others
+END RI_Dataset1.others;
+
+SUBPROGRAM RI_getParam3
+END RI_getParam3;
+
+SUBPROGRAM IMPLEMENTATION RI_getParam3.others
+END RI_getParam3.others;
+
+SYSTEM OSRA_Component6
+FEATURES
+  PI_op3 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component6::PI_op3.others {
+    Taste::coordinates => "541081 23123";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "op3";
+  };
+  PI_processData : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::OSRA_Component6::PI_processData.others {
+    Taste::coordinates => "485789 27854";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "processData";
+  };
+  RI_Dataset1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_DatasetPublishing::PI_Dataset1.others {
+    Taste::coordinates => "485789 46778";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Dataset1";
+    Taste::labelInheritance => "true";
+  };
+  RI_getParam3 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_Parameter_Acquisition::PI_getParam3.others {
+    Taste::coordinates => "541081 46778";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getParam3";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END OSRA_Component6;
+
+SYSTEM IMPLEMENTATION OSRA_Component6.others
+END OSRA_Component6.others;
+
+END interfaceview::IV::OSRA_Component6;
+
+PACKAGE interfaceview::IV::Partition2_EventDistributionandReporting
+PUBLIC
+
+WITH interfaceview::IV::Partition2_LibPUS;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_C1_event1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C1_event1;
+
+SUBPROGRAM IMPLEMENTATION PI_C1_event1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C1_event1.others;
+
+SUBPROGRAM PI_C2_data1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_C2_data1;
+
+SUBPROGRAM IMPLEMENTATION PI_C2_data1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_C2_data1.others;
+
+SUBPROGRAM RI_raiseEvent
+END RI_raiseEvent;
+
+SUBPROGRAM IMPLEMENTATION RI_raiseEvent.others
+END RI_raiseEvent.others;
+
+SUBPROGRAM RI_sendTM
+END RI_sendTM;
+
+SUBPROGRAM IMPLEMENTATION RI_sendTM.others
+END RI_sendTM.others;
+
+SYSTEM Partition2_EventDistributionandReporting
+FEATURES
+  PI_C1_event1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDistributionandReporting::PI_C1_event1.others {
+    Taste::coordinates => "382602 158033";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C1_event1";
+  };
+  PI_C2_data1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_EventDistributionandReporting::PI_C2_data1.others {
+    Taste::coordinates => "396059 158033";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "C2_data1";
+  };
+  RI_raiseEvent : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_raiseEvent.others {
+    Taste::coordinates => "403621 178540";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "raiseEvent";
+    Taste::labelInheritance => "true";
+  };
+  RI_sendTM : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_sendTM.others {
+    Taste::coordinates => "403621 165615";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sendTM";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_EventDistributionandReporting;
+
+SYSTEM IMPLEMENTATION Partition2_EventDistributionandReporting.others
+END Partition2_EventDistributionandReporting.others;
+
+END interfaceview::IV::Partition2_EventDistributionandReporting;
+
+PACKAGE interfaceview::IV::Partition2_IORouter
+PUBLIC
+
+WITH interfaceview::IV::Partition2_LibPUS;
+WITH interfaceview::IV::Partition1_IORouter;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_send_Partition2_Partition1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_send_Partition2_Partition1;
+
+SUBPROGRAM IMPLEMENTATION PI_send_Partition2_Partition1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_send_Partition2_Partition1.others;
+
+SUBPROGRAM RI_send
+END RI_send;
+
+SUBPROGRAM IMPLEMENTATION RI_send.others
+END RI_send.others;
+
+SUBPROGRAM RI_receive
+END RI_receive;
+
+SUBPROGRAM IMPLEMENTATION RI_receive.others
+END RI_receive.others;
+
+SUBPROGRAM RI_send_Partition1_Partition2
+END RI_send_Partition1_Partition2;
+
+SUBPROGRAM IMPLEMENTATION RI_send_Partition1_Partition2.others
+END RI_send_Partition1_Partition2.others;
+
+SYSTEM Partition2_IORouter
+FEATURES
+  PI_send_Partition2_Partition1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Partition2_IORouter::PI_send_Partition2_Partition1.others {
+    Taste::coordinates => "403105 224161";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "send_Partition2_Partition1";
+  };
+  RI_send : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_send.others {
+    Taste::coordinates => "429495 203068";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "send";
+    Taste::labelInheritance => "true";
+  };
+  RI_receive : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition2_LibPUS::PI_receive.others {
+    Taste::coordinates => "467825 203068";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "receive";
+    Taste::labelInheritance => "true";
+  };
+  RI_send_Partition1_Partition2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_send_Partition1_Partition2.others {
+    Taste::coordinates => "485600 224161";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "send_Partition1_Partition2";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Partition2_IORouter;
+
+SYSTEM IMPLEMENTATION Partition2_IORouter.others
+END Partition2_IORouter.others;
+
+END interfaceview::IV::Partition2_IORouter;
+
+PACKAGE interfaceview::IV::IOPartition
+PUBLIC
+
+WITH interfaceview::IV::Partition1_IORouter;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_readFromHw
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_readFromHw;
+
+SUBPROGRAM IMPLEMENTATION PI_readFromHw.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_readFromHw.others;
+
+SUBPROGRAM RI_sendToHw
+END RI_sendToHw;
+
+SUBPROGRAM IMPLEMENTATION RI_sendToHw.others
+END RI_sendToHw.others;
+
+SYSTEM IOPartition
+FEATURES
+  PI_readFromHw : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::IOPartition::PI_readFromHw.others {
+    Taste::coordinates => "68339 259159";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "readFromHw";
+  };
+  RI_sendToHw : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Partition1_IORouter::PI_sendToHw.others {
+    Taste::coordinates => "117846 259159";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sendToHw";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END IOPartition;
+
+SYSTEM IMPLEMENTATION IOPartition.others
+END IOPartition.others;
+
+END interfaceview::IV::IOPartition;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component1;
+WITH interfaceview::IV::OSRA_Component2;
+WITH interfaceview::IV::Partition1_DatasetPublishing;
+WITH interfaceview::IV::Partition1_DatasetDispatching;
+WITH interfaceview::IV::Partition1_DatasetTable;
+WITH interfaceview::IV::Partition1_EventPublishing;
+WITH interfaceview::IV::Partition1_EventDispatching;
+WITH interfaceview::IV::Partition1_EventTable;
+WITH interfaceview::IV::Partition1_ApplicationCommanding;
+WITH interfaceview::IV::Partition1_Parameter_Acquisition;
+WITH interfaceview::IV::Partition1_LibPUS;
+WITH interfaceview::IV::Partition1_IORouter;
+WITH interfaceview::IV::OSRA_Component3;
+WITH interfaceview::IV::Partition1_EventDistributionandReporting;
+WITH interfaceview::IV::OSRA_Component4;
+WITH interfaceview::IV::OSRA_Component5;
+WITH interfaceview::IV::Partition2_DatasetPublishing;
+WITH interfaceview::IV::Partition2_DatasetDispatching;
+WITH interfaceview::IV::Partition2_DatasetTable;
+WITH interfaceview::IV::Partition2_EventPublishing;
+WITH interfaceview::IV::Partition2_EventDispatching;
+WITH interfaceview::IV::Partition2_EventTable;
+WITH interfaceview::IV::Partition2_ApplicationCommanding;
+WITH interfaceview::IV::Partition2_Parameter_Acquisition;
+WITH interfaceview::IV::Partition2_LibPUS;
+WITH interfaceview::IV::OSRA_Component6;
+WITH interfaceview::IV::Partition2_EventDistributionandReporting;
+WITH interfaceview::IV::Partition2_IORouter;
+WITH interfaceview::IV::IOPartition;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  OSRA_Component1 : SYSTEM interfaceview::IV::OSRA_Component1::OSRA_Component1.others {
+    Taste::coordinates => "20130 20232 80951 48444";
+  };
+  OSRA_Component2 : SYSTEM interfaceview::IV::OSRA_Component2::OSRA_Component2.others {
+    Taste::coordinates => "115977 19111 171275 45681";
+  };
+  Partition1_DatasetPublishing : SYSTEM interfaceview::IV::Partition1_DatasetPublishing::Partition1_DatasetPublishing.others {
+    Taste::coordinates => "25763 59412 85289 74417";
+  };
+  Partition1_DatasetDispatching : SYSTEM interfaceview::IV::Partition1_DatasetDispatching::Partition1_DatasetDispatching.others {
+    Taste::coordinates => "17955 122191 85176 138241";
+  };
+  Partition1_DatasetTable : SYSTEM interfaceview::IV::Partition1_DatasetTable::Partition1_DatasetTable.others {
+    Taste::coordinates => "22256 83815 88270 111724";
+  };
+  Partition1_EventPublishing : SYSTEM interfaceview::IV::Partition1_EventPublishing::Partition1_EventPublishing.others {
+    Taste::coordinates => "150385 68742 229720 82429";
+  };
+  Partition1_EventDispatching : SYSTEM interfaceview::IV::Partition1_EventDispatching::Partition1_EventDispatching.others {
+    Taste::coordinates => "146308 128018 226129 144872";
+  };
+  Partition1_EventTable : SYSTEM interfaceview::IV::Partition1_EventTable::Partition1_EventTable.others {
+    Taste::coordinates => "153976 92099 218945 118900";
+  };
+  Partition1_ApplicationCommanding : SYSTEM interfaceview::IV::Partition1_ApplicationCommanding::Partition1_ApplicationCommanding.others {
+    Taste::coordinates => "16739 153099 61131 179455";
+  };
+  Partition1_Parameter_Acquisition : SYSTEM interfaceview::IV::Partition1_Parameter_Acquisition::Partition1_Parameter_Acquisition.others {
+    Taste::coordinates => "202818 154118 252255 186608";
+  };
+  Partition1_LibPUS : SYSTEM interfaceview::IV::Partition1_LibPUS::Partition1_LibPUS.others {
+    Taste::coordinates => "124457 153883 177762 180129";
+  };
+  Partition1_IORouter : SYSTEM interfaceview::IV::Partition1_IORouter::Partition1_IORouter.others {
+    Taste::coordinates => "23393 207247 254752 228340";
+  };
+  OSRA_Component3 : SYSTEM interfaceview::IV::OSRA_Component3::OSRA_Component3.others {
+    Taste::coordinates => "195891 18343 251189 44913";
+  };
+  Partition1_EventDistributionandReporting : SYSTEM interfaceview::IV::Partition1_EventDistributionandReporting::Partition1_EventDistributionandReporting.others {
+    Taste::coordinates => "63773 153652 113714 179060";
+  };
+  OSRA_Component4 : SYSTEM interfaceview::IV::OSRA_Component4::OSRA_Component4.others {
+    Taste::coordinates => "309543 25012 370358 53221";
+  };
+  OSRA_Component5 : SYSTEM interfaceview::IV::OSRA_Component5::OSRA_Component5.others {
+    Taste::coordinates => "405632 23640 460925 50208";
+  };
+  Partition2_DatasetPublishing : SYSTEM interfaceview::IV::Partition2_DatasetPublishing::Partition2_DatasetPublishing.others {
+    Taste::coordinates => "315883 63937 375403 78941";
+  };
+  Partition2_DatasetDispatching : SYSTEM interfaceview::IV::Partition2_DatasetDispatching::Partition2_DatasetDispatching.others {
+    Taste::coordinates => "307872 126710 375086 142758";
+  };
+  Partition2_DatasetTable : SYSTEM interfaceview::IV::Partition2_DatasetTable::Partition2_DatasetTable.others {
+    Taste::coordinates => "312172 88338 378179 116244";
+  };
+  Partition2_EventPublishing : SYSTEM interfaceview::IV::Partition2_EventPublishing::Partition2_EventPublishing.others {
+    Taste::coordinates => "440288 73266 519615 86952";
+  };
+  Partition2_EventDispatching : SYSTEM interfaceview::IV::Partition2_EventDispatching::Partition2_EventDispatching.others {
+    Taste::coordinates => "436211 132536 516024 149388";
+  };
+  Partition2_EventTable : SYSTEM interfaceview::IV::Partition2_EventTable::Partition2_EventTable.others {
+    Taste::coordinates => "443878 96621 508841 123419";
+  };
+  Partition2_ApplicationCommanding : SYSTEM interfaceview::IV::Partition2_ApplicationCommanding::Partition2_ApplicationCommanding.others {
+    Taste::coordinates => "306656 157614 351043 183968";
+  };
+  Partition2_Parameter_Acquisition : SYSTEM interfaceview::IV::Partition2_Parameter_Acquisition::Partition2_Parameter_Acquisition.others {
+    Taste::coordinates => "492715 158633 542147 191120";
+  };
+  Partition2_LibPUS : SYSTEM interfaceview::IV::Partition2_LibPUS::Partition2_LibPUS.others {
+    Taste::coordinates => "413980 158781 467279 185025";
+  };
+  OSRA_Component6 : SYSTEM interfaceview::IV::OSRA_Component6::OSRA_Component6.others {
+    Taste::coordinates => "485789 23123 541081 49691";
+  };
+  Partition2_EventDistributionandReporting : SYSTEM interfaceview::IV::Partition2_EventDistributionandReporting::Partition2_EventDistributionandReporting.others {
+    Taste::coordinates => "353685 158033 403621 183439";
+  };
+  Partition2_IORouter : SYSTEM interfaceview::IV::Partition2_IORouter::Partition2_IORouter.others {
+    Taste::coordinates => "362099 203068 539153 224161";
+  };
+  IOPartition : SYSTEM interfaceview::IV::IOPartition::IOPartition.others {
+    Taste::coordinates => "49415 259159 156342 291365";
+  };
+CONNECTIONS
+  OSRA_Component1_PI_op1_Partition1_ApplicationCommanding_RI_op1 : SUBPROGRAM ACCESS OSRA_Component1.PI_op1 -> Partition1_ApplicationCommanding.RI_op1 {
+    Taste::coordinates => "16739 154866 11047 154866 11047 31038 20130 31038";
+  };
+  OSRA_Component1_PI_C1_EventName1_Partition1_EventDispatching_RI_C1_EventName1 : SUBPROGRAM ACCESS OSRA_Component1.PI_C1_EventName1 -> Partition1_EventDispatching.RI_C1_EventName1 {
+    Taste::coordinates => "146308 141765 113629 141765 113629 44262 80951 44262";
+  };
+  OSRA_Component2_PI_DoIF_OSRA_Component1_RI_DoIF : SUBPROGRAM ACCESS OSRA_Component2.PI_DoIF -> OSRA_Component1.RI_DoIF {
+    Taste::coordinates => "80951 22995 98338 22995 98338 22980 115977 22980";
+  };
+  Partition1_EventDistributionandReporting_PI_C1_event1_OSRA_Component1_RI_C1_event1 : SUBPROGRAM ACCESS Partition1_EventDistributionandReporting.PI_C1_event1 -> OSRA_Component1.RI_C1_event1 {
+    Taste::coordinates => "80951 38042 92016 38042 92016 153652";
+  };
+  Partition1_Parameter_Acquisition_PI_getParam1_OSRA_Component1_RI_getParam1 : SUBPROGRAM ACCESS Partition1_Parameter_Acquisition.PI_getParam1 -> OSRA_Component1.RI_getParam1 {
+    Taste::coordinates => "20130 22633 3492 22633 3492 8413 268893 8413 268893 166359 252255 166359";
+  };
+  OSRA_Component2_PI_C2_DatasetName_Partition1_DatasetDispatching_RI_C2_DatasetName : SUBPROGRAM ACCESS OSRA_Component2.PI_C2_DatasetName -> Partition1_DatasetDispatching.RI_C2_DatasetName {
+    Taste::coordinates => "85176 134359 98072 134359 98072 37349 115977 37349";
+  };
+  OSRA_Component2_PI_op2_Partition1_ApplicationCommanding_RI_op2 : SUBPROGRAM ACCESS OSRA_Component2.PI_op2 -> Partition1_ApplicationCommanding.RI_op2 {
+    Taste::coordinates => "16739 159576 7732 159576 7732 13369 137843 13369 137843 19111";
+  };
+  Partition1_EventPublishing_PI_Event1_OSRA_Component2_RI_Event1 : SUBPROGRAM ACCESS Partition1_EventPublishing.PI_Event1 -> OSRA_Component2.RI_Event1 {
+    Taste::coordinates => "171275 41214 175975 41214 175975 54439 126520 54439 126520 79147 150385 79147";
+  };
+  OSRA_Component3_PI_processData_OSRA_Component2_RI_processData : SUBPROGRAM ACCESS OSRA_Component3.PI_processData -> OSRA_Component2.RI_processData {
+    Taste::coordinates => "171275 26847 183319 26847 183319 26908 195891 26908";
+  };
+  Partition1_EventDistributionandReporting_PI_C2_data1_OSRA_Component2_RI_C2_data1 : SUBPROGRAM ACCESS Partition1_EventDistributionandReporting.PI_C2_data1 -> OSRA_Component2.RI_C2_data1 {
+    Taste::coordinates => "115977 42044 104780 42044 104780 153652";
+  };
+  Partition1_Parameter_Acquisition_PI_getParam2_OSRA_Component2_RI_getParam2 : SUBPROGRAM ACCESS Partition1_Parameter_Acquisition.PI_getParam2 -> OSRA_Component2.RI_getParam2 {
+    Taste::coordinates => "156796 19111 156796 2361 264104 2361 264104 161561 252255 161561";
+  };
+  Partition1_DatasetPublishing_PI_Dataset1_OSRA_Component3_RI_Dataset1 : SUBPROGRAM ACCESS Partition1_DatasetPublishing.PI_Dataset1 -> OSRA_Component3.RI_Dataset1 {
+    Taste::coordinates => "195891 42657 186220 42657 186220 62367 85289 62367";
+  };
+  Partition1_DatasetTable_PI_registerDataset_Partition1_DatasetPublishing_RI_registerDataset : SUBPROGRAM ACCESS Partition1_DatasetTable.PI_registerDataset -> Partition1_DatasetPublishing.RI_registerDataset {
+    Taste::coordinates => "43178 74417 43178 80218 66719 80218 66719 83815";
+  };
+  Partition1_DatasetDispatching_PI_getDatasetDescription_Partition1_DatasetTable_RI_getDatasetDescription : SUBPROGRAM ACCESS Partition1_DatasetDispatching.PI_getDatasetDescription -> Partition1_DatasetTable.RI_getDatasetDescription {
+    Taste::coordinates => "40924 111724 40924 116957 40931 116957 40931 122191";
+  };
+  Partition1_DatasetTable_PI_requestDataset_Partition1_DatasetDispatching_RI_requestDataset : SUBPROGRAM ACCESS Partition1_DatasetTable.PI_requestDataset -> Partition1_DatasetDispatching.RI_requestDataset {
+    Taste::coordinates => "71721 122191 71721 115837 71713 115837 71713 111724";
+  };
+  Partition1_EventTable_PI_registerEvent_Partition1_EventPublishing_RI_registerEvent : SUBPROGRAM ACCESS Partition1_EventTable.PI_registerEvent -> Partition1_EventPublishing.RI_registerEvent {
+    Taste::coordinates => "195453 82429 195453 87141 176909 87141 176909 92099";
+  };
+  Partition1_EventDispatching_PI_getEventDescription_Partition1_EventTable_RI_getEventDescription : SUBPROGRAM ACCESS Partition1_EventDispatching.PI_getEventDescription -> Partition1_EventTable.RI_getEventDescription {
+    Taste::coordinates => "173632 118900 173632 123888 165095 123888 165095 128018";
+  };
+  Partition1_EventTable_PI_requestEvent_Partition1_EventDispatching_RI_requestEvent : SUBPROGRAM ACCESS Partition1_EventTable.PI_requestEvent -> Partition1_EventDispatching.RI_requestEvent {
+    Taste::coordinates => "210409 128018 210409 123888 203749 123888 203749 118900";
+  };
+  Partition1_ApplicationCommanding_PI_executeTC_Partition1_LibPUS_RI_executeTC : SUBPROGRAM ACCESS Partition1_ApplicationCommanding.PI_executeTC -> Partition1_LibPUS.RI_executeTC {
+    Taste::coordinates => "137179 180129 137179 192260 50361 192260 50361 179455";
+  };
+  OSRA_Component3_PI_op3_Partition1_ApplicationCommanding_RI_op3 : SUBPROGRAM ACCESS OSRA_Component3.PI_op3 -> Partition1_ApplicationCommanding.RI_op3 {
+    Taste::coordinates => "16739 175393 4416 175393 4416 8948 264965 8948 264965 21934 251189 21934";
+  };
+  Partition1_Parameter_Acquisition_PI_getParam3_OSRA_Component3_RI_getParam3 : SUBPROGRAM ACCESS Partition1_Parameter_Acquisition.PI_getParam3 -> OSRA_Component3.RI_getParam3 {
+    Taste::coordinates => "251189 42353 257911 42353 257911 157478 252255 157478";
+  };
+  Partition1_LibPUS_PI_sendTM_Partition1_Parameter_Acquisition_RI_sendTM : SUBPROGRAM ACCESS Partition1_LibPUS.PI_sendTM -> Partition1_Parameter_Acquisition.RI_sendTM {
+    Taste::coordinates => "202818 183278 187858 183278 187858 149068 159597 149068 159597 153883";
+  };
+  Partition1_LibPUS_PI_sendTM_Partition1_EventDistributionandReporting_RI_sendTM : SUBPROGRAM ACCESS Partition1_LibPUS.PI_sendTM -> Partition1_EventDistributionandReporting.RI_sendTM {
+    Taste::coordinates => "113714 161570 121475 161570 121475 149003 159597 149003 159597 153883";
+  };
+  Partition1_LibPUS_PI_raiseEvent_Partition1_EventDistributionandReporting_RI_raiseEvent : SUBPROGRAM ACCESS Partition1_LibPUS.PI_raiseEvent -> Partition1_EventDistributionandReporting.RI_raiseEvent {
+    Taste::coordinates => "113714 172453 119376 172453 119376 171931 124457 171931";
+  };
+  Partition1_IORouter_PI_send_Partition1_LibPUS_RI_send : SUBPROGRAM ACCESS Partition1_IORouter.PI_send -> Partition1_LibPUS.RI_send {
+    Taste::coordinates => "154336 180129 154336 193688 147143 193688 147143 207247";
+  };
+  Partition1_IORouter_PI_receive_Partition1_LibPUS_RI_receive : SUBPROGRAM ACCESS Partition1_IORouter.PI_receive -> Partition1_LibPUS.RI_receive {
+    Taste::coordinates => "168359 180129 168359 193688 170243 193688 170243 207247";
+  };
+  Partition1_IORouter_PI_send_Partition1_Partition2_Partition2_IORouter_RI_send_Partition1_Partition2 : SUBPROGRAM ACCESS Partition1_IORouter.PI_send_Partition1_Partition2 -> Partition2_IORouter.RI_send_Partition1_Partition2 {
+    Taste::coordinates => "485600 224161 485600 241160 143910 241160 143910 228340";
+  };
+  Partition1_IORouter_PI_sendToHw_IOPartition_RI_sendToHw : SUBPROGRAM ACCESS Partition1_IORouter.PI_sendToHw -> IOPartition.RI_sendToHw {
+    Taste::coordinates => "117846 259159 117846 243749 82736 243749 82736 228340";
+  };
+  Partition2_IORouter_PI_send_Partition2_Partition1_Partition1_IORouter_RI_send_Partition2_Partition1 : SUBPROGRAM ACCESS Partition2_IORouter.PI_send_Partition2_Partition1 -> Partition1_IORouter.RI_send_Partition2_Partition1 {
+    Taste::coordinates => "221410 228340 221410 235794 403105 235794 403105 224161";
+  };
+  IOPartition_PI_readFromHw_Partition1_IORouter_RI_readFromHw : SUBPROGRAM ACCESS IOPartition.PI_readFromHw -> Partition1_IORouter.RI_readFromHw {
+    Taste::coordinates => "44180 228340 44180 243749 68339 243749 68339 259159";
+  };
+  OSRA_Component4_PI_op1_Partition2_ApplicationCommanding_RI_op1 : SUBPROGRAM ACCESS OSRA_Component4.PI_op1 -> Partition2_ApplicationCommanding.RI_op1 {
+    Taste::coordinates => "306656 157614 300235 157614 300235 34474 309543 34474";
+  };
+  OSRA_Component4_PI_C1_EventName1_Partition2_EventDispatching_RI_C1_EventName1 : SUBPROGRAM ACCESS OSRA_Component4.PI_C1_EventName1 -> Partition2_EventDispatching.RI_C1_EventName1 {
+    Taste::coordinates => "436211 146021 403536 146021 403536 48667 370358 48667";
+  };
+  OSRA_Component5_PI_DoIF_OSRA_Component4_RI_DoIF : SUBPROGRAM ACCESS OSRA_Component5.PI_DoIF -> OSRA_Component4.RI_DoIF {
+    Taste::coordinates => "370358 25012 388246 25012 388246 23640 405632 23640";
+  };
+  Partition2_EventDistributionandReporting_PI_C1_event1_OSRA_Component4_RI_C1_event1 : SUBPROGRAM ACCESS Partition2_EventDistributionandReporting.PI_C1_event1 -> OSRA_Component4.RI_C1_event1 {
+    Taste::coordinates => "370358 39205 382602 39205 382602 158033";
+  };
+  Partition2_Parameter_Acquisition_PI_getParam1_OSRA_Component4_RI_getParam1 : SUBPROGRAM ACCESS Partition2_Parameter_Acquisition.PI_getParam1 -> OSRA_Component4.RI_getParam1 {
+    Taste::coordinates => "309543 25012 285464 25012 285464 3315 558783 3315 558783 168095 542147 168095";
+  };
+  OSRA_Component5_PI_C2_DatasetName_Partition2_DatasetDispatching_RI_C2_DatasetName : SUBPROGRAM ACCESS OSRA_Component5.PI_C2_DatasetName -> Partition2_DatasetDispatching.RI_C2_DatasetName {
+    Taste::coordinates => "375086 139944 389244 139944 389244 37833 405632 37833";
+  };
+  OSRA_Component5_PI_op2_Partition2_ApplicationCommanding_RI_op2 : SUBPROGRAM ACCESS OSRA_Component5.PI_op2 -> Partition2_ApplicationCommanding.RI_op2 {
+    Taste::coordinates => "306656 162345 291229 162345 291229 7607 424556 7607 424556 23640";
+  };
+  Partition2_EventPublishing_PI_Event1_OSRA_Component5_RI_Event1 : SUBPROGRAM ACCESS Partition2_EventPublishing.PI_Event1 -> OSRA_Component5.RI_Event1 {
+    Taste::coordinates => "460925 42564 467256 42564 467256 62646 433957 62646 433957 82728 440288 82728";
+  };
+  OSRA_Component6_PI_processData_OSRA_Component5_RI_processData : SUBPROGRAM ACCESS OSRA_Component6.PI_processData -> OSRA_Component5.RI_processData {
+    Taste::coordinates => "460925 28371 473357 28371 473357 27854 485789 27854";
+  };
+  Partition2_EventDistributionandReporting_PI_C2_data1_OSRA_Component5_RI_C2_data1 : SUBPROGRAM ACCESS Partition2_EventDistributionandReporting.PI_C2_data1 -> OSRA_Component5.RI_C2_data1 {
+    Taste::coordinates => "405632 42564 396059 42564 396059 158033";
+  };
+  Partition2_Parameter_Acquisition_PI_getParam2_OSRA_Component5_RI_getParam2 : SUBPROGRAM ACCESS Partition2_Parameter_Acquisition.PI_getParam2 -> OSRA_Component5.RI_getParam2 {
+    Taste::coordinates => "443480 23640 443480 6892 555799 6892 555799 163364 542147 163364";
+  };
+  Partition2_DatasetPublishing_PI_Dataset1_OSRA_Component6_RI_Dataset1 : SUBPROGRAM ACCESS Partition2_DatasetPublishing.PI_Dataset1 -> OSRA_Component6.RI_Dataset1 {
+    Taste::coordinates => "485789 46778 430596 46778 430596 63937 375403 63937";
+  };
+  Partition2_DatasetTable_PI_registerDataset_Partition2_DatasetPublishing_RI_registerDataset : SUBPROGRAM ACCESS Partition2_DatasetTable.PI_registerDataset -> Partition2_DatasetPublishing.RI_registerDataset {
+    Taste::coordinates => "375403 78130 382004 78130 382004 83107 354751 83107 354751 88338";
+  };
+  Partition2_DatasetDispatching_PI_getDatasetDescription_Partition2_DatasetTable_RI_getDatasetDescription : SUBPROGRAM ACCESS Partition2_DatasetDispatching.PI_getDatasetDescription -> Partition2_DatasetTable.RI_getDatasetDescription {
+    Taste::coordinates => "378179 107262 385210 107262 385210 118415 326796 118415 326796 126710";
+  };
+  Partition2_DatasetTable_PI_requestDataset_Partition2_DatasetDispatching_RI_requestDataset : SUBPROGRAM ACCESS Partition2_DatasetTable.PI_requestDataset -> Partition2_DatasetDispatching.RI_requestDataset {
+    Taste::coordinates => "359913 126710 359913 121268 388002 121268 388002 111993 378179 111993";
+  };
+  Partition2_EventTable_PI_registerEvent_Partition2_EventPublishing_RI_registerEvent : SUBPROGRAM ACCESS Partition2_EventTable.PI_registerEvent -> Partition2_EventPublishing.RI_registerEvent {
+    Taste::coordinates => "519615 82728 527548 82728 527548 91606 462802 91606 462802 96621";
+  };
+  Partition2_EventDispatching_PI_getEventDescription_Partition2_EventTable_RI_getEventDescription : SUBPROGRAM ACCESS Partition2_EventDispatching.PI_getEventDescription -> Partition2_EventTable.RI_getEventDescription {
+    Taste::coordinates => "508841 115545 520861 115545 520861 125555 450404 125555 450404 132536";
+  };
+  Partition2_EventTable_PI_requestEvent_Partition2_EventDispatching_RI_requestEvent : SUBPROGRAM ACCESS Partition2_EventTable.PI_requestEvent -> Partition2_EventDispatching.RI_requestEvent {
+    Taste::coordinates => "497714 132536 497714 127259 516822 127259 516822 120276 508841 120276";
+  };
+  Partition2_ApplicationCommanding_PI_executeTC_Partition2_LibPUS_RI_executeTC : SUBPROGRAM ACCESS Partition2_ApplicationCommanding.PI_executeTC -> Partition2_LibPUS.RI_executeTC {
+    Taste::coordinates => "425064 185025 425064 192028 334139 192028 334139 183968";
+  };
+  OSRA_Component6_PI_op3_Partition2_ApplicationCommanding_RI_op3 : SUBPROGRAM ACCESS OSRA_Component6.PI_op3 -> Partition2_ApplicationCommanding.RI_op3 {
+    Taste::coordinates => "306656 176538 281206 176538 281206 0 557191 0 557191 23123 541081 23123";
+  };
+  Partition2_Parameter_Acquisition_PI_getParam3_OSRA_Component6_RI_getParam3 : SUBPROGRAM ACCESS Partition2_Parameter_Acquisition.PI_getParam3 -> OSRA_Component6.RI_getParam3 {
+    Taste::coordinates => "541081 46778 547783 46778 547783 158633 542147 158633";
+  };
+  Partition2_LibPUS_PI_sendTM_Partition2_Parameter_Acquisition_RI_sendTM : SUBPROGRAM ACCESS Partition2_LibPUS.PI_sendTM -> Partition2_Parameter_Acquisition.RI_sendTM {
+    Taste::coordinates => "492715 187019 479898 187019 479898 155532 447097 155532 447097 158781";
+  };
+  Partition2_LibPUS_PI_sendTM_Partition2_EventDistributionandReporting_RI_sendTM : SUBPROGRAM ACCESS Partition2_LibPUS.PI_sendTM -> Partition2_EventDistributionandReporting.RI_sendTM {
+    Taste::coordinates => "403621 165615 410485 165615 410485 156082 447097 156082 447097 158781";
+  };
+  Partition2_LibPUS_PI_send_Partition2_IORouter_RI_send : SUBPROGRAM ACCESS Partition2_LibPUS.PI_send -> Partition2_IORouter.RI_send {
+    Taste::coordinates => "429495 203068 429495 194046 441813 194046 441813 185025";
+  };
+  Partition2_LibPUS_PI_raiseEvent_Partition2_EventDistributionandReporting_RI_raiseEvent : SUBPROGRAM ACCESS Partition2_LibPUS.PI_raiseEvent -> Partition2_EventDistributionandReporting.RI_raiseEvent {
+    Taste::coordinates => "403621 178540 408800 178540 408800 172974 413980 172974";
+  };
+  Partition2_LibPUS_PI_receive_Partition2_IORouter_RI_receive : SUBPROGRAM ACCESS Partition2_LibPUS.PI_receive -> Partition2_IORouter.RI_receive {
+    Taste::coordinates => "467825 203068 467825 194046 455412 194046 455412 185025";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 600000 300000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

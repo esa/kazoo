@@ -43,7 +43,7 @@ END PI_receiveAOCS_TC.others;
 
 SUBPROGRAM PI_sendAOCS_TM
 FEATURES
-  TM : OUT PARAMETER DataView::MyInteger {
+  TM : IN PARAMETER DataView::MyInteger {
     Taste::encoding => NATIVE;
   };
 PROPERTIES
@@ -73,14 +73,14 @@ FEATURES
   };
   PI_receiveAOCS_TC : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::AOCS::PI_receiveAOCS_TC.others {
     Taste::coordinates => "103247 74960";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "receiveAOCS_TC";
   };
   PI_sendAOCS_TM : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::AOCS::PI_sendAOCS_TM.others {
     Taste::coordinates => "113808 74960";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "sendAOCS_TM";

@@ -1,0 +1,318 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS Partition1
+END Partition1;
+
+PROCESS IMPLEMENTATION Partition1.others
+END Partition1.others;
+
+VIRTUAL PROCESSOR Partition1_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 0;
+END Partition1_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION Partition1_VP.others
+END Partition1_VP.others;
+
+PROCESS IOP
+END IOP;
+
+PROCESS IMPLEMENTATION IOP.others
+END IOP.others;
+
+VIRTUAL PROCESSOR IOP_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 1;
+END IOP_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION IOP_VP.others
+END IOP_VP.others;
+
+PROCESS Partition2
+END Partition2;
+
+PROCESS IMPLEMENTATION Partition2.others
+END Partition2.others;
+
+VIRTUAL PROCESSOR Partition2_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 2;
+END Partition2_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION Partition2_VP.others
+END Partition2_VP.others;
+
+MEMORY main_memory
+END main_memory;
+
+MEMORY IMPLEMENTATION main_memory.others
+SUBCOMPONENTS
+  Partition1_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#400000#;
+    Memory_Size => 16#200000#Bytes;
+    Byte_Count => 16#200000#;
+  };
+  IOP_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#400000#;
+    Memory_Size => 16#200000#Bytes;
+    Byte_Count => 16#200000#;
+  };
+  Partition2_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#1#;
+    Memory_Size => 16#1#Bytes;
+    Byte_Count => 16#1#;
+  };
+END main_memory.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::OSRA_Component1;
+WITH interfaceview::IV::OSRA_Component2;
+WITH interfaceview::IV::OSRA_Component3;
+WITH interfaceview::IV::Partition1_DatasetPublishing;
+WITH interfaceview::IV::Partition1_DatasetDispatching;
+WITH interfaceview::IV::Partition1_DatasetTable;
+WITH interfaceview::IV::Partition1_EventPublishing;
+WITH interfaceview::IV::Partition1_EventDispatching;
+WITH interfaceview::IV::Partition1_EventTable;
+WITH interfaceview::IV::Partition1_ApplicationCommanding;
+WITH interfaceview::IV::Partition1_Parameter_Acquisition;
+WITH interfaceview::IV::Partition1_LibPUS;
+WITH interfaceview::IV::Partition1_IORouter;
+WITH interfaceview::IV::Partition1_EventDistributionandReporting;
+WITH interfaceview::IV::IOPartition;
+WITH interfaceview::IV::OSRA_Component4;
+WITH interfaceview::IV::OSRA_Component5;
+WITH interfaceview::IV::OSRA_Component6;
+WITH interfaceview::IV::Partition2_DatasetPublishing;
+WITH interfaceview::IV::Partition2_DatasetDispatching;
+WITH interfaceview::IV::Partition2_DatasetTable;
+WITH interfaceview::IV::Partition2_EventPublishing;
+WITH interfaceview::IV::Partition2_EventDispatching;
+WITH interfaceview::IV::Partition2_EventTable;
+WITH interfaceview::IV::Partition2_ApplicationCommanding;
+WITH interfaceview::IV::Partition2_Parameter_Acquisition;
+WITH interfaceview::IV::Partition2_LibPUS;
+WITH interfaceview::IV::Partition2_EventDistributionandReporting;
+WITH interfaceview::IV::Partition2_IORouter;
+WITH ocarina_processors_leon;
+WITH ARINC653;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+MEMORY partition_memory
+END partition_memory;
+
+MEMORY IMPLEMENTATION partition_memory.others
+END partition_memory.others;
+
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_OSRA_Component1 : SYSTEM interfaceview::IV::OSRA_Component1::OSRA_Component1.others {
+    Taste::FunctionName => "OSRA_Component1";
+  };
+  IV_OSRA_Component2 : SYSTEM interfaceview::IV::OSRA_Component2::OSRA_Component2.others {
+    Taste::FunctionName => "OSRA_Component2";
+  };
+  IV_OSRA_Component3 : SYSTEM interfaceview::IV::OSRA_Component3::OSRA_Component3.others {
+    Taste::FunctionName => "OSRA_Component3";
+  };
+  IV_Partition1_DatasetPublishing : SYSTEM interfaceview::IV::Partition1_DatasetPublishing::Partition1_DatasetPublishing.others {
+    Taste::FunctionName => "Partition1_DatasetPublishing";
+  };
+  IV_Partition1_DatasetDispatching : SYSTEM interfaceview::IV::Partition1_DatasetDispatching::Partition1_DatasetDispatching.others {
+    Taste::FunctionName => "Partition1_DatasetDispatching";
+  };
+  IV_Partition1_DatasetTable : SYSTEM interfaceview::IV::Partition1_DatasetTable::Partition1_DatasetTable.others {
+    Taste::FunctionName => "Partition1_DatasetTable";
+  };
+  IV_Partition1_EventPublishing : SYSTEM interfaceview::IV::Partition1_EventPublishing::Partition1_EventPublishing.others {
+    Taste::FunctionName => "Partition1_EventPublishing";
+  };
+  IV_Partition1_EventDispatching : SYSTEM interfaceview::IV::Partition1_EventDispatching::Partition1_EventDispatching.others {
+    Taste::FunctionName => "Partition1_EventDispatching";
+  };
+  IV_Partition1_EventTable : SYSTEM interfaceview::IV::Partition1_EventTable::Partition1_EventTable.others {
+    Taste::FunctionName => "Partition1_EventTable";
+  };
+  IV_Partition1_ApplicationCommanding : SYSTEM interfaceview::IV::Partition1_ApplicationCommanding::Partition1_ApplicationCommanding.others {
+    Taste::FunctionName => "Partition1_ApplicationCommanding";
+  };
+  IV_Partition1_Parameter_Acquisition : SYSTEM interfaceview::IV::Partition1_Parameter_Acquisition::Partition1_Parameter_Acquisition.others {
+    Taste::FunctionName => "Partition1_Parameter_Acquisition";
+  };
+  IV_Partition1_LibPUS : SYSTEM interfaceview::IV::Partition1_LibPUS::Partition1_LibPUS.others {
+    Taste::FunctionName => "Partition1_LibPUS";
+  };
+  IV_Partition1_IORouter : SYSTEM interfaceview::IV::Partition1_IORouter::Partition1_IORouter.others {
+    Taste::FunctionName => "Partition1_IORouter";
+  };
+  IV_Partition1_EventDistributionandReporting : SYSTEM interfaceview::IV::Partition1_EventDistributionandReporting::Partition1_EventDistributionandReporting.others {
+    Taste::FunctionName => "Partition1_EventDistributionandReporting";
+  };
+  Partition1 : PROCESS deploymentview::DV::Node1::Partition1.others {
+    Taste::coordinates => "110580 70964 153697 130233";
+    Deployment::Port_Number => 0;
+  };
+  Partition1_VP : VIRTUAL PROCESSOR deploymentview::DV::Node1::Partition1_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  IV_IOPartition : SYSTEM interfaceview::IV::IOPartition::IOPartition.others {
+    Taste::FunctionName => "IOPartition";
+  };
+  IOP : PROCESS deploymentview::DV::Node1::IOP.others {
+    Taste::coordinates => "110447 135596 198262 146021";
+    Deployment::Port_Number => 0;
+  };
+  IOP_VP : VIRTUAL PROCESSOR deploymentview::DV::Node1::IOP_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  IV_OSRA_Component4 : SYSTEM interfaceview::IV::OSRA_Component4::OSRA_Component4.others {
+    Taste::FunctionName => "OSRA_Component4";
+  };
+  IV_OSRA_Component5 : SYSTEM interfaceview::IV::OSRA_Component5::OSRA_Component5.others {
+    Taste::FunctionName => "OSRA_Component5";
+  };
+  IV_OSRA_Component6 : SYSTEM interfaceview::IV::OSRA_Component6::OSRA_Component6.others {
+    Taste::FunctionName => "OSRA_Component6";
+  };
+  IV_Partition2_DatasetPublishing : SYSTEM interfaceview::IV::Partition2_DatasetPublishing::Partition2_DatasetPublishing.others {
+    Taste::FunctionName => "Partition2_DatasetPublishing";
+  };
+  IV_Partition2_DatasetDispatching : SYSTEM interfaceview::IV::Partition2_DatasetDispatching::Partition2_DatasetDispatching.others {
+    Taste::FunctionName => "Partition2_DatasetDispatching";
+  };
+  IV_Partition2_DatasetTable : SYSTEM interfaceview::IV::Partition2_DatasetTable::Partition2_DatasetTable.others {
+    Taste::FunctionName => "Partition2_DatasetTable";
+  };
+  IV_Partition2_EventPublishing : SYSTEM interfaceview::IV::Partition2_EventPublishing::Partition2_EventPublishing.others {
+    Taste::FunctionName => "Partition2_EventPublishing";
+  };
+  IV_Partition2_EventDispatching : SYSTEM interfaceview::IV::Partition2_EventDispatching::Partition2_EventDispatching.others {
+    Taste::FunctionName => "Partition2_EventDispatching";
+  };
+  IV_Partition2_EventTable : SYSTEM interfaceview::IV::Partition2_EventTable::Partition2_EventTable.others {
+    Taste::FunctionName => "Partition2_EventTable";
+  };
+  IV_Partition2_ApplicationCommanding : SYSTEM interfaceview::IV::Partition2_ApplicationCommanding::Partition2_ApplicationCommanding.others {
+    Taste::FunctionName => "Partition2_ApplicationCommanding";
+  };
+  IV_Partition2_Parameter_Acquisition : SYSTEM interfaceview::IV::Partition2_Parameter_Acquisition::Partition2_Parameter_Acquisition.others {
+    Taste::FunctionName => "Partition2_Parameter_Acquisition";
+  };
+  IV_Partition2_LibPUS : SYSTEM interfaceview::IV::Partition2_LibPUS::Partition2_LibPUS.others {
+    Taste::FunctionName => "Partition2_LibPUS";
+  };
+  IV_Partition2_EventDistributionandReporting : SYSTEM interfaceview::IV::Partition2_EventDistributionandReporting::Partition2_EventDistributionandReporting.others {
+    Taste::FunctionName => "Partition2_EventDistributionandReporting";
+  };
+  IV_Partition2_IORouter : SYSTEM interfaceview::IV::Partition2_IORouter::Partition2_IORouter.others {
+    Taste::FunctionName => "Partition2_IORouter";
+  };
+  Partition2 : PROCESS deploymentview::DV::Node1::Partition2.others {
+    Taste::coordinates => "155271 70864 198420 129288";
+    Deployment::Port_Number => 0;
+  };
+  Partition2_VP : VIRTUAL PROCESSOR deploymentview::DV::Node1::Partition2_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  proc1 : PROCESSOR ocarina_processors_leon::leon3.AIR {
+    Taste::coordinates => "107288 59305 208656 155114";
+  };
+  main_memory : MEMORY deploymentview::DV::Node1::main_memory.others;
+PROPERTIES
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_OSRA_Component1;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_OSRA_Component2;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_OSRA_Component3;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_DatasetPublishing;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_DatasetDispatching;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_DatasetTable;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_EventPublishing;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_EventDispatching;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_EventTable;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_ApplicationCommanding;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_Parameter_Acquisition;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_LibPUS;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_IORouter;
+  Taste::APLC_Binding => (reference (Partition1)) APPLIES TO IV_Partition1_EventDistributionandReporting;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO Partition1_VP;
+  Actual_Processor_Binding => (reference (Partition1_VP)) APPLIES TO Partition1;
+  Actual_Memory_Binding => (reference (main_memory.Partition1_Segment)) APPLIES TO Partition1;
+  Taste::APLC_Binding => (reference (IOP)) APPLIES TO IV_IOPartition;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO IOP_VP;
+  Actual_Processor_Binding => (reference (IOP_VP)) APPLIES TO IOP;
+  Actual_Memory_Binding => (reference (main_memory.IOP_Segment)) APPLIES TO IOP;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_OSRA_Component4;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_OSRA_Component5;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_OSRA_Component6;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_DatasetPublishing;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_DatasetDispatching;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_DatasetTable;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_EventPublishing;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_EventDispatching;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_EventTable;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_ApplicationCommanding;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_Parameter_Acquisition;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_LibPUS;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_EventDistributionandReporting;
+  Taste::APLC_Binding => (reference (Partition2)) APPLIES TO IV_Partition2_IORouter;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO Partition2_VP;
+  Actual_Processor_Binding => (reference (Partition2_VP)) APPLIES TO Partition2;
+  Actual_Memory_Binding => (reference (main_memory.Partition2_Segment)) APPLIES TO Partition2;
+  ARINC653::Module_Major_Frame => 3000ms APPLIES TO proc1;
+  ARINC653::Module_Schedule => (
+	[ Partition => reference(Partition1_VP);
+	  Duration => 1600ms;
+	  Periodic_Processing_Start => False; ],
+	[ Partition => reference(IOP_VP);
+	  Duration => 1400ms;
+	  Periodic_Processing_Start => False; ]
+) APPLIES TO proc1;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "102989 51494 219837 158893";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

@@ -1,0 +1,106 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::helloworld1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_task1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_task1;
+
+SUBPROGRAM IMPLEMENTATION PI_task1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 3 ms;
+END PI_task1.others;
+
+SYSTEM helloworld1
+FEATURES
+  PI_task1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::helloworld1::PI_task1.others {
+    Taste::coordinates => "116690 67244";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "task1";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END helloworld1;
+
+SYSTEM IMPLEMENTATION helloworld1.others
+END helloworld1.others;
+
+END interfaceview::IV::helloworld1;
+
+PACKAGE interfaceview::IV::helloworld2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_task2
+END PI_task2;
+
+SUBPROGRAM IMPLEMENTATION PI_task2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 3 ms;
+END PI_task2.others;
+
+SYSTEM helloworld2
+FEATURES
+  PI_task2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::helloworld2::PI_task2.others {
+    Taste::coordinates => "185664 66142";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "task2";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END helloworld2;
+
+SYSTEM IMPLEMENTATION helloworld2.others
+END helloworld2.others;
+
+END interfaceview::IV::helloworld2;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::helloworld1;
+WITH interfaceview::IV::helloworld2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  helloworld1 : SYSTEM interfaceview::IV::helloworld1::helloworld1.others {
+    Taste::coordinates => "83777 59369 116690 88344";
+  };
+  helloworld2 : SYSTEM interfaceview::IV::helloworld2::helloworld2.others {
+    Taste::coordinates => "152751 58267 185664 87242";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

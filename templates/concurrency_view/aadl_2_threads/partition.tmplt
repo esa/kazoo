@@ -28,7 +28,7 @@ subcomponents
 @@TABLE@@
    @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
 @@END_TABLE@@
-@@IF@@ @_Thread_Src_Name_'Length_@ > 0
+@@IF@@ @_Thread_Src_Name'Length_@ > 0
 connections
 @@TABLE@@
    port @_CAPITALIZE:Thread_Src_Name_@.OUTPORT_@_CAPITALIZE:Thread_Src_Port_@ -> @_CAPITALIZE:Thread_Dst_Name_@.INPORT_@_CAPITALIZE:Thread_Dst_Port_@;

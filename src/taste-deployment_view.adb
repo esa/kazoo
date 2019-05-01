@@ -74,8 +74,6 @@ package body TASTE.Deployment_View is
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View
    is
-      --  use type Node_Maps.Map;
-      --  use type Taste_Busses.Vector;
       use type Bus_Connections.Vector;
 
       Nodes          : Node_Maps.Map;

@@ -22,7 +22,7 @@ END deploymentview::DV::Node1;
 PACKAGE deploymentview::DV
 PUBLIC
 
-WITH interfaceview::IV::obsw;
+WITH interfaceview::IV::Obsw;
 WITH interfaceview::IV::GNC;
 WITH interfaceview::IV::ground;
 WITH ocarina_processors_x86;

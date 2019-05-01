@@ -74,6 +74,9 @@ package body TASTE.AADL_Parser is
          File_Descr := Ocarina.Files.Load_File (File_Name);
          Interface_Root := Ocarina.Parser.Parse (AADL_Language,
                                                  Interface_Root, File_Descr);
+         if Interface_Root = No_Node then
+            raise AADL_Parser_Error with "Interface view is incorrect";
+         end if;
       end if;
 
       if Cfg.Glue then
@@ -176,7 +179,9 @@ package body TASTE.AADL_Parser is
                raise AADL_Parser_Error with "Interface view parsing error";
          end;
 
-         if not Result.Configuration.Deployment_View.Is_Empty then
+         if Deployment_Root /= No_Node
+           and not Result.Configuration.Deployment_View.Is_Empty
+         then
             AADL_Lib.Append (Result.Configuration.Interface_View.Element);
             Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
          end if;

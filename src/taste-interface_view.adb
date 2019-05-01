@@ -665,6 +665,7 @@ package body TASTE.Interface_View is
          return Is_Terminal;
       end Rec_Function;
    begin
+      Put_Info ("Parsing interface view");
       if No (Interface_Root) then
          raise Interface_Error with "Interface View parsing error";
       end if;

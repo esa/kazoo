@@ -105,6 +105,7 @@ package TASTE.Concurrency_View is
    --  information is already in the deployment view. It is not repeated here.
    type Taste_Concurrency_View is tagged
       record
+         Configuration      : Taste_Configuration;
          Nodes              : CV_Nodes.Map;
          Deployment         : Complete_Deployment_View;
          Base_Template_Path : String_Holder;

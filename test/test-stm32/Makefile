@@ -3,7 +3,7 @@ KAZOO=../../kazoo
 all: test-parse
 	cp InterfaceView.aadl output/concurrency_view && \
 	cp DeploymentView.aadl output/concurrency_view && \
-	cp DataView.aadl output/concurrency_view/D_view.aadl && \
+	cp DataView.aadl output/concurrency_view && \
 	cd output/concurrency_view && ocarina -x main.aadl
 
 test-parse: clean

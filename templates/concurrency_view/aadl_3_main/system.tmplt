@@ -8,12 +8,38 @@
 @@-- @_Partition_Node_@      :  |_ Corresponding node name
 @@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
 @@-- @_Threads_@             : Code generated for the threads
+@@-- @_Thread_Names_@        : List of all threads in the complete system
+@@-- @_Target_Packages_@     : List of all target package names in the complete system
+@@-- And all the system configuration obtained from the command line:
+@@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
+@@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
+@@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
 --  Input file for the taste orchestrator: do not edit
 --  This file was generated automatically by taste/kazoo
 system Taste
 properties
- Ocarina_Config::AADL_Files => ("InterfaceView.aadl", "DeploymentView.aadl", "system.aadl", "D_view.aadl", "ocarina_components.aadl", "TASTE_IV_Properties.aadl", "TASTE_DV_Properties.aadl");
+ Ocarina_Config::AADL_Files =>
+    ("@_Interface_View_@",
+     "@_Deployment_View_@",
+     "@_Data_View_@",
+     "system.aadl",
+@@IF@@ not @_No_Stdlib_Flag_@     
+     "ocarina_components.aadl",
+@@END_IF@@
+@@IF@@ @_Other_Files'Length_@ > 0
+   @@INLINE(     )(,\n)(,\n)@@
+      @@TABLE@@
+         "@_Other_Files_@"
+      @@END_TABLE@@
+   @@END_INLINE@@
+@@END_IF@@
+     "TASTE_IV_Properties.aadl",
+     "TASTE_DV_Properties.aadl");
+@@IF@@ @_Use_POHIC_@
+ Ocarina_Config::Generator => polyorb_hi_c;
+@@ELSE@@
  Ocarina_Config::Generator => polyorb_hi_ada;
+@@END_IF@@
  Ocarina_Config::Generator_Options => ();
  Ocarina_Config::AADL_Version => AADLv2;
  Ocarina_Config::Needed_Property_Sets => (

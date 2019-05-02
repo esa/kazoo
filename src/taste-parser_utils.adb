@@ -161,26 +161,35 @@ package body TASTE.Parser_Utils is
       return Result;
    end To_Template_Tag;
 
-   procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is
-      Vec      : Tag;
-      Template : Translate_Set;
+   function To_Template (Config : Taste_Configuration) return Translate_Set is
+      Vec    : Tag;
    begin
-      Template := +Assoc ("Interface_View",  Config.Interface_View.Element)
-        & Assoc ("Deployment_View",
-                 (if Config.Deployment_View.Is_Empty then "<none>"
-                    else Config.Deployment_View.Element))
-        & Assoc ("Data_View",        Config.Data_View.Element)
-        & Assoc ("Output_Dir",       Config.Output_Dir.Element)
-        & Assoc ("Skeletons",        Config.Skeletons)
-        & Assoc ("Glue",             Config.Glue)
-        & Assoc ("Use_POHIC",        Config.Use_POHIC)
-        & Assoc ("Debug_Flag",       Config.Debug_Flag)
-        & Assoc ("No_StdLib_Flag",   Config.No_Stdlib)
-        & Assoc ("Timer_Resolution", Config.Timer_Resolution);
       for Each of Config.Other_Files loop
          Vec := Vec & Each;
       end loop;
-      Template := Template & Assoc ("Other_Files", Vec);
+
+      return (+Assoc  ("Interface_View", Config.Interface_View.Element)
+              & Assoc ("Deployment_View",
+                (if Config.Deployment_View.Is_Empty
+                 then "<none>"
+                 else Config.Deployment_View.Element))
+              & Assoc ("Data_View",        Config.Data_View.Element)
+              & Assoc ("Binary_Path",      Config.Binary_Path.Element)
+              & Assoc ("Check_Data_View",  Config.Check_Data_View)
+              & Assoc ("Output_Dir",       Config.Output_Dir.Element)
+              & Assoc ("Skeletons",        Config.Skeletons)
+              & Assoc ("Glue",             Config.Glue)
+              & Assoc ("Use_POHIC",        Config.Use_POHIC)
+              & Assoc ("Timer_Resolution", Config.Timer_Resolution)
+              & Assoc ("Debug_Flag",       Config.Debug_Flag)
+              & Assoc ("No_StdLib_Flag",   Config.No_Stdlib)
+              & Assoc ("Timer_Resolution", Config.Timer_Resolution)
+              & Assoc ("Other_Files", Vec));
+   end To_Template;
+
+   procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is
+      Template : constant Translate_Set := Config.To_Template;
+   begin
       Put_Line (Output,
         Parse (Config.Binary_Path.Element & "templates/configuration.tmplt",
          Template));
@@ -192,13 +201,11 @@ package body TASTE.Parser_Utils is
 
    function Get_APLC_Binding (E : Node_Id) return List_Id is
       APLC_Binding : constant Name_Id :=
-          Get_String_Name ("taste::aplc_binding");
+        Get_String_Name ("taste::aplc_binding");
    begin
-      if Is_Defined_Property (E, APLC_Binding) then
-         return Get_List_Property (E, APLC_Binding);
-      else
-         return No_List;
-      end if;
+      return (if Is_Defined_Property (E, APLC_Binding)
+              then Get_List_Property (E, APLC_Binding)
+              else No_List);
    end Get_APLC_Binding;
 
    ------------------------
@@ -206,11 +213,7 @@ package body TASTE.Parser_Utils is
    ------------------------
 
    function Get_Interface_Name (D : Node_Id) return Name_Id is
-      Interface_Name : constant Name_id :=
-         Get_String_Name ("taste::interfacename");
-   begin
-      return Get_String_Property (D, Interface_Name);
-   end Get_Interface_Name;
+     (Get_String_Property (D, Get_String_Name ("taste::interfacename")));
 
    --------------------------------------------
    -- Get all properties as a Map Key/String --

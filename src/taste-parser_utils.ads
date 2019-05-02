@@ -144,6 +144,8 @@ package TASTE.Parser_Utils is
          Other_Files      : String_Vectors.Vector;
       end record;
 
+   function To_Template (Config : Taste_Configuration) return Translate_Set;
+
    procedure Debug_Dump         (Config :     Taste_Configuration;
                                  Output :     File_Type);
    procedure Parse_Command_Line (Result : out Taste_Configuration);

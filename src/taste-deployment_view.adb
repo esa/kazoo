@@ -554,6 +554,15 @@ package body TASTE.Deployment_View is
                       & Partition.CPU_Platform'Img);
             Put_Line (Output, "    |_ CPU Classifier : "
                       & To_String (Partition.CPU_Classifier));
+            if Partition.VP_Name /= "" then
+               Put_Line (Output, "    |_ VP Name        : "
+                         & To_String (Partition.VP_Name));
+               Put_Line (Output, "    |_ VP Platform    : "
+                         & Partition.VP_Platform'Img);
+               Put_Line (Output, "    |_ VP Classifier  : "
+                         & To_String (Partition.VP_Classifier));
+            end if;
+
             Put (Output, "    |_ Contains       : ");
             for Bounded of Partition.Bound_Functions loop
                Put (Output, Bounded & " ");

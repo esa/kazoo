@@ -39,10 +39,10 @@ end DeploymentView;
 
 system implementation DeploymentView.final
 subcomponents
-@@TABLE@@
+@@TABLE'ALIGN_ON(":")@@
    @_CAPITALIZE:Partition_Names_@ : process @_CAPITALIZE:Partition_Names_@.final;
 @@END_TABLE@@
-@@TABLE@@
+@@TABLE'ALIGN_ON(":")@@
    @_CAPITALIZE:Node_Names_@_@_Node_CPU_@ : processor @_CAPITALIZE:Node_CPU_Classifier_@;
 @@END_TABLE@@
 properties

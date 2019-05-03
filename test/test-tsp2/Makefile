@@ -4,7 +4,7 @@ all: test-parse
 	cd output/concurrency_view && ocarina -x main.aadl
 
 test-parse: clean
-	$(KAZOO) --gw \
+	$(KAZOO) --gw -p \
 	         -o output \
 	         --glue \
 		 --no-stdlib \

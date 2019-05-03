@@ -128,7 +128,11 @@ package TASTE.Deployment_View is
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
-         Ada_Runtime     : Unbounded_String;  --  when Platform = GNAT_Runtime
+         VP_Package_Name : Unbounded_String := US ("");  -- Virtual Processor
+         VP_Name         : Unbounded_String := US ("");
+         VP_Platform     : Supported_Execution_Platform := Platform_None;
+         VP_Classifier   : Unbounded_String := US ("");
+         Ada_Runtime     : Unbounded_String; --  if CPU_Platform = GNAT_Runtime
          Bound_Functions : String_Sets.Set;
       end record;
 
@@ -140,6 +144,10 @@ package TASTE.Deployment_View is
        & Assoc ("CPU_Name",        P.CPU_Name)
        & Assoc ("CPU_Platform",    P.CPU_Platform'Img)
        & Assoc ("CPU_Classifier",  P.CPU_Classifier)
+       & AssoC ("VP_Package_Name", P.VP_Package_Name)
+       & Assoc ("VP_Name",         P.VP_Name)
+       & Assoc ("VP_Platform",     P.VP_Platform'Img)
+       & Assoc ("VP_Classifier",   P.VP_Classifier)
        & Assoc ("Ada_Runtime",     P.Ada_Runtime)
        & Assoc ("Bound_Functions", To_Template_Tag (P.Bound_Functions)));
 

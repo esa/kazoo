@@ -354,6 +354,7 @@ package body TASTE.Deployment_View is
             Get_Name_String (ATN.Name (ATN.Identifier (ATN.Namespace
                         (Corresponding_Declaration (CPU)))));
             Result.Package_Name := US (Get_Name_String (Name_Find));
+
             Set_Str_To_Name_Buffer ("");
             Get_Name_String
               (Get_String_Name (To_String (Result.Package_Name)));
@@ -367,8 +368,49 @@ package body TASTE.Deployment_View is
          end if;
 
          Result.Name :=
-            US (Get_Name_String (ATN.Name (ATN.Component_Type_Identifier
-                     (Corresponding_Declaration (CI)))));
+           US (Get_Name_String (ATN.Name (ATN.Component_Type_Identifier
+               (Corresponding_Declaration (CI)))));
+
+         --  If case of virtual processor, find the physical processor it is
+         --  bounded to, and set the values in the taste partition
+         if Get_Category_Of_Component (CPU) = CC_Virtual_Processor then
+            declare
+               Phy_CPU      : constant Node_Id :=
+                 Get_Reference_Property (CPU,
+                                         Get_String_Name
+                                           ("actual_processor_binding"));
+               Phy_CPU_Name : constant String :=
+                 Get_Name_String
+                   (Name (Identifier (Parent_Subcomponent (Phy_CPU))));
+               Phy_CPU_Platform : constant Supported_Execution_Platform :=
+                 Get_Execution_Platform (Phy_CPU);
+               Phy_CPU_Classifier   : Unbounded_String;
+               Phy_CPU_Package_Name : Unbounded_String;
+            begin
+               --  Build the classifier string (package::...::cpu....)
+               Set_Str_To_Name_Buffer ("");
+               Get_Name_String (ATN.Name (ATN.Identifier (ATN.Namespace
+                                (Corresponding_Declaration (Phy_CPU)))));
+               Phy_CPU_Package_Name := US (Get_Name_String (Name_Find));
+
+               Set_Str_To_Name_Buffer ("");
+               Get_Name_String (Get_String_Name
+                                (To_String (Phy_CPU_Package_Name)));
+               Add_Str_To_Name_Buffer ("::");
+               Get_Name_String_And_Append (Name (Identifier (Phy_CPU)));
+
+               Phy_CPU_Classifier := US (Get_Name_String (Name_Find));
+
+               Result.VP_Package_Name := Result.Package_Name;
+               Result.VP_Name         := Result.CPU_Name;
+               Result.VP_Platform     := Result.CPU_Platform;
+               Result.VP_Classifier   := Result.CPU_Classifier;
+               Result.CPU_Name        := US (Phy_CPU_Name);
+               Result.CPU_Platform    := Phy_CPU_Platform;
+               Result.CPU_Classifier  := Phy_CPU_Classifier;
+               Result.Package_Name    := Phy_CPU_Package_Name;
+            end;
+         end if;
 
          --  Bounded functions
          Processes := First_Node (Subcomponents (Depl));

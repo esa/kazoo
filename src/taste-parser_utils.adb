@@ -182,7 +182,7 @@ package body TASTE.Parser_Utils is
               & Assoc ("Use_POHIC",        Config.Use_POHIC)
               & Assoc ("Timer_Resolution", Config.Timer_Resolution)
               & Assoc ("Debug_Flag",       Config.Debug_Flag)
-              & Assoc ("No_StdLib_Flag",   Config.No_Stdlib)
+              & Assoc ("No_Stdlib_Flag",   Config.No_Stdlib)
               & Assoc ("Timer_Resolution", Config.Timer_Resolution)
               & Assoc ("Other_Files", Vec));
    end To_Template;

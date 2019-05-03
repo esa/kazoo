@@ -19,9 +19,9 @@
 system Taste
 properties
  Ocarina_Config::AADL_Files =>
-    ("@_Interface_View_@",
-     "@_Deployment_View_@",
-     "@_Data_View_@",
+    ("../../@_Interface_View_@",
+     "../../@_Deployment_View_@",
+     "../../@_Data_View_@",
      "system.aadl",
 @@IF@@ not @_No_Stdlib_Flag_@     
      "ocarina_components.aadl",
@@ -29,7 +29,7 @@ properties
 @@IF@@ @_Other_Files'Length_@ > 0
    @@INLINE(     )(,\n)(,\n)@@
       @@TABLE@@
-         "@_Other_Files_@"
+         "../../@_Other_Files_@"
       @@END_TABLE@@
    @@END_INLINE@@
 @@END_IF@@

@@ -34,6 +34,7 @@
  * Timers              : @_Timers_@
  */
 
+#include <stdbool.h>
 #include "@_LOWER:Name_@_vm_if.h"
 
 void init_@_LOWER:Name_@()
@@ -52,6 +53,7 @@ void init_@_LOWER:Name_@()
       // init function. Multiple calls are prevented by the "init" guard.
 @@END_IF@@
 @@TABLE@@
+      extern void init_@_LOWER:Sync_RIs_Parent_@();
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
    }

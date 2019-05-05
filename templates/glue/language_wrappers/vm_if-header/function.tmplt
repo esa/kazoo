@@ -59,7 +59,7 @@ extern "C" {
 @@IF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
 #include "@_LOWER:Name_@.h"
 @@ELSIF@@ @_Language_@ = "GUI"
-#include "@_LOWER:Name_@_gui_header.h"    // Mmmh?
+#include "@_LOWER:Name_@.h"
 @@ELSIF@@ @_Language_@ = "RTDS"
 #include "glue_@_LOWER:Name_@.h"
 @@ELSIF@@ @_Language_@ = "MicroPython"

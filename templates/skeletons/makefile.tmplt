@@ -7,6 +7,9 @@
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+OUTDIR := $(dir $(MAKEFILE_PATH))
+
 all: dataviews
 
 dataviews:
@@ -20,37 +23,32 @@ dataviews:
 ; do cat $$f; echo; done > dataview/dataview-uniq.asn
 	@@END_INLINE@@
 	@@-- Then generate Dataviews once per target language
+	echo @_Unique_Languages_@
 	@@TABLE@@
-           @@IF@@ @_Unique_Languages_@ /= "GUI"
-	      @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-	         @@SET@@ Lang=Ada
-	         @@SET@@ Post=cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
-	      @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
-	         @@SET@@ Lang=C
-		 @@SET@@ Post=# Blackboxes, C and C++ all use the same C data model
-	      @@ELSE@@
-                 @@SET@@ Lang=@_Unique_Languages_@
-	      @@END_IF@@
-	      @@INLINE(	)(\n	)(\n)@@
-                 mkdir -p dataview/@_Lang_@
-                 PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
-		 @@TABLE@@
+	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
+	      @@SET@@ Lang=Ada
+	      @@SET@@ Post=cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	   @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C" or @_Unique_Languages_@ = "GUI"
+	      @@SET@@ Lang=C
+	      @@SET@@ Post=# Blackboxes, C, GUI, and C++ all use the same C data model
+	   @@ELSE@@
+              @@SET@@ Lang=@_Unique_Languages_@
+	   @@END_IF@@
+	   @@INLINE(	)(\n	)(\n)@@
+              mkdir -p dataview/@_Lang_@
+              PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
+	      @@INLINE(	)( \\\n	)(\n	)@@
+	         @@TABLE@@
                     @_REPLACE(,/ ):CP_Files_@
     	         @@END_TABLE@@
-                 @_Post_@
 	      @@END_INLINE@@
-	   @@END_IF@@
+              @_Post_@
+	   @@END_INLINE@@
         @@END_TABLE@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@
-	@@IF@@ @_Language_@ = "Ada"
-	ln -fs ${PWD}/dataview/Ada/*.ads @_LOWER:Function_Names_@/Ada/src
-	@@ELSIF@@ @_Language_@ = "C" or @_Language_@ = "CPP" or @_Language_@ = "GUI" or @_Language_@ = "Blackbox_C"
-	ln -fs ${PWD}/dataview/C/*.h @_LOWER:Function_Names_@/@_Language_@/src
-	@@ELSIF@@ @_Language_@ = "SDL"
+	@@IF@@ @_Language_@ = "SDL"
 	ln -fs ${PWD}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
-	@@ELSE@@
-	ln -fs ${PWD}/dataview/@_Language_@/* @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@
 

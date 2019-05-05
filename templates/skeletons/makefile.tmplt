@@ -7,10 +7,10 @@
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
-all: compile-all-linux
+all: dataviews
 
 dataviews:
-	mkdir -p dataview
+	mkdir -p dataview/.cache
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
         for f in
@@ -21,27 +21,25 @@ dataviews:
 	@@END_INLINE@@
 	@@-- Then generate Dataviews once per target language
 	@@TABLE@@
-        @@IF@@ @_Unique_Languages_@ /= "GUI"
-	@@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-	@@INLINE()()(; fi\n)@@
-	if [ ! -d dataview/Ada ]; then mkdir dataview/Ada && mono $(shell which asn1.exe) -Ada -typePrefix asn1Scc -o dataview/Ada dataview/dataview-uniq.asn 
-	   @@TABLE@@
-	      @_REPLACE(,/ ):CP_Files_@
-	   @@END_TABLE@@
-	@@END_INLINE@@
-	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
-	@@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
-	@@INLINE()()(; fi\n)@@
-	if [ ! -d dataview/C ]; then mkdir dataview/C && mono $(shell which asn1.exe) -c -typePrefix asn1Scc -o dataview/C dataview/dataview-uniq.asn 
-	   @@TABLE@@
-	      @_REPLACE(,/ ):CP_Files_@
-	   @@END_TABLE@@
-	@@END_INLINE@@
-	@@ELSE@@
-	mkdir -p dataview/@_Unique_Languages_@
-	asn2dataModel -o dataview/@_Unique_Languages_@ -to@_Unique_Languages_@ dataview/dataview-uniq.asn
-	@@END_IF@@
-	@@END_IF@@
+           @@IF@@ @_Unique_Languages_@ /= "GUI"
+	      @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
+	         @@SET@@ Lang=Ada
+	         @@SET@@ Post=cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	      @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
+	         @@SET@@ Lang=C
+		 @@SET@@ Post=# Blackboxes, C and C++ all use the same C data model
+	      @@ELSE@@
+                 @@SET@@ Lang=@_Unique_Languages_@
+	      @@END_IF@@
+	      @@INLINE(	)(\n	)(\n)@@
+                 mkdir -p dataview/@_Lang_@
+                 PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
+		 @@TABLE@@
+                    @_REPLACE(,/ ):CP_Files_@
+    	         @@END_TABLE@@
+                 @_Post_@
+	      @@END_INLINE@@
+	   @@END_IF@@
         @@END_TABLE@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@

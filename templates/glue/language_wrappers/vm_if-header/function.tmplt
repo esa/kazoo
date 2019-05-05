@@ -54,7 +54,7 @@ extern "C" {
 #endif
 
 // C_ASN1_Types contains the signatures for ASN.1 Encoding/Decoding
-#include "C_ASN1_Types.h"
+//#include "C_ASN1_Types.h"
 
 @@IF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
 #include "@_LOWER:Name_@.h"

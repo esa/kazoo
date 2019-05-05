@@ -7,4 +7,4 @@
 @@-- @_Provided_@         : Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
 @_LOWER:Name_@ :
-	# Generate DMT glue code for this block (coded in @_Language_@)
+	# Placeholder if anything has to be done for this function coded in @_Language_@

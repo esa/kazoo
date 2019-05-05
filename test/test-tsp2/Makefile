@@ -9,14 +9,16 @@ test-parse: clean
 	         --glue \
 		 --no-stdlib \
 	         --debug \
-		 ../common/libhw.aadl
+		 ../common/ocarina_components.aadl
 
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
 	               -o output \
 	               --glue \
-		       --debug
+		 --no-stdlib \
+	         --debug \
+		 ../common/ocarina_components.aadl
 
 clean:
 	rm -rf output

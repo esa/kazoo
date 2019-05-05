@@ -414,9 +414,10 @@ package body TASTE.AADL_Parser is
                else "");
 
             Block : Protected_Block :=
-              (Name   => F.Name,
-               Node   => Node,
-               others => <>);
+              (Name     => F.Name,
+               Language => F.Language,
+               Node     => Node,
+               others   => <>);
          begin
             if not Node.Has_Value then
                --  Ignore functions that are not mapped to a node/partition

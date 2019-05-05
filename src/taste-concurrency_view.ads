@@ -37,6 +37,7 @@ package TASTE.Concurrency_View is
    type Protected_Block is tagged
       record
          Name            : Unbounded_String;
+         Language        : Unbounded_String;
          Provided        : Protected_Block_PIs.Map;
          Required        : Interfaces_Maps.Map;
          Calling_Threads : String_Sets.Set;

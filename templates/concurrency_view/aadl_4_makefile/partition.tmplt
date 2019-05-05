@@ -19,18 +19,11 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
-process @_CAPITALIZE:Name_@ extends DeploymentView::DV::@_CAPITALIZE:Node_Name_@::@_CAPITALIZE:Name_@
-end @_Name_@;
+@@INLINE@@
+@_LOWER:Name_@ :
+   @@TABLE@@
+      @_LOWER:Block_Names_@
+   @@END_TABLE@@
+@@END_INLINE@@
 
-process implementation @_CAPITALIZE:Name_@.final
-subcomponents
-@@TABLE@@
-   @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
-@@END_TABLE@@
-@@IF@@ @_Thread_Src_Name'Length_@ > 0
-connections
-@@TABLE@@
-   port @_CAPITALIZE:Thread_Src_Name_@.OUTPORT_@_CAPITALIZE:Thread_Src_Port_@ -> @_CAPITALIZE:Thread_Dst_Name_@.INPORT_@_CAPITALIZE:Thread_Dst_Port_@;
-@@END_TABLE@@
-@@END_IF@@
-end @_CAPITALIZE:Name_@.final;
+@_Blocks_@

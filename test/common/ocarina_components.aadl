@@ -2210,7 +2210,14 @@ with Deployment;
 
 processor leon
 end leon;
-
+ 
+processor leon3 extends leon
+end leon3;
+ 
+processor implementation leon3.AIR
+properties
+   Deployment::Execution_Platform => AIR;
+end leon3.AIR;
 processor leon2 extends leon
 end leon2;
 
@@ -2294,8 +2301,6 @@ end gr740.rtems410_gaisler_posix;
 --      Deployment::Execution_Platform => LEON_ORK;
 --   end leon.ork;
 
-processor leon3
-end leon3;
 
 virtual processor xtratum_partition
 end xtratum_partition;

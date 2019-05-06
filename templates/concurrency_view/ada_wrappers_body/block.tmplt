@@ -7,6 +7,10 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@IF@@ @_Language_@ = sdl or @_Language_@ = ada
+with @_CAPITALIZE:Name_@;
+@@END_IF@@
+
 package body @_CAPITALIZE:Name_@_Block is
 
    @@IF@@ @_Protected_PIs_@ /= ""

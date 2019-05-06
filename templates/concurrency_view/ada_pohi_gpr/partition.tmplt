@@ -40,12 +40,21 @@ project @_CAPITALIZE:Name_@ is
    for Source_Dirs use
       (".",
        "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada",
+       "../../dataview/C",
+       "../../dataview/Ada",
 @@TABLE@@
+@@IF@@ @_Block_Languages_@ = sdl
+       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/code",
+@@ELSE@@
        "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/src",
+@@END_IF@@
        "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/wrappers",
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("ADA_INCLUDE_PATH", ":");
+
+   for Object_Dir use "obj";
+   for Exec_Dir   use "../../binaries";
 
    for Languages use ("Ada", "C");
 

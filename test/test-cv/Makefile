@@ -2,6 +2,7 @@ KAZOO=../../kazoo
 
 all: test-parse
 	make -C output
+	cp obsw.pr output/obsw/SDL/src
 	cd output/concurrency_view && \
 	ocarina -x main.aadl && \
 	    make -f Makefile.taste

@@ -26,4 +26,5 @@ void *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
 void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
 @@END_IF@@
 {
+   puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
 }

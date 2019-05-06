@@ -27,15 +27,17 @@ use PolyORB_HI_Generated.Deployment,
 
 package @_CAPITALIZE:Thread_Name_@_Wrappers is
 
-   procedure C_Init_@_CAPITALIZE:Thread_Name_@ is null;
+   procedure C_Init_@_CAPITALIZE:Thread_Name_@
+      with Import, Convention => C, Link_Name => "init_@_LOWER:Pro_Block_Name_@";
 
-@@INLINE(   )()()@@
+@@INLINE(   )(\n   )(\n)@@
    @@IF@@ @_Param_Names'Length_@ > 0
       @@TABLE@@
-         procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl) is null;
+         procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl);
       @@END_TABLE@@
    @@ELSE@@
-      procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type) is null;
+      procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type);
+      procedure @_CAPITALIZE:Pro_Block_Name_@_@_CAPITALIZE:Entry_Port_Name_@ with Import, Convention => C, Link_Name => "@_LOWER:Pro_Block_Name_@_@_LOWER:Entry_Port_Name_@";
    @@END_IF@@
 @@END_INLINE@@
 

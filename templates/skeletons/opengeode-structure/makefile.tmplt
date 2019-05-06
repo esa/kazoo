@@ -11,17 +11,27 @@ all: compile-linux
 clean:
 	rm -rf obj
 
-compile-linux:
+generate-code:
 	mkdir -p code && cd code && \
 	@@IF@@ @_EXIST:Instance_Of_@
 	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
-	       mv *.gpr .. && cd .. && \
-	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/code/:../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
+	       mv *.gpr ..
  	@@ELSE@@
 	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
 	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
-	   mv *.gpr .. && cd .. && CODE_PATH=code ADA_INCLUDE_PATH=../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
+	   mv *.gpr ..
+	@@ELSE@@
+	:
+	@@END_IF@@
+
+compile-linux: generate-code
+	@@IF@@ @_EXIST:Instance_Of_@
+	       ADA_INCLUDE_PATH=../../../@_LOWER:Instance_Of_@/SDL/code/:../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
+ 	@@ELSE@@
+	@@END_IF@@
+	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
+	   CODE_PATH=code ADA_INCLUDE_PATH=../../../dataview/Ada gprbuild -p -P @_LOWER:Name_@_ada.gpr
 	@@ELSE@@
 	:
 	@@END_IF@@

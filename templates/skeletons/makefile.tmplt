@@ -48,7 +48,7 @@ dataviews:
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"
-	ln -fs ${PWD}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
+	ln -fs ${OUTDIR}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@
 

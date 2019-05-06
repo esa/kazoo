@@ -56,6 +56,7 @@ void init_@_LOWER:Name_@()
       extern void init_@_LOWER:Sync_RIs_Parent_@();
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
+   puts ("init done");
    }
 }
 @@-- For blackbox devices, don't generate the PI functions, they will be

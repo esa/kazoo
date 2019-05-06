@@ -91,7 +91,11 @@ package body TASTE.Concurrency_View is
               & Assoc ("Protected_Block_Name", To_String (PI.Name))
               & Assoc ("Caller_Is_Local", PI.Local_Caller);
          begin
-            Result.Provided.Append (Basic);
+            if PI.PI.RCM = Protected_Operation then
+               Result.Protected_Provided.Append (Basic);
+            else
+               Result.Unprotected_Provided.Append (Basic);
+            end if;
          end;
       end loop;
 
@@ -136,6 +140,7 @@ package body TASTE.Concurrency_View is
         & Assoc ("Thread_Name",       To_String (T.Name))
         & Assoc ("Entry_Port_Name",   To_String (T.Entry_Port_Name))
         & Assoc ("RCM",               To_String (T.RCM))
+        & Assoc ("Need_Mutex",        T.Need_Mutex)
         & Assoc ("Pro_Block_Name",    To_String (T.Protected_Block_Name))
         & Assoc ("Node_Name",         To_String (T.Node.Value_Or
           (Taste_Node'(Name => US (""), others => <>)).Name))
@@ -274,13 +279,14 @@ package body TASTE.Concurrency_View is
 
                for B of Partition.Blocks loop
                   declare
-                     Block_Name  : constant String := To_String (B.Name);
-                     Tmpl        : constant Block_As_Template :=
+                     Block_Name   : constant String := To_String (B.Name);
+                     Tmpl         : constant Block_As_Template :=
                        B.Prepare_Template;
-                     Block_Assoc : Translate_Set := Tmpl.Header;
-                     PI_Tag      : Unbounded_String;
-                     RI_Tag      : Unbounded_String;
-                     Result      : Unbounded_String;
+                     Block_Assoc  : Translate_Set := Tmpl.Header;
+                     Pro_PI_Tag   : Unbounded_String;
+                     Unpro_PI_Tag : Unbounded_String;
+                     RI_Tag       : Unbounded_String;
+                     Result       : Unbounded_String;
 
                      --  Optionally generate block code in separate files
                      --  (if fileblock.tmplt present and contains a filename)
@@ -298,8 +304,12 @@ package body TASTE.Concurrency_View is
                      Block_Names     := Block_Names & Block_Name;
                      Block_Languages := Block_Languages & B.Language;
 
-                     for PI_Assoc of Tmpl.Provided loop
-                        PI_Tag := PI_Tag & Newline
+                     for PI_Assoc of Tmpl.Protected_Provided loop
+                        Pro_PI_Tag := Pro_PI_Tag & Newline
+                          & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
+                     end loop;
+                     for PI_Assoc of Tmpl.Unprotected_Provided loop
+                        Unpro_PI_Tag := Unpro_PI_Tag & Newline
                           & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
                      end loop;
                      for RI_Assoc of Tmpl.Required loop
@@ -307,8 +317,9 @@ package body TASTE.Concurrency_View is
                           & String'(Parse (Path & "/ri.tmplt", RI_Assoc));
                      end loop;
                      Block_Assoc := Block_Assoc
-                       & Assoc ("Provided", PI_Tag)
-                       & Assoc ("Required", RI_Tag);
+                       & Assoc ("Protected_PIs",   Pro_PI_Tag)
+                       & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
+                       & Assoc ("Required",        RI_Tag);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
 

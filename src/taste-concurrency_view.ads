@@ -47,9 +47,10 @@ package TASTE.Concurrency_View is
    --  Data model for the template backends (templates_parser)
    type Block_As_Template is
       record
-         Header   : Translate_Set;
-         Provided : Translate_Sets.Vector;
-         Required : Translate_Sets.Vector;
+         Header               : Translate_Set;
+         Protected_Provided   : Translate_Sets.Vector;
+         Unprotected_Provided : Translate_Sets.Vector;
+         Required             : Translate_Sets.Vector;
       end record;
    function Prepare_Template (B : Protected_Block) return Block_As_Template;
 
@@ -70,6 +71,7 @@ package TASTE.Concurrency_View is
       record
          Name                 : Unbounded_String;
          RCM                  : Unbounded_String;
+         Need_Mutex           : Boolean := False;
          Entry_Port_Name      : Unbounded_String;
          Protected_Block_Name : Unbounded_String;
          Output_Ports         : Ports.Map;

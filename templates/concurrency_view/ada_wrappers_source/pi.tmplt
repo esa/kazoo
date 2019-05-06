@@ -7,3 +7,13 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@IF@@ @_Param_Names'Length_@ = 0
+procedure @_CAPITALIZE:Name_@;
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@
+@@INLINE(   \()(;\n    )(\);)@@
+   @@TABLE'ALIGN_ON(":")@@
+      @_CAPITALIZE:Param_Names_@ : Interfaces.C.char_array; @_CAPITALIZE:Param_Names_@_Size : Integer
+   @@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@

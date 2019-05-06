@@ -462,6 +462,7 @@ package body TASTE.AADL_Parser is
                      Thread : constant AADL_Thread :=
                        (Name                 => F.Name & "_" & PI.Name,
                         RCM                  => US (PI.RCM'Img),
+                        Need_Mutex           => (F.Provided.Length > 1),
                         Entry_Port_Name      => PI.Name,
                         Protected_Block_name => Block.Name,
                         Node                 => Block.Node,

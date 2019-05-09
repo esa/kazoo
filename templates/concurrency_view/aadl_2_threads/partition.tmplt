@@ -24,12 +24,12 @@ end @_Name_@;
 
 process implementation @_CAPITALIZE:Name_@.final
 subcomponents
-@@TABLE@@
+@@TABLE'ALIGN_ON(":")@@
    @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
 @@END_TABLE@@
 @@IF@@ @_Thread_Src_Name'Length_@ > 0
 connections
-@@TABLE@@
+@@TABLE'ALIGN_ON(":","->")@@
    port @_CAPITALIZE:Thread_Src_Name_@.OUTPORT_@_CAPITALIZE:Thread_Src_Port_@ -> @_CAPITALIZE:Thread_Dst_Name_@.INPORT_@_CAPITALIZE:Thread_Dst_Port_@;
 @@END_TABLE@@
 @@END_IF@@

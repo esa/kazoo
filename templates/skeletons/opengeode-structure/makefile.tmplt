@@ -17,7 +17,7 @@ generate-code:
 	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
 	       mv *.gpr ..
  	@@ELSE@@
-	   opengeode --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
+	   opengeode --taste --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
 	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
 	   mv *.gpr ..

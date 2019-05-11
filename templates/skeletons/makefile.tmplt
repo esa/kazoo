@@ -23,7 +23,6 @@ dataviews:
 ; do cat $$f; echo; done > dataview/dataview-uniq.asn
 	@@END_INLINE@@
 	@@-- Then generate Dataviews once per target language
-	echo @_Unique_Languages_@
 	@@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
 	      @@SET@@ Lang=Ada

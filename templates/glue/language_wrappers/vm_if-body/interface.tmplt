@@ -14,17 +14,18 @@
 @@IF@@ @_EXIST:Param_Names_@
 void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
-@@TABLE@@
-@@IF@@ @_Param_Directions_@ = "PARAM_IN"
-const char *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
-@@ELSE@@
-void *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
-@@END_IF@@
-@@END_TABLE@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         const char *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
+     @@ELSE@@
+         char       *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
+     @@END_IF@@
+   @@END_TABLE@@
 @@END_INLINE@@
-@@ELSE@@
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
-@@END_IF@@
 {
-   puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
+   //  Directly call user code, no parameters to pass
+   //  This could be done directly from the concurrency glue...
+   @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();
+   // puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
 }
+@@END_IF@@

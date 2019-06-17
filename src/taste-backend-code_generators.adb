@@ -415,8 +415,11 @@ package body TASTE.Backend.Code_Generators is
       Timers             : Tag;
       Property_Names     : Vector_Tag;
       Property_Values    : Vector_Tag;
-      CP_Names           : Vector_Tag;   --  For Context Parameters
-      CP_Types           : Vector_Tag;   --  For Context Parameters
+      CP_Names           : Vector_Tag;   --  CP = Context Parameters
+      CP_Types           : Vector_Tag;
+      CP_Values          : Vector_Tag;
+      CP_Asn1Modules     : Vector_Tag;
+      CP_Filenames       : Vector_Tag;
       Interface_Tmplt    : Translate_Set;
    begin
       Result.Header := +Assoc ("Name", F.Name)
@@ -425,8 +428,11 @@ package body TASTE.Backend.Code_Generators is
 
       --  Add context parameters details
       for Each of F.Context_Params loop
-         CP_Names := CP_Names & Each.Name;
-         CP_Types := CP_Types & Each.Sort;
+         CP_Names       := CP_Names       & Each.Name;
+         CP_Types       := CP_Types       & Each.Sort;
+         CP_Values      := CP_Values      & Each.Default_Value;
+         CP_Asn1Modules := CP_Asn1Modules & Each.ASN1_Module;
+         CP_Filenames   := CP_Filenames   & Each.ASN1_File_Name;
       end loop;
 
       --  Add all function user-defined properties
@@ -503,6 +509,9 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("Property_Values",   Property_Values)
         & Assoc ("CP_Names",          CP_Names)
         & Assoc ("CP_Types",          CP_Types)
+        & Assoc ("CP_Values",         CP_Values)
+        & Assoc ("CP_Asn1Modules",    CP_Asn1Modules)
+        & Assoc ("CP_Asn1Filenames",  CP_Asn1Filenames)
         & Assoc ("Is_Type",           F.Is_Type)
         & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
         & Assoc ("Timers",            Timers);

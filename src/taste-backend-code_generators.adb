@@ -432,7 +432,8 @@ package body TASTE.Backend.Code_Generators is
          CP_Types       := CP_Types       & Each.Sort;
          CP_Values      := CP_Values      & Each.Default_Value;
          CP_Asn1Modules := CP_Asn1Modules & Each.ASN1_Module;
-         CP_Filenames   := CP_Filenames   & Each.ASN1_File_Name;
+         CP_Filenames   := CP_Filenames
+            & Each.ASN1_File_Name.Value_Or (US (""));
       end loop;
 
       --  Add all function user-defined properties
@@ -511,7 +512,7 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("CP_Types",          CP_Types)
         & Assoc ("CP_Values",         CP_Values)
         & Assoc ("CP_Asn1Modules",    CP_Asn1Modules)
-        & Assoc ("CP_Asn1Filenames",  CP_Asn1Filenames)
+        & Assoc ("CP_Asn1Filenames",  CP_Filenames)
         & Assoc ("Is_Type",           F.Is_Type)
         & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
         & Assoc ("Timers",            Timers);

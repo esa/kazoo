@@ -10,7 +10,7 @@ use Ada.Containers,
 package TASTE.Backend.Code_Generators is
    procedure Generate (Model : TASTE_Model);
    ACG_Error : exception;
-private
+
    package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
 
    package ST_Interfaces is new Indefinite_Vectors (Natural, Translate_Set);

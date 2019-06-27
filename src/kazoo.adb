@@ -1,7 +1,8 @@
 with GNAT.OS_Lib,
      TASTE,
      TASTE.AADL_Parser,
-     TASTE.Model_Transformations;
+     TASTE.Model_Transformations,
+     TASTE.Dump;
 use TASTE.AADL_Parser,
     TASTE.Model_Transformations;
 
@@ -11,6 +12,10 @@ begin
       Model       : constant TASTE_Model := Parse_Project;
       Transformed :          TASTE_Model := Transform (Model);
    begin
+      if Model.Configuration.Debug_Flag then
+         TASTE.Dump.Dump_Input_Model (Model);
+      end if;
+
       if Transformed.Configuration.Glue then
          Transformed.Add_Concurrency_View;
          Transformed.Concurrency_View.Generate_CV;

@@ -741,7 +741,8 @@ package body TASTE.Interface_View is
       end loop;
 
       return IV_AST : constant Complete_Interface_View :=
-                                                 (Flat_Functions => Functions);
+        (Flat_Functions => Functions,
+         Connections    => Routes_Map);
    end Parse_Interface_View;
 
    procedure Rename_Function (IV       : in out Complete_Interface_View;

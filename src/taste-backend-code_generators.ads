@@ -27,6 +27,8 @@ package TASTE.Backend.Code_Generators is
    type IV_As_Template is
       record
          Funcs : Func_Maps.Map;
+         --  Connections:
+         Callers, Callees, PI_Names, RI_Names : Vector_Tag;
       end record;
 
    --  Set of functions translating the AST into Templates_Parser mappings

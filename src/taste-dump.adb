@@ -119,7 +119,6 @@ package body TASTE.Dump is
                end loop;
                return Result;
             end Process_Interfaces;
-
          begin
             if not Check or not Trigger then
                Put_Info ("Nothing generated from " & Path);
@@ -140,9 +139,18 @@ package body TASTE.Dump is
                   end;
                end loop;
             end if;
-            IV_Tags     := +Assoc ("Functions", Functions);
+
+            --  Interface view is made of functions and connections
+            IV_Tags     := +Assoc ("Functions", Functions)
+              & Assoc ("Callers", IV.Callers)
+              & Assoc ("Callees", IV.Callees)
+              & Assoc ("Caller_RIs", IV.RI_Names)
+              & Assoc ("Callee_PIs", IV.PI_Names);
+
+            --  Output is made of interface, deployment and data views
             Output_Tags := +Assoc
               ("Interface_View", String'(Parse (IV_Template, IV_Tags)));
+
             Create_Path (Output_Prefix & "/" & Output_Path);
             Create (File => Output_File,
                     Mode => Out_File,

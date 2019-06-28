@@ -23,23 +23,16 @@
 @@-- @_Property_Values_@     : List of User-defined properties (values)
 @@-- @_Is_Type_@             : Flag, True if function is a component type
 @@-- @_Instance_Of_@         : Optional name of component type
-<Function name=@_Name_@ language=@_Language_@ is_type=@_YES_NO:Is_Type_@ instance_of=@_Instance_Of_@>
-
+<Function name="@_Name_@" language="@_Language_@" is_type="@_YES_NO:Is_Type_@" instance_of="@_Instance_Of_@">
 @@TABLE@@
-   <Timer name=@_Timers_@/>
+   <Timer name="@_Timers_@"/>
 @@END_TABLE@@
-
 @@TABLE@@
-   <Context_Parameter name=@_CP_Names_@ type=@_WEB_ENCODE:CP_Types_@ value=@_WEB_ENCODE:CP_Values_@ asn1module=@_WEB_ENCODE:CP_Asn1Modules_@ asn1file=@_WEB_ENCODE:CP_Asn1Filenames_@/>
+   <Context_Parameter name="@_CP_Names_@" type="@_WEB_ENCODE:CP_Types_@" value="@_WEB_ENCODE:CP_Values_@" asn1module="@_WEB_ENCODE:CP_Asn1Modules_@" asn1file="@_WEB_ENCODE:CP_Asn1Filenames_@"/>
 @@END_TABLE@@
-
 @@TABLE@@
-   <Property name=@_WEB_ENCODE:Property_Names_@ value=@_WEB_ENCODE:Property_Values_@/>
-
+   <Property name="@_WEB_ENCODE:Property_Names_@" value="@_WEB_ENCODE:Property_Values_@"/>
 @@END_TABLE@@
-
    @_Provided_Interfaces'Indent_@
-
    @_Required_Interfaces'Indent_@ 
-
 </Function>

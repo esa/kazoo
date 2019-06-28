@@ -6,12 +6,14 @@ with Ada.Directories,
      Ada.Text_IO,
      Ada.Characters.Latin_1,
      Ada.Exceptions,
+     Ada.Strings.Unbounded,
      Templates_Parser,
      TASTE.Parser_Utils,
      TASTE.Backend.Code_Generators;
 
 use Ada.Directories,
     Ada.Text_IO,
+    Ada.Strings.Unbounded,
     Templates_Parser,
     TASTE.Parser_Utils,
     TASTE.Backend.Code_Generators;
@@ -21,8 +23,11 @@ package body TASTE.Dump is
    Newline : Character renames Ada.Characters.Latin_1.LF;
 
    --  iterate over template folders
-   procedure Dump_Everything (Model : TASTE_Model; dummy_IV : IV_As_Template)
+   procedure Dump_Everything (Model : TASTE_Model)
    is
+      IV : constant IV_As_Template :=
+        Interface_View_Template (Model.Interface_View);
+
       --  Everything will be generated under output/Dump
       --  There may be subfolders inside, set by the templates
       Output_Prefix : constant String :=
@@ -37,7 +42,7 @@ package body TASTE.Dump is
       Current  : Directory_Entry_Type;
       Filter   : constant Filter_Type := (Directory => True,
                                           others    => False);
-      dummy_Output_File      : File_Type;
+      Output_File      : File_Type;
 
       --  output path will be determined by the templates
       --  CV_Out_Dir  : constant String  :=
@@ -99,25 +104,62 @@ package body TASTE.Dump is
               (if Check then Strip_String (Parse (File_Template)) else "");
             Trigger       : constant Boolean :=
               (Check and then (Strip_String (Parse (Trig_Template)) = "TRUE"));
+
+            IV_Tags     : Translate_Set;
+            Output_Tags : Translate_Set;
+            Functions   : Unbounded_String;
+
+            function Process_Interfaces (Interfaces : St_Interfaces.Vector)
+                                         return Unbounded_String
+            is
+               Result : Unbounded_String;
+            begin
+               for I of Interfaces loop
+                  Result := Result & String'(Parse (IF_Template, I)) & Newline;
+               end loop;
+               return Result;
+            end Process_Interfaces;
+
          begin
             if not Check or not Trigger then
                Put_Info ("Nothing generated from " & Path);
                return;
             else
                Put_Info ("Generating Dump from " & Path);
-               Put_Info (Output_Prefix & Newline & Output_Path & Filename);
+               for F of IV.Funcs loop
+                  declare
+                     Func_Map : constant Translate_Set := F.Header
+                       & Assoc ("Provided_Interfaces",
+                                Process_Interfaces (F.Provided))
+                       & Assoc ("Required_Interfaces",
+                                Process_Interfaces (F.Required));
+                     Result : constant String :=
+                       Parse (Func_Template, Func_Map);
+                  begin
+                     Functions := Functions & Result & Newline;
+                  end;
+               end loop;
             end if;
+            IV_Tags     := +Assoc ("Functions", Functions);
+            Output_Tags := +Assoc
+              ("Interface_View", String'(Parse (IV_Template, IV_Tags)));
+            Create_Path (Output_Prefix & "/" & Output_Path);
+            Create (File => Output_File,
+                    Mode => Out_File,
+                    Name =>
+                      Output_Prefix & "/" & Output_Path & "/" & Filename);
+            Put_Line (Output_File, Parse (Out_Template, Output_Tags));
+            Close (Output_File);
          end;
+
          <<continue>>
       end loop;
       End_Search (ST);
    end Dump_Everything;
 
    procedure Dump_Input_Model (Model : TASTE_Model) is
-      IV : constant IV_As_Template :=
-        Interface_View_Template (Model.Interface_View);
    begin
-      Dump_Everything (Model, IV);
+      Dump_Everything (Model);
    exception
       when Error : others =>
          Put_Error ("Dump : "

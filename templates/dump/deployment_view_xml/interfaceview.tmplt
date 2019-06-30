@@ -1,0 +1,11 @@
+@@-- @_Functions_@  : functions generated from functions.tmplt
+@@-- @_Callers_@    : connection vector tag: caller function names
+@@-- @_Callees_@    :   |_ corresponding callee function names
+@@-- @_Caller_RIs_@ :   |_ corresponding name of RIs
+@@-- @_Callee_PIs_@ :   |_ corresponding name of PIs
+<InterfaceView>
+    @_Functions'Indent_@
+@@TABLE@@
+    <Connection from="@_Callers_@" ri_name="@_Caller_RIs_@" to="@_Callees_@" pi_name="@_Callee_PIs_@"/>
+@@END_TABLE@@
+</InterfaceView>

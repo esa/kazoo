@@ -22,8 +22,8 @@ package body TASTE.Dump is
 
    Newline : Character renames Ada.Characters.Latin_1.LF;
 
-   --  iterate over template folders
-   procedure Dump_Everything (Model : TASTE_Model)
+   --  iterate over template folders in the dump directory
+   procedure Dump_Input_Model (Model : TASTE_Model)
    is
       IV : constant IV_As_Template :=
         Interface_View_Template (Model.Interface_View);
@@ -86,6 +86,8 @@ package body TASTE.Dump is
             Data_Template : constant String := Path & "/dataview.tmplt";
             Func_Template : constant String := Path & "/function.tmplt";
             IF_Template   : constant String := Path & "/interface.tmplt";
+            Node_Template : constant String := Path & "/node.tmplt";
+            Part_Template : constant String := Path & "/partition.tmplt";
 
             --  Verify that all templates files are present
             Check         : constant Boolean :=
@@ -93,7 +95,8 @@ package body TASTE.Dump is
               and then Exists (Trig_Template) and then Exists (Out_Template)
               and then Exists (IV_Template) and then Exists (DV_Template)
               and then Exists (Data_Template) and then Exists (Func_Template)
-              and then Exists (IF_Template);
+              and then Exists (IF_Template) and then Exists (Node_Template)
+              and then Exists (Part_Template);
 
             --  Get the output path and filename from the template,
             --  and evaluate the trigger condition
@@ -105,9 +108,11 @@ package body TASTE.Dump is
             Trigger       : constant Boolean :=
               (Check and then (Strip_String (Parse (Trig_Template)) = "TRUE"));
 
-            IV_Tags     : Translate_Set;
+            IV_Tags     : Translate_Set;   -- Interface View
+            DV_Tags     : Translate_Set;   -- Deployment View
             Output_Tags : Translate_Set;
             Functions   : Unbounded_String;
+            Nodes       : Unbounded_String;
 
             function Process_Interfaces (Interfaces : St_Interfaces.Vector)
                                          return Unbounded_String
@@ -125,6 +130,7 @@ package body TASTE.Dump is
                return;
             else
                Put_Info ("Generating Dump from " & Path);
+               --  Prepare the interface view
                for F of IV.Funcs loop
                   declare
                      Func_Map : constant Translate_Set := F.Header
@@ -138,18 +144,97 @@ package body TASTE.Dump is
                      Functions := Functions & Result & Newline;
                   end;
                end loop;
+
+               --  Prepare the deployment view
+               for N of Model.Deployment_View.Nodes loop
+                  if N.Name = "interfaceview" then
+                     goto Next_Node;
+                  end if;
+
+                  declare
+                     Node_Map           : Translate_Set :=
+                       +Assoc  ("Node_Name",      N.Name)
+                       & Assoc ("CPU_Name",       N.CPU_Name)
+                       & Assoc ("CPU_Platform",   N.CPU_Platform'Img)
+                       & Assoc ("CPU_Classifier", N.CPU_Classifier)
+                       & Assoc ("Ada_Runtime",    N.Ada_Runtime);
+                     Partitions         : Unbounded_String;
+                     Device_Names,
+                     Package_Names,
+                     Device_Classifiers,
+                     Proc_Names,
+                     Config,
+                     Bus_Names,
+                     Port_Names,
+                     Asn1_Files,
+                     Asn1_Typenames,
+                     Asn1_Modules       : Vector_Tag;
+                  begin
+                     for Driver of N.Drivers loop
+                        Device_Names   := Device_Names & Driver.Name;
+                        Package_Names  := Package_Names & Driver.Package_Name;
+                        Device_Classifiers :=
+                          Device_Classifiers & Driver.Device_Classifier;
+                        Proc_Names     :=
+                          Proc_Names & Driver.Associated_Processor_Name;
+                        Config         := Config & Driver.Device_Configuration;
+                        Bus_Names      := Bus_Names & Driver.Accessed_Bus_Name;
+                        Port_Names     :=
+                          Port_Names & Driver.Accessed_Port_Name;
+                        Asn1_Files     := Asn1_Files & Driver.ASN1_Filename;
+                        Asn1_Typenames :=
+                          Asn1_Typenames & Driver.ASN1_Typename;
+                        Asn1_Modules   := Asn1_Modules & Driver.ASN1_Module;
+                     end loop;
+
+                     --  Add drivers to the node map
+                     Node_Map := Node_Map
+                       & Assoc ("Device_Names",       Device_Names)
+                       & Assoc ("Package_Names",      Package_Names)
+                       & Assoc ("Device_Classifiers", Device_Classifiers)
+                       & Assoc ("Proc_Names",         Proc_Names)
+                       & Assoc ("Config",             Config)
+                       & Assoc ("Bus_Names",          Bus_Names)
+                       & Assoc ("Port_Names",         Port_Names)
+                       & Assoc ("Asn1_Files",         Asn1_Files)
+                       & Assoc ("Asn1_Typenames",     Asn1_Typenames)
+                       & Assoc ("Asn1_Modules",       Asn1_Modules);
+
+                     for P of N.Partitions loop
+                        declare
+                           Part : constant String :=
+                             Parse (Part_Template, P.To_Template);
+                        begin
+                           Partitions := Partitions & Part & Newline;
+                        end;
+                     end loop;
+
+                     --  Add partitions to the node map
+                     Node_Map := Node_Map & Assoc ("Partitions", Partitions);
+
+                     Nodes :=
+                       Nodes & String'(Parse (Node_Template, Node_Map))
+                       & Newline;
+                  end;
+                  <<Next_Node>>
+               end loop;
             end if;
 
             --  Interface view is made of functions and connections
-            IV_Tags     := +Assoc ("Functions", Functions)
+            IV_Tags := +Assoc ("Functions", Functions)
               & Assoc ("Callers", IV.Callers)
               & Assoc ("Callees", IV.Callees)
               & Assoc ("Caller_RIs", IV.RI_Names)
               & Assoc ("Callee_PIs", IV.PI_Names);
 
+            --  Deployment view is made of nodes, connections and busses
+            DV_Tags := +Assoc ("Nodes", Nodes);
+
             --  Output is made of interface, deployment and data views
-            Output_Tags := +Assoc
-              ("Interface_View", String'(Parse (IV_Template, IV_Tags)));
+            Output_Tags := +Assoc ("Interface_View",
+                                   String'(Parse (IV_Template, IV_Tags)))
+              & Assoc ("Deployment_View",
+                       String'(Parse (DV_Template, DV_Tags)));
 
             Create_Path (Output_Prefix & "/" & Output_Path);
             Create (File => Output_File,
@@ -163,16 +248,10 @@ package body TASTE.Dump is
          <<continue>>
       end loop;
       End_Search (ST);
-   end Dump_Everything;
-
-   procedure Dump_Input_Model (Model : TASTE_Model) is
-   begin
-      Dump_Everything (Model);
    exception
       when Error : others =>
          Put_Error ("Dump : "
                     & Ada.Exceptions.Exception_Message (Error));
          raise Quit_Taste;
    end Dump_Input_Model;
-
 end TASTE.Dump;

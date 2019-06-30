@@ -13,14 +13,15 @@ begin
       Transformed :          TASTE_Model := Transform (Model);
    begin
       if Model.Configuration.Debug_Flag then
-         TASTE.Dump.Dump_Input_Model (Model);
+         TASTE.Dump.Dump_Input_Model (Transformed);
+         Transformed.Dump;
       end if;
 
       if Transformed.Configuration.Glue then
          Transformed.Add_Concurrency_View;
          Transformed.Concurrency_View.Generate_CV;
       end if;
-      Transformed.Dump;
+
       Transformed.Generate_Build_Script;
       Transformed.Generate_Code;
    end;

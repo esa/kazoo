@@ -1,0 +1,38 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the function
+@@-- @_Language_@            : The implementation language
+@@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
+@@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
+@@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
+@@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
+@@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
+@@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
+@@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
+@@-- @_ASN1_Files_@          : List of ASN.1 Files with path
+@@-- @_Timers_@              : List of timers (just names)
+@@-- @_Has_Context_@         : Flag, True if there are context parameters
+@@-- @_CP_Names_@            : Tag: Context Parameters - name
+@@-- @_CP_Types_@            :   |_ asn1 type
+@@-- @_CP_Values_@           :   |_ value
+@@-- @_CP_Asn1Modules_@      :   |_ asn1 module
+@@-- @_CP_Asn1Filenames_@    :   |_ asn1 filenames
+@@-- @_Provided_Interfaces_@ : From template: Provided interfaces with params
+@@-- @_Required_Interfaces_@ : From template: Required interfaces with params
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@     : List of User-defined properties (values)
+@@-- @_Is_Type_@             : Flag, True if function is a component type
+@@-- @_Instance_Of_@         : Optional name of component type
+<Function name="@_Name_@" language="@_Language_@" is_type="@_YES_NO:Is_Type_@" instance_of="@_Instance_Of_@">
+@@TABLE@@
+   <Timer name="@_Timers_@"/>
+@@END_TABLE@@
+@@TABLE@@
+   <Context_Parameter name="@_CP_Names_@" type="@_WEB_ENCODE:CP_Types_@" value="@_WEB_ENCODE:CP_Values_@" asn1module="@_WEB_ENCODE:CP_Asn1Modules_@" asn1file="@_WEB_ENCODE:CP_Asn1Filenames_@"/>
+@@END_TABLE@@
+@@TABLE@@
+   <Property name="@_WEB_ENCODE:Property_Names_@" value="@_WEB_ENCODE:Property_Values_@"/>
+@@END_TABLE@@
+   @_Provided_Interfaces'Indent_@
+   @_Required_Interfaces'Indent_@ 
+</Function>

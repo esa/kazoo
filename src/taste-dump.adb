@@ -113,6 +113,11 @@ package body TASTE.Dump is
             Output_Tags : Translate_Set;
             Functions   : Unbounded_String;
             Nodes       : Unbounded_String;
+            Source_Nodes,                  -- Connections in deployment
+            Source_Ports,
+            Bus_Names,
+            Dest_Nodes,
+            Dest_Ports  : Vector_Tag;
 
             function Process_Interfaces (Interfaces : St_Interfaces.Vector)
                                          return Unbounded_String
@@ -218,6 +223,15 @@ package body TASTE.Dump is
                   end;
                   <<Next_Node>>
                end loop;
+
+               --  Add the deployment connections as vector tag
+               for C of Model.Deployment_View.Connections loop
+                  Source_Nodes := Source_Nodes & C.Source_Node;
+                  Source_Ports := Source_Ports & C.Source_Port;
+                  Bus_Names    := Bus_Names    & C.Bus_Name;
+                  Dest_Nodes   := Dest_Nodes   & C.Dest_Node;
+                  Dest_Ports   := Dest_Ports   & C.Dest_Port;
+               end loop;
             end if;
 
             --  Interface view is made of functions and connections
@@ -228,7 +242,12 @@ package body TASTE.Dump is
               & Assoc ("Callee_PIs", IV.PI_Names);
 
             --  Deployment view is made of nodes, connections and busses
-            DV_Tags := +Assoc ("Nodes", Nodes);
+            DV_Tags := +Assoc ("Nodes", Nodes)
+              & Assoc ("Source_Nodes", Source_Nodes)
+              & Assoc ("Source_Ports", Source_Ports)
+              & Assoc ("Bus_Names",    Bus_Names)
+              & Assoc ("Dest_Nodes",   Dest_Nodes)
+              & Assoc ("Dest_Ports",   Dest_Ports);
 
             --  Output is made of interface, deployment and data views
             Output_Tags := +Assoc ("Interface_View",

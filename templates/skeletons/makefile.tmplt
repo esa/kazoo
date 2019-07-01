@@ -22,6 +22,15 @@ dataviews:
         @@END_TABLE@@
 ; do cat $$f; echo; done > dataview/dataview-uniq.asn
 	@@END_INLINE@@
+	@@-- Create system_config.h by concatenating all functions partial system config files
+	@@INLINE(	)( )(\n)@@
+        for f in
+        @@TABLE@@
+	    @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_system_config.h
+        @@END_TABLE@@
+; do cat $$f; echo; done > system_config.h
+	@@END_INLINE@@
+	
 	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
 	PROJECT_CACHE=dataview/.cache asn2aadlPlus dataview/dataview-uniq.asn dataview/dataview_aadlv1.aadl
 	@@-- For each function generate the glue code from DMT based on the dataview

@@ -10,7 +10,7 @@
 @_LOWER:Name_@ :
 @@IF@@ @_Language_@ = "sdl"
 	# Call opengeode to generate the functional code
-	make -C ../@_Name_@/SDL generate-code
+	make -C ../@_LOWER:Name_@/SDL generate-code
 @@ELSE@@
 	# Placeholder if anything has to be done for this function coded in @_Language_@
 @@END_IF@@

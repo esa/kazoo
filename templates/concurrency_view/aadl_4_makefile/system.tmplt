@@ -14,10 +14,13 @@
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
 @@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
 @@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
-@@INLINE@@
+@@INLINE()( )()@@
 all:
+@@TABLE@@
 @_LOWER:Node_Names_@
+@@END_TABLE@@
 @@END_INLINE@@
+
 @@TABLE@@
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@
 @@END_TABLE@@

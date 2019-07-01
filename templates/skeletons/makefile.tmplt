@@ -26,7 +26,9 @@ dataviews:
 	@@INLINE(	)( )(\n)@@
         for f in
         @@TABLE@@
+	@@IF@@ not @_Is_Type_@
 	    @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_system_config.h
+	@@END_IF@@
         @@END_TABLE@@
 ; do cat $$f; echo; done > system_config.h
 	@@END_INLINE@@
@@ -35,7 +37,9 @@ dataviews:
 	PROJECT_CACHE=dataview/.cache asn2aadlPlus dataview/dataview-uniq.asn dataview/dataview_aadlv1.aadl
 	@@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@
-	aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
+	@@IF@@ not @_Is_Type_@
+	PROJECT_CACHE=dataview/.cache aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
+	@@END_IF@@
 	@@END_TABLE@@
 	@@-- Then generate Dataviews once per target language
 	@@TABLE@@

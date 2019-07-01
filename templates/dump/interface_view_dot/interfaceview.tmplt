@@ -7,4 +7,3 @@
 @@TABLE@@
 @_Callers_@ -> @_Callees_@ [fontsize=14, color=blue, headlabel="[@_Caller_RIs_@]", taillabel="[@_Callee_PIs_@]"];
 @@END_TABLE@@
-</InterfaceView>

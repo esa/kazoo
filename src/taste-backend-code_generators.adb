@@ -528,13 +528,11 @@ package body TASTE.Backend.Code_Generators is
          Result.Funcs.Insert (Key      => To_String (Each.Name),
                               New_Item => Func_Template (Each));
       end loop;
-      for Each of IV.Connections loop
-         for C of Each loop
-            Result.Callers  := Result.Callers  & C.Caller;
-            Result.Callees  := Result.Callees  & C.Callee;
-            Result.RI_Names := Result.RI_Names & C.RI_Name;
-            Result.PI_Names := Result.PI_Names & C.PI_Name;
-         end loop;
+      for C of IV.Connections loop
+         Result.Callers  := Result.Callers  & C.Caller;
+         Result.Callees  := Result.Callees  & C.Callee;
+         Result.RI_Names := Result.RI_Names & C.RI_Name;
+         Result.PI_Names := Result.PI_Names & C.PI_Name;
       end loop;
       return Result;
    end Interface_View_Template;

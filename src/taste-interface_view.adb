@@ -293,11 +293,12 @@ package body TASTE.Interface_View is
       use type Ctxt_Params.Vector;
       use type Parameters.Vector;
       --  use type Connection_Maps.Map;
-      System            : Node_Id;
-      Success           : Boolean;
-      Functions         : Function_Maps.Map;
-      Routes_Map        : Connection_Maps.Map;
-      Current_Function  : Node_Id;
+      System                 : Node_Id;
+      Success                : Boolean;
+      Functions              : Function_Maps.Map;
+      Routes_Map             : Connection_Maps.Map;
+      End_To_End_Connections : Channels.Vector;
+      Current_Function       : Node_Id;
 
       --  Parse a connection
       function Parse_Connection (Conn : Node_Id) return Optional_Connection is
@@ -696,6 +697,8 @@ package body TASTE.Interface_View is
          end;
       end loop;
 
+      --  Routes_Map contains all connections including the nested ones
+      --  It is used in Rec_Jump to resolve all end-to-end connections
       Routes_Map.Insert (Key      => "_Root",
                          New_Item => Parse_System_Connections (System));
 
@@ -715,6 +718,13 @@ package body TASTE.Interface_View is
                   RI.RCM :=
                     Functions (To_String (Remote.Function_Name)).Provided
                       (To_String (Remote.Interface_Name)).RCM;
+
+                  --  Update list of end to end connections with RI->PI
+                  End_To_End_Connections := End_To_End_Connections
+                    & (Caller  => Each.Name,
+                       Callee  => Remote.Function_Name,
+                       RI_Name => RI.Name,
+                       PI_Name => Remote.Interface_Name);
                end if;
             end;
          end loop;
@@ -724,6 +734,16 @@ package body TASTE.Interface_View is
       --  current function - we cannot touch the one with the remote PI.
       for Each of Functions loop
          for PI of Each.Provided loop
+
+            --  Add periodic PIs to the list of connections
+            if PI.RCM = Cyclic_Operation then
+               End_To_End_Connections := End_To_End_Connections
+                 & (Caller  => US ("ENV"),
+                    Callee  => Each.Name,
+                    RI_Name => PI.Name,
+                    PI_Name => PI.Name);
+            end if;
+
             for Fn of Functions loop
                for RI of Fn.Required loop
                   for Remote of RI.Remote_Interfaces loop
@@ -742,7 +762,7 @@ package body TASTE.Interface_View is
 
       return IV_AST : constant Complete_Interface_View :=
         (Flat_Functions => Functions,
-         Connections    => Routes_Map);
+         Connections    => End_To_End_Connections);
    end Parse_Interface_View;
 
    procedure Rename_Function (IV       : in out Complete_Interface_View;

@@ -176,7 +176,7 @@ package TASTE.Interface_View is
    type Complete_Interface_View is tagged
       record
          Flat_Functions  : Function_Maps.Map;
-         Connections     : Connection_Maps.Map;
+         Connections     : Channels.Vector;
       end record;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina

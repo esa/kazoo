@@ -13,7 +13,7 @@ begin
       Transformed :          TASTE_Model := Transform (Model);
    begin
       if Model.Configuration.Debug_Flag then
-         TASTE.Dump.Dump_Input_Model (Transformed);
+         TASTE.Dump.Dump_Input_Model (Model);
          Transformed.Dump;
       end if;
 

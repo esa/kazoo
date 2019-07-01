@@ -1,0 +1,18 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@            : Partition name (usually the name of the binary)
+@@-- @_Coverage_@        : True if user requested code coverage enable
+@@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
+@@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
+@@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
+@@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+@@-- @_VP_Name_@         : Virtual processor name on which the partition is bounded
+@@-- @_VP_Platform_@     : Virtual processor platform (e.g. PLATFORM_AIR)
+@@-- @_VP_Classifier_@   : Virtual processor classifier
+@@-- @_Bound_Functions_@ : List of user functions from Interface view
+@@-- @_Ada_Runtime_@     : Ada runtime for the CPU
+<Partition name="@_Name_@" coverage="@_Coverage_@" package="@_Package_Name_@" cpu="@_CPU_Name_@" cpu_platform="@_CPU_Platform_@" cpu_classifier="@_CPU_Classifier_@" vp_name="@_VP_Name_@" vp_platform="@_VP_Platform_@" vp_classifier="@_VP_Classifier_@" ada_runtime="@_Ada_Runtime_@">
+@@TABLE@@
+   <function>@_Bound_Functions_@</function>
+@@END_TABLE@@
+</Partition>

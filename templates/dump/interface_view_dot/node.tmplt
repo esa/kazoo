@@ -1,0 +1,22 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@          : Name of the node from deployment view
+@@-- @_Partitions_@         : List of rendered code for partitions
+@@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
+@@-- @_Device_Names_@       : Vector tag for device drivers - name
+@@-- @_Package_Names_@      :   |_ aadl package
+@@-- @_Device_Classifiers_@ :   |_ aadl classifier
+@@-- @_Proc_Names_@         :   |_ associated processor name
+@@-- @_Config_@             :   |_ device configuration (asn1 string)
+@@-- @_Bus_Names_@          :   |_ accessed bus name
+@@-- @_Port_Names_@         :   |_ accessed port name
+@@-- @_Asn1_Files_@         :   |_ asn1 filename for the configuration type
+@@-- @_Asn1_Typenames_@     :   |_ asn1 configuration type name
+@@-- @_Asn1_Modules_@       :   |_ asn1 module name containing the type
+
+<Node name="@_Node_Name_@">
+   @_Partitions'Indent_@
+@@TABLE@@
+   <Device name="@_Device_Names_@" pkg="@_Package_Names_@" classifier="@_Device_Classifiers_@" proc="@_Proc_Names_@" config="@_WEB_ENCODE:Config_@" bus="@_Bus_Names_@" port="@_Port_Names_@" asn1file="@_Asn1_Files_@" asn1type="@_Asn1_Typenames_@" asn1module="@_Asn1_Modules_@"/>
+@@END_TABLE@@
+</Node>

@@ -1,0 +1,32 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding ASN.1 encoding
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
+@@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
+@@IF@@ @_Direction_@ = "PI"
+<Provided_Interface name="@_Name_@" kind="@_Kind_@" period="@_Period_@" wcet="@_WCET_@" queue_size="@_Queue_Size_@">
+@@ELSE@@
+<Required_Interface name="@_Name_@" kind="@_Kind_@">
+@@END_IF@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+    <Input_Parameter name="@_Param_Names_@" type="@_WEB_ENCODE:Param_Types_@" encoding="@_Param_Encodings_@"/>
+@@ELSE@@
+    <Output_Parameter name="@_Param_Names_@" type="@_WEB_ENCODE:Param_Types_@" encoding="@_Param_Encodings_@"/>
+@@END_IF@@
+@@END_TABLE@@
+@@TABLE@@
+    <Property name="@_WEB_ENCODE:IF_Property_Names_@" value="@_WEB_ENCODE:IF_Property_Values_@"/>
+@@END_TABLE@@
+@@IF@@ @_Direction_@ = "PI"
+</Provided_Interface>
+@@ELSE@@
+</Required_Interface>
+@@END_IF@@

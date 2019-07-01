@@ -47,6 +47,7 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_IF@@
 @@END_TABLE@@
 
+@@IF@@ @_Language_@ /= GUI
    //  Declare user code function as external (it may not have a .h if it is in Ada)
    extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
@@ -70,14 +71,23 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
      @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
+@@END_IF@@
+
+@@TABLE@@    @@-- encode output parameters
+@@IF@@ @_Param_Directions_@ = "PARAM_OUT"
+   *OUT_@_LOWER:Param_Names_@_len = Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@ (OUT_@_LOWER:Param_Names_@, sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@), &OUT_@_UPPER:Param_Names_@);
+@@END_IF@@
+@@END_TABLE@@
 }
 @@ELSE@@   @@-- parameterless functions
 void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
 {
    //  Directly call user code, no parameters to pass
    //  This could be done directly from the concurrency glue...
+@@IF@@ @_Language_@ /= GUI
    extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();
    @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();
    // puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
+@@END_IF@@
 }
 @@END_IF@@

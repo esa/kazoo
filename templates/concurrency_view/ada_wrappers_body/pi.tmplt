@@ -28,9 +28,9 @@ end @_CAPITALIZE:Name_@;
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@ is
    procedure C_@_CAPITALIZE:Name_@
-     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_PI_@_LOWER:Name_@";
+     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
 begin
-   --  PI has no parameter - directly call user code
+   --  PI has no parameter - could directly call user code (add _PI_ above)
    C_@_CAPITALIZE:Name_@;
 end @_CAPITALIZE:Name_@;
 

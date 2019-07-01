@@ -71,6 +71,7 @@ project @_CAPITALIZE:Name_@ is
    package Linker renames PolyORB_HI.Linker;
    package Check renames PolyORB_HI.Check;
    package Prove renames PolyORB_HI.Prove;
+   
 end @_CAPITALIZE:Name_@;
 
 

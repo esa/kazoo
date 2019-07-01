@@ -36,6 +36,9 @@
 #include <stdbool.h>
 #include "@_LOWER:Name_@_vm_if.h"
 #include "C_ASN1_Types.h"
+#ifdef __unix__
+   #include <stdio.h>
+#endif
 
 void init_@_LOWER:Name_@()
 {

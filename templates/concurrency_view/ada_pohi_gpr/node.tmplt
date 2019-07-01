@@ -8,5 +8,5 @@
 #  @_Node_Name_@ @_CPU_Name_@ @_Ada_Runtime_@
 all:
 @@TABLE@@
-	gprbuild -p -P @_LOWER:Partition_Names_@.gpr
+	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -cargs:C -DSTATIC=static 
 @@END_TABLE@@

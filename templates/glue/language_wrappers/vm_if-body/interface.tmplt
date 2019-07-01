@@ -23,6 +23,34 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
    @@END_TABLE@@
 @@END_INLINE@@
 {
+@@TABLE@@    @@-- decode input parameters into static variables
+   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ IN_@_UPPER:Param_Names_@;
+#ifdef __unix__
+   asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_Initialize(&IN_@_UPPER:Param_Names_@);
+#endif
+   if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@ (&IN_@_UPPER:Param_Names_@, @_LOWER:Param_Names_@_len)) {
+      #ifdef __unix__
+         puts("Error decoding @_Param_Types_@ in function @_LOWER:Parent_Function_@_@_LOWER:Name_@");
+      #endif
+      return;
+   }
+@@END_TABLE@@
+
+   //  Call user code
+   @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
+@@INLINE(      \()(,\n       )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         &IN_@_UPPER:Param_Names_@
+     @@ELSE@@
+         &OUT_@_UPPER:Param_Names_@
+     @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+}
+@@ELSE@@   @@-- parameterless functions
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
+{
    //  Directly call user code, no parameters to pass
    //  This could be done directly from the concurrency glue...
    @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();

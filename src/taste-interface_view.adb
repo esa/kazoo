@@ -736,7 +736,7 @@ package body TASTE.Interface_View is
          for PI of Each.Provided loop
 
             --  Add periodic PIs to the list of connections
-            if PI.RCM = Cyclic_Operation then
+            if PI.RCM = Cyclic_Operation and not Each.Is_Type then
                End_To_End_Connections := End_To_End_Connections
                  & (Caller  => US ("ENV"),
                     Callee  => Each.Name,

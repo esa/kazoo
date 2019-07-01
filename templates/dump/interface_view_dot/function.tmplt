@@ -24,9 +24,9 @@
 @@-- @_Is_Type_@             : Flag, True if function is a component type
 @@-- @_Instance_Of_@         : Optional name of component type
 @@IF@@ @_Is_Type_@ = TRUE
-@_Name_@ [shape=box, style=filled, fontsize=24, label="type @_Name_@ (@_Language_@)"];
+@_Name_@ [shape=box, style=filled, fillcolor=gold,fontsize=24, label="type @_Name_@ (@_Language_@)"];
 @@ELSIF@@ @_Instance_Of_@ /= ""
-@_Name_@ [shape=box, fillcolor=cyan, style="filled, rounded", fontsize=20, label="@_Name_@ : @_Instance_Of_@"];
+@_Name_@ [shape=box, fillcolor=beige, style="filled, rounded", fontsize=20, label="@_Name_@ : @_Instance_Of_@"];
 @@ELSE@@
-@_Name_@ [shape=box, fillcolor=cyan, style="filled, rounded", fontsize=20, label="@_Name_@ (@_Language_@)"];
+@_Name_@ [shape=box, fillcolor=bisque, style="filled, rounded", fontsize=20, label="@_Name_@ (@_Language_@)"];
 @@END_IF@@

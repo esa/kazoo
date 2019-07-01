@@ -5,5 +5,9 @@
 @@-- @_Callee_PIs_@ :   |_ corresponding name of PIs
 @_Functions'Indent_@
 @@TABLE@@
+@@IF@@ @_Caller_RIs_@ = @_Callee_PIs_@
+@_Callers_@ -> @_Callees_@ [fontsize=14, color=blue, headlabel="[@_Callee_PIs_@]"];
+@@ELSE@@
 @_Callers_@ -> @_Callees_@ [fontsize=14, color=blue, headlabel="[@_Caller_RIs_@]", taillabel="[@_Callee_PIs_@]"];
+@@END_IF@@
 @@END_TABLE@@

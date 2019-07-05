@@ -86,7 +86,7 @@ package body TASTE.Backend.Code_Generators is
                         & Assoc ("Unique_Languages", Unique_Languages)
                         & Assoc ("ASN1_Files",       Get_ASN1_File_List)
                         & Assoc ("ASN1_Modules",     Get_Module_List);
-         Put_Info ("Generating global Makefile");
+         Put_Debug ("Generating global Makefile");
          Create (File => Output_File,
                  Mode => Out_File,
                  Name => Model.Configuration.Output_Dir.Element & "/Makefile");
@@ -122,7 +122,7 @@ package body TASTE.Backend.Code_Generators is
       begin
          if not F.Context_Params.Is_Empty then
             Create_Path (Output_Lang);
-            Put_Info ("Generating " & CP_File);
+            Put_Debug ("Generating " & CP_File);
             Create (File => Output_File,
                     Mode => Out_File,
                     Name => Output_Lang & CP_File);
@@ -183,7 +183,7 @@ package body TASTE.Backend.Code_Generators is
          --  Create directory tree (output/function/language/src)
          Create_Path (Output_Dir);
          if File_Name /= "" then
-            Put_Info ("Generating " & Output_Dir & File_Name);
+            Put_Debug ("Generating " & Output_Dir & File_Name);
             Create (File => Output_File,
                     Mode => Out_File,
                     Name => Output_Dir & File_Name);
@@ -191,7 +191,7 @@ package body TASTE.Backend.Code_Generators is
             Close (Output_File);
          end if;
          if Make_File /= "" then
-            Put_Info ("Generating " & Make_File & " for function "
+            Put_Debug ("Generating " & Make_File & " for function "
                       & To_String (F.Name));
             Create (File => Output_File,
                     Mode => Out_File,
@@ -218,7 +218,7 @@ package body TASTE.Backend.Code_Generators is
                                          Output_Base : String;
                                          Output_Sub  : String := "src/") is
       begin
-         Put_Info ("=== Generate code with templates from " & Prefix & " ===");
+         Put_Debug ("== Generate code with templates from " & Prefix & " ==");
          for Each of Model.Interface_View.Flat_Functions loop
             --  There can be multiple folders containing templates, iterate
             declare

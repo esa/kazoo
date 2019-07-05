@@ -33,6 +33,13 @@ package body TASTE.Parser_Utils is
       Put_Line (Red_Bold & "[ERROR] " & White_Bold & Error & No_Color);
    end Put_Error;
 
+   procedure Put_Debug (Debug : String) is
+   begin
+      if Debug_Mode then
+         Put_Line (White_Bold & "[DEBUG] " & No_Color & Debug & No_Color);
+      end if;
+   end Put_Debug;
+
    procedure Banner is
       The_Banner : constant String :=
         Yellow_Bold & "TASTE/Kazoo" & No_Color & " (Version "
@@ -149,6 +156,7 @@ package body TASTE.Parser_Utils is
       if Version then
          raise Exit_From_Command_Line;
       end if;
+      Debug_Mode := Result.Debug_Flag;
 
    end Parse_Command_Line;
 
@@ -280,4 +288,5 @@ package body TASTE.Parser_Utils is
       --  Following is needed to parse the interface view
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
    end Initialize_Ocarina;
+
 end TASTE.Parser_Utils;

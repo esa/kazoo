@@ -434,8 +434,11 @@ package body TASTE.Concurrency_View is
                   Present      : constant Boolean :=
                     (File_Name /= ""
                      and then Exists (Output_Dir & "/" & File_Name));
+
                   Trig_Tmpl    : constant Translate_Set :=
-                    +Assoc ("Filename_Is_Present", Present);
+                    CV.Configuration.To_Template
+                    & Assoc ("Filename_Is_Present", Present);
+
                   Trigger      : constant Boolean :=
                     (Node_Name /= "interfaceview"
                      and then Exists (Path & "/trigger.tmplt") and then

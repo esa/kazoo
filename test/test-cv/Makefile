@@ -1,43 +1,43 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	make -C output
-	cp obsw.pr output/obsw/SDL/src
-	cd output/concurrency_view && \
+	make -C output.ada
+	cp obsw.pr output.ada/obsw/SDL/src
+	cd output.ada/concurrency_view && \
 	ocarina -x main.aadl && \
 	    make -f Makefile.taste
 
 c: # Polyorb_HI_C output
-	$(KAZOO) -p --gw --glue --debug -o output_pohic && \
-	    make -C output_pohic && \
-    	    cp obsw.pr output_pohic/obsw/SDL/src && \
-    	    cd output_pohic/concurrency_view && \
+	$(KAZOO) -p --gw --glue --debug -o output.pohic && \
+	    make -C output.pohic && \
+    	    cp obsw.pr output.pohic/obsw/SDL/src && \
+    	    cd output.pohic/concurrency_view && \
     	    ocarina -x main.aadl && \
 	    make -f Makefile.taste
 
 test-parse: clean
 	$(KAZOO) --gw \
-	         -o output \
+	         -o output.ada \
 	         --glue \
 	         --debug
 
 test-parse-c: clean
 	$(KAZOO) -p --gw \
-	         -o output \
+	         -o output.pohic \
 	         --glue
 buildsupport_pohic:
-	buildsupport -o buildsupport_pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
+	buildsupport -o output.buildsupport.pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
 
 buildsupport_pohiada:
-	buildsupport -o buildsupport_ada --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
+	buildsupport -o output.buildsupport.ada --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output \
+	               -o output.pohic \
 	               --glue \
 		       --debug
 
 clean:
-	rm -rf output
+	rm -rf output.ada output.pohic
 
-.PHONY: clean test-parse gdb
+.PHONY: clean test-parse gdb test-parse-c buildsupport_pohic buildsupport_pohiada c

@@ -1,0 +1,16 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Nodes_@               : Code generated for the nodes
+@@-- @_Node_Names_@          : Vector Tag of node names
+@@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
+@@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
+@@-- @_Partition_Names_@     : Vector Tag of partition names
+@@-- @_Partition_Node_@      :  |_ Corresponding node name
+@@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Threads_@             : Code generated for the threads
+@@-- @_Thread_Names_@        : List of all threads in the complete system
+@@-- @_Target_Packages_@     : List of all target package names in the complete system
+@@-- And all the system configuration obtained from the command line:
+@@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
+@@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
+@@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

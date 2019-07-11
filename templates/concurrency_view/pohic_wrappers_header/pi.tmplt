@@ -1,0 +1,27 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
+@@IF@@ @_Kind_@ = "PROTECTED_OPERATION" or @_Kind_@ = "UNPROTECTED_OPERATION"
+   void sync_@_LOWER:Parent_Function_@_@_LOWER:Name_@();
+@@ELSE@@   @@-- cyclic/sporadic: entry point for polyorb-hi-c    (maybe cyclic has no task_id!!)
+   void po_hi_c_@_LOWER:Parent_Function_@_@_LOWER:Name_@ (__po_hi_task_id);
+@@END_IF@@
+@@ELSE@@   @@-- contains param(s)
+@@IF@@ @_Kind_@ = "PROTECTED_OPERATION" or @_Kind_@ = "UNPROTECTED_OPERATION"
+   void sync_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(   \()(;\n    )(\);)@@
+   @@TABLE'ALIGN_ON(",")@@
+      void *@_LOWER:Param_Names_@, size_t @_LOWER:Param_Names_@_len
+   @@END_TABLE@@
+@@END_INLINE@@
+@@ELSE@@  @@-- sporadic: entry point for polyorb-hi-c (one param)
+   void po_hi_c_@_LOWER:Parent_Function_@_@_LOWER:Name_@ (__po_hi_task_id, dataview__@_LOWER_Param_Types_@_buffer_impl);
+@@END_IF@@
+@@END_IF@@

@@ -16,6 +16,7 @@
 @@-- @_Param_Names_@, _Types_@, _ASN1_Modules, _Encodings_@, _Directions_@ : param vector tag
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
+@@-- the Configuration tags are also avilable (Use_POHIC, etc.)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
 package @_CAPITALIZE:Thread_Name_@_Thread
@@ -38,7 +39,11 @@ features
       @@END_INLINE@@
       { Compute_Execution_Time => @_WCET_@ ms .. @_WCET_@ ms;
         Queue_Size => @_Queue_Size_@;
+@@IF@@ @_Use_POHIC_@
+        Compute_Entrypoint_Source_Text => "@_LOWER:Thread_Name_@_@_LOWER:Entry_Port_Name_@"; };
+@@ELSE@@
         Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
+@@END_IF@@
 @@END_IF@@
    @@TABLE@@
 @@INLINE(   )()()@@
@@ -53,12 +58,20 @@ end @_CAPITALIZE:Thread_Name_@;
 
 thread implementation @_CAPITALIZE:Thread_Name_@.others
 properties
+@@IF@@ @_Use_POHIC_@
+   Initialize_Entrypoint_Source_Text => "init_@_LOWER:Pro_Block_Name_@";
+@@ELSE@@
    Initialize_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.C_Init_@_Thread_Name_@";
+@@END_IF@@
 @@INLINE(   )(\n   )()@@
 @@IF@@ @_RCM_@ = "SPORADIC_OPERATION"
    Dispatch_Protocol                 => Sporadic;
 @@ELSE@@
+@@IF@@ @_Use_POHIC_@
+   Compute_Entrypoint_Source_Text    => "@_LOWER:Thread_Name_@_@_LOWER:Entry_Port_Name_@";
+@@ELSE@@
    Compute_Entrypoint_Source_Text    => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@";
+@@END_IF@@
    Dispatch_Protocol                 => Periodic;
 @@END_IF@@
 @@END_INLINE@@

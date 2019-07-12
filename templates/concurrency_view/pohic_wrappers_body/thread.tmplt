@@ -18,47 +18,18 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-#if 0
-@@IF@@ @_Param_Names'Length_@ > 0
-with Interfaces.C;
-@@END_IF@@
+#include "@_LOWER:Thread_Name_@_polyorb_interface.h"
 
-package body @_CAPITALIZE:Thread_Name_@_Wrappers is
-
-   @@INLINE(   )()(\n)@@
-      @@IF@@ @_Param_Names'Length_@ > 0
-         @@TABLE@@
-            procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl) is
-         @@END_TABLE@@
-      @@ELSE@@
-         procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type) is
-      @@END_IF@@
-   @@END_INLINE@@
+@@INLINE()(\n)(\n)@@
    @@IF@@ @_Param_Names'Length_@ > 0
       @@TABLE@@
-      @_CAPITALIZE:Param_Names_@_AdaBuffer : Interfaces.C.char_array (1 .. Interfaces.C.size_t (Param_Buffer.Length)) with Import;
-      for @_CAPITALIZE:Param_Names_@_AdaBuffer'Address use Param_Buffer'Address;
-      @@END_TABLE@@ 
-   begin
-      @@IF@@ @_Need_Mutex_@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@
-      @@ELSE@@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Entry_Port_Name_@
-      @@END_IF@@
-         (@_CAPITALIZE:Param_Names_@_AdaBuffer, @_CAPITALIZE:Param_Names_@_AdaBuffer'Length);
+         void call_@_LOWER:Thread_Name_@ (__po_hi_task_id sender_pid, dataview__@_REPLACE_ALL((-)/_):LOWER:Param_Types_@_buffer_impl buf)
+      @@END_TABLE@@
    @@ELSE@@
-   begin
-      @@IF@@ @_Need_Mutex_@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@;
-      @@ELSE@@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Entry_Port_Name_@;
-      @@END_IF@@
+      void call_@_LOWER:Thread_Name_@ (__po_hi_task_id sender_pid)
    @@END_IF@@
-   end @_CAPITALIZE:Entry_Port_Name_@;
-
-   -- This is the list of remote threads/RIs :
-   @@TABLE@@
-   -- @_Remote_Threads_@.@_Remote_PIs_@
-   @@END_TABLE@@
-end @_CAPITALIZE:Thread_Name_@_Wrappers;
-#endif
+@@END_INLINE@@
+{
+   (void)sender_pid;
+   // call something from vm_if
+}

@@ -18,21 +18,22 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-#include <stddef.h>
+//#include <stddef.h>
 
-#include "types.h"
-#include "deployment.h"
-#include "po_hi_transport.h"
+//#include "types.h"
+//#include "deployment.h"
+//#include "po_hi_transport.h"
 
-#include "@_LOWER:Pro_Block_Name_@_polyorb_interface.h"
+#include "po_hi_task.h"
+#include "@_LOWER:Pro_Block_Name_@_block.h"
 
 @@INLINE()(\n)(\n)@@
    @@IF@@ @_Param_Names'Length_@ > 0
       @@TABLE@@
-         void @_LOWER:Entry_Port_Name_@ (__po_hi_task_id entity, dataview__@_REPLACE_ALL((-)/_):LOWER:Param_Types_@_buffer_impl);
+         void call_@_LOWER:Thread_Name_@ (__po_hi_task_id, dataview__@_REPLACE_ALL((-)/_):LOWER:Param_Types_@_buffer_impl);
       @@END_TABLE@@
    @@ELSE@@
-      procedure @_CAPITALIZE:Entry_Port_Name_@ (__po_hi_task_id entity);
+      void call_@_LOWER:Thread_Name_@ (__po_hi_task_id);
    @@END_IF@@
 @@END_INLINE@@
 

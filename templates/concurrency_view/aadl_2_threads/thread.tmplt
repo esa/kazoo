@@ -40,7 +40,7 @@ features
       { Compute_Execution_Time => @_WCET_@ ms .. @_WCET_@ ms;
         Queue_Size => @_Queue_Size_@;
 @@IF@@ @_Use_POHIC_@
-        Compute_Entrypoint_Source_Text => "@_LOWER:Thread_Name_@_@_LOWER:Entry_Port_Name_@"; };
+        Compute_Entrypoint_Source_Text => "call_@_LOWER:Thread_Name_@"; };
 @@ELSE@@
         Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
 @@END_IF@@
@@ -68,7 +68,7 @@ properties
    Dispatch_Protocol                 => Sporadic;
 @@ELSE@@
 @@IF@@ @_Use_POHIC_@
-   Compute_Entrypoint_Source_Text    => "@_LOWER:Thread_Name_@_@_LOWER:Entry_Port_Name_@";
+   Compute_Entrypoint_Source_Text    => "call_@_LOWER:Thread_Name_@";
 @@ELSE@@
    Compute_Entrypoint_Source_Text    => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@";
 @@END_IF@@

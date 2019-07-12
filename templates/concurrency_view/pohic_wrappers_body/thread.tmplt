@@ -18,7 +18,7 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-#include "@_LOWER:Thread_Name_@_polyorb_interface.h"
+#include "@_LOWER:Pro_Block_Name_@_vm_if.h"
 
 @@INLINE()(\n)(\n)@@
    @@IF@@ @_Param_Names'Length_@ > 0
@@ -30,6 +30,18 @@
    @@END_IF@@
 @@END_INLINE@@
 {
-   (void)sender_pid;
-   // call something from vm_if
+   (void)sender_pid; // sender id is not used for now
+
+   @@IF@@ @_Need_Mutex_@
+    extern process_package__taste_protected_object @_LOWER:Pro_Block_Name_@_protected;
+   __po_hi_protected_lock (@_LOWER:Pro_Block_Name_@_protected.protected_id);
+   @@END_IF@@
+   @@IF@@ @_Param_Names'Length_@ > 0
+   @_LOWER:Thread_Name_@ (buf.buffer, buf.length);
+   @@ELSE@@
+      @_LOWER:Thread_Name_@ ();
+   @@END_IF@@
+   @@IF@@ @_Need_Mutex_@
+   __po_hi_protected_unlock (@_LOWER:Pro_Block_Name_@_protected.protected_id);
+   @@END_IF@@
 }

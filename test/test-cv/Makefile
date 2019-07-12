@@ -7,13 +7,12 @@ all: test-parse
 	ocarina -x main.aadl && \
 	    make -f Makefile.taste
 
-c: # Polyorb_HI_C output
-	$(KAZOO) -p --gw --glue --debug -o output.pohic && \
-	    make -C output.pohic && \
-    	    cp obsw.pr output.pohic/obsw/SDL/src && \
-    	    cd output.pohic/concurrency_view && \
-    	    ocarina -x main.aadl && \
-	    make -f Makefile.taste
+c: test-parse-c # Polyorb_HI_C output
+	make -C output.pohic && \
+    	cp obsw.pr output.pohic/obsw/SDL/src && \
+    	cd output.pohic/concurrency_view && \
+    	ocarina -x main.aadl && \
+	make -f Makefile.taste
 
 test-parse: clean
 	$(KAZOO) --gw \

@@ -32,6 +32,19 @@ public
    with @_CAPITALIZE:Target_Packages_@;
 @@END_TABLE@@
 
+@@-- POHIC-only: declare protected objects to have runtime mutex
+@@IF@@ @_Use_POHIC_@
+data Taste_Protected
+properties
+   Concurrency_Control_Protocol => Protected_Access;
+end Taste_Protected;
+
+data implementation Taste_Protected.Object
+properties
+   Concurrency_Control_Protocol => Protected_Access;
+end Taste_Protected.Object; 
+@@END_IF@@
+
 @_Nodes_@
 
 system DeploymentView

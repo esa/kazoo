@@ -16,7 +16,7 @@
 @@ELSE@@   @@-- contains param(s)
 @@IF@@ @_Kind_@ = "PROTECTED_OPERATION" or @_Kind_@ = "UNPROTECTED_OPERATION"
    void sync_@_LOWER:Parent_Function_@_@_LOWER:Name_@
-@@INLINE(   \()(;\n    )(\);)@@
+@@INLINE(      \()(,\n       )(\);)@@
    @@TABLE'ALIGN_ON(",")@@
       void *@_LOWER:Param_Names_@, size_t @_LOWER:Param_Names_@_len
    @@END_TABLE@@

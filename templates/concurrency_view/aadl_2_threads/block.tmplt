@@ -7,3 +7,6 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@IF@@ @_Protected_PIs_@ /= ""
+@_LOWER:Name_@_protected : data TASTE_Protected.Object;
+@@END_IF@@

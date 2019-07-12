@@ -18,13 +18,6 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-//#include <stddef.h>
-
-//#include "types.h"
-//#include "deployment.h"
-//#include "po_hi_transport.h"
-
-#include "po_hi_task.h"
 #include "@_LOWER:Pro_Block_Name_@_block.h"
 
 @@INLINE()(\n)(\n)@@

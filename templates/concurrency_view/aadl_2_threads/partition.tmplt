@@ -24,6 +24,7 @@ end @_Name_@;
 
 process implementation @_CAPITALIZE:Name_@.final
 subcomponents
+   @_STRIP:Blocks'Indent_@
 @@TABLE'ALIGN_ON(":")@@
    @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
 @@END_TABLE@@

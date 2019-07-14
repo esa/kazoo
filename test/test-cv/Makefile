@@ -1,15 +1,17 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	make -C output.ada
-	cp obsw.pr output.ada/obsw/SDL/src
+	make -C output.ada && \
+	cp input_data/obsw.pr output.ada/obsw/SDL/src && \
+	cp input_data/gnc.c output.ada/gnc/C/src && \
 	cd output.ada/concurrency_view && \
 	ocarina -x main.aadl && \
 	    make -f Makefile.taste
 
 c: test-parse-c # Polyorb_HI_C output
 	make -C output.pohic && \
-    	cp obsw.pr output.pohic/obsw/SDL/src && \
+    	cp input_data/obsw.pr output.pohic/obsw/SDL/src && \
+	cp input_data/gnc.c output.pohic/gnc/C/src && \
     	cd output.pohic/concurrency_view && \
     	ocarina -x main.aadl && \
 	make -f Makefile.taste

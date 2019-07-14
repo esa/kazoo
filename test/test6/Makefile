@@ -4,9 +4,7 @@ all: test-parse
 	cd output && make
 
 test-parse: clean
-	$(KAZOO) --gw \
-	               --debug \
-	               -o output
+	$(KAZOO) --gw --debug -o output
 
 clean:
 	rm -rf output

@@ -1,9 +1,11 @@
 /* CIF PROCESS (250, 150), (150, 75) */
 process Obsw;
-    /* CIF TEXT (504, 123), (275, 153) */
+    /* CIF TEXT (504, 123), (282, 153) */
     -- Text area for declarations and comments
     
     dcl p t_boolean;
+    
+    dcl inp t_uint32 := 42;
     /* CIF ENDTEXT */
     /* CIF START (320, 10), (70, 35) */
     START;
@@ -13,17 +15,21 @@ process Obsw;
         NEXTSTATE Wait;
     /* CIF state (320, 115), (70, 35) */
     state Wait;
-        /* CIF input (235, 170), (78, 35) */
+        /* CIF input (199, 170), (78, 35) */
         input Run(p);
-            /* CIF output (231, 225), (86, 35) */
+            /* CIF output (195, 225), (86, 35) */
             output Result(42);
-            /* CIF NEXTSTATE (239, 275), (70, 35) */
+            /* CIF NEXTSTATE (203, 275), (70, 35) */
             NEXTSTATE wait;
         /* CIF input (369, 170), (70, 35) */
         input Pulse;
-            /* CIF PROCEDURECALL (327, 225), (152, 35) */
-            call writeln('[SDL] Pulse');
-            /* CIF NEXTSTATE (369, 280), (70, 35) */
+            /* CIF PROCEDURECALL (341, 225), (125, 35) */
+            call guidance (inp, p);
+            /* CIF PROCEDURECALL (313, 275), (181, 35) */
+            call writeln('[SDL] Result: ', p);
+            /* CIF task (291, 330), (224, 35) */
+            task inp := if inp = 42 then 0 else 42 fi;
+            /* CIF NEXTSTATE (369, 380), (70, 35) */
             NEXTSTATE wait;
     endstate;
     /* CIF state (450, 10), (70, 35) */

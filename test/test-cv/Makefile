@@ -1,6 +1,8 @@
 KAZOO=../../kazoo
 
-all: test-parse
+all: ada c
+
+ada: test-parse-ada
 	make -C output.ada && \
 	cp input_data/obsw.pr output.ada/obsw/SDL/src && \
 	cp input_data/gnc.c output.ada/gnc/C/src && \
@@ -16,13 +18,13 @@ c: test-parse-c # Polyorb_HI_C output
     	ocarina -x main.aadl && \
 	make -f Makefile.taste
 
-test-parse: clean
+test-parse-ada: clean-ada
 	$(KAZOO) --gw \
 	         -o output.ada \
 	         --glue \
 	         --debug
 
-test-parse-c: clean
+test-parse-c: clean-c
 	$(KAZOO) -p --gw \
 	         -o output.pohic \
 	         --glue
@@ -38,7 +40,12 @@ gdb: clean
 	               --glue \
 		       --debug
 
-clean:
-	rm -rf output.ada output.pohic
+clean-ada:
+	rm -rf output.ada
 
-.PHONY: clean test-parse gdb test-parse-c buildsupport_pohic buildsupport_pohiada c
+clean-c:
+	rm -rf output.pohic
+
+clean: clean-ada clean-c
+
+.PHONY: clean clean-ada clean-c test-parse-ada gdb test-parse-c buildsupport_pohic buildsupport_pohiada c

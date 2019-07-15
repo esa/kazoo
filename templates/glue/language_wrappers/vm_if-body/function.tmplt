@@ -50,6 +50,10 @@ void init_@_LOWER:Name_@()
 @@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
       // Call user code startup function
       @_LOWER:Name_@_startup();
+@@ELSIF@@ @_Language_@ = Ada or @_Language_@ = SDL
+      // Initialize Ada runtime to call elaboration functions
+      extern void adainit();
+      adainit();
 @@END_IF@@
 @@IF@@ @_EXIST:Sync_RIs_Parent_@
       // Iterate over all synchronous RIs, and call their parent's
@@ -59,7 +63,7 @@ void init_@_LOWER:Name_@()
       extern void init_@_LOWER:Sync_RIs_Parent_@();
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
-   puts ("init done");
+   puts ("[TASTE] Initialization completed for function @_Name_@");
    }
 }
 @@-- For blackbox devices, don't generate the PI functions, they will be

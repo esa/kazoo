@@ -63,6 +63,9 @@ dataviews:
               @_Post_@
 	   @@END_INLINE@@
         @@END_TABLE@@
+	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
+	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
+	cd dataview/C && msgPrinter ../dataview-uniq.asn && msgPrinterASN1 ../dataview-uniq.asn
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"

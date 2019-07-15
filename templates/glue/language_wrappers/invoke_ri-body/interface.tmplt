@@ -26,5 +26,61 @@ void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@
 void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(void)
 @@END_IF@@
 {
-   puts ("@_LOWER:Parent_Function_@_RI_@_LOWER:Name_@ called");
+   puts ("[TASTE] @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@ called");
+
+#ifdef __unix__
+   // Log MSC data on Linux when environment variable is set
+   static int innerMsc = -1;
+   if (-1 == innerMsc)
+      innerMsc = (NULL != getenv("TASTE_INNER_MSC"))?1:0;
+   if (1 == innerMsc) {
+      long long msc_time = getTimeInMilliseconds();
+@@TABLE'TERSE@@
+@@IF@@ @_Param_Directions_@ = PARAM_IN
+      PrintASN1@_REPLACE_ALL(-/_):Param_Types_@ ("INNERDATA: @_LOWER:Name_@::@_REPLACE_ALL(-/_):Param_Types_@::@_LOWER:Param_Names_@", IN_@_LOWER:Param_Names_@);
+@@END_IF@@
+@@END_TABLE@@
+      puts(""); // add newline
+@@-- Had to comment the line below, because we miss the destination function (in place of gnc)
+@@-- When we have multicast me need to to emit the line several times (and need to add support)
+      //printf ("INNER: @_LOWER:Parent_Function_@,gnc,@_LOWER:Name_@,%lld\n", msc_time);
+      fflush(stdout);
+   }
+#endif
+@@TABLE'TERSE@@
+@@IF@@ @_Param_Directions_@ = PARAM_IN
+   // Encode parameter @_Param_Names_@
+   static char IN_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)] = {0};
+   int size_IN_buf_@_LOWER:Param_Names_@ =
+      Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
+        (IN_buf_@_LOWER:Param_Names_@, sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@), IN_@_LOWER:Param_Names_@);
+   if (-1 == size_IN_buf_@_LOWER:Param_Names_@) {
+      #ifdef __unix__
+         puts ("[ERROR] ASN.1 Encoding failed in @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@, parameter @_Param_Names_@");
+      #endif
+        /* Crash the application due to message loss */
+        extern void abort (void);
+        abort();
+   }
+@@END_IF@@
+@@END_TABLE@@
+   // Call Middleware interface (TODO)
+   // extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@ ( ... )
+   // vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@ ( ... )
+
+@@TABLE'TERSE@@
+@@IF@@ @_Param_Directions_@ = PARAM_OUT
+   // Decode parameter @_Param_Names_@
+   static char OUT_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+   size_t      size_OUT_buf_@_LOWER:Param_Names_@ = 0;
+
+   if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
+              (OUT_@_LOWER:Param_Names_@, OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
+#ifdef __unix__
+      puts ("[ERROR] ASN.1 Decoding failed in @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@, parameter @_Param_Names_@");
+#endif
+      return;
+  }
+@@END_IF@@
+@@END_TABLE@@
 }

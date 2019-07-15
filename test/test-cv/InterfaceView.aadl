@@ -70,6 +70,16 @@ END RI_get_pro_data;
 SUBPROGRAM IMPLEMENTATION RI_get_pro_data.others
 END RI_get_pro_data.others;
 
+SUBPROGRAM RI_gnc_async
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_gnc_async;
+
+SUBPROGRAM IMPLEMENTATION RI_gnc_async.others
+END RI_gnc_async.others;
+
 SYSTEM obsw
 FEATURES
   PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::obsw::PI_pulse.others {
@@ -102,6 +112,12 @@ FEATURES
     Taste::coordinates => "118422 63306";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "get_pro_data";
+    Taste::labelInheritance => "true";
+  };
+  RI_gnc_async : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_gnc_async.others {
+    Taste::coordinates => "118422 66456";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "gnc_async";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -142,12 +158,26 @@ FEATURES
   outp : OUT PARAMETER DataView::T_Boolean {
     Taste::encoding => UPER;
   };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_get_pro_data;
 
 SUBPROGRAM IMPLEMENTATION PI_get_pro_data.others
 PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_get_pro_data.others;
+
+SUBPROGRAM PI_gnc_async
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END PI_gnc_async;
+
+SUBPROGRAM IMPLEMENTATION PI_gnc_async.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_gnc_async.others;
 
 SYSTEM GNC
 FEATURES
@@ -161,7 +191,14 @@ FEATURES
   PI_get_pro_data : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_get_pro_data.others {
     Taste::coordinates => "142673 63306";
     Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "get_pro_data";
+  };
+  PI_gnc_async : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_gnc_async.others {
+    Taste::coordinates => "142673 68031";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "gnc_async";
   };
 PROPERTIES
   Source_Language => (C);
@@ -267,6 +304,9 @@ CONNECTIONS
   };
   GNC_PI_get_pro_data_obsw_RI_get_pro_data : SUBPROGRAM ACCESS GNC.PI_get_pro_data -> obsw.RI_get_pro_data {
     Taste::coordinates => "118422 63306 130547 63306 130547 63306 142673 63306";
+  };
+  GNC_PI_gnc_async_obsw_RI_gnc_async : SUBPROGRAM ACCESS GNC.PI_gnc_async -> obsw.RI_gnc_async {
+    Taste::coordinates => "118422 66456 130547 66456 130547 68031 142673 68031";
   };
 END interfaceview.others;
 

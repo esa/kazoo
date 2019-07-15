@@ -33,3 +33,7 @@ void gnc_PI_get_pro_data(asn1SccT_Boolean *OUT_outp)
     *OUT_outp = toggle;
     toggle = toggle ? false : true;
 }
+void gnc_PI_gnc_async( const asn1SccT_Int32 *a)
+{
+    printf("[GNC] ASync data call: %lld\n", *a);
+}

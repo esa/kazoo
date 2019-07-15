@@ -37,7 +37,9 @@ process Obsw;
             call writeln('[SDL] Protected call result: ', p2);
             /* CIF output (355, 490), (98, 35) */
             output Result(inp);
-            /* CIF NEXTSTATE (369, 540), (70, 35) */
+            /* CIF output (345, 545), (116, 35) */
+            output Gnc_Async (42);
+            /* CIF NEXTSTATE (369, 595), (70, 35) */
             NEXTSTATE wait;
     endstate;
     /* CIF state (450, 10), (70, 35) */

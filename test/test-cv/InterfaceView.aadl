@@ -60,6 +60,16 @@ END RI_result;
 SUBPROGRAM IMPLEMENTATION RI_result.others
 END RI_result.others;
 
+SUBPROGRAM RI_get_pro_data
+FEATURES
+  outp : OUT PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END RI_get_pro_data;
+
+SUBPROGRAM IMPLEMENTATION RI_get_pro_data.others
+END RI_get_pro_data.others;
+
 SYSTEM obsw
 FEATURES
   PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::obsw::PI_pulse.others {
@@ -86,6 +96,12 @@ FEATURES
     Taste::coordinates => "118422 71181";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "result";
+    Taste::labelInheritance => "true";
+  };
+  RI_get_pro_data : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_get_pro_data.others {
+    Taste::coordinates => "118422 63306";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "get_pro_data";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -121,6 +137,18 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_guidance.others;
 
+SUBPROGRAM PI_get_pro_data
+FEATURES
+  outp : OUT PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END PI_get_pro_data;
+
+SUBPROGRAM IMPLEMENTATION PI_get_pro_data.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_get_pro_data.others;
+
 SYSTEM GNC
 FEATURES
   PI_guidance : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_guidance.others {
@@ -129,6 +157,11 @@ FEATURES
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "guidance";
+  };
+  PI_get_pro_data : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GNC::PI_get_pro_data.others {
+    Taste::coordinates => "142673 63306";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "get_pro_data";
   };
 PROPERTIES
   Source_Language => (C);
@@ -231,6 +264,9 @@ CONNECTIONS
   };
   ground_PI_result_obsw_RI_result : SUBPROGRAM ACCESS ground.PI_result -> obsw.RI_result {
     Taste::coordinates => "118422 71181 132598 71181 132598 89446";
+  };
+  GNC_PI_get_pro_data_obsw_RI_get_pro_data : SUBPROGRAM ACCESS GNC.PI_get_pro_data -> obsw.RI_get_pro_data {
+    Taste::coordinates => "118422 63306 130547 63306 130547 63306 142673 63306";
   };
 END interfaceview.others;
 

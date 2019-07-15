@@ -7,31 +7,40 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@IF@@ @_Param_Names'Length_@ > 0
-procedure @_CAPITALIZE:Name_@
-@@INLINE(   \()(;\n    )(\) is\n)@@
-   @@TABLE'ALIGN_ON(":")@@
-      @_CAPITALIZE:Param_Names_@ : Interfaces.C.char_array; @_CAPITALIZE:Param_Names_@_Size : Integer
-   @@END_TABLE@@
-@@END_INLINE@@
-   procedure C_@_CAPITALIZE:Name_@
-   @@INLINE(      \()(;\n       )(\)\n)@@
-      @@TABLE'ALIGN_ON(":")@@
-         @_CAPITALIZE:Param_Names_@ : Interfaces.C.char_array; @_CAPITALIZE:Param_Names_@_Size : Integer
+@@-- @_Remote_Function_Names_@  : List of callers
+@@-- @_Remote_Interface_Names_@ :   |_ caller's interface name
+@@IF@@ @_Kind_@ = PROTECTED_OPERATION
+   @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
+void pro_@_LOWER:Parent_Function_@_@_LOWER:Name_@()
+   @@ELSE@@   @@-- contains param(s)
+void pro_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+   @@INLINE(      \()(,\n       )(\)\n)@@
+      @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         void *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         void *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
       @@END_TABLE@@
    @@END_INLINE@@
-     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
-begin
-   @@-- Works only for one param: for more than one param, use a table section
-   C_@_CAPITALIZE:Name_@ (@_CAPITALIZE:Param_Names_@, @_CAPITALIZE:Param_Names_@_Size);
-end @_CAPITALIZE:Name_@;
-@@ELSE@@
-procedure @_CAPITALIZE:Name_@ is
-   procedure C_@_CAPITALIZE:Name_@
-     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
-begin
-   --  PI has no parameter - could directly call user code (add _PI_ above)
-   C_@_CAPITALIZE:Name_@;
-end @_CAPITALIZE:Name_@;
-
+   @@END_IF@@
 @@END_IF@@
+{
+   extern process_package__taste_protected_object @_LOWER:Parent_Function_@_protected;
+   __po_hi_protected_lock (@_LOWER:Parent_Function_@_protected.protected_id);
+@@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
+   @_LOWER:Parent_Function_@_@_LOWER:Name_@();
+@@ELSE@@
+   @_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(      \()(,\n       )(\);\n)@@
+      @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
+      @@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@  
+   __po_hi_protected_unlock (@_LOWER:Parent_Function_@_protected.protected_id);
+}

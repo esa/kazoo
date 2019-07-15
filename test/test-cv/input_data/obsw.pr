@@ -6,6 +6,8 @@ process Obsw;
     dcl p t_boolean;
     
     dcl inp t_uint32 := 42;
+    
+    dcl p2 t_boolean;
     /* CIF ENDTEXT */
     /* CIF START (320, 10), (70, 35) */
     START;
@@ -15,11 +17,11 @@ process Obsw;
         NEXTSTATE Wait;
     /* CIF state (320, 115), (70, 35) */
     state Wait;
-        /* CIF input (199, 170), (78, 35) */
+        /* CIF input (124, 170), (78, 35) */
         input Run(p);
-            /* CIF output (195, 225), (86, 35) */
+            /* CIF output (119, 225), (86, 35) */
             output Result(42);
-            /* CIF NEXTSTATE (203, 275), (70, 35) */
+            /* CIF NEXTSTATE (128, 275), (70, 35) */
             NEXTSTATE wait;
         /* CIF input (369, 170), (70, 35) */
         input Pulse;
@@ -29,7 +31,13 @@ process Obsw;
             call writeln('[SDL] Result: ', p);
             /* CIF task (291, 330), (224, 35) */
             task inp := if inp = 42 then 0 else 42 fi;
-            /* CIF NEXTSTATE (369, 380), (70, 35) */
+            /* CIF PROCEDURECALL (331, 385), (145, 35) */
+            call Get_Pro_Data (p2);
+            /* CIF PROCEDURECALL (217, 435), (374, 35) */
+            call writeln('[SDL] Protected call result: ', p2);
+            /* CIF output (355, 490), (98, 35) */
+            output Result(inp);
+            /* CIF NEXTSTATE (369, 540), (70, 35) */
             NEXTSTATE wait;
     endstate;
     /* CIF state (450, 10), (70, 35) */

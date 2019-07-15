@@ -38,7 +38,19 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 
 @@END_TABLE@@
 @@ELSE@@ @@-- Protected call
-   puts("Protected call of @_Name_@");
+   puts("[TASTE] Protected call of @_Name_@");
+@@TABLE@@
+   pro_@_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
+@@INLINE(        \()(,\n         )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+@@END_TABLE@@
 @@END_IF@@
 }
 

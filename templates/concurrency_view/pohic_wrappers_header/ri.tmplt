@@ -7,7 +7,10 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Remote_Function_Names_@  : List of callees
+@@-- @_Remote_Interface_Names_@ :   |_ callee's interface name
 // Required interface @_Name_@ in function @_Parent_Function_@
+// This RI is connected to: @_Remote_Function_Names_@
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(        \()(,\n         )(\);\n)@@
    @@TABLE@@

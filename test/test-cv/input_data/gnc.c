@@ -26,5 +26,10 @@ void gnc_PI_guidance
     *OUT_result = (42 == *IN_a);
 }
 
-
-
+void gnc_PI_get_pro_data(asn1SccT_Boolean *OUT_outp)
+{
+    puts("[GNC] get_pro_data called");
+    static asn1SccT_Boolean toggle = false;
+    *OUT_outp = toggle;
+    toggle = toggle ? false : true;
+}

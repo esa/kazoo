@@ -18,8 +18,6 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-//#include "@_LOWER:Pro_Block_Name_@_block.h"
-
 @@INLINE()(\n)(\n)@@
    @@IF@@ @_Param_Names'Length_@ > 0
       @@TABLE@@

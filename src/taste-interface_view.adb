@@ -992,7 +992,9 @@ package body TASTE.Interface_View is
       Param_Directions,
       Param_Encodings,
       Property_Names,
-      Property_Values    : Vector_Tag;
+      Property_Values,
+      Remote_Function_Names,
+      Remote_Interface_Names : Vector_Tag;
    begin
       for Each of TI.Params loop
          Param_Names        := Param_Names & Each.Name;
@@ -1006,20 +1008,28 @@ package body TASTE.Interface_View is
          Property_Names  := Property_Names  & Each.Name;
          Property_Values := Property_Values & Each.Value;
       end loop;
+      --  Add list of callers or callees
+      for Each of TI.Remote_Interfaces loop
+         Remote_Function_Names  := Remote_Function_Names & Each.Function_Name;
+         Remote_Interface_Names := Remote_Interface_Names
+           & Each.Interface_Name;
+      end loop;
 
-      return +Assoc ("Name",           TI.Name)
-        & Assoc ("Kind",               TI.RCM'Img)
-        & Assoc ("Parent_Function",    TI.Parent_Function)
-        & Assoc ("Period",             TI.Period_Or_MIAT'Img)
-        & Assoc ("WCET",               TI.WCET_ms.Value_Or (0)'Img)
-        & Assoc ("Queue_Size",         TI.Queue_Size.Value_Or (1)'Img)
-        & Assoc ("Param_Names",        Param_Names)
-        & Assoc ("Param_Types",        Param_Types)
-        & Assoc ("Param_ASN1_Modules", Param_ASN1_Modules)
-        & Assoc ("Param_Encodings",    Param_Encodings)
-        & Assoc ("Param_Directions",   Param_Directions)
-        & Assoc ("IF_Property_Names",  Property_Names)
-        & Assoc ("IF_Property_Values", Property_Values);
+      return +Assoc ("Name",               TI.Name)
+        & Assoc ("Kind",                   TI.RCM'Img)
+        & Assoc ("Parent_Function",        TI.Parent_Function)
+        & Assoc ("Period",                 TI.Period_Or_MIAT'Img)
+        & Assoc ("WCET",                   TI.WCET_ms.Value_Or (0)'Img)
+        & Assoc ("Queue_Size",             TI.Queue_Size.Value_Or (1)'Img)
+        & Assoc ("Param_Names",            Param_Names)
+        & Assoc ("Param_Types",            Param_Types)
+        & Assoc ("Param_ASN1_Modules",     Param_ASN1_Modules)
+        & Assoc ("Param_Encodings",        Param_Encodings)
+        & Assoc ("Param_Directions",       Param_Directions)
+        & Assoc ("IF_Property_Names",      Property_Names)
+        & Assoc ("IF_Property_Values",     Property_Values)
+        & Assoc ("Remote_Function_Names",  Remote_Function_Names)
+        & Assoc ("Remote_Interface_Names", Remote_Interface_Names);
    end To_Template;
 
 end TASTE.Interface_View;

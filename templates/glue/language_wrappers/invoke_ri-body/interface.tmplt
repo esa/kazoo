@@ -64,16 +64,41 @@ void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(void)
    }
 @@END_IF@@
 @@END_TABLE@@
-   // Call Middleware interface (TODO)
-   // extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@ ( ... )
-   // vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@ ( ... )
+
+@@TABLE'TERSE@@
+@@IF@@ @_Param_Directions_@ = PARAM_OUT
+   // Buffer for decoding parameter @_Param_Names_@
+   static char OUT_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+   size_t      size_OUT_buf_@_LOWER:Param_Names_@ = 0;
+@@END_IF@@
+@@END_TABLE@@
+
+   // Call Middleware interface
+   extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(     \()(,\n      )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         void *, size_t
+      @@ELSE@@
+         void *, size_t *
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+   vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(     \()(,\n      )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+
 
 @@TABLE'TERSE@@
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Decode parameter @_Param_Names_@
-   static char OUT_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
-   size_t      size_OUT_buf_@_LOWER:Param_Names_@ = 0;
-
    if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
               (OUT_@_LOWER:Param_Names_@, OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
 #ifdef __unix__

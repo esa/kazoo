@@ -1,10 +1,44 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Name_@                : The name of the interface
-@@-- @_Direction_@           : "PI" or "RI"
-@@-- @_Kind_@                : The RCM Kind
-@@-- @_Parent_Function_@     : The name of the function
-@@-- @_Param_Names_@         : List of parameter names
-@@-- @_Param_Types_@         :   |_ Corresponding parameter types
-@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Name_@                   : The name of the interface
+@@-- @_Direction_@              : "PI" or "RI"
+@@-- @_Kind_@                   : The RCM Kind
+@@-- @_Parent_Function_@        : The name of the function
+@@-- @_Param_Names_@            : List of parameter names
+@@-- @_Param_Types_@            :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@       :   |_ Corresponding direction
+@@-- @_Remote_Function_Names_@  : List of callees
+@@-- @_Remote_Interface_Names_@ :   |_ callee's interface name
+// Required interface @_Name_@ in function @_Parent_Function_@
+void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@INLINE(        \()(,\n         )(\)\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         void *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         void *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+{
+@@IF@@ @_Kind_@ = SPORADIC_OPERATION
+   puts("Sporadic call of @_Name_@");
+@@ELSIF@@ @_Kind_@ = UNPROTECTED_OPERATION
+@@TABLE@@
+   @_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
+@@INLINE(        \()(,\n         )(\);\n)@@
+   @@TABLE@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+      @@ELSE@@
+         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+
+@@END_TABLE@@
+@@ELSE@@ @@-- Protected call
+   puts("Protected call of @_Name_@");
+@@END_IF@@
+}
 

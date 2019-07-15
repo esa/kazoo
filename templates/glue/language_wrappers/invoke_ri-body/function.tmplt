@@ -37,8 +37,8 @@
 #include <stdlib.h>
 #ifdef __unix__
    #include <stdio.h>
-//   #include "PrintTypesAsASN1.h"
-//   #include "timeInMS.h"
+   #include "PrintTypesAsASN1.h"
+   #include "timeInMS.h"
 #endif
 
 //#include "C_ASN1_Types.h"

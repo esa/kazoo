@@ -89,7 +89,8 @@ package body TASTE.Concurrency_View is
          declare
             Basic : constant Translate_Set := PI.PI.To_Template
               & Assoc ("Protected_Block_Name", To_String (PI.Name))
-              & Assoc ("Caller_Is_Local", PI.Local_Caller);
+              & Assoc ("Caller_Is_Local", PI.Local_Caller)
+              & Assoc ("Calling_Threads", Calling_Threads);
          begin
             if PI.PI.RCM = Protected_Operation then
                Result.Protected_Provided.Append (Basic);
@@ -100,7 +101,8 @@ package body TASTE.Concurrency_View is
       end loop;
 
       for RI of B.Required loop
-         Result.Required.Append (RI.To_Template);
+         Result.Required.Append (RI.To_Template
+                                 & Assoc ("Calling_Threads", Calling_Threads));
       end loop;
 
       Result.Header := +Assoc  ("Name",            To_String (B.Name))
@@ -316,15 +318,21 @@ package body TASTE.Concurrency_View is
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Pro_PI_Tag := Pro_PI_Tag & Newline
-                          & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
+                          & String'(Parse (Path & "/pi.tmplt",
+                                    PI_Assoc & Assoc
+                                      ("Partition_Name", Partition_Name)));
                      end loop;
                      for PI_Assoc of Tmpl.Unprotected_Provided loop
                         Unpro_PI_Tag := Unpro_PI_Tag & Newline
-                          & String'(Parse (Path & "/pi.tmplt", PI_Assoc));
+                          & String'(Parse (Path & "/pi.tmplt",
+                                    PI_Assoc & Assoc
+                                      ("Partition_Name", Partition_Name)));
                      end loop;
                      for RI_Assoc of Tmpl.Required loop
                         RI_Tag := RI_Tag & Newline
-                          & String'(Parse (Path & "/ri.tmplt", RI_Assoc));
+                          & String'(Parse (Path & "/ri.tmplt",
+                                    RI_Assoc & Assoc
+                                      ("Partition_Name", Partition_Name)));
                      end loop;
                      Block_Assoc := Block_Assoc
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)

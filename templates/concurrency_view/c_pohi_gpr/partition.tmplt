@@ -144,6 +144,10 @@ project @_CAPITALIZE:Name_@ is
           "-lm",
           "-Wl,-gc-sections");
    end Linker;
+
+   package Builder is
+      for Executable ("main.c") use "@_Name_@";
+   end Builder;
    
 end @_CAPITALIZE:Name_@;
 

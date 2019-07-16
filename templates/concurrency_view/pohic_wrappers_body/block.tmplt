@@ -11,4 +11,6 @@
 // Required interfaces of function @_Name_@
 @_Required_@
 @@END_IF@@
+#include "@_LOWER:Name_@_vm_if.h"
+
 @_Protected_PIs_@

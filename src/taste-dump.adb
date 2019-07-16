@@ -119,7 +119,7 @@ package body TASTE.Dump is
             Dest_Nodes,
             Dest_Ports  : Vector_Tag;
 
-            function Process_Interfaces (Interfaces : St_Interfaces.Vector)
+            function Process_Interfaces (Interfaces : Template_Vectors.Vector)
                                          return Unbounded_String
             is
                Result : Unbounded_String;

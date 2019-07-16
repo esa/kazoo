@@ -35,7 +35,7 @@
 
 #pragma once
 
-#include "../../../dataview/C/dataview-uniq.h"
+#include "dataview-uniq.h"
 
 #ifdef __cplusplus
 extern "C" {

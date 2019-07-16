@@ -13,13 +13,14 @@ package TASTE.Backend.Code_Generators is
 
    package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
 
-   package ST_Interfaces is new Indefinite_Vectors (Natural, Translate_Set);
+   --  package ST_Interfaces is new Indefinite_Vectors
+   --  (Natural, Translate_Set);
 
    type Func_As_Template is
       record
          Header   : Translate_set;
-         Provided : ST_Interfaces.Vector;
-         Required : ST_Interfaces.Vector;
+         Provided : Template_Vectors.Vector;
+         Required : Template_Vectors.Vector;
       end record;
 
    package Func_Maps is new Indefinite_Ordered_Maps (String, Func_As_Template);

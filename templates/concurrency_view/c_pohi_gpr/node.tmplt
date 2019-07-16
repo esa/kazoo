@@ -10,7 +10,7 @@ all: debug
 
 debug:
 @@TABLE@@
-	gprbuild -p -v -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release:

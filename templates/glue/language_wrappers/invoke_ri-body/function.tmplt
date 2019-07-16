@@ -41,8 +41,8 @@
    #include "timeInMS.h"
 #endif
 
-//#include "C_ASN1_Types.h"
-#include "../../../dataview/C/dataview-uniq.h"
+#include "C_ASN1_Types.h"
+#include "dataview-uniq.h"
 
 @@-- For blackbox devices, don't generate the RI code here, because their parameters are different
 @@-- (they are already encoded, not using native ASN.1 types)

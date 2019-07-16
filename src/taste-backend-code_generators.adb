@@ -28,8 +28,6 @@ package body TASTE.Backend.Code_Generators is
 
       Prefix_Skeletons  : constant String := Prefix & "skeletons/";
       Prefix_Wrappers   : constant String := Prefix & "glue/language_wrappers";
-      Prefix_Middleware : constant String :=
-                                          Prefix & "glue/middleware_interface";
 
       --  Return a Tag list of ASN.1 Modules for the headers
       function Get_Module_List return Tag is
@@ -95,7 +93,7 @@ package body TASTE.Backend.Code_Generators is
       end Generate_Global_Makefile;
 
       --  Render a set (Tag) of interfaces by applying a template
-      function Process_Interfaces (Interfaces : ST_Interfaces.Vector;
+      function Process_Interfaces (Interfaces : Template_Vectors.Vector;
                                    Path       : String) return Tag
       is
          Result : Tag;
@@ -210,7 +208,7 @@ package body TASTE.Backend.Code_Generators is
                                  & Exception_Message (E);
       end Process_Template;
 
-      --  Main loop generating skeletons for each function
+      --  Main loop generating output for each function
       --  Prefix is where the templates are located
       --  Output_Base is the output folder defined in the command line
       --  Output_Sub is where the code shall be generated (e.g. "src")
@@ -294,9 +292,9 @@ package body TASTE.Backend.Code_Generators is
 
                      --  Data needed to process trigger.tmplt
                      Trig_Tmpl  : constant Translate_Set :=
-                        +Assoc  ("Name", Each.Name)
+                        +Assoc  ("Name",     Each.Name)
                         & Assoc ("Language", Language_Spelling (Each))
-                        & Assoc ("Is_Type", Each.Is_Type)
+                        & Assoc ("Is_Type",  Each.Is_Type)
                         & Assoc ("Instance_Of",
                                          Each.Instance_Of.Value_Or (US ("")))
                         & Assoc ("C_Middleware", Model.Configuration.Use_POHIC)
@@ -339,11 +337,6 @@ package body TASTE.Backend.Code_Generators is
                                     Model.Configuration.Output_Dir.Element
                                        & "/",
                                   Output_Sub => "wrappers/");
-         Generate_From_Templates (Prefix     => Prefix_Middleware,
-                                  Output_Base =>
-                                    Model.Configuration.Output_Dir.Element
-                                       & "/",
-                                  Output_Sub => "middleware_glue/");
       end if;
    end Generate;
 
@@ -402,7 +395,7 @@ package body TASTE.Backend.Code_Generators is
    function Func_Template (F : Taste_Terminal_Function) return Func_As_Template
    is
       use Ctxt_Params;
-      use ST_Interfaces;
+      use Template_Vectors;
       Result             : Func_As_Template;
       List_Of_PIs        : Tag;
       List_Of_RIs        : Tag;

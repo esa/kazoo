@@ -10,9 +10,13 @@
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 OUTDIR := $(dir $(MAKEFILE_PATH))
 
-all: dataviews
+all: dataview/dataview-uniq.asn
 
-dataviews:
+@@INLINE(dataview/dataview-uniq.asn:)( )(\n)@@
+        @@TABLE@@
+           @_ASN1_Files_@
+        @@END_TABLE@@
+@@END_INLINE@@
 	mkdir -p dataview/.cache
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
@@ -41,28 +45,44 @@ dataviews:
 	PROJECT_CACHE=dataview/.cache aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
 	@@END_IF@@
 	@@END_TABLE@@
-	@@-- Then generate Dataviews once per target language
-	@@TABLE@@
+	@@-- Then generate Dataviews once per target language - first for C, it is needed in any case
+	mkdir -p dataview/C && PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/C -toC dataview/dataview-uniq.asn \
+	@@INLINE(	)( \\\n	)(\n)@@
+	    @@TABLE@@
+               @_REPLACE(,/ ):CP_Files_@
+	    @@END_TABLE@@
+	 @@END_INLINE@@
+         @@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-	      @@SET@@ Lang=Ada
-	      @@SET@@ Post=cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+              @@SET@@ Enable=FALSE
+              @@SET@@ Need_Ada=TRUE
 	   @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C" or @_Unique_Languages_@ = "GUI"
-	      @@SET@@ Lang=C
-	      @@SET@@ Post=# Blackboxes, C, GUI, and C++ all use the same C data model
+              @@SET@@ Enable=FALSE
 	   @@ELSE@@
+              @@SET@@ Enable=TRUE
               @@SET@@ Lang=@_Unique_Languages_@
 	   @@END_IF@@
-	   @@INLINE(	)(\n	)(\n)@@
-              mkdir -p dataview/@_Lang_@
-              PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
-	      @@INLINE(	)( \\\n	)(\n	)@@
-	         @@TABLE@@
-                    @_REPLACE(,/ ):CP_Files_@
-    	         @@END_TABLE@@
-	      @@END_INLINE@@
-              @_Post_@
-	   @@END_INLINE@@
-        @@END_TABLE@@
+           @@IF@@ Enable=TRUE
+               @@INLINE(	)(\n	)(\n)@@
+                  mkdir -p dataview/@_Lang_@
+                  PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
+                  @@INLINE(	)( \\\n	)(\n	)@@
+                     @@TABLE@@
+                        @_REPLACE(,/ ):CP_Files_@
+                     @@END_TABLE@@
+                  @@END_INLINE@@
+               @@END_INLINE@@
+	   @@END_IF@@
+	@@END_TABLE@@
+	@@IF@@ @_Need_Ada_@=TRUE
+	mkdir -p dataview/Ada && PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/Ada -toAda dataview/dataview-uniq.asn \
+	@@INLINE(	)( \\\n	)(\n)@@
+	    @@TABLE@@
+               @_REPLACE(,/ ):CP_Files_@
+	    @@END_TABLE@@
+	 @@END_INLINE@@
+	 cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+        @@END_IF@@
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
 	cd dataview/C && msgPrinter ../dataview-uniq.asn && msgPrinterASN1 ../dataview-uniq.asn

@@ -20,11 +20,36 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
-@@INLINE@@
+@@INLINE()( )(\n)@@
 @_LOWER:Name_@ :
    @@TABLE@@
       @_LOWER:Block_Names_@
    @@END_TABLE@@
 @@END_INLINE@@
+@@-- On RTEMS if using POHIC we need to have adainit created for Ada functions
+@@-- Here we miss the configuration? Please add... We don't need that for POHIAda
+@@--@@IF@@ @_CPU_Platform_@ /= PLATFORM_NATIVE
+	mkdir -p @_LOWER:Name_@_adainit && \
+@@INLINE(    echo ')()()@@
+@@TABLE@@
+@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
+with @_CAPITALIZE:Block_Names_@;
+@@END_IF@@
+@@END_TABLE@@
+package adainit is end adainit;' >@_LOWER:Name_@_adainit/tasteada.ads && \
+@@END_INLINE@@
+        cd @_LOWER:Name_@_adainit && \
+@@INLINE(    )(:)( )@@
+ADA_INCLUDE_PATH=../../dataview/Ada
+@@TABLE'TERSE@@
+@@IF@@ @_LOWER:Block_Languages_@ = sdl
+../../@_LOWER:Block_Names_@/SDL/code
+@@ELSIF@@ @_LOWER:Block_Languages_@ = ada
+../../@_LOWER:Block_Names_@/Ada/src
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+sparc-rtems5-gnatmake -c tasteada.ads && sparc-rtems5-gnatbind -t -n tasteada.ali -o ada-start.adb && mkdir -p ../@_LOWER:Node_Name_@/ada_code_startup && mv ada-start.* ../@_LOWER:Node_Name_@/ada_code_startup
+@@--@@END_IF@@
 
 @_Blocks_@

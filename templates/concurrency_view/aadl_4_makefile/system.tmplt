@@ -17,12 +17,23 @@
 @@INLINE()( )()@@
 all:
 @@TABLE@@
-@_LOWER:Node_Names_@
+@_LOWER:Node_Names_@_native
 @@END_TABLE@@
 @@END_INLINE@@
 
 @@TABLE@@
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@
+@@END_TABLE@@
+
+@@INLINE()( )()@@
+rtems_ada:
+@@TABLE@@
+@_LOWER:Node_Names_@_rtems_ada
+@@END_TABLE@@
+@@END_INLINE@@
+
+@@TABLE@@
+	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
 @@END_TABLE@@
 
 @_Nodes_@

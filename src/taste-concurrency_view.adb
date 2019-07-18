@@ -166,7 +166,7 @@ package body TASTE.Concurrency_View is
       Output_File      : File_Type;
 
       CV_Out_Dir  : constant String  :=
-        CV.Base_Output_Path.Element & "/concurrency_view/";
+        CV.Base_Output_Path.Element & "/build/";
 
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:

@@ -10,7 +10,15 @@
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 OUTDIR := $(dir $(MAKEFILE_PATH))
 
-all: dataview/dataview-uniq.asn
+all: build-native
+
+dataview : dataview/dataview-uniq.asn
+
+build-native: dataview
+	cd build && ocarina -x main.aadl && make -f Makefile.taste
+
+build-rtems-ada: dataview
+	cd build && ocarina -x main.aadl && make -f Makefile.taste rtems_ada
 
 @@INLINE(dataview/dataview-uniq.asn:)( )(\n)@@
         @@TABLE@@
@@ -34,7 +42,7 @@ all: dataview/dataview-uniq.asn
 	    @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_system_config.h
 	@@END_IF@@
         @@END_TABLE@@
-; do cat $$f; echo; done > system_config.h
+; do cat $$f; echo; done > build/system_config.h
 	@@END_INLINE@@
 	
 	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
@@ -108,3 +116,8 @@ function-instances-linux: function-types-linux
 	@@END_TABLE@@
 
 compile-all-linux: dataviews function-instances-linux
+
+clean:
+	rm -rf binaries/*
+
+.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-native dataview build-rtems-ada

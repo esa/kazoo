@@ -21,13 +21,14 @@
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
 @@INLINE()( )(\n)@@
-@_LOWER:Name_@ :
+@_LOWER:Name_@_native :
    @@TABLE@@
       @_LOWER:Block_Names_@
    @@END_TABLE@@
 @@END_INLINE@@
+
+@_LOWER:Name_@_rtems_ada : @_LOWER:Name_@_native
 @@-- On RTEMS if using POHIC we need to have adainit created for Ada functions
-@@-- Here we miss the configuration? Please add... We don't need that for POHIAda
 @@--@@IF@@ @_CPU_Platform_@ /= PLATFORM_NATIVE
 	mkdir -p @_LOWER:Name_@_adainit && \
 @@INLINE(    echo ')()()@@

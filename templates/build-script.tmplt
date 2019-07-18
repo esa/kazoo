@@ -53,7 +53,7 @@ fi
 
 # Execute the makefile to update dataviews, if needed, then call ocarina and build everything
 make && \
-cd concurrency_view && \
+cd build && \
 ocarina -x main.aadl &&
 make -f Makefile.taste
 

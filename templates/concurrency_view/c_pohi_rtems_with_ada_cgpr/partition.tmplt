@@ -41,7 +41,7 @@ configuration project RTEMS_WITH_ADA is
          ("--pipe",
           "-DTARGET=leon.rtems_posix",
           "-DRTEMS_POSIX",
-          "-DRTEMS410",
+          "-DRTEMS412",
           "-DGRLEON3",
           "-DLEON_RTEMS",
           "-DLEON3",

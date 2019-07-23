@@ -162,7 +162,6 @@ SUBCOMPONENTS
   };
   leon_rtems_posix : PROCESSOR ocarina_processors_leon::leon.rtems_posix {
     Taste::coordinates => "96438 63440 129389 99342";
-    Scheduling_Protocol => (ARINC653);
   };
   generic_serial_raw : DEVICE deploymentview::DV::Platform::generic_serial_raw.others {
     Taste::coordinates => "103682 103208 113782 108258";

@@ -1,7 +1,7 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output/concurrency_view && ocarina -x main.aadl
+	cd output/build && ocarina -x main.aadl
 
 test-parse: clean
 	$(KAZOO) --gw -p \
@@ -13,7 +13,7 @@ test-parse: clean
 
 
 gdb: clean
-	gdb --args $(KAZOO) --gw \
+	gdb --args $(KAZOO) --gw -p \
 	               -o output \
 	               --glue \
 		 --no-stdlib \

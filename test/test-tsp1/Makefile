@@ -1,7 +1,7 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output/concurrency_view && ocarina -x main.aadl
+	cd output/build && ocarina -x main.aadl
 
 test-parse: clean
 	$(KAZOO) --gw -p \

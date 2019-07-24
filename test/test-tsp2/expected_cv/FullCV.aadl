@@ -1,0 +1,697 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type concurrencyview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PROPERTY SET AI IS
+  Root_System : AADLSTRING
+    APPLIES TO(SYSTEM IMPLEMENTATION);
+  Disabled_Processing_Tools : LIST OF AADLSTRING
+    APPLIES TO(SYSTEM IMPLEMENTATION);
+END AI;
+
+
+PACKAGE concurrencyview::CV
+PUBLIC
+WITH AI;
+WITH AIR::portpooling;
+WITH DataView;
+WITH TSP::DataView;
+WITH Arinc653;
+WITH ocarina_processors_leon;
+WITH deploymentview::DV::TSPNode;
+
+PROCESSOR TSPNode_proc1_cv
+EXTENDS ocarina_processors_leon::leon3
+END TSPNode_proc1_cv;
+
+PROCESSOR IMPLEMENTATION TSPNode_proc1_cv.final
+EXTENDS ocarina_processors_leon::leon3.AIR
+SUBCOMPONENTS
+  part1_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part1_VP.others;
+  part2_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part2_VP.others;
+PROPERTIES
+  SCHEDULING_PROTOCOL => (POSIX_1003_Highest_Priority_First_Protocol) APPLIES TO part1_VP;
+  SCHEDULING_PROTOCOL => (POSIX_1003_Highest_Priority_First_Protocol) APPLIES TO part2_VP;
+  ARINC653::DAL => LEVEL_A APPLIES TO part1_VP;
+  ARINC653::DAL => LEVEL_A APPLIES TO part2_VP;
+END TSPNode_proc1_cv.final;
+
+PROCESS part1
+EXTENDS deploymentview::DV::TSPNode::part1
+END part1;
+
+PROCESS IMPLEMENTATION part1.final
+SUBCOMPONENTS
+  helloworld1_task1 : THREAD helloworld1_task1.others;
+  helloworld1_pi_task1 : SUBPROGRAM helloworld1_pi_task1.final;
+END part1.final;
+
+PROCESS part2
+EXTENDS deploymentview::DV::TSPNode::part2
+END part2;
+
+PROCESS IMPLEMENTATION part2.final
+SUBCOMPONENTS
+  helloworld2_task2 : THREAD helloworld2_task2.others;
+  helloworld2_pi_task2 : SUBPROGRAM helloworld2_pi_task2.final;
+END part2.final;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.final
+SUBCOMPONENTS
+  part1 : PROCESS part1.final;
+  part2 : PROCESS part2.final;
+  TSPNode_proc1_cv : PROCESSOR TSPNode_proc1_cv.final;
+  TSPNode_main_memory : MEMORY deploymentview::DV::TSPNode::main_memory.others;
+PROPERTIES
+  AI::ROOT_SYSTEM => "generated";
+  ACTUAL_PROCESSOR_BINDING => (REFERENCE(TSPNode_proc1_cv.part1_VP)) APPLIES TO part1;
+  ACTUAL_PROCESSOR_BINDING => (REFERENCE(TSPNode_proc1_cv.part2_VP)) APPLIES TO part2;
+  ACTUAL_MEMORY_BINDING => (Reference(TSPNode_main_memory.part1_Segment)) APPLIES TO part1;
+  ACTUAL_MEMORY_BINDING => (Reference(TSPNode_main_memory.part2_Segment)) APPLIES TO part2;
+  ARINC653::MODULE_MAJOR_FRAME => 3000 ms APPLIES TO TSPNode_proc1_cv;
+  ARINC653::MODULE_SCHEDULE => (
+    [PARTITION=>Reference(TSPNode_proc1_cv.part1_VP);Duration=>1500 ms;PERIODIC_PROCESSING_START=>FALSE;],
+    [PARTITION=>Reference(TSPNode_proc1_cv.part2_VP);Duration=>1500 ms;PERIODIC_PROCESSING_START=>FALSE;]
+  ) APPLIES TO TSPNode_proc1_cv;
+END deploymentview.final;
+
+THREAD helloworld1_task1
+END helloworld1_task1;
+
+THREAD IMPLEMENTATION helloworld1_task1.others
+CALLS
+  MyCalls : { 
+    MyCall : SUBPROGRAM helloworld1_pi_task1;
+  };
+PROPERTIES
+  DISPATCH_PROTOCOL => Periodic;
+  PERIOD => 1000 ms;
+  DEADLINE => 1000 ms;
+  COMPUTE_EXECUTION_TIME => 0 ms..3 ms;
+ANNEX behavior_specification {**
+**};
+END helloworld1_task1.others;
+
+THREAD helloworld2_task2
+END helloworld2_task2;
+
+THREAD IMPLEMENTATION helloworld2_task2.others
+CALLS
+  MyCalls : { 
+    MyCall : SUBPROGRAM helloworld2_pi_task2;
+  };
+PROPERTIES
+  DISPATCH_PROTOCOL => Periodic;
+  PERIOD => 1000 ms;
+  DEADLINE => 1000 ms;
+  COMPUTE_EXECUTION_TIME => 0 ms..3 ms;
+ANNEX behavior_specification {**
+**};
+END helloworld2_task2.others;
+
+SUBPROGRAM helloworld1_pi_task1
+PROPERTIES
+  COMPUTE_EXECUTION_TIME => 3 ms..3 ms;
+  SOURCE_LANGUAGE => (C);
+  SOURCE_NAME => "helloworld1_pi_task1";
+  SOURCE_TEXT => ("helloworld1/helloworld1.c");
+END helloworld1_pi_task1;
+
+SUBPROGRAM IMPLEMENTATION helloworld1_pi_task1.final
+END helloworld1_pi_task1.final;
+
+SUBPROGRAM helloworld2_pi_task2
+PROPERTIES
+  COMPUTE_EXECUTION_TIME => 3 ms..3 ms;
+  SOURCE_LANGUAGE => (C);
+  SOURCE_NAME => "helloworld2_pi_task2";
+  SOURCE_TEXT => ("helloworld2/helloworld2.c");
+END helloworld2_pi_task2;
+
+SUBPROGRAM IMPLEMENTATION helloworld2_pi_task2.final
+END helloworld2_pi_task2.final;
+
+END concurrencyview::CV;
+
+
+
+
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::helloworld1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_task1
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_task1;
+
+SUBPROGRAM IMPLEMENTATION PI_task1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 3 ms;
+END PI_task1.others;
+
+SYSTEM helloworld1
+FEATURES
+  PI_task1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::helloworld1::PI_task1.others {
+    Taste::coordinates => "116690 67244";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "task1";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END helloworld1;
+
+SYSTEM IMPLEMENTATION helloworld1.others
+END helloworld1.others;
+
+END interfaceview::IV::helloworld1;
+
+PACKAGE interfaceview::IV::helloworld2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_task2
+END PI_task2;
+
+SUBPROGRAM IMPLEMENTATION PI_task2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 3 ms;
+END PI_task2.others;
+
+SYSTEM helloworld2
+FEATURES
+  PI_task2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::helloworld2::PI_task2.others {
+    Taste::coordinates => "185664 66142";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "task2";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END helloworld2;
+
+SYSTEM IMPLEMENTATION helloworld2.others
+END helloworld2.others;
+
+END interfaceview::IV::helloworld2;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::helloworld1;
+WITH interfaceview::IV::helloworld2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  helloworld1 : SYSTEM interfaceview::IV::helloworld1::helloworld1.others {
+    Taste::coordinates => "83777 59369 116690 88344";
+  };
+  helloworld2 : SYSTEM interfaceview::IV::helloworld2::helloworld2.others {
+    Taste::coordinates => "152751 58267 185664 87242";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+
+
+
+
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::TSPNode
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS part1
+END part1;
+
+PROCESS IMPLEMENTATION part1.others
+END part1.others;
+
+VIRTUAL PROCESSOR part1_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 0;
+END part1_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION part1_VP.others
+END part1_VP.others;
+
+PROCESS part2
+END part2;
+
+PROCESS IMPLEMENTATION part2.others
+END part2.others;
+
+VIRTUAL PROCESSOR part2_VP
+PROPERTIES
+  Deployment::Execution_Platform => AIR;
+  ARINC653::Partition_Identifier => 1;
+END part2_VP;
+
+VIRTUAL PROCESSOR IMPLEMENTATION part2_VP.others
+END part2_VP.others;
+
+MEMORY main_memory
+END main_memory;
+
+MEMORY IMPLEMENTATION main_memory.others
+SUBCOMPONENTS
+  part1_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#100000#;
+    Memory_Size => 16#100#;
+    Byte_Count => 16#100#;
+  };
+  part2_Segment : MEMORY deploymentview::DV::partition_memory.others {
+    Base_Address => 16#600000#;
+    Memory_Size => 16#100#;
+    Byte_Count => 16#100#;
+  };
+END main_memory.others;
+
+END deploymentview::DV::TSPNode;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::helloworld1;
+WITH interfaceview::IV::helloworld2;
+WITH ocarina_processors_leon;
+WITH ARINC653;
+WITH deploymentview::DV::TSPNode;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+MEMORY partition_memory
+END partition_memory;
+
+MEMORY IMPLEMENTATION partition_memory.others
+END partition_memory.others;
+
+SYSTEM TSPNode
+END TSPNode;
+
+SYSTEM IMPLEMENTATION TSPNode.others
+SUBCOMPONENTS
+  IV_helloworld1 : SYSTEM interfaceview::IV::helloworld1::helloworld1.others {
+    Taste::FunctionName => "helloworld1";
+  };
+  part1 : PROCESS deploymentview::DV::TSPNode::part1.others {
+    Taste::coordinates => "101403 57909 133666 69594";
+    Deployment::Port_Number => 0;
+  };
+  part1_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part1_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  IV_helloworld2 : SYSTEM interfaceview::IV::helloworld2::helloworld2.others {
+    Taste::FunctionName => "helloworld2";
+  };
+  part2 : PROCESS deploymentview::DV::TSPNode::part2.others {
+    Taste::coordinates => "101412 72100 133823 82850";
+    Deployment::Port_Number => 0;
+  };
+  part2_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part2_VP.others {
+    Scheduling_Protocol => (Posix_1003_Highest_Priority_First_Protocol);
+    ARINC653::DAL => LEVEL_A;
+  };
+  proc1 : PROCESSOR ocarina_processors_leon::leon3.AIR {
+    Taste::coordinates => "95948 49619 140767 87742";
+    Taste::Fill_Color => "#ffff80";
+  };
+  main_memory : MEMORY deploymentview::DV::TSPNode::main_memory.others;
+PROPERTIES
+  Taste::APLC_Binding => (reference (part1)) APPLIES TO IV_helloworld1;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO part1_VP;
+  Actual_Processor_Binding => (reference (part1_VP)) APPLIES TO part1;
+  Actual_Memory_Binding => (reference (main_memory.part1_Segment)) APPLIES TO part1;
+  Taste::APLC_Binding => (reference (part2)) APPLIES TO IV_helloworld2;
+  Actual_Processor_Binding => (reference (proc1)) APPLIES TO part2_VP;
+  Actual_Processor_Binding => (reference (part2_VP)) APPLIES TO part2;
+  Actual_Memory_Binding => (reference (main_memory.part2_Segment)) APPLIES TO part2;
+  ARINC653::Module_Major_Frame => 3000 ms APPLIES TO proc1;
+  ARINC653::Module_Schedule => (
+	[ Partition => reference(part1_VP);
+	  Duration => 1500 ms;
+	  Periodic_Processing_Start => False; ],
+	[ Partition => reference(part2_VP);
+	  Duration => 1500 ms;
+	  Periodic_Processing_Start => False; ]
+) APPLIES TO proc1;
+END TSPNode.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  TSPNode : SYSTEM TSPNode.others {
+    Taste::coordinates => "90865 45668 144870 92319";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("");
+END deploymentview::DV;
+
+
+
+
+--------------------------------------------------------
+--! File generated by asn2aadl v2.1.10: DO NOT EDIT !
+--------------------------------------------------------
+--! InputASN1FileChecksum:6bf664b31ce9ca6fd89af52cea7ea0f2:/home/taste/TASTEForErgoExamples/ex1/DataView.asn:
+--! InputASN1FileChecksum:ee8a7e01f29874c0d50f437d5abb9599:/home/taste/tool-inst/share/taste-types/taste-types.asn:
+--------------------------------------------------------
+
+package DataView
+
+public
+
+  with Data_Model;
+  with Taste;
+  with Base_Types;
+  with Deployment;
+
+DATA Simulink_Tunable_Parameter
+PROPERTIES
+   TASTE::Ada_Package_Name => "TASTE_Directives";
+   Type_Source_Name => "Simulink-Tunable-Parameter";
+   Deployment::ASN1_Module_Name => "TASTE-Directives";
+   TASTE::Forbid_in_PI => true;
+END Simulink_Tunable_Parameter;
+
+DATA Timer
+PROPERTIES
+   TASTE::Ada_Package_Name => "TASTE_Directives";
+   Type_Source_Name => "Timer";
+   Deployment::ASN1_Module_Name => "TASTE-Directives";
+   TASTE::Forbid_in_PI => true;
+END Timer;
+
+DATA Taste_directive
+PROPERTIES
+   TASTE::Ada_Package_Name => "TASTE_Directives";
+   Type_Source_Name => "Taste-directive";
+   Deployment::ASN1_Module_Name => "TASTE-Directives";
+   TASTE::Forbid_in_PI => true;
+END Taste_directive;
+
+data Stream_Element_Buffer
+    -- Root type for buffer elements
+properties
+    Data_Model::Data_Representation => Character;
+end Stream_Element_Buffer;
+DATA T_UInt8
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    TASTE::Ada_Package_Name => "TASTE_BasicTypes";
+    Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 8; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "T-UInt8";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aINTEGER;
+END T_UInt8;
+
+DATA T_UInt8_Buffer_Max
+END T_UInt8_Buffer_Max;
+
+DATA IMPLEMENTATION T_UInt8_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type T_UInt8
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END T_UInt8_Buffer_Max.impl;
+
+DATA T_UInt8_Buffer
+END T_UInt8_Buffer;
+
+DATA IMPLEMENTATION T_UInt8_Buffer.impl
+    -- Buffer to hold a marshalled data of type T_UInt8
+SUBCOMPONENTS
+    Buffer : data T_UInt8_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END T_UInt8_Buffer.impl;
+
+DATA T_Boolean
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    TASTE::Ada_Package_Name => "TASTE_BasicTypes";
+    Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 1; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "T-Boolean";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aBOOLEAN;
+END T_Boolean;
+
+DATA T_Boolean_Buffer_Max
+END T_Boolean_Buffer_Max;
+
+DATA IMPLEMENTATION T_Boolean_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type T_Boolean
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END T_Boolean_Buffer_Max.impl;
+
+DATA T_Boolean_Buffer
+END T_Boolean_Buffer;
+
+DATA IMPLEMENTATION T_Boolean_Buffer.impl
+    -- Buffer to hold a marshalled data of type T_Boolean
+SUBCOMPONENTS
+    Buffer : data T_Boolean_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END T_Boolean_Buffer.impl;
+
+DATA T_Int8
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    TASTE::Ada_Package_Name => "TASTE_BasicTypes";
+    Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 8; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "T-Int8";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aINTEGER;
+END T_Int8;
+
+DATA T_Int8_Buffer_Max
+END T_Int8_Buffer_Max;
+
+DATA IMPLEMENTATION T_Int8_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type T_Int8
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END T_Int8_Buffer_Max.impl;
+
+DATA T_Int8_Buffer
+END T_Int8_Buffer;
+
+DATA IMPLEMENTATION T_Int8_Buffer.impl
+    -- Buffer to hold a marshalled data of type T_Int8
+SUBCOMPONENTS
+    Buffer : data T_Int8_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END T_Int8_Buffer.impl;
+
+DATA T_UInt32
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    TASTE::Ada_Package_Name => "TASTE_BasicTypes";
+    Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 8; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "T-UInt32";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aINTEGER;
+END T_UInt32;
+
+DATA T_UInt32_Buffer_Max
+END T_UInt32_Buffer_Max;
+
+DATA IMPLEMENTATION T_UInt32_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type T_UInt32
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END T_UInt32_Buffer_Max.impl;
+
+DATA T_UInt32_Buffer
+END T_UInt32_Buffer;
+
+DATA IMPLEMENTATION T_UInt32_Buffer.impl
+    -- Buffer to hold a marshalled data of type T_UInt32
+SUBCOMPONENTS
+    Buffer : data T_UInt32_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END T_UInt32_Buffer.impl;
+
+DATA TASTE_Boolean
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/TASTEForErgoExamples/ex1/DataView.asn");
+    TASTE::EncodingDefinitionFile => classifier(DataView::ACN_DataView);
+    TASTE::Ada_Package_Name => "TASTE_Dataview";
+    Deployment::ASN1_Module_Name => "TASTE-Dataview";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 1; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "TASTE-Boolean";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aBOOLEAN;
+END TASTE_Boolean;
+
+DATA TASTE_Boolean_Buffer_Max
+END TASTE_Boolean_Buffer_Max;
+
+DATA IMPLEMENTATION TASTE_Boolean_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type TASTE_Boolean
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END TASTE_Boolean_Buffer_Max.impl;
+
+DATA TASTE_Boolean_Buffer
+END TASTE_Boolean_Buffer;
+
+DATA IMPLEMENTATION TASTE_Boolean_Buffer.impl
+    -- Buffer to hold a marshalled data of type TASTE_Boolean
+SUBCOMPONENTS
+    Buffer : data TASTE_Boolean_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END TASTE_Boolean_Buffer.impl;
+
+DATA T_Int32
+PROPERTIES
+    -- name of the ASN.1 source file:
+    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    TASTE::Ada_Package_Name => "TASTE_BasicTypes";
+    Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
+    Source_Language => ASN1;
+    -- Size of a buffer to cover all forms of message representation:
+    -- Real message size is 8; suggested aligned message buffer is...
+    Source_Data_Size => 8 Bytes;
+    -- name of the corresponding data type in the source file:
+    Type_Source_Name => "T-Int32";
+    -- what kind of type is this?
+    TASTE::ASN1_Basic_Type =>aINTEGER;
+END T_Int32;
+
+DATA T_Int32_Buffer_Max
+END T_Int32_Buffer_Max;
+
+DATA IMPLEMENTATION T_Int32_Buffer_Max.impl
+    -- Buffer to hold a marshalled data of type T_Int32
+PROPERTIES
+    Data_Model::Data_Representation => array;
+    Data_Model::Dimension => (8); -- Size of the buffer
+    Data_Model::Base_Type => (classifier (DataView::Stream_Element_Buffer));
+END T_Int32_Buffer_Max.impl;
+
+DATA T_Int32_Buffer
+END T_Int32_Buffer;
+
+DATA IMPLEMENTATION T_Int32_Buffer.impl
+    -- Buffer to hold a marshalled data of type T_Int32
+SUBCOMPONENTS
+    Buffer : data T_Int32_Buffer_Max.impl;
+    Length : data Base_Types::Unsigned_32;
+PROPERTIES
+    Data_Model::Data_Representation => Struct;
+END T_Int32_Buffer.impl;
+
+DATA ACN_DataView
+PROPERTIES
+    Source_Text => ("/home/taste/TASTEForErgoExamples/ex1/DataView.acn");
+    Source_Language => ACN;
+END ACN_DataView;
+
+end DataView;
+
+
+

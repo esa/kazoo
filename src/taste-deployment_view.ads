@@ -125,6 +125,7 @@ package TASTE.Deployment_View is
          Name            : Unbounded_String;
          Coverage        : Boolean := False;
          Package_Name    : Unbounded_String;
+         CPU_Kind        : Unbounded_String;
          CPU_Name        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
@@ -142,6 +143,7 @@ package TASTE.Deployment_View is
        & Assoc ("Coverage",        P.Coverage)
        & Assoc ("Package_Name",    P.Package_Name)
        & Assoc ("CPU_Name",        P.CPU_Name)
+       & Assoc ("CPU_Kind",        P.CPU_Kind)
        & Assoc ("CPU_Platform",    P.CPU_Platform'Img)
        & Assoc ("CPU_Classifier",  P.CPU_Classifier)
        & AssoC ("VP_Package_Name", P.VP_Package_Name)
@@ -154,14 +156,29 @@ package TASTE.Deployment_View is
    package Option_Partition is new Option_Type (Taste_Partition);
 
    package Taste_Partitions is
-      new Indefinite_Ordered_Maps (String, Taste_Partition);
+     new Indefinite_Ordered_Maps (String, Taste_Partition);
+
+   --  Virtual processors are used in TSP systems to represent partitions
+   type Virtual_Processor is tagged
+      record
+         Name,
+         Package_Name,
+         Platform,
+         Classifier : Unbounded_String;
+      end record;
+
+   package Virtual_Processors is
+      new Indefinite_Ordered_Maps (String, Virtual_Processor);
 
    type Taste_Node is tagged
       record
          Name            : Unbounded_String;
          Drivers         : Taste_Drivers.Vector;
          Partitions      : Taste_Partitions.Map;
+         Virtual_CPUs    : Virtual_Processors.Map;
+         Package_Name    : Unbounded_String;
          CPU_Name        : Unbounded_String;
+         CPU_Kind        : Unbounded_String;
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
          Ada_Runtime     : Unbounded_String;  --  when Platform = GNAT_Runtime

@@ -3,6 +3,17 @@
 @@-- @_Node_Name_@       : Name of the node from deployment view
 @@-- @_Partition_Names_@ : Tag listing the partitions in this node
 @@-- @_Partitions_@      : List of rendered code for partitions
+@@-- @_VP_Names_@        : Vector tag: list of virtual processors on this node
+@@--   VP_Package_Names  :    |_ Corresponding package name
+@@--   VP_Platforms      :    |_ Corresponding platform name
+@@--   VP_Classifiers    :    |_ Corresponding aadl classifier
 @@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
 @@-- In standard TASTE systems there is only one partition per node
+
+--  DEBUG : NODE_Name: @_Node_Name_@ CPU_Name : @_CPU_Name_@ Platform : @_CPU_Platform_@
+--  Classifier : @_CPU_Classifier_@  Packagename : @_Package_Name_@ CPU Kind: @_CPU_Kind_@
+--  VP Names: @_VP_Names_@
+--  @_VP_Package_Names_@
+--  @_VP_Platforms_@
+--  @_VP_Classifiers_@
 @_Partitions_@

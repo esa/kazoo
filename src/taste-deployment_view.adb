@@ -339,7 +339,11 @@ package body TASTE.Deployment_View is
          CPU := Get_Bound_Processor (CI);
 
          Result.CPU_Name :=
-          US (Get_Name_String (Name (Identifier (Parent_Subcomponent (CPU)))));
+           US
+             (Get_Name_String (Name (Identifier (Parent_Subcomponent (CPU)))));
+
+         --  CPU Kind is e.g. "leon3.air"
+         Result.CPU_Kind := US (Get_Name_String (Name (Identifier (CPU))));
 
          Result.CPU_Platform := Get_Execution_Platform (CPU);
          if Result.CPU_Platform = Platform_GNAT_Runtime then
@@ -406,9 +410,22 @@ package body TASTE.Deployment_View is
                Result.VP_Platform     := Result.CPU_Platform;
                Result.VP_Classifier   := Result.CPU_Classifier;
                Result.CPU_Name        := US (Phy_CPU_Name);
+               Result.CPU_Kind :=
+                 US (Get_Name_String (Name (Identifier (Phy_CPU))));
                Result.CPU_Platform    := Phy_CPU_Platform;
                Result.CPU_Classifier  := Phy_CPU_Classifier;
                Result.Package_Name    := Phy_CPU_Package_Name;
+               declare
+                  dummy_X : constant Node_Id :=
+                    Corresponding_Declaration (Phy_CPU);
+                  dummy_Y : constant Node_Id :=
+                    Parent_Subcomponent (Phy_CPU);
+                  dummy_Z : constant Node_Id :=
+                    Namespace (dummy_X);
+               begin
+                  Put_Debug ("*** " & Get_Name_String
+                             (Name (Identifier (dummy_Z))));
+               end;
             end;
          end if;
 
@@ -460,12 +477,25 @@ package body TASTE.Deployment_View is
                Result.Drivers.Append (Parse_Device (CI));
             elsif Get_Category_Of_Component (CI) = CC_Process then
                Partition := Parse_Partition (CI, Depl_View_System);
-               Result.Partitions.Insert (Key => To_String (Partition.Name),
-                                         New_Item => Partition);
+               Result.Partitions.Insert
+                 (Key      => To_String (Partition.Name),
+                  New_Item => Partition);
                Result.CPU_Name       := Partition.CPU_Name;
+               Result.CPU_Kind       := Partition.CPU_Kind;
                Result.CPU_Platform   := Partition.CPU_Platform;
                Result.CPU_Classifier := Partition.CPU_Classifier;
                Result.Ada_Runtime    := Partition.Ada_Runtime;
+               Result.Package_Name   := Partition.Package_Name;
+               --  Check if there is a Virtual processor, add it to the list
+               if Partition.VP_Name /= "" then
+                  Result.Virtual_CPUs.Insert
+                    (Key      => To_String (Partition.VP_Name),
+                     New_Item => (Name         => Partition.VP_Name,
+                                  Package_Name => Partition.VP_Package_Name,
+                                  Platform     =>
+                                    US (Partition.VP_Platform'Img),
+                                  Classifier   => Partition.VP_Classifier));
+               end if;
             end if;
 
             Processes := Next_Node (Processes);

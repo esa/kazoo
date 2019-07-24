@@ -1,0 +1,144 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type concurrencyview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PROPERTY SET AI IS
+  Root_System : AADLSTRING
+    APPLIES TO(SYSTEM IMPLEMENTATION);
+  Disabled_Processing_Tools : LIST OF AADLSTRING
+    APPLIES TO(SYSTEM IMPLEMENTATION);
+END AI;
+
+
+PACKAGE concurrencyview::CV
+PUBLIC
+WITH AI;
+WITH AIR::portpooling;
+WITH DataView;
+WITH TSP::DataView;
+WITH Arinc653;
+WITH ocarina_processors_leon;
+WITH deploymentview::DV::TSPNode;
+
+PROCESSOR TSPNode_proc1_cv
+EXTENDS ocarina_processors_leon::leon3
+END TSPNode_proc1_cv;
+
+PROCESSOR IMPLEMENTATION TSPNode_proc1_cv.final
+EXTENDS ocarina_processors_leon::leon3.AIR
+SUBCOMPONENTS
+  part1_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part1_VP.others;
+  part2_VP : VIRTUAL PROCESSOR deploymentview::DV::TSPNode::part2_VP.others;
+PROPERTIES
+  SCHEDULING_PROTOCOL => (POSIX_1003_Highest_Priority_First_Protocol) APPLIES TO part1_VP;
+  SCHEDULING_PROTOCOL => (POSIX_1003_Highest_Priority_First_Protocol) APPLIES TO part2_VP;
+  ARINC653::DAL => LEVEL_A APPLIES TO part1_VP;
+  ARINC653::DAL => LEVEL_A APPLIES TO part2_VP;
+END TSPNode_proc1_cv.final;
+
+PROCESS part1
+EXTENDS deploymentview::DV::TSPNode::part1
+END part1;
+
+PROCESS IMPLEMENTATION part1.final
+SUBCOMPONENTS
+  helloworld1_task1 : THREAD helloworld1_task1.others;
+  helloworld1_pi_task1 : SUBPROGRAM helloworld1_pi_task1.final;
+END part1.final;
+
+PROCESS part2
+EXTENDS deploymentview::DV::TSPNode::part2
+END part2;
+
+PROCESS IMPLEMENTATION part2.final
+SUBCOMPONENTS
+  helloworld2_task2 : THREAD helloworld2_task2.others;
+  helloworld2_pi_task2 : SUBPROGRAM helloworld2_pi_task2.final;
+END part2.final;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.final
+SUBCOMPONENTS
+  part1 : PROCESS part1.final;
+  part2 : PROCESS part2.final;
+  TSPNode_proc1_cv : PROCESSOR TSPNode_proc1_cv.final;
+  TSPNode_main_memory : MEMORY deploymentview::DV::TSPNode::main_memory.others;
+PROPERTIES
+  AI::ROOT_SYSTEM => "generated";
+  ACTUAL_PROCESSOR_BINDING => (REFERENCE(TSPNode_proc1_cv.part1_VP)) APPLIES TO part1;
+  ACTUAL_PROCESSOR_BINDING => (REFERENCE(TSPNode_proc1_cv.part2_VP)) APPLIES TO part2;
+  ACTUAL_MEMORY_BINDING => (Reference(TSPNode_main_memory.part1_Segment)) APPLIES TO part1;
+  ACTUAL_MEMORY_BINDING => (Reference(TSPNode_main_memory.part2_Segment)) APPLIES TO part2;
+  ARINC653::MODULE_MAJOR_FRAME => 3000 ms APPLIES TO TSPNode_proc1_cv;
+  ARINC653::MODULE_SCHEDULE => (
+    [PARTITION=>Reference(TSPNode_proc1_cv.part1_VP);Duration=>1500 ms;PERIODIC_PROCESSING_START=>FALSE;],
+    [PARTITION=>Reference(TSPNode_proc1_cv.part2_VP);Duration=>1500 ms;PERIODIC_PROCESSING_START=>FALSE;]
+  ) APPLIES TO TSPNode_proc1_cv;
+END deploymentview.final;
+
+THREAD helloworld1_task1
+END helloworld1_task1;
+
+THREAD IMPLEMENTATION helloworld1_task1.others
+CALLS
+  MyCalls : { 
+    MyCall : SUBPROGRAM helloworld1_pi_task1;
+  };
+PROPERTIES
+  DISPATCH_PROTOCOL => Periodic;
+  PERIOD => 1000 ms;
+  DEADLINE => 1000 ms;
+  COMPUTE_EXECUTION_TIME => 0 ms..3 ms;
+ANNEX behavior_specification {**
+**};
+END helloworld1_task1.others;
+
+THREAD helloworld2_task2
+END helloworld2_task2;
+
+THREAD IMPLEMENTATION helloworld2_task2.others
+CALLS
+  MyCalls : { 
+    MyCall : SUBPROGRAM helloworld2_pi_task2;
+  };
+PROPERTIES
+  DISPATCH_PROTOCOL => Periodic;
+  PERIOD => 1000 ms;
+  DEADLINE => 1000 ms;
+  COMPUTE_EXECUTION_TIME => 0 ms..3 ms;
+ANNEX behavior_specification {**
+**};
+END helloworld2_task2.others;
+
+SUBPROGRAM helloworld1_pi_task1
+PROPERTIES
+  COMPUTE_EXECUTION_TIME => 3 ms..3 ms;
+  SOURCE_LANGUAGE => (C);
+  SOURCE_NAME => "helloworld1_pi_task1";
+  SOURCE_TEXT => ("helloworld1/helloworld1.c");
+END helloworld1_pi_task1;
+
+SUBPROGRAM IMPLEMENTATION helloworld1_pi_task1.final
+END helloworld1_pi_task1.final;
+
+SUBPROGRAM helloworld2_pi_task2
+PROPERTIES
+  COMPUTE_EXECUTION_TIME => 3 ms..3 ms;
+  SOURCE_LANGUAGE => (C);
+  SOURCE_NAME => "helloworld2_pi_task2";
+  SOURCE_TEXT => ("helloworld2/helloworld2.c");
+END helloworld2_pi_task2;
+
+SUBPROGRAM IMPLEMENTATION helloworld2_pi_task2.final
+END helloworld2_pi_task2.final;
+
+END concurrencyview::CV;
+
+
+
+

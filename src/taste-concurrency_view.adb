@@ -396,6 +396,11 @@ package body TASTE.Concurrency_View is
                Partitions      : Unbounded_String;
                Partition_Names : Tag;
                Node_Assoc      : Translate_Set;
+               --  Nodes may contain a list of virtual processors for TSP:
+               VP_Names,
+               VP_Package_Names,
+               VP_Platforms,
+               VP_Classifiers  : Vector_Tag;
             begin
                for Partition in CV.Nodes (Node_Name).Partitions.Iterate loop
                   Partition_Names := Partition_Names
@@ -405,15 +410,30 @@ package body TASTE.Concurrency_View is
                     (Partition_Name => CV_Partitions.Key (Partition),
                      Node_Name      => Node_Name);
                end loop;
+               for VP of CV.Nodes (Node_Name).Deployment_Node.Virtual_CPUs loop
+                  VP_Names         := VP_Names & VP.Name;
+                  VP_Package_Names := VP_Package_Names & VP.Package_Name;
+                  VP_Platforms     := VP_Platforms & VP.Platform;
+                  VP_Classifiers   := VP_Classifiers & VP.Classifier;
+               end loop;
+
                Node_Assoc := +Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
+                 & Assoc ("VP_Names", VP_Names)
+                 & Assoc ("VP_Package_Names", VP_Package_Names)
+                 & Assoc ("VP_Platforms", VP_Platforms)
+                 & Assoc ("VP_Classifiers", VP_Classifiers)
                  & Assoc ("Node_Name", Node_Name)
                  & Assoc ("CPU_Name",
-                         CV.Nodes (Node_Name).Deployment_Node.CPU_Name)
+                          CV.Nodes (Node_Name).Deployment_Node.CPU_Name)
+                 & Assoc ("CPU_Kind",
+                          CV.Nodes (Node_Name).Deployment_Node.CPU_Kind)
                  & Assoc ("CPU_Platform",
                          CV.Nodes (Node_Name).Deployment_Node.CPU_Platform'Img)
                  & Assoc ("CPU_Classifier",
-                         CV.Nodes (Node_Name).Deployment_Node.CPU_Classifier)
+                          CV.Nodes (Node_Name).Deployment_Node.CPU_Classifier)
+                 & Assoc ("Package_Name",
+                          CV.Nodes (Node_Name).Deployment_Node.Package_Name)
                  & Assoc ("Ada_Runtime",
                          CV.Nodes (Node_Name).Deployment_Node.Ada_Runtime);
                return Parse (Path & "/node.tmplt", Node_Assoc);

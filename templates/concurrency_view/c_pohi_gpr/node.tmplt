@@ -15,7 +15,7 @@ debug_native:
 
 debug_rtems_leon3_with_ada:
 @@TABLE@@
-	gprbuild --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -v --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release_native:

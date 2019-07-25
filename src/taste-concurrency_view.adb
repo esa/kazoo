@@ -419,6 +419,8 @@ package body TASTE.Concurrency_View is
 
                Node_Assoc := +Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
+                 & Assoc ("Has_Memory", Boolean'
+                      (CV.Nodes (Node_Name).Deployment_Node.Memory.Name /= ""))
                  & Assoc ("VP_Names", VP_Names)
                  & Assoc ("VP_Package_Names", VP_Package_Names)
                  & Assoc ("VP_Platforms", VP_Platforms)
@@ -449,12 +451,14 @@ package body TASTE.Concurrency_View is
               (if Valid_Dir then Strip_String (Parse (Tmpl_File)) else "");
             Trig_Sys        : constant Boolean := Exists (Tmpl_Sys);
             Set_Sys         : Translate_Set;
-            Node_Names      : Vector_Tag;  --  List of nodes
-            Node_CPU        : Vector_Tag;  --  Corresponding CPU name
-            Node_CPU_Cls    : Vector_Tag;  --  Corresponding CPU classifier
-            Partition_Names : Vector_Tag;  --  List of processes
-            Partition_Node  : Vector_Tag;  --  Corresponding node name
-            Partition_CPU   : Vector_Tag;  --  Corresponding CPU name
+            Node_Names,                    --  List of nodes
+            Node_CPU,                      --  Corresponding CPU name
+            Node_CPU_Cls,                  --  Corresponding CPU classifier
+            Node_Has_Memory : Vector_Tag;  --  Corresponding memory flag
+            Partition_Names,               --  List of partitions
+            Partition_Node,                --  Corresponding node name
+            Partition_CPU,                 --  Corresponding CPU name
+            Partition_VP    : Vector_Tag;  --  for TSP: VP binding
          begin
             for Node in CV.Nodes.Iterate loop
                declare
@@ -499,12 +503,16 @@ package body TASTE.Concurrency_View is
                   if Trigger then
 
                      --  Associate node name, CPU name and CPU classifier
+                     --  Also set flag if a memory region is defined
                      --  (this is needed for AADL backends)
                      Node_Names := Node_Names & Node_Name;
                      Node_CPU := Node_CPU
                        & CV.Nodes (Node_Name).Deployment_Node.CPU_Name;
                      Node_CPU_Cls := Node_CPU_Cls
                        & CV.Nodes (Node_Name).Deployment_Node.CPU_Classifier;
+                     Node_Has_Memory := Node_Has_Memory
+                       & (CV.Nodes (Node_Name)
+                          .Deployment_Node.Memory.Name /= "");
 
                      --  Associate partition name, corresponding node and CPU
                      --  for AADL backends
@@ -515,6 +523,9 @@ package body TASTE.Concurrency_View is
                         Partition_CPU := Partition_CPU
                           & CV_Partitions.Element (Partition)
                           .Deployment_Partition.CPU_Name;
+                        Partition_VP := Partition_VP
+                          & CV_Partitions.Element (Partition)
+                          .Deployment_Partition.VP_Name;
                         Partition_Node := Partition_Node & Node_Name;
                      end loop;
 
@@ -536,9 +547,11 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
                  & Assoc ("Node_CPU_Classifier", Node_CPU_Cls)
+                 & Assoc ("Node_Has_Memory",     Node_Has_Memory)
                  & Assoc ("Partition_Names",     Partition_Names)
                  & Assoc ("Partition_Node",      Partition_Node)
                  & Assoc ("Partition_CPU",       Partition_CPU)
+                 & Assoc ("Partition_VP",        Partition_VP)
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
                  & Assoc ("Target_Packages",     All_Target_Names);

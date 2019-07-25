@@ -7,6 +7,7 @@
 @@-- @_Partition_Names_@     : Vector Tag of partition names
 @@-- @_Partition_Node_@      :  |_ Corresponding node name
 @@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Partition_VP_@        :  |_ Virtual processor binding (TSP only)
 @@-- @_Threads_@             : Code generated for the threads
 @@-- @_Thread_Names_@        : List of all threads in the complete system
 @@-- @_Target_Packages_@     : List of all target package names in the complete system
@@ -58,14 +59,26 @@ end DeploymentView;
 system implementation DeploymentView.final
 subcomponents
 @@TABLE'ALIGN_ON(":")@@
+@@-- First declare the partitions
    @_CAPITALIZE:Partition_Names_@ : process @_CAPITALIZE:Partition_Names_@.final;
 @@END_TABLE@@
+@@-- Then the processor boards (they may contain several virtual processors for TSP systems) and optionally memory
 @@TABLE'ALIGN_ON(":")@@
-   @_CAPITALIZE:Node_Names_@_@_Node_CPU_@ : processor @_CAPITALIZE:Node_CPU_Classifier_@;
+   @_CAPITALIZE:Node_Names_@_@_Node_CPU_@ : processor @_CAPITALIZE:Node_Names_@_Board.final;
+@@IF@@ @_Node_Has_Memory_@
+   @_CAPITALIZE:Node_Names_@_Memory : memory deploymentview::DV::@_CAPITALIZE:Node_Names_@::main_memory.others;
+@@END_IF@@
 @@END_TABLE@@
+@@-- Then specify the bindings of the partitions to (virtual) processors
 properties
-@@TABLE@@
+@@TABLE'ALIGN_ON("applies")@@
+@@-- Check if this is a TSP system, in which case bind the partitions to the corresponding virtual processor of the node
+@@IF@@ @_Partition_VP_@ = ""
    Actual_Processor_Binding => (reference (@_CAPITALIZE:Partition_Node_@_@_Partition_CPU_@)) applies to @_CAPITALIZE:Partition_Names_@;
+@@ELSE@@
+   Actual_Processor_Binding => (reference (@_CAPITALIZE:Partition_Node_@_@_Partition_CPU_@.@_Partition_VP_@)) applies to @_CAPITALIZE:Partition_Names_@;
+   Actual_Memory_Binding    => (reference (@_CAPITALIZE:Partition_Node_@_Memory.@_CAPITALIZE:Partition_Names_@_Segment)) applies to @_CAPITALIZE:Partition_Names_@;
+@@END_IF@@
 @@END_TABLE@@
 end DeploymentView.final;
 

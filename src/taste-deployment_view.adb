@@ -322,6 +322,23 @@ package body TASTE.Deployment_View is
               & Exception_Message (Error);
       end Parse_Device;
 
+      --  TSP systems have memory regions, declared in the deployment view
+      --  the partitions are bound to the memory region. This function
+      --  is a placeholder to parse any required memory information.
+      --  Currently the backends only need to know that a memory is defined
+      --  actual size or segements information are not needed to build the
+      --  concurrency view.
+      function Parse_Memory (CI : Node_Id;
+                             dummy_Depl : Node_Id) return Taste_Memory
+      is
+         Result : Taste_Memory;
+      begin
+         Result.Name :=  -- Memory identifier (usually "main_memory")
+           US (Get_Name_String (ATN.Name (ATN.Component_Type_Identifier
+               (Corresponding_Declaration (CI)))));
+         return Result;
+      end Parse_Memory;
+
       function Parse_Partition (CI : Node_Id; Depl : Node_Id)
                                 return Taste_Partition is
          Result         : Taste_Partition;
@@ -477,17 +494,22 @@ package body TASTE.Deployment_View is
       end Parse_Partition;
 
       function Parse_Node (Depl_View_System : Node_Id) return Taste_Node is
-         Processes : Node_Id;
+         Subcos    : Node_Id;
          CI        : Node_Id;
          Result    : Taste_Node;
          Partition : Taste_Partition;
       begin
-         Processes := First_Node (Subcomponents (Depl_View_System));
+         Subcos := First_Node (Subcomponents (Depl_View_System));
 
-         while Present (Processes) loop
-            CI := Corresponding_Instance (Processes);
+         while Present (Subcos) loop
+            CI := Corresponding_Instance (Subcos);
+
             if Get_Category_Of_Component (CI) = CC_Device then
                Result.Drivers.Append (Parse_Device (CI));
+
+            elsif Get_Category_Of_Component (CI) = CC_Memory then
+               Result.Memory := Parse_Memory (CI, Depl_View_System);
+
             elsif Get_Category_Of_Component (CI) = CC_Process then
                Partition := Parse_Partition (CI, Depl_View_System);
                Result.Partitions.Insert
@@ -512,7 +534,7 @@ package body TASTE.Deployment_View is
                end if;
             end if;
 
-            Processes := Next_Node (Processes);
+            Subcos := Next_Node (Subcos);
          end loop;
          return Result;
       end Parse_Node;

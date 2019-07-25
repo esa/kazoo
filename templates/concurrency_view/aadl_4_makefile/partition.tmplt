@@ -40,7 +40,7 @@ with @_CAPITALIZE:Block_Names_@;
 package adainit is end adainit;' >@_LOWER:Name_@_adainit/tasteada.ads && \
 @@END_INLINE@@
         cd @_LOWER:Name_@_adainit && \
-@@INLINE(    )(:)(\\)@@
+@@INLINE(    )(:)( \\)@@
 ADA_INCLUDE_PATH=../../dataview/Ada
 @@TABLE'TERSE@@
 @@IF@@ @_LOWER:Block_Languages_@ = sdl

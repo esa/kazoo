@@ -2,6 +2,7 @@
 @@--
 @@-- @_Node_Name_@       : Name of the node from deployment view
 @@-- @_Partition_Names_@ : Tag listing the partitions in this node
+@@-- @_Has_Memory_@      : Boolean flag indicating that a memory is defined for this node
 @@-- @_Partitions_@      : List of rendered code for partitions
 @@-- @_VP_Names_@        : Vector tag: list of virtual processors on this node
 @@--   VP_Package_Names  :    |_ Corresponding package name
@@ -18,11 +19,11 @@
 --  @_VP_Classifiers_@
 @@-- Test if the node contains several partitions (virtual processors)
 @@-- If that's the case we need to generate a new AADL processor for TSP support
-@@IF@@ @_VP_Names'Length_@ > 0
-processor @_Node_Name_@_@_CPU_Name_@ extends @_Package_Name_@::@_CPU_Family_@
-end @_Node_Name_@_@_CPU_Name_@;
+processor @_Node_Name_@_Board extends @_Package_Name_@::@_CPU_Family_@
+end @_Node_Name_@_Board;
 
-processor implementation @_Node_Name_@_@_CPU_Name_@.final extends @_CPU_Classifier_@
+processor implementation @_Node_Name_@_Board.final extends @_CPU_Classifier_@
+@@IF@@ @_VP_Names'Length_@ > 0
 subcomponents
 @@TABLE@@
    @_VP_Names_@ : virtual processor deploymentview::DV::@_Node_Name_@::@_VP_Names_@.others;
@@ -32,6 +33,6 @@ properties
    Scheduling_Protocol => (POSIX_1003_Highest_Priority_First_Protocol) applies to @_VP_Names_@;
    Arinc653::DAL => Level_A applies to @_VP_Names_@;
 @@END_TABLE@@
-end @_Node_Name_@_@_CPU_Name_@.final;
 @@END_IF@@
+end @_Node_Name_@_Board.final;
 @_Partitions_@

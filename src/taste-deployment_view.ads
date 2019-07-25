@@ -116,6 +116,13 @@ package TASTE.Deployment_View is
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);
 
+   --  Memory component specified at node level
+   type Taste_Memory is
+      record
+         Name             : Unbounded_String;
+         Bound_Partitions : String_Sets.Set;
+      end record;
+
    --  Partition in the deployment view
    --  Supported_Execution_Platform is defined in:
    --  ocarina/src/backends/ocarina-backends-properties.ads
@@ -134,6 +141,7 @@ package TASTE.Deployment_View is
          VP_Name         : Unbounded_String := US ("");
          VP_Platform     : Supported_Execution_Platform := Platform_None;
          VP_Classifier   : Unbounded_String := US ("");
+         Memory_Region   : Unbounded_String := US ("");  --  TSP only
          Ada_Runtime     : Unbounded_String; --  if CPU_Platform = GNAT_Runtime
          Bound_Functions : String_Sets.Set;
       end record;
@@ -152,6 +160,7 @@ package TASTE.Deployment_View is
        & Assoc ("VP_Name",         P.VP_Name)
        & Assoc ("VP_Platform",     P.VP_Platform'Img)
        & Assoc ("VP_Classifier",   P.VP_Classifier)
+       & Assoc ("Memory_Region",   P.Memory_Region)
        & Assoc ("Ada_Runtime",     P.Ada_Runtime)
        & Assoc ("Bound_Functions", To_Template_Tag (P.Bound_Functions)));
 
@@ -177,6 +186,7 @@ package TASTE.Deployment_View is
          Name            : Unbounded_String;
          Drivers         : Taste_Drivers.Vector;
          Partitions      : Taste_Partitions.Map;
+         Memory          : Taste_Memory;
          Virtual_CPUs    : Virtual_Processors.Map;
          Package_Name    : Unbounded_String;
          CPU_Name        : Unbounded_String;   --  AADL Identifier

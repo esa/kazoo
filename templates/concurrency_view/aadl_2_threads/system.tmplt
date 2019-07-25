@@ -21,10 +21,15 @@
 
 package Process_Package
 public
+   with arinc653;
    with Deployment;
    with DataView;
    with interfaceview::IV;
    with deploymentview::DV;
+@@-- Add "with" of the node, this is at least needed for TSP systems
+@@TABLE@@
+   with deploymentview::DV::@_Node_Names_@;
+@@END_TABLE@@
 @@TABLE@@
    with @_CAPITALIZE:Thread_Names_@_Thread;
 @@END_TABLE@@

@@ -59,8 +59,9 @@ build-rtems-ada: dataview
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
 	    @@END_TABLE@@
-	 @@END_INLINE@@
-         @@TABLE@@
+	@@END_INLINE@@
+	
+        @@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
               @@SET@@ Enable=FALSE
               @@SET@@ Need_Ada=TRUE
@@ -88,8 +89,9 @@ build-rtems-ada: dataview
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
 	    @@END_TABLE@@
-	 @@END_INLINE@@
-	 cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	@@END_INLINE@@
+
+	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
         @@END_IF@@
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C

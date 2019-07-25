@@ -329,6 +329,28 @@ package body TASTE.Deployment_View is
          Processes      : Node_Id;
          P_CI           : Node_Id;
          Ref            : Node_Id;
+         procedure Separate_CPU_Family_From_Instance
+         --  If the CPU in the AADL model is "leon3.air", then split into
+         --  family "leon3" and instance "air" based on dot separator
+           (CPU              : Node_Id;
+            Family, Instance : out Unbounded_String) is
+            CPU_With_Instance : constant String :=
+              Get_Name_String (Name (Identifier (CPU)));
+            Dot : constant Natural := Index (CPU_With_Instance, ".");
+            Fam : constant String :=
+              (if Dot > 0
+               then CPU_With_Instance (CPU_With_Instance'First .. Dot - 1)
+               else "");
+            Inst : constant String :=
+              (if Dot >= CPU_With_Instance'First
+               and then Dot + 1 <= CPU_With_Instance'Last
+               then CPU_With_Instance (Dot + 1 .. CPU_With_Instance'Last)
+               else "");
+         begin
+            Family := US (Fam);
+            Instance := US (Inst);
+         end Separate_CPU_Family_From_Instance;
+
       begin
          if Is_Defined_Property (CI, "taste_dv_properties::coverageenabled")
          then
@@ -342,8 +364,9 @@ package body TASTE.Deployment_View is
            US
              (Get_Name_String (Name (Identifier (Parent_Subcomponent (CPU)))));
 
-         --  CPU Kind is e.g. "leon3.air"
-         Result.CPU_Kind := US (Get_Name_String (Name (Identifier (CPU))));
+         Separate_CPU_Family_From_Instance (CPU,
+                                            Result.CPU_Family,
+                                            Result.CPU_Instance);
 
          Result.CPU_Platform := Get_Execution_Platform (CPU);
          if Result.CPU_Platform = Platform_GNAT_Runtime then
@@ -410,22 +433,12 @@ package body TASTE.Deployment_View is
                Result.VP_Platform     := Result.CPU_Platform;
                Result.VP_Classifier   := Result.CPU_Classifier;
                Result.CPU_Name        := US (Phy_CPU_Name);
-               Result.CPU_Kind :=
-                 US (Get_Name_String (Name (Identifier (Phy_CPU))));
                Result.CPU_Platform    := Phy_CPU_Platform;
                Result.CPU_Classifier  := Phy_CPU_Classifier;
                Result.Package_Name    := Phy_CPU_Package_Name;
-               declare
-                  dummy_X : constant Node_Id :=
-                    Corresponding_Declaration (Phy_CPU);
-                  dummy_Y : constant Node_Id :=
-                    Parent_Subcomponent (Phy_CPU);
-                  dummy_Z : constant Node_Id :=
-                    Namespace (dummy_X);
-               begin
-                  Put_Debug ("*** " & Get_Name_String
-                             (Name (Identifier (dummy_Z))));
-               end;
+               Separate_CPU_Family_From_Instance (Phy_CPU,
+                                                  Result.CPU_Family,
+                                                  Result.CPU_Instance);
             end;
          end if;
 
@@ -481,7 +494,8 @@ package body TASTE.Deployment_View is
                  (Key      => To_String (Partition.Name),
                   New_Item => Partition);
                Result.CPU_Name       := Partition.CPU_Name;
-               Result.CPU_Kind       := Partition.CPU_Kind;
+               Result.CPU_Family     := Partition.CPU_Family;
+               Result.CPU_Instance   := Partition.CPU_Instance;
                Result.CPU_Platform   := Partition.CPU_Platform;
                Result.CPU_Classifier := Partition.CPU_Classifier;
                Result.Ada_Runtime    := Partition.Ada_Runtime;

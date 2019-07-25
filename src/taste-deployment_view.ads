@@ -125,8 +125,9 @@ package TASTE.Deployment_View is
          Name            : Unbounded_String;
          Coverage        : Boolean := False;
          Package_Name    : Unbounded_String;
-         CPU_Kind        : Unbounded_String;
-         CPU_Name        : Unbounded_String;
+         CPU_Name        : Unbounded_String; --  AADL Identifier
+         CPU_Family      : Unbounded_String; --  e.g. leon3
+         CPU_Instance    : Unbounded_String; --  e.g. rtems_posix
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
          VP_Package_Name : Unbounded_String := US ("");  -- Virtual Processor
@@ -143,7 +144,8 @@ package TASTE.Deployment_View is
        & Assoc ("Coverage",        P.Coverage)
        & Assoc ("Package_Name",    P.Package_Name)
        & Assoc ("CPU_Name",        P.CPU_Name)
-       & Assoc ("CPU_Kind",        P.CPU_Kind)
+       & Assoc ("CPU_Family",      P.CPU_Family)
+       & Assoc ("CPU_Instance",    P.CPU_Instance)
        & Assoc ("CPU_Platform",    P.CPU_Platform'Img)
        & Assoc ("CPU_Classifier",  P.CPU_Classifier)
        & AssoC ("VP_Package_Name", P.VP_Package_Name)
@@ -177,8 +179,9 @@ package TASTE.Deployment_View is
          Partitions      : Taste_Partitions.Map;
          Virtual_CPUs    : Virtual_Processors.Map;
          Package_Name    : Unbounded_String;
-         CPU_Name        : Unbounded_String;
-         CPU_Kind        : Unbounded_String;
+         CPU_Name        : Unbounded_String;   --  AADL Identifier
+         CPU_Family      : Unbounded_String;   --  e.g. leon3
+         CPU_Instance    : Unbounded_String;   --  e.g. rtems_posix
          CPU_Platform    : Supported_Execution_Platform;
          CPU_Classifier  : Unbounded_String;
          Ada_Runtime     : Unbounded_String;  --  when Platform = GNAT_Runtime

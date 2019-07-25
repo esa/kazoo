@@ -426,8 +426,10 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Node_Name", Node_Name)
                  & Assoc ("CPU_Name",
                           CV.Nodes (Node_Name).Deployment_Node.CPU_Name)
-                 & Assoc ("CPU_Kind",
-                          CV.Nodes (Node_Name).Deployment_Node.CPU_Kind)
+                 & Assoc ("CPU_Family",
+                          CV.Nodes (Node_Name).Deployment_Node.CPU_Family)
+                 & Assoc ("CPU_Instance",
+                          CV.Nodes (Node_Name).Deployment_Node.CPU_Instance)
                  & Assoc ("CPU_Platform",
                          CV.Nodes (Node_Name).Deployment_Node.CPU_Platform'Img)
                  & Assoc ("CPU_Classifier",

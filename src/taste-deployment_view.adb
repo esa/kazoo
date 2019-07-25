@@ -15,6 +15,7 @@ with Ada.Exceptions,
      Ocarina.Namet,
      Ocarina.Analyzer,
      Ocarina.Options,
+     Ocarina.Backends.Properties.ARINC653,
      Locations,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
@@ -28,6 +29,7 @@ package body TASTE.Deployment_View is
        Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.FE_AADL.Parser,
+       Ocarina.Backends.Properties.ARINC653,
        Locations,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
@@ -417,6 +419,10 @@ package body TASTE.Deployment_View is
 
          --  If case of virtual processor, find the physical processor it is
          --  bounded to, and set the values in the taste partition
+         --  The physical CPU in that case should contain two additional
+         --  properties:
+         --  ARINC653::Module_Major_Frame (time with unit),
+         --  and ARINC653::Module_Schedule
          if Get_Category_Of_Component (CPU) = CC_Virtual_Processor then
             declare
                Phy_CPU      : constant Node_Id :=
@@ -456,6 +462,29 @@ package body TASTE.Deployment_View is
                Separate_CPU_Family_From_Instance (Phy_CPU,
                                                   Result.CPU_Family,
                                                   Result.CPU_Instance);
+               declare
+                  Major_Frame : constant Time_Type :=
+                    Get_POK_Major_Frame (Phy_CPU);
+                  Schedule : constant Schedule_Window_Record_Term_Array :=
+                    Get_Module_Schedule_Property (Phy_CPU);
+               begin
+                  if Major_Frame /= Null_Time
+                    and then Major_Frame.U = Millisecond
+                  then
+                     Put_Info ("Major Frame: " & Major_Frame.T'Img);
+                  end if;   -- otherwise, error?
+                  for Each of Schedule loop
+                     Put_Line (Boolean'Image (
+                          Corresponding_Declaration (Parent_Subcomponent (CPU))
+                                 = Each.Partition));
+
+                     if Each.Partition = CPU then
+                        Put_Info ("Duration for " & To_String (Result.VP_Name)
+                                  & " = " & Each.Duration.T'Img);
+                     end if;
+                  end loop;
+               end;
+
             end;
          end if;
 

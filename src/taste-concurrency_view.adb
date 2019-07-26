@@ -454,10 +454,12 @@ package body TASTE.Concurrency_View is
             Node_Names,                    --  List of nodes
             Node_CPU,                      --  Corresponding CPU name
             Node_CPU_Cls,                  --  Corresponding CPU classifier
-            Node_Has_Memory : Vector_Tag;  --  Corresponding memory flag
+            Node_Major_Frame,              --  Corresponding time frame (TSP)
+            Node_Has_Memory : Vector_Tag;  --  Corresponding memory flag (TSP)
             Partition_Names,               --  List of partitions
             Partition_Node,                --  Corresponding node name
             Partition_CPU,                 --  Corresponding CPU name
+            Partition_Time,                --  Corresponding TSP VP time
             Partition_VP    : Vector_Tag;  --  for TSP: VP binding
          begin
             for Node in CV.Nodes.Iterate loop
@@ -513,6 +515,8 @@ package body TASTE.Concurrency_View is
                      Node_Has_Memory := Node_Has_Memory
                        & (CV.Nodes (Node_Name)
                           .Deployment_Node.Memory.Name /= "");
+                     Node_Major_Frame := Node_Major_Frame
+                       & CV.Nodes (Node_Name).Deployment_Node.CPU_Duration;
 
                      --  Associate partition name, corresponding node and CPU
                      --  for AADL backends
@@ -527,6 +531,9 @@ package body TASTE.Concurrency_View is
                           & CV_Partitions.Element (Partition)
                           .Deployment_Partition.VP_Name;
                         Partition_Node := Partition_Node & Node_Name;
+                        Partition_Time := Partition_Time
+                          & CV_Partitions.Element (Partition)
+                          .Deployment_Partition.VP_Duration;
                      end loop;
 
                      Nodes := Nodes & Newline & Node_Content;
@@ -547,10 +554,12 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
                  & Assoc ("Node_CPU_Classifier", Node_CPU_Cls)
+                 & Assoc ("Node_Major_Frame",    Node_Major_Frame)
                  & Assoc ("Node_Has_Memory",     Node_Has_Memory)
                  & Assoc ("Partition_Names",     Partition_Names)
                  & Assoc ("Partition_Node",      Partition_Node)
                  & Assoc ("Partition_CPU",       Partition_CPU)
+                 & Assoc ("Partition_Duration",  Partition_Time)
                  & Assoc ("Partition_VP",        Partition_VP)
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)

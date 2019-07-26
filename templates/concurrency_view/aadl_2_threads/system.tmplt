@@ -4,9 +4,11 @@
 @@-- @_Node_Names_@          : Vector Tag of node names
 @@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
 @@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
+@@-- @_Node_Major_Frame_@    :  |_ Time in milliseconds allocated to the CPU (TSP only)
 @@-- @_Partition_Names_@     : Vector Tag of partition names
 @@-- @_Partition_Node_@      :  |_ Corresponding node name
 @@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Partition_Duration_@  :  |_ Corresponding time allocation (TSP only)
 @@-- @_Partition_VP_@        :  |_ Virtual processor binding (TSP only)
 @@-- @_Threads_@             : Code generated for the threads
 @@-- @_Thread_Names_@        : List of all threads in the complete system
@@ -80,6 +82,24 @@ properties
    Actual_Memory_Binding    => (reference (@_CAPITALIZE:Partition_Node_@_Memory.@_CAPITALIZE:Partition_Names_@_Segment)) applies to @_CAPITALIZE:Partition_Names_@;
 @@END_IF@@
 @@END_TABLE@@
+@@--  TSP: specify the time allocated to each node and on each partition
+@@TABLE'ALIGN_ON("applies")@@
+@@IF@@ @_Node_Major_Frame_@ /= ""
+   arinc653::module_major_frame => @_Node_Major_Frame_@ ms applies to @_Node_Names_@_@_Node_CPU_@;
+@@END_IF@@
+@@END_TABLE@@
+@@TABLE@@
+@@IF@@ @_Node_Major_Frame_@ /= ""
+   arinc653::module_schedule => (
+@@INLINE(      )(,\n      )()@@
+@@TABLE@@
+      [partition => reference (@_Partition_Node_@_@_Partition_CPU_@.@_Partition_VP_@); duration => @_Partition_Duration_@ ms; periodic_processing_start => false;]
+@@END_TABLE@@
+@@END_INLINE@@@@
+   ) applies to @_Node_Names_@_@_Node_CPU_@;
+@@END_IF@@
+@@END_TABLE@@
+
 end DeploymentView.final;
 
 end Process_Package;

@@ -462,6 +462,8 @@ package body TASTE.Deployment_View is
                Separate_CPU_Family_From_Instance (Phy_CPU,
                                                   Result.CPU_Family,
                                                   Result.CPU_Instance);
+               --  Detect the CPU major frame duration and the time
+               --  allocation for this specific partition
                declare
                   Major_Frame : constant Time_Type :=
                     Get_POK_Major_Frame (Phy_CPU);
@@ -471,16 +473,17 @@ package body TASTE.Deployment_View is
                   if Major_Frame /= Null_Time
                     and then Major_Frame.U = Millisecond
                   then
-                     Put_Info ("Major Frame: " & Major_Frame.T'Img);
+
+                     Result.CPU_Total_Time := US (Major_Frame.T'Img);
                   end if;   -- otherwise, error?
                   for Each of Schedule loop
-                     Put_Line (Boolean'Image (
-                          Corresponding_Declaration (Parent_Subcomponent (CPU))
-                                 = Each.Partition));
-
-                     if Each.Partition = CPU then
-                        Put_Info ("Duration for " & To_String (Result.VP_Name)
-                                  & " = " & Each.Duration.T'Img);
+                     --  To know if the schedule applies to the current VP,
+                     --  we need to compare it with "Corresponding_Declaration
+                     --  (Parent_Subcomponent (CPU)
+                     if Each.Partition = Corresponding_Declaration
+                       (Parent_Subcomponent (CPU))
+                     then
+                        Result.VP_Duration := US (Each.Duration.T'Img);
                      end if;
                   end loop;
                end;
@@ -545,6 +548,7 @@ package body TASTE.Deployment_View is
                  (Key      => To_String (Partition.Name),
                   New_Item => Partition);
                Result.CPU_Name       := Partition.CPU_Name;
+               Result.CPU_Duration   := Partition.CPU_Total_Time;
                Result.CPU_Family     := Partition.CPU_Family;
                Result.CPU_Instance   := Partition.CPU_Instance;
                Result.CPU_Platform   := Partition.CPU_Platform;

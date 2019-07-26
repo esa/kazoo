@@ -95,7 +95,7 @@ build-rtems-ada: dataview
         @@END_IF@@
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
-	cd dataview/C && msgPrinter ../dataview-uniq.asn && msgPrinterASN1 ../dataview-uniq.asn
+	cd dataview/C && PROJECT_CACHE=../.cache msgPrinter ../dataview-uniq.asn && PROJECT_CACHE=../.cache msgPrinterASN1 ../dataview-uniq.asn
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"

@@ -93,7 +93,7 @@ properties
    arinc653::module_schedule => (
 @@INLINE(      )(,\n      )()@@
 @@TABLE@@
-      [partition => reference (@_Partition_Node_@_@_Partition_CPU_@.@_Partition_VP_@); duration => @_Partition_Duration_@ ms; periodic_processing_start => false;]
+      [partition => reference (@_Partition_Node_@_@_Partition_CPU_@.@_Partition_VP_@); Duration => @_Partition_Duration_@ ms; periodic_processing_start => false;]
 @@END_TABLE@@
 @@END_INLINE@@@@
    ) applies to @_Node_Names_@_@_Node_CPU_@;

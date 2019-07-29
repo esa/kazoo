@@ -13,6 +13,9 @@
 @@-- @_Threads_@             : Code generated for the threads
 @@-- @_Thread_Names_@        : List of all threads in the complete system
 @@-- @_Target_Packages_@     : List of all target package names in the complete system
+@@-- @_Part_Source_Name_@    : Inter-partition connections : partition source name (vector tag)
+@@-- @_Part_Source_Port_@    :   |_ Corresponding port name
+@@-- @_Part_Dest_Name_@      :   |_ Corresponding name of the remote partition
 @@-- And all the system configuration obtained from the command line:
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
 @@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
@@ -71,6 +74,13 @@ subcomponents
    @_CAPITALIZE:Node_Names_@_Memory : memory deploymentview::DV::@_CAPITALIZE:Node_Names_@::main_memory.others;
 @@END_IF@@
 @@END_TABLE@@
+@@-- Specify the cconnections for distributed and TSP systems
+@@IF@@ @_Part_Source_Name'Length_@ > 0
+connections
+@@TABLE@@
+   @_Part_Source_Name_@_@_Part_Source_Port_@ : port @_Part_Source_Name_@.OUTPORT_@_Part_Source_Port_@ -> @_Part_Dest_Name_@.INPORT_@_Part_Source_Port_@;
+@@END_TABLE@@
+@@END_IF@@
 @@-- Then specify the bindings of the partitions to (virtual) processors
 properties
 @@TABLE'ALIGN_ON("applies")@@

@@ -343,7 +343,7 @@ package body TASTE.AADL_Parser is
                     Dist.Function_Name & "_" & Dist.Interface_Name;
                   Port_Name : constant Unbounded_String := RI.Name;
                   --  Remote_Thread_Name & "_" & Dist.Interface_Name;
-                  New_P     : constant Port :=
+                  New_P     : constant Thread_Port :=
                     (Name          => Port_Name,
                      Remote_Thread => Remote_Thread_Name,
                      Remote_PI     => Dist.Interface_Name,
@@ -484,10 +484,89 @@ package body TASTE.AADL_Parser is
          end;
          <<Continue>>
       end loop;
-      --  Find and set protected blocks calling threads
+
       for Node of CV.Nodes loop
          for Partition of Node.Partitions loop
+            --  Find and set protected blocks calling threads
             Set_Calling_Threads (Partition);
+
+            --  Define ports at partition (process) level
+            --  (ports are for all interfaces of a function are not located
+            --   in the same partition of the system)
+            for T of Partition.Threads loop
+               --  Check each Remote PI of the entry port of the thread
+               for Remote of T.PI.Remote_Interfaces loop
+                  declare
+                     Node : constant Option_Node.Option  :=
+                       CV.Deployment.Find_Node
+                         (To_String (Remote.Function_Name));
+                     Part : Option_Partition.Option;
+                     --  Optional type of the parameter:
+                     Sort : constant Unbounded_String :=
+                       (if not T.PI.Params.Is_Empty
+                        then T.PI.Params.First_Element.Sort
+                        else US (""));
+                  begin
+                     if Node.Has_Value then
+                        Part :=
+                          Node.Unsafe_Just.Find_Partition
+                            (To_String (Remote.Function_Name));
+
+                        if Part.Has_Value
+                          and then Part.Unsafe_Just.Name
+                            /= Partition.Deployment_Partition.Name
+                        then
+                           --  shouldn't we check for presence first in case
+                           --  there are multiple callers?
+                           Partition.In_Ports.Insert
+                             (Key      => To_String (T.Entry_Port_Name),
+                              New_Item => (Port_Name   => T.Entry_Port_Name,
+                                           Thread_Name => T.Name,
+                                           Type_Name   => Sort,
+                                           Remote_Partition_Name
+                                                    => Part.Unsafe_Just.Name));
+                        end if;
+                     else
+                        Put_Error ("This should never happen.");
+                     end if;
+                  end;
+               end loop;
+               --  Do the same for output ports
+               for Out_Port of T.Output_Ports loop
+                  for Remote of Out_Port.RI.Remote_Interfaces loop
+                     declare
+                        Node : constant Option_Node.Option  :=
+                          CV.Deployment.Find_Node
+                            (To_String (Remote.Function_Name));
+                        Part : Option_Partition.Option;
+                        --  Optional type of the parameter:
+                        Sort : constant Unbounded_String :=
+                          (if not T.PI.Params.Is_Empty
+                           then T.PI.Params.First_Element.Sort
+                           else US (""));
+                     begin
+                        if Node.Has_Value then
+                           Part := Node.Unsafe_Just.Find_Partition
+                             (To_String (Remote.Function_Name));
+
+                           if Part.Has_Value and then Part.Unsafe_Just.Name
+                             /= Partition.Deployment_Partition.Name
+                           then
+                              Partition.Out_Ports.Insert
+                                (Key      => To_String (Out_Port.RI.Name),
+                                 New_Item => (Port_Name   => Out_Port.RI.Name,
+                                              Thread_Name => T.Name,
+                                              Type_Name   => Sort,
+                                              Remote_Partition_Name
+                                                    => Part.Unsafe_Just.Name));
+                           end if;
+                        else
+                           Put_Error ("This should never happen.");
+                        end if;
+                     end;
+                  end loop;
+               end loop;
+            end loop;
          end loop;
       end loop;
 

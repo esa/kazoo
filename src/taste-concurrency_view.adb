@@ -216,10 +216,17 @@ package body TASTE.Concurrency_View is
                Blocks          : Unbounded_String;
                Partition_Assoc : Translate_Set;
                --  Connections between threads:
-               Thread_Src_Name : Vector_Tag;
+               Thread_Src_Name,
                Thread_Src_Port : Vector_Tag;
-               Thread_Dst_Name : Vector_Tag;
+               Thread_Dst_Name,
                Thread_Dst_Port : Vector_Tag;
+               Input_Port_Names,
+               Input_Port_Type_Name,
+               Input_Port_Thread_Name  : Vector_Tag;
+               Output_Port_Names,
+               Output_Port_Type_Name,
+               Output_Port_Thread_Name : Vector_Tag;
+
                --  Optionally generate partition code in separate files
                --  (if filepart.tmplt is present and contains a filename)
                File_Id         : constant String := Path & "/filepart.tmplt";
@@ -231,6 +238,21 @@ package body TASTE.Concurrency_View is
                   else "");
                Part_Content    : Unbounded_String;
             begin
+               for Each of Partition.In_Ports loop
+                  Input_Port_Names := Input_Port_Names & Each.Port_Name;
+                  Input_Port_Type_Name := Input_Port_Type_Name
+                    & Each.Type_Name;
+                  Input_Port_Thread_Name :=
+                    Input_Port_Thread_Name & Each.Thread_Name;
+               end loop;
+               for Each of Partition.Out_Ports loop
+                  Output_Port_Names := Output_Port_Names & Each.Port_Name;
+                  Output_Port_Type_Name := Output_Port_Type_Name
+                    & Each.Type_Name;
+                  Output_Port_Thread_Name :=
+                    Output_Port_Thread_Name & Each.Thread_Name;
+               end loop;
+
                for T of Partition.Threads loop
                   declare
                      --  There is no "&" operator for Translate sets...
@@ -266,13 +288,19 @@ package body TASTE.Concurrency_View is
                      Thread_Names := Thread_Names & Name;
                      All_Thread_Names := All_Thread_Names & Name;
                      for P of T.Output_Ports loop
-                        Thread_Src_Name := Thread_Src_Name & Name;
-                        Thread_Src_Port := Thread_Src_Port
-                          & To_String (P.Name);
-                        Thread_Dst_Name := Thread_Dst_Name
-                          & To_String (P.Remote_Thread);
-                        Thread_Dst_Port := Thread_Dst_Port
-                          & To_String (P.Remote_PI);
+                        for Part_Threads of Partition.Threads loop
+                           --  Create partition ports only when source and
+                           --  destination are in the same partition
+                           if P.Remote_Thread = Part_Threads.Name then
+                              Thread_Src_Name := Thread_Src_Name & Name;
+                              Thread_Src_Port := Thread_Src_Port
+                                & To_String (P.Name);
+                              Thread_Dst_Name := Thread_Dst_Name
+                                & To_String (P.Remote_Thread);
+                              Thread_Dst_Port := Thread_Dst_Port
+                                & To_String (P.Remote_PI);
+                           end if;
+                        end loop;
                      end loop;
                      --  Save the content of the thread in a file
                      --  (if required at template folder level)
@@ -359,16 +387,22 @@ package body TASTE.Concurrency_View is
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
                Partition_Assoc := Partition.Deployment_Partition.To_Template
-                 & Assoc ("Threads",         Threads)
-                 & Assoc ("Thread_Names",    Thread_Names)
-                 & Assoc ("Node_Name",       Node_Name)
-                 & Assoc ("Blocks",          Blocks)
-                 & Assoc ("Block_Names",     Block_Names)
-                 & Assoc ("Block_Languages", Block_Languages)
-                 & Assoc ("Thread_Src_Name", Thread_Src_Name)
-                 & Assoc ("Thread_Src_Port", Thread_Src_Port)
-                 & Assoc ("Thread_Dst_Name", Thread_Dst_Name)
-                 & Assoc ("Thread_Dst_Port", Thread_Dst_Port);
+                 & Assoc ("Threads",              Threads)
+                 & Assoc ("Thread_Names",         Thread_Names)
+                 & Assoc ("Node_Name",            Node_Name)
+                 & Assoc ("Blocks",               Blocks)
+                 & Assoc ("Block_Names",          Block_Names)
+                 & Assoc ("Block_Languages",      Block_Languages)
+                 & Assoc ("In_Port_Names",        Input_Port_Names)
+                 & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
+                 & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)
+                 & Assoc ("Out_Port_Names",       Output_Port_Names)
+                 & Assoc ("Out_Port_Thread_Name", Output_Port_Thread_Name)
+                 & Assoc ("Out_Port_Type_Name",   Output_Port_Type_Name)
+                 & Assoc ("Thread_Src_Name",      Thread_Src_Name)
+                 & Assoc ("Thread_Src_Port",      Thread_Src_Port)
+                 & Assoc ("Thread_Dst_Name",      Thread_Dst_Name)
+                 & Assoc ("Thread_Dst_Port",      Thread_Dst_Port);
 
                All_Target_Names := All_Target_Names
                  & String'(Get (Get (Partition_Assoc, "Package_Name")));
@@ -461,6 +495,9 @@ package body TASTE.Concurrency_View is
             Partition_CPU,                 --  Corresponding CPU name
             Partition_Time,                --  Corresponding TSP VP time
             Partition_VP    : Vector_Tag;  --  for TSP: VP binding
+            Part_Source_Name,
+            Part_Source_Port,
+            Part_Dest_Name  : Vector_Tag;  -- Inter-partition connections (TSP)
          begin
             for Node in CV.Nodes.Iterate loop
                declare
@@ -534,6 +571,18 @@ package body TASTE.Concurrency_View is
                         Partition_Time := Partition_Time
                           & CV_Partitions.Element (Partition)
                           .Deployment_Partition.VP_Duration;
+
+                        --  Create the inter-partition connections
+                        for Out_Port of
+                          CV_Partitions.Element (Partition).Out_Ports
+                        loop
+                           Part_Source_Name := Part_Source_Name
+                             & CV_Partitions.Key (Partition);
+                           Part_Source_Port := Part_Source_Port
+                             & Out_Port.Port_Name;
+                           Part_Dest_Name := Part_Dest_Name
+                             & Out_Port.Remote_Partition_Name;
+                        end loop;
                      end loop;
 
                      Nodes := Nodes & Newline & Node_Content;
@@ -561,6 +610,9 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Partition_CPU",       Partition_CPU)
                  & Assoc ("Partition_Duration",  Partition_Time)
                  & Assoc ("Partition_VP",        Partition_VP)
+                 & Assoc ("Part_Source_Name",    Part_Source_Name)
+                 & Assoc ("Part_Source_Port",    Part_Source_Port)
+                 & Assoc ("Part_Dest_Name",      Part_Dest_Name)
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
                  & Assoc ("Target_Packages",     All_Target_Names);

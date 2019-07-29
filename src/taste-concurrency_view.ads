@@ -57,7 +57,7 @@ package TASTE.Concurrency_View is
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);
 
-   type Port is
+   type Thread_Port is
       record
          Name          : Unbounded_String;
          Remote_Thread : Unbounded_String;
@@ -65,7 +65,7 @@ package TASTE.Concurrency_View is
          RI            : Taste_Interface;
       end record;
 
-   package Ports is new Indefinite_Ordered_Maps (String, Port);
+   package Ports is new Indefinite_Ordered_Maps (String, Thread_Port);
 
    type AADL_Thread is tagged
       record
@@ -83,11 +83,21 @@ package TASTE.Concurrency_View is
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
 
+   type Partition_Port is
+      record
+         Port_Name, Thread_Name, Type_Name : Unbounded_String;
+         Remote_Partition_Name : Unbounded_String; --  Other side
+      end record;
+
+   package Partition_Ports is
+     new Indefinite_Ordered_Maps (String, Partition_Port);
+
    type CV_Partition is tagged
       record
          Deployment_Partition : Taste_Partition;
          Threads              : AADL_Threads.Map;
          Blocks               : Protected_Blocks.Map;
+         In_Ports, Out_Ports  : Partition_Ports.Map;
       end record;
 
    package CV_Partitions is new Indefinite_Ordered_Maps (String, CV_Partition);

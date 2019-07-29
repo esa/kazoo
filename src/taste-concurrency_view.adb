@@ -531,14 +531,6 @@ package body TASTE.Concurrency_View is
                     (if Trigger then Generate_Node (Node_Name)
                      else "");
                begin
-                  if Node_Name /= "interfaceview" then
-                     Put_Debug (Path & " :" & Trigger'Img
-                               & " (" & Node_Name & ")");
-                     Put_Debug (Strip_String
-                               (Parse (Path & "/trigger.tmplt",
-                                  Trig_Tmpl)));
-                  end if;
-
                   if Trigger then
 
                      --  Associate node name, CPU name and CPU classifier

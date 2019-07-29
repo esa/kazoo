@@ -42,7 +42,7 @@ project @_CAPITALIZE:Name_@ is
 @@END_TABLE@@
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
-      (".",
+      ("@_LOWER:Name_@",
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",

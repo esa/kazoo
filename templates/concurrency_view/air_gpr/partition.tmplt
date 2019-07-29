@@ -72,9 +72,10 @@ project @_CAPITALIZE:Name_@_AIR is
 
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
-      (".",
+      ("@_LOWER:Name_@",
        "/home/taste/air/air/pmk/core/include",
        "/home/taste/air/air/pmk/arch/sparc/include",
+       "/home/taste/air/air/libs/imaspex/include",
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
@@ -99,6 +100,7 @@ project @_CAPITALIZE:Name_@_AIR is
        "cheddar_schedule.hh",
        "cheddar_types.hh",
        "config.c",
+       "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
        "grspw_api.c",
        "grspw_pkt_lib.c",

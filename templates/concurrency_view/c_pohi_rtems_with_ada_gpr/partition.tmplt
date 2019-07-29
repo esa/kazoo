@@ -70,7 +70,7 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
 
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
-      (".",
+      ("@_LOWER:Name_@",
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",

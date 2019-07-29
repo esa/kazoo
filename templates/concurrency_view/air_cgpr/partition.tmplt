@@ -47,7 +47,6 @@ configuration project AIR is
           "-DLEON_RTEMS",
           "-DLEON3",
           "-DGAISLER",
-          "-DNDEBUG",
           "-B/home/taste/air/air/install/pos/rtems5/rtems5-install/sparc-rtems5/leon3/lib",
           "-specs=bsp_specs",
           "-qrtems",

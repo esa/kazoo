@@ -18,6 +18,8 @@ gdb: clean
 	gdb --args $(KAZOO) --gw \
 	               -o output \
 	               --glue \
+		 --no-stdlib \
+		 ../common/libhw.aadl \
 		       --debug
 
 clean:

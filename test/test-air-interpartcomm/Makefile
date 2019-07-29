@@ -6,7 +6,7 @@ all: test-parse
 	cd output/build && ocarina -x main.aadl
 
 test-parse: clean
-	$(KAZOO) --gw \
+	$(KAZOO) --gw -p \
 	         -o output \
 	         --glue \
 		 --no-stdlib \
@@ -15,7 +15,7 @@ test-parse: clean
 
 
 gdb: clean
-	gdb --args $(KAZOO) --gw \
+	gdb --args $(KAZOO) --gw -p \
 	               -o output \
 	               --glue \
 		 --no-stdlib \

@@ -61,7 +61,12 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
       for Executable_Suffix use ".exe";
       for Executable ("main.c") use "@_Name_@_leon3_rtems";
    end Builder;
-   
+@@-- Not all systems use Ada so we must not always include Ada dataview folder
+@@TABLE@@
+@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Names_@ = ada
+@@SET@@ Need_Ada = TRUE
+@@END_IF@@
+@@END_TABLE@@
 
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
@@ -69,7 +74,10 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
+@@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada",
+       "ada_code_startup",
+@@END_IF@@
 @@TABLE@@
 @@IF@@ @_Block_Languages_@ = sdl
        "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/code",
@@ -78,7 +86,6 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
 @@END_IF@@
        "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/wrappers",
 @@END_TABLE@@
-       "ada_code_startup",
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("ADA_INCLUDE_PATH", ":");
 

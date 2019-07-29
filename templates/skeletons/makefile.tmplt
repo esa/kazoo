@@ -20,6 +20,9 @@ build-native: dataview
 build-rtems-ada: dataview
 	cd build && ocarina -x main.aadl && make -f Makefile.taste rtems_ada
 
+air: dataview
+	cd build && ocarina -x main.aadl && make -f Makefile.taste air
+
 @@INLINE(dataview/dataview-uniq.asn:)( )(\n)@@
         @@TABLE@@
            @_ASN1_Files_@

@@ -20,7 +20,6 @@ all:
 @_LOWER:Node_Names_@_native
 @@END_TABLE@@
 @@END_INLINE@@
-
 @@TABLE@@
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@
 @@END_TABLE@@
@@ -31,9 +30,18 @@ rtems_ada:
 @_LOWER:Node_Names_@_rtems_ada
 @@END_TABLE@@
 @@END_INLINE@@
-
 @@TABLE@@
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
+@@END_TABLE@@
+
+@@INLINE()( )()@@
+air:
+@@TABLE@@
+@_LOWER:Node_Names_@_air
+@@END_TABLE@@
+@@END_INLINE@@
+@@TABLE@@
+	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ air
 @@END_TABLE@@
 
 @_Nodes_@

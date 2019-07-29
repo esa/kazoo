@@ -18,6 +18,11 @@ debug_rtems_leon3_with_ada:
 	gprbuild -v --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
+air:
+@@TABLE@@
+	gprbuild -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+
 release_native:
 @@TABLE@@
 	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""

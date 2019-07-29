@@ -1,0 +1,8 @@
+ -I"/home/taste/tool-src/AADLib/examples/air/hello/hello_impl/node_a/../polyorb-hi-c/include"
+ "-I/home/taste/tool-src/AADLib/examples/air/hello"
+ -I/home/taste/air/air/pmk/core/include
+ -I/home/taste/air/air/pmk/arch/sparc/include
+ -I/home/taste/air/air/install/libs/imaspex/include/
+ -I/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/include
+ -I'/home/taste/tool-src/AADLib/examples/air/hello/'
+

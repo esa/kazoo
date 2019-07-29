@@ -541,8 +541,8 @@ package body TASTE.AADL_Parser is
                         Part : Option_Partition.Option;
                         --  Optional type of the parameter:
                         Sort : constant Unbounded_String :=
-                          (if not T.PI.Params.Is_Empty
-                           then T.PI.Params.First_Element.Sort
+                          (if not Out_Port.RI.Params.Is_Empty
+                           then Out_Port.RI.Params.First_Element.Sort
                            else US (""));
                      begin
                         if Node.Has_Value then

@@ -28,7 +28,7 @@ air: dataview
            @_ASN1_Files_@
         @@END_TABLE@@
 @@END_INLINE@@
-	mkdir -p dataview/.cache
+	mkdir -p ${HOME}/.taste_AST_cache && mkdir -p dataview
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
         for f in
@@ -49,15 +49,15 @@ air: dataview
 	@@END_INLINE@@
 	
 	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
-	PROJECT_CACHE=dataview/.cache asn2aadlPlus dataview/dataview-uniq.asn dataview/dataview_aadlv1.aadl
+	PROJECT_CACHE=${HOME}/.taste_AST_cache asn2aadlPlus dataview/dataview-uniq.asn dataview/dataview_aadlv1.aadl
 	@@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
-	PROJECT_CACHE=dataview/.cache aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
+	PROJECT_CACHE=${HOME}/.taste_AST_cache aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
 	@@END_IF@@
 	@@END_TABLE@@
 	@@-- Then generate Dataviews once per target language - first for C, it is needed in any case
-	mkdir -p dataview/C && PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/C -toC dataview/dataview-uniq.asn \
+	mkdir -p dataview/C && PROJECT_CACHE=${HOME}/.taste_AST_cache asn2dataModel -o dataview/C -toC dataview/dataview-uniq.asn \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
@@ -77,7 +77,7 @@ air: dataview
            @@IF@@ Enable=TRUE
                @@INLINE(	)(\n	)(\n)@@
                   mkdir -p dataview/@_Lang_@
-                  PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
+                  PROJECT_CACHE=${HOME}/.taste_AST_cache asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
                   @@INLINE(	)( \\\n	)(\n	)@@
                      @@TABLE@@
                         @_REPLACE(,/ ):CP_Files_@
@@ -87,7 +87,7 @@ air: dataview
 	   @@END_IF@@
 	@@END_TABLE@@
 	@@IF@@ @_Need_Ada_@=TRUE
-	mkdir -p dataview/Ada && PROJECT_CACHE=dataview/.cache asn2dataModel -o dataview/Ada -toAda dataview/dataview-uniq.asn \
+	mkdir -p dataview/Ada && PROJECT_CACHE=${HOME}/.taste_AST_cache asn2dataModel -o dataview/Ada -toAda dataview/dataview-uniq.asn \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
@@ -98,7 +98,7 @@ air: dataview
         @@END_IF@@
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
-	cd dataview/C && PROJECT_CACHE=../.cache msgPrinter ../dataview-uniq.asn && PROJECT_CACHE=../.cache msgPrinterASN1 ../dataview-uniq.asn
+	cd dataview/C && PROJECT_CACHE=${HOME}/.taste_AST_cache msgPrinter ../dataview-uniq.asn && PROJECT_CACHE=${HOME}/.taste_AST_cache msgPrinterASN1 ../dataview-uniq.asn
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"

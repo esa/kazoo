@@ -29,7 +29,7 @@ project @_CAPITALIZE:Name_@_AIR is
    Build : Build_Type := external ("CFG", "Debug");
 
    for Create_Missing_Dirs use "True";
-   for Object_Dir use "obj_rtems_with_ada";
+   for Object_Dir use "@_LOWER:Name_@_obj";
    for Exec_Dir   use "../../binaries";
 
    for Languages use ("Ada", "C");

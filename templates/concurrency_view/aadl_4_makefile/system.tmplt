@@ -41,6 +41,16 @@ air:
 @@END_TABLE@@
 @@END_INLINE@@
 @@TABLE@@
+	# generate the xml file for AIR and call AIR's configure script
+	ocarina -aadlv2 -v -disable-annexes=emv2 -g air_configuration \
+                -r deploymentview.final system.aadl deployment.aadl \
+                Cheddar_Properties.aadl arinc653.aadl data_model.aadl \
+                TASTE_IV_Properties.aadl TASTE_DV_Properties.aadl \
+                taste_properties.aadl base_types.aadl \
+                ../../DataView.aadl ../../InterfaceView.aadl ../../DeploymentView.aadl \
+                ../../../common/ocarina_components.aadl && \
+        cd deploymentview_final && configure
+	@echo "XML generated, AIR configuration done, building..."
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ air
 @@END_TABLE@@
 

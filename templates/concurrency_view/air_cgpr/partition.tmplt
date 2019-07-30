@@ -83,8 +83,6 @@ configuration project AIR is
             "-lm",
             --  "-L/opt/rtems-ada/lib/gcc/sparc-rtems5/7.3.0/leon3/adalib",
             "-L/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/libs/leon-rtems4.12/",
-            "-lgnat",
-            "-lgnarl",
             "-lrtemscpu",
             "-lrtemsbsp",
             "/home/taste/air/air/install/libs/libprintf/libprintf.a",
@@ -98,7 +96,6 @@ configuration project AIR is
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",
-            "-lgnat",
             "-mcpu=cypress");
    end Linker;
 end AIR;

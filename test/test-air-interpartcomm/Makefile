@@ -3,7 +3,7 @@ KAZOO=../../kazoo
 all: test-parse
 	cp input_data/hello.c output/hello/C/src && \
 	    cp input_data/read.c output/read/C/src && \
-	cd output/build && ocarina -x main.aadl
+	cd output && make air
 
 test-parse: clean
 	$(KAZOO) --gw -p \

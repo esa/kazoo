@@ -30,7 +30,7 @@ project @_CAPITALIZE:Name_@_AIR is
 
    for Create_Missing_Dirs use "True";
    for Object_Dir use "@_LOWER:Name_@_obj";
-   for Exec_Dir   use "../../binaries";
+   for Exec_Dir   use "../deploymentview_final/@_Name_@";
 
    for Languages use ("Ada", "C");
 
@@ -61,7 +61,7 @@ project @_CAPITALIZE:Name_@_AIR is
 
    package Builder is
       for Executable_Suffix use ".exe";
-      for Executable ("main.c") use "@_Name_@_leon3_rtems";
+      for Executable ("main.c") use "@_Name_@";
    end Builder;
 @@-- Not all systems use Ada so we must not always include Ada dataview folder
 @@TABLE@@
@@ -100,6 +100,7 @@ project @_CAPITALIZE:Name_@_AIR is
        "cheddar_schedule.hh",
        "cheddar_types.hh",
        "config.c",
+       "init.c",
        "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
        "grspw_api.c",
@@ -139,6 +140,5 @@ project @_CAPITALIZE:Name_@_AIR is
        "trace_manager.c",
        "trace_manager.cc",
        "um_threads.c");
-
 
 end @_CAPITALIZE:Name_@_AIR;

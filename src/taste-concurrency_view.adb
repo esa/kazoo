@@ -215,6 +215,7 @@ package body TASTE.Concurrency_View is
                Block_Names     : Vector_Tag;
                Block_Languages : Vector_Tag;
                Blocks          : Unbounded_String;
+               Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
                --  Connections between threads:
                Thread_Src_Name,
@@ -255,6 +256,11 @@ package body TASTE.Concurrency_View is
                   Output_Port_Thread_Name :=
                     Output_Port_Thread_Name & Each.Thread_Name;
                end loop;
+               Put_Info ("Partition: "
+                         & To_String (Partition.Deployment_Partition.Name));
+               for T of Partition.Threads loop
+                  Put_Info ("Thread: " & To_String (T.Name));
+               end loop;
 
                for T of Partition.Threads loop
                   declare
@@ -279,6 +285,7 @@ package body TASTE.Concurrency_View is
                         else "");
                   begin
                      Threads      := Threads & Newline & Result;
+                     Part_Threads := Part_Threads & Newline & Result;
                      Thread_Names := Thread_Names & Name;
                      All_Thread_Names := All_Thread_Names & Name;
                      for P of T.Output_Ports loop
@@ -383,7 +390,7 @@ package body TASTE.Concurrency_View is
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
                Partition_Assoc := Partition.Deployment_Partition.To_Template
-                 & Assoc ("Threads",              Threads)
+                 & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Node_Name",            Node_Name)
                  & Assoc ("Blocks",               Blocks)

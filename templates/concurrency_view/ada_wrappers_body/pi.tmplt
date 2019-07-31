@@ -22,8 +22,12 @@ procedure @_CAPITALIZE:Name_@
    @@END_INLINE@@
      with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
 begin
-   @@-- Works only for one param: for more than one param, use a table section
-   C_@_CAPITALIZE:Name_@ (@_CAPITALIZE:Param_Names_@, @_CAPITALIZE:Param_Names_@_Size);
+   C_@_CAPITALIZE:Name_@
+    @@INLINE(      \()(,\n      )(\);)@@
+       @@TABLE@@
+          @_CAPITALIZE:Param_Names_@, @_CAPITALIZE:Param_Names_@_Size
+       @@END_TABLE@@
+    @@END_INLINE@@
 end @_CAPITALIZE:Name_@;
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@ is

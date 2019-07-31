@@ -20,7 +20,7 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
    @@END_TABLE@@
 @@END_INLINE@@
 @@ELSE@@
-void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@(void)
 @@END_IF@@
 {
    // Write your code here

@@ -258,15 +258,6 @@ package body TASTE.Concurrency_View is
 
                for T of Partition.Threads loop
                   declare
-                     --  There is no "&" operator for Translate sets...
-                     function Join_Sets (S1, S2 : Translate_Set)
-                                         return Translate_Set is
-                        Result : Translate_Set := S1;
-                     begin
-                        Insert (Result, S2);
-                        return Result;
-                     end Join_Sets;
-
                      --  Render each thread
                      Name         : constant String := To_String (T.Name);
                      Thread_Assoc : constant Translate_Set :=
@@ -365,7 +356,9 @@ package body TASTE.Concurrency_View is
                                     RI_Assoc & Assoc
                                       ("Partition_Name", Partition_Name)));
                      end loop;
-                     Block_Assoc := Block_Assoc
+
+                     Block_Assoc :=
+                       Join_Sets (Block_Assoc, CV.Configuration.To_Template)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
                        & Assoc ("Required",        RI_Tag);

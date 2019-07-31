@@ -153,6 +153,10 @@ package TASTE.Parser_Utils is
 
    --  Define a vector for template_parser translate sets
    package Translate_Sets is new Indefinite_Vectors (Natural, Translate_Set);
+
+   --  There is no "&" operator for Translate sets...
+   function Join_Sets (S1, S2 : Translate_Set) return Translate_Set;
+
 private
    Debug_Mode : Boolean := False;
 end TASTE.Parser_Utils;

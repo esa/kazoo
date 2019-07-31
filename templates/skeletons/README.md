@@ -126,7 +126,7 @@ For example this is an extract of the C template:
 extern "C" {
 #endif
 
-void @_LOWER:Name_@_startup();
+void @_LOWER:Name_@_startup(void);
 
 /* Provided interfaces */
 @@TABLE@@

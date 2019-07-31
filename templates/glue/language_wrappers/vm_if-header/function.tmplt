@@ -67,10 +67,10 @@ extern "C" {
 @@END_IF@@
 
 // Function initialization - calls user startup code of all dependent functions
-void init_@_LOWER:Name_@();
+void init_@_LOWER:Name_@(void);
 
 @@IF@@ @_Language_@ = "Ada" or @_Language_@ = "QGenAda"
-extern void adainit();
+extern void adainit(void);
 @@END_IF@@
 
 @@IF@@ @_EXIST:Provided_Interfaces_@ and @_Language_@ /= "Blackbox_C"

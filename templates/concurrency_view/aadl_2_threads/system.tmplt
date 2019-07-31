@@ -44,17 +44,17 @@ public
 @@END_TABLE@@
 
 @@-- POHIC-only: declare protected objects to have runtime mutex
-@@-- @@IF@@ @_Use_POHIC_@
-data Taste_Protected
+@@IF@@ @_Use_POHIC_@
+data TASTE_Protected
 properties
    Concurrency_Control_Protocol => Protected_Access;
-end Taste_Protected;
+end TASTE_Protected;
 
-data implementation Taste_Protected.Object
+data implementation TASTE_Protected.Object
 properties
    Concurrency_Control_Protocol => Protected_Access;
-end Taste_Protected.Object; 
-@@-- @@END_IF@@
+end TASTE_Protected.Object; 
+@@END_IF@@
 
 @_Nodes_@
 

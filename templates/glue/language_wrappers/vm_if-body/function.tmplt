@@ -40,6 +40,10 @@
    #include <stdio.h>
 #endif
 
+@@IF@@ @_Language_@ = Ada or @_Language_@ = SDL
+extern void adainit(void);
+@@END_IF@@
+
 void init_@_LOWER:Name_@()
 {
    static bool init = false;
@@ -52,7 +56,6 @@ void init_@_LOWER:Name_@()
       @_LOWER:Name_@_startup();
 @@ELSIF@@ @_Language_@ = Ada or @_Language_@ = SDL
       // Initialize Ada runtime to call elaboration functions
-      extern void adainit();
       adainit();
 @@END_IF@@
 @@IF@@ @_EXIST:Sync_RIs_Parent_@
@@ -60,7 +63,7 @@ void init_@_LOWER:Name_@()
       // init function. Multiple calls are prevented by the "init" guard.
 @@END_IF@@
 @@TABLE@@
-      extern void init_@_LOWER:Sync_RIs_Parent_@();
+      extern void init_@_LOWER:Sync_RIs_Parent_@(void);
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
    puts ("[TASTE] Initialization completed for function @_Name_@");

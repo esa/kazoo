@@ -39,7 +39,7 @@
 #include "Context-@_LOWER:Name_@.h"
 @@END_IF@@
 
-void @_LOWER:Name_@_startup()
+void @_LOWER:Name_@_startup(void)
 {
    // Write your initialisation code, but DO NOT CALL REQUIRED INTERFACES
    // puts ("[@_Name_@] Startup");
@@ -51,7 +51,7 @@ void @_LOWER:Name_@_startup()
 @@END_TABLE@@
 
 @@TABLE@@
-void @_LOWER:Name_@_PI_@_Timers_@()
+void @_LOWER:Name_@_PI_@_Timers_@(void)
 {
    // This function is called when the timer expires
 }

@@ -19,7 +19,7 @@ asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
 @@END_TABLE@@
 @@END_INLINE@@
 @@ELSE@@
-void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@()
+void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void)
 @@END_IF@@
 {
    // Write your code here

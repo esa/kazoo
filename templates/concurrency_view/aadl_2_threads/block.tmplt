@@ -7,6 +7,10 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_Protected_PIs_@ /= ""
+@@-- And all the system configuration obtained from the command line:
+@@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
+@@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
+@@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+@@IF@@ @_Protected_PIs_@ /= "" and @_Use_POHIC_@
 @_LOWER:Name_@_protected : data TASTE_Protected.Object;
 @@END_IF@@

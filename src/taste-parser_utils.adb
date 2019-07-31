@@ -289,4 +289,12 @@ package body TASTE.Parser_Utils is
       Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
    end Initialize_Ocarina;
 
+   --  There is no "&" operator for Translate sets...
+   function Join_Sets (S1, S2 : Translate_Set) return Translate_Set is
+      Result : Translate_Set := S1;
+   begin
+      Insert (Result, S2);
+      return Result;
+   end Join_Sets;
+
 end TASTE.Parser_Utils;

@@ -256,11 +256,6 @@ package body TASTE.Concurrency_View is
                   Output_Port_Thread_Name :=
                     Output_Port_Thread_Name & Each.Thread_Name;
                end loop;
-               Put_Info ("Partition: "
-                         & To_String (Partition.Deployment_Partition.Name));
-               for T of Partition.Threads loop
-                  Put_Info ("Thread: " & To_String (T.Name));
-               end loop;
 
                for T of Partition.Threads loop
                   declare

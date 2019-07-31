@@ -1,0 +1,48 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Nodes_@               : Code generated for the nodes
+@@-- @_Node_Names_@          : Vector Tag of node names
+@@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
+@@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
+@@-- @_Partition_Names_@     : Vector Tag of partition names
+@@-- @_Partition_Node_@      :  |_ Corresponding node name
+@@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
+@@-- @_Threads_@             : Code generated for the threads
+@@-- @_Thread_Names_@        : List of all threads in the complete system
+@@-- @_Target_Packages_@     : List of all target package names in the complete system
+@@-- And all the system configuration obtained from the command line:
+@@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
+@@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
+@@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+# This Makefile is called by Makefile.taste to support the compilation
+# of AIR systems - for time and space partitionning.
+
+# Make sure that $AIR and $RTEMS_MAKEFILE_PATH are set
+
+export AIR_ROOT=$(AIR)
+export AIR_INSTALL=/home/taste/air/air/install
+export AIR_PMK=$(AIR_INSTALL)/pmk
+export AIR_POS=$(AIR_INSTALL)/pos
+export AIR_LIBS=$(AIR_INSTALL)/libs
+export AIR_TOOLS=$(AIR_INSTALL)/tools
+
+# Makefile Include file
+include $(AIR_ROOT)/Makefile.inc
+
+# All
+.PHONY : all
+all:
+	make -C deploymentview_final/common
+	make -C deploymentview_final/config all
+
+# Clean
+.PHONY : clean
+clean:
+	make -C deploymentview_final/common clean
+	make -C deploymentview_final/config clean
+
+# Distclean
+.PHONY : distclean
+distclean: clean
+	make -C deploymentview_final/config distclean
+	$(AIR_TOOLS)/configurator clean

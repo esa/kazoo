@@ -20,10 +20,17 @@ debug_rtems_leon3_with_ada:
 
 air:
 @@TABLE@@
-	gprbuild -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -c -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
+	gprbuild -l -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release_native:
 @@TABLE@@
 	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+
+clean:
+@@TABLE@@
+	rm -rf @_LOWER:Partition_Names_@_obj
 @@END_TABLE@@

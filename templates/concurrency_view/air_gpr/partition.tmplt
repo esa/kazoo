@@ -101,6 +101,7 @@ project @_CAPITALIZE:Name_@_AIR is
        "cheddar_types.hh",
        "config.c",
        "init.c",
+       "marshallers.c",
        "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
        "grspw_api.c",

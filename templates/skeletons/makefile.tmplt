@@ -7,38 +7,64 @@
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
-MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-OUTDIR := $(dir $(MAKEFILE_PATH))
+MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
+OUTDIR          := $(dir $(MAKEFILE_PATH))
+DATAVIEW_PATH   := ${OUTDIR}/dataview
+DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
+DATAVIEW_AADLV1 := ${DATAVIEW_PATH}/dataview_aadlv1.aadl
 
-export PROJECT_CACHE=${HOME}/.taste_AST_cache 
+# Project cache folder is used to speed up all ASN.1-related processing
+export PROJECT_CACHE=${HOME}/.taste_AST_cache
 
-all: build-native
+all:	build-native
 
-dataview : dataview/dataview-uniq.asn
+@@-- global check to see if dataview in Ada is needed
+@@TABLE@@
+  @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
+     @@SET@@ Need_Ada=TRUE
+  @@END_IF@@
+@@END_TABLE@@
 
-build-native: dataview
-	make -C build -f Makefile.taste
+dataview:	${DATAVIEW_PATH}/built
 
-build-rtems-ada: dataview
-	make -C build -f Makefile.taste rtems_ada
+@@INLINE(${DATAVIEW_PATH}/built:	dataview/C/built )( )()@@
+   @@IF@@ @_Need_Ada_@ = TRUE
+      dataview/Ada/built
+   @@END_IF@@
+   @@TABLE@@
+      @@IF@@ @_Unique_Languages_@ /= "Ada" and @_Unique_Languages_@ /= "SDL" and @_Unique_Languages_@ /= "C" and @_Unique_Languages_@ /= "CPP" and @_Unique_Languages_@ /= "Blackbox_C" and @_Unique_Languages_@ /= "GUI"
+      dataview/@_Unique_Languages_@/built
+      @@END_IF@@
+   @@END_TABLE@@
+   # Build dataviews for all languages
+@@END_INLINE@@
+	touch $@
 
-air: dataview
-	make -C build -f Makefile.taste air
+build-native:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+	make -j -C build -f Makefile.taste
 
-@@INLINE(dataview/dataview-uniq.asn:)( )(\n)@@
+build-rtems-ada:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+	make -j -C build -f Makefile.taste rtems_ada
+
+air:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+	make -j -C build -f Makefile.taste air
+
+@@INLINE(${DATAVIEW_UNIQ}:	)( )()@@
         @@TABLE@@
            @_ASN1_Files_@
         @@END_TABLE@@
 @@END_INLINE@@
-	mkdir -p ${HOME}/.taste_AST_cache && mkdir -p dataview
+	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
         for f in
         @@TABLE@@
            @_ASN1_Files_@ 
         @@END_TABLE@@
-; do cat $$f; echo; done > dataview/dataview-uniq.asn
+; do cat $$f; echo; done > $@
 	@@END_INLINE@@
+
+build/system_config.h:  # This is fast, no need to have dependencies
 	@@-- Create system_config.h by concatenating all functions partial system config files
 	@@INLINE(	)( )(\n)@@
         for f in
@@ -49,23 +75,42 @@ air: dataview
         @@END_TABLE@@
 ; do cat $$f; echo; done > build/system_config.h
 	@@END_INLINE@@
-	
-	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
-	asn2aadlPlus dataview/dataview-uniq.asn dataview/dataview_aadlv1.aadl
-	@@-- For each function generate the glue code from DMT based on the dataview
-	@@TABLE@@
+
+@@INLINE(aadl2glueC:	)( )()@@
+        @@TABLE@@
 	@@IF@@ not @_Is_Type_@
-	aadl2glueC -o @_LOWER:Function_Names_@/@_Language_@/wrappers dataview/dataview_aadlv1.aadl @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl
+            @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built
 	@@END_IF@@
 	@@END_TABLE@@
-	@@-- Then generate Dataviews once per target language - first for C, it is needed in any case
-	mkdir -p dataview/C && asn2dataModel -o dataview/C -toC dataview/dataview-uniq.asn \
+@@END_INLINE@@
+
+${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
+	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
+	asn2aadlPlus $< $@
+
+@@-- For each function generate the glue code from DMT based on the dataview
+	@@TABLE@@
+	@@IF@@ not @_Is_Type_@
+@_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl | ${DATAVIEW_AADLV1}
+	aadl2glueC -o $(dir $@) ${DATAVIEW_AADLV1} $<
+	touch $@
+
+	@@END_IF@@
+	@@END_TABLE@@
+
+@@-- Then generate Dataviews once per target language - first for C, it is needed in any case
+dataview/C/built: | ${DATAVIEW_UNIQ}
+	mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
 	    @@END_TABLE@@
 	@@END_INLINE@@
-	
+
+	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
+	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
+	cd dataview/C && msgPrinter ${DATAVIEW_UNIQ} && msgPrinterASN1 ${DATAVIEW_UNIQ}
+	touch $@
         @@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
               @@SET@@ Enable=FALSE
@@ -77,52 +122,54 @@ air: dataview
               @@SET@@ Lang=@_Unique_Languages_@
 	   @@END_IF@@
            @@IF@@ Enable=TRUE
+dataview/@_Lang_@/built: | ${DATAVIEW_UNIQ}
                @@INLINE(	)(\n	)(\n)@@
-                  mkdir -p dataview/@_Lang_@
-                  asn2dataModel -o dataview/@_Lang_@ -to@_Lang_@ dataview/dataview-uniq.asn \
+                  mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Lang_@ ${DATAVIEW_UNIQ} \
                   @@INLINE(	)( \\\n	)(\n	)@@
                      @@TABLE@@
                         @_REPLACE(,/ ):CP_Files_@
                      @@END_TABLE@@
                   @@END_INLINE@@
                @@END_INLINE@@
+
+	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@
+
 	@@IF@@ @_Need_Ada_@=TRUE
-	mkdir -p dataview/Ada && asn2dataModel -o dataview/Ada -toAda dataview/dataview-uniq.asn \
+dataview/Ada/built: | ${DATAVIEW_UNIQ}
+	mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -toAda ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
 	    @@END_TABLE@@
 	@@END_INLINE@@
 
+	touch $@
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
         @@END_IF@@
-	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
-	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
-	cd dataview/C && msgPrinter ../dataview-uniq.asn && msgPrinterASN1 ../dataview-uniq.asn
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"
-	ln -fs ${OUTDIR}/dataview/dataview-uniq.asn @_LOWER:Function_Names_@/@_Language_@/src
+	ln -fs ${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@
 
 function-types-linux:
 	@@TABLE@@
 	@@IF@@ @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && make compile-linux
+	cd @_LOWER:Function_Names_@/@_Language_@ && make -j compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 
-function-instances-linux: function-types-linux
+function-instances-linux:	function-types-linux
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && make compile-linux
+	cd @_LOWER:Function_Names_@/@_Language_@ && make -j compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 
-compile-all-linux: dataviews function-instances-linux
+compile-all-linux:	dataviews function-instances-linux
 
 clean:
 	rm -rf binaries/*

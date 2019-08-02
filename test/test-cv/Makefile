@@ -1,6 +1,6 @@
 KAZOO=../../kazoo
 
-all: ada c
+all: c
 
 ada: test-parse-ada
 	make -C output.ada && \

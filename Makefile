@@ -6,9 +6,10 @@ exec = kazoo
 
 all: build
 
-build:
-	#if [ -d "templates-parser" ]; then cd templates-parser && git pull; else git clone https://github.com/AdaCore/templates-parser; fi
-	--  make -C templates-parser -j
+templatesParser:
+	$(MAKE) -C templates-parser -j
+
+build:	| templatesParser
 ifeq ($(UNAME), Linux)
 	@echo "package TASTE.Parser_Version is" > src/taste-parser_version.ads.new
 	@echo "   Parser_Release : constant String :=" >> src/taste-parser_version.ads.new
@@ -51,4 +52,4 @@ test:
 clean:
 	rm -rf obj templates-parser $(exec) *~
 
-.PHONY: install clean build edit test
+.PHONY: install clean build edit test templatesParser

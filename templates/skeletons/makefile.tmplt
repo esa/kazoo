@@ -89,7 +89,7 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
 @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
-	aadl2glueC -o $(dir $@) ${DATAVIEW_AADLV1} $<
+	aadl2glueC -o $(dir $@) $^
 	touch $@
 
 	@@END_IF@@

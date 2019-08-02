@@ -1,5 +1,5 @@
 kazoo
 obj/
-templates-parser/
 src/*.swp
 *.swp
+src/taste-parser_version.ads

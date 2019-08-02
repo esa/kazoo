@@ -7,7 +7,8 @@
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
-MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
+# MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
 OUTDIR          := $(dir $(MAKEFILE_PATH))
 DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
@@ -96,7 +97,8 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 
 @@-- Then generate Dataviews once per target language - first for C, it is needed in any case
 dataview/C/built: | ${DATAVIEW_UNIQ}
-	mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} \
+	mkdir -p $(dir $@)
+	asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
@@ -105,7 +107,8 @@ dataview/C/built: | ${DATAVIEW_UNIQ}
 
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
-	cd dataview/C && msgPrinter ${DATAVIEW_UNIQ} && msgPrinterASN1 ${DATAVIEW_UNIQ}
+	cd dataview/C && msgPrinter ../dataview-uniq.asn
+	cd dataview/C && msgPrinterASN1  ../dataview-uniq.asn
 	touch $@
         @@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
@@ -147,21 +150,21 @@ dataview/Ada/built: | ${DATAVIEW_UNIQ}
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"
-	ln -fs ${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/@_Language_@/src
+	ln -fs ../../../${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/@_Language_@/src
 	@@END_IF@@
 	@@END_TABLE@@
 
 function-types-linux:
 	@@TABLE@@
 	@@IF@@ @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && $(MAKE) -j compile-linux
+	$(MAKE) -j -C @_LOWER:Function_Names_@/@_Language_@ compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 
 function-instances-linux:	function-types-linux
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && $(MAKE) -j compile-linux
+	$(MAKE) -C @_LOWER:Function_Names_@/@_Language_@ -j compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 

@@ -20,7 +20,7 @@
 # Make sure that $AIR and $RTEMS_MAKEFILE_PATH are set
 
 export AIR_ROOT=$(AIR)
-export AIR_INSTALL=/home/taste/air/air/install
+export AIR_INSTALL=/home/taste/tool-src/air/air/install
 export AIR_PMK=$(AIR_INSTALL)/pmk
 export AIR_POS=$(AIR_INSTALL)/pos
 export AIR_LIBS=$(AIR_INSTALL)/libs

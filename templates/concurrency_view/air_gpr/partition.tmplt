@@ -73,9 +73,9 @@ project @_CAPITALIZE:Name_@_AIR is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
-       "/home/taste/air/air/pmk/core/include",
-       "/home/taste/air/air/pmk/arch/sparc/include",
-       "/home/taste/air/air/install/libs/imaspex/include",
+       "/home/taste/tool-src/air/air/pmk/core/include",
+       "/home/taste/tool-src/air/air/pmk/arch/sparc/include",
+       "/home/taste/tool-src/air/air/install/libs/imaspex/include",
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",

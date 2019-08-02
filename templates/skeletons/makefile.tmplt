@@ -41,13 +41,13 @@ dataview:	${DATAVIEW_PATH}/built
 	touch $@
 
 build-native:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
-	make -j -C build -f Makefile.taste
+	$(MAKE) -j -C build -f Makefile.taste
 
 build-rtems-ada:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
-	make -j -C build -f Makefile.taste rtems_ada
+	$(MAKE) -j -C build -f Makefile.taste rtems_ada
 
 air:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
-	make -j -C build -f Makefile.taste air
+	$(MAKE) -j -C build -f Makefile.taste air
 
 @@INLINE(${DATAVIEW_UNIQ}:	)( )()@@
         @@TABLE@@
@@ -57,11 +57,7 @@ air:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
 	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
-        for f in
-        @@TABLE@@
-           @_ASN1_Files_@ 
-        @@END_TABLE@@
-; do cat $$f; echo; done > $@
+        for f in $^ ; do cat "$$f"; echo; done > $@
 	@@END_INLINE@@
 
 build/system_config.h:  # This is fast, no need to have dependencies
@@ -91,7 +87,7 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 @@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
-@_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl | ${DATAVIEW_AADLV1}
+@_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
 	aadl2glueC -o $(dir $@) ${DATAVIEW_AADLV1} $<
 	touch $@
 
@@ -158,14 +154,14 @@ dataview/Ada/built: | ${DATAVIEW_UNIQ}
 function-types-linux:
 	@@TABLE@@
 	@@IF@@ @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && make -j compile-linux
+	cd @_LOWER:Function_Names_@/@_Language_@ && $(MAKE) -j compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 
 function-instances-linux:	function-types-linux
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
-	cd @_LOWER:Function_Names_@/@_Language_@ && make -j compile-linux
+	cd @_LOWER:Function_Names_@/@_Language_@ && $(MAKE) -j compile-linux
 	@@END_IF@@
 	@@END_TABLE@@
 
@@ -173,6 +169,6 @@ compile-all-linux:	dataviews function-instances-linux
 
 clean:
 	rm -rf binaries/*
-	make -C build -f Makefile.taste clean
+	$(MAKE) -C build -f Makefile.taste clean
 
 .PHONY: clean compile-all-linux function-instances-linux function-types-linux build-native dataview build-rtems-ada

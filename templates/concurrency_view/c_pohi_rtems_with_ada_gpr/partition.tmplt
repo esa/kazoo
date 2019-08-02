@@ -96,6 +96,7 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
        "cheddar_types.hh",
        "config.c",
        "config_leon4_n2x.c",
+       "config_leon3_drvmgr.c",
        "grspw_api.c",
        "grspw_pkt_lib.c",
        "hyperperriod_config.hh",

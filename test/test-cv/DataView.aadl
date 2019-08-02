@@ -214,7 +214,7 @@ END T_UInt32_Buffer.impl;
 DATA TASTE_Boolean
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/kazoo/test/test-cv/DataView.asn");
+    Source_Text => ("DataView.asn");
     TASTE::EncodingDefinitionFile => classifier(DataView::ACN_DataView);
     TASTE::Ada_Package_Name => "TASTE_Dataview";
     Deployment::ASN1_Module_Name => "TASTE-Dataview";
@@ -310,7 +310,7 @@ SUBCOMPONENTS
 END Taste_DataView.others;
 DATA ACN_DataView
 PROPERTIES
-    Source_Text => ("/home/taste/kazoo/test/test-cv/DataView.acn");
+    Source_Text => ("DataView.acn");
     Source_Language => (ACN);
 END ACN_DataView;
 

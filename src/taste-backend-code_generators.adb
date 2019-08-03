@@ -496,7 +496,6 @@ package body TASTE.Backend.Code_Generators is
       for Each of F.Timers loop
          Timers := Timers & Each;
       end loop;
-      Put_Info (To_String (F.Name) & ": " & PIs_Have_Params'Img);
 
       --  Setup the mapping for the template
       Result.Header := Result.Header

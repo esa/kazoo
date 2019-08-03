@@ -21,6 +21,12 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+@@-- @_In_Port_Names_@        : Vector tag: input ports of the partition
+@@-- @_In_Port_Thread_Name_@  :     |_ corresponding thread inside the partition
+@@-- @_In_Port_Type_Name_@    :     |_ corresponding parameter type name (optional)
+@@-- @_Out_Port_Names_@       : Vector tag: output ports of the partition
+@@-- @_Out_Port_Thread_Name_@ :     |_ corresponding thread inside the partition
+@@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
 -- Generic gprbuild configuration file for rtems5 with Ada support for leon3

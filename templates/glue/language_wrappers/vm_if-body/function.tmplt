@@ -13,6 +13,8 @@
 @@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
 @@-- @_ASN1_Files_@          : List of ASN.1 Files with path
 @@-- @_Timers_@              : List of timers (just names)
+@@-- @_PIs_Have_Params_@     : Flag, True if at least one PI has an ASN.1 parameter
+@@-- @_RIs_Have_Params_@     : Flag, True if at least one RI has an ASN.1 parameter
 @@-- @_Has_Context_@         : Flag, True if there are context parameters
 @@-- @_CP_Names_@            : List of Context Parameter names
 @@-- @_CP_Types_@            : List of Context Parameter types
@@ -32,10 +34,12 @@
 @@END_TABLE@@
  * Timers              : @_Timers_@
  */
-
+// debug : @_PIs_Have_Params_@, @_RIs_Have_Params_@
 #include <stdbool.h>
 #include "@_LOWER:Name_@_vm_if.h"
+@@IF@@ @_PIs_Have_Params_@
 #include "C_ASN1_Types.h"
+@@END_IF@@
 #ifdef __unix__
    #include <stdio.h>
 #endif
@@ -44,7 +48,7 @@
 extern void adainit(void);
 @@END_IF@@
 
-void init_@_LOWER:Name_@()
+void init_@_LOWER:Name_@(void)
 {
    static bool init = false;
 

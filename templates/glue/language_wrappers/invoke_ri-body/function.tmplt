@@ -33,7 +33,7 @@
 @@END_TABLE@@
  * Timers              : @_Timers_@
  */
-
+@@IF@@ @_Required_Interfaces'Length_@ > 0
 #include <stdlib.h>
 #ifdef __unix__
    #include <stdio.h>
@@ -51,3 +51,6 @@
 @_Required_Interfaces_@
 @@END_TABLE@@
 @@END_IF@@
+@@ELSE@@
+/* There are no required interfaces for this function... */
+@@END_IF@@  @@-- Required_Interfaces'Length > 0

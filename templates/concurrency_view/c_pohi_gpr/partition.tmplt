@@ -73,6 +73,7 @@ project @_CAPITALIZE:Name_@ is
        "cheddar_schedule.hh",
        "cheddar_types.hh",
        "config.c",
+       "marshallers.c",
        "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
        "grspw_api.c",

@@ -51,6 +51,7 @@ package body TASTE.Dump is
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:
    begin
+      Put_Debug ("Folder with Dump templates: " & Prefix);
       Start_Search (Search    => ST,
                     Pattern   => "",
                     Directory => Prefix,

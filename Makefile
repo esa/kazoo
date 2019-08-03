@@ -41,7 +41,8 @@ endif
 
 install:
 	$(MAKE)
-	cp kazoo `ocarina-config --prefix`/bin/
+	mkdir -p `ocarina-config --prefix`/share/kazoo
+	cp -a templates kazoo `ocarina-config --prefix`/share/kazoo
 
 edit:
 	OCARINA_PATH=`ocarina-config --prefix` gps

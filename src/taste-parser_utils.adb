@@ -6,6 +6,9 @@ with Ada.Characters.Latin_1,
      Ada.Strings.Maps,
      Ada.Strings.Fixed,
      Ada.Strings,
+     Ada.Directories,
+     Ada.Command_Line,
+     Ada.Environment_Variables,
      GNAT.OS_Lib,
      GNAT.Strings,
      GNAT.Command_Line,
@@ -66,11 +69,47 @@ package body TASTE.Parser_Utils is
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config  : Command_Line_Configuration;
       Version : aliased Boolean := False;
+      Command : constant String := Ada.Command_Line.Command_Name;
       use String_Holders;
 
       IV, DeplV, DataV, OutDir : aliased GNAT.Strings.String_Access := null;
    begin
-      Result.Binary_Path := To_Holder (Get_Program_Directory);
+      --  Retrieve the path of the kazoo binary, to have a base prefix
+      --  to find the templates folder
+      if Command /= "kazoo" then
+         --  Command used a explicit path to call kazoo - use it
+         Result.Binary_Path := To_Holder (Get_Program_Directory);
+      else
+         --  We must find kazoo in the PATH
+         --  This will work only on Linux because the PATH separator is ":"
+         --  while on Windows it is ";"
+         declare
+            Path : constant String := Ada.Environment_Variables.Value ("PATH");
+            Nb   : constant Natural := Ada.Strings.Fixed.Count (Path, ":");
+            From : Natural := Path'First;
+            To   : Natural;
+         begin
+            if Nb = 0 then
+               To   := Path'Last;
+            end if;
+            for I in 0 .. Nb loop
+               To := Ada.Strings.Fixed.Index (Path, ":", From => From);
+               if To = 0 then
+                  To := Path'Last + 1;
+               end if;
+               if Ada.Directories.Exists
+                 (Path (From .. To - 1) & "/" & "kazoo")
+               then
+                  --  Found the folder containing the kazoo binary
+                  Result.Binary_Path := To_Holder
+                    (Path (From .. To - 1) & "/");
+                  exit;
+               end if;
+               From := To + 1;
+            end loop;
+         end;
+      end if;
+
       Define_Switch (Config, Output => IV'Access,
                      Switch         => "-i:",
                      Long_Switch    => "--interfaceview=",

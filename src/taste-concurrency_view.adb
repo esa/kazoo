@@ -175,6 +175,7 @@ package body TASTE.Concurrency_View is
       All_Thread_Names : Tag;  --  Complete list of threads
       All_Target_Names : Tag;  --  List of all targets used (AADL packages)
    begin
+      Put_Debug ("Concurrency View templates expected in " & Prefix);
       Start_Search (Search    => ST,
                     Pattern   => "",
                     Directory => Prefix,
@@ -636,10 +637,6 @@ package body TASTE.Concurrency_View is
 
    procedure Generate_CV (CV : Taste_Concurrency_View) is
    begin
-      --  In this first iteration Nodes are generated in standalone files,
-      --  and they include their processes. It would be useful to be able
-      --  to decide if processes could also have their own files, since
-      --  in the future they may be more than one process per node (for TSP).
       CV.Generate_Code;
    exception
       when Error : Concurrency_View_Error | Ada.IO_Exceptions.Name_Error =>

@@ -401,18 +401,20 @@ package body TASTE.Backend.Code_Generators is
       List_Of_RIs        : Tag;
       List_Of_Sync_PIs   : Tag;
       List_Of_ASync_PIs  : Tag;
-      List_Of_Sync_RIs   : Vector_Tag;
+      List_Of_Sync_RIs,
       Sync_RIs_Parent    : Vector_Tag;   --  Parent function of the sync RI
-      List_Of_ASync_RIs  : Vector_Tag;
+      List_Of_ASync_RIs,
       Async_RIs_Parent   : Vector_Tag;   --  Parent function of the async RI
       Timers             : Tag;
-      Property_Names     : Vector_Tag;
+      Property_Names,
       Property_Values    : Vector_Tag;
-      CP_Names           : Vector_Tag;   --  CP = Context Parameters
-      CP_Types           : Vector_Tag;
-      CP_Values          : Vector_Tag;
-      CP_Asn1Modules     : Vector_Tag;
+      CP_Names,          --  CP = Context Parameters
+      CP_Types,
+      CP_Values,
+      CP_Asn1Modules,
       CP_Filenames       : Vector_Tag;
+      PIs_Have_Params,   --  True if at least one PI has an ASN.1 parameter
+      RIs_Have_Params    : Boolean := False;   -- Same for RI
       Interface_Tmplt    : Translate_Set;
    begin
       Result.Header := +Assoc ("Name", F.Name)
@@ -455,6 +457,9 @@ package body TASTE.Backend.Code_Generators is
             when others =>
                List_Of_Sync_PIs := List_Of_Sync_PIs & Each.Name;
          end case;
+         if Each.Params.Length > 0 then
+            PIs_Have_Params := True;
+         end if;
       end loop;
 
       --  Add list of all RI names (both synchronous and asynchronous)
@@ -482,12 +487,16 @@ package body TASTE.Backend.Code_Generators is
                      & Each.Remote_Interfaces.First_Element.Function_Name;
                end if;
          end case;
+         if Each.Params.Length > 0 then
+            RIs_Have_Params := True;
+         end if;
       end loop;
 
       --  Add list of timers (names)
       for Each of F.Timers loop
          Timers := Timers & Each;
       end loop;
+      Put_Info (To_String (F.Name) & ": " & PIs_Have_Params'Img);
 
       --  Setup the mapping for the template
       Result.Header := Result.Header
@@ -508,7 +517,10 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("CP_Asn1Filenames",  CP_Filenames)
         & Assoc ("Is_Type",           F.Is_Type)
         & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",            Timers);
+        & Assoc ("Timers",            Timers)
+        & Assoc ("PIs_Have_Params",   PIs_Have_Params)
+        & Assoc ("RIs_Have_Params",   RIs_Have_Params);
+
       return Result;
    end Func_Template;
 

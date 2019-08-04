@@ -90,12 +90,16 @@ package body TASTE.Data_View is
          begin
             if File_Ref = ASN1_File_Maps.No_Element then
                declare
-                  New_File   : ASN1_File;
-                  New_Module : ASN1_Module;
+                  New_File      : ASN1_File;
+                  New_Module    : ASN1_Module;
+                  Relative_Path : Unbounded_String := US (Filename);
                begin
                   New_Module.Name  := US (Module);
                   New_Module.Types := (Empty_Vector & Sort);
-                  New_File.Path    := US (Filename);
+                  if Filename (Filename'First) /= '/' then
+                     Relative_Path := "../" & Relative_Path;
+                  end if;
+                  New_File.Path    := Relative_Path;
                   New_File.Modules.Insert (Module, New_Module);
                   Files.Insert            (Filename, New_File);
                end;
@@ -128,9 +132,11 @@ package body TASTE.Data_View is
    procedure Check_Files (DV : Taste_Data_View) is
       Success : Boolean := True;
    begin
-      for Each of DV.ASN1_Files loop
-         if not Ada.Directories.Exists (To_String (Each.Path)) then
-            Put_Error ("ASN.1 File not found: " & To_String (Each.Path));
+      for Idx in DV.ASN1_Files.Iterate loop
+         --  The Key of the map contains the path as found in the dataview
+         if not Ada.Directories.Exists (ASN1_File_Maps.Key (Idx))
+         then
+            Put_Error ("ASN.1 File not found: " & ASN1_File_Maps.Key (Idx));
             Success := False;
          end if;
       end loop;

@@ -552,6 +552,8 @@ package body TASTE.AADL_Parser is
                            if Part.Has_Value and then Part.Unsafe_Just.Name
                              /= Partition.Deployment_Partition.Name
                            then
+                              --  CHECKME: if the key is already present,
+                              --  this will fail (test-tsp1).
                               Partition.Out_Ports.Insert
                                 (Key      => To_String (Out_Port.RI.Name),
                                  New_Item => (Port_Name   => Out_Port.RI.Name,

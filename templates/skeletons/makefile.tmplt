@@ -35,6 +35,8 @@ dataview:	${DATAVIEW_PATH}/built
    @@TABLE@@
       @@IF@@ @_Unique_Languages_@ /= "Ada" and @_Unique_Languages_@ /= "SDL" and @_Unique_Languages_@ /= "C" and @_Unique_Languages_@ /= "CPP" and @_Unique_Languages_@ /= "Blackbox_C" and @_Unique_Languages_@ /= "GUI"
       dataview/@_Unique_Languages_@/built
+      @@ELSIF@@ @_Unique_Languages_@ = GUI
+      dataview/Python/built
       @@END_IF@@
    @@END_TABLE@@
    # Build dataviews for all languages
@@ -114,13 +116,16 @@ dataview/C/built: | ${DATAVIEW_UNIQ}
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
               @@SET@@ Enable=FALSE
               @@SET@@ Need_Ada=TRUE
-	   @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C" or @_Unique_Languages_@ = "GUI"
+	   @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
               @@SET@@ Enable=FALSE
+	   @@ELSIF@@ @_Unique_Languages_@ = "GUI"
+	      @@SET@@ Enable=TRUE
+	      @@SET@@ Lang=Python
 	   @@ELSE@@
               @@SET@@ Enable=TRUE
               @@SET@@ Lang=@_Unique_Languages_@
 	   @@END_IF@@
-           @@IF@@ Enable=TRUE
+           @@IF@@ @_Enable_@=TRUE
 dataview/@_Lang_@/built: | ${DATAVIEW_UNIQ}
                @@INLINE(	)(\n	)(\n)@@
                   mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Lang_@ ${DATAVIEW_UNIQ} \
@@ -131,13 +136,17 @@ dataview/@_Lang_@/built: | ${DATAVIEW_UNIQ}
                   @@END_INLINE@@
                @@END_INLINE@@
 
+	@@IF@@ @_Lang_@ = Python
+	$(MAKE) -C dataview/Python -f Makefile.python
+	@@END_IF@@
 	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@
 
 	@@IF@@ @_Need_Ada_@=TRUE
 dataview/Ada/built: | ${DATAVIEW_UNIQ}
-	mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -toAda ${DATAVIEW_UNIQ} \
+	mkdir -p $(dir $@)
+	asn2dataModel -o $(dir $@) -toAda ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@
 	    @@TABLE@@
                @_REPLACE(,/ ):CP_Files_@
@@ -145,7 +154,8 @@ dataview/Ada/built: | ${DATAVIEW_UNIQ}
 	@@END_INLINE@@
 
 	touch $@
-	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	cd dataview/Ada
+	rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
         @@END_IF@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@

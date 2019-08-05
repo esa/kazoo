@@ -13,9 +13,9 @@ procedure @_CAPITALIZE:Name_@
 @@INLINE(\()(; )(\) is)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-IN_@_CAPITALIZE:Param_Names_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
+@_Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
 @@ELSE@@
-OUT_@_CAPITALIZE:Param_Names_@ : access asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
+@_Param_Names_@ : out asn1Scc@_CAPITALIZE:REPLACE_ALL((-)/_):Param_Types_@
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@

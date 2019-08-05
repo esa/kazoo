@@ -56,6 +56,30 @@ properties
 end TASTE_Protected.Object; 
 @@END_IF@@
 
+@@IF@@ @_Partition_Names'Length_@ > 0   @@-- AIR : we need a port polling threads
+--  Required by AIR to allow inter-partition communications
+subprogram do_ports_polling
+properties
+   Source_Language => C;
+   Source_Name     => "user_ports_polling";
+   Source_Text     => ("air_polling.c");
+end do_ports_polling;
+
+thread Port_Poller
+end    Port_Poller;
+
+thread implementation Port_Poller.i
+calls
+   Mycalls: {
+      P_Spg : subprogram do_ports_polling;
+   };
+properties
+   Dispatch_Protocol => Periodic;
+   Period            => 100 ms;
+   Deadline          => 100 ms;
+end Port_Poller.i;
+@@END_IF@@
+
 @_Nodes_@
 
 system DeploymentView

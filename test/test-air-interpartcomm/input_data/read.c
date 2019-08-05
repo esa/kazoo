@@ -10,7 +10,10 @@ void read_startup()
 
 void read_PI_h()
 {
+    static asn1SccT_Boolean someBool = true;
     /* Write your code here! */
     printf("executing partition defined by TASTE\n");
+    read_RI_s(&someBool);
+    someBool = someBool?false:true;
 }
 

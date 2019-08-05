@@ -11,6 +11,6 @@ void hello_startup()
 void hello_PI_s(const asn1SccTASTE_Boolean *IN_t)
 {
     /* Write your code here! */
-    printf("hello.c printf here");
+    printf("hello.c got async message with value %s", *IN_t?"TRUE":"FALSE");
 }
 

@@ -8,7 +8,7 @@
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
 @_LOWER:Name_@ :
-@@IF@@ @_Language_@ = "sdl"
+@@IF@@ @_LOWER:Language_@ = "sdl"
 	# Call opengeode to generate the functional code
 	make -j -C ../@_LOWER:Name_@/SDL generate-code
 @@ELSE@@

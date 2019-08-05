@@ -17,6 +17,7 @@ with System.Assertions,
      Ocarina.Files,
      Ocarina.Parser,
      Ocarina.FE_AADL.Parser,
+     TASTE.Backend,
      TASTE.Backend.Build_Script,
      TASTE.Backend.Code_Generators,
      TASTE.Semantic_Check;
@@ -415,7 +416,7 @@ package body TASTE.AADL_Parser is
 
             Block : Protected_Block :=
               (Name     => F.Name,
-               Language => F.Language,
+               Language => US (TASTE.Backend.Language_Spelling (F)),
                Node     => Node,
                others   => <>);
          begin

@@ -23,6 +23,12 @@
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
+@@-- Not all systems use Ada so we must not always include Ada dataview folder
+@@TABLE@@
+@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Names_@ = ada
+@@SET@@ Need_Ada = TRUE
+@@END_IF@@
+@@END_TABLE@@
 project @_CAPITALIZE:Name_@_AIR is
 
    type Build_Type is ("Debug", "Release");
@@ -32,7 +38,11 @@ project @_CAPITALIZE:Name_@_AIR is
    for Object_Dir use "@_LOWER:Name_@_obj";
    for Exec_Dir   use "../deploymentview_final/@_Name_@";
 
+@@IF@@ @_Need_Ada_@ = TRUE
    for Languages use ("Ada", "C");
+@@ELSE@@
+   for Languages use ("C");
+@@END_IF@@
 
    for Main use ("main.c");
 
@@ -63,12 +73,6 @@ project @_CAPITALIZE:Name_@_AIR is
       for Executable_Suffix use ".exe";
       for Executable ("main.c") use "@_Name_@";
    end Builder;
-@@-- Not all systems use Ada so we must not always include Ada dataview folder
-@@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Names_@ = ada
-@@SET@@ Need_Ada = TRUE
-@@END_IF@@
-@@END_TABLE@@
 
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
@@ -84,12 +88,13 @@ project @_CAPITALIZE:Name_@_AIR is
        "ada_code_startup",
 @@END_IF@@
 @@TABLE@@
-@@IF@@ @_Block_Languages_@ = sdl
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/code",
+@@IF@@ @_LOWER:Block_Languages_@ = sdl
+       "../../@_LOWER:Block_Names_@/SDL/code",
+       "../../@_LOWER:Block_Names_@/SDL/wrappers",
 @@ELSE@@
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/src",
+       "../../@_LOWER:Block_Names_@/@_Block_Languages_@/src",
+       "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
 @@END_IF@@
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/wrappers",
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("ADA_INCLUDE_PATH", ":");

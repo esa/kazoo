@@ -339,6 +339,7 @@ package body TASTE.Concurrency_View is
                         else "");
                   begin
                      Block_Names     := Block_Names & Block_Name;
+
                      Block_Languages := Block_Languages & B.Language;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop

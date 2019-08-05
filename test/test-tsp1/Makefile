@@ -13,10 +13,10 @@ test-parse: clean
 
 
 gdb: clean
-	gdb --args $(KAZOO) --gw \
+	gdb --args $(KAZOO) --gw -p \
 	               -o output \
-	               --glue \
-		       --debug
+	               --glue --no-stdlib \
+		       --debug ../common/libhw.aadl
 
 clean:
 	rm -rf output

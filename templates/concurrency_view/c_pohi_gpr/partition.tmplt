@@ -36,7 +36,7 @@ project @_CAPITALIZE:Name_@ is
 
 @@-- Not all systems use Ada so we must not always include Ada dataview folder
 @@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Names_@ = ada
+@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
 @@SET@@ Need_Ada = TRUE
 @@END_IF@@
 @@END_TABLE@@

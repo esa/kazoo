@@ -174,6 +174,7 @@ package body TASTE.Concurrency_View is
       Threads          : Unbounded_String;
       All_Thread_Names : Tag;  --  Complete list of threads
       All_Target_Names : Tag;  --  List of all targets used (AADL packages)
+      All_Block_Names  : Tag;  --  Complete list of blocks
    begin
       Put_Debug ("Concurrency View templates expected in " & Prefix);
       Start_Search (Search    => ST,
@@ -195,6 +196,7 @@ package body TASTE.Concurrency_View is
          Threads := US ("");
          Clear (All_Thread_Names);
          Clear (All_Target_Names);
+         Clear (All_Block_Names);
 
          Get_Next_Entry (ST, Current);
 
@@ -339,7 +341,7 @@ package body TASTE.Concurrency_View is
                         else "");
                   begin
                      Block_Names     := Block_Names & Block_Name;
-
+                     All_Block_Names := All_Block_Names & Block_Name;
                      Block_Languages := Block_Languages & B.Language;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
@@ -622,6 +624,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Part_Dest_Name",      Part_Dest_Name)
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
+                 & Assoc ("Block_Names",         All_Block_Names)
                  & Assoc ("Target_Packages",     All_Target_Names);
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,

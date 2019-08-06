@@ -1,14 +1,15 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Nodes_@               : Code generated for the nodes
+@@-- @_Nodes_@               : Code generated for the nodes (from node.tmplt)
 @@-- @_Node_Names_@          : Vector Tag of node names
 @@-- @_Node_CPU_@            :  |_ Corresponding CPU name (eg x86_linux)
 @@-- @_Node_CPU_Classifier_@ :  |_ CPU Classifier (ocarina...::x86_linux)
 @@-- @_Partition_Names_@     : Vector Tag of partition names
 @@-- @_Partition_Node_@      :  |_ Corresponding node name
 @@-- @_Partition_CPU_@       :  |_ Corresponding CPU name
-@@-- @_Threads_@             : Code generated for the threads
+@@-- @_Threads_@             : Code generated for the threads (from thread.tmplt)
 @@-- @_Thread_Names_@        : List of all threads in the complete system
+@@-- @_Block_Names_@         : List of all blocks in the complete system
 @@-- @_Target_Packages_@     : List of all target package names in the complete system
 @@-- And all the system configuration obtained from the command line:
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
@@ -66,3 +67,9 @@ clean:
 	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ clean
 	rm -rf *_adainit deploymentview_final
 @@END_TABLE@@
+
+@@INLINE(.PHONY:	)( )()@@
+   @@TABLE@@
+      @_LOWER:Block_Names_@
+   @@END_TABLE@@
+@@END_INLINE@@

@@ -38,6 +38,7 @@
 
 #include <air.h>
 #include <a653.h>
+#include <stdio.h>   // for debug purposes
 
 void user_ports_polling ()
 {
@@ -46,13 +47,19 @@ void user_ports_polling ()
    __po_hi_node_t tmpnode;
    __po_hi_request_t request;
    __po_hi_port_kind_t pkind;
+   static int debug_counter = 0;
 
    RETURN_CODE_TYPE rc;
    SAMPLING_PORT_CURRENT_STATUS_TYPE STATUS;
    MESSAGE_SIZE_TYPE len;
    PARTITION_ID_TYPE self_id;
 
-   __DEBUGMSG ("Polling ports for partition \n");
+   debug_counter = debug_counter + 1;
+
+   if (10 == debug_counter) {
+       printf("Polling ports for partition \n");
+       debug_counter = 0;
+   }
 
    mynode = __po_hi_transport_get_mynode ();
 
@@ -62,10 +69,11 @@ void user_ports_polling ()
         (__po_hi_get_entity_from_global_port (portno));
 
       if (tmpnode == mynode) {
-        __DEBUGMSG ("Testing port %d\n",
+         printf ("Testing port %d\n",
                     __po_hi_transport_air_get_port (portno));
 
          if (pkind ==  __PO_HI_IN_EVENT_DATA_INTER_PROCESS) {
+           printf("Receiving message from the other partition!!!!\n");
            RECEIVE_QUEUING_MESSAGE
              (__po_hi_transport_air_get_port (portno),
               INFINITE_TIME_VALUE,
@@ -74,6 +82,7 @@ void user_ports_polling ()
               &rc);
 
            if (rc == NO_ERROR) {
+            printf("There was no error: DELIVERING \n");
             __po_hi_main_deliver (&request);
            }
          }

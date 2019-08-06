@@ -43,13 +43,13 @@ dataview:	${DATAVIEW_PATH}/built
 @@END_INLINE@@
 	touch $@
 
-build-native:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+build-native:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
 	$(MAKE) -j -C build -f Makefile.taste
 
-build-rtems-ada:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+build-rtems-ada:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
 	$(MAKE) -j -C build -f Makefile.taste rtems_ada
 
-air:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
+air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
 	$(MAKE) -j -C build -f Makefile.taste air
 
 @@INLINE(${DATAVIEW_UNIQ}:	)( )()@@
@@ -60,20 +60,11 @@ air:	aadl2glueC build/system_config.h | ${DATAVIEW_PATH}/built
 	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
 	@@-- Create dataview-uniq.asn
 	@@INLINE(	)( )(\n)@@
-        for f in $^ ; do cat "$$f"; echo; done > $@
+        cat $^ > $@
 	@@END_INLINE@@
 
-build/system_config.h:  # This is fast, no need to have dependencies
-	@@-- Create system_config.h by concatenating all functions partial system config files
-	@@INLINE(	)( )(\n)@@
-        for f in
-        @@TABLE@@
-	@@IF@@ not @_Is_Type_@
-	    @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_system_config.h
-	@@END_IF@@
-        @@END_TABLE@@
-; do cat $$f; echo; done > build/system_config.h
-	@@END_INLINE@@
+build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
+	cat $^ > $@
 
 @@INLINE(aadl2glueC:	)( )()@@
         @@TABLE@@
@@ -98,7 +89,7 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 	@@END_TABLE@@
 
 @@-- Then generate Dataviews once per target language - first for C, it is needed in any case
-dataview/C/built: | ${DATAVIEW_UNIQ}
+dataview/C/built: ${DATAVIEW_UNIQ}
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@
@@ -126,7 +117,7 @@ dataview/C/built: | ${DATAVIEW_UNIQ}
               @@SET@@ Lang=@_Unique_Languages_@
 	   @@END_IF@@
            @@IF@@ @_Enable_@=TRUE
-dataview/@_Lang_@/built: | ${DATAVIEW_UNIQ}
+dataview/@_Lang_@/built: ${DATAVIEW_UNIQ}
                @@INLINE(	)(\n	)(\n)@@
                   mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Lang_@ ${DATAVIEW_UNIQ} \
                   @@INLINE(	)( \\\n	)(\n	)@@
@@ -144,7 +135,7 @@ dataview/@_Lang_@/built: | ${DATAVIEW_UNIQ}
 	@@END_TABLE@@
 
 	@@IF@@ @_Need_Ada_@=TRUE
-dataview/Ada/built: | ${DATAVIEW_UNIQ}
+dataview/Ada/built: ${DATAVIEW_UNIQ}
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toAda ${DATAVIEW_UNIQ} \
 	@@INLINE(	)( \\\n	)(\n)@@

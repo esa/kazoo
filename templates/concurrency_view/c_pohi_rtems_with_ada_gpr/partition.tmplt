@@ -40,7 +40,7 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
    type Build_Type is ("Debug", "Release");
    Build : Build_Type := external ("CFG", "Debug");
 
-   for Create_Missing_Dirs use "True";
+   --  for Create_Missing_Dirs use "True"; (not supported in Debian 9, use -p instead)
    for Object_Dir use "obj_rtems_with_ada";
    for Exec_Dir   use "../../binaries";
 

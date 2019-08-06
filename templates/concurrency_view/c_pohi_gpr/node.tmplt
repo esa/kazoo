@@ -15,16 +15,16 @@ debug_native:
 
 debug_rtems_leon3_with_ada:
 @@TABLE@@
-	gprbuild -v --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -v -p --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 air:
 @@TABLE@@
 	# We need to compile and link separately because the linker script must
 	# be copied to the obj folder. Path cannot be set manually with -T
-	gprbuild -c -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -c -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
-	gprbuild -l -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -l -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release_native:

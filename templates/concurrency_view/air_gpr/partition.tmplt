@@ -34,7 +34,7 @@ project @_CAPITALIZE:Name_@_AIR is
    type Build_Type is ("Debug", "Release");
    Build : Build_Type := external ("CFG", "Debug");
 
-   for Create_Missing_Dirs use "True";
+   --  for Create_Missing_Dirs use "True";  (not supported in Debian 9, use -p instead)
    for Object_Dir use "@_LOWER:Name_@_obj";
    for Exec_Dir   use "../deploymentview_final/@_Name_@";
 

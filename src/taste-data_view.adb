@@ -23,7 +23,6 @@ package body TASTE.Data_View is
    use Locations,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       --  Ocarina.Analyzer,
        Ocarina.Backends.Properties,
        Ocarina.Options,
        Ocarina.Instances,
@@ -64,11 +63,22 @@ package body TASTE.Data_View is
         Get_String_Name ("taste_dataview.others");
 
       if DV_Root /= No_Node then
-         System := Root_System (Instantiate_Model (Root => DV_Root));
+         declare
+            Inst : constant Node_Id := Instantiate_Model
+              (Root => DV_Root,
+               Exit_If_Error => False);
+         begin
+            if Inst /= No_Node then
+               System := Root_System (Instantiate_Model (Root => DV_Root));
+            else
+               System := No_Node;
+            end if;
+         end;
       end if;
 
       if No (System) then
-         raise Data_View_Error with "Could not instantiate Data View";
+         raise Data_View_Error with
+         "Could not instantiate Data View - Try taste-update-data-view";
       end if;
 
       Current_Type := AIN.First_Node (AIN.Subcomponents (System));

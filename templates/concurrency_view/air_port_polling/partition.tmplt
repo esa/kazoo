@@ -69,22 +69,20 @@ void user_ports_polling ()
         (__po_hi_get_entity_from_global_port (portno));
 
       if (tmpnode == mynode) {
-         printf ("Testing port %d\n",
-                    __po_hi_transport_air_get_port (portno));
-
          if (pkind ==  __PO_HI_IN_EVENT_DATA_INTER_PROCESS) {
-           printf("Receiving message from the other partition!!!!\n");
-           RECEIVE_QUEUING_MESSAGE
-             (__po_hi_transport_air_get_port (portno),
-              INFINITE_TIME_VALUE,
-              &request,
-              &len,
-              &rc);
+            RECEIVE_QUEUING_MESSAGE(
+               __po_hi_transport_air_get_port (portno),
+               INFINITE_TIME_VALUE,
+               &request,
+               &len,
+               &rc);
 
-           if (rc == NO_ERROR) {
-            printf("There was no error: DELIVERING \n");
-            __po_hi_main_deliver (&request);
-           }
+            if (rc == NO_ERROR) {
+               __po_hi_main_deliver (&request);
+            } else {
+               printf("There was an error of %d for AIR port %d\n",
+                  rc, __po_hi_transport_air_get_port (portno));
+            }
          }
       }
    }

@@ -396,26 +396,30 @@ package body TASTE.Backend.Code_Generators is
    is
       use Ctxt_Params;
       use Template_Vectors;
-      Result             : Func_As_Template;
-      List_Of_PIs        : Tag;
-      List_Of_RIs        : Tag;
-      List_Of_Sync_PIs   : Tag;
-      List_Of_ASync_PIs  : Tag;
+      Result               : Func_As_Template;
+      List_Of_PIs          : Tag;
+      List_Of_RIs          : Tag;
+      List_Of_Sync_PIs     : Tag;
+      List_Of_ASync_PIs,
+      ASync_PI_Param_Name,
+      ASync_PI_Param_Type  : Vector_Tag;
       List_Of_Sync_RIs,
-      Sync_RIs_Parent    : Vector_Tag;   --  Parent function of the sync RI
+      Sync_RIs_Parent      : Vector_Tag;   --  Parent function of the sync RI
       List_Of_ASync_RIs,
-      Async_RIs_Parent   : Vector_Tag;   --  Parent function of the async RI
-      Timers             : Tag;
+      ASync_RIs_Parent,
+      ASync_RI_Param_Name,
+      ASync_RI_Param_Type  : Vector_Tag;   --  Parent function of the async RI
+      Timers               : Tag;
       Property_Names,
-      Property_Values    : Vector_Tag;
-      CP_Names,          --  CP = Context Parameters
+      Property_Values      : Vector_Tag;
+      CP_Names,            --  CP = Context Parameters
       CP_Types,
       CP_Values,
       CP_Asn1Modules,
-      CP_Filenames       : Vector_Tag;
-      PIs_Have_Params,   --  True if at least one PI has an ASN.1 parameter
-      RIs_Have_Params    : Boolean := False;   -- Same for RI
-      Interface_Tmplt    : Translate_Set;
+      CP_Filenames         : Vector_Tag;
+      PIs_Have_Params,     --  True if at least one PI has an ASN.1 parameter
+      RIs_Have_Params      : Boolean := False;   -- Same for RI
+      Interface_Tmplt      : Translate_Set;
    begin
       Result.Header := +Assoc ("Name", F.Name)
         & Assoc ("Language", Language_Spelling (F))
@@ -454,6 +458,15 @@ package body TASTE.Backend.Code_Generators is
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
                List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
+               if not Each.Params.Is_Empty then
+                  ASync_PI_Param_Name := ASync_PI_Param_Name
+                    & Each.Params.First_Element.Name;
+                  ASync_PI_Param_Type := ASync_PI_Param_Type &
+                    Each.Params.First_Element.Sort;
+               else
+                  ASync_PI_Param_Name := ASync_PI_Param_Name & "";
+                  ASync_PI_Param_Type := ASync_PI_Param_Type & "";
+               end if;
             when others =>
                List_Of_Sync_PIs := List_Of_Sync_PIs & Each.Name;
          end case;
@@ -474,11 +487,22 @@ package body TASTE.Backend.Code_Generators is
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
                List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
+               if not Each.Params.Is_Empty then
+                  ASync_RI_Param_Name := ASync_RI_Param_Name
+                    & Each.Params.First_Element.Name;
+                  ASync_RI_Param_Type := ASync_RI_Param_Type &
+                    Each.Params.First_Element.Sort;
+               else
+                  ASync_RI_Param_Name := ASync_RI_Param_Name & "";
+                  ASync_RI_Param_Type := ASync_RI_Param_Type & "";
+               end if;
                --  Find remote function name (only one remote per RI)
                if not Each.Remote_Interfaces.Is_Empty then
                   --  We can spot non-connected RIs..
                   Async_RIs_Parent  := Async_RIs_Parent
-                     & Each.Remote_Interfaces.First_Element.Function_Name;
+                    & Each.Remote_Interfaces.First_Element.Function_Name;
+               else
+                  Async_RIs_Parent := ASync_RIs_Parent & "";
                end if;
             when others =>
                List_Of_Sync_RIs  := List_Of_Sync_RIs & Each.Name;
@@ -499,26 +523,30 @@ package body TASTE.Backend.Code_Generators is
 
       --  Setup the mapping for the template
       Result.Header := Result.Header
-        & Assoc ("List_Of_PIs",       List_Of_PIs)
-        & Assoc ("List_Of_RIs",       List_Of_RIs)
-        & Assoc ("List_Of_Sync_PIs",  List_Of_Sync_PIs)
-        & Assoc ("List_Of_Sync_RIs",  List_Of_Sync_RIs)
-        & Assoc ("Sync_RIs_Parent",   Sync_RIs_Parent)
-        & Assoc ("List_Of_ASync_PIs", List_Of_ASync_PIs)
-        & Assoc ("List_Of_ASync_RIs", List_Of_ASync_RIs)
-        & Assoc ("Async_RIs_Parent",  Async_RIs_Parent)
-        & Assoc ("Property_Names",    Property_Names)
-        & Assoc ("Property_Values",   Property_Values)
-        & Assoc ("CP_Names",          CP_Names)
-        & Assoc ("CP_Types",          CP_Types)
-        & Assoc ("CP_Values",         CP_Values)
-        & Assoc ("CP_Asn1Modules",    CP_Asn1Modules)
-        & Assoc ("CP_Asn1Filenames",  CP_Filenames)
-        & Assoc ("Is_Type",           F.Is_Type)
-        & Assoc ("Instance_Of",       F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",            Timers)
-        & Assoc ("PIs_Have_Params",   PIs_Have_Params)
-        & Assoc ("RIs_Have_Params",   RIs_Have_Params);
+        & Assoc ("List_Of_PIs",         List_Of_PIs)
+        & Assoc ("List_Of_RIs",         List_Of_RIs)
+        & Assoc ("List_Of_Sync_PIs",    List_Of_Sync_PIs)
+        & Assoc ("List_Of_Sync_RIs",    List_Of_Sync_RIs)
+        & Assoc ("Sync_RIs_Parent",     Sync_RIs_Parent)
+        & Assoc ("List_Of_ASync_PIs",   List_Of_ASync_PIs)
+        & Assoc ("ASync_PI_Param_Name", ASync_PI_Param_Name)
+        & Assoc ("ASync_PI_Param_Type", ASync_PI_Param_Type)
+        & Assoc ("List_Of_ASync_RIs",   List_Of_ASync_RIs)
+        & Assoc ("ASync_RI_Param_Name", ASync_RI_Param_Name)
+        & Assoc ("ASync_RI_Param_Type", ASync_RI_Param_Type)
+        & Assoc ("Async_RIs_Parent",    Async_RIs_Parent)
+        & Assoc ("Property_Names",      Property_Names)
+        & Assoc ("Property_Values",     Property_Values)
+        & Assoc ("CP_Names",            CP_Names)
+        & Assoc ("CP_Types",            CP_Types)
+        & Assoc ("CP_Values",           CP_Values)
+        & Assoc ("CP_Asn1Modules",      CP_Asn1Modules)
+        & Assoc ("CP_Asn1Filenames",    CP_Filenames)
+        & Assoc ("Is_Type",             F.Is_Type)
+        & Assoc ("Instance_Of",         F.Instance_Of.Value_Or (US ("")))
+        & Assoc ("Timers",              Timers)
+        & Assoc ("PIs_Have_Params",     PIs_Have_Params)
+        & Assoc ("RIs_Have_Params",     RIs_Have_Params);
 
       return Result;
    end Func_Template;

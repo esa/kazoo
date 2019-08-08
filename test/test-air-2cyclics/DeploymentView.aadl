@@ -50,13 +50,13 @@ MEMORY IMPLEMENTATION main_memory.others
 SUBCOMPONENTS
   part1_Segment : MEMORY deploymentview::DV::partition_memory.others {
     Base_Address => 16#100000#;
-    Memory_Size => 16#100# Bytes;
-    Byte_Count => 16#100#;
+    Memory_Size => 16#100000# Bytes;
+    Byte_Count => 16#100000#;
   };
   part2_Segment : MEMORY deploymentview::DV::partition_memory.others {
     Base_Address => 16#600000#;
-    Memory_Size => 16#100# Bytes;
-    Byte_Count => 16#100#;
+    Memory_Size => 16#100000# Bytes;
+    Byte_Count => 16#100000#;
   };
 END main_memory.others;
 

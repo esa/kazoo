@@ -121,13 +121,13 @@ PROPERTIES
   Actual_Processor_Binding => (reference (proc1)) APPLIES TO part2_VP;
   Actual_Processor_Binding => (reference (part2_VP)) APPLIES TO part2;
   Actual_Memory_Binding => (reference (main_memory.part2_Segment)) APPLIES TO part2;
-  ARINC653::Module_Major_Frame => 3000ms APPLIES TO proc1;
+  ARINC653::Module_Major_Frame => 1000ms APPLIES TO proc1;
   ARINC653::Module_Schedule => (
 	[ Partition => reference(part1_VP);
-	  Duration => 1600ms;
+	  Duration => 450ms;
 	  Periodic_Processing_Start => False; ],
 	[ Partition => reference(part2_VP);
-	  Duration => 1400ms;
+	  Duration => 450ms;
 	  Periodic_Processing_Start => False; ]
 ) APPLIES TO proc1;
 END Node1.others;

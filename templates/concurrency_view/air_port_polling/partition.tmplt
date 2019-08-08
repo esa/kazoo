@@ -54,13 +54,6 @@ void user_ports_polling ()
    MESSAGE_SIZE_TYPE len;
    PARTITION_ID_TYPE self_id;
 
-   debug_counter = debug_counter + 1;
-
-   if (10 == debug_counter) {
-       printf("Polling ports for partition \n");
-       debug_counter = 0;
-   }
-
    mynode = __po_hi_transport_get_mynode ();
 
    for (portno = 0 ; portno < __PO_HI_NB_PORTS ; portno++) {
@@ -80,8 +73,8 @@ void user_ports_polling ()
             if (rc == NO_ERROR) {
                __po_hi_main_deliver (&request);
             } else {
-               printf("There was an error of %d for AIR port %d\n",
-                  rc, __po_hi_transport_air_get_port (portno));
+               // printf("There was an error of %d for AIR port %d\n",
+               //    rc, __po_hi_transport_air_get_port (portno));
             }
          }
       }

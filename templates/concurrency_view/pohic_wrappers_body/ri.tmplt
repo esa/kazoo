@@ -28,7 +28,7 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@TABLE@@
    // @_Calling_Threads_@ calling thread
    if (@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k == current_task) {
-      puts("[TASTE] Sporadic call of @_Name_@ from thread @_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@");
+      // puts("[TASTE] Sporadic call of @_Name_@ from thread @_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@");
 @@IF@@ @_Param_Names'Length_@ > 0
 @@INLINE(      )( \n      )(\n)@@
    __po_hi_request_t request;
@@ -64,7 +64,7 @@ size_IN_buf_@_LOWER:Param_Names_@;
 
 @@END_TABLE@@
 @@ELSE@@ @@-- Protected call
-   puts("[TASTE] Protected call of @_Name_@");
+   // puts("[TASTE] Protected call of @_Name_@");
 @@TABLE@@
    pro_@_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@

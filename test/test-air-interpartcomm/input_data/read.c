@@ -12,7 +12,7 @@ void read_PI_h()
 {
     static asn1SccT_Boolean someBool = true;
     /* Write your code here! */
-    printf("executing partition defined by TASTE\n");
+    printf("read_RI_s is sending %s\n", someBool?"TRUE":"FALSE");
     read_RI_s(&someBool);
     someBool = someBool?false:true;
 }

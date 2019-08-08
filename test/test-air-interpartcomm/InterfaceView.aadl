@@ -17,7 +17,7 @@ FEATURES
     Taste::encoding => NATIVE;
   };
 PROPERTIES
-  Taste::Associated_Queue_Size => 5;
+  Taste::Associated_Queue_Size => 1;
 END PI_s;
 
 SUBPROGRAM IMPLEMENTATION PI_s.others
@@ -30,7 +30,7 @@ FEATURES
   PI_s : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::hello::PI_s.others {
     Taste::coordinates => "129130 47716";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 10 ms;
+    Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 5 ms;
     Taste::InterfaceName => "s";
   };
@@ -76,7 +76,7 @@ FEATURES
   PI_h : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::read::PI_h.others {
     Taste::coordinates => "189601 53700";
     Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 100 ms;
+    Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 10 ms;
     Taste::InterfaceName => "h";
   };

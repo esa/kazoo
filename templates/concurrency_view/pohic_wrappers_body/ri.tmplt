@@ -24,11 +24,11 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_INLINE@@
 {
 @@IF@@ @_Kind_@ = SPORADIC_OPERATION
-   puts("[TASTE] Sporadic call of @_Name_@");
    __po_hi_task_id current_task = __po_hi_get_task_id();
 @@TABLE@@
    // @_Calling_Threads_@ calling thread
    if (@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k == current_task) {
+      puts("[TASTE] Sporadic call of @_Name_@ from thread @_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@");
 @@IF@@ @_Param_Names'Length_@ > 0
 @@INLINE(      )( \n      )(\n)@@
    __po_hi_request_t request;

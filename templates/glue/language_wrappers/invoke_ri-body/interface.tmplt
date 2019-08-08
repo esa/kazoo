@@ -29,8 +29,6 @@ void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@
 void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(void)
 @@END_IF@@
 {
-   puts ("[TASTE] @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@ called");
-
    #ifdef __unix__
       // Log MSC data on Linux when environment variable is set
       static int innerMsc = -1;

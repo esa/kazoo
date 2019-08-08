@@ -1,7 +1,7 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output/build && ocarina -x main.aadl
+	make -C output air
 
 test-parse: clean
 	$(KAZOO) --gw -p \

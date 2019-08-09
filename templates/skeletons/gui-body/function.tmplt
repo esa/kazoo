@@ -126,6 +126,39 @@ void @_LOWER:Name_@_startup(void)
     }
 }
 
+//  Function polling the message queue for incoming message from the user
+void @_LOWER:Name_@_PI_poll(void)
+{
+   struct mq_attr msgq_attr;
+   char* msgcontent = NULL;
+
+   T_@_LOWER:Name_@_RI_list message_recieved_type;
+
+   if ((msgcontent = (char*)malloc(sizeof(RI_Messages))) == NULL) {
+      perror("Error when allocating memory in GUI polling function");
+      exit (-1);
+   }
+
+   mq_getattr(@_LOWER:Name_@_RI_queue_id, &msgq_attr);
+
+   while (!retrieve_message_from_queue(@_LOWER:Name_@_RI_queue_id,
+                                       sizeof(RI_Messages),
+                                       msgcontent,
+                                       (int *)&message_recieved_type)) {
+      switch(message_recieved_type) {
+@@TABLE@@
+         case i_@_LOWER:List_Of_ASync_RIs_@:
+            @_LOWER:Name_@_RI_@_LOWER:List_Of_ASync_RIs_@((asn1Scc@_REPLACE_ALL(-/_):ASync_RI_Param_Type_@ *)msgcontent);
+            break;
+@@END_TABLE@@
+       default : break;
+      }
+   }
+
+   free(msgcontent);
+   return;
+}
+
 @@TABLE@@
 @_Provided_Interfaces_@
 

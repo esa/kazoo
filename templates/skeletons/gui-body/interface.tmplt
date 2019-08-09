@@ -34,9 +34,9 @@ asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
 @@END_TABLE@@
 }
 @@ELSE@@
+@@IF@@ @_LOWER:Name_@ /= poll
 void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void)
 {
-@@IF@@ @_LOWER:Name_@ /= poll
    write_message_to_queue
       (@_LOWER:Parent_Function_@_PI_queue_id,
        0,      // Message parameter size is 0 since there is no parameter
@@ -48,34 +48,6 @@ void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void)
        0,
        NULL,
        i_@_LOWER:Name_@);
-@@ELSE@@  @@-- GUI polling function
-   struct mq_attr msgq_attr;
-   char* msgcontent = NULL;
-   T_ground_RI_list message_recieved_type;
-
-
-   if ((msgcontent = (char*)malloc(sizeof(RI_Messages))) == NULL) {
-      perror("Error when allocating memory in GUI polling function");
-      exit (-1);
-   }
-
-   mq_getattr(ground_RI_queue_id, &msgq_attr);
-
-   while (!retrieve_message_from_queue(ground_RI_queue_id,
-                                       sizeof(RI_Messages),
-                                       msgcontent,
-                                       (int *)&message_recieved_type))
-   {
-      switch(message_recieved_type)
-      {
-//      case i_run_forrest : INVOKE_RI_run_forrest (msgcontent);
-//                break; 
-       default : break;
-      }
-   }
-
-   free(msgcontent);
-   return;
-@@END_IF@@
 }
+@@END_IF@@
 @@END_IF@@

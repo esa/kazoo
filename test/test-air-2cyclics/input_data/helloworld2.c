@@ -20,7 +20,7 @@ void helloworld2_startup(void)
 
 void helloworld2_PI_task2(void)
 {
-   puts ("[helloworld1] Tick");
+   puts ("[helloworld2] Tick");
 }
 
 

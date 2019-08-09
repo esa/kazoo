@@ -83,21 +83,34 @@ package TASTE.Concurrency_View is
 
    package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
 
-   type Partition_Port is
+   type Partition_In_Port is
       record
          Port_Name, Thread_Name, Type_Name : Unbounded_String;
          Remote_Partition_Name : Unbounded_String; --  Other side
       end record;
 
-   package Partition_Ports is
-     new Indefinite_Ordered_Maps (String, Partition_Port);
+   package Partition_In_Ports is
+     new Indefinite_Ordered_Maps (String, Partition_In_Port);
+
+   --  Output ports of partitions can be connected to more than one
+   --  thread output port. A vector of thread is needed to hold the list
+   type Partition_Out_Port is
+      record
+         Port_Name, Type_Name  : Unbounded_String;
+         Connected_Threads     : String_Vectors.Vector;
+         Remote_Partition_Name : Unbounded_String; --  Other side
+      end record;
+
+   package Partition_Out_Ports is
+     new Indefinite_Ordered_Maps (String, Partition_Out_Port);
 
    type CV_Partition is tagged
       record
          Deployment_Partition : Taste_Partition;
          Threads              : AADL_Threads.Map;
          Blocks               : Protected_Blocks.Map;
-         In_Ports, Out_Ports  : Partition_Ports.Map;
+         In_Ports             : Partition_In_Ports.Map;
+         Out_Ports            : Partition_Out_Ports.Map;
       end record;
 
    package CV_Partitions is new Indefinite_Ordered_Maps (String, CV_Partition);

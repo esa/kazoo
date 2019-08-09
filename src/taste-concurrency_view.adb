@@ -229,8 +229,9 @@ package body TASTE.Concurrency_View is
                Input_Port_Type_Name,
                Input_Port_Thread_Name  : Vector_Tag;
                Output_Port_Names,
-               Output_Port_Type_Name,
-               Output_Port_Thread_Name : Vector_Tag;
+               Output_Port_Type_Name   : Vector_Tag;
+               Part_Out_Port_Names,  --  there can be multiple threads
+               Connected_Threads : Vector_Tag;  -- on one partition outport
 
                --  Optionally generate partition code in separate files
                --  (if filepart.tmplt is present and contains a filename)
@@ -256,8 +257,12 @@ package body TASTE.Concurrency_View is
                   Output_Port_Names := Output_Port_Names & Each.Port_Name;
                   Output_Port_Type_Name := Output_Port_Type_Name
                     & Each.Type_Name;
-                  Output_Port_Thread_Name :=
-                    Output_Port_Thread_Name & Each.Thread_Name;
+                  --  Set the connection between threads and partition outports
+                  for T of Each.Connected_Threads loop
+                     Part_Out_Port_Names := Part_Out_Port_Names
+                       & Each.Port_Name;
+                     Connected_Threads := Connected_Threads & T;
+                  end loop;
                end loop;
 
                for T of Partition.Threads loop
@@ -399,8 +404,9 @@ package body TASTE.Concurrency_View is
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)
                  & Assoc ("Out_Port_Names",       Output_Port_Names)
-                 & Assoc ("Out_Port_Thread_Name", Output_Port_Thread_Name)
                  & Assoc ("Out_Port_Type_Name",   Output_Port_Type_Name)
+                 & Assoc ("Part_Out_Port_Name",   Part_Out_Port_Names)
+                 & Assoc ("Connected_Threads",    Connected_Threads)
                  & Assoc ("Thread_Src_Name",      Thread_Src_Name)
                  & Assoc ("Thread_Src_Port",      Thread_Src_Port)
                  & Assoc ("Thread_Dst_Name",      Thread_Dst_Name)

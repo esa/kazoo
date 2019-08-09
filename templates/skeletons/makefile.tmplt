@@ -103,39 +103,39 @@ dataview/C/built: ${DATAVIEW_UNIQ}
 	cd dataview/C && msgPrinter ../dataview-uniq.asn
 	cd dataview/C && msgPrinterASN1  ../dataview-uniq.asn
 	touch $@
+
         @@TABLE@@
 	   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
-              @@SET@@ Enable=FALSE
               @@SET@@ Need_Ada=TRUE
 	   @@ELSIF@@ @_Unique_Languages_@ = "C" or @_Unique_Languages_@ = "CPP" or @_Unique_Languages_@ = "Blackbox_C"
-              @@SET@@ Enable=FALSE
+           @@--  do nothing, C is always done, only once
 	   @@ELSIF@@ @_Unique_Languages_@ = "GUI"
-	      @@SET@@ Enable=TRUE
-	      @@SET@@ Lang=Python
-	   @@ELSE@@
-              @@SET@@ Enable=TRUE
-              @@SET@@ Lang=@_Unique_Languages_@
-	   @@END_IF@@
-           @@IF@@ @_Enable_@=TRUE
-dataview/@_Lang_@/built: ${DATAVIEW_UNIQ}
-               @@INLINE(	)(\n	)(\n)@@
-                  mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Lang_@ ${DATAVIEW_UNIQ} \
-                  @@INLINE(	)( \\\n	)(\n	)@@
-                     @@TABLE@@
-                        @_REPLACE(,/ ):CP_Files_@
-                     @@END_TABLE@@
-                  @@END_INLINE@@
-               @@END_INLINE@@
-
-	@@IF@@ @_Lang_@ = Python
+           @@--  for DMT, GUI means Python
+dataview/Python/built: ${DATAVIEW_UNIQ}
+	mkdir -p $(dir $@)
+	asn2dataModel -o $(dir $@) -toPython ${DATAVIEW_UNIQ}  @@-- Ignore context parameters for python interface
 	$(MAKE) -C dataview/Python -f Makefile.python
+        @@TABLE@@
+        @@IF@@ @_Language_@ = GUI
 	cp  dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python
 	cp  dataview/C/* @_LOWER:Function_Names_@/GUI/wrappers/python
 	cp  dataview/C/* @_LOWER:Function_Names_@/GUI/wrappers/python
 	cd @_LOWER:Function_Names_@/GUI/wrappers/python && \
 	   gcc -g -fPIC -c `python-config --cflags`  gui_api.c ../../src/queue_manager.c timeInMS.c debug_messages.c -I. -I../../src && \
 	   gcc -g -shared -o PythonAccess.so gui_api.o queue_manager.o timeInMS.o debug_messages.o `python-config --ldflags` -lrt
-	@@END_IF@@
+        @@END_IF@@
+        @@END_TABLE@@
+	touch $@
+	   @@ELSE@@
+dataview/@_Unique_Languages_@/built: ${DATAVIEW_UNIQ}
+               @@INLINE(	)(\n	)(\n)@@
+                  mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Unique_Languages_@ ${DATAVIEW_UNIQ} \
+                  @@INLINE(	)( \\\n	)(\n	)@@
+                     @@TABLE@@
+                        @_REPLACE(,/ ):CP_Files_@
+                     @@END_TABLE@@
+                  @@END_INLINE@@
+               @@END_INLINE@@
 	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@

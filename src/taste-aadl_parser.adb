@@ -371,6 +371,7 @@ package body TASTE.AADL_Parser is
          Deployment         => Model.Deployment_View,
          Configuration      => Model.Configuration,
          others             => <>);
+      use String_Vectors;
    begin
       --  Initialize the lists of nodes and partitions based on the DV
       for Node of Model.Deployment_View.Nodes loop
@@ -492,8 +493,8 @@ package body TASTE.AADL_Parser is
             Set_Calling_Threads (Partition);
 
             --  Define ports at partition (process) level
-            --  (ports are for all interfaces of a function are not located
-            --   in the same partition of the system)
+            --  (ports are for all interfaces of a function not located
+            --  in the same partition of the system)
             for T of Partition.Threads loop
                --  Check each Remote PI of the entry port of the thread
                for Remote of T.PI.Remote_Interfaces loop
@@ -516,6 +517,8 @@ package body TASTE.AADL_Parser is
                         if Part.Has_Value
                           and then Part.Unsafe_Just.Name
                             /= Partition.Deployment_Partition.Name
+                             and then not Partition.In_Ports.Contains
+                               (To_String (T.Entry_Port_Name))
                         then
                            --  shouldn't we check for presence first in case
                            --  there are multiple callers?
@@ -553,15 +556,27 @@ package body TASTE.AADL_Parser is
                            if Part.Has_Value and then Part.Unsafe_Just.Name
                              /= Partition.Deployment_Partition.Name
                            then
-                              --  CHECKME: if the key is already present,
-                              --  this will fail (test-tsp1).
-                              Partition.Out_Ports.Insert
-                                (Key      => To_String (Out_Port.RI.Name),
-                                 New_Item => (Port_Name   => Out_Port.RI.Name,
-                                              Thread_Name => T.Name,
-                                              Type_Name   => Sort,
-                                              Remote_Partition_Name
-                                                    => Part.Unsafe_Just.Name));
+                              if not Partition.Out_Ports.Contains
+                                (To_String (Out_Port.RI.Name))
+                              then
+                                 --  Create a new port and reference the thread
+                                 Partition.Out_Ports.Insert
+                                   (Key      => To_String (Out_Port.RI.Name),
+                                    New_Item => (Port_Name   =>
+                                                     Out_Port.RI.Name,
+                                                 Connected_Threads =>
+                                                   String_Vectors.Empty_Vector
+                                                 & To_String (T.Name),
+                                                 Type_Name   => Sort,
+                                                 Remote_Partition_Name =>
+                                                   Part.Unsafe_Just.Name));
+                              else
+                                 --  Port already exists: just add this thread
+                                 Partition.Out_Ports
+                                   (To_String
+                                      (Out_Port.RI.Name)).Connected_Threads
+                                     .Append (To_String (T.Name));
+                              end if;
                            end if;
                         else
                            Put_Error ("This should never happen.");

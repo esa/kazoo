@@ -7,4 +7,75 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@INCLUDE@@ ../c-header/interface.tmplt
+@@IF@@ @_EXIST:Param_Names_@
+void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
+@@INLINE(      \()(,\n       )(\)\n)@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+const asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *IN_@_LOWER:Param_Names_@
+@@ELSE@@
+asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+{
+@@TABLE@@  @@-- Write parameters in sequence. In practice there is only one paraemeter since it's a sporadic PI
+   write_message_to_queue
+      (@_LOWER:Parent_Function_@_PI_queue_id,
+       sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
+       (void*)IN_@_LOWER:Param_Names_@,
+       i_@_LOWER:Name_@);
+
+   write_message_to_queue
+      (@_LOWER:Parent_Function_@_PI_Python_queue_id,
+       sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
+       (void*)IN_@_LOWER:Param_Names_@,
+       i_@_LOWER:Name_@);
+@@END_TABLE@@
+}
+@@ELSE@@
+void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void)
+{
+@@IF@@ @_LOWER:Name_@ /= poll
+   write_message_to_queue
+      (@_LOWER:Parent_Function_@_PI_queue_id,
+       0,      // Message parameter size is 0 since there is no parameter
+       NULL,   // Pointer to message content is null for the same reason
+       i_@_LOWER:Name_@);
+
+   write_message_to_queue
+      (@_LOWER:Parent_Function_@_PI_Python_queue_id,
+       0,
+       NULL,
+       i_@_LOWER:Name_@);
+@@ELSE@@  @@-- GUI polling function
+   struct mq_attr msgq_attr;
+   char* msgcontent = NULL;
+   T_ground_RI_list message_recieved_type;
+
+
+   if ((msgcontent = (char*)malloc(sizeof(RI_Messages))) == NULL) {
+      perror("Error when allocating memory in GUI polling function");
+      exit (-1);
+   }
+
+   mq_getattr(ground_RI_queue_id, &msgq_attr);
+
+   while (!retrieve_message_from_queue(ground_RI_queue_id,
+                                       sizeof(RI_Messages),
+                                       msgcontent,
+                                       (int *)&message_recieved_type))
+   {
+      switch(message_recieved_type)
+      {
+//      case i_run_forrest : INVOKE_RI_run_forrest (msgcontent);
+//                break; 
+       default : break;
+      }
+   }
+
+   free(msgcontent);
+   return;
+@@END_IF@@
+}
+@@END_IF@@

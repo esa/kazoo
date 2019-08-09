@@ -47,7 +47,6 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_IF@@
 @@END_TABLE@@
 
-@@IF@@ @_Language_@ /= GUI
    //  Declare user code function as external (it may not have a .h if it is in Ada)
    extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
@@ -71,7 +70,6 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
      @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
-@@END_IF@@
 
 @@TABLE@@    @@-- encode output parameters
 @@IF@@ @_Param_Directions_@ = "PARAM_OUT"

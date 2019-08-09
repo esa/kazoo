@@ -129,6 +129,12 @@ dataview/@_Lang_@/built: ${DATAVIEW_UNIQ}
 
 	@@IF@@ @_Lang_@ = Python
 	$(MAKE) -C dataview/Python -f Makefile.python
+	cp  dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python
+	cp  dataview/C/* @_LOWER:Function_Names_@/GUI/wrappers/python
+	cp  dataview/C/* @_LOWER:Function_Names_@/GUI/wrappers/python
+	cd @_LOWER:Function_Names_@/GUI/wrappers/python && \
+	   gcc -g -fPIC -c `python-config --cflags`  gui_api.c ../../src/queue_manager.c timeInMS.c debug_messages.c -I. -I../../src && \
+	   gcc -g -shared -o PythonAccess.so gui_api.o queue_manager.o timeInMS.o debug_messages.o `python-config --ldflags` -lrt
 	@@END_IF@@
 	touch $@
 	   @@END_IF@@

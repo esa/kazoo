@@ -84,10 +84,8 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
 {
    //  Directly call user code, no parameters to pass
    //  This could be done directly from the concurrency glue...
-@@IF@@ @_Language_@ /= GUI
    extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void);
    @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();
    // puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
-@@END_IF@@
 }
 @@END_IF@@

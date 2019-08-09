@@ -121,7 +121,8 @@ dataview/Python/built: ${DATAVIEW_UNIQ}
 	cp  dataview/C/timeInMS.[ch] dataview/C/debug_messages.c @_LOWER:Function_Names_@/GUI/wrappers/python
 	cd @_LOWER:Function_Names_@/GUI/wrappers/python && \
 	   gcc -g -fPIC -c `python-config --cflags`  gui_api.c ../../src/queue_manager.c timeInMS.c debug_messages.c -I. -I../../src && \
-	   gcc -g -shared -o PythonAccess.so gui_api.o queue_manager.o timeInMS.o debug_messages.o `python-config --ldflags` -lrt
+	   gcc -g -shared -o PythonAccess.so gui_api.o queue_manager.o timeInMS.o debug_messages.o `python-config --ldflags` -lrt && mv * .. && cd .. && rmdir python
+	mkdir -p binaries/@_LOWER:Function_Names_@_GUI && cp -f @_LOWER:Function_Names_@/GUI/wrappers/* binaries/@_LOWER:Function_Names_@_GUI
         @@END_IF@@
         @@END_TABLE@@
 	touch $@

@@ -91,35 +91,35 @@ void @_LOWER:Name_@_startup(void)
    }
 
     char *gui_queue_name = NULL;
-    int  len = snprintf (gui_queue_name, 0, "%d_ground_RI_queue", geteuid());
+    int  len = snprintf (gui_queue_name, 0, "%d_@_LOWER:Name_@_RI_queue", geteuid());
     gui_queue_name = (char *) malloc ((size_t) len + 1);
     if (NULL != gui_queue_name) {
-       snprintf (gui_queue_name, len + 1, "%d_ground_RI_queue", geteuid());
+       snprintf (gui_queue_name, len + 1, "%d_@_LOWER:Name_@_RI_queue", geteuid());
 
-       create_exchange_queue(gui_queue_name, 5, sizeof(RI_Messages), &ground_RI_queue_id);
+       create_exchange_queue(gui_queue_name, 5, sizeof(RI_Messages), &@_LOWER:Name_@_RI_queue_id);
 
        free (gui_queue_name);
        gui_queue_name = NULL;
     }
 
-    len = snprintf (gui_queue_name, 0, "%d_ground_PI_queue", geteuid());
+    len = snprintf (gui_queue_name, 0, "%d_@_LOWER:Name_@_PI_queue", geteuid());
     gui_queue_name = (char *) malloc ((size_t) len + 1);
     if (NULL != gui_queue_name) {
-       snprintf (gui_queue_name, len + 1, "%d_ground_PI_queue", geteuid());
+       snprintf (gui_queue_name, len + 1, "%d_@_LOWER:Name_@_PI_queue", geteuid());
 
-       create_exchange_queue(gui_queue_name, 10, sizeof(PI_Messages), &ground_PI_queue_id);
+       create_exchange_queue(gui_queue_name, 10, sizeof(PI_Messages), &@_LOWER:Name_@_PI_queue_id);
 
        free (gui_queue_name);
        gui_queue_name = NULL;
     }
 
-    len = snprintf (gui_queue_name, 0, "%d_ground_PI_Python_queue", geteuid());
+    len = snprintf (gui_queue_name, 0, "%d_@_LOWER:Name_@_PI_Python_queue", geteuid());
     gui_queue_name = (char *) malloc ((size_t) len + 1);
     if (NULL != gui_queue_name) {
-       snprintf (gui_queue_name, len + 1, "%d_ground_PI_Python_queue", geteuid());
+       snprintf (gui_queue_name, len + 1, "%d_@_LOWER:Name_@_PI_Python_queue", geteuid());
 
        /* Extra queue for the TM sent to the Python mappers */
-       create_exchange_queue(gui_queue_name, 10, sizeof (PI_Messages), &ground_PI_Python_queue_id);
+       create_exchange_queue(gui_queue_name, 10, sizeof (PI_Messages), &@_LOWER:Name_@_PI_Python_queue_id);
 
        free (gui_queue_name);
        gui_queue_name = NULL;
@@ -147,7 +147,7 @@ void @_LOWER:Name_@_PI_poll(void)
                                        (int *)&message_recieved_type)) {
       switch(message_recieved_type) {
 @@TABLE@@
-         case i_@_LOWER:List_Of_ASync_RIs_@:
+         case i_@_List_Of_ASync_RIs_@:
             @_LOWER:Name_@_RI_@_LOWER:List_Of_ASync_RIs_@((asn1Scc@_REPLACE_ALL(-/_):ASync_RI_Param_Type_@ *)msgcontent);
             break;
 @@END_TABLE@@

@@ -122,7 +122,6 @@ project @_CAPITALIZE:Name_@ is
        "spwrouter_custom_config.c",
        "star_dundee_api.c",
        "trace_manager.c",
-       "trace_manager.cc",
        "um_threads.c");
 
 

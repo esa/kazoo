@@ -24,13 +24,13 @@ asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
       (@_LOWER:Parent_Function_@_PI_queue_id,
        sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
        (void*)IN_@_LOWER:Param_Names_@,
-       i_@_LOWER:Name_@);
+       i_@_Name_@);
 
    write_message_to_queue
       (@_LOWER:Parent_Function_@_PI_Python_queue_id,
        sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
        (void*)IN_@_LOWER:Param_Names_@,
-       i_@_LOWER:Name_@);
+       i_@_Name_@);
 @@END_TABLE@@
 }
 @@ELSE@@
@@ -41,13 +41,13 @@ void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void)
       (@_LOWER:Parent_Function_@_PI_queue_id,
        0,      // Message parameter size is 0 since there is no parameter
        NULL,   // Pointer to message content is null for the same reason
-       i_@_LOWER:Name_@);
+       i_@_Name_@);
 
    write_message_to_queue
       (@_LOWER:Parent_Function_@_PI_Python_queue_id,
        0,
        NULL,
-       i_@_LOWER:Name_@);
+       i_@_Name_@);
 }
 @@END_IF@@
 @@END_IF@@

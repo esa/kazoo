@@ -1,0 +1,11 @@
+Demo_Ada_GUI
+
+This demo tests a system containing two Ada functions and a GUI.
+All the blocks exchange data.
+
+The runtime target is Linux with C runtime
+
+This test is also used to validate the MSC plugin and Python scripts.
+
+Once built, run test.with.python.sh
+

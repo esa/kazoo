@@ -1,0 +1,333 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::mygui
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_gui_send_tm
+FEATURES
+  tm : IN PARAMETER DataView::TM_T {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_gui_send_tm;
+
+SUBPROGRAM IMPLEMENTATION PI_gui_send_tm.others
+END PI_gui_send_tm.others;
+
+SUBPROGRAM RI_router_put_tc
+FEATURES
+  tc : IN PARAMETER DataView::TC_T {
+    Taste::encoding => NATIVE;
+  };
+END RI_router_put_tc;
+
+SUBPROGRAM IMPLEMENTATION RI_router_put_tc.others
+END RI_router_put_tc.others;
+
+SUBPROGRAM PI_HousekeepingTM
+FEATURES
+  hk_value : IN PARAMETER DataView::HK_T {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_HousekeepingTM;
+
+SUBPROGRAM IMPLEMENTATION PI_HousekeepingTM.others
+END PI_HousekeepingTM.others;
+
+END interfaceview::FV::mygui;
+
+PACKAGE interfaceview::FV::router
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_router_send_tm
+FEATURES
+  tm : IN PARAMETER DataView::TM_T {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_router_send_tm;
+
+SUBPROGRAM IMPLEMENTATION PI_router_send_tm.others
+END PI_router_send_tm.others;
+
+SUBPROGRAM PI_router_put_tc
+FEATURES
+  tc : IN PARAMETER DataView::TC_T {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_router_put_tc;
+
+SUBPROGRAM IMPLEMENTATION PI_router_put_tc.others
+END PI_router_put_tc.others;
+
+SUBPROGRAM RI_displayer_put_tc
+FEATURES
+  tc : IN PARAMETER DataView::TC_T {
+    Taste::encoding => NATIVE;
+  };
+END RI_displayer_put_tc;
+
+SUBPROGRAM IMPLEMENTATION RI_displayer_put_tc.others
+END RI_displayer_put_tc.others;
+
+SUBPROGRAM RI_gui_send_tm
+FEATURES
+  tm : IN PARAMETER DataView::TM_T {
+    Taste::encoding => NATIVE;
+  };
+END RI_gui_send_tm;
+
+SUBPROGRAM IMPLEMENTATION RI_gui_send_tm.others
+END RI_gui_send_tm.others;
+
+END interfaceview::FV::router;
+
+PACKAGE interfaceview::FV::displayer
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclicdisplayer
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclicdisplayer;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclicdisplayer.others
+END PI_cyclicdisplayer.others;
+
+SUBPROGRAM PI_displayer_put_tc
+FEATURES
+  tc : IN PARAMETER DataView::TC_T {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_displayer_put_tc;
+
+SUBPROGRAM IMPLEMENTATION PI_displayer_put_tc.others
+END PI_displayer_put_tc.others;
+
+SUBPROGRAM RI_router_send_tm
+FEATURES
+  tm : IN PARAMETER DataView::TM_T {
+    Taste::encoding => NATIVE;
+  };
+END RI_router_send_tm;
+
+SUBPROGRAM IMPLEMENTATION RI_router_send_tm.others
+END RI_router_send_tm.others;
+
+SUBPROGRAM RI_HousekeepingTM
+FEATURES
+  hk_value : IN PARAMETER DataView::HK_T {
+    Taste::encoding => UPER;
+  };
+END RI_HousekeepingTM;
+
+SUBPROGRAM IMPLEMENTATION RI_HousekeepingTM.others
+END RI_HousekeepingTM.others;
+
+END interfaceview::FV::displayer;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::FV::mygui;
+WITH interfaceview::FV::router;
+WITH interfaceview::FV::displayer;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM mygui
+FEATURES
+  PI_gui_send_tm : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::mygui::PI_gui_send_tm.others {
+    Taste::coordinates => "1034 1770";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "gui_send_tm";
+  };
+  RI_router_put_tc : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::router::PI_router_put_tc.others {
+    Taste::coordinates => "1034 1346";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "router_put_tc";
+    Taste::labelInheritance => "true";
+  };
+  PI_HousekeepingTM : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::mygui::PI_HousekeepingTM.others {
+    Taste::coordinates => "660 1113";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "HousekeepingTM";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+END mygui;
+
+SYSTEM IMPLEMENTATION mygui.others
+SUBCOMPONENTS
+  gui_send_tm_impl : SUBPROGRAM interfaceview::FV::mygui::PI_gui_send_tm.others {
+    Compute_Execution_Time => 0 ms .. 100 ms;
+  };
+  HousekeepingTM_impl : SUBPROGRAM interfaceview::FV::mygui::PI_HousekeepingTM.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_gui_send_tm_impl : SUBPROGRAM ACCESS gui_send_tm_impl -> PI_gui_send_tm;
+  OpToPICnx_HousekeepingTM_impl : SUBPROGRAM ACCESS HousekeepingTM_impl -> PI_HousekeepingTM;
+END mygui.others;
+
+SYSTEM router
+FEATURES
+  PI_router_send_tm : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::router::PI_router_send_tm.others {
+    Taste::coordinates => "1795 993";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "router_send_tm";
+  };
+  PI_router_put_tc : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::router::PI_router_put_tc.others {
+    Taste::coordinates => "1795 1345";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "router_put_tc";
+  };
+  RI_displayer_put_tc : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::displayer::PI_displayer_put_tc.others {
+    Taste::coordinates => "2114 888";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "displayer_put_tc";
+    Taste::labelInheritance => "true";
+  };
+  RI_gui_send_tm : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::mygui::PI_gui_send_tm.others {
+    Taste::coordinates => "2183 1548";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "gui_send_tm";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+END router;
+
+SYSTEM IMPLEMENTATION router.others
+SUBCOMPONENTS
+  router_send_tm_impl : SUBPROGRAM interfaceview::FV::router::PI_router_send_tm.others {
+    Compute_Execution_Time => 0 ms .. 100 ms;
+  };
+  router_put_tc_impl : SUBPROGRAM interfaceview::FV::router::PI_router_put_tc.others {
+    Compute_Execution_Time => 0 ms .. 100 ms;
+  };
+CONNECTIONS
+  OpToPICnx_router_send_tm_impl : SUBPROGRAM ACCESS router_send_tm_impl -> PI_router_send_tm;
+  OpToPICnx_router_put_tc_impl : SUBPROGRAM ACCESS router_put_tc_impl -> PI_router_put_tc;
+END router.others;
+
+SYSTEM displayer
+FEATURES
+  PI_cyclicdisplayer : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::displayer::PI_cyclicdisplayer.others {
+    Taste::coordinates => "355 669";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 2000 ms;
+    Taste::Deadline => 2000 ms;
+    Taste::InterfaceName => "cyclicdisplayer";
+  };
+  PI_displayer_put_tc : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::displayer::PI_displayer_put_tc.others {
+    Taste::coordinates => "1167 395";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "displayer_put_tc";
+  };
+  RI_router_send_tm : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::router::PI_router_send_tm.others {
+    Taste::coordinates => "1167 747";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "router_send_tm";
+    Taste::labelInheritance => "true";
+  };
+  RI_HousekeepingTM : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::mygui::PI_HousekeepingTM.others {
+    Taste::coordinates => "678 924";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "HousekeepingTM";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+END displayer;
+
+SYSTEM IMPLEMENTATION displayer.others
+SUBCOMPONENTS
+  cyclicdisplayer_impl : SUBPROGRAM interfaceview::FV::displayer::PI_cyclicdisplayer.others {
+    Compute_Execution_Time => 0 ms .. 2000 ms;
+  };
+  displayer_put_tc_impl : SUBPROGRAM interfaceview::FV::displayer::PI_displayer_put_tc.others {
+    Compute_Execution_Time => 0 ms .. 100 ms;
+  };
+CONNECTIONS
+  OpToPICnx_cyclicdisplayer_impl : SUBPROGRAM ACCESS cyclicdisplayer_impl -> PI_cyclicdisplayer;
+  OpToPICnx_displayer_put_tc_impl : SUBPROGRAM ACCESS displayer_put_tc_impl -> PI_displayer_put_tc;
+END displayer.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  mygui : SYSTEM interfaceview::IV::mygui.others {
+    Taste::coordinates => "294 1115 1034 1876";
+  };
+  router : SYSTEM interfaceview::IV::router.others {
+    Taste::coordinates => "1795 888 2557 1548";
+  };
+  displayer : SYSTEM interfaceview::IV::displayer.others {
+    Taste::coordinates => "355 219 1167 924";
+  };
+CONNECTIONS
+  mygui_gui_send_tm_router_gui_send_tm : SUBPROGRAM ACCESS mygui.PI_gui_send_tm -> router.RI_gui_send_tm {
+    Taste::coordinates => "2183 1548 2183 1770 1034 1770";
+  };
+  router_router_put_tc_mygui_router_put_tc : SUBPROGRAM ACCESS router.PI_router_put_tc -> mygui.RI_router_put_tc {
+    Taste::coordinates => "1034 1346 1421 1346 1421 1345 1795 1345";
+  };
+  mygui_HousekeepingTM_displayer_HousekeepingTM : SUBPROGRAM ACCESS mygui.PI_HousekeepingTM -> displayer.RI_HousekeepingTM {
+    Taste::coordinates => "678 924 678 1018 660 1018 660 1113";
+  };
+  router_router_send_tm_displayer_router_send_tm : SUBPROGRAM ACCESS router.PI_router_send_tm -> displayer.RI_router_send_tm {
+    Taste::coordinates => "1167 747 1481 747 1481 993 1795 993";
+  };
+  displayer_displayer_put_tc_router_displayer_put_tc : SUBPROGRAM ACCESS displayer.PI_displayer_put_tc -> router.RI_displayer_put_tc {
+    Taste::coordinates => "2114 888 2114 395 1167 395";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

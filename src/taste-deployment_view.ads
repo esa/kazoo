@@ -61,8 +61,8 @@ package TASTE.Deployment_View is
 
    type Taste_Bus is
       record
-         Name         : Unbounded_String;
-         AADL_Package : Unbounded_String;
+         Name,
+         AADL_Package,
          Classifier   : Unbounded_String;
          Properties   : Property_Maps.Map;
       end record;
@@ -71,47 +71,28 @@ package TASTE.Deployment_View is
 
    type Bus_Connection is tagged
       record
-         Source_Node : Unbounded_String;
-         Source_Port : Unbounded_String;
-         Bus_Name    : Unbounded_String;
-         Dest_Node   : Unbounded_String;
+         Source_Node,
+         Source_Port,
+         Bus_Name,
+         Dest_Node,
          Dest_Port   : Unbounded_String;
       end record;
-
-   function To_Template (B : Bus_Connection) return Translate_Set is
-     (+Assoc ("Source_Node",  B.Source_Node)
-      & Assoc ("Source_Port", B.Source_Port)
-      & Assoc ("Bus_Name",    B.Bus_Name)
-      & Assoc ("Dest_Node",   B.Dest_Node)
-      & Assoc ("Dest_Port",   B.Dest_Port));
 
    package Bus_Connections is new Indefinite_Vectors (Natural, Bus_Connection);
 
    type Taste_Device_Driver is tagged
       record
-         Name                      : Unbounded_String;
-         Package_Name              : Unbounded_String;
-         Device_Classifier         : Unbounded_String;
-         Associated_Processor_Name : Unbounded_String;
-         Device_Configuration      : Unbounded_String;
-         Accessed_Bus_Name         : Unbounded_String;
-         Accessed_Port_Name        : Unbounded_String;
-         ASN1_Filename             : Unbounded_String;
-         ASN1_Typename             : Unbounded_String;
+         Name,
+         Package_Name,
+         Device_Classifier,
+         Associated_Processor_Name,
+         Device_Configuration,
+         Accessed_Bus_Name,
+         Accessed_Port_Name,
+         ASN1_Filename,
+         ASN1_Typename,
          ASN1_Module               : Unbounded_String;
       end record;
-
-   function To_Template (D : Taste_Device_Driver) return Translate_Set is
-     (+Assoc ("Name",                       D.Name)
-      & Assoc ("Package_Name",              D.Package_Name)
-      & Assoc ("Device_Classifier",         D.Device_Classifier)
-      & Assoc ("Associated_Processor_Name", D.Associated_Processor_Name)
-      & Assoc ("Device_Configuration",      D.Device_Configuration)
-      & Assoc ("Accessed_Bus_Name",         D.Accessed_Bus_Name)
-      & Assoc ("Accessed_Port_Name",        D.Accessed_Port_Name)
-      & Assoc ("ASN1_Filename",             D.ASN1_Filename)
-      & Assoc ("ASN1_Typename",             D.ASN1_Typename)
-      & Assoc ("ASN1_Module",               D.ASN1_Module));
 
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);

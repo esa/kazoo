@@ -75,6 +75,14 @@ package TASTE.Parser_Utils is
 
    package String_Holders is new Indefinite_Holders (String);
 
+   function My_Custom_Filter
+     (Value, Parameters : String;
+      dummy_Context     :  Filter_Context) return String;
+
+   --  Generate documentation for a translate set
+   procedure Document_Template (Source_Folder, Template_Name : String;
+                                T : Translate_Set);
+
    AADL_Parser_Error : exception;
 
    function Get_APLC_Binding (E : Node_Id) return List_Id;

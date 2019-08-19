@@ -44,10 +44,6 @@ package body TASTE.Dump is
                                           others    => False);
       Output_File      : File_Type;
 
-      --  output path will be determined by the templates
-      --  CV_Out_Dir  : constant String  :=
-      --   CV.Base_Output_Path.Element & "/concurrency_view/";
-
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:
    begin
@@ -126,11 +122,13 @@ package body TASTE.Dump is
                Result : Unbounded_String;
             begin
                for I of Interfaces loop
+
                   Result := Result & String'(Parse (IF_Template, I)) & Newline;
                end loop;
                return Result;
             end Process_Interfaces;
          begin
+            Document_Template (Prefix, "interfaceview.tmplt", IV_Tags);
             if not Check or not Trigger then
                Put_Info ("Nothing generated from " & Path);
                return;
@@ -251,6 +249,7 @@ package body TASTE.Dump is
               & Assoc ("Dest_Ports",   Dest_Ports);
 
             --  Output is made of interface, deployment and data views
+            Document_Template (Prefix, "interfaceview.tmplt", IV_Tags);
             Output_Tags := +Assoc ("Interface_View",
                                    String'(Parse (IV_Template, IV_Tags)))
               & Assoc ("Deployment_View",

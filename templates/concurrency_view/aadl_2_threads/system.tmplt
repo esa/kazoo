@@ -56,7 +56,7 @@ properties
 end TASTE_Protected.Object; 
 @@END_IF@@
 
-@@IF@@ @_Partition_Names'Length_@ > 0   @@-- AIR : we need a port polling threads
+@@IF@@ @_Partition_VP'Length_@ > 0   @@-- AIR : we need a port polling threads
 --  Required by AIR to allow inter-partition communications
 subprogram do_ports_polling
 properties
@@ -64,7 +64,6 @@ properties
    Source_Name     => "user_ports_polling";
    Source_Text     => ("air_polling.c");
 end do_ports_polling;
-
 thread Port_Poller
 end    Port_Poller;
 

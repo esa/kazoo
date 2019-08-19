@@ -65,6 +65,7 @@ package body TASTE.Backend.Code_Generators is
          Tmplt            : constant String := Prefix_Skeletons
                                                & "makefile.tmplt";
       begin
+         Register_Filter ("COUCOU", My_Custom_Filter'Access);
          if not Exists (Tmplt) then
             raise ACG_Error with "Missing makefile.tmplt";
          end if;

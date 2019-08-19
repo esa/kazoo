@@ -613,6 +613,7 @@ package body TASTE.Concurrency_View is
                end;
             end loop;
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
+               --  Generate from system.tmplt
                Set_Sys := CV.Configuration.To_Template
                  & Assoc ("Nodes",       Nodes)
                  & Assoc ("Node_Names",          Node_Names)

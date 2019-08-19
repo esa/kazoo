@@ -13,6 +13,7 @@ with Ada.Characters.Latin_1,
      GNAT.Strings,
      GNAT.Command_Line,
      Templates_Parser.Utils,
+     Templates_Parser.Query,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
@@ -56,6 +57,22 @@ package body TASTE.Parser_Utils is
       New_Line;
    end Banner;
 
+   --  Generate documentation for a translate set
+   procedure Document_Template (Source_Folder, Template_Name : String;
+                                T : Translate_Set)
+   is
+      procedure Action (Item : Association; Quit : in out Boolean) is
+      begin
+         Put_Debug ("  " & Templates_Parser.Query.Variable (Item) & " - "
+                   & Templates_Parser.Query.Kind (Item)'Img);
+         Quit := False;
+      end Action;
+      procedure Iterate is new For_Every_Association (Action);
+   begin
+      Put_Debug (Template_Name & " (subfolder " & Source_Folder & ")");
+      Iterate (T);
+   end Document_Template;
+
    --  Strip function as in Python
    function Strip_String (Input_String : String) return String is
       use Ada.Characters.Latin_1;
@@ -65,6 +82,14 @@ package body TASTE.Parser_Utils is
    begin
       return Ada.Strings.Fixed.Trim (Input_String, Strip_Set, Strip_Set);
    end Strip_String;
+
+   function My_Custom_Filter
+     (Value, Parameters : String;
+      dummy_Context     : Filter_Context) return String is
+   begin
+      Put_Debug (Parameters & " - " & Value);
+      return Value;
+   end My_Custom_Filter;
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config  : Command_Line_Configuration;

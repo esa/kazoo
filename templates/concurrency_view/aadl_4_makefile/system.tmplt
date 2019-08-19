@@ -68,8 +68,4 @@ clean:
 	rm -rf *_adainit deploymentview_final
 @@END_TABLE@@
 
-@@INLINE(.PHONY:	)( )()@@
-   @@TABLE@@
-      @_LOWER:Block_Names_@
-   @@END_TABLE@@
-@@END_INLINE@@
+.PHONY:	@_REPLACE_ALL(,/):LOWER:Block_Names_@

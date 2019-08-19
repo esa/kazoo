@@ -55,7 +55,7 @@ subcomponents
 @@TABLE'ALIGN_ON(":")@@
    @_Thread_Names_@ : thread @_Thread_Names_@_Thread::@_Thread_Names_@.others;
 @@END_TABLE@@
-@@IF@@ @_In_Port_Names'Length_@ > 0   @@--  Add poller thread to map AIR ports to POHIC ports
+@@IF@@ @_In_Port_Names'Length_@ > 0 and @_VP_Platform_@ = PLATFORM_AIR  @@--  Add poller thread to map AIR ports to POHIC ports
    Poll_Port : thread Port_Poller.i;
 @@END_IF@@
 @@IF@@ @_Thread_Src_Name'Length_@ > 0 or @_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0
@@ -71,4 +71,6 @@ connections
    port @_Connected_Threads_@.OUTPORT_@_Part_Out_Port_Name_@ -> OUTPORT_@_Part_Out_Port_Name_@;
 @@END_TABLE@@
 @@END_IF@@
+@@-- CHECKME: There are no connections to the protected object data and it does not seem to matter
+@@-- (check buildsupport output for the difference)
 end @_CAPITALIZE:Name_@.final;

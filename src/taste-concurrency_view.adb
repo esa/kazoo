@@ -521,7 +521,20 @@ package body TASTE.Concurrency_View is
             Part_Source_Name,
             Part_Source_Port,
             Part_Dest_Name  : Vector_Tag;  -- Inter-partition connections (TSP)
+            Bus_Names,
+            Bus_AADL_Pkg,
+            Bus_Classifier  : Vector_Tag;  --  System busses
          begin
+            --  Prepare the template tags of system.aadl with the busses
+            for Bus of CV.Deployment.Busses loop
+               --  The bus user properties are ignored here
+               --  Could be added if needed but they would require an
+               --  additional template file to process the name/values.
+               Bus_Names      := Bus_Names & Bus.Name;
+               Bus_AADL_Pkg   := Bus_AADL_Pkg & Bus.AADL_Package;
+               Bus_Classifier := Bus_Classifier & Bus.Classifier;
+            end loop;
+
             for Node in CV.Nodes.Iterate loop
                declare
                   Node_Name    : constant String := CV_Nodes.Key (Node);
@@ -632,7 +645,10 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
                  & Assoc ("Block_Names",         All_Block_Names)
-                 & Assoc ("Target_Packages",     All_Target_Names);
+                 & Assoc ("Target_Packages",     All_Target_Names)
+                 & Assoc ("Bus_Names",           Bus_Names)
+                 & Assoc ("Bus_AADL_Package",    Bus_AADL_Pkg)
+                 & Assoc ("Bus_Classifier",      Bus_Classifier);
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,
                        Mode => Out_File,

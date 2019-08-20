@@ -524,6 +524,17 @@ package body TASTE.Concurrency_View is
             Bus_Names,
             Bus_AADL_Pkg,
             Bus_Classifier  : Vector_Tag;  --  System busses
+            Device_Names,
+            Device_Node_Name,
+            Device_AADL_Pkg,
+            Device_Classifier,
+            Device_CPU,
+            Device_Configuration,
+            Device_Accessed_Bus_Name,
+            Device_Accessed_Port_Name,
+            Device_ASN1_Filename,
+            Device_ASN1_Typename,
+            Device_ASN1_Module : Vector_Tag;  --  Device drivers
          begin
             --  Prepare the template tags of system.aadl with the busses
             for Bus of CV.Deployment.Busses loop
@@ -625,6 +636,42 @@ package body TASTE.Concurrency_View is
                   end if;
                end;
             end loop;
+            --  Iterate again on the nodes to set the devices
+            --  at system level (they could also be added to
+            --  nodes if needed, but for the concurrency view
+            --  in AADL they are only used at system level)
+            for N : Taste_Node of CV.Deployment.Nodes loop
+               for D : Taste_Device_Driver of N.Drivers loop
+                  declare
+                     Dot : constant Natural := Index (D.Name, ".");
+                     Name : constant String := To_String (D.Name);
+                     Result : constant String :=
+                       (if Dot > 0
+                        then Name (Name'First .. Dot - 1)
+                        else "ERROR_MALFORMED_DEVICE_NAME");
+                  begin
+                     --  Device names are in the form ethernet0.other
+                     --  Get rid of the ".other"
+                     Device_Names := Device_Names & Result;
+                  end;
+                  Device_Node_Name  := Device_Node_Name & N.Name;
+                  Device_AADL_Pkg   := Device_AADL_Pkg & D.Package_Name;
+                  Device_Classifier := Device_Classifier & D.Device_Classifier;
+                  Device_CPU := Device_CPU & D.Associated_Processor_Name;
+                  Device_Configuration :=
+                    Device_Configuration & D.Device_Configuration;
+                  Device_Accessed_Bus_Name :=
+                    Device_Accessed_Bus_Name & D.Accessed_Bus_Name;
+                  Device_Accessed_Port_Name :=
+                    Device_Accessed_Port_Name & D.Accessed_Port_Name;
+                  Device_ASN1_Filename :=
+                    Device_ASN1_Filename & D.ASN1_Filename;
+                  Device_ASN1_Typename :=
+                    Device_ASN1_Typename & D.ASN1_Typename;
+                  Device_ASN1_Module := Device_ASN1_Module & D.ASN1_Module;
+               end loop;
+            end loop;
+
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
                --  Generate from system.tmplt
                Set_Sys := CV.Configuration.To_Template
@@ -648,7 +695,18 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Target_Packages",     All_Target_Names)
                  & Assoc ("Bus_Names",           Bus_Names)
                  & Assoc ("Bus_AADL_Package",    Bus_AADL_Pkg)
-                 & Assoc ("Bus_Classifier",      Bus_Classifier);
+                 & Assoc ("Bus_Classifier",      Bus_Classifier)
+                 & Assoc ("Device_Names",        Device_Names)
+                 & Assoc ("Device_Node_Name",    Device_Node_Name)
+                 & Assoc ("Device_AADL_Pkg",     Device_AADL_Pkg)
+                 & Assoc ("Device_Classifier",   Device_Classifier)
+                 & Assoc ("Device_CPU",          Device_CPU)
+                 & Assoc ("Device_Config",       Device_Configuration)
+                 & Assoc ("Device_Bus_Name",     Device_Accessed_Bus_Name)
+                 & Assoc ("Device_Port_Name",    Device_Accessed_Port_Name)
+                 & Assoc ("Device_ASN1_File",    Device_ASN1_Filename)
+                 & Assoc ("Device_ASN1_Sort",    Device_ASN1_Typename)
+                 & Assoc ("Device_ASN1_Module",  Device_ASN1_Module);
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,
                        Mode => Out_File,

@@ -537,6 +537,10 @@ package body TASTE.Concurrency_View is
             Device_ASN1_Filename,
             Device_ASN1_Typename,
             Device_ASN1_Module : Vector_Tag;  --  Device drivers
+            Connect_From_Partition,           --  Partition to bus connections
+            Connect_Port_Name,
+            Connect_Via_Bus    : Vector_Tag;
+            Found : Boolean := False;
          begin
             --  Prepare the template tags of system.aadl with the busses
             for Bus of CV.Deployment.Busses loop
@@ -546,6 +550,35 @@ package body TASTE.Concurrency_View is
                Bus_Names      := Bus_Names & Bus.Name;
                Bus_AADL_Pkg   := Bus_AADL_Pkg & Bus.AADL_Package;
                Bus_Classifier := Bus_Classifier & Bus.Classifier;
+            end loop;
+
+            --  Bus connections: we need the output port name, partition and
+            --  bus name to make the AADL construct. Check Bus_Connection type
+            --  in deployment_view.ads if anything else is needed. It does not
+            --  directly provide the partition name of the function so we have
+            --  to retrieve it here
+            for BC : Bus_Connection of CV.Deployment.Connections loop
+               Connect_Via_Bus   := Connect_Via_Bus & BC.Bus_Name;
+               Connect_Port_Name := Connect_Port_Name & BC.Source_Port;
+               Found := False;
+               for Node of CV.Deployment.Nodes loop
+                  exit when Found;
+                  for Part of Node.Partitions loop
+                     exit when Found;
+                     if Part.Bound_Functions.Contains
+                       (To_String (BC.Dest_Function))
+                     then
+                        Connect_From_Partition :=
+                          Connect_From_Partition & Part.Name;
+                        Found := True;
+                     end if;
+                  end loop;
+               end loop;
+               if not Found then
+                  raise Concurrency_View_Error with
+                    "Could not find partition of function "
+                    & To_String (BC.Dest_Function);
+               end if;
             end loop;
 
             for Node in CV.Nodes.Iterate loop
@@ -722,7 +755,10 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Device_Port_Name",    Device_Accessed_Port_Name)
                  & Assoc ("Device_ASN1_File",    Device_ASN1_Filename)
                  & Assoc ("Device_ASN1_Sort",    Device_ASN1_Typename)
-                 & Assoc ("Device_ASN1_Module",  Device_ASN1_Module);
+                 & Assoc ("Device_ASN1_Module",  Device_ASN1_Module)
+                 & Assoc ("Connect_From_Part",   Connect_From_Partition)
+                 & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
+                 & Assoc ("Connect_Port_Name",   Connect_Port_Name);
                Create_Path (CV_Out_Dir);
                Create (File => Output_File,
                        Mode => Out_File,

@@ -32,6 +32,9 @@
 @@-- @_Device_ASN1_File_@
 @@-- @_Device_ASN1_Sort_@
 @@-- @_Device_ASN1_Module_@  : Device drivers (vector tag)
+@@-- @_Connect_From_Part_@   : Vector tag - bus connection: partition source
+@@-- @_Connect_Via_Bus_@          |_ bus name
+@@-- @_Connect_Port_Name_@        |_ port name
 @@-- And all the system configuration obtained from the command line:
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
 @@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
@@ -58,6 +61,10 @@ public
 @@TABLE@@
    with @_CAPITALIZE:Target_Packages_@;
 @@END_TABLE@@
+@@-- If there is at least one bus, add ocarina_buses
+@@IF@@ @_Bus_Names'Length_@ > 0
+   with ocarina_buses;
+@@END_IF@@
 
 @@-- POHIC-only: declare protected objects to have runtime mutex
 @@IF@@ @_Use_POHIC_@
@@ -150,6 +157,10 @@ properties
 @@-- Specify the bindings of the drivers to processors
 @@TABLE'ALIGN_ON("applies")@@
    Actual_Processor_Binding => (reference (@_CAPITALIZE:Device_Node_Name_@_@_Device_CPU_@)) applies to @_Device_Node_Name_@_@_Device_Names_@;
+@@END_TABLE@@
+@@-- Specify connection bindings (from partition to bus)
+@@TABLE'ALIGN_ON("applies")@@
+   Actual_Connection_Binding => (reference (@_Connect_Via_Bus_@)) applies to @_Connect_From_Part_@_@_Connect_Port_Name_@;
 @@END_TABLE@@
 @@--  TSP: specify the time allocated to each node and on each partition
 @@TABLE'ALIGN_ON("applies")@@

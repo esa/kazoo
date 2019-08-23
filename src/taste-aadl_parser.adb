@@ -569,7 +569,9 @@ package body TASTE.AADL_Parser is
                                                  & To_String (T.Name),
                                                  Type_Name   => Sort,
                                                  Remote_Partition_Name =>
-                                                   Part.Unsafe_Just.Name));
+                                                   Part.Unsafe_Just.Name,
+                                                 Remote_Port_Name =>
+                                                   Remote.Interface_Name));
                               else
                                  --  Port already exists: just add this thread
                                  Partition.Out_Ports

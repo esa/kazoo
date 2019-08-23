@@ -16,11 +16,13 @@
 @@-- @_Part_Source_Name_@    : Inter-partition connections : partition source name (vector tag)
 @@-- @_Part_Source_Port_@    :   |_ Corresponding port name
 @@-- @_Part_Dest_Name_@      :   |_ Corresponding name of the remote partition
+@@-- @_Part_Dest_Port_@      :   |_ Corresponding name of the port on the remote partition
 @@-- @_Bus_Names_@           : Vector tag: busses present in the system
 @@-- @_Bus_AADL_Package_@    :   |_ corresponding AADL Package
 @@-- @_Bus_Classifier_@      :   |_ corresponding AADL classifier
 @@-- @_Device_Names_@
 @@-- @_Device_Node_Name_@
+@@-- @_Device_Partition_@    -- Partition name associated to the driver (currently only one supported per node)
 @@-- @_Device_AADL_Pkg_@
 @@-- @_Device_Classifier_@
 @@-- @_Device_CPU_@
@@ -119,7 +121,7 @@ subcomponents
 @@TABLE'ALIGN_ON(":")@@
    @_Device_Node_Name_@_@_Device_Names_@ : device @_Device_Classifier_@
       {
-         Source_Text      => ("../DriversConfig/PARTITION_NAME/DeviceConfig-@_Device_Node_Name_@-@_Device_Names_@.c");
+         Source_Text      => ("../DriversConfig/@_Device_Partition_@/DeviceConfig-@_Device_Node_Name_@-@_Device_Names_@.c");
          Type_Source_Name => "pohidrv_@_Device_Node_Name_@_@_Device_Names_@";
       };
 @@END_TABLE@@
@@ -127,11 +129,15 @@ subcomponents
 @@IF@@ @_Part_Source_Name'Length_@ > 0
 connections
 @@TABLE@@
-   @_Part_Source_Name_@_@_Part_Source_Port_@ : port @_Part_Source_Name_@.OUTPORT_@_Part_Source_Port_@ -> @_Part_Dest_Name_@.INPORT_@_Part_Source_Port_@;
+   @_Part_Source_Name_@_@_Part_Source_Port_@ : port @_Part_Source_Name_@.OUTPORT_@_Part_Source_Port_@ -> @_Part_Dest_Name_@.INPORT_@_Part_Dest_Port_@;
 @@END_TABLE@@
 @@END_IF@@
-@@-- Then specify the bindings of the partitions to (virtual) processors
+@@-- Specify the bus accesses
+@@TABLE'ALIGN_ON("->")@@
+   bus access @_Device_Bus_Name_@ -> @_Device_Node_Name_@_@_Device_Names_@.link;
+@@END_TABLE@@
 properties
+@@-- Specify the bindings of the partitions to (virtual) processors
 @@TABLE'ALIGN_ON("applies")@@
 @@-- Check if this is a TSP system, in which case bind the partitions to the corresponding virtual processor of the node
 @@IF@@ @_Partition_VP_@ = ""
@@ -140,6 +146,10 @@ properties
    Actual_Processor_Binding => (reference (@_CAPITALIZE:Partition_Node_@_@_Partition_CPU_@.@_Partition_VP_@)) applies to @_CAPITALIZE:Partition_Names_@;
    Actual_Memory_Binding    => (reference (@_CAPITALIZE:Partition_Node_@_Memory.@_CAPITALIZE:Partition_Names_@_Segment)) applies to @_CAPITALIZE:Partition_Names_@;
 @@END_IF@@
+@@END_TABLE@@
+@@-- Specify the bindings of the drivers to processors
+@@TABLE'ALIGN_ON("applies")@@
+   Actual_Processor_Binding => (reference (@_CAPITALIZE:Device_Node_Name_@_@_Device_CPU_@)) applies to @_Device_Node_Name_@_@_Device_Names_@;
 @@END_TABLE@@
 @@--  TSP: specify the time allocated to each node and on each partition
 @@TABLE'ALIGN_ON("applies")@@

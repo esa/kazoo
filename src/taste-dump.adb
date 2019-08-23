@@ -110,10 +110,10 @@ package body TASTE.Dump is
             Output_Tags : Translate_Set;
             Functions   : Unbounded_String;
             Nodes       : Unbounded_String;
-            Source_Nodes,                  -- Connections in deployment
+            Source_Functions,                  -- Connections in deployment
             Source_Ports,
             Bus_Names,
-            Dest_Nodes,
+            Dest_Functions,
             Dest_Ports  : Vector_Tag;
 
             function Process_Interfaces (Interfaces : Template_Vectors.Vector)
@@ -225,11 +225,11 @@ package body TASTE.Dump is
 
                --  Add the deployment connections as vector tag
                for C of Model.Deployment_View.Connections loop
-                  Source_Nodes := Source_Nodes & C.Source_Node;
-                  Source_Ports := Source_Ports & C.Source_Port;
-                  Bus_Names    := Bus_Names    & C.Bus_Name;
-                  Dest_Nodes   := Dest_Nodes   & C.Dest_Node;
-                  Dest_Ports   := Dest_Ports   & C.Dest_Port;
+                  Source_Functions := Source_Functions & C.Source_Function;
+                  Source_Ports     := Source_Ports     & C.Source_Port;
+                  Bus_Names        := Bus_Names        & C.Bus_Name;
+                  Dest_Functions   := Dest_Functions   & C.Dest_Function;
+                  Dest_Ports       := Dest_Ports       & C.Dest_Port;
                end loop;
             end if;
 
@@ -242,10 +242,10 @@ package body TASTE.Dump is
 
             --  Deployment view is made of nodes, connections and busses
             DV_Tags := +Assoc ("Nodes", Nodes)
-              & Assoc ("Source_Nodes", Source_Nodes)
+              & Assoc ("Source_Functions", Source_Functions)
               & Assoc ("Source_Ports", Source_Ports)
               & Assoc ("Bus_Names",    Bus_Names)
-              & Assoc ("Dest_Nodes",   Dest_Nodes)
+              & Assoc ("Dest_Functions",   Dest_Functions)
               & Assoc ("Dest_Ports",   Dest_Ports);
 
             --  Output is made of interface, deployment and data views

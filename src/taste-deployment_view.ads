@@ -71,10 +71,10 @@ package TASTE.Deployment_View is
 
    type Bus_Connection is tagged
       record
-         Source_Node,
+         Source_Function,
          Source_Port,
          Bus_Name,
-         Dest_Node,
+         Dest_Function,
          Dest_Port   : Unbounded_String;
       end record;
 

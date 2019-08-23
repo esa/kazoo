@@ -98,7 +98,8 @@ package TASTE.Concurrency_View is
       record
          Port_Name, Type_Name  : Unbounded_String;
          Connected_Threads     : String_Vectors.Vector;
-         Remote_Partition_Name : Unbounded_String; --  Other side
+         Remote_Partition_Name,
+         Remote_Port_Name      : Unbounded_String; --  Other side
       end record;
 
    package Partition_Out_Ports is

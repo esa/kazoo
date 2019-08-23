@@ -1,15 +1,15 @@
 @@-- template for deployment view
 @@-- @_Nodes_@
-@@-- @_Source_Nodes_@ : connection source node (vector tag)
-@@-- @_Source_Ports_@ :    |_ corresponding source port
-@@-- @_Bus_Names_@    :    |_ connected to bus name
-@@-- @_Dest_Nodes_@   :    |_ destination node name
-@@-- @_Dest_Ports_@   :    |_ destination port name
+@@-- @_Source_Functions_@ : connection source function (vector tag)
+@@-- @_Source_Ports_@ :       |_ corresponding source port
+@@-- @_Bus_Names_@    :       |_ connected to bus name
+@@-- @_Dest_Functions_@  :    |_ destination function name
+@@-- @_Dest_Ports_@   :       |_ destination port name
 @@-- @_Busses_@
 <DeploymentView>
    @_Nodes'Indent_@
    @_Busses'Indent_@
 @@TABLE@@
-   <Connection from_node="@_Source_Nodes_@" from_port="@_Source_Ports_@" to_bus="@_Bus_Names_@" to_node="@_Dest_Nodes_@" to_port="@_Dest_Ports_@"/>
+   <Connection from_node="@_Source_Functions_@" from_port="@_Source_Ports_@" to_bus="@_Bus_Names_@" to_node="@_Dest_Functions_@" to_port="@_Dest_Ports_@"/>
 @@END_TABLE@@
 </DeploymentView>

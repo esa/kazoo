@@ -520,12 +520,14 @@ package body TASTE.Concurrency_View is
             Partition_VP    : Vector_Tag;  --  for TSP: VP binding
             Part_Source_Name,
             Part_Source_Port,
+            Part_Dest_Port,
             Part_Dest_Name  : Vector_Tag;  -- Inter-partition connections (TSP)
             Bus_Names,
             Bus_AADL_Pkg,
             Bus_Classifier  : Vector_Tag;  --  System busses
             Device_Names,
             Device_Node_Name,
+            Device_Partition_Name,
             Device_AADL_Pkg,
             Device_Classifier,
             Device_CPU,
@@ -621,6 +623,8 @@ package body TASTE.Concurrency_View is
                              & Out_Port.Port_Name;
                            Part_Dest_Name := Part_Dest_Name
                              & Out_Port.Remote_Partition_Name;
+                           Part_Dest_Port := Part_Dest_Port
+                             & Out_Port.Remote_Port_Name;
                         end loop;
                      end loop;
 
@@ -641,6 +645,14 @@ package body TASTE.Concurrency_View is
             --  nodes if needed, but for the concurrency view
             --  in AADL they are only used at system level)
             for N : Taste_Node of CV.Deployment.Nodes loop
+               --  Check that there if there are drivers, there is only one
+               --  partition in the node as the current design does not specify
+               --  what partition(s) use the drivers.
+               if not N.Drivers.Is_Empty and N.Partitions.Length > 1 then
+                  raise Concurrency_View_Error with
+                    "Drivers in multi-partition systems are not supported";
+               end if;
+
                for D : Taste_Device_Driver of N.Drivers loop
                   declare
                      Dot : constant Natural := Index (D.Name, ".");
@@ -655,6 +667,8 @@ package body TASTE.Concurrency_View is
                      Device_Names := Device_Names & Result;
                   end;
                   Device_Node_Name  := Device_Node_Name & N.Name;
+                  Device_Partition_Name :=  -- There must be only one
+                    Device_Partition_Name & N.Partitions.First_Element.Name;
                   Device_AADL_Pkg   := Device_AADL_Pkg & D.Package_Name;
                   Device_Classifier := Device_Classifier & D.Device_Classifier;
                   Device_CPU := Device_CPU & D.Associated_Processor_Name;
@@ -689,6 +703,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Part_Source_Name",    Part_Source_Name)
                  & Assoc ("Part_Source_Port",    Part_Source_Port)
                  & Assoc ("Part_Dest_Name",      Part_Dest_Name)
+                 & Assoc ("Part_Dest_Port",      Part_Dest_Port)
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
                  & Assoc ("Block_Names",         All_Block_Names)
@@ -698,6 +713,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Bus_Classifier",      Bus_Classifier)
                  & Assoc ("Device_Names",        Device_Names)
                  & Assoc ("Device_Node_Name",    Device_Node_Name)
+                 & Assoc ("Device_Partition",    Device_Partition_Name)
                  & Assoc ("Device_AADL_Pkg",     Device_AADL_Pkg)
                  & Assoc ("Device_Classifier",   Device_Classifier)
                  & Assoc ("Device_CPU",          Device_CPU)

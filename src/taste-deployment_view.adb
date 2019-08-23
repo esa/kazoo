@@ -119,52 +119,57 @@ package body TASTE.Deployment_View is
       function Parse_Connections (CI : Node_Id) return Bus_Connections.Vector
       is
          use Bus_Connections;
-         Conn           : Node_Id;
-         Bound_Bus      : Node_Id;
-         Src_Port       : Node_Id;
-         Src_Name       : Unbounded_String;
-         Dst_Name       : Unbounded_String;
-         Dst_Port       : Node_Id;
-         Bound_Bus_Name : Name_Id;
-         If1_Name       : Name_Id;
+         Conn,
+         Bound_Bus,
+         SRC, DST       : Node_Id;
+         SRC_PORT,
+         DST_PORT,
+         SRC_FUNCTION,
+         DST_FUNCTION   : Unbounded_String;
+         Bound_Bus_Name,
+         If1_Name,
          If2_Name       : Name_Id;
          Result         : Bus_Connections.Vector;
       begin
          Conn := First_Node (Connections (CI));
          while Present (Conn) loop
+            --  AADL is confusing because it reverses the meaning of source
+            --  and destination. Source is the message receiver (the PI) and
+            --  destination is the message sender (the RI)
             Bound_Bus := Get_Bound_Bus (Conn, False);
             if Bound_Bus /= No_Node then
                Bound_Bus_Name := Name
                   (Identifier (Parent_Subcomponent (Bound_Bus)));
-               Src_Port := Get_Referenced_Entity (Source (Conn));
-               Dst_Port := Get_Referenced_Entity (Destination (Conn));
-               If1_Name := Get_Interface_Name (Src_Port);
-               If2_Name := Get_Interface_Name (Dst_Port);
+               DST := Get_Referenced_Entity (Source (Conn));
+               SRC := Get_Referenced_Entity (Destination (Conn));
+               If1_Name := Get_Interface_Name (DST);  --  PI
+               If2_Name := Get_Interface_Name (SRC);  --  RI
                --  Get_Interface_Name is v1.3.5+ only
                if If1_Name /= No_Name and If2_Name /= No_Name then
-                  Src_Name := US (Get_Name_String (If1_Name));
-                  Dst_Name := US (Get_Name_String (If2_Name));
+                  DST_PORT := US (Get_Name_String (If1_Name));  --  PI
+                  SRC_PORT := US (Get_Name_String (If2_Name));  --  RI
                else
                   --  Keep compatibility with v1.2
-                  Src_Name := US (Get_Name_String (Display_Name
-                                                  (Identifier (Src_Port))));
-
-                  Dst_Name := US (Get_Name_String (Display_Name
-                                                  (Identifier (Dst_Port))));
+                  DST_PORT := US (Get_Name_String (Display_Name
+                                                  (Identifier (SRC))));
+                  SRC_PORT := US (Get_Name_String (Display_Name
+                                                  (Identifier (DST))));
                end if;
+               DST_FUNCTION := US (Get_Name_String
+                                     (Name (Identifier
+                                      (Parent_Subcomponent
+                                         (Parent_Component (DST))))));
+               SRC_FUNCTION := US (Get_Name_String
+                                     (Name (Identifier
+                                      (Parent_Subcomponent
+                                           (Parent_Component (SRC))))));
                Result := Result
-                 & Bus_Connection'(Source_Node => Src_Name,
-                                   Source_Port => US (Get_Name_String
-                                     (Name (Identifier
-                                      (Parent_Subcomponent
-                                           (Parent_Component (Src_Port)))))),
-                                   Bus_Name    =>
+                 & Bus_Connection'(Dest_Port       => DST_PORT,
+                                   Dest_Function   => DST_FUNCTION,
+                                   Bus_Name        =>
                                      US (Get_Name_String (Bound_Bus_Name)),
-                                   Dest_Node   => Dst_Name,
-                                   Dest_Port   => US (Get_Name_String
-                                     (Name (Identifier
-                                      (Parent_Subcomponent
-                                           (Parent_Component (Src_Port)))))));
+                                   Source_Port     => SRC_PORT,
+                                   Source_Function => SRC_FUNCTION);
             end if;
             Conn := Next_Node (Conn);
          end loop;
@@ -587,7 +592,7 @@ package body TASTE.Deployment_View is
 
          if Get_Category_Of_Component (CI) = CC_System then  --  Node
             if not Is_Empty (Connections (CI)) then
-               Conns := Conns & Parse_Connections (CI);  --  Checkme
+               Conns := Conns & Parse_Connections (CI);
             end if;
 
             if not Is_Empty (Subcomponents (CI)) then
@@ -697,11 +702,12 @@ package body TASTE.Deployment_View is
    begin
       for Each of DV.Connections loop
          Put_Line (Output, "Connection on bus : " & To_String (Each.Bus_Name));
-         Put_Line (Output, "  |_ Source Node : "
-                   & To_String (Each.Source_Node));
+         Put_Line (Output, "  |_ Source Function : "
+                   & To_String (Each.Source_Function));
          Put_Line (Output, "  |_ Source Port : "
                    & To_String (Each.Source_Port));
-         Put_Line (Output, "  |_ Dest Node   : " & To_String (Each.Dest_Node));
+         Put_Line (Output, "  |_ Dest Function : "
+                   & To_String (Each.Dest_Function));
          Put_Line (Output, "  |_ Dest Port   : " & To_String (Each.Dest_Port));
       end loop;
    end Dump_Connections;

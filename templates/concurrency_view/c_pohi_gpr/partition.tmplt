@@ -82,27 +82,29 @@ project @_CAPITALIZE:Name_@ is
        "cheddar_schedule.hh",
        "cheddar_types.hh",
        "config.c",
-       "marshallers.c",  -- only for distributed systems
 @@IF@@ @_In_Port_Names'Length_@ = 0 and @_Out_Port_Names'Length_@ = 0 and @_Thread_Src_Port'Length_@ = 0
        "po_hi_gqueue.c",
        "po_hi_transport.c",
        "po_hi_marshallers.c", 
        "po_hi_semaphore.c",
        "po_hi_monitor.c",
+       "po_hi_driver_drvmgr_common.c",
+       "po_hi_driver_linux_serial.c",
+       "po_hi_driver_serial_common.c",
+       "po_hi_driver_sockets.c",
+       "marshallers.c",  -- only for distributed systems
 @@END_IF@@
        "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
        "grspw_api.c",
        "grspw_pkt_lib.c",
        "hyperperriod_config.hh",
-       "po_hi_driver_drvmgr_common.c",
        "po_hi_driver_exarm.c",
        "po_hi_driver_exarm_ni_6071e_analog.c",
        "po_hi_driver_exarm_ni_6071e_digital.c",
        "po_hi_driver_keyboard.c",
        "po_hi_driver_leon_eth.c",
        "po_hi_driver_leon_serial.c",
-       "po_hi_driver_linux_serial.c",
        "po_hi_driver_rasta_1553_brmlib.c",
        "po_hi_driver_rasta_1553.c",
        "po_hi_driver_rasta_common.c",
@@ -112,8 +114,6 @@ project @_CAPITALIZE:Name_@ is
        "po_hi_driver_rtems_drvmgr_serial.c",
        "po_hi_driver_rtems_drvmgr_spacewire.c",
        "po_hi_driver_rtems_ne2000.c",
-       "po_hi_driver_serial_common.c",
-       "po_hi_driver_sockets.c",
        "po_hi_driver_stardundee.c",
        "po_hi_driver_usbbrick_spacewire.c",
        "po_hi_driver_xc4v_fpga.c",
@@ -127,7 +127,6 @@ project @_CAPITALIZE:Name_@ is
        "star_dundee_api.c",
        "trace_manager.c",
        "um_threads.c");
-
 
    package Compiler is
       case Build is

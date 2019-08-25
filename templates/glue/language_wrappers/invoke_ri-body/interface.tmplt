@@ -78,6 +78,10 @@ void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(void)
 @@END_TABLE@@
 
    // Call Middleware interface
+@@IF@@ @_Param_Names'Length_@ = 0
+   extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void);
+   vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@();
+@@ELSE@@
    extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(     \()(,\n      )(\);\n)@@
    @@TABLE@@
@@ -98,7 +102,7 @@ void @_LOWER:Parent_Function_@_RI_@_LOWER:Name_@(void)
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
-
+@@END_IF@@
 
 @@TABLE'TERSE@@
 @@IF@@ @_Param_Directions_@ = PARAM_OUT

@@ -13,6 +13,9 @@
 @@-- @_Calling_Threads_@        : Calling threads of the containing block
 // Required interface @_Name_@ in function @_Parent_Function_@
 // This RI is connected to: @_Remote_Function_Names_@
+@@IF@@ @_Param_Names'Length_@ = 0
+void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void);
+@@ELSE@@
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(        \()(,\n         )(\);\n)@@
    @@TABLE@@
@@ -23,3 +26,4 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
+@@END_IF@@

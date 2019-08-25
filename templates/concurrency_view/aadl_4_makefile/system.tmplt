@@ -47,6 +47,9 @@ all:
 @@TABLE@@
 @_LOWER:Node_Names_@_native
 @@END_TABLE@@
+@@IF@@ @_Device_Names'Length_@ > 0
+DriversConfig/drivers_config.h
+@@END_IF@@
 @@END_INLINE@@
 	ocarina -x main.aadl
 @@TABLE@@
@@ -58,6 +61,9 @@ rtems_ada:
 @@TABLE@@
 @_LOWER:Node_Names_@_rtems_ada
 @@END_TABLE@@
+@@IF@@ @_Device_Names'Length_@ > 0
+DriversConfig/drivers_config.h
+@@END_IF@@
 @@END_INLINE@@
 	ocarina -x main.aadl
 @@TABLE@@

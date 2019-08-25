@@ -43,6 +43,10 @@ project @_CAPITALIZE:Name_@ is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
+@@IF@@ @_VP_Name_@ = "" and @_In_Port_Names'Length_@ > 0
+@@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
+       "../DriversConfig",
+@@END_IF@@ 
        "../deploymentview_final/polyorb-hi-c/src",
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
@@ -84,6 +88,7 @@ project @_CAPITALIZE:Name_@ is
        "po_hi_transport.c",
        "po_hi_marshallers.c", 
        "po_hi_semaphore.c",
+       "po_hi_monitor.c",
 @@END_IF@@
        "config_leon3_drvmgr.c",
        "config_leon4_n2x.c",
@@ -115,7 +120,6 @@ project @_CAPITALIZE:Name_@ is
        "po_hi_giop.c",
        "po_hi_gprof_rtems_leon.c",
        "po_hi_lua.c",
-       "po_hi_monitor.c",
        "po_hi_simulink.c",
        "po_hi_storage.c",
        "remote_configuration.cc",

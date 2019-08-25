@@ -53,7 +53,7 @@ BEGIN
 @@END_TABLE@@
 @@END_INLINE@@
 @@TABLE@@
-   pohidrv-@_REPLACE_ALL(_/-):Device_Names_@ @_Device_ASN1_Sort_@ ::= @_Device_Config_@
+   pohidrv-@_REPLACE_ALL(_/-):Device_Node_Name_@-@_REPLACE_ALL(_/-):Device_Names_@ @_Device_ASN1_Sort_@ ::= @_Device_Config_@
 @@END_TABLE@@
 END
 @@END_IF@@

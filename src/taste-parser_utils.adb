@@ -83,13 +83,52 @@ package body TASTE.Parser_Utils is
       return Ada.Strings.Fixed.Trim (Input_String, Strip_Set, Strip_Set);
    end Strip_String;
 
-   function My_Custom_Filter
-     (Value, Parameters : String;
-      dummy_Context     : Filter_Context) return String is
+   --  str.join as in Python - join string arrays with a separator
+   function Join_Strings (Str_Set : String_Sets.Set;
+                          Sep     : String             := ", ";
+                          C       : String_Sets.Cursor :=
+                            String_Sets.No_Element)
+                          return String
+   is
+      use String_Sets;
    begin
-      Put_Debug (Parameters & " - " & Value);
-      return Value;
-   end My_Custom_Filter;
+      return
+       (if C = String_Sets.No_Element then "" else
+       (if C /= Str_Set.First then Sep else "")
+        & String_Sets.Element (C)
+        & Join_Strings
+          (Str_Set => Str_Set,
+           C => String_Sets.Next (C),
+           Sep => Sep));
+   end Join_Strings;
+
+   function Filter_Uniq
+     (Value, Parameters : String;
+      unused_Context    : Filter_Context) return String
+   --  Value is the tag name (list ), and Parameter must be a separator
+   is
+      use String_Sets, Ada.Strings.Fixed;
+      Unique_Set : String_Sets.Set;
+      Nb         : constant Natural :=
+        Ada.Strings.Fixed.Count (Value, Parameters);
+      From : Natural := Value'First;
+      To   : Natural;
+   begin
+      if Nb = 0 then
+         Unique_Set.Insert (Value);
+      else
+         for I in 0 .. Nb loop
+            To := Index (Value, Parameters, From => From);
+            if To = 0 then
+               To := Value'Last + 1;
+            end if;
+            Unique_Set.Union (To_Set (Strip_String (Value (From .. To - 1))));
+            From := To + 1;
+         end loop;
+      end if;
+      return Join_Strings
+        (Unique_Set, Sep => Parameters, C => Unique_Set.First);
+   end Filter_Uniq;
 
    procedure Parse_Command_Line (Result : out Taste_Configuration) is
       Config  : Command_Line_Configuration;
@@ -360,5 +399,6 @@ package body TASTE.Parser_Utils is
       Insert (Result, S2);
       return Result;
    end Join_Sets;
-
+begin
+   Register_Filter ("UNIQ", Filter_Uniq'Access);
 end TASTE.Parser_Utils;

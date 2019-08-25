@@ -42,64 +42,18 @@
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
 @@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
 @@-- No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
-@@INLINE()( )()@@
-all:
-@@TABLE@@
-@_LOWER:Node_Names_@_native
-@@END_TABLE@@
-@@END_INLINE@@
-	ocarina -x main.aadl
-@@TABLE@@
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@
-@@END_TABLE@@
-
-@@INLINE()( )()@@
-rtems_ada:
-@@TABLE@@
-@_LOWER:Node_Names_@_rtems_ada
-@@END_TABLE@@
-@@END_INLINE@@
-	ocarina -x main.aadl
-@@TABLE@@
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
-@@END_TABLE@@
-
-@@INLINE()( )()@@
-air:
-@@TABLE@@
-@_LOWER:Node_Names_@_air
-@@END_TABLE@@
-@@END_INLINE@@
-	ocarina -x main.aadl
-@@TABLE@@
-	# generate the xml file for AIR and call AIR's configure script
-	ocarina -aadlv2 -v -disable-annexes=emv2 -g air_configuration \
-                -r deploymentview.final system.aadl deployment.aadl \
-                Cheddar_Properties.aadl arinc653.aadl data_model.aadl \
-                TASTE_IV_Properties.aadl TASTE_DV_Properties.aadl \
-                taste_properties.aadl base_types.aadl \
-                ../../DataView.aadl ../../InterfaceView.aadl ../../DeploymentView.aadl \
-                ../../../common/ocarina_components.aadl && \
-        cd deploymentview_final && rm -f Makefile && (configure --keep-files-silent)
-	@echo "XML generated, AIR configuration done, building..."
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ air
-	@echo Putting partitions alltogether
-	make -j -f Makefile.air && mkdir -p ../binaries && cp deploymentview_final/executable/* ../binaries
-@@END_TABLE@@
-
-@@--  If there are busses, there are drivers, and therefore asn1 configurations
+--  Configuration data for device drivers in distributed systems
+--  This file was generated automatically by taste/kazoo
 @@IF@@ @_Bus_Names'Length_@ > 0
-DriversConfig/drivers_config.h:	drivers_config.asn
-	mkdir -p DriversConfig
-	asn1.exe -o DriversConfig -c drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
-@@END_IF@@
-
-@_Nodes_@
-
-clean:
+Taste-Drivers-Configuation DEFINITIONS ::=
+BEGIN
+@@INLINE(IMPORTS )(\n        )(;)@@
 @@TABLE@@
-	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ clean
-	rm -rf *_adainit deploymentview_final
+@_Unique_Dev_ASN1_Sorts_@ FROM @_Unique_Dev_ASN1_Mod_@
 @@END_TABLE@@
-
-.PHONY:	@_REPLACE_ALL(,/):LOWER:Block_Names_@
+@@END_INLINE@@
+@@TABLE@@
+   pohidrv-@_REPLACE_ALL(_/-):Device_Names_@ @_Device_ASN1_Sort_@ ::= @_Device_Config_@
+@@END_TABLE@@
+END
+@@END_IF@@

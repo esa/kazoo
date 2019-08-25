@@ -537,6 +537,13 @@ package body TASTE.Concurrency_View is
             Device_ASN1_Filename,
             Device_ASN1_Typename,
             Device_ASN1_Module : Vector_Tag;  --  Device drivers
+
+            --  To keep a list of ASN.1 files/modules without duplicates:
+            Unique_ASN1_Sorts_Set : String_Sets.Set;
+            Unique_ASN1_Files,
+            Unique_ASN1_Sorts,
+            Unique_ASN1_Modules : Vector_Tag;
+
             Connect_From_Partition,           --  Partition to bus connections
             Connect_Port_Name,
             Connect_Via_Bus    : Vector_Tag;
@@ -716,6 +723,18 @@ package body TASTE.Concurrency_View is
                   Device_ASN1_Typename :=
                     Device_ASN1_Typename & D.ASN1_Typename;
                   Device_ASN1_Module := Device_ASN1_Module & D.ASN1_Module;
+
+                  --  Update list of types and files without duplicates
+                  if not Unique_ASN1_Sorts_Set.Contains
+                    (Strip_String (To_String (D.ASN1_Typename)))
+                  then
+                     Unique_ASN1_Sorts_Set.Insert
+                       (Strip_String (To_String (D.ASN1_Typename)));
+                     Unique_ASN1_Sorts := Unique_ASN1_Sorts & D.ASN1_Typename;
+                     Unique_ASN1_Modules :=
+                       Unique_ASN1_Modules & D.ASN1_Module;
+                     Unique_ASN1_Files := Unique_ASN1_Files & D.ASN1_Filename;
+                  end if;
                end loop;
             end loop;
 
@@ -756,6 +775,9 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Device_ASN1_File",    Device_ASN1_Filename)
                  & Assoc ("Device_ASN1_Sort",    Device_ASN1_Typename)
                  & Assoc ("Device_ASN1_Module",  Device_ASN1_Module)
+                 & Assoc ("Unique_Dev_ASN1_Files", Unique_ASN1_Files)
+                 & Assoc ("Unique_Dev_ASN1_Mod",   Unique_ASN1_Modules)
+                 & Assoc ("Unique_Dev_ASN1_Sorts", Unique_ASN1_Sorts)
                  & Assoc ("Connect_From_Part",   Connect_From_Partition)
                  & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
                  & Assoc ("Connect_Port_Name",   Connect_Port_Name);

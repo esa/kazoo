@@ -1,0 +1,13 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@       : Name of the node from deployment view
+@@-- @_Partition_Names_@ : Tag listing the partitions in this node
+@@-- @_Has_Memory_@      : Boolean flag indicating that a memory is defined for this node
+@@-- @_Partitions_@      : List of rendered code for partitions
+@@-- @_VP_Names_@        : Vector tag: list of virtual processors on this node
+@@--   VP_Package_Names  :    |_ Corresponding package name
+@@--   VP_Platforms      :    |_ Corresponding platform name
+@@--   VP_Classifiers    :    |_ Corresponding aadl classifier
+@@-- @_CPU_Name_@, _Family_@, Instance_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
+@@-- Test if the node contains several partitions (virtual processors)
+@@-- If that's the case we need to generate a new AADL processor for TSP support

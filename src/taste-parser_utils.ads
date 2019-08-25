@@ -75,9 +75,13 @@ package TASTE.Parser_Utils is
 
    package String_Holders is new Indefinite_Holders (String);
 
-   function My_Custom_Filter
+   --  Custom filters for Templates_Parser
+
+   --  Return a list without duplicates
+   --  @_UNIQ(separator):Tag_@
+   function Filter_Uniq
      (Value, Parameters : String;
-      dummy_Context     :  Filter_Context) return String;
+      unused_Context    :  Filter_Context) return String;
 
    --  Generate documentation for a translate set
    procedure Document_Template (Source_Folder, Template_Name : String;

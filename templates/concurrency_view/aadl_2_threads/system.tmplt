@@ -32,6 +32,9 @@
 @@-- @_Device_ASN1_File_@
 @@-- @_Device_ASN1_Sort_@
 @@-- @_Device_ASN1_Module_@  : Device drivers (vector tag)
+@@-- @_Unique_Dev_ASN1_Files_@ : List of ASN.1 files/module/type for device configuration with no duplicates (vector tag)
+@@-- @_Unique_Dev_ASN1_Mod_@       |_  corresponding asn1 module
+@@-- @_Unique_Dev_ASN1_Sorts_@     |_  type name
 @@-- @_Connect_From_Part_@   : Vector tag - bus connection: partition source
 @@-- @_Connect_Via_Bus_@          |_ bus name
 @@-- @_Connect_Port_Name_@        |_ port name

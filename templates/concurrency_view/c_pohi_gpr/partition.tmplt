@@ -78,10 +78,7 @@ project @_CAPITALIZE:Name_@ is
 
    --  These files are not needed to use POHIC: don' t compile them
    for Excluded_Source_Files use
-      ("cheddar_schedule.cc",
-       "cheddar_schedule.hh",
-       "cheddar_types.hh",
-       "config.c",
+      ("config.c",
 @@IF@@ @_In_Port_Names'Length_@ = 0 and @_Out_Port_Names'Length_@ = 0 and @_Thread_Src_Port'Length_@ = 0
        "po_hi_gqueue.c",
        "po_hi_transport.c",

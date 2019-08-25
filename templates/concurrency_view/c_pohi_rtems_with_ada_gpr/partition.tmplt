@@ -102,10 +102,7 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
 
    --  These files are not needed to use POHIC: don' t compile them
    for Excluded_Source_Files use
-      ("cheddar_schedule.cc",
-       "cheddar_schedule.hh",
-       "cheddar_types.hh",
-       "config.c",
+      ("config.c",
        "config_leon4_n2x.c",
        "config_leon3_drvmgr.c",
        "grspw_api.c",

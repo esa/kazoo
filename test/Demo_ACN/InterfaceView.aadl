@@ -1,0 +1,250 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::A
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Cyclic_Run
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Cyclic_Run;
+
+SUBPROGRAM IMPLEMENTATION PI_Cyclic_Run.others
+END PI_Cyclic_Run.others;
+
+SUBPROGRAM PI_from_gui
+FEATURES
+  position : IN PARAMETER DataView::T_POS {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_from_gui;
+
+SUBPROGRAM IMPLEMENTATION PI_from_gui.others
+END PI_from_gui.others;
+
+SUBPROGRAM RI_Hi
+END RI_Hi;
+
+SUBPROGRAM IMPLEMENTATION RI_Hi.others
+END RI_Hi.others;
+
+SUBPROGRAM RI_to_gui
+FEATURES
+  position : IN PARAMETER DataView::T_POS {
+    Taste::encoding => NATIVE;
+  };
+END RI_to_gui;
+
+SUBPROGRAM IMPLEMENTATION RI_to_gui.others
+END RI_to_gui.others;
+
+END interfaceview::FV::A;
+
+PACKAGE interfaceview::FV::B
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Hello
+FEATURES
+  in_param : IN PARAMETER DataView::T_POS {
+    Taste::encoding => ACN;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Hello;
+
+SUBPROGRAM IMPLEMENTATION PI_Hello.others
+END PI_Hello.others;
+
+END interfaceview::FV::B;
+
+PACKAGE interfaceview::FV::some_GUI
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_to_gui
+FEATURES
+  position : IN PARAMETER DataView::T_POS {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_to_gui;
+
+SUBPROGRAM IMPLEMENTATION PI_to_gui.others
+END PI_to_gui.others;
+
+SUBPROGRAM RI_from_gui
+FEATURES
+  position : IN PARAMETER DataView::T_POS {
+    Taste::encoding => NATIVE;
+  };
+END RI_from_gui;
+
+SUBPROGRAM IMPLEMENTATION RI_from_gui.others
+END RI_from_gui.others;
+
+END interfaceview::FV::some_GUI;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::FV::A;
+WITH interfaceview::FV::B;
+WITH interfaceview::FV::some_GUI;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM A
+FEATURES
+  PI_Cyclic_Run : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::A::PI_Cyclic_Run.others {
+    Taste::coordinates => "229 490";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 2000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Cyclic_Run";
+  };
+  PI_from_gui : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::A::PI_from_gui.others {
+    Taste::coordinates => "508 1015";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "from_gui";
+  };
+  RI_Hi : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::B::PI_Hello.others {
+    Taste::coordinates => "1019 413";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "Hi";
+    Taste::labelInheritance => "true";
+  };
+  RI_to_gui : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::some_GUI::PI_to_gui.others {
+    Taste::coordinates => "882 1015";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "to_gui";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+END A;
+
+SYSTEM IMPLEMENTATION A.others
+SUBCOMPONENTS
+  Cyclic_Run_impl : SUBPROGRAM interfaceview::FV::A::PI_Cyclic_Run.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+  from_gui_impl : SUBPROGRAM interfaceview::FV::A::PI_from_gui.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_Cyclic_Run_impl : SUBPROGRAM ACCESS Cyclic_Run_impl -> PI_Cyclic_Run;
+  OpToPICnx_from_gui_impl : SUBPROGRAM ACCESS from_gui_impl -> PI_from_gui;
+END A.others;
+
+SYSTEM B
+FEATURES
+  PI_Hello : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::B::PI_Hello.others {
+    Taste::coordinates => "1719 413";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Hello";
+  };
+PROPERTIES
+  Source_Language => (C);
+END B;
+
+SYSTEM IMPLEMENTATION B.others
+SUBCOMPONENTS
+  Hello_impl : SUBPROGRAM interfaceview::FV::B::PI_Hello.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_Hello_impl : SUBPROGRAM ACCESS Hello_impl -> PI_Hello;
+END B.others;
+
+SYSTEM some_GUI
+FEATURES
+  PI_to_gui : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::some_GUI::PI_to_gui.others {
+    Taste::coordinates => "887 1308";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "to_gui";
+  };
+  RI_from_gui : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::A::PI_from_gui.others {
+    Taste::coordinates => "513 1308";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "from_gui";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+END some_GUI;
+
+SYSTEM IMPLEMENTATION some_GUI.others
+SUBCOMPONENTS
+  to_gui_impl : SUBPROGRAM interfaceview::FV::some_GUI::PI_to_gui.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_to_gui_impl : SUBPROGRAM ACCESS to_gui_impl -> PI_to_gui;
+END some_GUI.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  A : SYSTEM interfaceview::IV::A.others {
+    Taste::coordinates => "229 257 1019 1015";
+  };
+  B : SYSTEM interfaceview::IV::B.others {
+    Taste::coordinates => "1719 308 2433 1029";
+  };
+-- { interfaceview::IV::interfaceview.others.some_GUI - 543 1713 1538 1857 
+--Gui is there to test the Python backend with ACN 
+--}
+  some_GUI : SYSTEM interfaceview::IV::some_GUI.others {
+    Taste::coordinates => "200 1308 1723 1903";
+  };
+CONNECTIONS
+  A_from_gui_some_GUI_from_gui : SUBPROGRAM ACCESS A.PI_from_gui -> some_GUI.RI_from_gui {
+    Taste::coordinates => "513 1308 513 1161 508 1161 508 1015";
+  };
+  B_Hello_A_Hi : SUBPROGRAM ACCESS B.PI_Hello -> A.RI_Hi {
+    Taste::coordinates => "1019 413 1365 413 1365 413 1719 413";
+  };
+  some_GUI_to_gui_A_to_gui : SUBPROGRAM ACCESS some_GUI.PI_to_gui -> A.RI_to_gui {
+    Taste::coordinates => "882 1015 882 1161 887 1161 887 1308";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.13";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

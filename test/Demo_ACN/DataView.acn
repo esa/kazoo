@@ -1,0 +1,10 @@
+MY-MODULE DEFINITIONS ::= BEGIN
+
+	T-POS[] {
+		first-choice [size 16, encoding pos-int] ,
+		second-choice [] {
+			intVal [size 5, encoding twos-complement] ,
+			boolVal [true-value '1'B] 
+		} 
+	}
+END

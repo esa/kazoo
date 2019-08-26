@@ -17,7 +17,7 @@ DATAVIEW_AADLV1 := ${DATAVIEW_PATH}/dataview_aadlv1.aadl
 # Project cache folder is used to speed up all ASN.1-related processing
 export PROJECT_CACHE=${HOME}/.taste_AST_cache
 
-all:	build-native
+all:	build-default
 
 @@-- global check to see if dataview in Ada is needed
 @@TABLE@@
@@ -43,14 +43,18 @@ dataview:	${DATAVIEW_PATH}/built
 @@END_INLINE@@
 	touch $@
 
-build-native:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
+build-default:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
 	$(MAKE) -j -C build -f Makefile.taste
 
-build-rtems-ada:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
+build-rtems-ada:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
 	$(MAKE) -j -C build -f Makefile.taste rtems_ada
 
-air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built
+air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
 	$(MAKE) -j -C build -f Makefile.taste air
+
+# Rule to invoke Ocarina (generation of POHI middleware code)
+build/deploymentview_final/Makefile:	build/main.aadl
+	cd build && ocarina -x main.aadl
 
 @@INLINE(${DATAVIEW_UNIQ}:	)( )()@@
         @@TABLE@@
@@ -181,4 +185,4 @@ clean:
 	rm -rf binaries/*
 	$(MAKE) -C build -f Makefile.taste clean
 
-.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-native dataview build-rtems-ada
+.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-default dataview build-rtems-ada

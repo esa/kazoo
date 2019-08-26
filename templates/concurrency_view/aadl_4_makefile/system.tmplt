@@ -51,7 +51,6 @@ all:
 DriversConfig/drivers_config.h
 @@END_IF@@
 @@END_INLINE@@
-	ocarina -x main.aadl
 @@TABLE@@
 	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@
 @@END_TABLE@@
@@ -65,7 +64,6 @@ rtems_ada:
 DriversConfig/drivers_config.h
 @@END_IF@@
 @@END_INLINE@@
-	ocarina -x main.aadl
 @@TABLE@@
 	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
 @@END_TABLE@@
@@ -76,7 +74,6 @@ air:
 @_LOWER:Node_Names_@_air
 @@END_TABLE@@
 @@END_INLINE@@
-	ocarina -x main.aadl
 @@TABLE@@
 	# generate the xml file for AIR and call AIR's configure script
 	ocarina -aadlv2 -v -disable-annexes=emv2 -g air_configuration \

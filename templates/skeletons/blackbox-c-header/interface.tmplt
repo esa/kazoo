@@ -10,9 +10,17 @@
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
 @@IF@@ @_Direction_@ = "PI"
+@@IF@@ @_Param_Names'Length_@ = 0
+void @_LOWER:Parent_Function_@_@_LOWER:Name_@(void);
+@@ELSE@@
 void @_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@END_IF@@
+@@ELSE@@
+@@IF@@ @_Param_Names'Length_@ = 0
+extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void);
 @@ELSE@@
 extern void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+@@END_IF@@
 @@END_IF@@
 @@INLINE(      \()(,\n       )(\);\n)@@
    @@TABLE@@

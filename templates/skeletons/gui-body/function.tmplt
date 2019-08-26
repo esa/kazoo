@@ -36,10 +36,10 @@
 
 #include "queue_manager.h"
 #include "@_LOWER:Name_@.h"
-#include "@_LOWER:Name_@_enums_def.h"
+#include "@_Name_@_enums_def.h"
 
 typedef struct _PI_Messages {
-   T_@_LOWER:Name_@_PI_list msg_id;
+   T_@_Name_@_PI_list msg_id;
    union {
       @@TABLE@@
       @@IF@@ @_ASync_PI_Param_Type_@ /= ""
@@ -50,7 +50,7 @@ typedef struct _PI_Messages {
 } PI_Messages;
 
 typedef struct _RI_Messages {
-   T_@_LOWER:Name_@_RI_list msg_id;
+   T_@_Name_@_RI_list msg_id;
    union {
       @@TABLE@@
       @@IF@@ @_ASync_RI_Param_Type_@ /= ""
@@ -132,7 +132,7 @@ void @_LOWER:Name_@_PI_poll(void)
    struct mq_attr msgq_attr;
    char* msgcontent = NULL;
 
-   T_@_LOWER:Name_@_RI_list message_recieved_type;
+   T_@_Name_@_RI_list message_received_type;
 
    if ((msgcontent = (char*)malloc(sizeof(RI_Messages))) == NULL) {
       perror("Error when allocating memory in GUI polling function");
@@ -144,8 +144,8 @@ void @_LOWER:Name_@_PI_poll(void)
    while (!retrieve_message_from_queue(@_LOWER:Name_@_RI_queue_id,
                                        sizeof(RI_Messages),
                                        msgcontent,
-                                       (int *)&message_recieved_type)) {
-      switch(message_recieved_type) {
+                                       (int *)&message_received_type)) {
+      switch(message_received_type) {
 @@TABLE@@
          case i_@_List_Of_ASync_RIs_@:
             @_LOWER:Name_@_RI_@_LOWER:List_Of_ASync_RIs_@((asn1Scc@_REPLACE_ALL(-/_):ASync_RI_Param_Type_@ *)msgcontent);

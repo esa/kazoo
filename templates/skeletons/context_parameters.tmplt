@@ -8,29 +8,29 @@
 @@-- @_CP_Sort_@        : ... corresponding ASN.1 type
 @@-- @_CP_ASN1_Module_@ : ... in ASN.1 module
 @@-- @_CP_Value_@       : ... with default value
-Context-@_REPLACE((_)/-):LOWER:Name_@ DEFINITIONS ::=
+Context-@_REPLACE_ALL(_/-):LOWER:Name_@ DEFINITIONS ::=
 BEGIN
    IMPORTS
 @@INLINE(      )(\n      )(;\n)@@
    @@TABLE@@
-      @_Sort_Set_@ FROM @_Module_Set_@
+      @_REPLACE_ALL(_/-):Sort_Set_@ FROM @_REPLACE_ALL(_/-):Module_Set_@
    @@END_TABLE@@
 @@END_INLINE@@
 
 --  Group all context parameters of this function in a record
-Context-@_REPLACE((_)/-):LOWER:Name_@ ::= SEQUENCE {
+Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= SEQUENCE {
 @@INLINE(   )(,\n   )(\n)@@
    @@TABLE@@
-      @_REPLACE((_)/-):LOWER:CP_Name_@ @_CP_Sort_@
+      @_REPLACE_ALL((_)/-):LOWER:CP_Name_@ @_REPLACE_ALL(_/-):CP_Sort_@
    @@END_TABLE@@
 @@END_INLINE@@
 }
 
 --  Declare a constant with the values set by the user in the interface view
-@_REPLACE((_)/-):LOWER:Name_@-ctxt Context-@_REPLACE((_)/-):LOWER:Name_@ ::= {
+@_REPLACE_ALL(_/-):LOWER:Name_@-ctxt Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= {
 @@INLINE(   )(,\n   )(\n)@@
    @@TABLE@@
-      @_REPLACE((_)/-):LOWER:CP_Name_@ @_CP_Value_@
+      @_REPLACE_ALL(_/-):LOWER:CP_Name_@ @_CP_Value_@
    @@END_TABLE@@
 @@END_INLINE@@
 }

@@ -85,18 +85,18 @@ int create_exchange_queue(char* queue_name,
 // queue_id             : [in] Handle to the queue adressed as returned by
 // max_message_length   : [in] Maximum size of an element to be stored in the queue
 //                             (functional data plus discriminant) in bytes
-// message_data_recieved: [out] Pointer on the functional data retrieved in the queue
+// message_data_received: [out] Pointer on the functional data retrieved in the queue
 //                              Note that this buffer only contains the functional part
 //                              of the message and not the first field allowing to identify
 //                              the message type.
-// message_recieved_type: [out] Identifier of the type of message recieved.
+// message_received_type: [out] Identifier of the type of message received.
 //
 // Returns              : 0 on success, -1 otherwise
 //
 int retrieve_message_from_queue(mqd_t queue_id,
                                 long  max_message_length,
-                                void* message_data_recieved,
-                                int*  message_recieved_type);
+                                void* message_data_received,
+                                int*  message_received_type);
 
 //
 //This function writes a single message from a queue create_exchange_queue
@@ -107,7 +107,7 @@ int retrieve_message_from_queue(mqd_t queue_id,
 //                             Note that this buffer only contains the functional part
 //                             of the message and not the first field allowing to identify
 //                             the message type.
-// message_recieved_type: [in] Identifier of the type of message to be sent
+// message_received_type: [in] Identifier of the type of message to be sent
 //
 // Returns              : 0 on success, -1 otherwise 
 //

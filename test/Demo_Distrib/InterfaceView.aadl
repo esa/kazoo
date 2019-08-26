@@ -1,0 +1,166 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::A
+PUBLIC
+
+WITH interfaceview::IV::B;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_ping
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_ping;
+
+SUBPROGRAM IMPLEMENTATION PI_ping.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 1000 ms;
+END PI_ping.others;
+
+SUBPROGRAM PI_cyclic_activation
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_activation;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_activation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 1000 ms;
+END PI_cyclic_activation.others;
+
+SUBPROGRAM RI_pong
+FEATURES
+  p1 : IN PARAMETER DataView::My_Integer {
+    Taste::encoding => UPER;
+  };
+END RI_pong;
+
+SUBPROGRAM IMPLEMENTATION RI_pong.others
+END RI_pong.others;
+
+SYSTEM A
+FEATURES
+  PI_ping : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::A::PI_ping.others {
+    Taste::coordinates => "1232 1132";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "ping";
+  };
+  PI_cyclic_activation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::A::PI_cyclic_activation.others {
+    Taste::coordinates => "877 570";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 2000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "cyclic_activation";
+  };
+  RI_pong : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::B::PI_ping.others {
+    Taste::coordinates => "1232 672";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "pong";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END A;
+
+SYSTEM IMPLEMENTATION A.others
+END A.others;
+
+END interfaceview::IV::A;
+
+PACKAGE interfaceview::IV::B
+PUBLIC
+
+WITH interfaceview::IV::A;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_ping
+FEATURES
+  p1 : IN PARAMETER DataView::My_Integer {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_ping;
+
+SUBPROGRAM IMPLEMENTATION PI_ping.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 1000 ms;
+END PI_ping.others;
+
+SUBPROGRAM RI_pong
+END RI_pong;
+
+SUBPROGRAM IMPLEMENTATION RI_pong.others
+END RI_pong.others;
+
+SYSTEM B
+FEATURES
+  PI_ping : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::B::PI_ping.others {
+    Taste::coordinates => "1781 671";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "ping";
+  };
+  RI_pong : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::A::PI_ping.others {
+    Taste::coordinates => "1781 1131";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "pong";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END B;
+
+SYSTEM IMPLEMENTATION B.others
+END B.others;
+
+END interfaceview::IV::B;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::A;
+WITH interfaceview::IV::B;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  A : SYSTEM interfaceview::IV::A::A.others {
+    Taste::coordinates => "565 570 1232 1245";
+  };
+  B : SYSTEM interfaceview::IV::B::B.others {
+    Taste::coordinates => "1781 569 2470 1214";
+  };
+CONNECTIONS
+  A_PI_ping_B_RI_pong : SUBPROGRAM ACCESS A.PI_ping -> B.RI_pong {
+    Taste::coordinates => "1781 1131 1414 1131 1414 1132 1232 1132";
+  };
+  B_PI_ping_A_RI_pong : SUBPROGRAM ACCESS B.PI_ping -> A.RI_pong {
+    Taste::coordinates => "1232 672 1414 672 1414 671 1781 671";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

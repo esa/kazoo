@@ -1,0 +1,176 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::pb1
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS pinger
+END pinger;
+
+PROCESS IMPLEMENTATION pinger.others
+END pinger.others;
+
+DEVICE ethernet1
+EXTENDS ocarina_drivers::generic_sockets_ip
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::ip.i {
+    Taste::coordinates => "729 966";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "1145 1062" APPLIES TO link;
+  Deployment::Configuration => "{devname ""eth0"", address ""127.0.0.1"", version ipv4, port 5115 }";
+  Deployment::Config => "~/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
+  Deployment::Version => "0.1beta";
+END ethernet1;
+
+DEVICE IMPLEMENTATION ethernet1.others
+EXTENDS ocarina_drivers::generic_sockets_ip.pohic
+END ethernet1.others;
+
+END deploymentview::DV::pb1;
+
+PACKAGE deploymentview::DV::pb2
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS pingee
+END pingee;
+
+PROCESS IMPLEMENTATION pingee.others
+END pingee.others;
+
+DEVICE ethernet2
+EXTENDS ocarina_drivers::generic_sockets_ip
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::ip.i {
+    Taste::coordinates => "2276 780";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "1710 1062" APPLIES TO link;
+  Deployment::Configuration => "{devname ""eth0"", address ""127.0.0.1"", version ipv4, port 5116 }";
+  Deployment::Config => "~/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
+  Deployment::Version => "0.1beta";
+END ethernet2;
+
+DEVICE IMPLEMENTATION ethernet2.others
+EXTENDS ocarina_drivers::generic_sockets_ip.pohic
+END ethernet2.others;
+
+END deploymentview::DV::pb2;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::A;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::pb1;
+WITH interfaceview::IV::B;
+WITH deploymentview::DV::pb2;
+WITH ocarina_buses;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM pb1
+FEATURES
+  ethernet1_eth0 : REQUIRES BUS ACCESS ocarina_buses::ip.i;
+END pb1;
+
+SYSTEM IMPLEMENTATION pb1.others
+SUBCOMPONENTS
+  IV_A : SYSTEM interfaceview::IV::A::A.others {
+    Taste::FunctionName => "A";
+  };
+  pinger : PROCESS deploymentview::DV::pb1::pinger.others {
+    Taste::coordinates => "420 296 680 747";
+    Deployment::Port_Number => 0;
+  };
+  p1 : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "391 255 719 754";
+  };
+  ethernet1 : DEVICE deploymentview::DV::pb1::ethernet1.others {
+    Taste::coordinates => "457 793 850 966";
+  };
+CONNECTIONS
+  ethernet1_eth0_link : BUS ACCESS ethernet1_eth0 -> ethernet1.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (pinger)) APPLIES TO IV_A;
+  Actual_Processor_Binding => (reference (p1)) APPLIES TO pinger;
+  Actual_Processor_Binding => (reference (p1)) APPLIES TO ethernet1;
+END pb1.others;
+
+SYSTEM pb2
+FEATURES
+  ethernet2_eth0 : REQUIRES BUS ACCESS ocarina_buses::ip.i;
+END pb2;
+
+SYSTEM IMPLEMENTATION pb2.others
+SUBCOMPONENTS
+  IV_B : SYSTEM interfaceview::IV::B::B.others {
+    Taste::FunctionName => "B";
+  };
+  pingee : PROCESS deploymentview::DV::pb2::pingee.others {
+    Taste::coordinates => "2269 363 2584 708";
+    Deployment::Port_Number => 0;
+  };
+  p2 : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "2249 307 2591 725";
+  };
+  ethernet2 : DEVICE deploymentview::DV::pb2::ethernet2.others {
+    Taste::coordinates => "2276 775 2726 963";
+  };
+CONNECTIONS
+  ethernet2_eth0_link : BUS ACCESS ethernet2_eth0 -> ethernet2.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (pingee)) APPLIES TO IV_B;
+  Actual_Processor_Binding => (reference (p2)) APPLIES TO pingee;
+  Actual_Processor_Binding => (reference (p2)) APPLIES TO ethernet2;
+END pb2.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  pb1 : SYSTEM pb1.others {
+    Taste::coordinates => "333 173 913 995";
+  };
+  pb2 : SYSTEM pb2.others {
+    Taste::coordinates => "2181 223 2864 1058";
+  };
+  eth0 : BUS ocarina_buses::ip.i {
+    Taste::coordinates => "1073 1062 1788 1282";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+CONNECTIONS
+  obj1366 : BUS ACCESS eth0 -> pb1.ethernet1_eth0 {
+    Taste::coordinates => "729 966 729 1003 1145 1003 1145 1062";
+  };
+  obj1487 : BUS ACCESS eth0 -> pb2.ethernet2_eth0 {
+    Taste::coordinates => "2276 780 1710 780 1710 1062";
+  };
+PROPERTIES
+  Actual_Connection_Binding => (reference (eth0)) APPLIES TO interfaceview.A_PI_ping_B_RI_pong;
+  Actual_Connection_Binding => (reference (eth0)) APPLIES TO interfaceview.B_PI_ping_A_RI_pong;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.2";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

@@ -1,0 +1,6 @@
+Demo_Distrib
+
+Tests a distributed system over two linux nodes using TCP/IP connection
+
+build-script.sh builds with the legacy system (buildsupport/orchestrator)
+and make builds with kazoo

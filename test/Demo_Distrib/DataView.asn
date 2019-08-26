@@ -1,0 +1,5 @@
+DataView DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+My-Integer ::= INTEGER (0 .. 65535)
+
+END

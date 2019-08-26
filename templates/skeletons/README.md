@@ -141,7 +141,7 @@ This is an extract of `interface.tmplt`:
 
 ```
 @@IF@@ @_Direction_@ = "PI"
-void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(
+void @_LOWER:Parent_Function_@_PI_@_Name_@(
 @@ELSE@@
 extern void @_LOWER:Parent_Function_@_RI_@_Name_@(
 @@END_IF@@

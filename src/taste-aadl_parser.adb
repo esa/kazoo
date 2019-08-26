@@ -433,7 +433,9 @@ package body TASTE.AADL_Parser is
                                                   others => <>);
                begin
                   New_PI.PI.RCM := (if F.Provided.Length = 1
-                                    then Unprotected_Operation
+                                    then (if PI.RCM = Protected_Operation
+                                          then PI.RCM
+                                          else Unprotected_Operation)
                                     else Protected_Operation);
                   --  Check in the DV if any caller is remote
                   for Remote of PI.Remote_Interfaces loop

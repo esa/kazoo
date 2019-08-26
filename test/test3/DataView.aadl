@@ -45,7 +45,7 @@ end Stream_Element_Buffer;
 DATA MyInteger
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/kazoo/test/test3/DataView.asn");
+    Source_Text => ("DataView.asn");
     TASTE::Ada_Package_Name => "DataView";
     Deployment::ASN1_Module_Name => "DataView";
     Source_Language => ASN1;

@@ -6,7 +6,7 @@ test-parse: clean
 	$(KAZOO) --gw \
 	               -o output \
 	               --glue \
-		       --debug && cd output && time make dataviews
+		       --debug && time $(MAKE) -C output dataview
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
@@ -16,7 +16,7 @@ gdb: clean
 		       -i InterfaceView.aadl \
 		       -c DeploymentView.aadl \
 		       -d DataView.aadl \
-		       ../common/ocarina_components.aadl && cd output && time make dataviews
+		       ../common/ocarina_components.aadl && $(MAKE) -C output dataview
 
 clean:
 	rm -rf output

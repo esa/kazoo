@@ -48,7 +48,7 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_TABLE@@
 
    //  Declare user code function as external (it may not have a .h if it is in Ada)
-   extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
+   extern void @_LOWER:Parent_Function_@_PI_@_Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
@@ -60,7 +60,7 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_INLINE@@
 
    // Call user code
-   @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
+   @_LOWER:Parent_Function_@_PI_@_Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
@@ -82,8 +82,8 @@ void @_LOWER:Parent_Function_@_@_LOWER:Name_@()
 {
    //  Directly call user code, no parameters to pass
    //  This could be done directly from the concurrency glue...
-   extern void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@(void);
-   @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@();
+   extern void @_LOWER:Parent_Function_@_PI_@_Name_@(void);
+   @_LOWER:Parent_Function_@_PI_@_Name_@();
    // puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");
 }
 @@END_IF@@

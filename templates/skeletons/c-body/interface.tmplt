@@ -11,7 +11,7 @@
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
 @@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
 @@IF@@ @_EXIST:Param_Names_@
-void @_LOWER:Parent_Function_@_PI_@_LOWER:Name_@
+void @_LOWER:Parent_Function_@_PI_@_Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"

@@ -56,9 +56,12 @@ size_IN_buf_@_LOWER:Param_Names_@;
 @@END_TABLE@@
    // calling threads: @_Calling_Threads_@ partition: @_Partition_Name_@
 @@ELSIF@@ @_Kind_@ = UNPROTECTED_OPERATION
+@@IF@@ @_Param_Names'Length_@ = 0
+   @@SET@@ No_Param=True
+@@END_IF@@
    // Unprotected call
 @@TABLE@@
-@@IF@@ not @_EXIST:Param_Names_@
+@@IF@@ @_No_Param_@
    @_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@();
 @@ELSE@@
    @_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
@@ -76,7 +79,7 @@ size_IN_buf_@_LOWER:Param_Names_@;
 @@ELSE@@ @@-- Protected call
    // puts("[TASTE] Protected call of @_Name_@");
 @@TABLE@@
-   pro_@_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
+   pro_@_LOWER:Remote_Function_Names_@_@_Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

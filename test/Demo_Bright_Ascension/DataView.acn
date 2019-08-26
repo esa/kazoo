@@ -1,0 +1,359 @@
+TASTE-Dataview DEFINITIONS ::= BEGIN
+
+T-Int32-Twos[size 32, encoding twos-complement] 
+
+T-UInt14[size 14, encoding pos-int]    
+T-UInt16[size 16, encoding pos-int] 
+T-Int64[size 64, encoding twos-complement]
+
+
+T-packet[] 
+
+T-SpacecraftMode[size 8, encoding pos-int]
+    
+------------------------------------------------ 
+------------------------------------------------
+-- Shared Space Packet structure
+------------------------------------------------ 
+------------------------------------------------
+
+T-sp-tc-primaryHeader []
+
+T-sp-tc-packetID []
+{
+    versionNumber         NULL  [pattern '000'B],
+    packetType            NULL  [pattern '1'B],
+    hasScdryHdr           NULL  [pattern '1'B],
+    apid []
+} 
+
+T-sp-tm-packetID []
+{
+    versionNumber         NULL  [pattern '000'B],
+    packetType            NULL  [pattern '0'B],
+    hasScdryHdr           NULL  [pattern '1'B],
+    apid []
+} 
+
+------------------------------------------------ 
+------------------------------------------------ 
+ 
+-- MO
+
+------------------------------------------------ 
+------------------------------------------------
+
+T-MO-tc-sp[]
+{
+    primaryHeader  [],
+    secondaryHeader[]
+}  
+
+T-MO-tm-sp[]
+{
+    primaryHeader  [],
+    secondaryHeader[]
+}
+
+T-MO-ack-sp[]
+{
+    primaryHeader   [],
+    secondaryHeader []
+}   
+
+T-MO-header[]
+{
+    versionNumber  [size 3, encoding pos-int],
+    sduType        [size 5, encoding pos-int],
+    serviceArea    [],
+    moService      [],
+    operation      [],
+    areaVersion    [],
+    isErrorMsg     [true-value '1'B],
+    qosLevel       [size 2, encoding pos-int],
+    session        [size 2, encoding pos-int],
+    scdryAPID      [size 11, encoding pos-int],
+    scdryAPIDQual  [],
+--    padding        NULL   [pattern '00000000000000000000000000000000'B], --pad transactionId to 64 bits
+    transactionId  [],
+    sourceIdFlg    [true-value '1'B],
+    destIdFlg      [true-value '1'B],
+    priorityFlg    [true-value '1'B],
+    timestampFlg   [true-value '1'B],
+    netZoneFlg     [true-value '1'B],
+    sessionNameFlg [true-value '1'B],
+    domainFlg      [true-value '1'B],
+    authFlg        [true-value '1'B],    
+    timestamp      []
+}
+
+T-MO-userDataField[]
+T-Variable-String[]
+    
+T-MAL-encoded-ModeManager[]
+{
+    isPresent [true-value '00000001'B],
+    mode[]
+}
+
+T-MAL-entityKey[]
+{
+    isPresent NULL    [pattern '00000001'B],
+    subkeyLen      T-UInt16 [],
+    firstSubKey [size subkeyLen],
+-- Below subkeys are never used. set to null value
+    padding   NULL [pattern '000000000000000000000000'B]
+}
+
+T-MAL-encoded-Int32[]
+{
+    isPresent [true-value '00000001'B],
+    intVal[]
+}
+
+T-MAL-updateType[size 8, encoding pos-int]
+
+--Parameter Service Bodies
+T-MAL-encoded-parameter-getValueRequestBody[]
+T-MAL-encoded-parameter-getValueResponseBody[]
+T-MAL-encoded-parameter-setValueSubmitBody[]
+
+T-MAL-updateHeader[] 
+{
+    isPresent NULL    [pattern '00000001'B],
+    timeStamp         [],     
+    sourceURILen T-UInt16 [],
+    sourceURI  [size sourceURILen],    
+    updateType [],
+    key        []
+}
+
+T-MO-parameter-MonitorValueNotifyBody[]
+{
+    subscriptionIdPresent NULL     [pattern '00000001'B],
+    subscriptionIdLen     T-UInt16 [],
+    subscriptionID                 [size subscriptionIdLen],
+    
+    updateHeadersListPresent  NULL      [pattern '00000001'B],
+    updateHeadersListLen      T-UInt16  [],
+    updateHeaders                       [size updateHeadersListLen],
+    
+    sourceIDsListPresent NULL      [pattern '00000001'B],
+    sourceIDsListLen     T-UInt16  [],
+    sourceIDs                      [size sourceIDsListLen],
+    
+    paramValsListPresent NULL     [pattern '00000001'B],
+    paramValsListLen     T-UInt16 [],
+    paramVals                     [size paramValsListLen] 
+}
+
+T-MO-timestamp[]    
+
+T-ValidityState[size 8, encoding pos-int]
+
+T-MAL-encoded-ParameterValue[]
+{
+    isPresent NULL    [pattern '00000001'B],
+    validity [],
+    rawValue [],
+    convertedValue[]    
+}
+
+T-MO-aggregation-getValueRequestBody[]
+{
+    aggInstIdsListPresent  NULL      [pattern '00000001'B],
+    aggInstIdsListLen      T-UInt16  [],
+    aggInstIds                       [size aggInstIdsListLen]
+}
+
+
+T-MAL-encoded-InstanceBooleanPair []
+{
+    compositePresent   NULL      [pattern '00000001'B],
+    id      [],
+    value   [true-value '00000001'B]
+}
+
+T-MAL-encoded-AggregationSetValue[]
+{
+    compositePresent   NULL      [pattern '00000001'B],
+    deltaTime            [],
+    parameterSetListPresent  NULL      [pattern '00000001'B],
+    parameterSetListLen      T-UInt16  [],
+    parameterSet        [size parameterSetListLen]
+}
+
+
+T-MAL-encoded-AggregationValue[]
+{
+    compositePresent   NULL      [pattern '00000001'B],
+    aggSetsListPresent  NULL      [pattern '00000001'B],
+    aggSetsListLen      T-UInt16  [],
+    aggSets                      [size aggSetsListLen]
+}
+
+T-MO-aggregation-getValueResponseBody[]
+{
+    aggInstIdsListPresent  NULL      [pattern '00000001'B],
+    aggInstIdsListLen      T-UInt16  [],
+    aggInstIds                       [size aggInstIdsListLen],
+    
+    aggValuesListPresent  NULL      [pattern '00000001'B],
+    aggValuesListLen      T-UInt16  [],
+    aggValues                       [size aggValuesListLen]
+}
+
+T-MO-aggregation-enableGenerationSubmitBody[]
+{
+    enableInstancesListPresent  NULL      [pattern '00000001'B],
+    enableInstancesListLen      T-UInt16  [],
+    enableInstances         [size enableInstancesListLen]
+}
+
+T-MO-aggregation-MonitorValueNotifyBody[]
+{
+    subscriptionIdPresent NULL     [pattern '00000001'B],
+    subscriptionIdLen     T-UInt16 [],
+    subscriptionID                 [size subscriptionIdLen],
+    
+    updateHeadersListPresent  NULL      [pattern '00000001'B],
+    updateHeadersListLen      T-UInt16  [],
+    updateHeaders                       [size updateHeadersListLen],
+    
+    sourceIDsListPresent NULL      [pattern '00000001'B],
+    sourceIDsListLen     T-UInt16  [],
+    sourceIDs                      [size sourceIDsListLen],
+    
+    aggrValsListPresent NULL     [pattern '00000001'B],
+    aggrValsListLen     T-UInt16 [],
+    aggrVals                     [size aggrValsListLen] 
+}
+      
+      
+T-MO-alert-enableGenerationSubmitBody[]
+{
+    isGroupIdsPresent  NULL      [pattern '00000001'B],
+    isGroupIds [true-value '00000001'B],
+    
+    enableInstancesListPresent  NULL      [pattern '00000001'B],
+    enableInstancesListLen      T-UInt16  [],
+    enableInstances         [size enableInstancesListLen]
+}
+
+------------------------------------------------ 
+------------------------------------------------ 
+
+-- PUS
+
+------------------------------------------------ 
+------------------------------------------------
+
+
+T-PUS-timestamp []
+
+T-PUS-tc-sp[]
+{
+    primaryHeader   [],
+    secondaryHeader [] {
+       packetPusVersion        NULL  [pattern '0001'B],   -- fixed = 0001. This should be 0010 for PUS C
+       ackExecutionCompletion        [true-value '1'B],
+       ackExecutionProgress          [true-value '1'B],
+       ackExecutionStart             [true-value '1'B],
+       ackAcceptance                 [true-value '1'B],
+       serviceType                   TASTE-BasicTypes.T-UInt8[],
+       messageSubtype                TASTE-BasicTypes.T-UInt8[],
+       source-id                     []
+    },
+
+    userDataField [] {
+        tc-3-5-enable-hk              [present-when secondaryHeader.serviceType ==   3 secondaryHeader.messageSubtype == 5 ],
+        tc-3-6-disable-hk             [present-when secondaryHeader.serviceType ==   3 secondaryHeader.messageSubtype == 6 ],
+        tc-20-1-request-parameter     [present-when secondaryHeader.serviceType ==  20 secondaryHeader.messageSubtype == 1 ],
+        tc-20-3-set-parameter         [present-when secondaryHeader.serviceType ==  20 secondaryHeader.messageSubtype == 3 ],
+        tc-128-1-get-mode             [present-when secondaryHeader.serviceType == 128 secondaryHeader.messageSubtype == 1 ],
+        tc-128-3-set-mode             [present-when secondaryHeader.serviceType == 128 secondaryHeader.messageSubtype == 3 ]
+    },
+    crc             []
+}
+
+T-PUS-tm-sp[]
+{
+    primaryHeader   [],
+    secondaryHeader [] {
+       packetPusVersion        NULL  [pattern '0001'B],   -- fixed = 0001. This should be 0010 for PUS C
+       timeStatus              NULL  [pattern '0000'B],
+       serviceType                   TASTE-BasicTypes.T-UInt8[],
+       messageSubtype                TASTE-BasicTypes.T-UInt8[],
+       messageTypeCounter            [],
+       destination-id                [],
+       time                          []
+    },
+    userDataField [] {
+        tm-1-1-acc-success         [present-when secondaryHeader.serviceType ==   1 secondaryHeader.messageSubtype == 1 ],
+        tm-1-2-acc-failure         [present-when secondaryHeader.serviceType ==   1 secondaryHeader.messageSubtype == 2 ],
+        tm-1-7-exec-success        [present-when secondaryHeader.serviceType ==   1 secondaryHeader.messageSubtype == 7 ],
+        tm-1-8-exec-failure        [present-when secondaryHeader.serviceType ==   1 secondaryHeader.messageSubtype == 8 ],
+        tm-3-25-hk-report          [present-when secondaryHeader.serviceType ==   3 secondaryHeader.messageSubtype == 25],
+        tm-20-2-parameter-report   [present-when secondaryHeader.serviceType ==  20 secondaryHeader.messageSubtype == 2 ],
+        tm-20-4-parameter-set-ack  [present-when secondaryHeader.serviceType ==  20 secondaryHeader.messageSubtype == 4 ],
+        tm-128-2-mode-report       [present-when secondaryHeader.serviceType == 128 secondaryHeader.messageSubtype == 2 ],
+        tm-128-4-mode-set-ack      [present-when secondaryHeader.serviceType == 128 secondaryHeader.messageSubtype == 4 ]
+    },
+    crc             []
+}
+
+------------------------------------------
+-- TC-Data-Field-Header and related types
+------------------------------------------
+
+T-PUS-tc-scdryHeader [] -- Never used standalone, so no additional fields
+
+T-PUS-tc-sourceId [size 16, encoding pos-int, encode-values]
+
+-------------------------------
+-- Telecommand user data field
+-------------------------------
+
+T-PUS-tc-userDataField []
+
+T-PUS-tc-request-parameter[]
+T-PUS-tc-set-parameter[]
+
+T-PUS-tc-set-mode    []
+{
+    padding  NULL [pattern '000000'B],
+    mode          []
+}
+
+------------------------------------------
+-- TM-Data-Field-Header and related types
+------------------------------------------
+
+T-PUS-tm-scdryHeader [] --  Never used standalone, so no additional fields
+
+
+T-PUS-tm-destId [size 16, encoding pos-int, encode-values]
+
+-------------------------------
+-- Telemetry user data field 
+-------------------------------
+
+T-PUS-tm-userDataField []
+
+T-PUS-tc-enable-hk          []
+T-PUS-tc-disable-hk         []
+T-PUS-tm-hk-report          []
+T-PUS-tm-acc-success        []
+T-PUS-tm-acc-failure        []
+T-PUS-tm-parameter-report   []
+T-PUS-tm-parameter-set-ack  []
+T-PUS-tm-mode-set-ack       []
+
+T-PUS-tm-mode-report []
+{
+    padding  NULL [pattern '000000000000000000000000'B],
+    mode          []
+}
+  
+
+END

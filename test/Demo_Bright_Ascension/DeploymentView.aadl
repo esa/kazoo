@@ -1,0 +1,241 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS obsw_demonstrator
+END obsw_demonstrator;
+
+PROCESS IMPLEMENTATION obsw_demonstrator.others
+END obsw_demonstrator.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH interfaceview::IV::MO_Service_Adaption_Layer;
+WITH interfaceview::IV::MO_Service_Dispatchers;
+WITH interfaceview::IV::Mode_Manager_Component;
+WITH interfaceview::IV::PUS_Protocol_Handling;
+WITH interfaceview::IV::PUS_Service_Adapters;
+WITH interfaceview::IV::Virtual_Gyro_Component;
+WITH interfaceview::IV::sois_packet_service;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_pus_service_dispatch : SYSTEM interfaceview::IV::pus_service_dispatch.others {
+    Taste::coordinates => "203 272 334 314";
+    Taste::FunctionName => "pus_service_dispatch";
+  };
+  IV_mal_space_packet_binding : SYSTEM interfaceview::IV::mal_space_packet_binding.others {
+    Taste::coordinates => "209 327 316 376";
+    Taste::FunctionName => "mal_space_packet_binding";
+  };
+  IV_thermal_manager_container : SYSTEM interfaceview::IV::thermal_manager_container.others {
+    Taste::coordinates => "219 585 339 625";
+    Taste::FunctionName => "thermal_manager_container";
+  };
+  IV_mal_dispatch : SYSTEM interfaceview::IV::mal_dispatch.others {
+    Taste::coordinates => "220 631 343 678";
+    Taste::FunctionName => "mal_dispatch";
+  };
+  IV_mode_manager_container : SYSTEM interfaceview::IV::Mode_Manager_Component::mode_manager_container.others {
+    Taste::coordinates => "219 683 361 749";
+    Taste::FunctionName => "mode_manager_container";
+  };
+  IV_mode_manager : SYSTEM interfaceview::IV::Mode_Manager_Component::mode_manager.others {
+    Taste::coordinates => "216 763 372 814";
+    Taste::FunctionName => "mode_manager";
+  };
+  IV_thermal_manager : SYSTEM interfaceview::IV::thermal_manager.others {
+    Taste::coordinates => "226 828 377 873";
+    Taste::FunctionName => "thermal_manager";
+  };
+  IV_pus_protocol_handling : SYSTEM interfaceview::IV::PUS_Protocol_Handling::pus_protocol_handling.others {
+    Taste::coordinates => "228 893 390 941";
+    Taste::FunctionName => "pus_protocol_handling";
+  };
+  IV_space_packet_routing : SYSTEM interfaceview::IV::space_packet_routing.others {
+    Taste::coordinates => "234 963 403 1023";
+    Taste::FunctionName => "space_packet_routing";
+  };
+  IV_spp_packet_service : SYSTEM interfaceview::IV::spp_packet_service.others {
+    Taste::coordinates => "244 1039 402 1097";
+    Taste::FunctionName => "spp_packet_service";
+  };
+  IV_parameter_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::parameter_service_dispatch.others {
+    Taste::coordinates => "250 1106 416 1167";
+    Taste::FunctionName => "parameter_service_dispatch";
+  };
+  IV_mode_control_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::mode_control_service_dispatch.others {
+    Taste::coordinates => "248 1189 428 1245";
+    Taste::FunctionName => "mode_control_service_dispatch";
+  };
+  IV_check_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::check_service_dispatch.others {
+    Taste::coordinates => "680 1509 870 1567";
+    Taste::FunctionName => "check_service_dispatch";
+  };
+  IV_aggregation_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::aggregation_service_dispatch.others {
+    Taste::coordinates => "257 1407 432 1474";
+    Taste::FunctionName => "aggregation_service_dispatch";
+  };
+  IV_alert_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::alert_service_dispatch.others {
+    Taste::coordinates => "254 1488 437 1535";
+    Taste::FunctionName => "alert_service_dispatch";
+  };
+  IV_pus_custom_service_protocol_handler : SYSTEM interfaceview::IV::PUS_Service_Adapters::pus_custom_service_protocol_handler.others {
+    Taste::coordinates => "260 1547 440 1597";
+    Taste::FunctionName => "pus_custom_service_protocol_handler";
+  };
+  IV_pus_parameter_service_handler : SYSTEM interfaceview::IV::PUS_Service_Adapters::pus_parameter_service_handler.others {
+    Taste::coordinates => "265 1606 439 1657";
+    Taste::FunctionName => "pus_parameter_service_handler";
+  };
+  IV_pus_housekeeping_service_protocol_handler : SYSTEM interfaceview::IV::PUS_Service_Adapters::pus_housekeeping_service_protocol_handler.others {
+    Taste::coordinates => "263 1667 440 1711";
+    Taste::FunctionName => "pus_housekeeping_service_protocol_handler";
+  };
+  IV_parameter_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::parameter_service_adapter.others {
+    Taste::coordinates => "259 1718 439 1770";
+    Taste::FunctionName => "parameter_service_adapter";
+  };
+  IV_mode_control_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::mode_control_service_adapter.others {
+    Taste::coordinates => "265 1782 446 1822";
+    Taste::FunctionName => "mode_control_service_adapter";
+  };
+  IV_aggregation_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::aggregation_service_adapter.others {
+    Taste::coordinates => "266 1885 436 1904";
+    Taste::FunctionName => "aggregation_service_adapter";
+  };
+  IV_alert_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::alert_service_adapter.others {
+    Taste::coordinates => "265 1909 439 1926";
+    Taste::FunctionName => "alert_service_adapter";
+  };
+  IV_space_link_tx : SYSTEM interfaceview::IV::sois_packet_service::space_link_tx.others {
+    Taste::coordinates => "264 1930 437 1950";
+    Taste::FunctionName => "space_link_tx";
+  };
+  IV_space_link_rx : SYSTEM interfaceview::IV::sois_packet_service::space_link_rx.others {
+    Taste::coordinates => "264 1956 438 1964";
+    Taste::FunctionName => "space_link_rx";
+  };
+  IV_pus_spp_handling : SYSTEM interfaceview::IV::PUS_Protocol_Handling::pus_spp_handling.others {
+    Taste::coordinates => "449 408 619 511";
+    Taste::FunctionName => "pus_spp_handling";
+  };
+  IV_aggregation_service_provider : SYSTEM interfaceview::IV::aggregation_service_provider.others {
+    Taste::coordinates => "567 849 711 1029";
+    Taste::FunctionName => "aggregation_service_provider";
+  };
+  IV_action_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::action_service_adapter.others {
+    Taste::coordinates => "534 1864 659 1907";
+    Taste::FunctionName => "action_service_adapter";
+  };
+  IV_action_service_dispatch : SYSTEM interfaceview::IV::MO_Service_Dispatchers::action_service_dispatch.others {
+    Taste::coordinates => "533 1820 651 1853";
+    Taste::FunctionName => "action_service_dispatch";
+  };
+  IV_virtual_gyro_device : SYSTEM interfaceview::IV::Virtual_Gyro_Component::virtual_gyro_device.others {
+    Taste::coordinates => "542 1728 639 1769";
+    Taste::FunctionName => "virtual_gyro_device";
+  };
+  IV_virtual_gyro_container : SYSTEM interfaceview::IV::Virtual_Gyro_Component::virtual_gyro_container.others {
+    Taste::coordinates => "549 1676 628 1712";
+    Taste::FunctionName => "virtual_gyro_container";
+  };
+  IV_check_service_provider : SYSTEM interfaceview::IV::check_service_provider.others {
+    Taste::coordinates => "554 1581 800 1612";
+    Taste::FunctionName => "check_service_provider";
+  };
+  IV_gyro_device_access : SYSTEM interfaceview::IV::gyro_device_access.others {
+    Taste::coordinates => "564 1502 662 1545";
+    Taste::FunctionName => "gyro_device_access";
+  };
+  IV_check_service_adapter : SYSTEM interfaceview::IV::MO_Service_Adaption_Layer::check_service_adapter.others {
+    Taste::coordinates => "574 1421 683 1458";
+    Taste::FunctionName => "check_service_adapter";
+  };
+  IV_GUI_Parameters : SYSTEM interfaceview::IV::GUI_Parameters.others {
+    Taste::coordinates => "614 695 738 774";
+    Taste::FunctionName => "GUI_Parameters";
+  };
+  obsw_demonstrator : PROCESS deploymentview::DV::Node1::obsw_demonstrator.others {
+    Taste::coordinates => "138 228 915 2011";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux32 : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "77 80 1082 2021";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mal_space_packet_binding;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_thermal_manager_container;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mal_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mode_manager_container;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mode_manager;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_thermal_manager;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_protocol_handling;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_space_packet_routing;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_spp_packet_service;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_parameter_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mode_control_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_check_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_aggregation_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_alert_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_custom_service_protocol_handler;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_parameter_service_handler;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_housekeeping_service_protocol_handler;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_parameter_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_mode_control_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_aggregation_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_alert_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_space_link_tx;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_space_link_rx;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_pus_spp_handling;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_aggregation_service_provider;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_action_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_action_service_dispatch;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_virtual_gyro_device;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_virtual_gyro_container;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_check_service_provider;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_gyro_device_access;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_check_service_adapter;
+  Taste::APLC_Binding => (reference (obsw_demonstrator)) APPLIES TO IV_GUI_Parameters;
+  Actual_Processor_Binding => (reference (x86_linux32)) APPLIES TO obsw_demonstrator;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "44 18 1119 2064";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

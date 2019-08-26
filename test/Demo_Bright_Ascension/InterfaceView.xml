@@ -1,0 +1,1768 @@
+<InterfaceView>
+  <SystemDSObject id="obj68" label="interfaceview" dataView="DataView" dataViewPath="DataView.aadl" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="0 0 50000 50000" visible="true" />
+    <CHILD reference="obj83" />
+    <CHILD reference="obj225" />
+    <CHILD reference="obj785" />
+    <CHILD reference="obj1156" />
+    <CHILD reference="obj1752" />
+    <CHILD reference="obj1767" />
+    <CHILD reference="obj1782" />
+    <CHILD reference="obj1797" />
+    <CHILD reference="obj1812" />
+    <CHILD reference="obj1827" />
+    <CHILD reference="obj2102" />
+    <CHILD reference="obj2410" />
+    <CHILD reference="obj2546" />
+    <CHILD reference="obj2763" />
+    <CHILD reference="obj2816" />
+    <CHILD reference="obj2966" />
+    <CHILD reference="obj3000" />
+    <CHILD reference="obj3167" />
+    <CHILD reference="obj3326" />
+  </SystemDSObject> 
+  <ContainerObject id="obj83" label="sois_packet_service" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="28450 48008 34855 49721" visible="true" />
+    <CHILD reference="obj98" />
+    <CHILD reference="obj171" />
+  </ContainerObject> 
+  <FunctionObject id="obj98" label="space_link_rx" Source_Language="Blackbox_device" text="Provides a SOIS Packet Service interface to higher layers. Packet indications and requests are handled, and transferred over the simulated space link using the ZMQ messaging technology." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="29581 48465 31408 49150" visible="true" />
+    <FEATURE reference="obj113" />
+    <FEATURE reference="obj132" />
+    <CHILD reference="obj126" />
+    <CHILD reference="obj145" />
+    <CHILD reference="obj157" />
+    <CHILD reference="obj164" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj113" label="pollSocket" RCMoperationKind="cyclic" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj126" text="Polls a ZMQ socket for new packets." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="31408 49046" visible="true" />
+    <COMPONENT reference="obj98" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj132" label="packetReceiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj145" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30390 48465" visible="true" />
+    <COMPONENT reference="obj98" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj126" label="pollSocket" > 
+  </OperationObject> 
+  <OperationObject id="obj145" label="packetReceiveIndication" > 
+    <FEATURE reference="obj151" />
+  </OperationObject> 
+  <ParameterObject id="obj151" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj145" />
+  </ParameterObject> 
+  <FunctionnalStateObject id="obj157" FunctionnalStateName="zmqRxPort" FunctionnalStateType="DataView::T_UInt16" FS_Default_Value="5555" > 
+  </FunctionnalStateObject> 
+  <FunctionnalStateObject id="obj164" FunctionnalStateName="compiler_flag" FunctionnalStateType="DataView::TASTE_Directive" FS_Default_Value="linker-option: "-lzmq"" > 
+  </FunctionnalStateObject> 
+  <FunctionObject id="obj171" label="space_link_tx" Source_Language="Blackbox_device" text="Provides a SOIS Packet Service interface to higher layers. Packet indications and requests are handled, and transferred over the simulated space link using the ZMQ messaging technology." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="31990 48454 33817 49140" visible="true" />
+    <FEATURE reference="obj186" />
+    <CHILD reference="obj199" />
+    <CHILD reference="obj211" />
+    <CHILD reference="obj218" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj186" label="packetSendRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj199" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32872 48454" visible="true" />
+    <COMPONENT reference="obj171" />
+  </ProvidedInterfaceObject> 
+  <OperationObject id="obj199" label="packetSendRequest" > 
+    <FEATURE reference="obj205" />
+  </OperationObject> 
+  <ParameterObject id="obj205" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj199" />
+  </ParameterObject> 
+  <FunctionnalStateObject id="obj211" FunctionnalStateName="zmqTxPort" FunctionnalStateType="DataView::T_UInt16" FS_Default_Value="5556" > 
+  </FunctionnalStateObject> 
+  <FunctionnalStateObject id="obj218" FunctionnalStateName="compiler_Flag" FunctionnalStateType="DataView::TASTE_Directive" FS_Default_Value="linker-option: "-lzmq"" > 
+  </FunctionnalStateObject> 
+  <ContainerObject id="obj225" label="MO_Service_Adaption_Layer" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10491 33236 33324 37317" visible="true" />
+    <CHILD reference="obj240" />
+    <CHILD reference="obj312" />
+    <CHILD reference="obj434" />
+    <CHILD reference="obj487" />
+    <CHILD reference="obj540" />
+    <CHILD reference="obj643" />
+    <CHILD reference="obj770" />
+  </ContainerObject> 
+  <FunctionObject id="obj240" label="alert_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22409 34749 25798 35727" visible="true" />
+    <FEATURE reference="obj255" />
+    <FEATURE reference="obj274" />
+    <FEATURE reference="obj293" />
+    <CHILD reference="obj268" />
+    <CHILD reference="obj287" />
+    <CHILD reference="obj306" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj255" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj268" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="23047 35727" visible="true" />
+    <COMPONENT reference="obj240" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj274" label="receiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj287" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="25235 35727" visible="true" />
+    <COMPONENT reference="obj240" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3489" label="alert_service_adapter_receiveIndication_alert_service_adapter_receiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="25235 35727 25235 35825 23047 35825 23047 35727" visible="true" />
+    <OBJECT1 reference="obj255" />
+    <OBJECT2 reference="obj274" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj293" label="enableGeneration" labelInheritance="true" RCMoperationKind="any" operation="obj306" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24092 34749" visible="true" />
+    <COMPONENT reference="obj240" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj268" label="receiveIndication" > 
+  </OperationObject> 
+  <OperationObject id="obj287" label="receiveIndication" > 
+  </OperationObject> 
+  <OperationObject id="obj306" label="enableGeneration" > 
+  </OperationObject> 
+  <FunctionObject id="obj312" label="aggregation_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18732 34808 22122 35786" visible="true" />
+    <FEATURE reference="obj327" />
+    <FEATURE reference="obj358" />
+    <FEATURE reference="obj377" />
+    <FEATURE reference="obj396" />
+    <FEATURE reference="obj415" />
+    <CHILD reference="obj340" />
+    <CHILD reference="obj371" />
+    <CHILD reference="obj390" />
+    <CHILD reference="obj409" />
+    <CHILD reference="obj428" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj327" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj340" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19626 35786" visible="true" />
+    <COMPONENT reference="obj312" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj358" label="publish" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj371" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21472 34808" visible="true" />
+    <COMPONENT reference="obj312" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj377" label="transmitRequest" labelInheritance="true" RCMoperationKind="any" operation="obj390" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21558 35786" visible="true" />
+    <COMPONENT reference="obj312" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj396" label="enableGeneration" labelInheritance="true" RCMoperationKind="any" operation="obj409" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19554 34808" visible="true" />
+    <COMPONENT reference="obj312" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj415" label="monitorValue" labelInheritance="true" RCMoperationKind="any" operation="obj428" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20579 34808" visible="true" />
+    <COMPONENT reference="obj312" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj340" label="receiveIndication" > 
+    <FEATURE reference="obj346" />
+    <FEATURE reference="obj352" />
+  </OperationObject> 
+  <ParameterObject id="obj346" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj340" />
+  </ParameterObject> 
+  <ParameterObject id="obj352" parameterName="msgBody" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj340" />
+  </ParameterObject> 
+  <OperationObject id="obj371" label="publish" > 
+  </OperationObject> 
+  <OperationObject id="obj390" label="transmitRequest" > 
+  </OperationObject> 
+  <OperationObject id="obj409" label="enableGeneration" > 
+  </OperationObject> 
+  <OperationObject id="obj428" label="monitorValue" > 
+  </OperationObject> 
+  <FunctionObject id="obj434" label="check_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="26173 34773 29563 35751" visible="true" />
+    <FEATURE reference="obj449" />
+    <FEATURE reference="obj468" />
+    <CHILD reference="obj462" />
+    <CHILD reference="obj481" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj449" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj462" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="26769 35751" visible="true" />
+    <COMPONENT reference="obj434" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj468" label="receiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj481" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="29040 35751" visible="true" />
+    <COMPONENT reference="obj434" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3608" label="check_service_adapter_receiveIndication_check_service_adapter_receiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="29040 35751 29040 36274 26769 36274 26769 35751" visible="true" />
+    <OBJECT1 reference="obj449" />
+    <OBJECT2 reference="obj468" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj462" label="receiveIndication" > 
+  </OperationObject> 
+  <OperationObject id="obj481" label="receiveIndication" > 
+  </OperationObject> 
+  <FunctionObject id="obj487" label="event_action_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="29728 34772 33118 35750" visible="true" />
+    <FEATURE reference="obj502" />
+    <FEATURE reference="obj521" />
+    <CHILD reference="obj515" />
+    <CHILD reference="obj534" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj502" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj515" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30366 35750" visible="true" />
+    <COMPONENT reference="obj487" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj521" label="receiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj534" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32214 35750" visible="true" />
+    <COMPONENT reference="obj487" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3625" label="event_action_service_adapter_receiveIndication_event_action_service_adapter_receiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32214 35750 32214 35848 30366 35848 30366 35750" visible="true" />
+    <OBJECT1 reference="obj502" />
+    <OBJECT2 reference="obj521" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj515" label="receiveIndication" > 
+  </OperationObject> 
+  <OperationObject id="obj534" label="receiveIndication" > 
+  </OperationObject> 
+  <FunctionObject id="obj540" label="mode_control_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14642 34727 18032 35705" visible="true" />
+    <FEATURE reference="obj555" />
+    <FEATURE reference="obj586" />
+    <FEATURE reference="obj605" />
+    <FEATURE reference="obj624" />
+    <CHILD reference="obj568" />
+    <CHILD reference="obj599" />
+    <CHILD reference="obj618" />
+    <CHILD reference="obj637" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj555" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj568" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15619 35705" visible="true" />
+    <COMPONENT reference="obj540" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj586" label="getMode" labelInheritance="true" RCMoperationKind="any" operation="obj599" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15331 34727" visible="true" />
+    <COMPONENT reference="obj540" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj605" label="setMode" labelInheritance="true" RCMoperationKind="any" operation="obj618" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17017 34727" visible="true" />
+    <COMPONENT reference="obj540" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj624" label="transmitRequest" labelInheritance="true" RCMoperationKind="any" operation="obj637" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17369 35705" visible="true" />
+    <COMPONENT reference="obj540" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj568" label="receiveIndication" > 
+    <FEATURE reference="obj574" />
+    <FEATURE reference="obj580" />
+  </OperationObject> 
+  <ParameterObject id="obj574" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj568" />
+  </ParameterObject> 
+  <ParameterObject id="obj580" parameterName="msgBody" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj568" />
+  </ParameterObject> 
+  <OperationObject id="obj599" label="getMode" > 
+    <FEATURE reference="obj7174" />
+    <FEATURE reference="obj7339" />
+  </OperationObject> 
+  <ParameterObject id="obj7174" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj599" />
+  </ParameterObject> 
+  <ParameterObject id="obj7339" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj599" />
+  </ParameterObject> 
+  <OperationObject id="obj618" label="setMode" > 
+    <FEATURE reference="obj7238" />
+    <FEATURE reference="obj7417" />
+  </OperationObject> 
+  <ParameterObject id="obj7238" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj618" />
+  </ParameterObject> 
+  <ParameterObject id="obj7417" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj618" />
+  </ParameterObject> 
+  <OperationObject id="obj637" label="transmitRequest" > 
+  </OperationObject> 
+  <FunctionObject id="obj643" label="parameter_service_adapter" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10904 34727 14294 35705" visible="true" />
+    <FEATURE reference="obj658" />
+    <FEATURE reference="obj689" />
+    <FEATURE reference="obj708" />
+    <FEATURE reference="obj751" />
+    <CHILD reference="obj671" />
+    <CHILD reference="obj702" />
+    <CHILD reference="obj721" />
+    <CHILD reference="obj764" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj658" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj671" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11542 35705" visible="true" />
+    <COMPONENT reference="obj643" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj689" label="transmitRequest" labelInheritance="true" RCMoperationKind="any" operation="obj702" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13475 35705" visible="true" />
+    <COMPONENT reference="obj643" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj708" label="getValue" labelInheritance="true" RCMoperationKind="any" operation="obj721" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11616 34727" visible="true" />
+    <COMPONENT reference="obj643" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj751" label="setValue" labelInheritance="true" RCMoperationKind="any" operation="obj764" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13078 34727" visible="true" />
+    <COMPONENT reference="obj643" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj671" label="receiveIndication" > 
+    <FEATURE reference="obj677" />
+    <FEATURE reference="obj683" />
+  </OperationObject> 
+  <ParameterObject id="obj677" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj671" />
+  </ParameterObject> 
+  <ParameterObject id="obj683" parameterName="msgBody" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj671" />
+  </ParameterObject> 
+  <OperationObject id="obj702" label="transmitRequest" > 
+  </OperationObject> 
+  <OperationObject id="obj721" label="getValue" > 
+    <FEATURE reference="obj727" />
+    <FEATURE reference="obj733" />
+    <FEATURE reference="obj739" />
+    <FEATURE reference="obj745" />
+  </OperationObject> 
+  <ParameterObject id="obj727" parameterName="providerID" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj721" />
+  </ParameterObject> 
+  <ParameterObject id="obj733" parameterName="paramInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj721" />
+  </ParameterObject> 
+  <ParameterObject id="obj739" parameterName="paramObjInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj721" />
+  </ParameterObject> 
+  <ParameterObject id="obj745" parameterName="currentValues" parameterType="DataView::T_ParameterValueList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj721" />
+  </ParameterObject> 
+  <OperationObject id="obj764" label="setValue" > 
+    <FEATURE reference="obj6291" />
+    <FEATURE reference="obj6399" />
+  </OperationObject> 
+  <ParameterObject id="obj6291" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj764" />
+  </ParameterObject> 
+  <ParameterObject id="obj6399" parameterName="newRawValues" parameterType="DataView::T_ParameterRawValueList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj764" />
+  </ParameterObject> 
+  <CommentObject id="obj770" comment="Adapt from service specific interfaces to a generic MAL interface. Inspects SDU type and Stage to determine which interface to call." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10684 33553 15033 34589" visible="true" />
+  </CommentObject> 
+  <ContainerObject id="obj785" label="PUS_Service_Adapters" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="35563 33098 48087 37271" visible="true" />
+    <CHILD reference="obj800" />
+    <CHILD reference="obj912" />
+    <CHILD reference="obj1054" />
+    <CHILD reference="obj1141" />
+  </ContainerObject> 
+  <FunctionObject id="obj800" label="pus_housekeeping_service_protocol_handler" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="36812 34804 39145 35633" visible="true" />
+    <FEATURE reference="obj815" />
+    <FEATURE reference="obj840" />
+    <FEATURE reference="obj859" />
+    <FEATURE reference="obj878" />
+    <CHILD reference="obj828" />
+    <CHILD reference="obj853" />
+    <CHILD reference="obj872" />
+    <CHILD reference="obj891" />
+    <CHILD reference="obj897" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj815" label="hkServiceRequest" RCMoperationKind="protected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj828" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="37903 35633" visible="true" />
+    <COMPONENT reference="obj800" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj840" label="publish" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj853" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="38663 34804" visible="true" />
+    <COMPONENT reference="obj800" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj859" label="enableGeneration" labelInheritance="true" RCMoperationKind="any" operation="obj872" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="37878 34804" visible="true" />
+    <COMPONENT reference="obj800" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj878" label="monitorValue" labelInheritance="true" RCMoperationKind="any" operation="obj891" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="37091 34804" visible="true" />
+    <COMPONENT reference="obj800" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj828" label="hkServiceRequest" > 
+    <FEATURE reference="obj834" />
+  </OperationObject> 
+  <ParameterObject id="obj834" parameterName="userDataField" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj828" />
+  </ParameterObject> 
+  <OperationObject id="obj853" label="publish" > 
+  </OperationObject> 
+  <OperationObject id="obj872" label="enableGeneration" > 
+  </OperationObject> 
+  <OperationObject id="obj891" label="monitorValue" > 
+  </OperationObject> 
+  <CommentObject id="obj897" comment="Service 3
+
+Todo: add getvalue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="36838 35136 37747 35618" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj912" label="pus_parameter_service_handler" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40534 34786 43143 35713" visible="true" />
+    <FEATURE reference="obj927" />
+    <FEATURE reference="obj952" />
+    <FEATURE reference="obj995" />
+    <FEATURE reference="obj1014" />
+    <CHILD reference="obj940" />
+    <CHILD reference="obj965" />
+    <CHILD reference="obj1008" />
+    <CHILD reference="obj1027" />
+    <CHILD reference="obj1039" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj927" label="serviceRequest" RCMoperationKind="protected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj940" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="41240 35713" visible="true" />
+    <COMPONENT reference="obj912" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj952" label="getValue" labelInheritance="true" RCMoperationKind="any" operation="obj965" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40855 34786" visible="true" />
+    <COMPONENT reference="obj912" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj995" label="setValue" labelInheritance="true" RCMoperationKind="any" operation="obj1008" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42158 34786" visible="true" />
+    <COMPONENT reference="obj912" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1014" label="serviceResponse" labelInheritance="true" RCMoperationKind="any" operation="obj1027" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42289 35713" visible="true" />
+    <COMPONENT reference="obj912" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj940" label="serviceRequest" > 
+    <FEATURE reference="obj946" />
+  </OperationObject> 
+  <ParameterObject id="obj946" parameterName="pusUserData" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj940" />
+  </ParameterObject> 
+  <OperationObject id="obj965" label="getValue" > 
+    <FEATURE reference="obj971" />
+    <FEATURE reference="obj977" />
+    <FEATURE reference="obj983" />
+    <FEATURE reference="obj989" />
+  </OperationObject> 
+  <ParameterObject id="obj971" parameterName="providerID" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj965" />
+  </ParameterObject> 
+  <ParameterObject id="obj977" parameterName="paramInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj965" />
+  </ParameterObject> 
+  <ParameterObject id="obj983" parameterName="paramObjInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj965" />
+  </ParameterObject> 
+  <ParameterObject id="obj989" parameterName="currentValues" parameterType="DataView::T_ParameterValueList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj965" />
+  </ParameterObject> 
+  <OperationObject id="obj1008" label="setValue" > 
+    <FEATURE reference="obj6297" />
+    <FEATURE reference="obj6405" />
+  </OperationObject> 
+  <ParameterObject id="obj6297" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1008" />
+  </ParameterObject> 
+  <ParameterObject id="obj6405" parameterName="newRawValues" parameterType="DataView::T_ParameterRawValueList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1008" />
+  </ParameterObject> 
+  <OperationObject id="obj1027" label="serviceResponse" > 
+    <FEATURE reference="obj1033" />
+  </OperationObject> 
+  <ParameterObject id="obj1033" parameterName="pusUserData" parameterType="DataView::T_PUS_tm_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1027" />
+  </ParameterObject> 
+  <CommentObject id="obj1039" comment="Service 20" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="41433 34971 42457 35141" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj1054" label="pus_custom_service_protocol_handler" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="44603 34847 47334 35714" visible="true" />
+    <FEATURE reference="obj1069" />
+    <FEATURE reference="obj1088" />
+    <FEATURE reference="obj1107" />
+    <CHILD reference="obj1082" />
+    <CHILD reference="obj1101" />
+    <CHILD reference="obj1120" />
+    <CHILD reference="obj1126" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1069" label="customServiceRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1082" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="45878 35714" visible="true" />
+    <COMPONENT reference="obj1054" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj1088" label="getMode" labelInheritance="true" RCMoperationKind="any" operation="obj1101" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="45055 34847" visible="true" />
+    <COMPONENT reference="obj1054" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1107" label="setMode" labelInheritance="true" RCMoperationKind="any" operation="obj1120" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="46567 34847" visible="true" />
+    <COMPONENT reference="obj1054" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj1082" label="customServiceRequest" > 
+  </OperationObject> 
+  <OperationObject id="obj1101" label="getMode" > 
+    <FEATURE reference="obj7180" />
+    <FEATURE reference="obj7345" />
+  </OperationObject> 
+  <ParameterObject id="obj7180" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1101" />
+  </ParameterObject> 
+  <ParameterObject id="obj7345" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj1101" />
+  </ParameterObject> 
+  <OperationObject id="obj1120" label="setMode" > 
+    <FEATURE reference="obj7244" />
+    <FEATURE reference="obj7423" />
+  </OperationObject> 
+  <ParameterObject id="obj7244" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1120" />
+  </ParameterObject> 
+  <ParameterObject id="obj7423" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1120" />
+  </ParameterObject> 
+  <CommentObject id="obj1126" comment="Service 128" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="45320 34958 46575 35190" visible="true" />
+  </CommentObject> 
+  <CommentObject id="obj1141" comment="Decodes PUS packets, determines equivalent MO service request, and directs it to appropriate MO service provider via a service dispatcher." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="35907 33418 40810 34276" visible="true" />
+  </CommentObject> 
+  <ContainerObject id="obj1156" label="MO_Service_Dispatchers" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="5937 23748 33203 27829" visible="true" />
+    <CHILD reference="obj1171" />
+    <CHILD reference="obj1205" />
+    <CHILD reference="obj1381" />
+    <CHILD reference="obj1434" />
+    <CHILD reference="obj1487" />
+    <CHILD reference="obj1609" />
+    <CHILD reference="obj1737" />
+  </ContainerObject> 
+  <FunctionObject id="obj1171" label="alert_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22268 25260 25657 26238" visible="true" />
+    <FEATURE reference="obj1186" />
+    <CHILD reference="obj1199" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1186" label="enableGeneration" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1199" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24074 26238" visible="true" />
+    <COMPONENT reference="obj1171" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3506" label="alert_service_dispatch_enableGeneration_alert_service_adapter_enableGeneration" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24092 34749 24092 30493 24074 30493 24074 26238" visible="true" />
+    <OBJECT1 reference="obj1186" />
+    <OBJECT2 reference="obj293" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj1199" label="enableGeneration" > 
+  </OperationObject> 
+  <FunctionObject id="obj1205" label="aggregation_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18493 25260 21883 26238" visible="true" />
+    <FEATURE reference="obj1220" />
+    <FEATURE reference="obj1239" />
+    <FEATURE reference="obj1258" />
+    <FEATURE reference="obj1277" />
+    <FEATURE reference="obj1296" />
+    <FEATURE reference="obj1315" />
+    <FEATURE reference="obj1328" />
+    <FEATURE reference="obj1347" />
+    <CHILD reference="obj1233" />
+    <CHILD reference="obj1252" />
+    <CHILD reference="obj1271" />
+    <CHILD reference="obj1290" />
+    <CHILD reference="obj1309" />
+    <CHILD reference="obj1341" />
+    <CHILD reference="obj1360" />
+    <CHILD reference="obj1366" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1220" label="enableGeneration" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1233" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19555 26238" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3574" label="aggregation_service_dispatch_enableGeneration_aggregation_service_adapter_enableGeneration" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19554 34808 19554 30493 19555 30493 19555 26238" visible="true" />
+    <OBJECT1 reference="obj1220" />
+    <OBJECT2 reference="obj396" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3812" label="aggregation_service_dispatch_enableGeneration_pus_housekeeping_service_protocol_handler_enableGeneration" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="37878 34804 37878 29685 19555 29685 19555 26238" visible="true" />
+    <OBJECT1 reference="obj1220" />
+    <OBJECT2 reference="obj859" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj1239" label="monitorValue" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1252" text="Register and De-register" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20574 26238" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3591" label="aggregation_service_dispatch_monitorValue_aggregation_service_adapter_monitorValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20579 34808 20579 30493 20574 30493 20574 26238" visible="true" />
+    <OBJECT1 reference="obj1239" />
+    <OBJECT2 reference="obj415" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3829" label="aggregation_service_dispatch_monitorValue_pus_housekeeping_service_protocol_handler_monitorValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="37091 34804 37091 29863 20574 29863 20574 26238" visible="true" />
+    <OBJECT1 reference="obj1239" />
+    <OBJECT2 reference="obj878" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj1258" label="publishUpdate" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1271" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21489 25260" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj1277" label="aggrServiceEnableGeneration" labelInheritance="false" RCMoperationKind="any" operation="obj1290" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20993 25260" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1296" label="publishMO" labelInheritance="false" RCMoperationKind="any" operation="obj1309" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21476 26238" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3540" label="aggregation_service_adapter_publish_aggregation_service_dispatch_publishMO" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21476 26238 21476 30493 21472 30493 21472 34808" visible="true" />
+    <OBJECT1 reference="obj358" />
+    <OBJECT2 reference="obj1296" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj1315" label="publishPUS" labelInheritance="false" RCMoperationKind="any" operation="obj1309" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21703 26238" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3795" label="pus_housekeeping_service_protocol_handler_publish_aggregation_service_dispatch_publishPUS" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21703 26238 21703 29468 38663 29468 38663 34804" visible="true" />
+    <OBJECT1 reference="obj840" />
+    <OBJECT2 reference="obj1315" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj1328" label="getValue" labelInheritance="true" RCMoperationKind="any" operation="obj1341" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20285 25260" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1347" label="monitorValue" labelInheritance="true" RCMoperationKind="any" operation="obj1360" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19958 25260" visible="true" />
+    <COMPONENT reference="obj1205" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj1233" label="enableGeneration" > 
+  </OperationObject> 
+  <OperationObject id="obj1252" label="monitorValue" > 
+  </OperationObject> 
+  <OperationObject id="obj1271" label="publishUpdate" > 
+  </OperationObject> 
+  <OperationObject id="obj1290" label="aggrServiceEnableGeneration" > 
+  </OperationObject> 
+  <OperationObject id="obj1309" label="publishMO" > 
+  </OperationObject> 
+  <OperationObject id="obj1341" label="getValue" > 
+  </OperationObject> 
+  <OperationObject id="obj1360" label="monitorValue" > 
+  </OperationObject> 
+  <CommentObject id="obj1366" comment="Note that we only have one aggregation service provider in this deployment, so this dispatcher is present for illustration only" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18582 25477 19445 25979" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj1381" label="check_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="26052 25284 29442 26262" visible="true" />
+    <FEATURE reference="obj1396" />
+    <FEATURE reference="obj1415" />
+    <CHILD reference="obj1409" />
+    <CHILD reference="obj1428" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1396" label="enableCheck" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1409" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="26690 26262" visible="true" />
+    <COMPONENT reference="obj1381" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj1415" label="enableCheck" labelInheritance="true" RCMoperationKind="any" operation="obj1428" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="28878 26262" visible="true" />
+    <COMPONENT reference="obj1381" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4033" label="check_service_dispatch_enableCheck_check_service_dispatch_enableCheck" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="28878 26262 28878 26360 26690 26360 26690 26262" visible="true" />
+    <OBJECT1 reference="obj1396" />
+    <OBJECT2 reference="obj1415" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj1409" label="enableCheck" > 
+  </OperationObject> 
+  <OperationObject id="obj1428" label="enableCheck" > 
+  </OperationObject> 
+  <FunctionObject id="obj1434" label="event_action_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="29607 25283 32997 26261" visible="true" />
+    <FEATURE reference="obj1449" />
+    <FEATURE reference="obj1468" />
+    <CHILD reference="obj1462" />
+    <CHILD reference="obj1481" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1449" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1462" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30245 26261" visible="true" />
+    <COMPONENT reference="obj1434" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj1468" label="receiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj1481" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32433 26261" visible="true" />
+    <COMPONENT reference="obj1434" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4050" label="event_action_service_dispatch_receiveIndication_event_action_service_dispatch_receiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32433 26261 32433 26359 30245 26359 30245 26261" visible="true" />
+    <OBJECT1 reference="obj1449" />
+    <OBJECT2 reference="obj1468" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj1462" label="receiveIndication" > 
+  </OperationObject> 
+  <OperationObject id="obj1481" label="receiveIndication" > 
+  </OperationObject> 
+  <FunctionObject id="obj1487" label="mode_control_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14521 25238 17911 26216" visible="true" />
+    <FEATURE reference="obj1502" />
+    <FEATURE reference="obj1521" />
+    <FEATURE reference="obj1540" />
+    <FEATURE reference="obj1565" />
+    <FEATURE reference="obj1590" />
+    <CHILD reference="obj1515" />
+    <CHILD reference="obj1534" />
+    <CHILD reference="obj1553" />
+    <CHILD reference="obj1578" />
+    <CHILD reference="obj1603" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1502" label="getMode" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="obj1515" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15344 26216" visible="true" />
+    <COMPONENT reference="obj1487" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3659" label="mode_control_service_dispatch_getMode_mode_control_service_adapter_getMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15331 34727 15331 30471 15344 30471 15344 26216" visible="true" />
+    <OBJECT1 reference="obj1502" />
+    <OBJECT2 reference="obj586" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3931" label="mode_control_service_dispatch_getMode_pus_custom_service_protocol_handler_getMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="45055 34847 45055 31206 15344 31206 15344 26216" visible="true" />
+    <OBJECT1 reference="obj1502" />
+    <OBJECT2 reference="obj1088" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj1521" label="setMode" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="obj1534" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17017 26216" visible="true" />
+    <COMPONENT reference="obj1487" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3676" label="mode_control_service_dispatch_setMode_mode_control_service_adapter_setMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17017 34727 17017 30471 17017 30471 17017 26216" visible="true" />
+    <OBJECT1 reference="obj1521" />
+    <OBJECT2 reference="obj605" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3948" label="mode_control_service_dispatch_setMode_pus_custom_service_protocol_handler_setMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="46567 34847 46567 30982 17017 30982 17017 26216" visible="true" />
+    <OBJECT1 reference="obj1521" />
+    <OBJECT2 reference="obj1107" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj1540" label="getMode" labelInheritance="true" RCMoperationKind="any" operation="obj1553" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15320 25238" visible="true" />
+    <COMPONENT reference="obj1487" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1565" label="setMode" labelInheritance="true" RCMoperationKind="any" operation="obj1578" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="16164 25238" visible="true" />
+    <COMPONENT reference="obj1487" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1590" label="reset" labelInheritance="true" RCMoperationKind="any" operation="obj1603" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17146 25238" visible="true" />
+    <COMPONENT reference="obj1487" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj1515" label="getMode" > 
+    <FEATURE reference="obj7172" />
+    <FEATURE reference="obj7337" />
+  </OperationObject> 
+  <ParameterObject id="obj7172" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1515" />
+  </ParameterObject> 
+  <ParameterObject id="obj7337" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj1515" />
+  </ParameterObject> 
+  <OperationObject id="obj1534" label="setMode" > 
+    <FEATURE reference="obj7236" />
+    <FEATURE reference="obj7415" />
+  </OperationObject> 
+  <ParameterObject id="obj7236" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1534" />
+  </ParameterObject> 
+  <ParameterObject id="obj7415" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1534" />
+  </ParameterObject> 
+  <OperationObject id="obj1553" label="getMode" > 
+    <FEATURE reference="obj1559" />
+  </OperationObject> 
+  <ParameterObject id="obj1559" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj1553" />
+  </ParameterObject> 
+  <OperationObject id="obj1578" label="setMode" > 
+    <FEATURE reference="obj1584" />
+  </OperationObject> 
+  <ParameterObject id="obj1584" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1578" />
+  </ParameterObject> 
+  <OperationObject id="obj1603" label="reset" > 
+  </OperationObject> 
+  <FunctionObject id="obj1609" label="parameter_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="7668 25238 14173 26216" visible="true" />
+    <FEATURE reference="obj1624" />
+    <FEATURE reference="obj1667" />
+    <FEATURE reference="obj1686" />
+    <FEATURE reference="obj1705" />
+    <FEATURE reference="obj1724" />
+    <CHILD reference="obj1637" />
+    <CHILD reference="obj1680" />
+    <CHILD reference="obj1699" />
+    <CHILD reference="obj1718" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1624" label="getValue" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="obj1637" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11619 26216" visible="true" />
+    <COMPONENT reference="obj1609" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3744" label="parameter_service_dispatch_getValue_parameter_service_adapter_getValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11616 34727 11616 32865 11619 32865 11619 26216" visible="true" />
+    <OBJECT1 reference="obj1624" />
+    <OBJECT2 reference="obj708" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3863" label="parameter_service_dispatch_getValue_pus_parameter_service_handler_getValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40855 34786 40855 32708 11619 32708 11619 26216" visible="true" />
+    <OBJECT1 reference="obj1624" />
+    <OBJECT2 reference="obj952" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj1667" label="setValue" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="obj1680" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13075 26216" visible="true" />
+    <COMPONENT reference="obj1609" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3761" label="parameter_service_dispatch_setValue_parameter_service_adapter_setValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13078 34727 13078 32865 13075 32865 13075 26216" visible="true" />
+    <OBJECT1 reference="obj1667" />
+    <OBJECT2 reference="obj751" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3880" label="parameter_service_dispatch_setValue_pus_parameter_service_handler_setValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42158 34786 42158 32491 13075 32491 13075 26216" visible="true" />
+    <OBJECT1 reference="obj1667" />
+    <OBJECT2 reference="obj995" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj1686" label="modeManagerGetValue" labelInheritance="false" RCMoperationKind="any" operation="obj1699" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11218 25238" visible="true" />
+    <COMPONENT reference="obj1609" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1705" label="modeManagerSetValue" labelInheritance="false" RCMoperationKind="any" operation="obj1718" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="12720 25238" visible="true" />
+    <COMPONENT reference="obj1609" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1724" label="setValue" labelInheritance="true" RCMoperationKind="any" operation="obj1718" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="8788 25238" visible="true" />
+    <COMPONENT reference="obj1609" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj1637" label="getValue" > 
+    <FEATURE reference="obj1643" />
+    <FEATURE reference="obj1649" />
+    <FEATURE reference="obj1655" />
+    <FEATURE reference="obj1661" />
+  </OperationObject> 
+  <ParameterObject id="obj1643" parameterName="providerID" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1637" />
+  </ParameterObject> 
+  <ParameterObject id="obj1649" parameterName="paramInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1637" />
+  </ParameterObject> 
+  <ParameterObject id="obj1655" parameterName="paramObjInstIds" parameterType="DataView::T_ObjectIdList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj1637" />
+  </ParameterObject> 
+  <ParameterObject id="obj1661" parameterName="currentValues" parameterType="DataView::T_ParameterValueList" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj1637" />
+  </ParameterObject> 
+  <OperationObject id="obj1680" label="setValue" > 
+    <FEATURE reference="obj6289" />
+    <FEATURE reference="obj6397" />
+  </OperationObject> 
+  <ParameterObject id="obj6289" parameterName="providerId" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1680" />
+  </ParameterObject> 
+  <ParameterObject id="obj6397" parameterName="newRawValues" parameterType="DataView::T_ParameterRawValueList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1680" />
+  </ParameterObject> 
+  <OperationObject id="obj1699" label="modeManagerGetValue" > 
+  </OperationObject> 
+  <OperationObject id="obj1718" label="modeManagerSetValue" > 
+  </OperationObject> 
+  <CommentObject id="obj1737" comment="Allows run time selection of service provider. Effectively a cross bar switch. Determines correct  provider by inspecting MAL URI" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="6106 26516 10455 27552" visible="true" />
+  </CommentObject> 
+  <ContainerObject id="obj1752" label="OSRA_Reporting_Service" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17284 16890 22287 18563" visible="true" />
+  </ContainerObject> 
+  <ContainerObject id="obj1767" label="OSRA_Monitoring_Service" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22542 16890 26873 18563" visible="true" />
+  </ContainerObject> 
+  <ContainerObject id="obj1782" label="OSRA_Automation_Service" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27128 16913 31454 18586" visible="true" />
+  </ContainerObject> 
+  <ContainerObject id="obj1797" label="Check_Service_Provider" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22895 20678 27113 22305" visible="true" />
+  </ContainerObject> 
+  <ContainerObject id="obj1812" label="Event_Action_Service_Provider" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27555 20640 31773 22267" visible="true" />
+  </ContainerObject> 
+  <ContainerObject id="obj1827" label="PUS_Protocol_Handling" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39134 40733 44183 43399" visible="true" />
+    <CHILD reference="obj1842" />
+    <CHILD reference="obj1972" />
+  </ContainerObject> 
+  <FunctionObject id="obj1842" label="pus_protocol_handling" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39306 40995 43928 41841" visible="true" />
+    <FEATURE reference="obj1857" />
+    <FEATURE reference="obj1882" />
+    <FEATURE reference="obj1907" />
+    <FEATURE reference="obj1932" />
+    <CHILD reference="obj1870" />
+    <CHILD reference="obj1895" />
+    <CHILD reference="obj1920" />
+    <CHILD reference="obj1945" />
+    <CHILD reference="obj1957" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1857" label="pus_packetIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1870" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40453 41841" visible="true" />
+    <COMPONENT reference="obj1842" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj1882" label="pus_response" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj1895" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42833 40995" visible="true" />
+    <COMPONENT reference="obj1842" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj1907" label="pus_packetRequest" labelInheritance="true" RCMoperationKind="any" operation="obj1920" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42747 41841" visible="true" />
+    <COMPONENT reference="obj1842" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj1932" label="pus_request" labelInheritance="true" RCMoperationKind="any" operation="obj1945" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39921 40995" visible="true" />
+    <COMPONENT reference="obj1842" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj1870" label="pus_packetIndication" > 
+    <FEATURE reference="obj1876" />
+  </OperationObject> 
+  <ParameterObject id="obj1876" parameterName="telemetry" parameterType="DataView::T_PUS_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj1870" />
+  </ParameterObject> 
+  <OperationObject id="obj1895" label="pus_response" > 
+    <FEATURE reference="obj1901" />
+  </OperationObject> 
+  <ParameterObject id="obj1901" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj1895" />
+  </ParameterObject> 
+  <OperationObject id="obj1920" label="pus_packetRequest" > 
+    <FEATURE reference="obj1926" />
+  </OperationObject> 
+  <ParameterObject id="obj1926" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj1920" />
+  </ParameterObject> 
+  <OperationObject id="obj1945" label="pus_request" > 
+    <FEATURE reference="obj1951" />
+  </OperationObject> 
+  <ParameterObject id="obj1951" parameterName="pusUserData" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj1945" />
+  </ParameterObject> 
+  <CommentObject id="obj1957" comment="Handles PUS service 1, Telecommand Verification" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39361 41281 40129 41622" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj1972" label="pus_spp_handling" Source_Language="Blackbox_device" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39297 42228 43909 43108" visible="true" />
+    <FEATURE reference="obj1987" />
+    <FEATURE reference="obj2012" />
+    <FEATURE reference="obj2037" />
+    <FEATURE reference="obj2062" />
+    <CHILD reference="obj2000" />
+    <CHILD reference="obj2025" />
+    <CHILD reference="obj2050" />
+    <CHILD reference="obj2075" />
+    <CHILD reference="obj2087" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj1987" label="pus_spacePacketIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2000" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40577 43108" visible="true" />
+    <COMPONENT reference="obj1972" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj2012" label="pus_packetRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2025" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42755 42228" visible="true" />
+    <COMPONENT reference="obj1972" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4220" label="pus_spp_handling_pus_packetRequest_pus_protocol_handling_pus_packetRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42769 41830 42769 42023 42755 42023 42755 42228" visible="true" />
+    <OBJECT1 reference="obj2012" />
+    <OBJECT2 reference="obj1907" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2037" label="pus_spacePacketRequest" labelInheritance="true" RCMoperationKind="any" operation="obj2050" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42939 43108" visible="true" />
+    <COMPONENT reference="obj1972" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj2062" label="pus_packetIndication" labelInheritance="true" RCMoperationKind="any" operation="obj2075" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40437 42228" visible="true" />
+    <COMPONENT reference="obj1972" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4186" label="pus_protocol_handling_pus_packetIndication_pus_spp_handling_pus_packetIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="40437 42228 40437 41895 40475 41895 40475 41830" visible="true" />
+    <OBJECT1 reference="obj1857" />
+    <OBJECT2 reference="obj2062" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj2000" label="pus_spacePacketIndication" > 
+    <FEATURE reference="obj2006" />
+  </OperationObject> 
+  <ParameterObject id="obj2006" parameterName="telemetry" parameterType="DataView::T_PUS_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2000" />
+  </ParameterObject> 
+  <OperationObject id="obj2025" label="pus_packetRequest" > 
+    <FEATURE reference="obj2031" />
+  </OperationObject> 
+  <ParameterObject id="obj2031" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2025" />
+  </ParameterObject> 
+  <OperationObject id="obj2050" label="pus_spacePacketRequest" > 
+    <FEATURE reference="obj2056" />
+  </OperationObject> 
+  <ParameterObject id="obj2056" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2050" />
+  </ParameterObject> 
+  <OperationObject id="obj2075" label="pus_packetIndication" > 
+    <FEATURE reference="obj2081" />
+  </OperationObject> 
+  <ParameterObject id="obj2081" parameterName="telemetry" parameterType="DataView::T_PUS_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2075" />
+  </ParameterObject> 
+  <CommentObject id="obj2087" comment="Handles setting of packet length in TM headers and CRC calculation and checking" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39347 42412 40468 42984" visible="true" />
+  </CommentObject> 
+  <ContainerObject id="obj2102" label="Mode_Manager_Component" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="7645 18489 16644 22493" visible="true" />
+    <CHILD reference="obj2117" />
+    <CHILD reference="obj2201" />
+  </ContainerObject> 
+  <FunctionObject id="obj2117" label="mode_manager" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10393 19248 15238 20220" visible="true" />
+    <FEATURE reference="obj2132" />
+    <FEATURE reference="obj2157" />
+    <FEATURE reference="obj2182" />
+    <CHILD reference="obj2145" />
+    <CHILD reference="obj2170" />
+    <CHILD reference="obj2195" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2132" label="getMode" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2145" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13250 20220" visible="true" />
+    <COMPONENT reference="obj2117" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj2157" label="setMode" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2170" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11063 20220" visible="true" />
+    <COMPONENT reference="obj2117" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj2182" label="reset" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2195" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14606 20220" visible="true" />
+    <COMPONENT reference="obj2117" />
+  </ProvidedInterfaceObject> 
+  <OperationObject id="obj2145" label="getMode" > 
+    <FEATURE reference="obj2151" />
+  </OperationObject> 
+  <ParameterObject id="obj2151" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj2145" />
+  </ParameterObject> 
+  <OperationObject id="obj2170" label="setMode" > 
+    <FEATURE reference="obj2176" />
+  </OperationObject> 
+  <ParameterObject id="obj2176" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2170" />
+  </ParameterObject> 
+  <OperationObject id="obj2195" label="reset" > 
+  </OperationObject> 
+  <FunctionObject id="obj2201" label="mode_manager_container" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10357 21095 15329 22068" visible="true" />
+    <FEATURE reference="obj2272" />
+    <FEATURE reference="obj2291" />
+    <FEATURE reference="obj2316" />
+    <FEATURE reference="obj2341" />
+    <FEATURE reference="obj2366" />
+    <FEATURE reference="obj2391" />
+    <FEATURE reference="obj6615" />
+    <FEATURE reference="obj6992" />
+    <CHILD reference="obj2285" />
+    <CHILD reference="obj2304" />
+    <CHILD reference="obj2329" />
+    <CHILD reference="obj2354" />
+    <CHILD reference="obj2379" />
+    <CHILD reference="obj2404" />
+    <CHILD reference="attributes" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2272" label="reset" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2285" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15063 22068" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4101" label="mode_manager_container_reset_mode_control_service_dispatch_reset" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17146 25238 17146 23311 15063 23311 15063 22068" visible="true" />
+    <OBJECT1 reference="obj2272" />
+    <OBJECT2 reference="obj1590" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj2291" label="getMode" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2304" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14179 22068" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4067" label="mode_manager_container_getMode_mode_control_service_dispatch_getMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15320 25238 15320 23653 14179 23653 14179 22068" visible="true" />
+    <OBJECT1 reference="obj2291" />
+    <OBJECT2 reference="obj1540" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj2316" label="setMode" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="obj2329" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14631 22068" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4084" label="mode_manager_container_setMode_mode_control_service_dispatch_setMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="16164 25238 16164 23507 14631 23507 14631 22068" visible="true" />
+    <OBJECT1 reference="obj2316" />
+    <OBJECT2 reference="obj1565" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2341" label="setMode" labelInheritance="true" RCMoperationKind="any" operation="obj2354" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11064 21095" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4305" label="mode_manager_setMode_mode_manager_container_setMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11064 21095 11064 20926 11063 20926 11063 20220" visible="true" />
+    <OBJECT1 reference="obj2157" />
+    <OBJECT2 reference="obj2341" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2366" label="getMode" labelInheritance="true" RCMoperationKind="any" operation="obj2379" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13254 21095" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4288" label="mode_manager_getMode_mode_manager_container_getMode" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13254 21095 13254 20926 13250 20926 13250 20220" visible="true" />
+    <OBJECT1 reference="obj2132" />
+    <OBJECT2 reference="obj2366" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2391" label="reset" labelInheritance="true" RCMoperationKind="any" operation="obj2404" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14606 21095" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4322" label="mode_manager_reset_mode_manager_container_reset" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="14606 21095 14606 20926 14606 20926 14606 20220" visible="true" />
+    <OBJECT1 reference="obj2182" />
+    <OBJECT2 reference="obj2391" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj6615" label="getValue" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="attributes" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11221 22068" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj6829" label="Connection1" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11218 25238 11218 23653 11221 23653 11221 22068" visible="true" />
+    <OBJECT1 reference="obj6615" />
+    <OBJECT2 reference="obj1686" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj6992" label="setValue" RCMoperationKind="unprotected" Deadline="0" Compute_Execution_Time="0" operation="attributes" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="12712 22068" visible="true" />
+    <COMPONENT reference="obj2201" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj7067" label="Connection2" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="12720 25238 12720 23653 12712 23653 12712 22068" visible="true" />
+    <OBJECT1 reference="obj6992" />
+    <OBJECT2 reference="obj1705" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj2285" label="reset" > 
+  </OperationObject> 
+  <OperationObject id="obj2304" label="getMode" > 
+    <FEATURE reference="obj2310" />
+  </OperationObject> 
+  <ParameterObject id="obj2310" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj2304" />
+  </ParameterObject> 
+  <OperationObject id="obj2329" label="setMode" > 
+    <FEATURE reference="obj2335" />
+  </OperationObject> 
+  <ParameterObject id="obj2335" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2329" />
+  </ParameterObject> 
+  <OperationObject id="obj2354" label="setMode" > 
+    <FEATURE reference="obj2360" />
+  </OperationObject> 
+  <ParameterObject id="obj2360" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2354" />
+  </ParameterObject> 
+  <OperationObject id="obj2379" label="getMode" > 
+    <FEATURE reference="obj2385" />
+  </OperationObject> 
+  <ParameterObject id="obj2385" parameterName="spacecraftMode" parameterType="DataView::T_SpacecraftMode" encoding="NATIVE" direction="OUT" > 
+    <COMPONENT reference="obj2379" />
+  </ParameterObject> 
+  <OperationObject id="obj2404" label="reset" > 
+  </OperationObject> 
+  <OperationObject id="attributes" label="setValue" > 
+    <FEATURE reference="obj6616" />
+  </OperationObject> 
+  <ParameterObject id="obj6616" parameterName="newRawValues" parameterType="DataView::T_ParameterRawValueList" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="attributes" />
+  </ParameterObject> 
+  <FunctionObject id="obj2410" label="spp_packet_service" Source_Language="Blackbox_device" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="28792 46689 34440 47603" visible="true" />
+    <FEATURE reference="obj2425" />
+    <FEATURE reference="obj2450" />
+    <FEATURE reference="obj2475" />
+    <FEATURE reference="obj2500" />
+    <CHILD reference="obj2438" />
+    <CHILD reference="obj2463" />
+    <CHILD reference="obj2488" />
+    <CHILD reference="obj2513" />
+    <CHILD reference="obj2531" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2425" label="packetReceiveIndication" RCMoperationKind="protected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2438" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30391 47603" visible="true" />
+    <COMPONENT reference="obj2410" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3455" label="spp_packet_service_packetReceiveIndication_space_link_rx_packetReceiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30390 48465 30390 48034 30391 48034 30391 47603" visible="true" />
+    <OBJECT1 reference="obj2425" />
+    <OBJECT2 reference="obj132" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj2450" label="packetRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2463" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32464 46689" visible="true" />
+    <COMPONENT reference="obj2410" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj2475" label="packetSendRequest" labelInheritance="true" RCMoperationKind="any" operation="obj2488" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32872 47603" visible="true" />
+    <COMPONENT reference="obj2410" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3472" label="space_link_tx_packetSendRequest_spp_packet_service_packetSendRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32872 47603 32872 48029 32872 48029 32872 48455" visible="true" />
+    <OBJECT1 reference="obj186" />
+    <OBJECT2 reference="obj2475" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2500" label="packetIndication" labelInheritance="true" RCMoperationKind="any" operation="obj2513" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30958 46689" visible="true" />
+    <COMPONENT reference="obj2410" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj2438" label="packetReceiveIndication" > 
+    <FEATURE reference="obj2444" />
+  </OperationObject> 
+  <ParameterObject id="obj2444" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2438" />
+  </ParameterObject> 
+  <OperationObject id="obj2463" label="packetRequest" > 
+    <FEATURE reference="obj2469" />
+  </OperationObject> 
+  <ParameterObject id="obj2469" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2463" />
+  </ParameterObject> 
+  <OperationObject id="obj2488" label="packetSendRequest" > 
+    <FEATURE reference="obj2494" />
+  </OperationObject> 
+  <ParameterObject id="obj2494" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2488" />
+  </ParameterObject> 
+  <OperationObject id="obj2513" label="packetIndication" > 
+    <FEATURE reference="obj2519" />
+    <FEATURE reference="obj2525" />
+  </OperationObject> 
+  <ParameterObject id="obj2519" parameterName="apid" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2513" />
+  </ParameterObject> 
+  <ParameterObject id="obj2525" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2513" />
+  </ParameterObject> 
+  <CommentObject id="obj2531" comment="Receives Space Packets from the space link. Maintains counters per APID" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="28937 46888 30339 47500" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj2546" label="space_packet_routing" Source_Language="Blackbox_device" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="26678 44742 36906 45624" visible="true" />
+    <FEATURE reference="obj2561" />
+    <FEATURE reference="obj2592" />
+    <FEATURE reference="obj2617" />
+    <FEATURE reference="obj2642" />
+    <FEATURE reference="obj2667" />
+    <FEATURE reference="obj2692" />
+    <FEATURE reference="obj2717" />
+    <CHILD reference="obj2574" />
+    <CHILD reference="obj2605" />
+    <CHILD reference="obj2630" />
+    <CHILD reference="obj2655" />
+    <CHILD reference="obj2680" />
+    <CHILD reference="obj2705" />
+    <CHILD reference="obj2730" />
+    <CHILD reference="obj2748" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2561" label="packetIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2574" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30966 45624" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4356" label="space_packet_routing_packetIndication_spp_packet_service_packetIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30958 46689 30958 46199 30966 46199 30966 45624" visible="true" />
+    <OBJECT1 reference="obj2561" />
+    <OBJECT2 reference="obj2500" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj2592" label="pus_spacePacketRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2605" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="35327 44742" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4271" label="space_packet_routing_pus_spacePacketRequest_pus_spp_handling_pus_spacePacketRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42939 43108 42939 43958 35327 43958 35327 44742" visible="true" />
+    <OBJECT1 reference="obj2592" />
+    <OBJECT2 reference="obj2037" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj2617" label="mo_packetRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2630" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="30029 44742" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj2642" label="mo_ackPacketRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2655" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="31619 44742" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj2667" label="packetRequest" labelInheritance="true" RCMoperationKind="any" operation="obj2680" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32464 45624" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4339" label="spp_packet_service_packetRequest_space_packet_routing_packetRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32464 45624 32464 46199 32464 46199 32464 46689" visible="true" />
+    <OBJECT1 reference="obj2450" />
+    <OBJECT2 reference="obj2667" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2692" label="pus_spacePacketIndication" labelInheritance="true" RCMoperationKind="any" operation="obj2705" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32732 44742" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4254" label="pus_spp_handling_pus_spacePacketIndication_space_packet_routing_pus_spacePacketIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="32732 44742 32732 43640 40577 43640 40577 43108" visible="true" />
+    <OBJECT1 reference="obj1987" />
+    <OBJECT2 reference="obj2692" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2717" label="mo_packetIndication" labelInheritance="true" RCMoperationKind="any" operation="obj2730" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27427 44742" visible="true" />
+    <COMPONENT reference="obj2546" />
+  </RequiredInterfaceObject> 
+  <OperationObject id="obj2574" label="packetIndication" > 
+    <FEATURE reference="obj2580" />
+    <FEATURE reference="obj2586" />
+  </OperationObject> 
+  <ParameterObject id="obj2580" parameterName="apid" parameterType="DataView::T_apid" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2574" />
+  </ParameterObject> 
+  <ParameterObject id="obj2586" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2574" />
+  </ParameterObject> 
+  <OperationObject id="obj2605" label="pus_spacePacketRequest" > 
+    <FEATURE reference="obj2611" />
+  </OperationObject> 
+  <ParameterObject id="obj2611" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2605" />
+  </ParameterObject> 
+  <OperationObject id="obj2630" label="mo_packetRequest" > 
+    <FEATURE reference="obj2636" />
+  </OperationObject> 
+  <ParameterObject id="obj2636" parameterName="sp" parameterType="DataView::T_MO_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2630" />
+  </ParameterObject> 
+  <OperationObject id="obj2655" label="mo_ackPacketRequest" > 
+    <FEATURE reference="obj2661" />
+  </OperationObject> 
+  <ParameterObject id="obj2661" parameterName="sp" parameterType="DataView::T_MO_ack_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2655" />
+  </ParameterObject> 
+  <OperationObject id="obj2680" label="packetRequest" > 
+    <FEATURE reference="obj2686" />
+  </OperationObject> 
+  <ParameterObject id="obj2686" parameterName="rawPacket" parameterType="DataView::T_packet" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2680" />
+  </ParameterObject> 
+  <OperationObject id="obj2705" label="pus_spacePacketIndication" > 
+    <FEATURE reference="obj2711" />
+  </OperationObject> 
+  <ParameterObject id="obj2711" parameterName="telemetry" parameterType="DataView::T_PUS_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2705" />
+  </ParameterObject> 
+  <OperationObject id="obj2730" label="mo_packetIndication" > 
+    <FEATURE reference="obj2736" />
+    <FEATURE reference="obj2742" />
+  </OperationObject> 
+  <ParameterObject id="obj2736" parameterName="tc" parameterType="DataView::T_MO_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj2730" />
+  </ParameterObject> 
+  <ParameterObject id="obj2742" parameterName="body" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2730" />
+  </ParameterObject> 
+  <CommentObject id="obj2748" comment="Dispatches Space Packets to MAL or PUS handling stacks according to APID." > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27022 44978 29282 45511" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj2763" label="thermal_manager" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="342 19148 4661 20321" visible="true" />
+    <FEATURE reference="obj2778" />
+    <FEATURE reference="obj2797" />
+    <CHILD reference="obj2791" />
+    <CHILD reference="obj2810" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2778" label="heaterOn" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2791" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="3737 20321" visible="true" />
+    <COMPONENT reference="obj2763" />
+  </ProvidedInterfaceObject> 
+  <RequiredInterfaceObject id="obj2797" label="heaterOn" labelInheritance="true" RCMoperationKind="any" operation="obj2810" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="1209 20321" visible="true" />
+    <COMPONENT reference="obj2763" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4424" label="thermal_manager_heaterOn_thermal_manager_heaterOn" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="1209 20321 1209 20438 3737 20438 3737 20321" visible="true" />
+    <OBJECT1 reference="obj2778" />
+    <OBJECT2 reference="obj2797" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj2791" label="heaterOn" > 
+  </OperationObject> 
+  <OperationObject id="obj2810" label="heaterOn" > 
+  </OperationObject> 
+  <FunctionObject id="obj2816" label="mal_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="10962 38872 33226 39935" visible="true" />
+    <FEATURE reference="obj2831" />
+    <FEATURE reference="obj2862" />
+    <FEATURE reference="obj2881" />
+    <FEATURE reference="obj2906" />
+    <FEATURE reference="obj2925" />
+    <FEATURE reference="obj2938" />
+    <CHILD reference="obj2844" />
+    <CHILD reference="obj2875" />
+    <CHILD reference="obj2894" />
+    <CHILD reference="obj2919" />
+    <CHILD reference="obj2951" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2831" label="receiveIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2844" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21967 39935" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj2862" label="transmitRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2875" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22394 38872" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3557" label="mal_dispatch_transmitRequest_aggregation_service_adapter_transmitRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21558 35786 21558 37805 22394 37805 22394 38872" visible="true" />
+    <OBJECT1 reference="obj2862" />
+    <OBJECT2 reference="obj377" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3693" label="mal_dispatch_transmitRequest_mode_control_service_adapter_transmitRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17369 35705 17369 38003 22394 38003 22394 38872" visible="true" />
+    <OBJECT1 reference="obj2862" />
+    <OBJECT2 reference="obj624" />
+  </GenericConnectionObject> 
+  <GenericConnectionObject id="obj3727" label="mal_dispatch_transmitRequest_parameter_service_adapter_transmitRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="13475 35705 13475 38195 22394 38195 22394 38872" visible="true" />
+    <OBJECT1 reference="obj2862" />
+    <OBJECT2 reference="obj689" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2881" label="transmitRequest" labelInheritance="true" RCMoperationKind="any" operation="obj2894" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24907 39935" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </RequiredInterfaceObject> 
+  <RequiredInterfaceObject id="obj2906" label="paramServiceReceiveIndication" labelInheritance="false" RCMoperationKind="any" operation="obj2919" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11547 38872" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3710" label="parameter_service_adapter_receiveIndication_mal_dispatch_paramServiceReceiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11547 38872 11547 38088 11542 38088 11542 35705" visible="true" />
+    <OBJECT1 reference="obj658" />
+    <OBJECT2 reference="obj2906" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2925" label="modeControlServiceReceiveIndication" labelInheritance="false" RCMoperationKind="any" operation="obj2919" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15637 38872" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3642" label="mode_control_service_adapter_receiveIndication_mal_dispatch_modeControlServiceReceiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="15637 38872 15637 37288 15619 37288 15619 35705" visible="true" />
+    <OBJECT1 reference="obj555" />
+    <OBJECT2 reference="obj2925" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj2938" label="aggrServiceReceiveIndication" labelInheritance="false" RCMoperationKind="any" operation="obj2919" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19626 38872" visible="true" />
+    <COMPONENT reference="obj2816" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3523" label="aggregation_service_adapter_receiveIndication_mal_dispatch_aggrServiceReceiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19626 38872 19626 37539 19626 37539 19626 35786" visible="true" />
+    <OBJECT1 reference="obj327" />
+    <OBJECT2 reference="obj2938" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj2844" label="receiveIndication" > 
+    <FEATURE reference="obj2850" />
+    <FEATURE reference="obj2856" />
+  </OperationObject> 
+  <ParameterObject id="obj2850" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2844" />
+  </ParameterObject> 
+  <ParameterObject id="obj2856" parameterName="msgBody" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2844" />
+  </ParameterObject> 
+  <OperationObject id="obj2875" label="transmitRequest" > 
+  </OperationObject> 
+  <OperationObject id="obj2894" label="transmitRequest" > 
+    <FEATURE reference="obj2900" />
+  </OperationObject> 
+  <ParameterObject id="obj2900" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj2894" />
+  </ParameterObject> 
+  <OperationObject id="obj2919" label="paramServiceReceiveIndication" > 
+  </OperationObject> 
+  <CommentObject id="obj2951" comment="Routes MAL messages according to service ID" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="11609 39103 13484 39784" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj2966" label="thermal_manager_container" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="434 21349 4554 22656" visible="true" />
+    <FEATURE reference="obj2981" />
+    <CHILD reference="obj2994" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj2981" label="setValue" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj2994" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="2641 22656" visible="true" />
+    <COMPONENT reference="obj2966" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4169" label="thermal_manager_container_setValue_parameter_service_dispatch_setValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="8788 25238 8788 24550 2641 24550 2641 22656" visible="true" />
+    <OBJECT1 reference="obj2981" />
+    <OBJECT2 reference="obj1724" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj2994" label="setValue" > 
+  </OperationObject> 
+  <FunctionObject id="obj3000" label="mal_space_packet_binding" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18522 41523 28271 42586" visible="true" />
+    <FEATURE reference="obj3015" />
+    <FEATURE reference="obj3046" />
+    <FEATURE reference="obj3071" />
+    <FEATURE reference="obj3096" />
+    <FEATURE reference="obj3127" />
+    <CHILD reference="obj3028" />
+    <CHILD reference="obj3059" />
+    <CHILD reference="obj3084" />
+    <CHILD reference="obj3109" />
+    <CHILD reference="obj3140" />
+    <CHILD reference="obj3152" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj3015" label="mo_packetIndication" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3028" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="22253 42586" visible="true" />
+    <COMPONENT reference="obj3000" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4407" label="mal_space_packet_binding_mo_packetIndication_space_packet_routing_mo_packetIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27427 44742 27427 44246 22253 44246 22253 42586" visible="true" />
+    <OBJECT1 reference="obj3015" />
+    <OBJECT2 reference="obj2717" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj3046" label="transmitRequest" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3059" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24909 41523" visible="true" />
+    <COMPONENT reference="obj3000" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4458" label="mal_space_packet_binding_transmitRequest_mal_dispatch_transmitRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24907 39935 24907 40753 24909 40753 24909 41523" visible="true" />
+    <OBJECT1 reference="obj3046" />
+    <OBJECT2 reference="obj2881" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3071" label="mo_packetRequest" labelInheritance="true" RCMoperationKind="any" operation="obj3084" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24921 42586" visible="true" />
+    <COMPONENT reference="obj3000" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4373" label="space_packet_routing_mo_packetRequest_mal_space_packet_binding_mo_packetRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="24921 42586 24921 43879 30029 43879 30029 44742" visible="true" />
+    <OBJECT1 reference="obj2617" />
+    <OBJECT2 reference="obj3071" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3096" label="receiveIndication" labelInheritance="true" RCMoperationKind="any" operation="obj3109" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21966 41523" visible="true" />
+    <COMPONENT reference="obj3000" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4441" label="mal_dispatch_receiveIndication_mal_space_packet_binding_receiveIndication" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21966 41523 21966 40753 21967 40753 21967 39935" visible="true" />
+    <OBJECT1 reference="obj2831" />
+    <OBJECT2 reference="obj3096" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3127" label="mo_ackPacketRequest" labelInheritance="true" RCMoperationKind="any" operation="obj3140" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27205 42586" visible="true" />
+    <COMPONENT reference="obj3000" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4390" label="space_packet_routing_mo_ackPacketRequest_mal_space_packet_binding_mo_ackPacketRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="27205 42586 27205 43721 31619 43721 31619 44742" visible="true" />
+    <OBJECT1 reference="obj2642" />
+    <OBJECT2 reference="obj3127" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj3028" label="mo_packetIndication" > 
+    <FEATURE reference="obj3034" />
+    <FEATURE reference="obj3040" />
+  </OperationObject> 
+  <ParameterObject id="obj3034" parameterName="tc" parameterType="DataView::T_MO_tc_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj3028" />
+  </ParameterObject> 
+  <ParameterObject id="obj3040" parameterName="body" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3028" />
+  </ParameterObject> 
+  <OperationObject id="obj3059" label="transmitRequest" > 
+    <FEATURE reference="obj3065" />
+  </OperationObject> 
+  <ParameterObject id="obj3065" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3059" />
+  </ParameterObject> 
+  <OperationObject id="obj3084" label="mo_packetRequest" > 
+    <FEATURE reference="obj3090" />
+  </OperationObject> 
+  <ParameterObject id="obj3090" parameterName="sp" parameterType="DataView::T_MO_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj3084" />
+  </ParameterObject> 
+  <OperationObject id="obj3109" label="receiveIndication" > 
+    <FEATURE reference="obj3115" />
+    <FEATURE reference="obj3121" />
+  </OperationObject> 
+  <ParameterObject id="obj3115" parameterName="msg" parameterType="DataView::T_MAL_msg" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3109" />
+  </ParameterObject> 
+  <ParameterObject id="obj3121" parameterName="msgBody" parameterType="DataView::T_MO_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3109" />
+  </ParameterObject> 
+  <OperationObject id="obj3140" label="mo_ackPacketRequest" > 
+    <FEATURE reference="obj3146" />
+  </OperationObject> 
+  <ParameterObject id="obj3146" parameterName="sp" parameterType="DataView::T_MO_ack_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj3140" />
+  </ParameterObject> 
+  <CommentObject id="obj3152" comment="Binding of MAL messages to Space Packets" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18876 41816 20208 42418" visible="true" />
+  </CommentObject> 
+  <FunctionObject id="obj3167" label="pus_service_dispatch" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39447 38930 43662 40009" visible="true" />
+    <FEATURE reference="obj3182" />
+    <FEATURE reference="obj3207" />
+    <FEATURE reference="obj3232" />
+    <FEATURE reference="obj3257" />
+    <FEATURE reference="obj3276" />
+    <FEATURE reference="obj3301" />
+    <CHILD reference="obj3195" />
+    <CHILD reference="obj3220" />
+    <CHILD reference="obj3245" />
+    <CHILD reference="obj3270" />
+    <CHILD reference="obj3289" />
+    <CHILD reference="obj3314" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj3182" label="pus_request" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3195" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39919 40009" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4237" label="pus_service_dispatch_pus_request_pus_protocol_handling_pus_request" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39921 40995 39921 40502 39919 40502 39919 40009" visible="true" />
+    <OBJECT1 reference="obj3182" />
+    <OBJECT2 reference="obj1932" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj3207" label="serviceResponse" RCMoperationKind="protected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3220" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42289 38930" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3897" label="pus_service_dispatch_serviceResponse_pus_parameter_service_handler_serviceResponse" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42289 35713 42289 37321 42289 37321 42289 38930" visible="true" />
+    <OBJECT1 reference="obj3207" />
+    <OBJECT2 reference="obj1014" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3232" label="pus_response" labelInheritance="true" RCMoperationKind="any" operation="obj3245" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42832 40009" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4203" label="pus_protocol_handling_pus_response_pus_service_dispatch_pus_response" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="42832 40009 42832 40502 42833 40502 42833 40995" visible="true" />
+    <OBJECT1 reference="obj1882" />
+    <OBJECT2 reference="obj3232" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3257" label="customServiceRequest" labelInheritance="true" RCMoperationKind="any" operation="obj3270" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="43174 38930" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3914" label="pus_custom_service_protocol_handler_customServiceRequest_pus_service_dispatch_customServiceRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="43174 38930 43174 37785 45878 37785 45878 35714" visible="true" />
+    <OBJECT1 reference="obj1069" />
+    <OBJECT2 reference="obj3257" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3276" label="hkServiceRequest" labelInheritance="true" RCMoperationKind="any" operation="obj3289" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39829 38930" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3778" label="pus_housekeeping_service_protocol_handler_hkServiceRequest_pus_service_dispatch_hkServiceRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="39829 38930 39829 37844 37903 37844 37903 35633" visible="true" />
+    <OBJECT1 reference="obj815" />
+    <OBJECT2 reference="obj3276" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3301" label="serviceRequest" labelInheritance="true" RCMoperationKind="any" operation="obj3314" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="41240 38930" visible="true" />
+    <COMPONENT reference="obj3167" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3846" label="pus_parameter_service_handler_serviceRequest_pus_service_dispatch_serviceRequest" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="41240 38930 41240 37321 41240 37321 41240 35713" visible="true" />
+    <OBJECT1 reference="obj927" />
+    <OBJECT2 reference="obj3301" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj3195" label="pus_request" > 
+    <FEATURE reference="obj3201" />
+  </OperationObject> 
+  <ParameterObject id="obj3201" parameterName="pusUserData" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3195" />
+  </ParameterObject> 
+  <OperationObject id="obj3220" label="serviceResponse" > 
+    <FEATURE reference="obj3226" />
+  </OperationObject> 
+  <ParameterObject id="obj3226" parameterName="pusUserData" parameterType="DataView::T_PUS_tm_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3220" />
+  </ParameterObject> 
+  <OperationObject id="obj3245" label="pus_response" > 
+    <FEATURE reference="obj3251" />
+  </OperationObject> 
+  <ParameterObject id="obj3251" parameterName="telemetry" parameterType="DataView::T_PUS_tm_sp" encoding="ACN" direction="IN" > 
+    <COMPONENT reference="obj3245" />
+  </ParameterObject> 
+  <OperationObject id="obj3270" label="customServiceRequest" > 
+  </OperationObject> 
+  <OperationObject id="obj3289" label="hkServiceRequest" > 
+    <FEATURE reference="obj3295" />
+  </OperationObject> 
+  <ParameterObject id="obj3295" parameterName="userDataField" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3289" />
+  </ParameterObject> 
+  <OperationObject id="obj3314" label="serviceRequest" > 
+    <FEATURE reference="obj3320" />
+  </OperationObject> 
+  <ParameterObject id="obj3320" parameterName="pusUserData" parameterType="DataView::T_PUS_tc_userDataField" encoding="NATIVE" direction="IN" > 
+    <COMPONENT reference="obj3314" />
+  </ParameterObject> 
+  <FunctionObject id="obj3326" label="aggregation_service_provider" Source_Language="C" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="17879 21368 21269 22346" visible="true" />
+    <FEATURE reference="obj3341" />
+    <FEATURE reference="obj3360" />
+    <FEATURE reference="obj3379" />
+    <FEATURE reference="obj3398" />
+    <FEATURE reference="obj3417" />
+    <FEATURE reference="obj3436" />
+    <CHILD reference="obj3354" />
+    <CHILD reference="obj3373" />
+    <CHILD reference="obj3392" />
+    <CHILD reference="obj3411" />
+    <CHILD reference="obj3430" />
+    <CHILD reference="obj3449" />
+  </FunctionObject> 
+  <ProvidedInterfaceObject id="obj3341" label="enableGeneration" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3354" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20619 22346" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3982" label="aggregation_service_provider_enableGeneration_aggregation_service_dispatch_aggrServiceEnableGeneration" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20993 25260 20993 23313 20619 23313 20619 22346" visible="true" />
+    <OBJECT1 reference="obj3341" />
+    <OBJECT2 reference="obj1277" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj3360" label="update" RCMoperationKind="cyclic" RCMperiod="100" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3373" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21269 21555" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </ProvidedInterfaceObject> 
+  <ProvidedInterfaceObject id="obj3379" label="getValue" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3392" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20023 22346" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj3999" label="aggregation_service_provider_getValue_aggregation_service_dispatch_getValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="20285 25260 20285 23428 20023 23428 20023 22346" visible="true" />
+    <OBJECT1 reference="obj3379" />
+    <OBJECT2 reference="obj1328" />
+  </GenericConnectionObject> 
+  <ProvidedInterfaceObject id="obj3398" label="monitorValue" RCMoperationKind="unprotected" RCMperiod="0" Deadline="0" Compute_Execution_Time="0" Associated_Queue_Size="1" operation="obj3411" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19435 22346" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </ProvidedInterfaceObject> 
+  <GenericConnectionObject id="obj4016" label="aggregation_service_provider_monitorValue_aggregation_service_dispatch_monitorValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="19958 25260 19958 23543 19435 23543 19435 22346" visible="true" />
+    <OBJECT1 reference="obj3398" />
+    <OBJECT2 reference="obj1347" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3417" label="paramServiceGetValue" labelInheritance="false" RCMoperationKind="any" operation="obj3430" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18153 22346" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj4118" label="parameter_service_dispatch_getValue_aggregation_service_provider_paramServiceGetValue" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="18153 22338 18153 26787 11619 26787 11619 26216" visible="true" />
+    <OBJECT1 reference="obj1624" />
+    <OBJECT2 reference="obj3417" />
+  </GenericConnectionObject> 
+  <RequiredInterfaceObject id="obj3436" label="publishUpdate" labelInheritance="true" RCMoperationKind="any" operation="obj3449" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21269 22045" visible="true" />
+    <COMPONENT reference="obj3326" />
+  </RequiredInterfaceObject> 
+  <GenericConnectionObject id="obj3965" label="aggregation_service_dispatch_publishUpdate_aggregation_service_provider_publishUpdate" > 
+    <GRAPHIC graphicalInterface="InterfaceView" coordinates="21266 22045 21489 22045 21489 25260" visible="true" />
+    <OBJECT1 reference="obj1258" />
+    <OBJECT2 reference="obj3436" />
+  </GenericConnectionObject> 
+  <OperationObject id="obj3354" label="enableGeneration" > 
+  </OperationObject> 
+  <OperationObject id="obj3373" label="update" > 
+  </OperationObject> 
+  <OperationObject id="obj3392" label="getValue" > 
+  </OperationObject> 
+  <OperationObject id="obj3411" label="monitorValue" > 
+  </OperationObject> 
+  <OperationObject id="obj3430" label="paramServiceGetValue" > 
+  </OperationObject> 
+  <OperationObject id="obj3449" label="publishUpdate" > 
+  </OperationObject> 
+</InterfaceView>

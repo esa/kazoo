@@ -1,0 +1,867 @@
+TASTE-Dataview DEFINITIONS ::=
+BEGIN
+IMPORTS T-Int32, T-UInt32, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
+
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------
+ 
+-- Basic Types             
+    
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------
+
+T-Int32-Twos ::=  INTEGER (-2147483648 .. 2147483647)
+
+T-UInt14 ::= INTEGER(0 .. 16383)
+T-UInt16 ::= INTEGER(0 .. 65535)
+T-Int64  ::= INTEGER(-1 .. 9223372036854775807)
+T-NULL   ::= INTEGER(0)
+T-String ::= OCTET STRING (SIZE(64))
+T-Variable-String ::= OCTET STRING (SIZE(0..64))
+
+-- CUC 
+-- 4 octet T field, no P field.
+T-UnsegmentedTime ::= OCTET STRING (SIZE(4))
+
+T-UInt32List ::= SEQUENCE (SIZE(1..10)) OF T-UInt32
+T-Int32List ::= SEQUENCE (SIZE(1..10)) OF T-Int32
+
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------ 
+   
+-- SOIS Packet Service                  
+  
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------
+
+-- Raw packet buffer  -- should be max space packet len, but kept short for now
+T-packet ::= SEQUENCE (SIZE(7..256)) OF T-UInt8
+
+
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------ 
+ 
+-- MO Application types       
+  
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------
+
+------------------------------------------------ 
+-- Shared MO Types
+------------------------------------------------
+
+
+T-MO-ErrorCodes ::= ENUMERATED 
+{
+    -- Provider specific error code, used globally in this
+    -- demonstrator to mean no error.
+    none       (0), 
+    
+    --MAL Table 5-1: Standard MAL Error Codes
+    unsupportedOperation (65546), 
+    internal             (65549), 
+    unknown              (65550),
+    
+    
+    -- COM
+    invalid     (70000),
+    duplicate   (70001),
+    
+    -- M&C Services
+    readonly    (70020)
+    
+}
+
+-- Area 99
+-- Short form 2
+T-ParameterExpression ::= SEQUENCE
+{ 
+    parameterId     T-Int32,
+    exprOperator    T-String,
+    useConverted    T-Boolean,
+    value           T-String
+}
+
+-- Area 99
+-- Short form 3
+T-ConditionalReference ::= SEQUENCE
+{
+    condition       T-ParameterExpression,
+    referenceId     T-Int32
+}
+T-ConditionalReferenceList ::= SEQUENCE (SIZE(1..10)) OF T-ConditionalReference
+
+-- Area 99
+-- Short form 5
+T-InstanceBooleanPair ::= SEQUENCE
+{
+    id      T-Int32,
+    value   T-Boolean
+}
+T-InstanceBooleanPairList ::= SEQUENCE (SIZE(1..10)) OF T-InstanceBooleanPair
+
+T-MAL-encoded-InstanceBooleanPair ::= SEQUENCE
+{
+    id      T-MAL-encoded-Int32,
+    value   BOOLEAN
+}
+
+T-MO-Severity ::= ENUMERATED
+{
+    severity-informational,
+    severity-warning,
+    severity-alarm,
+    severity-severe,
+    severity-critical
+}
+
+------------------------------------------------ 
+-- Spacecraft Mode Control Service Types
+------------------------------------------------ 
+
+-- Area 99
+-- Short form 4
+T-SpacecraftMode ::= ENUMERATED 
+{
+    safe           (1), 
+    sunAcquisition (2),
+    standby        (3),
+    measurement    (4)
+}
+
+------------------------------------------------ 
+-- Parameter Service Types
+------------------------------------------------
+
+-- Area 99
+-- Service 2
+-- Short form 1
+T-ValidityState ::= ENUMERATED
+{
+    invalid       (1),
+    valid         (2),
+    valid-raw     (3),
+    unverified    (4),
+    expired       (5)
+}
+
+
+T-MO-ParameterIdentity ::= SEQUENCE
+{
+    objectInstID        T-Int32,
+    objectName          T-String
+}
+
+T-MO-ParameterDefinitionDetails ::= SEQUENCE
+{
+    objectInstID       T-Int32,
+    related            T-MO-ParameterIdentity,
+    rawType            T-UInt8,
+    generationEnabled  BOOLEAN
+}
+
+T-MO-ParameterValue ::= SEQUENCE
+{
+    objectInstID       T-Int32,
+    related            T-MO-ParameterDefinitionDetails, 
+    
+--  validityState      T-ValidityState Not used onboard
+    rawValue           T-Int32 -- Should be an attribute, but we use Int for simplicity
+--  convertedValue     We dont use this onboard.
+}
+T-MO-ParameterValueList ::= SEQUENCE (SIZE(1..10)) OF T-MO-ParameterValue
+
+
+------------------------------------------------ 
+-- Aggregation Service Types 
+------------------------------------------------
+
+
+T-MO-AggregationParameterSet ::= SEQUENCE
+{
+    parameters         SEQUENCE (SIZE(1..10)) OF T-Int32  -- List of parameter definition ids
+}
+
+T-MO-AggregationSetValue ::= SEQUENCE
+{
+    deltaTime          T-UnsegmentedTime,
+    values             SEQUENCE (SIZE(1..10)) OF T-MO-ParameterValue
+}
+
+
+T-MO-AggregationIdentity ::= SEQUENCE
+{
+    objectInstID        T-Int32,
+    objectName          T-String
+}
+
+T-MO-AggregationDefinitionDetails ::= SEQUENCE
+{
+    objectInstID       T-Int32,
+    related            T-MO-AggregationIdentity,
+    
+    generationEnabled  BOOLEAN,
+    parameterSets      SEQUENCE (SIZE(1..10)) OF T-MO-AggregationParameterSet
+}
+
+T-MO-AggregationValue ::= SEQUENCE
+{
+    objectInstID       T-Int32,
+    related            T-MO-AggregationDefinitionDetails,
+    values            SEQUENCE (SIZE(1..10)) OF T-MO-AggregationSetValue
+}
+T-MO-AggregationValueList ::= SEQUENCE (SIZE(1..10)) OF T-MO-AggregationValue
+
+------------------------------------------------ 
+-- Check Service Types
+------------------------------------------------
+
+
+
+T-MO-CheckSummary ::= SEQUENCE
+{
+    linkID          T-Int32,
+    parameterID     T-Int32,
+    evaluationTime  T-UnsegmentedTime,
+    result          T-MO-CheckResult
+}
+T-MO-CheckSummaryList ::= SEQUENCE (SIZE(1..10)) OF T-MO-CheckSummary
+
+T-MO-CheckState ::= ENUMERATED
+{
+    disabled   (1),
+    unchecked  (2),
+    invalid    (3),
+    ok         (4),
+    notOk      (5)
+}
+T-MO-CheckResult ::= SEQUENCE
+{
+    source      T-MO-ParameterValue, --object that caused check evaluation to occur- ParameterValueInstance
+    related     T-MO-CheckLinkDetails,
+    
+    previousCheckState T-MO-CheckState,
+    currentCheckState  T-MO-CheckState,
+    
+    previousEvaluationResult BOOLEAN,
+    currentEvaluationResult  BOOLEAN
+    
+}
+
+T-MO-CheckIdentity ::= SEQUENCE
+{
+    objectInstID        T-Int32,
+    objectName          T-String
+}
+
+T-MO-CheckDefinition ::= SEQUENCE
+{
+    objectInstID    T-Int32,
+    source      T-MO-LimitCheck,
+    related     T-MO-CheckIdentity
+}
+
+T-MO-LimitCheck ::= SEQUENCE
+{
+    objectInstID    T-Int32,
+    related     T-MO-CheckIdentity,
+    
+    violateInRange BOOLEAN,
+    lowerLimit     T-Int32,
+    upperLimit     T-Int32
+}
+
+T-MO-CheckLinkDetails ::= SEQUENCE
+{
+    objectInstID    T-Int32,
+    
+    source          T-MO-ParameterDefinitionDetails,
+    related         T-MO-CheckDefinition,  
+    checkEnabled    BOOLEAN    
+}
+
+T-MO-CheckTransitionEvent ::= SEQUENCE
+{
+    objectInstID    T-Int32,
+    source          T-MO-CheckLinkDetails,
+    related         T-MO-ParameterValue
+}
+
+------------------------------------------------ 
+-- Alert Service Types
+------------------------------------------------
+
+
+
+T-MO-ArgumentValue ::= SEQUENCE
+{
+    value   T-String
+}
+T-MO-ArgumentValueList ::= SEQUENCE (SIZE(1..10)) OF T-MO-ArgumentValue
+
+T-MO-AlertIdentity ::= SEQUENCE
+{
+    objectInstID        T-Int32,
+    objectName          T-String   
+}
+
+T-MO-AlertDefinitionDetails ::= SEQUENCE
+{
+    objectInstID       T-Int32,
+    related            T-MO-AlertIdentity,
+    
+    description        T-String,
+    severity           T-MO-Severity,
+    generationEnabled  BOOLEAN
+    -- We would include a list of argument definitions here, but all alert arguments
+    -- in this demonstrator are of the same type (string)
+}
+
+T-MO-AlertEventDetails ::= SEQUENCE
+{
+    source      T-Int32, --object that caused event to be generated.
+    related     T-MO-AlertDefinitionDetails,
+    
+    values      T-MO-ArgumentValueList    
+}
+
+
+------------------------------------------------ 
+------------------------------------------------ 
+ 
+-- MAL message   
+
+------------------------------------------------ 
+------------------------------------------------
+T-MAL-msg ::= SEQUENCE
+{
+    malMsgHeader T-MAL-msg-header,
+    malMsgBody   T-MAL-msg-body
+--  qosProperties
+}
+
+T-MAL-interactionType ::= ENUMERATED
+{
+    send,
+    submit,
+    request,
+    invoke,
+    progress,
+    pubsub
+}
+
+T-MAL-msg-header ::= SEQUENCE
+{
+    uriFrom          T-apid,
+--  authID
+    uriTo            T-apid,
+    timestamp        T-MO-timestamp,    
+--  qosLevel         \
+--  priority         |
+--  domain           |  We don't use any of these flags
+--  network zone     |
+--  session          |
+--  session name     /   
+    interactionType  T-MAL-interactionType,
+    interactionStage T-UInt8,
+    transactionId    T-Int64,
+    serviceArea      T-UInt16,
+    moService        T-UInt16,
+    operation        T-UInt16,
+    areaVersion      T-UInt8,
+    isErrorMsg       BOOLEAN   
+}
+
+
+T-MAL-msg-body ::= CHOICE
+{
+     modeManager T-SpacecraftMode    
+}
+
+
+------------------------------------------------ 
+------------------------------------------------ 
+ 
+-- Space Packet common parts  
+    
+------------------------------------------------ 
+------------------------------------------------ 
+
+T-sp-tc-primaryHeader ::= SEQUENCE
+{
+    packetID              T-sp-tc-packetID,
+    packetSequenceControl T-packetSequenceControl,
+    packetLength          T-UInt16
+}
+
+T-sp-tm-primaryHeader ::= SEQUENCE
+{
+    packetID              T-sp-tm-packetID,
+    packetSequenceControl T-packetSequenceControl,
+    packetLength          T-UInt16
+}
+
+T-sp-tc-packetID ::= SEQUENCE
+{
+--  versionNumber    INTEGER(0..7),
+--  packetType       T-packetType, --always 1 for telecommand
+--  hasScdryHdr      BOOLEAN,
+    apid             T-apid
+}
+
+T-sp-tm-packetID ::= SEQUENCE
+{
+--  versionNumber    INTEGER(0..7),
+--  packetType       T-packetType, --always 0 for telemetry
+--  hasScdryHdr      BOOLEAN,
+    apid             T-apid
+}
+
+T-sp-packetType ::= ENUMERATED -- not really needed any more. handled in ACN
+{
+    telemetry   (0),
+    telecommand (1)
+}
+
+T-apid ::= INTEGER(0..2047)
+
+T-packetSequenceControl ::= SEQUENCE
+{
+    sequenceControlFlags  T-sequenceControlFlags,
+    sequenceCount         T-UInt14
+}
+
+T-sequenceControlFlags ::= ENUMERATED
+{
+    continuationSequencePacket(0),
+    firstsSequencePacket      (1),
+    lastSequencePakcet        (2),
+    standAlonePacket          (3)
+}
+
+------------------------------------------------ 
+------------------------------------------------ 
+ 
+-- MO Space Packet Parts  
+
+------------------------------------------------ 
+------------------------------------------------ 
+
+T-MO-timestamp ::=  OCTET STRING (SIZE(7))
+
+T-MO-tc-sp ::= SEQUENCE
+{
+    primaryHeader   T-sp-tc-primaryHeader,
+    secondaryHeader T-MO-header
+}
+
+T-MO-tm-sp ::= SEQUENCE
+{
+    primaryHeader   T-sp-tm-primaryHeader,
+    secondaryHeader T-MO-header
+}
+
+T-MO-ack-sp ::= SEQUENCE
+{
+    primaryHeader   T-sp-tm-primaryHeader,
+    secondaryHeader T-MO-header
+}
+
+T-MO-header ::= SEQUENCE
+{
+    versionNumber  INTEGER(0..7),
+    sduType        INTEGER(0..31),
+    serviceArea    T-UInt16,
+    moService      T-UInt16,
+    operation      T-UInt16,
+    areaVersion    T-UInt8,
+    isErrorMsg     BOOLEAN,
+    qosLevel       INTEGER(0..3),
+    session        INTEGER(0..3),
+    scdryAPID      INTEGER(0..2047),
+    scdryAPIDQual  T-UInt16,
+    transactionId  T-Int64,
+    sourceIdFlg    BOOLEAN,
+    destIdFlg      BOOLEAN,
+    priorityFlg    BOOLEAN,
+    timestampFlg   BOOLEAN,
+    netZoneFlg     BOOLEAN,
+    sessionNameFlg BOOLEAN,
+    domainFlg      BOOLEAN,
+    authFlg        BOOLEAN,
+    timestamp      T-MO-timestamp
+}
+
+----
+-- Data types used to encode MAL message bodies
+----
+
+
+T-MO-userDataField ::=  OCTET STRING (SIZE(0..222))
+
+T-MAL-encoded-ModeManager ::= SEQUENCE
+{
+     isPresent BOOLEAN,
+     mode T-SpacecraftMode
+}
+
+T-MAL-encoded-Int32 ::= SEQUENCE
+{
+     isPresent BOOLEAN,
+     intVal    T-Int32-Twos
+}
+T-MAL-encoded-Int32List ::= SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-Int32
+
+T-MO-parameter-getValueRequestBody ::= SEQUENCE
+{
+    paramID     T-Int32
+}
+T-MAL-encoded-parameter-getValueRequestBody ::= SEQUENCE
+{
+    paramID     T-MAL-encoded-Int32
+}
+
+T-MO-parameter-getValueResponseBody ::= SEQUENCE
+{
+    paramID     T-Int32,
+    paramVal    T-Int32
+}
+T-MAL-encoded-parameter-getValueResponseBody ::= SEQUENCE
+{
+    paramID     T-MAL-encoded-Int32,
+    paramVal    T-MAL-encoded-Int32
+}
+
+T-MO-parameter-setValueSubmitBody ::= SEQUENCE
+{
+    paramID     T-Int32,
+    paramVal    T-Int32
+}
+T-MAL-encoded-parameter-setValueSubmitBody ::= SEQUENCE
+{
+    paramID     T-MAL-encoded-Int32,
+    paramVal    T-MAL-encoded-Int32
+}
+
+T-MO-parameter-EnableGenerationSubmitBody ::= SEQUENCE
+{
+    paramID     T-Int32,
+    paramVal    T-Int32
+}
+T-MAL-encoded-parameter-EnableGenerationSubmitBody ::= SEQUENCE
+{
+    paramID     T-MAL-encoded-Int32,
+    paramVal    T-MAL-encoded-Int32
+}
+
+T-MAL-encoded-ParameterValue ::= SEQUENCE
+{
+    validity        T-ValidityState,
+    rawValue        T-MAL-encoded-Int32,
+    convertedValue  T-MAL-encoded-Int32
+}
+
+
+T-MAL-entityKey ::= SEQUENCE 
+{
+    firstSubKey    OCTET STRING (SIZE(0..64))
+-- We don't make use of the other sub keys in this demo 
+   -- secondSubKey   T-Int64,
+   -- thirdSubKey    T-Int64,
+   -- fourthSubKey   T-Int64    
+}
+
+T-MAL-updateType ::= ENUMERATED
+{
+    creation,
+    update,
+    modification,
+    deletion
+}
+
+T-MAL-updateHeader  ::= SEQUENCE
+{    
+    timeStamp      T-MO-timestamp, 
+    sourceURI      OCTET STRING (SIZE(0..64)),
+    updateType     T-MAL-updateType,
+    key            T-MAL-entityKey
+}
+T-MAL-updateHeaderList ::= SEQUENCE (SIZE(1..10)) OF T-MAL-updateHeader
+
+T-MO-parameter-MonitorValueNotifyBody ::= SEQUENCE
+{
+    subscriptionID  OCTET STRING (SIZE(0..64)),
+    updateHeaders   SEQUENCE (SIZE(1..10)) OF T-MAL-updateHeader,
+    sourceIDs       SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-Int32,
+    paramVals       SEQUENCE (SIZE(1..10))  OF T-MAL-encoded-ParameterValue   
+}
+
+
+T-MO-aggregation-getValueRequestBody ::= SEQUENCE
+{
+   aggInstIds SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-Int32
+}
+
+
+
+
+T-MAL-encoded-AggregationSetValue ::= SEQUENCE
+{
+    deltaTime     T-MAL-encoded-Int32,
+    parameterSet  SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-ParameterValue
+}
+
+
+T-MAL-encoded-AggregationValue ::= SEQUENCE
+{
+    aggSets SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-AggregationSetValue
+}
+
+T-MO-aggregation-getValueResponseBody ::= SEQUENCE
+{
+   aggInstIds SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-Int32,
+   aggValues  SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-AggregationValue
+}
+
+T-MO-aggregation-enableGenerationSubmitBody ::= SEQUENCE
+{
+    enableInstances  SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-InstanceBooleanPair 
+}
+
+T-MO-aggregation-MonitorValueNotifyBody ::= SEQUENCE
+{
+    subscriptionID  OCTET STRING (SIZE(0..64)),
+    updateHeaders   SEQUENCE (SIZE(1..10)) OF T-MAL-updateHeader,
+    sourceIDs       SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-Int32,
+    aggrVals        SEQUENCE (SIZE(1..10))  OF T-MAL-encoded-AggregationValue   
+}
+
+
+T-MO-alert-enableGenerationSubmitBody ::= SEQUENCE
+{
+    isGroupIds       BOOLEAN,
+    enableInstances  SEQUENCE (SIZE(1..10)) OF T-MAL-encoded-InstanceBooleanPair 
+}
+
+
+------------------------------------------------ 
+------------------------------------------------ 
+ 
+-- PUS   
+
+------------------------------------------------ 
+------------------------------------------------
+
+
+--------------Service 1 ------------ 
+
+-- PUS Space packet: access success
+T-PUS-tm-acc-success ::= SEQUENCE
+{
+    packetID                T-sp-tc-packetID,
+    packetSequenceControl   T-packetSequenceControl   
+}
+
+T-PUS-tm-acc-failure ::= SEQUENCE
+{
+    packetID                T-sp-tc-packetID,
+    packetSequenceControl   T-packetSequenceControl,
+    failure                 T-PUS-tc-failure-code
+}
+
+-- PUS Space packet: execution success
+T-PUS-tm-exec-success ::= SEQUENCE
+{
+    packetID                T-sp-tc-packetID,
+    packetSequenceControl   T-packetSequenceControl   
+}
+
+T-PUS-tm-exec-failure ::= SEQUENCE
+{
+    packetID                T-sp-tc-packetID,
+    packetSequenceControl   T-packetSequenceControl,
+    failure                 T-PUS-tc-failure-code
+}
+
+T-PUS-tc-failure-code ::= ENUMERATED
+{
+    none,
+    executionFail,
+    illegalApid,
+    illegalType,
+    illegalSubtype,
+    wrongPacketLength,
+    wrongSourceId,
+    wrongCRC
+}
+
+--------------Service 3 ------------ 
+
+T-PUS-tc-enable-hk ::= SEQUENCE
+{
+    count          T-UInt8,  
+    reportID       T-UInt32
+}
+
+T-PUS-tc-disable-hk ::= SEQUENCE
+{
+    count             T-UInt8,  
+    reportID          T-UInt32
+}
+
+T-PUS-tm-hk-report ::= SEQUENCE
+{
+    reportDefinitionID    T-UInt32,
+    valueA                T-UInt32,
+    valueB                T-UInt32
+}
+--------------Service 20 -----------
+
+T-PUS-tc-request-parameter ::= SEQUENCE
+{
+    count             T-UInt8,  
+    parameterID       T-UInt32
+}
+
+T-PUS-tm-parameter-report ::= SEQUENCE
+{   
+    count       T-UInt8,
+    parameterID T-UInt32,
+    value       T-UInt32
+}
+
+T-PUS-tc-set-parameter ::= SEQUENCE
+{
+    count             T-UInt8,
+    parameterID       T-UInt32,
+    value             T-UInt32
+}
+
+T-PUS-tm-parameter-set-ack ::= SEQUENCE
+{   
+    value       T-UInt32
+}
+
+
+-------------Service 128 -----------
+T-PUS-tm-mode-report ::= SEQUENCE
+{
+    mode T-SpacecraftMode
+}
+
+T-PUS-tc-set-mode ::= SEQUENCE
+{
+    mode T-SpacecraftMode
+}
+
+T-PUS-tm-mode-set-ack ::= SEQUENCE
+{   
+    value       T-UInt32
+}
+
+-- T-PUS-tc-get-mode  Empty user data field
+
+------------------------------------------------ 
+------------------------------------------------ 
+
+-- PUS Space Packet Parts  
+
+------------------------------------------------ 
+------------------------------------------------
+T-PUS-timestamp ::= OCTET STRING ( SIZE(6) )  -- Format not yet determined
+
+T-PUS-tc-sp ::= SEQUENCE
+{
+    primaryHeader   T-sp-tc-primaryHeader,
+    secondaryHeader T-PUS-tc-scdryHeader,
+    userDataField   T-PUS-tc-userDataField,
+    crc             T-UInt16
+}
+
+T-PUS-tm-sp ::= SEQUENCE
+{
+    primaryHeader   T-sp-tm-primaryHeader,
+    secondaryHeader T-PUS-tm-scdryHeader,
+    userDataField   T-PUS-tm-userDataField,
+    crc             T-UInt16
+}
+
+T-PUS-tc-scdryHeader ::= SEQUENCE
+{
+--  packetPusVersion INTEGER(0..7),
+    ackExecutionCompletion  BOOLEAN,
+    ackExecutionProgress    BOOLEAN,
+    ackExecutionStart       BOOLEAN,
+    ackAcceptance           BOOLEAN,
+--  serviceType
+--  messageSubtype
+    source-id               T-PUS-tc-sourceId
+}
+
+T-PUS-tm-scdryHeader ::= SEQUENCE
+{
+--  packetPusVersion INTEGER(0..7), set to 1
+--  timeStatus
+--  serviceType
+--  messageSubtype
+    messageTypeCounter        T-UInt16,
+    destination-id            T-PUS-tm-destId,
+    time                      T-PUS-timestamp
+} 
+
+
+-- Source and dest IDs are ignored by ground software
+-- source Ids TBD
+T-PUS-tc-sourceId ::=  ENUMERATED 
+{
+    source1-dummy,
+    source2-dummy
+}
+
+-- dest Ids TBD
+T-PUS-tm-destId ::=  ENUMERATED 
+{
+    dest1-dummy,
+    dest2-dummy
+}
+
+T-PUS-tc-userDataField ::= CHOICE
+{   
+-- Service 3: housekeeping --
+    tc-3-5-enable-hk             T-PUS-tc-enable-hk,
+    tc-3-6-disable-hk            T-PUS-tc-disable-hk,
+    
+-- Service 20: onboard parameter management --
+    tc-20-1-request-parameter    T-PUS-tc-request-parameter,   
+    tc-20-3-set-parameter        T-PUS-tc-set-parameter,
+--  tc-20-6-request-definition   T-PUS-tc-request-definition,
+
+        
+-- Service 128: mission specific service mode manager --
+    tc-128-1-get-mode             T-NULL, -- no user data field
+    tc-128-3-set-mode             T-PUS-tc-set-mode
+}
+
+T-PUS-tm-userDataField ::= CHOICE
+{
+-- Service 1: request verification
+    tm-1-1-acc-success           T-PUS-tm-acc-success,
+    tm-1-2-acc-failure           T-PUS-tm-acc-failure,
+    tm-1-7-exec-success          T-PUS-tm-exec-success,
+    tm-1-8-exec-failure          T-PUS-tm-exec-failure,
+    
+-- Service 3: housekeeping
+    tm-3-25-hk-report            T-PUS-tm-hk-report, 
+    
+--Service 20: onboard parameter management
+    tm-20-2-parameter-report     T-PUS-tm-parameter-report,
+    tm-20-4-parameter-set-ack    T-PUS-tm-parameter-set-ack,
+--  tc-20-7-definition-report    T-PUS-tc-definition-report,
+
+-- Service 128: mission specific service mode manager
+    tm-128-2-mode-report         T-PUS-tm-mode-report,
+    tm-128-4-mode-set-ack        T-PUS-tm-mode-set-ack
+}
+
+END
+

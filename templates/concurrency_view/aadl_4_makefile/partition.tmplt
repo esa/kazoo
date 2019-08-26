@@ -8,7 +8,7 @@
 @@-- @_Block_Names@      : Vector Tag: list of block (user functions) names
 @@-- @_Block_Languages@  :   |_ Corresponding implementation language
 @@-- @_Coverage_@        : True if user requested code coverage enable
-@@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
+@@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_processors_x86)
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
 @@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 @@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
@@ -20,14 +20,16 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+#  Build of partition @_Name_@ (common to all targets)
 @@INLINE()( )(\n)@@
-@_LOWER:Name_@_native :
+@_LOWER:Name_@:
    @@TABLE@@
       @_LOWER:Block_Names_@
    @@END_TABLE@@
 @@END_INLINE@@
 
-@_LOWER:Name_@_rtems_ada : @_LOWER:Name_@_native
+# Build of partition @_Name_@ for RTEMS
+@_LOWER:Name_@_rtems_ada : @_LOWER:Name_@
 @@-- On RTEMS if using POHIC we need to have adainit created for Ada functions
 @@--@@IF@@ @_CPU_Platform_@ /= PLATFORM_NATIVE
 	mkdir -p @_LOWER:Name_@_adainit && \

@@ -121,7 +121,6 @@ project @_CAPITALIZE:Name_@_AIR is
        "config_leon4_n2x.c",
        "grspw_api.c",
        "grspw_pkt_lib.c",
-       "hyperperriod_config.hh",
        "po_hi_driver_drvmgr_common.c",
        "po_hi_driver_exarm.c",
        "po_hi_driver_exarm_ni_6071e_analog.c",
@@ -150,11 +149,9 @@ project @_CAPITALIZE:Name_@_AIR is
        "po_hi_monitor.c",
        "po_hi_simulink.c",
        "po_hi_storage.c",
-       "remote_configuration.cc",
        "spwrouter_custom_config.c",
        "star_dundee_api.c",
        "trace_manager.c",
-       "trace_manager.cc",
        "um_threads.c");
 
 end @_CAPITALIZE:Name_@_AIR;

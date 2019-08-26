@@ -45,24 +45,15 @@
 @@INLINE()( )()@@
 all:
 @@TABLE@@
-@_LOWER:Node_Names_@_native
+@_LOWER:Node_Names_@_@_Node_CPU_@
 @@END_TABLE@@
-@@IF@@ @_Device_Names'Length_@ > 0
-DriversConfig/drivers_config.h
-@@END_IF@@
 @@END_INLINE@@
-@@TABLE@@
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@
-@@END_TABLE@@
 
 @@INLINE()( )()@@
 rtems_ada:
 @@TABLE@@
 @_LOWER:Node_Names_@_rtems_ada
 @@END_TABLE@@
-@@IF@@ @_Device_Names'Length_@ > 0
-DriversConfig/drivers_config.h
-@@END_IF@@
 @@END_INLINE@@
 @@TABLE@@
 	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
@@ -95,6 +86,8 @@ air:
 DriversConfig/drivers_config.h:	drivers_config.asn
 	mkdir -p DriversConfig
 	asn1.exe -o DriversConfig -c drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
+@@ELSE@@
+DriversConfig/drivers_config.h:  # Not a distributed system
 @@END_IF@@
 
 @_Nodes_@

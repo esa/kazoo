@@ -115,10 +115,10 @@ dataview/C/built: ${DATAVIEW_UNIQ}
            @@--  do nothing, C is always done, only once
 	   @@ELSIF@@ @_Unique_Languages_@ = "GUI"
            @@--  for DMT, GUI means Python
-dataview/Python/built: ${DATAVIEW_UNIQ}
+dataview/Python/built: dataview/C/built
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toPython ${DATAVIEW_UNIQ}  @@-- Ignore context parameters for python interface
-	$(MAKE) -C dataview/Python -f Makefile.python
+	$(MAKE) -j1 -C dataview/Python -f Makefile.python
         @@TABLE@@
         @@IF@@ @_Language_@ = GUI
 	cp  dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python

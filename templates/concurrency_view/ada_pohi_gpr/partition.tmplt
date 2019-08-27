@@ -57,12 +57,12 @@ project @_CAPITALIZE:Name_@ is
        "../../dataview/Ada",
 @@END_IF@@
 @@TABLE@@
-@@IF@@ @_Block_Languages_@ = sdl
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/code",
+@@IF@@ @_Block_Languages_@ = SDL
+       "../../@_LOWER:Block_Names_@/SDL/code",
 @@ELSE@@
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/src",
+       "../../@_LOWER:Block_Names_@/@_Block_Languages_@/src",
 @@END_IF@@
-       "../../@_LOWER:Block_Names_@/@_UPPER:Block_Languages_@/wrappers",
+       "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("ADA_INCLUDE_PATH", ":");

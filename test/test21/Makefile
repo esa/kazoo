@@ -3,22 +3,17 @@ KAZOO=../../kazoo
 all: test-parse
 
 test-parse: clean
-	$(KAZOO) --gw \
-	               -o output \
-	               --glue \
-		       --debug && time $(MAKE) -C output dataview
+	$(KAZOO) --gw -p -o output.pohic --glue --debug 
+	time $(MAKE) -C output.pohic dataview
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output \
+	               -o output.pohic \
+		       -p \
 	               --glue \
-		       --debug \
-		       -i InterfaceView.aadl \
-		       -c DeploymentView.aadl \
-		       -d DataView.aadl \
-		       ../common/ocarina_components.aadl && $(MAKE) -C output dataview
+		       --debug
 
 clean:
-	rm -rf output
+	rm -rf output.pohic
 
 .PHONY: clean test-parse gdb

@@ -62,10 +62,9 @@ build/deploymentview_final/Makefile:	build/main.aadl
         @@END_TABLE@@
 @@END_INLINE@@
 	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
-	@@-- Create dataview-uniq.asn
-	@@INLINE(	)( )(\n)@@
-        cat $^ > $@
-	@@END_INLINE@@
+	@@-- Create dataview-uniq.asn by concatenating all asn1 input files
+	@@-- Don't use cat, because files need newlines in between
+	sed -e '$$s/$$/\n/' -s $^ > $@	
 
 build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
 	cat $^ > $@

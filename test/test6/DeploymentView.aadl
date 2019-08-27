@@ -1,0 +1,110 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS drone
+END drone;
+
+PROCESS IMPLEMENTATION drone.others
+END drone.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Positioning;
+WITH interfaceview::IV::CoronagraphTrajectory;
+WITH interfaceview::IV::OcculterTrajectory;
+WITH interfaceview::IV::DroneInterface;
+WITH interfaceview::IV::Coordinator;
+WITH interfaceview::IV::GUI;
+WITH interfaceview::IV::PID_Controllers;
+WITH interfaceview::IV::Coronograph_Ctrl;
+WITH interfaceview::IV::Occulter_Ctrl;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Positioning : SYSTEM interfaceview::IV::Positioning::Positioning.others {
+    Taste::FunctionName => "Positioning";
+  };
+  IV_CoronagraphTrajectory : SYSTEM interfaceview::IV::CoronagraphTrajectory::CoronagraphTrajectory.others {
+    Taste::FunctionName => "CoronagraphTrajectory";
+  };
+  IV_OcculterTrajectory : SYSTEM interfaceview::IV::OcculterTrajectory::OcculterTrajectory.others {
+    Taste::FunctionName => "OcculterTrajectory";
+  };
+  IV_DroneInterface : SYSTEM interfaceview::IV::DroneInterface::DroneInterface.others {
+    Taste::FunctionName => "DroneInterface";
+  };
+  IV_Coordinator : SYSTEM interfaceview::IV::Coordinator::Coordinator.others {
+    Taste::FunctionName => "Coordinator";
+  };
+  IV_GUI : SYSTEM interfaceview::IV::GUI::GUI.others {
+    Taste::FunctionName => "GUI";
+  };
+  IV_PID_Controllers : SYSTEM interfaceview::IV::PID_Controllers::PID_Controllers.others {
+    Taste::FunctionName => "PID_Controllers";
+  };
+  IV_Coronograph_Ctrl : SYSTEM interfaceview::IV::Coronograph_Ctrl::Coronograph_Ctrl.others {
+    Taste::FunctionName => "Coronograph_Ctrl";
+  };
+  IV_Occulter_Ctrl : SYSTEM interfaceview::IV::Occulter_Ctrl::Occulter_Ctrl.others {
+    Taste::FunctionName => "Occulter_Ctrl";
+  };
+  drone : PROCESS deploymentview::DV::Node1::drone.others {
+    Taste::coordinates => "107206 45049 172944 123351";
+    TASTE_DV_Properties::CoverageEnabled => TRUE;
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "102240 35576 185009 126294";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_Positioning;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_CoronagraphTrajectory;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_OcculterTrajectory;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_DroneInterface;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_Coordinator;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_GUI;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_PID_Controllers;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_Coronograph_Ctrl;
+  Taste::APLC_Binding => (reference (drone)) APPLIES TO IV_Occulter_Ctrl;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO drone;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "100124 34612 201194 136888";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.2";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

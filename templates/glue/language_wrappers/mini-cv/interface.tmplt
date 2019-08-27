@@ -45,7 +45,7 @@ PROPERTIES
    Source_Language => GUI_RI;
 @@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
    Source_Language => VHDL;
-@@ELSIF@@ @_Language_@ = "Blackbox_C"
+@@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = CPP
    Source_Language => C;
 @@ELSE@@
    Source_Language => @_Language_@;

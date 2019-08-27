@@ -1,10 +1,10 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output && make
+	$(MAKE) -C output.pohic
 
 test-parse: clean
-	$(KAZOO) --gw --debug -o output
+	$(KAZOO) --gw -p --debug --glue -o output.pohic
 
 clean:
 	rm -rf output

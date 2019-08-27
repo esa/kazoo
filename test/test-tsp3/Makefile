@@ -1,7 +1,7 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output/build && ocarina -x main.aadl
+	$(MAKE) -C output
 
 test-parse: clean
 	$(KAZOO) --gw \
@@ -16,6 +16,8 @@ gdb: clean
 	gdb --args $(KAZOO) --gw \
 	               -o output \
 	               --glue \
+		 --no-stdlib \
+		 ../common/libhw.aadl \
 		       --debug
 
 clean:

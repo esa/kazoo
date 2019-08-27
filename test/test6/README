@@ -1,0 +1,1 @@
+There are connections issues - Coordinator block is in C and does not have any cyclic or PI that could activate it. This should be detected

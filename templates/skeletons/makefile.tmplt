@@ -6,12 +6,16 @@
 @@-- @_CP_Files_@            : List of all context parameters ASN.1 files
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
+@@-- @_ACN_Files_@           : List of all ACN files
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 # MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
 OUTDIR          := $(dir $(MAKEFILE_PATH))
 DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
+@@IF@@ @_ACN_Files'Length_@ > 0
+DATAVIEW_ACN    := ${DATAVIEW_PATH}/dataview-uniq.acn
+@@END_IF@@
 DATAVIEW_AADLV1 := ${DATAVIEW_PATH}/dataview_aadlv1.aadl
 
 # Project cache folder is used to speed up all ASN.1-related processing
@@ -43,6 +47,7 @@ dataview:	${DATAVIEW_PATH}/built
 @@END_INLINE@@
 	touch $@
 
+# Build based on the deployment view
 build-default:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
 	$(MAKE) -j -C build -f Makefile.taste
 
@@ -56,13 +61,9 @@ air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentvie
 build/deploymentview_final/Makefile:	build/main.aadl
 	cd build && ocarina -x main.aadl
 
-@@INLINE(${DATAVIEW_UNIQ}:	)( )()@@
-        @@TABLE@@
-           @_ASN1_Files_@
-        @@END_TABLE@@
-@@END_INLINE@@
+# Create dataview-uniq.asn by concatenating all asn1 input files
+${DATAVIEW_UNIQ}:	@_REPLACE_ALL(,/):ASN1_Files_@
 	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
-	@@-- Create dataview-uniq.asn by concatenating all asn1 input files
 	@@-- Don't use cat, because files need newlines in between
 	sed -e '$$s/$$/\n/' -s $^ > $@	
 

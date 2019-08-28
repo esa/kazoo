@@ -51,6 +51,16 @@ package body TASTE.Backend.Code_Generators is
          return Result;
       end Get_ASN1_File_List;
 
+      --  Return a Tag list of ACN Files
+      function Get_ACN_File_List return Tag is
+         Result : Tag;
+      begin
+         for Each of Model.Data_View.ACN_Files loop
+            Result := Result & Each;
+         end loop;
+         return Result;
+      end Get_ACN_File_List;
+
       --  Generate a global Makefile (processing all functions)
       procedure Generate_Global_Makefile is
          package Languages_Set is new Ordered_Sets (Unbounded_String);
@@ -83,6 +93,7 @@ package body TASTE.Backend.Code_Generators is
                         & Assoc ("CP_Files",         All_CP_Files)
                         & Assoc ("Unique_Languages", Unique_Languages)
                         & Assoc ("ASN1_Files",       Get_ASN1_File_List)
+                        & Assoc ("ACN_Files",        Get_ACN_File_List)
                         & Assoc ("ASN1_Modules",     Get_Module_List);
          Put_Debug ("Generating global Makefile");
          Create (File => Output_File,

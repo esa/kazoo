@@ -1,0 +1,12 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding ASN.1 encoding
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
+@@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)

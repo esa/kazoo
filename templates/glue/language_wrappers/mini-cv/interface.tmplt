@@ -47,6 +47,8 @@ PROPERTIES
    Source_Language => VHDL;
 @@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = CPP
    Source_Language => C;
+@@ELSIF@@ @_Language_@ = SIMULINK
+   Source_Language => Simulink;  @@-- aadl2glueC is case sensitive here
 @@ELSE@@
    Source_Language => @_Language_@;
 @@END_IF@@

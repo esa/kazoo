@@ -15,6 +15,8 @@ DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
 @@IF@@ @_ACN_Files'Length_@ > 0
 DATAVIEW_ACN    := ${DATAVIEW_PATH}/dataview-uniq.acn
+@@ELSE@@
+DATAVIEW_ACN    :=
 @@END_IF@@
 DATAVIEW_AADLV1 := ${DATAVIEW_PATH}/dataview_aadlv1.aadl
 
@@ -65,7 +67,15 @@ build/deploymentview_final/Makefile:	build/main.aadl
 ${DATAVIEW_UNIQ}:	@_REPLACE_ALL(,/):ASN1_Files_@
 	mkdir -p ${PROJECT_CACHE} && mkdir -p ${DATAVIEW_PATH}
 	@@-- Don't use cat, because files need newlines in between
-	sed -e '$$s/$$/\n/' -s $^ > $@	
+	sed -e '$$s/$$/\n/' -s $^ > $@
+
+@@IF@@ @_ACN_Files'Length_@ > 0
+# Create dataview-uniq.acn by concatenating all input files
+${DATAVIEW_ACN}:	@_REPLACE_ALL(,/):ACN_Files_@
+	mkdir -p ${DATAVIEW_PATH}
+	@@-- Don't use cat, because files need newlines in between
+	sed -e '$$s/$$/\n/' -s $^ > $@
+@@END_IF@@
 
 build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
 	cat $^ > $@
@@ -93,15 +103,11 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 	@@END_TABLE@@
 
 @@-- Then generate Dataviews once per target language - first for C, it is needed in any case
-dataview/C/built: ${DATAVIEW_UNIQ}
+dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
 	mkdir -p $(dir $@)
-	asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} \
-	@@INLINE(	)( \\\n	)(\n)@@
-	    @@TABLE@@
-               @_REPLACE(,/ ):CP_Files_@
-	    @@END_TABLE@@
-	@@END_INLINE@@
-
+	# asn2dataModel does not take the ACN files, and only calls asn1.exe
+	# asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
+	asn1.exe -typePrefix asn1Scc -equal -fp AUTO -o $(dir $@) -c -uPER -ACN ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} @_REPLACE_ALL(,/):CP_Files_@
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
 	cd dataview/C && msgPrinter ../dataview-uniq.asn

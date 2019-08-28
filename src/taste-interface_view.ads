@@ -103,8 +103,9 @@ package TASTE.Interface_View is
 
    type Taste_Interface is tagged
       record
-         Name              : Unbounded_String;
-         Parent_Function   : Unbounded_String;
+         Name,
+         Parent_Function,
+         Language          : Unbounded_String;
          Remote_Interfaces : Remote_Entities.Vector;
          Params            : Parameters.Vector;
          RCM               : Supported_RCM_Operation_Kind;

@@ -13,9 +13,9 @@
 @@-- @_Calling_Threads_@        : Calling threads of the containing block
 @@IF@@ @_Kind_@ = PROTECTED_OPERATION
    @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
-   void pro_@_LOWER:Parent_Function_@_@_Name_@(void);
+   void pro_@_Parent_Function_@_@_Name_@(void);
    @@ELSE@@   @@-- contains param(s)
-   void pro_@_LOWER:Parent_Function_@_@_Name_@
+   void pro_@_Parent_Function_@_@_Name_@
    @@INLINE(      \()(,\n       )(\);)@@
       @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

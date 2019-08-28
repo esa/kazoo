@@ -11,6 +11,8 @@
 // Required interfaces of function @_Name_@
 @_Required_@
 @@END_IF@@
+@@IF@@ @_Language_@ /= SIMULINK  @@-- Simulink's glue is generated from DMT
 #include "@_LOWER:Name_@_vm_if.h"
+@@END_IF@@
 
 @_Protected_PIs_@

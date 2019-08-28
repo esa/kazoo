@@ -37,9 +37,9 @@
    __po_hi_protected_lock (@_LOWER:Pro_Block_Name_@_protected.protected_id);
    @@END_IF@@
    @@IF@@ @_Param_Names'Length_@ > 0
-   @_LOWER:Thread_Name_@ (buf.buffer, buf.length);
+   @_Thread_Name_@ (buf.buffer, buf.length);
    @@ELSE@@
-      @_LOWER:Thread_Name_@ ();
+      @_Thread_Name_@();
    @@END_IF@@
    @@IF@@ @_Need_Mutex_@
    __po_hi_protected_unlock (@_LOWER:Pro_Block_Name_@_protected.protected_id);

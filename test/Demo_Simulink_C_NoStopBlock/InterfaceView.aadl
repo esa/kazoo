@@ -1,0 +1,140 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::My_C_Function
+PUBLIC
+
+WITH interfaceview::IV::My_Simulink_Function;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM RI_Add_Two_Params
+FEATURES
+  first_param : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  second_param : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  result : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_Add_Two_Params;
+
+SUBPROGRAM IMPLEMENTATION RI_Add_Two_Params.others
+END RI_Add_Two_Params.others;
+
+SYSTEM My_C_Function
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::My_C_Function::PI_pulse.others {
+    Taste::coordinates => "538 781";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_Add_Two_Params : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::My_Simulink_Function::PI_Add_Two_Params.others {
+    Taste::coordinates => "538 381";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Add_Two_Params";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END My_C_Function;
+
+SYSTEM IMPLEMENTATION My_C_Function.others
+END My_C_Function.others;
+
+END interfaceview::IV::My_C_Function;
+
+PACKAGE interfaceview::IV::My_Simulink_Function
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Add_Two_Params
+FEATURES
+  first_param : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  second_param : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  result : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END PI_Add_Two_Params;
+
+SUBPROGRAM IMPLEMENTATION PI_Add_Two_Params.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Add_Two_Params.others;
+
+SYSTEM My_Simulink_Function
+FEATURES
+  PI_Add_Two_Params : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::My_Simulink_Function::PI_Add_Two_Params.others {
+    Taste::coordinates => "907 392";
+    Taste::RCMoperationKind => unprotected;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Add_Two_Params";
+  };
+PROPERTIES
+  Source_Language => (Simulink);
+  Taste::Active_Interfaces => enabled;
+END My_Simulink_Function;
+
+SYSTEM IMPLEMENTATION My_Simulink_Function.others
+END My_Simulink_Function.others;
+
+END interfaceview::IV::My_Simulink_Function;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::My_C_Function;
+WITH interfaceview::IV::My_Simulink_Function;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView","DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  My_C_Function : SYSTEM interfaceview::IV::My_C_Function::My_C_Function.others {
+    Taste::coordinates => "67 189 538 1077";
+  };
+  My_Simulink_Function : SYSTEM interfaceview::IV::My_Simulink_Function::My_Simulink_Function.others {
+    Taste::coordinates => "907 203 1600 1084";
+  };
+CONNECTIONS
+  My_Simulink_Function_PI_Add_Two_Params_My_C_Function_RI_Add_Two_Params : SUBPROGRAM ACCESS My_Simulink_Function.PI_Add_Two_Params -> My_C_Function.RI_Add_Two_Params {
+    Taste::coordinates => "538 381 720 381 720 392 907 392";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView","DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

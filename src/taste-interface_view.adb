@@ -1,5 +1,5 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2017-2019 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Interface View parser
@@ -580,8 +580,9 @@ package body TASTE.Interface_View is
          if Present (AIN.Features (Inst)) then
             PI_Or_RI := AIN.First_Node (AIN.Features (Inst));
             while Present (PI_Or_RI) loop
-               Iface := Parse_Interface (PI_Or_RI);
+               Iface                 := Parse_Interface (PI_Or_RI);
                Iface.Parent_Function := Result.Name;
+               Iface.Language        := Result.Language;
                if AIN.Is_Provided (PI_Or_RI) then
                   Result.Provided.Insert (Key      => To_String (Iface.Name),
                                           New_Item => Iface);
@@ -1018,6 +1019,7 @@ package body TASTE.Interface_View is
       return +Assoc ("Name",               TI.Name)
         & Assoc ("Kind",                   TI.RCM'Img)
         & Assoc ("Parent_Function",        TI.Parent_Function)
+        & Assoc ("Language",               TI.Language)
         & Assoc ("Period",                 TI.Period_Or_MIAT'Img)
         & Assoc ("WCET",                   TI.WCET_ms.Value_Or (0)'Img)
         & Assoc ("Queue_Size",             TI.Queue_Size.Value_Or (1)'Img)

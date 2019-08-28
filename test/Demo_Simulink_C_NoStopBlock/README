@@ -1,0 +1,10 @@
+Demo_Simulink_C_NoStopBlock
+
+This Demo does not use any STOP block in the Simulink model. 
+As a consequence, RTW/EC does not generate any definition for the macro called rtmGetStopRequested.
+
+
+This test verifies that our glue detects that this macro is absent and therefore does not try to "call" it.
+
+
+

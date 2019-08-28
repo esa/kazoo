@@ -4,6 +4,7 @@
 @@-- @_Direction_@              : "PI" or "RI"
 @@-- @_Kind_@                   : The RCM Kind
 @@-- @_Parent_Function_@        : The name of the function
+@@-- @_Language_@               : The implementation language of the function
 @@-- @_Partition_Name_@         : Partition name for parent function
 @@-- @_Param_Names_@            : List of parameter names
 @@-- @_Param_Types_@            :   |_ Corresponding parameter types
@@ -15,7 +16,7 @@
 @@IF@@ @_Param_Names'Length_@ = 0
    @@SET@@ No_Param=True
 @@END_IF@@
-@@IF@@ @_Param_Names'Length_@ = 0
+@@IF@@ @_No_Param_@
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void)
 @@ELSE@@
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
@@ -36,7 +37,7 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
    // @_Calling_Threads_@ calling thread
    if (@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k == current_task) {
       // puts("[TASTE] Sporadic call of @_Name_@ from thread @_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@");
-@@IF@@ @_Param_Names'Length_@ > 0
+@@IF@@ not @_No_Param_@
 @@INLINE(      )( \n      )(\n)@@
    __po_hi_request_t request;
    __po_hi_copy_array(&(request.vars.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.buffer),
@@ -51,8 +52,8 @@ size_IN_buf_@_LOWER:Param_Names_@;
    __po_hi_gqueue_store_out(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_local_outport_@_LOWER:Name_@, &request);
    __po_hi_send_output(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@);
 @@END_INLINE@@
-@@ELSE@@ @@-- No params
-   __po_hi_send_output(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@);
+@@ELSE@@ @@-- No param
+      __po_hi_send_output(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@);
 @@END_IF@@
       return;
    }
@@ -62,9 +63,9 @@ size_IN_buf_@_LOWER:Param_Names_@;
    // Unprotected call
 @@TABLE@@
 @@IF@@ @_No_Param_@
-   @_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@();
+   @_Remote_Function_Names_@_@_Remote_Interface_Names_@();
 @@ELSE@@
-   @_LOWER:Remote_Function_Names_@_@_LOWER:Remote_Interface_Names_@
+   @_Remote_Function_Names_@_@_Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
@@ -80,9 +81,9 @@ size_IN_buf_@_LOWER:Param_Names_@;
    // puts("[TASTE] Protected call of @_Name_@");
 @@TABLE@@
 @@IF@@ @_No_Param_@
-   pro_@_LOWER:Remote_Function_Names_@_@_Remote_Interface_Names_@();
+   pro_@_Remote_Function_Names_@_@_Remote_Interface_Names_@();
 @@ELSE@@
-   pro_@_LOWER:Remote_Function_Names_@_@_Remote_Interface_Names_@
+   pro_@_Remote_Function_Names_@_@_Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

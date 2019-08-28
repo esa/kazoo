@@ -48,14 +48,15 @@ package TASTE.Data_View is
 
    type ASN1_File is
       record
-         Path    : Unbounded_String;
-         Modules : ASN1_Module_Maps.Map;
+         Path     : Unbounded_String;
+         Modules  : ASN1_Module_Maps.Map;
       end record;
    package ASN1_File_Maps is new Indefinite_Ordered_Maps (String, ASN1_File);
 
    type Taste_Data_View is tagged
       record
          ASN1_Files : ASN1_File_Maps.Map;
+         ACN_Files  : String_Sets.Set;
       end record;
 
    function Parse_Data_View (Dataview_Root : Node_Id) return Taste_Data_View

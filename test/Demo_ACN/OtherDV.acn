@@ -1,0 +1,3 @@
+Other DEFINITIONS ::= BEGIN
+    FooBar[size 4, true-value '0101'B]
+END

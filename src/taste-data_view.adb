@@ -40,6 +40,7 @@ package body TASTE.Data_View is
       use ASN1_File_Maps;
       System            : Node_Id;
       Files             : ASN1_File_Maps.Map;
+      ACN_Files         : String_Sets.Set;
       Current_Type      : Node_Id;
       F                 : Name_Id;
       Loc               : Location;
@@ -94,10 +95,26 @@ package body TASTE.Data_View is
             Module   : constant String  := Get_Name_String
               (Get_String_Property (Asntype,
                Get_String_Name ("taste::ada_package_name")));
+            ACN_Ref  : constant Node_Id := Get_Classifier_Property
+              (Asntype, "taste::encodingdefinitionfile");
             Filename : constant String  := Get_Name_String
               (Get_Source_Text (Asntype) (1));
             File_Ref : constant ASN1_File_Maps.Cursor := Files.Find (Filename);
          begin
+            --  If there are ACN files, add them to the list
+            if ACN_Ref /= No_Node then
+               declare
+                  ACN : constant Name_Array := Get_Source_Text (ACN_Ref);
+                  use String_Sets;
+               begin
+                  for F of ACN loop
+                     ACN_Files.Union
+                       (To_Set (Get_Name_String (F)));
+                  end loop;
+               end;
+
+            end if;
+
             if File_Ref = ASN1_File_Maps.No_Element then
                declare
                   New_File      : ASN1_File;
@@ -111,7 +128,7 @@ package body TASTE.Data_View is
                   end if;
                   New_File.Path    := Relative_Path;
                   New_File.Modules.Insert (Module, New_Module);
-                  Files.Insert            (Filename, New_File);
+                  Files.Insert (Filename, New_File);
                end;
             else
                declare
@@ -133,7 +150,8 @@ package body TASTE.Data_View is
          end;
          Current_Type := AIN.Next_Node (Current_Type);
       end loop;
-      return Data_AST : constant Taste_Data_View := (ASN1_Files => Files);
+      return Data_AST : constant Taste_Data_View := (ASN1_Files => Files,
+                                                     ACN_Files  => ACN_Files);
    end Parse_Data_View;
 
    --  Function checking the actual file presence of the ASN.1 models that
@@ -167,6 +185,9 @@ package body TASTE.Data_View is
                Put_Line (Output, "    |_Type : " & Sort);
             end loop;
          end loop;
+      end loop;
+      for Each of DV.ACN_Files loop
+         Put_Line (Output, "ACN File : " & Each);
       end loop;
    end Debug_Dump;
 

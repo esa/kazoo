@@ -1,0 +1,4 @@
+Other DEFINITIONS ::=
+BEGIN
+   FooBar ::= BOOLEAN
+END

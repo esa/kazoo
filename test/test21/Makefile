@@ -4,7 +4,7 @@ all: test-parse
 
 test-parse: clean
 	$(KAZOO) --gw -p -o output.pohic --glue --debug 
-	time $(MAKE) -C output.pohic dataview
+	eval time $(MAKE) -C output.pohic dataview
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \

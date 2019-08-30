@@ -49,22 +49,27 @@ def make(rule, path):
 def summarize(results, elapsed):
     ''' At the end display the errors of project that failed '''
     failed = 0
+    with open("/tmp/kazoo.err", "w") as f:
+        f.write("kazoo test report")
+        f.write("-----------------")
     for errcode, stdout, stderr, path, rule in results:
         if errcode == 0:
             continue
         failed += 1
-        print("=" * 80)
-        print("ERROR: %s %s" % (path, rule))
-        if stdout:
-            print("-- stdout " + "-" * 70)
-            print(stdout.decode())
-        if stderr:
-            print("-- stderr " + "-" * 70)
-            print(stderr.decode())
-            print("-" * 80)
+        with open("/tmp/kazoo.err", 'a') as f:
+            f.write("=" * 80)
+            f.write("ERROR: %s %s" % (path, rule))
+            if stdout:
+                f.write("-- stdout " + "-" * 70)
+                f.write(stdout.decode())
+            if stderr:
+                f.write("-- stderr " + "-" * 70)
+                f.write(stderr.decode())
+                f.write("-" * 80)
     print("Finished in %.3fs" % elapsed)
+    if failed:
+        print("Test report in /tmp/kazoo.err")
     print("%s tests, %s errors" % (len(results), failed))
-
     return 0 if not failed else 1
 
 

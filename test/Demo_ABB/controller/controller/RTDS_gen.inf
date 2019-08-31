@@ -1,0 +1,14 @@
+## Semaphores: <name> <number>
+
+## Processes: <name> <number> <function> <min inst> <max inst> <priority>
+PROCESS	controller_p	1	controller_p	1	-	-
+
+## Messages: <name> <number> <parameter type>
+MESSAGE	floor_detected	1	RTDS_floor_detected_data
+MESSAGE	Manual_Control	2	RTDS_Manual_Control_data
+MESSAGE	Start	4	RTDS_Start_data
+MESSAGE	Cabin_Command	5	RTDS_Cabin_Command_data
+MESSAGE	Floor_Command	6	RTDS_Floor_Command_data
+MESSAGE	door_status	7	RTDS_door_status_data
+MESSAGE	position	8	RTDS_position_data
+

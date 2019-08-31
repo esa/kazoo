@@ -55,13 +55,11 @@
 extern "C" {
 #endif
 
-@@IF@@ @_Language_@ = "C" or @_Language_@ = "CPP"
+@@IF@@ @_Language_@ = C or @_Language_@ = CPP or @_Language_@ = GUI
 #include "@_LOWER:Name_@.h"
-@@ELSIF@@ @_Language_@ = "GUI"
-#include "@_LOWER:Name_@.h"
-@@ELSIF@@ @_Language_@ = "RTDS"
+@@ELSIF@@ @_Language_@ = RTDS
 #include "glue_@_LOWER:Name_@.h"
-@@ELSIF@@ @_Language_@ = "MicroPython"
+@@ELSIF@@ @_Language_@ = MicroPython
 #include "@_LOWER:Name_@_mpy_bindings.h"
 @@END_IF@@
 

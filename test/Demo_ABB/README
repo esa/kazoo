@@ -1,0 +1,10 @@
+Demo_ABB
+
+Implementation of a demonstrator showing the integration of RTDS and Simulink on a complex lift system (implemented and provided by ABB).
+This system also shows the plot and GUI. It can be used for MSC tracing as well.
+A video (video-abb.avi) is available showing how to use this system
+
+Author of the Simulink model of the lift system: Stein-Erik Ellevseth (ABB)
+
+
+

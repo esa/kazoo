@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Diagram SYSTEM "rtdsDiagram.dtd">
+
+<Diagram language="sdl" type="sys" name="controller" showMsgData="full" linksCrossingAllowed="FALSE" cellWidthMm="4">
+
+<DiagramPartition name="Declarations" nbPagesH="1" nbPagesV="1">
+<PageSpecification pageWidth="21.0" pageHeight="29.7" topMargin="0.0" bottomMargin="0.0" leftMargin="0.0" rightMargin="0.0" pageFooter="FALSE"/>
+
+<Symbol symbolId="SYMB5" type="sdlSysDgmFrm" xCenter="297" yCenter="420" fixedDimensions="TRUE" width="551" height="775" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text></Text>
+
+<Symbol symbolId="SYMB10" type="sdlText" xCenter="88" yCenter="44" fixedDimensions="FALSE" width="132" height="44" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text>USE ASN1Types;</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB6" type="sdlText" xCenter="242" yCenter="132" fixedDimensions="FALSE" width="484" height="66" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text>
+signal Pulse;
+
+signal Floor_Command(Floor_button);
+
+signal Cabin_Command(Cabin_button);
+
+signal Manual_Control(Lift_control);
+
+signal Start(Start_condition);
+
+signal door_status(OpenClose);
+
+signal floor_detected(Floors);
+
+signal position(Position);
+
+
+</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB7" type="sdlText" xCenter="143" yCenter="253" fixedDimensions="FALSE" width="264" height="110" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text>
+PROCEDURE syncRI_Operate_lift(
+IN lift_command Lift_control,
+IN/OUT lift_sensors Lift_sensor
+) EXTERNAL;
+
+
+</Text>
+</Symbol>
+</Symbol>
+</DiagramPartition>
+
+<DiagramPartition name="Architecture" nbPagesH="1" nbPagesV="1">
+<PageSpecification pageWidth="21.0" pageHeight="29.7" topMargin="0.0" bottomMargin="0.0" leftMargin="0.0" rightMargin="0.0" pageFooter="FALSE"/>
+
+<Symbol symbolId="SYMB1" type="sdlSysDgmFrm" xCenter="297" yCenter="420" fixedDimensions="TRUE" width="551" height="775" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text></Text>
+
+<Symbol symbolId="SYMB2" type="sdlPrcs" xCenter="352" yCenter="121" fixedDimensions="TRUE" width="110" height="66" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text>controller_p</Text>
+</Symbol>
+</Symbol>
+
+<Link linkId="LINK6" type="chnl" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>taste_envl</Text>
+<Connector attachedSymbolId="SYMB1" type="chnl" isOutside="FALSE" side="w" position="-0.402580645161" endType="midarrow">
+<Text id="1">
+[door_status,floor_detected,position]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB2" type="chnl" isOutside="TRUE" side="y" position="0.0" endType="midarrow">
+<Text id="1">
+[Pulse,Floor_Command,Cabin_Command,Manual_Control,Start]
+</Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="176"/>
+<LinkSegment orientation="v" length="-110"/>
+<LinkSegment orientation="h" length="176"/>
+
+</Link>
+</DiagramPartition>
+
+</Diagram>

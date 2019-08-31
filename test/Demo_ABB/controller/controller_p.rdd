@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Diagram SYSTEM "rtdsDiagram.dtd">
+
+<Diagram language="sdl" type="prcs" name="controller_p" showMsgData="full" linksCrossingAllowed="TRUE" cellWidthMm="4">
+
+<DiagramPartition name="Part. 0" nbPagesH="5" nbPagesV="2">
+<PageSpecification pageWidth="21.0" pageHeight="29.7" topMargin="0.0" bottomMargin="0.0" leftMargin="0.0" rightMargin="0.0" pageFooter="FALSE"/>
+
+<Symbol symbolId="SYMB1" type="sdlPrcsDgmFrm" xCenter="1488" yCenter="841" fixedDimensions="TRUE" width="2932" height="1617" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text></Text>
+
+<Symbol symbolId="SYMB11" type="sdlPrcdCall" xCenter="440" yCenter="506" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>syncRI_Operate_lift
+(cmd, sensors)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB12" type="sdlComment" xCenter="616" yCenter="517" fixedDimensions="FALSE" width="88" height="66" color="#000000" fillColor="#ffffaa">
+<Description></Description>
+<Text>Call the 
+Simulink
+model</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB150" type="sdlState" xCenter="1155" yCenter="561" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB151" type="sdlState" xCenter="1397" yCenter="561" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB152" type="sdlState" xCenter="1650" yCenter="539" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB183" type="sdlState" xCenter="1397" yCenter="616" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB184" type="sdlInputSig" xCenter="1397" yCenter="671" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Pulse</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB185" type="sdlPrcdCall" xCenter="1397" yCenter="935" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>syncRI_Operate_lift
+(cmd, sensors)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB186" type="sdlDecision" xCenter="1397" yCenter="1287" fixedDimensions="FALSE" width="286" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>sensors!floor_detected and
+sensors!pos_x = target_floor</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB187" type="sdlTask" xCenter="1254" yCenter="1408" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!brake := on,
+cmd!motor := off,
+cmd!door := door_open</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB2" type="sdlStart" xCenter="660" yCenter="33" fixedDimensions="TRUE" width="88" height="44" color="#000000" fillColor="#ffffff">
+<Description></Description>
+<Text></Text>
+</Symbol>
+
+<Symbol symbolId="SYMB20" type="sdlSendSig" xCenter="440" yCenter="649" fixedDimensions="FALSE" width="154" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>door_status(door)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB23" type="sdlTask" xCenter="440" yCenter="583" fixedDimensions="FALSE" width="506" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>door := if sensors!door_open = true then door_open else door_close fi</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB254" type="sdlSendSig" xCenter="1254" yCenter="1529" fixedDimensions="FALSE" width="198" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>position (sensors!pos_x)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB255" type="sdlState" xCenter="1243" yCenter="1584" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB256" type="sdlSendSig" xCenter="1518" yCenter="1408" fixedDimensions="FALSE" width="198" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>position(sensors!pos_x)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB257" type="sdlState" xCenter="1518" yCenter="1485" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB259" type="sdlState" xCenter="2079" yCenter="110" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB260" type="sdlInputSig" xCenter="2079" yCenter="187" fixedDimensions="FALSE" width="198" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Cabin_Command(cabin_cmd)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB261" type="sdlDecision" xCenter="2079" yCenter="253" fixedDimensions="FALSE" width="220" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>sensors!pos_x = 100.0</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB262" type="sdlState" xCenter="1936" yCenter="352" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB263" type="sdlDecision" xCenter="2167" yCenter="418" fixedDimensions="FALSE" width="132" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>target_floor</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB266" type="sdlState" xCenter="2112" yCenter="638" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB267" type="sdlTask" xCenter="1870" yCenter="550" fixedDimensions="FALSE" width="176" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!direction := down,
+cmd!motor := on,
+cmd!brake := off,
+cmd!door := door_close</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB268" type="sdlState" xCenter="2365" yCenter="616" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB269" type="sdlTask" xCenter="2112" yCenter="550" fixedDimensions="FALSE" width="176" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!direction := up,
+cmd!motor := on,
+cmd!brake := off,
+cmd!door := door_close</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB270" type="sdlTask" xCenter="2365" yCenter="539" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!motor := off,
+cmd!brake := on,
+cmd!door := door_open</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB271" type="sdlState" xCenter="1870" yCenter="638" fixedDimensions="TRUE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB273" type="sdlTask" xCenter="2167" yCenter="346" fixedDimensions="FALSE" width="132" height="54" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>target_floor :=
+cabin_cmd!floor</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB274" type="sdlTask" xCenter="1342" yCenter="297" fixedDimensions="FALSE" width="242" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>target_floor := floor_cmd!floor</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB29" type="sdlText" xCenter="396" yCenter="154" fixedDimensions="FALSE" width="286" height="242" color="#000000" fillColor="#e5e5e5">
+<Description></Description>
+<Text>dcl cmd Lift_Control;
+dcl counter Start_condition;
+
+dcl sensors Lift_Sensor;
+
+dcl door OpenClose := door_open;
+
+dcl floor_cmd Floor_button;
+dcl cabin_cmd Cabin_button;
+
+dcl target_floor Floors;
+
+dcl prevPos Position := 100.0;
+dcl currFloor Floors := floor_above;</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB294" type="sdlState" xCenter="2585" yCenter="121" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>*</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB295" type="sdlInputSig" xCenter="2585" yCenter="198" fixedDimensions="FALSE" width="176" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Manual_Control(cmd)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB296" type="sdlState" xCenter="2585" yCenter="275" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB315" type="sdlInputSig" xCenter="2805" yCenter="198" fixedDimensions="FALSE" width="132" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Start(counter)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB317" type="sdlState" xCenter="2805" yCenter="275" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB318" type="sdlDecision" xCenter="660" yCenter="374" fixedDimensions="FALSE" width="550" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>(counter!present = forever and counter!forever=true) 
+or
+(counter!present = nb_of_cycle and counter!nb_of_cycle&gt;0)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB320" type="sdlState" xCenter="990" yCenter="539" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB321" type="sdlDecision" xCenter="451" yCenter="1320" fixedDimensions="FALSE" width="286" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>counter!present = nb_of_cycle</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB322" type="sdlTask" xCenter="594" yCenter="1419" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>counter!nb_of_cycle:=
+counter!nb_of_cycle-1</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB323" type="sdlState" xCenter="594" yCenter="1496" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB324" type="sdlDecision" xCenter="1397" yCenter="781" fixedDimensions="FALSE" width="550" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>(counter!present = forever and counter!forever=true) 
+or
+(counter!present = nb_of_cycle and counter!nb_of_cycle&gt;0)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB325" type="sdlState" xCenter="1760" yCenter="913" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>moving</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB327" type="sdlDecision" xCenter="1397" yCenter="1034" fixedDimensions="FALSE" width="286" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>counter!present = nb_of_cycle</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB329" type="sdlTask" xCenter="1507" yCenter="1144" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>counter!nb_of_cycle:=
+counter!nb_of_cycle-1</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB330" type="sdlSendSig" xCenter="1254" yCenter="1474" fixedDimensions="FALSE" width="242" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>floor_detected (target_floor)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB349" type="sdlDecision" xCenter="319" yCenter="924" fixedDimensions="FALSE" width="154" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!direction</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB350" type="sdlTask" xCenter="825" yCenter="1012" fixedDimensions="FALSE" width="418" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>currFloor := if currFloor = floor_1 then floor_2 else
+if currFloor = floor_2 then floor_3 else 
+if currFloor = floor_3 then floor_4 else floor_5 fi fi fi</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB351" type="sdlTask" xCenter="319" yCenter="1012" fixedDimensions="FALSE" width="550" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>currFloor := if currFloor = floor_above then floor_5 else
+if currFloor = floor_5 then floor_4 else if currFloor = floor_4 then
+floor_3 else if currFloor = floor_3 then floor_2 else floor_1 fi fi fi fi</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB352" type="sdlTask" xCenter="451" yCenter="1270" fixedDimensions="FALSE" width="198" height="32" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>prevPos = sensors!pos_x</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB4" type="sdlState" xCenter="660" yCenter="220" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB41" type="sdlDecision" xCenter="440" yCenter="726" fixedDimensions="FALSE" width="220" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>sensors!floor_detected</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB42" type="sdlSendSig" xCenter="319" yCenter="1100" fixedDimensions="FALSE" width="220" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>floor_detected (currFloor)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB44" type="sdlState" xCenter="451" yCenter="1408" fixedDimensions="FALSE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB45" type="sdlTask" xCenter="319" yCenter="1155" fixedDimensions="FALSE" width="176" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!door := door_open</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB6" type="sdlTask" xCenter="660" yCenter="132" fixedDimensions="FALSE" width="198" height="110" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>sensors!pos_x := 100.0,
+cmd!direction := up,
+cmd!motor := off,
+cmd!brake := on,
+cmd!door := door_close,
+counter!forever:=false</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB68" type="sdlSendSig" xCenter="451" yCenter="1221" fixedDimensions="FALSE" width="198" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>position(sensors!pos_x)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB69" type="sdlState" xCenter="1342" yCenter="55" fixedDimensions="TRUE" width="88" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>stopped</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB70" type="sdlInputSig" xCenter="1342" yCenter="132" fixedDimensions="FALSE" width="198" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Floor_Command(floor_cmd)</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB71" type="sdlDecision" xCenter="1342" yCenter="352" fixedDimensions="FALSE" width="154" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>floor_cmd!floor</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB72" type="sdlTask" xCenter="1155" yCenter="473" fixedDimensions="FALSE" width="176" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!direction := down,
+cmd!motor := on,
+cmd!brake := off,
+cmd!door := door_close</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB73" type="sdlTask" xCenter="1397" yCenter="473" fixedDimensions="FALSE" width="176" height="88" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!direction := up,
+cmd!motor := on,
+cmd!brake := off,
+cmd!door := door_close</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB74" type="sdlTask" xCenter="1650" yCenter="462" fixedDimensions="FALSE" width="176" height="66" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>cmd!motor := off,
+cmd!brake := on,
+cmd!door := door_open</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB75" type="sdlDecision" xCenter="1342" yCenter="220" fixedDimensions="FALSE" width="220" height="44" color="#000000" fillColor="#ffffcb">
+<Description></Description>
+<Text>sensors!pos_x = 100.0</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB76" type="sdlState" xCenter="1804" yCenter="308" fixedDimensions="FALSE" width="44" height="44" color="#000000" fillColor="#ffe4d6">
+<Description></Description>
+<Text>-</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB77" type="sdlComment" xCenter="1606" yCenter="220" fixedDimensions="TRUE" width="154" height="44" color="#000000" fillColor="#ffffaa">
+<Description></Description>
+<Text>Check if the lift
+is initialized</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB8" type="sdlComment" xCenter="825" yCenter="132" fixedDimensions="FALSE" width="110" height="66" color="#000000" fillColor="#ffffaa">
+<Description></Description>
+<Text>Set initial 
+conditions</Text>
+</Symbol>
+
+<Symbol symbolId="SYMB9" type="sdlInputSig" xCenter="660" yCenter="275" fixedDimensions="FALSE" width="66" height="44" color="#000000" fillColor="#fff0aa">
+<Description></Description>
+<Text>Pulse</Text>
+</Symbol>
+</Symbol>
+
+<Link linkId="LINK110" type="dbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB11" type="void" isOutside="TRUE" side="y" position="0.333333333333" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB12" type="void" isOutside="TRUE" side="y" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="176"/>
+
+</Link>
+
+<Link linkId="LINK111" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB11" type="void" isOutside="TRUE" side="x" position="-0.0113636363636" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB23" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="1"/>
+<LinkSegment orientation="v" length="33"/>
+
+</Link>
+
+<Link linkId="LINK714" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB183" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB184" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK760" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB184" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB324" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="110"/>
+
+</Link>
+
+<Link linkId="LINK874" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB185" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB327" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="99"/>
+
+</Link>
+
+<Link linkId="LINK704" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB186" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB187" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+<LinkSegment orientation="h" length="-143"/>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK702" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB186" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB256" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+<LinkSegment orientation="h" length="121"/>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK1010" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB187" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB330" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK370" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB2" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB6" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="99"/>
+
+</Link>
+
+<Link linkId="LINK144" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB20" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB41" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK101" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB23" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB20" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK1004" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB254" type="void" isOutside="TRUE" side="x" position="-0.111111111111" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB255" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK713" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB256" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB257" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK515" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB259" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB260" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK518" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB260" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB261" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK554" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB261" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB262" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="-143"/>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK600" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB261" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB273" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="88"/>
+<LinkSegment orientation="v" length="49"/>
+
+</Link>
+
+<Link linkId="LINK596" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>&lt;sensors!pos_x</Text>
+<Connector attachedSymbolId="SYMB263" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB267" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="-297"/>
+<LinkSegment orientation="v" length="99"/>
+
+</Link>
+
+<Link linkId="LINK598" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>&gt;sensors!pos_x</Text>
+<Connector attachedSymbolId="SYMB263" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB269" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="-55"/>
+<LinkSegment orientation="v" length="99"/>
+
+</Link>
+
+<Link linkId="LINK595" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>else</Text>
+<Connector attachedSymbolId="SYMB263" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB270" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="198"/>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK574" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB267" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB271" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK532" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB269" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB266" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK533" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB270" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB268" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK599" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB273" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB263" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="72"/>
+
+</Link>
+
+<Link linkId="LINK699" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB274" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB71" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK609" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB294" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB295" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK611" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB294" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB315" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="220"/>
+<LinkSegment orientation="v" length="44"/>
+
+</Link>
+
+<Link linkId="LINK610" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB295" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB296" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK613" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB315" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB317" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK674" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB318" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB11" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+<LinkSegment orientation="h" length="-220"/>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK718" type="dec" textSegmentNum="1" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB318" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB320" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+<LinkSegment orientation="h" length="330"/>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK735" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB321" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB322" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="143"/>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK733" type="dec" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB321" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB44" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK736" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB322" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB323" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK761" type="dec" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB324" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB185" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="154"/>
+
+</Link>
+
+<Link linkId="LINK766" type="dec" textSegmentNum="1" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB324" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB325" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+<LinkSegment orientation="h" length="363"/>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK969" type="dec" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB327" type="void" isOutside="TRUE" side="x" position="-0.384615384615" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB186" type="sdlarrow" isOutside="TRUE" side="x" position="-0.384615384615" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="253"/>
+
+</Link>
+
+<Link linkId="LINK995" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB327" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB329" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="110"/>
+<LinkSegment orientation="v" length="66"/>
+
+</Link>
+
+<Link linkId="LINK994" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB329" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB186" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+<LinkSegment orientation="h" length="-110"/>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK1009" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB330" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB254" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK1127" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>up</Text>
+<Connector attachedSymbolId="SYMB349" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB350" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="506"/>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK1069" type="dec" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>down</Text>
+<Connector attachedSymbolId="SYMB349" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB351" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK1128" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB350" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB42" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="-506"/>
+<LinkSegment orientation="v" length="44"/>
+
+</Link>
+
+<Link linkId="LINK1070" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB351" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB42" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK1104" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB352" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB321" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="50"/>
+
+</Link>
+
+<Link linkId="LINK108" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB4" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB9" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK1066" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB41" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB349" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="-121"/>
+<LinkSegment orientation="v" length="154"/>
+
+</Link>
+
+<Link linkId="LINK1101" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB41" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB68" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="44"/>
+<LinkSegment orientation="h" length="572"/>
+<LinkSegment orientation="v" length="418"/>
+<LinkSegment orientation="h" length="-561"/>
+<LinkSegment orientation="v" length="33"/>
+
+</Link>
+
+<Link linkId="LINK1019" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB42" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB45" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK1102" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB45" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB68" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="132"/>
+<LinkSegment orientation="v" length="33"/>
+
+</Link>
+
+<Link linkId="LINK181" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB6" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB4" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK182" type="dbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB6" type="void" isOutside="TRUE" side="y" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB8" type="void" isOutside="TRUE" side="y" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="165"/>
+
+</Link>
+
+<Link linkId="LINK1103" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB68" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB352" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="49"/>
+
+</Link>
+
+<Link linkId="LINK698" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB69" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB70" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK708" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB70" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB75" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK706" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>&lt;sensors!pos_x</Text>
+<Connector attachedSymbolId="SYMB71" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB72" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="-187"/>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK695" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>&gt;sensors!pos_x</Text>
+<Connector attachedSymbolId="SYMB71" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB73" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="55"/>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK703" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>=sensors!pos_x</Text>
+<Connector attachedSymbolId="SYMB71" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB74" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="308"/>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK707" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB72" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB150" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK696" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB73" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB151" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="88"/>
+
+</Link>
+
+<Link linkId="LINK712" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB74" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB152" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK700" type="dec" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>false</Text>
+<Connector attachedSymbolId="SYMB75" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB274" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="77"/>
+
+</Link>
+
+<Link linkId="LINK697" type="dec" textSegmentNum="2" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text>true</Text>
+<Connector attachedSymbolId="SYMB75" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB76" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="33"/>
+<LinkSegment orientation="h" length="462"/>
+<LinkSegment orientation="v" length="55"/>
+
+</Link>
+
+<Link linkId="LINK701" type="dbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB75" type="void" isOutside="TRUE" side="y" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB77" type="void" isOutside="TRUE" side="y" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="h" length="264"/>
+
+</Link>
+
+<Link linkId="LINK630" type="sbvoid" textSegmentNum="0" color="#000000" reverseRead="FALSE" oriented="TRUE">
+<Text></Text>
+<Connector attachedSymbolId="SYMB9" type="void" isOutside="TRUE" side="x" position="0.0" endType="voidend">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<Connector attachedSymbolId="SYMB318" type="sdlarrow" isOutside="TRUE" side="x" position="0.0" endType="arrow">
+<Text id="1"></Text>
+<Text id="2"></Text>
+</Connector>
+<LinkSegment orientation="v" length="99"/>
+
+</Link>
+</DiagramPartition>
+
+</Diagram>

@@ -1,0 +1,57 @@
+Lift-dataview DEFINITIONS ::=
+BEGIN
+
+UpDown		::= ENUMERATED { up (1),   down (0)  }
+OnOff		::= ENUMERATED { on (1),   off (0)   }
+OpenClose	::= ENUMERATED { door-open (1), door-close (0) }
+Position	::= REAL (0.0 .. 100.0)
+--Flag		::= BOOLEAN
+Floors		::= ENUMERATED { 
+			floor-0 (10), 
+			floor-1 (20), 
+			floor-2 (30), 
+			floor-3 (40), 
+			floor-4 (50), 
+			floor-5 (60) 
+		    }
+
+-- Types used for the interfacing with the Simulink model
+
+Lift-control ::= SEQUENCE {
+    direction	UpDown DEFAULT down,
+    motor	OnOff  DEFAULT on,
+    brake	OnOff  DEFAULT off,
+    door	OpenClose
+}
+
+Lift-sensor ::= SEQUENCE {
+    door-open	    BOOLEAN,
+    door-closed	    BOOLEAN,
+    floor-detected  BOOLEAN,
+    pos-x	    Position
+}
+
+-- Types used for the user interaction
+
+Floor-button ::= SEQUENCE {
+    floor	Floors,
+    direction	UpDown
+}
+
+Cabin-button ::= CHOICE {
+    emergency-stop  BOOLEAN,
+    floor	    Floors
+}
+
+Start-condition ::= CHOICE {
+	forever     BOOLEAN,
+	nb-of-cycle INTEGER (50 .. 255)
+}
+
+END
+
+
+
+
+
+

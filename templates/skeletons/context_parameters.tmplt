@@ -30,7 +30,7 @@ Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= SEQUENCE {
 @_REPLACE_ALL(_/-):LOWER:Name_@-ctxt Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= {
 @@INLINE(   )(,\n   )(\n)@@
    @@TABLE@@
-      @_REPLACE_ALL(_/-):LOWER:CP_Name_@ @_CP_Value_@
+      @_REPLACE_ALL(_/-):LOWER:CP_Name_@ @_REPLACE_ALL(_/-):CP_Value_@
    @@END_TABLE@@
 @@END_INLINE@@
 }

@@ -32,6 +32,7 @@
 */
 #pragma once
 
+@@IF@@ @_List_Of_ASync_PIs'Length_@ > 1  @@-- include "Poll"
 typedef enum {
 @@INLINE(   )(,\n   )()@@
     @@TABLE@@
@@ -41,7 +42,9 @@ typedef enum {
 @@END_TABLE@@
 @@END_INLINE@@
 } T_@_Name_@_PI_list;
+@@END_IF@@
 
+@@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
 typedef enum {
 @@INLINE(   )(,\n   )()@@
 @@TABLE@@
@@ -49,3 +52,4 @@ typedef enum {
 @@END_TABLE@@
 @@END_INLINE@@
 } T_@_Name_@_RI_list;
+@@END_IF@@

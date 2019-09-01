@@ -1,24 +1,26 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	$(MAKE) -C output
 
 test-parse: clean
 	$(KAZOO) --gw \
 	         -o output \
+		 -p \
 	         --glue \
 		 --no-stdlib \
 	         --debug \
-		 ../common/libhw.aadl
+		 ../common/libhw.aadl \
+	2>&1 | tail -1 | diff expected -
 
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output \
-	               --glue \
+	         -o output \
+	         --glue \
+		 -p \
 		 --no-stdlib \
 		 ../common/libhw.aadl \
-		       --debug
+		 --debug
 
 clean:
 	rm -rf output

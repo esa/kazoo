@@ -72,9 +72,19 @@ package body TASTE.Semantic_Check is
             --  1) interfaces must all have a parameter
             --  2) interfaces must all be sporadic (TODO)
             if Each.Language = "gui" and then
-               ((for all I of Each.Provided => I.Params.Length /= 1) or else
-               (for all I of Each.Required  => I.Params.Length /= 1))
+               ((Each.Provided.Length > 0 and then
+                   (for all I of Each.Provided => I.Params.Length /= 1))
+               or else (Each.Required.Length > 0 and then
+                   (for all I of Each.Required  => I.Params.Length /= 1)))
             then
+               for I of Each.Provided loop
+                  Put_Error ("PI " & To_String (I.Name) & " has "
+                             & I.Params.Length'Img & " parameters");
+               end loop;
+               for I of Each.Required loop
+                  Put_Error ("RI " & To_String (I.Name) & " has "
+                             & I.Params.Length'Img & " parameters");
+               end loop;
                raise Semantic_Error with
                      "Function " & To_String (Each.Name) & "'s interfaces"
                      & " must all have exactly one parameter";

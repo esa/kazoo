@@ -494,6 +494,15 @@ package body TASTE.AADL_Parser is
             --  Find and set protected blocks calling threads
             Set_Calling_Threads (Partition);
 
+            --  Check that all blocks have a calling thread, otherwise
+            --  they will never run
+            for B of Partition.Blocks loop
+               if B.Calling_Threads.Length = 0 then
+                  raise Concurrency_View_Error with
+                    "Function " & To_String (B.Name) & " has no active caller";
+               end if;
+            end loop;
+
             --  Define ports at partition (process) level
             --  (ports are for all interfaces of a function not located
             --  in the same partition of the system)

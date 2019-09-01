@@ -1,9 +1,12 @@
-with GNAT.OS_Lib,
+with Ada.Exceptions,
+     GNAT.OS_Lib,
      TASTE,
      TASTE.AADL_Parser,
+     TASTE.Parser_Utils,
      TASTE.Model_Transformations,
      TASTE.Dump;
 use TASTE.AADL_Parser,
+    TASTE.Parser_Utils,
     TASTE.Model_Transformations;
 
 procedure Kazoo is
@@ -27,5 +30,8 @@ begin
    end;
 exception
    when TASTE.Quit_TASTE =>
+      GNAT.OS_Lib.OS_Exit (1);
+   when Error : others =>
+      Put_Error (Ada.Exceptions.Exception_Message (Error));
       GNAT.OS_Lib.OS_Exit (1);
 end Kazoo;

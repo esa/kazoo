@@ -1,18 +1,16 @@
 /* User code: This file will not be overwritten by TASTE. */
 
-#include "hello.h"
+#include "function2.h"
 
-void hello_startup()
+void function2_startup()
 {
     /* Write your initialization code here,
        but do not make any call to a required interface. */
 }
 
-void hello_PI_s(const asn1SccTASTE_Boolean *IN_t)
+void function2_PI_t(const asn1SccTASTE_Boolean *IN_t)
 {
     /* Write your code here! */
-    printf("hello.c got %s ", *IN_t?"TRUE\n":"FALSE\n");
-    hello_RI_new(IN_t);
-
+    printf("function1.c got %s ", *IN_t?"TRUE\n":"FALSE\n");
 }
 

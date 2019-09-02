@@ -27,6 +27,10 @@ PROPERTIES
 END PI_s.others;
 
 SUBPROGRAM RI_new
+FEATURES
+  c : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
 END RI_new;
 
 SUBPROGRAM IMPLEMENTATION RI_new.others
@@ -74,6 +78,20 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 3 ms;
 END PI_h.others;
 
+SUBPROGRAM PI_new
+FEATURES
+  c : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_new;
+
+SUBPROGRAM IMPLEMENTATION PI_new.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 2 ms;
+END PI_new.others;
+
 SUBPROGRAM RI_s
 FEATURES
   t : IN PARAMETER DataView::TASTE_Boolean {
@@ -84,16 +102,6 @@ END RI_s;
 SUBPROGRAM IMPLEMENTATION RI_s.others
 END RI_s.others;
 
-SUBPROGRAM PI_new
-PROPERTIES
-  Taste::Associated_Queue_Size => 4;
-END PI_new;
-
-SUBPROGRAM IMPLEMENTATION PI_new.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_new.others;
-
 SYSTEM read
 FEATURES
   PI_h : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::read::PI_h.others {
@@ -103,18 +111,18 @@ FEATURES
     Taste::Deadline => 10 ms;
     Taste::InterfaceName => "h";
   };
-  RI_s : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::hello::PI_s.others {
-    Taste::coordinates => "154957 53700";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "s";
-    Taste::labelInheritance => "true";
-  };
   PI_new : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::read::PI_new.others {
     Taste::coordinates => "154957 65025";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 10 ms;
     Taste::Deadline => 10 ms;
     Taste::InterfaceName => "new";
+  };
+  RI_s : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::hello::PI_s.others {
+    Taste::coordinates => "154957 53700";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "s";
+    Taste::labelInheritance => "true";
   };
 PROPERTIES
   Source_Language => (C);
@@ -140,10 +148,14 @@ END PI_cycl;
 
 SUBPROGRAM IMPLEMENTATION PI_cycl.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
+  Compute_Execution_Time => 0 ms .. 2 ms;
 END PI_cycl.others;
 
 SUBPROGRAM RI_t
+FEATURES
+  t : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
 END RI_t;
 
 SUBPROGRAM IMPLEMENTATION RI_t.others
@@ -154,8 +166,8 @@ FEATURES
   PI_cycl : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_cycl.others {
     Taste::coordinates => "153242 17605";
     Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 10 ms;
-    Taste::Deadline => 0 ms;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 10 ms;
     Taste::InterfaceName => "cycl";
   };
   RI_t : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_t.others {
@@ -181,13 +193,17 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_t
+FEATURES
+  t : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
 PROPERTIES
-  Taste::Associated_Queue_Size => 2;
+  Taste::Associated_Queue_Size => 1;
 END PI_t;
 
 SUBPROGRAM IMPLEMENTATION PI_t.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
+  Compute_Execution_Time => 0 ms .. 2 ms;
 END PI_t.others;
 
 SYSTEM Function2
@@ -195,8 +211,8 @@ FEATURES
   PI_t : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_t.others {
     Taste::coordinates => "124920 25835";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
+    Taste::RCMperiod => 10 ms;
+    Taste::Deadline => 10 ms;
     Taste::InterfaceName => "t";
   };
 PROPERTIES

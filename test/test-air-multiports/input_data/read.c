@@ -17,3 +17,11 @@ void read_PI_h()
     someBool = someBool?false:true;
 }
 
+void read_PI_new(const asn1SccTASTE_Boolean *IN_c)
+{
+        /* Write your code here! */
+        printf("read.c got %s ", *IN_c?"TRUE\n":"FALSE\n");
+}
+
+
+

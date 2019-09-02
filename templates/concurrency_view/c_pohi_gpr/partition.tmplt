@@ -63,6 +63,7 @@ project @_CAPITALIZE:Name_@ is
 @@END_IF@@
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
+        & external_as_list("EXTERNAL_SOURCE_PATH", ":")
         & external_as_list("ADA_INCLUDE_PATH", ":");
 
    for Object_Dir use "obj";
@@ -137,7 +138,8 @@ project @_CAPITALIZE:Name_@ is
                 "-Wextra",
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
-                "-Wswitch");
+                "-Wswitch")
+                & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
                ("-g",
@@ -149,7 +151,8 @@ project @_CAPITALIZE:Name_@ is
                 "-Wextra",
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
-                "-Wswitch");
+                "-Wswitch")
+                & external_as_list("USER_CFLAGS", " ");
       end case;
    end Compiler;
 
@@ -159,7 +162,8 @@ project @_CAPITALIZE:Name_@ is
           "-lrt",
           "-lpthread",
           "-lm",
-          "-Wl,-gc-sections");
+          "-Wl,-gc-sections")
+          & external_as_list("USER_LDFLAGS", " ");
    end Linker;
 
    package Builder is

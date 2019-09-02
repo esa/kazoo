@@ -1,4 +1,9 @@
 KAZOO=../../kazoo
+# Add compiler and linker flags
+export USER_CFLAGS=
+export USER_LDFLAGS=
+# you can add folders with source code you want to compile
+export EXTERNAL_SOURCE_PATH=
 
 all: c
 

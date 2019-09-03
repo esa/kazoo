@@ -24,8 +24,9 @@ def main():
 
     with futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
         for result in executor.map(partial(make, rule), paths):
-            print("%40s: %s" % (result[3], colorMe(result[0],
+            print("%40s: %s" % (result[3].replace("/", ""), colorMe(result[0],
                                '[OK]' if result[0]==0 else '[FAILED]')))
+            sys.stdout.flush()
             results.append(result)
         executor.map(partial(make, 'clean'), paths)
     sys.stdout.write('\n')

@@ -124,7 +124,7 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
 dataview/Python/built: dataview/C/built
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toPython ${DATAVIEW_UNIQ}  @@-- Ignore context parameters for python interface
-	$(MAKE) -j1 -C dataview/Python -f Makefile.python
+	$(MAKE) -C dataview/Python -f Makefile.python
         @@TABLE@@
         @@IF@@ @_Language_@ = GUI
 	cp  dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python

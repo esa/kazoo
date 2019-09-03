@@ -38,7 +38,7 @@ SUBPROGRAM IMPLEMENTATION @_Name_@.C
 SUBPROGRAM IMPLEMENTATION @_Name_@.@_Language_@
 @@END_IF@@
 PROPERTIES
-   FV_Name => "@_Parent_Function_@";
+   FV_Name => "@_LOWER:Parent_Function_@";
 @@IF@@ @_Language_@ = "GUI" and @_Direction_@ = "PI"
    Source_Language => GUI_PI;
 @@ELSIF@@ @_Language_@ = "GUI" and @_Direction_@ = "RI"

@@ -3,5 +3,4 @@
 @@-- @_Name_@                : The name of the function
 @@-- @_Is_Type_@             : True if function type
 @@-- @_Instance_Of_@         : Name of instance or empty string
-@@-- Don't use LOWER because the enums_def.h is also included by DMT's gui_api.c
-@_Name_@_enums_def.h
+@_LOWER:Name_@_enums_def.h

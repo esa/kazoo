@@ -41,7 +41,7 @@ typedef enum {
       @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
-} T_@_Name_@_PI_list;
+} T_@_LOWER:Name_@_PI_list;
 @@END_IF@@
 
 @@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
@@ -51,5 +51,5 @@ typedef enum {
    i_@_List_Of_ASync_RIs_@
 @@END_TABLE@@
 @@END_INLINE@@
-} T_@_Name_@_RI_list;
+} T_@_LOWER:Name_@_RI_list;
 @@END_IF@@

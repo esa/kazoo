@@ -121,14 +121,22 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
            @@--  do nothing, C is always done, only once
 	   @@ELSIF@@ @_Unique_Languages_@ = "GUI"
            @@--  for DMT, GUI means Python
-dataview/Python/built: dataview/C/built
+@@INLINE(dataview/Python/built:	dataview/C/built )( )()@@
+        @@--  aadl2glueC has to be called before the python mapper is built
+        @@--  because it depends on gui_api.c/etc.
+        @@TABLE@@
+          @@IF@@ @_Language_@ = GUI
+             @_LOWER:Function_Names_@/GUI/wrappers/aadl2glueC_built
+          @@END_IF@@
+        @@END_TABLE@@
+@@END_INLINE@@
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toPython ${DATAVIEW_UNIQ}  @@-- Ignore context parameters for python interface
 	$(MAKE) -C dataview/Python -f Makefile.python
         @@TABLE@@
         @@IF@@ @_Language_@ = GUI
-	cp  dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python
-	cp  dataview/C/timeInMS.[ch] dataview/C/debug_messages.c @_LOWER:Function_Names_@/GUI/wrappers/python
+	cp dataview/Python/* @_LOWER:Function_Names_@/GUI/wrappers/python
+	cp dataview/C/timeInMS.[ch] dataview/C/debug_messages.c @_LOWER:Function_Names_@/GUI/wrappers/python
 	cd @_LOWER:Function_Names_@/GUI/wrappers/python && \
 	   gcc -g -fPIC -c `python-config --cflags`  gui_api.c ../../src/queue_manager.c timeInMS.c debug_messages.c -I. -I../../src && \
 	   gcc -g -shared -o PythonAccess.so gui_api.o queue_manager.o timeInMS.o debug_messages.o `python-config --ldflags` -lrt

@@ -23,11 +23,36 @@ def main():
     paths = sys.argv[2:]
 
     with futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
-        for result in executor.map(partial(make, rule), paths):
-            print("%40s: %s" % (result[3].replace("/", ""), colorMe(result[0],
-                               '[OK]' if result[0]==0 else '[FAILED]')))
+        fs = [executor.submit(partial(make, rule), path) for path in paths]
+        for each in futures.as_completed(fs):
+            result = each.result()
+            errcode, stdout, stderr, path, rule = result
+            name = path.replace("/", "")
+            print("%40s: %s" % (name,
+               colorMe (errcode, '[OK]' if errcode==0
+                  else '[FAILED] ... build log in /tmp/{}.err'.format(name))))
             sys.stdout.flush()
+            if errcode != 0:
+                # Failure: save the log immediately
+                with open("/tmp/{}.err".format(name), 'w') as f:
+                    f.write("=" * 80)
+                    f.write("ERROR: %s %s" % (name, rule))
+                    if stdout:
+                        f.write("-- stdout " + "-" * 70)
+                        f.write(stdout.decode())
+                    if stderr:
+                        f.write("-- stderr " + "-" * 70)
+                        f.write(stderr.decode())
+                        f.write("-" * 80)
             results.append(result)
+            # don't use the map function, because it keeps the order of
+            # submission, meaning that even if a job finishes before the
+            # previous one started, the log output will be delayed
+#       for result in executor.map(partial(make, rule), paths):
+#           print("%40s: %s" % (result[3].replace("/", ""), colorMe(result[0],
+#                              '[OK]' if result[0]==0 else '[FAILED]')))
+#           sys.stdout.flush()
+#           results.append(result)
         executor.map(partial(make, 'clean'), paths)
     sys.stdout.write('\n')
 

@@ -3,7 +3,7 @@ KAZOO=../../kazoo
 all: c
 
 c: test-parse-c # Polyorb_HI_C output
-	cp controller/controller/* output.pohic/controller/RTDS/src
+	cp controller/controller.pr output.pohic/controller/SDL/src
 	cp lift_model/* output.pohic/lift_model/SIMULINK/src
 	make -C output.pohic
 

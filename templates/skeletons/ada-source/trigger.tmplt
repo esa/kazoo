@@ -15,6 +15,6 @@
 @@-- @_Filename_Is_Present_@ : True if target function output already exists
 @@-- @_Makefile_Is_Present_@ : True if target build script already exists
 @@-- @_C_Middleware_@        : True if middleware is in C (e.g. PO-HI-C)
-@@IF@@ @_Language_@ = "Ada"
+@@IF@@ @_Language_@ = Ada
 TRUE
 @@END_IF@@

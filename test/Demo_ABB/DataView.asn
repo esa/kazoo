@@ -5,15 +5,14 @@ UpDown		::= ENUMERATED { up (1),   down (0)  }
 OnOff		::= ENUMERATED { on (1),   off (0)   }
 OpenClose	::= ENUMERATED { door-open (1), door-close (0) }
 Position	::= REAL (0.0 .. 100.0)
---Flag		::= BOOLEAN
-Floors		::= ENUMERATED { 
+Floors		::= INTEGER { 
 			floor-0 (10), 
 			floor-1 (20), 
 			floor-2 (30), 
 			floor-3 (40), 
 			floor-4 (50), 
 			floor-5 (60) 
-		    }
+		    } (10 | 20 | 30 | 40 | 50 | 60)
 
 -- Types used for the interfacing with the Simulink model
 
@@ -46,6 +45,11 @@ Cabin-button ::= CHOICE {
 Start-condition ::= CHOICE {
 	forever     BOOLEAN,
 	nb-of-cycle INTEGER (50 .. 255)
+}
+
+Status ::= SEQUENCE {
+   lift Lift-sensor,
+   door OpenClose
 }
 
 END

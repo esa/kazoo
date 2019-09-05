@@ -31,9 +31,9 @@ void pro_@_Parent_Function_@_@_Name_@
    extern process_package__taste_protected_object @_LOWER:Parent_Function_@_protected;
    __po_hi_protected_lock (@_LOWER:Parent_Function_@_protected.protected_id);
 @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
-   @_Parent_Function_@_@_Name_@();
+   @_LOWER:Parent_Function_@_@_Name_@();
 @@ELSE@@
-   @_Parent_Function_@_@_Name_@
+   @_LOWER:Parent_Function_@_@_Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
       @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

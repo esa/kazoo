@@ -12,7 +12,7 @@
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
 @@IF@@ @_EXIST:Param_Names_@
-void @_Parent_Function_@_@_Name_@
+void @_LOWER:Parent_Function_@_@_Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
@@ -78,10 +78,9 @@ void @_Parent_Function_@_@_Name_@
 @@END_TABLE@@
 }
 @@ELSE@@   @@-- parameterless functions
-void @_Parent_Function_@_@_Name_@()
+void @_LOWER:Parent_Function_@_@_Name_@()
 {
    //  Directly call user code, no parameters to pass
-   //  This could be done directly from the concurrency glue...
    extern void @_LOWER:Parent_Function_@_PI_@_Name_@(void);
    @_LOWER:Parent_Function_@_PI_@_Name_@();
    // puts ("@_LOWER:Parent_Function_@_@_LOWER:Name_@ called");

@@ -9,6 +9,7 @@ with System.Assertions,
      Ada.Directories,
      Ada.Strings.Equal_Case_Insensitive,
      Ada.Containers,
+     Ada.Characters.Handling,   -- Contains "To_Lower"
      GNAT.Command_Line,
      Errors,
      Locations,
@@ -26,6 +27,7 @@ use Ada.Text_IO,
     Ada.Exceptions,
     Ada.Directories,
     Ada.Containers,
+    Ada.Characters.Handling,
     Locations,
     Ocarina.Namet,
     Ocarina;
@@ -341,9 +343,9 @@ package body TASTE.AADL_Parser is
                   Dist      : constant Remote_Entity :=
                     RI.Remote_Interfaces.First_Element;
                   Remote_Thread_Name : constant Unbounded_String :=
-                    Dist.Function_Name & "_" & Dist.Interface_Name;
+                    To_Lower (To_String (Dist.Function_Name))
+                    & "_" & Dist.Interface_Name;
                   Port_Name : constant Unbounded_String := RI.Name;
-                  --  Remote_Thread_Name & "_" & Dist.Interface_Name;
                   New_P     : constant Thread_Port :=
                     (Name          => Port_Name,
                      Remote_Thread => Remote_Thread_Name,
@@ -464,7 +466,8 @@ package body TASTE.AADL_Parser is
                if PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation then
                   declare
                      Thread : constant AADL_Thread :=
-                       (Name                 => F.Name & "_" & PI.Name,
+                       (Name                 => To_Lower (To_String (F.Name))
+                                                & "_" & PI.Name,
                         RCM                  => US (PI.RCM'Img),
                         Need_Mutex           => (F.Provided.Length > 1),
                         Entry_Port_Name      => PI.Name,

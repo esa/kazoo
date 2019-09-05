@@ -43,7 +43,7 @@ counter             := forever : false
    brake        on
 },
 door := door_open;
-                /* CIF NEXTSTATE (2811, 438), (74, 35) */
+                /* CIF NEXTSTATE (2810, 438), (74, 35) */
                 NEXTSTATE Stopped;
             /* CIF ANSWER (3104, 254), (70, 24) */
             (false):
@@ -60,7 +60,7 @@ door := door_open;
 };
                     /* CIF ANSWER (3184, 366), (70, 24) */
                     (false):
-                        /* CIF task (3139, 410), (161, 120) */
+                        /* CIF task (3138, 410), (161, 120) */
                         task cmd := {
    direction down,
    motor       on,
@@ -73,59 +73,59 @@ door := door_open;
         enddecision;
     /* CIF End Label */
     endconnection;
-    /* CIF state (1718, 76), (74, 35) */
+    /* CIF state (1717, 76), (74, 35) */
     state Stopped;
-        /* CIF input (1278, 131), (196, 35) */
+        /* CIF input (1277, 131), (196, 35) */
         input Floor_Command (floor_cmd)
         /* CIF comment (1495, 131), (270, 32) */
         comment 'Someone at floor F pressed UP or DOWN';
-            /* CIF decision (1209, 186), (336, 56) */
+            /* CIF decision (1208, 186), (336, 56) */
             decision floor_cmd = { direction up, floor floor_5 }
 or floor_cmd = { direction down, floor floor_0 }
             /* CIF comment (1565, 196), (204, 35) */
             comment 'Discard impossible commands';
-                /* CIF ANSWER (1157, 262), (70, 24) */
+                /* CIF ANSWER (1139, 262), (70, 24) */
                 (true):
-                    /* CIF NEXTSTATE (1155, 306), (74, 35) */
+                    /* CIF NEXTSTATE (1137, 306), (74, 35) */
                     NEXTSTATE Stopped;
                 /* CIF ANSWER (1547, 262), (70, 24) */
                 (false):
-                    /* CIF task (1461, 306), (241, 35) */
-                    task target_pos := float (floor_cmd.floor);
+                    /* CIF task (1443, 306), (276, 35) */
+                    task target_pos := float (num(floor_cmd.floor));
                     /* CIF decision (1506, 356), (151, 50) */
                     decision round(sensors.pos_x);
-                        /* CIF ANSWER (1239, 426), (166, 24) */
-                        (= float(floor_cmd.floor)):
-                            /* CIF task (1241, 470), (163, 24) */
+                        /* CIF ANSWER (1221, 426), (201, 24) */
+                        (= float(num(floor_cmd.floor))):
+                            /* CIF task (1240, 470), (163, 24) */
                             task cmd.door := door_open
                             /* CIF comment (1425, 464), (138, 40) */
                             comment 'Lift is there
 Just open the door';
-                            /* CIF task (1255, 514), (134, 35) */
+                            /* CIF task (1254, 514), (134, 35) */
                             task door := door_open;
-                            /* CIF NEXTSTATE (1285, 564), (74, 35) */
+                            /* CIF NEXTSTATE (1284, 564), (74, 35) */
                             NEXTSTATE Stopped;
-                        /* CIF ANSWER (1676, 426), (54, 40) */
+                        /* CIF ANSWER (1675, 426), (54, 40) */
                         ELSE:
-                            /* CIF task (1636, 486), (134, 35) */
+                            /* CIF task (1635, 486), (134, 35) */
                             task door := door_close;
-                            /* CIF join (1686, 541), (35, 35) */
+                            /* CIF join (1685, 541), (35, 35) */
                             join move;
                     enddecision;
             enddecision;
-        /* CIF input (2007, 132), (200, 35) */
+        /* CIF input (2006, 132), (200, 35) */
         input Cabin_Command (cabin_cmd)
         /* CIF comment (2230, 132), (239, 56) */
         comment 'Someone selected a target floor
 from inside the cabin, or someone
 pressed the emergency stop button';
-            /* CIF decision (2035, 187), (145, 50) */
+            /* CIF decision (2034, 187), (145, 50) */
             decision present(cabin_cmd);
                 /* CIF ANSWER (1975, 257), (70, 24) */
                 (floor):
                     /* CIF decision (1896, 301), (227, 71) */
                     decision round(sensors.pos_x)
- = float(cabin_cmd.floor);
+ = float(num(cabin_cmd.floor));
                         /* CIF ANSWER (1869, 396), (70, 24) */
                         (true):
                             /* CIF task (1822, 435), (163, 24) */
@@ -135,23 +135,23 @@ pressed the emergency stop button';
 Just open the door';
                             /* CIF task (1836, 479), (134, 35) */
                             task door := door_open;
-                            /* CIF NEXTSTATE (1867, 534), (74, 35) */
+                            /* CIF NEXTSTATE (1866, 534), (74, 35) */
                             NEXTSTATE Stopped;
                         /* CIF ANSWER (2267, 396), (70, 24) */
                         (false):
                             /* CIF task (2234, 440), (134, 35) */
                             task door := door_close;
-                            /* CIF task (2180, 490), (243, 35) */
-                            task target_pos := float (cabin_cmd.floor);
+                            /* CIF task (2162, 490), (279, 35) */
+                            task target_pos := float (num(cabin_cmd.floor));
                             /* CIF join (2284, 545), (35, 35) */
                             join move;
                     enddecision;
-                /* CIF ANSWER (2437, 257), (123, 24) */
+                /* CIF ANSWER (2454, 257), (123, 24) */
                 (emergency_stop):
-                    /* CIF task (2434, 301), (129, 43) */
+                    /* CIF task (2451, 301), (129, 43) */
                     task cmd .motor := off,
 cmd.brake   := on;
-                    /* CIF NEXTSTATE (2461, 364), (74, 35) */
+                    /* CIF NEXTSTATE (2479, 364), (74, 35) */
                     NEXTSTATE Stopped;
             enddecision;
         /* CIF input (846, 131), (70, 35) */
@@ -173,12 +173,12 @@ command';
                 (forever):
                     /* CIF NEXTSTATE (750, 470), (74, 35) */
                     NEXTSTATE Stopped;
-                /* CIF ANSWER (922, 426), (94, 24) */
+                /* CIF ANSWER (921, 426), (94, 24) */
                 (nb_of_cycle):
-                    /* CIF task (882, 470), (175, 40) */
+                    /* CIF task (881, 470), (175, 40) */
                     task counter := nb_of_cycle :
 counter.nb_of_cycle - 1;
-                    /* CIF decision (887, 530), (165, 50) */
+                    /* CIF decision (886, 530), (165, 50) */
                     decision counter.nb_of_cycle > 0;
                         /* CIF ANSWER (891, 600), (70, 24) */
                         (true):
@@ -191,18 +191,56 @@ counter.nb_of_cycle - 1;
                     enddecision;
             enddecision;
     endstate;
-    /* CIF state (317, 394), (91, 56) */
+    /* CIF state (3593, 92), (70, 35) */
+    state Moving;
+        /* CIF input (3594, 147), (67, 35) */
+        input Pulse;
+            /* CIF PROCEDURECALL (3572, 202), (109, 40) */
+            call Operate_Lift
+(cmd, sensors)
+            /* CIF comment (3691, 198), (123, 40) */
+            comment 'Call the Simulink
+ model';
+            /* CIF task (3529, 262), (197, 35) */
+            task hk := {lift sensors, door door};
+            /* CIF output (3559, 317), (135, 40) */
+            output Housekeeping (hk);
+            /* CIF decision (3533, 377), (189, 50) */
+            decision present(counter);
+                /* CIF ANSWER (3500, 447), (68, 24) */
+                (forever):
+                    /* CIF join (3517, 491), (35, 35) */
+                    join move;
+                /* CIF ANSWER (3668, 447), (94, 24) */
+                (nb_of_cycle):
+                    /* CIF task (3628, 491), (175, 40) */
+                    task counter := nb_of_cycle :
+counter.nb_of_cycle - 1;
+                    /* CIF decision (3633, 551), (165, 50) */
+                    decision counter.nb_of_cycle > 0;
+                        /* CIF ANSWER (3633, 621), (70, 24) */
+                        (true):
+                            /* CIF join (3650, 665), (35, 35) */
+                            join move;
+                        /* CIF ANSWER (3723, 621), (70, 24) */
+                        (false):
+                            /* CIF NEXTSTATE (3712, 665), (90, 35) */
+                            NEXTSTATE Power_Off;
+                    enddecision;
+            enddecision;
+    endstate;
+    /* CIF state (316, 394), (91, 56) */
     state Power_Off,
 Stopped,
 Moving;
-        /* CIF input (152, 470), (122, 40) */
+        /* CIF input (151, 470), (122, 40) */
         input Start_Controller
 (counter);
-            /* CIF decision (149, 530), (128, 50) */
+            /* CIF decision (148, 530), (128, 50) */
             decision present(counter);
                 /* CIF ANSWER (98, 600), (73, 24) */
                 (forever):
-                    /* CIF decision (76, 644), (118, 50) */
+                    /* CIF decision (75, 644), (118, 50) */
                     decision counter.forever;
                         /* CIF ANSWER (56, 714), (70, 24) */
                         (true):
@@ -214,17 +252,17 @@ Moving;
                                     NEXTSTATE Moving;
                                 /* CIF ANSWER (101, 828), (70, 24) */
                                 (off):
-                                    /* CIF NEXTSTATE (99, 872), (74, 35) */
+                                    /* CIF NEXTSTATE (98, 872), (74, 35) */
                                     NEXTSTATE Stopped;
                             enddecision;
                         /* CIF ANSWER (191, 714), (70, 24) */
                         (false):
-                            /* CIF NEXTSTATE (181, 758), (90, 35) */
+                            /* CIF NEXTSTATE (180, 758), (90, 35) */
                             NEXTSTATE Power_Off;
                     enddecision;
-                /* CIF ANSWER (312, 600), (94, 24) */
+                /* CIF ANSWER (311, 600), (94, 24) */
                 (nb_of_cycle):
-                    /* CIF decision (314, 644), (90, 50) */
+                    /* CIF decision (313, 644), (90, 50) */
                     decision cmd.motor;
                         /* CIF ANSWER (281, 714), (70, 24) */
                         (on):
@@ -232,52 +270,14 @@ Moving;
                             NEXTSTATE Moving;
                         /* CIF ANSWER (371, 714), (70, 24) */
                         (off):
-                            /* CIF NEXTSTATE (369, 758), (74, 35) */
+                            /* CIF NEXTSTATE (368, 758), (74, 35) */
                             NEXTSTATE Stopped;
                     enddecision;
             enddecision;
-        /* CIF input (453, 470), (119, 40) */
+        /* CIF input (452, 470), (119, 40) */
         input Manual_Control
 (cmd);
-            /* CIF NEXTSTATE (478, 530), (70, 35) */
+            /* CIF NEXTSTATE (477, 530), (70, 35) */
             NEXTSTATE -;
-    endstate;
-    /* CIF state (3593, 92), (70, 35) */
-    state Moving;
-        /* CIF input (3594, 147), (67, 35) */
-        input Pulse;
-            /* CIF PROCEDURECALL (3573, 202), (109, 40) */
-            call Operate_Lift
-(cmd, sensors)
-            /* CIF comment (3691, 198), (123, 40) */
-            comment 'Call the Simulink
- model';
-            /* CIF task (3529, 262), (197, 35) */
-            task hk := {lift sensors, door door};
-            /* CIF output (3560, 317), (135, 40) */
-            output Housekeeping (hk);
-            /* CIF decision (3533, 377), (189, 50) */
-            decision present(counter);
-                /* CIF ANSWER (3501, 447), (68, 24) */
-                (forever):
-                    /* CIF join (3518, 491), (35, 35) */
-                    join move;
-                /* CIF ANSWER (3669, 447), (94, 24) */
-                (nb_of_cycle):
-                    /* CIF task (3629, 491), (175, 40) */
-                    task counter := nb_of_cycle :
-counter.nb_of_cycle - 1;
-                    /* CIF decision (3633, 551), (165, 50) */
-                    decision counter.nb_of_cycle > 0;
-                        /* CIF ANSWER (3633, 621), (70, 24) */
-                        (true):
-                            /* CIF join (3651, 665), (35, 35) */
-                            join move;
-                        /* CIF ANSWER (3723, 621), (70, 24) */
-                        (false):
-                            /* CIF NEXTSTATE (3713, 665), (90, 35) */
-                            NEXTSTATE Power_Off;
-                    enddecision;
-            enddecision;
     endstate;
 endprocess Controller;

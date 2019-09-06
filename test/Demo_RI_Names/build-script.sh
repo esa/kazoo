@@ -17,8 +17,8 @@ assert-builder-ocarina.py \
 	-f \
 	-p \
 	--aadlv2 \
-	--interfaceView interfaceview.aadl \
-	--deploymentView deploymentview.aadl \
+	--interfaceView InterfaceView.aadl \
+	--deploymentView DeploymentView.aadl \
 	-o binary.linux.pohic \
 	--subC a:a.zip \
 	--subC b:b.zip \
@@ -28,8 +28,8 @@ assert-builder-ocarina.py \
 assert-builder-ocarina.py \
 	-f \
 	--aadlv2 \
-	--interfaceView interfaceview.aadl \
-	--deploymentView deploymentview.aadl \
+	--interfaceView InterfaceView.aadl \
+	--deploymentView DeploymentView.aadl \
 	-o binary.linux.ada \
 	--subC a:a.zip \
 	--subC b:b.zip \

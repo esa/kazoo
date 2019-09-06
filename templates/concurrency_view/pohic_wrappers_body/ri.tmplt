@@ -53,6 +53,9 @@ size_IN_buf_@_LOWER:Param_Names_@;
    __po_hi_send_output(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@);
 @@END_INLINE@@
 @@ELSE@@ @@-- No param
+      __po_hi_request_t request;
+      request.port = @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@;
+      __po_hi_gqueue_store_out(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_local_outport_@_LOWER:Name_@, &request);
       __po_hi_send_output(@_LOWER:Partition_Name_@_@_LOWER:Calling_Threads_@_k, @_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@);
 @@END_IF@@
       return;

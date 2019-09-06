@@ -6,7 +6,7 @@ ada: test-parse-ada
 	make -C output.ada
 	cp a/a.c output.pohic/a/C/src
 	cp b/b.c output.pohic/b/C/src
-	cp b/b.c output.pohic/b/C/src
+	cp c/c.c output.pohic/c/C/src
 	cd output.ada/build && \
 	ocarina -x main.aadl && \
 	    make -f Makefile.taste
@@ -14,7 +14,7 @@ ada: test-parse-ada
 c: test-parse-c # Polyorb_HI_C output
 	cp a/a.c output.pohic/a/C/src
 	cp b/b.c output.pohic/b/C/src
-	cp b/b.c output.pohic/b/C/src
+	cp c/c.c output.pohic/c/C/src
 	make -C output.pohic
 
 test-parse-ada: clean-ada

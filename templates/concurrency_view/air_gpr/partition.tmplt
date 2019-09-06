@@ -45,9 +45,9 @@ project @_CAPITALIZE:Name_@_AIR is
    for Exec_Dir   use "../deploymentview_final/@_Name_@";
 
 @@IF@@ @_Need_Ada_@ = TRUE
-   for Languages use ("Ada", "C");
+   for Languages use ("Ada", "C", "C++");
 @@ELSE@@
-   for Languages use ("C");
+   for Languages use ("C", "C++");
 @@END_IF@@
 
    for Main use ("main.c");
@@ -160,6 +160,9 @@ project @_CAPITALIZE:Name_@_AIR is
        "spwrouter_custom_config.c",
        "star_dundee_api.c",
        "trace_manager.c",
-       "um_threads.c");
+       "um_threads.c",
+       "cheddar_schedule.cc",
+       "remote_configuration.cc",
+       "trace_manager.cc");
 
 end @_CAPITALIZE:Name_@_AIR;

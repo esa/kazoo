@@ -27,6 +27,7 @@
 configuration project AIR is
    package Compiler is
       for Driver ("C") use "sparc-rtems5-gcc";
+      for Driver ("C++") use "sparc-rtems5-g++";
       for Driver ("Ada") use "sparc-rtems5-gcc";
 
       for Leading_Required_Switches ("C") use ("-c");
@@ -72,6 +73,7 @@ configuration project AIR is
       for Body_Suffix ("C") use ".c";
       for Spec_Suffix ("Ada") use ".ads";
       for Body_Suffix ("Ada") use ".adb";
+      for Body_Suffix ("C++") use ".cc";
       for Dot_Replacement use "-";
    end Naming;
    for Archive_Builder use ("ar" , "cr");

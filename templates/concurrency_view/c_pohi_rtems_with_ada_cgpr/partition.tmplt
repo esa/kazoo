@@ -34,8 +34,10 @@ configuration project RTEMS_WITH_ADA is
    package Compiler is
       for Driver ("C") use "sparc-rtems5-gcc";
       for Driver ("Ada") use "sparc-rtems5-gcc";
+      for Driver ("C++") use "sparc-rtems5-g++";
 
       for Leading_Required_Switches ("C") use ("-c");
+      for Leading_Required_Switches ("C++") use ("-c");
 
       for Required_Switches("Ada") use
          ("-c",
@@ -43,7 +45,7 @@ configuration project RTEMS_WITH_ADA is
           "ada",
           "-gnatA");
 
-      for Required_Switches("C") use
+      Common_C_Switches := 
          ("--pipe",
           "-DTARGET=leon.rtems_posix",
           "-DRTEMS_POSIX",
@@ -60,11 +62,18 @@ configuration project RTEMS_WITH_ADA is
           "-DBSP_leon3",
           "-DCORES=1");
 
+      for Required_Switches("C") use Common_C_Switches;
+      for Required_Switches("C++") use Common_C_Switches;
+
+        
       for Object_File_Suffix ("C") use ".o";
+      for Object_File_Suffix ("C++") use ".o";
       for Object_File_Suffix ("Ada") use ".o";
       for Dependency_Switches ("C") use ("-Wp,-MD,");
+      for Dependency_Switches ("C++") use ("-Wp,-MD,");
       for Dependency_Switches ("Ada") use ("-MMD","-MF","");
       for Include_Switches ("C") use ("-I");
+      for Include_Switches ("C++") use ("-I");
       for Include_Switches ("Ada") use ("-I");
       for Include_Path ("Ada") use "ADA_INCLUDE_PATH";
       for Include_Path_File ("Ada") use "ADA_PRJ_INCLUDE_FILE";
@@ -76,13 +85,14 @@ configuration project RTEMS_WITH_ADA is
       for Body_Suffix ("C") use ".c";
       for Spec_Suffix ("Ada") use ".ads";
       for Body_Suffix ("Ada") use ".adb";
+       for Body_Suffix ("C++") use ".cc";
       for Dot_Replacement use "-";
    end Naming;
    for Archive_Builder use ("ar" , "cr");
 
    package Linker is
       for Driver use "sparc-rtems5-gcc";
-       for Default_Switches ("C") use
+      Common_C_Linker_Switches :=
            ("--pipe",
             "-g",
             "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon3/lib",
@@ -93,6 +103,9 @@ configuration project RTEMS_WITH_ADA is
             "-lgnat",
             "-lgnarl",
             "-mcpu=cypress");
+
+       for Default_Switches ("C") use Common_C_Linker_Switches;
+       for Default_Switches ("C++") use Common_C_Linker_Switches;
        for Default_Switches ("Ada") use
            ("--pipe",
             "-g",

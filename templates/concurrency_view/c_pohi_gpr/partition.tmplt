@@ -70,12 +70,16 @@ project @_CAPITALIZE:Name_@ is
    for Exec_Dir   use "../../binaries";
 
 @@IF@@ @_Need_Ada_@ = TRUE
-   for Languages use ("Ada", "C");
+   for Languages use ("Ada", "C", "C++");
 @@ELSE@@
-   for Languages use ("C");
+   for Languages use ("C", "C++");
 @@END_IF@@
 
    for Main use ("main.c");
+
+   package Naming is
+       for Body_Suffix ("C++") use ".cc";
+   end Naming;
 
    --  These files are not needed to use POHIC: don' t compile them
    for Excluded_Source_Files use
@@ -122,7 +126,10 @@ project @_CAPITALIZE:Name_@ is
        "spwrouter_custom_config.c",
        "star_dundee_api.c",
        "trace_manager.c",
-       "um_threads.c");
+       "um_threads.c",
+       "cheddar_schedule.cc",
+       "remote_configuration.cc",
+       "trace_manager.cc");
 
    package Compiler is
       case Build is

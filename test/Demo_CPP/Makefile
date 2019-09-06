@@ -13,7 +13,8 @@ ada: test-parse-ada
 c: test-parse-c # Polyorb_HI_C output
 	cp function1/function1.c output.pohic/function1/C/src
 	cp function2/function2.cc output.pohic/function2/CPP/src
-	make -C output.pohic
+	$(MAKE) -C output.pohic
+	$(MAKE) -C output.pohic build-rtems-ada
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \

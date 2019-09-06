@@ -102,6 +102,7 @@ configuration project RTEMS_WITH_ADA is
             "-L/opt/rtems-5.1-2019.07.25/lib/gcc/sparc-rtems5/7.4.1/leon3/adalib",
             "-lgnat",
             "-lgnarl",
+            "-lstdc++",
             "-mcpu=cypress");
 
        for Default_Switches ("C") use Common_C_Linker_Switches;

@@ -475,8 +475,8 @@ SYSTEM GUI
 FEATURES
   PI_update_positions : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_update_positions.others {
     Taste::coordinates => "221993 82276";
-    Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "update_positions";
   };

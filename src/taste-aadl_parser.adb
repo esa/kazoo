@@ -429,6 +429,16 @@ package body TASTE.AADL_Parser is
             end if;
 
             for PI of F.Provided loop
+               --  Ignore interfaces that are not called by anyone
+               if PI.RCM /= Cyclic_Operation
+                 and PI.Remote_Interfaces.Length = 0
+               then
+                  Put_Info ("Ignoring unconnected interface "
+                            & To_String (PI.Name) & " in function "
+                            & To_String (F.Name));
+                  goto next_pi;
+               end if;
+
                declare
                   New_PI : Protected_Block_PI := (Name   => PI.Name,
                                                   PI     => PI,
@@ -482,6 +492,7 @@ package body TASTE.AADL_Parser is
                         New_Item => Thread);
                   end;
                end if;
+               <<next_pi>>
             end loop;
             Block.Required := F.Required;
             --  Add the block to the Concurrency View

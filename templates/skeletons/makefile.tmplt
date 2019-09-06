@@ -32,20 +32,25 @@ all:	build-default
   @@END_IF@@
 @@END_TABLE@@
 
-dataview:	${DATAVIEW_PATH}/built
-
-@@INLINE(${DATAVIEW_PATH}/built:	dataview/C/built )( )()@@
+# Generate the language-specific data view needed before editing user code
+@@INLINE(dataview:	dataview/C/built )( )()@@
    @@IF@@ @_Need_Ada_@ = TRUE
       dataview/Ada/built
    @@END_IF@@
-   @@TABLE@@
+   @@TABLE@@  @@-- Exclude Python because it depends on information from the deployment view and it is not needed for the skeletons
       @@IF@@ @_Unique_Languages_@ /= "Ada" and @_Unique_Languages_@ /= "SDL" and @_Unique_Languages_@ /= "C" and @_Unique_Languages_@ /= "CPP" and @_Unique_Languages_@ /= "Blackbox_C" and @_Unique_Languages_@ /= "GUI"
-      dataview/@_Unique_Languages_@/built
-      @@ELSIF@@ @_Unique_Languages_@ = GUI
-      dataview/Python/built
+         dataview/@_Unique_Languages_@/built
       @@END_IF@@
    @@END_TABLE@@
-   # Build dataviews for all languages
+@@END_INLINE@@
+
+# Generate the complete dataview, including Python bindings if there is a GUI
+@@INLINE(${DATAVIEW_PATH}/built:	dataview )( )()@@
+   @@TABLE@@
+      @@IF@@ @_Unique_Languages_@ = GUI
+         dataview/Python/built
+      @@END_IF@@
+   @@END_TABLE@@
 @@END_INLINE@@
 	touch $@
 
@@ -199,7 +204,7 @@ function-instances-linux:	function-types-linux
 compile-all-linux:	dataviews function-instances-linux
 
 clean:
-	rm -rf binaries/*
+	rm -rf binaries dataview
 	$(MAKE) -C build -f Makefile.taste clean
 
-.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-default dataview build-rtems-ada
+.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-default dataview build-rtems-ada dataview

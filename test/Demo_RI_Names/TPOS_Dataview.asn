@@ -1,0 +1,12 @@
+MY-MODULE DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+T-POS ::= CHOICE {
+ first-choice INTEGER (0..10),
+ second-choice SEQUENCE { 
+  intVal INTEGER (-10..10), 
+  boolVal BOOLEAN 
+ },
+ third-choice OCTET STRING (SIZE(1000))
+}
+
+END

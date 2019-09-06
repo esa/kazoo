@@ -1,0 +1,4 @@
+Demo_RI_Names
+
+This tests the case when RI have a different name from the PI it is connected to. Various combinations.
+if dataview needs to be updated, run taste-update-data-view TPOS_Dataview.asn

@@ -1,0 +1,245 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::A
+PUBLIC
+
+WITH interfaceview::IV::B;
+WITH interfaceview::IV::C;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclic_activation
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_activation;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_activation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_cyclic_activation.others;
+
+SUBPROGRAM RI_caller
+END RI_caller;
+
+SUBPROGRAM IMPLEMENTATION RI_caller.others
+END RI_caller.others;
+
+SUBPROGRAM RI_call_c
+END RI_call_c;
+
+SUBPROGRAM IMPLEMENTATION RI_call_c.others
+END RI_call_c.others;
+
+SYSTEM A
+FEATURES
+  PI_cyclic_activation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::A::PI_cyclic_activation.others {
+    Taste::coordinates => "551 529";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 2000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "cyclic_activation";
+  };
+  RI_caller : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::B::PI_callee.others {
+    Taste::coordinates => "1146 606";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "caller";
+    Taste::labelInheritance => "true";
+  };
+  RI_call_c : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::C::PI_callee.others {
+    Taste::coordinates => "1146 760";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "call_c";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END A;
+
+SYSTEM IMPLEMENTATION A.others
+END A.others;
+
+END interfaceview::IV::A;
+
+PACKAGE interfaceview::IV::B
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_callee
+PROPERTIES
+  Taste::Associated_Queue_Size => 2;
+END PI_callee;
+
+SUBPROGRAM IMPLEMENTATION PI_callee.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_callee.others;
+
+SUBPROGRAM PI_second_callee
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_second_callee;
+
+SUBPROGRAM IMPLEMENTATION PI_second_callee.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_second_callee.others;
+
+SYSTEM B
+FEATURES
+  PI_callee : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::B::PI_callee.others {
+    Taste::coordinates => "1814 606";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "callee";
+  };
+  PI_second_callee : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::B::PI_second_callee.others {
+    Taste::coordinates => "1974 907";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "second_callee";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END B;
+
+SYSTEM IMPLEMENTATION B.others
+END B.others;
+
+END interfaceview::IV::B;
+
+PACKAGE interfaceview::IV::C
+PUBLIC
+
+WITH interfaceview::IV::B;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclic_activation
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_activation;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_activation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_cyclic_activation.others;
+
+SUBPROGRAM PI_callee
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_callee;
+
+SUBPROGRAM IMPLEMENTATION PI_callee.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_callee.others;
+
+SUBPROGRAM RI_second_callee
+END RI_second_callee;
+
+SUBPROGRAM IMPLEMENTATION RI_second_callee.others
+END RI_second_callee.others;
+
+SUBPROGRAM RI_callee
+END RI_callee;
+
+SUBPROGRAM IMPLEMENTATION RI_callee.others
+END RI_callee.others;
+
+SYSTEM C
+FEATURES
+  PI_cyclic_activation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::C::PI_cyclic_activation.others {
+    Taste::coordinates => "1666 1310";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 5000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "cyclic_activation";
+  };
+  PI_callee : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::C::PI_callee.others {
+    Taste::coordinates => "1666 1362";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "callee";
+  };
+  RI_second_callee : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::B::PI_second_callee.others {
+    Taste::coordinates => "1973 1219";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "second_callee";
+    Taste::labelInheritance => "true";
+  };
+  RI_callee : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::B::PI_callee.others {
+    Taste::coordinates => "1751 1219";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "callee";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END C;
+
+SYSTEM IMPLEMENTATION C.others
+END C.others;
+
+END interfaceview::IV::C;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::A;
+WITH interfaceview::IV::B;
+WITH interfaceview::IV::C;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  A : SYSTEM interfaceview::IV::A::A.others {
+    Taste::coordinates => "551 435 1146 885";
+  };
+  B : SYSTEM interfaceview::IV::B::B.others {
+    Taste::coordinates => "1814 424 2423 907";
+  };
+  C : SYSTEM interfaceview::IV::C::C.others {
+    Taste::coordinates => "1666 1219 2202 1436";
+  };
+CONNECTIONS
+  B_PI_callee_A_RI_caller : SUBPROGRAM ACCESS B.PI_callee -> A.RI_caller {
+    Taste::coordinates => "1146 606 1480 606 1480 606 1814 606";
+  };
+  C_PI_callee_A_RI_call_c : SUBPROGRAM ACCESS C.PI_callee -> A.RI_call_c {
+    Taste::coordinates => "1146 760 1406 760 1406 1362 1666 1362";
+  };
+  B_PI_callee_C_RI_callee : SUBPROGRAM ACCESS B.PI_callee -> C.RI_callee {
+    Taste::coordinates => "1751 1219 1751 606 1814 606";
+  };
+  B_PI_second_callee_C_RI_second_callee : SUBPROGRAM ACCESS B.PI_second_callee -> C.RI_second_callee {
+    Taste::coordinates => "1973 1219 1973 1064 1974 1064 1974 907";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

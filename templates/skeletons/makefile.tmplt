@@ -29,10 +29,17 @@ all:	build-default
 @@TABLE@@
   @@IF@@ @_Unique_Languages_@ = "Ada" or @_Unique_Languages_@ = "SDL"
      @@SET@@ Need_Ada=TRUE
+  @@ELSIF@@ @_Unique_Languages_@ /= "C" and @_Unique_Languages_@ /= "CPP" and @_Unique_Languages_@ /= "Blackbox_C" and @_Unique_Languages_@ /= "GUI"
+     @@SET@@ Other_DataViews=TRUE
+  @@ELSIF@@ @_Unique_Languages_@ = GUI
+     @@SET@@ Has_GUI=TRUE
   @@END_IF@@
 @@END_TABLE@@
 
 # Generate the language-specific data view needed before editing user code
+@@IF@@ not @_Need_Ada_@ and not @_Other_DataViews_@
+dataview:	dataview/C/built
+@@END_IF@@
 @@INLINE(dataview:	dataview/C/built )( )()@@
    @@IF@@ @_Need_Ada_@ = TRUE
       dataview/Ada/built
@@ -45,13 +52,11 @@ all:	build-default
 @@END_INLINE@@
 
 # Generate the complete dataview, including Python bindings if there is a GUI
-@@INLINE(${DATAVIEW_PATH}/built:	dataview )( )()@@
-   @@TABLE@@
-      @@IF@@ @_Unique_Languages_@ = GUI
-         dataview/Python/built
-      @@END_IF@@
-   @@END_TABLE@@
-@@END_INLINE@@
+@@IF@@ @_Has_GUI_@
+${DATAVIEW_PATH}/built:	dataview dataview/Python/built
+@@ELSE@@
+${DATAVIEW_PATH}/built:	dataview
+@@END_IF@@
 	touch $@
 
 # Build based on the deployment view

@@ -7,7 +7,7 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_Language_@ = sdl or @_Language_@ = ada
+@@IF@@ @_Language_@ = SDL or @_Language_@ = Ada
 with @_CAPITALIZE:Name_@;
 @@END_IF@@
 

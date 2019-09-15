@@ -20,7 +20,7 @@ procedure @_CAPITALIZE:Name_@
          @_CAPITALIZE:Param_Names_@ : Interfaces.C.char_array; @_CAPITALIZE:Param_Names_@_Size : Integer
       @@END_TABLE@@
    @@END_INLINE@@
-     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
+     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_Name_@";
 begin
    C_@_CAPITALIZE:Name_@
     @@INLINE(      \()(,\n      )(\);)@@
@@ -32,7 +32,7 @@ end @_CAPITALIZE:Name_@;
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@ is
    procedure C_@_CAPITALIZE:Name_@
-     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_LOWER:Name_@";
+     with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_@_Name_@";
 begin
    --  PI has no parameter - could directly call user code (add _PI_ above)
    C_@_CAPITALIZE:Name_@;

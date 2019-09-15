@@ -5,7 +5,7 @@ export USER_LDFLAGS=
 # you can add folders with source code you want to compile
 export EXTERNAL_SOURCE_PATH=
 
-all: c
+all: c ada
 
 ada: kazoo-ada
 	cp simple_c_function/*.c output.ada/simple_c_function/C/src

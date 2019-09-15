@@ -1,9 +1,0 @@
-@@-- The following boolean tags are available to decide if the file
-@@-- shall be generated or not:
-@@--    Filename_Is_Present
-@@--    Skeletons
-@@--    Glue
-@@--    POHIC
-@@--    Debug
-@@--    No_Stdlib
-FALSE

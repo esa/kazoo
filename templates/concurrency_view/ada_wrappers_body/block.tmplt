@@ -19,7 +19,7 @@ package body @_CAPITALIZE:Name_@_Block is
    end @_CAPITALIZE:Name_@_Protected;
    @@END_IF@@
 
-   @_Unprotected_PIs_'Indent_@
+   @_Unprotected_PIs'Indent_@
 
 end @_CAPITALIZE:Name_@_Block;
 

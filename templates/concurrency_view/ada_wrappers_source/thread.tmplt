@@ -18,11 +18,12 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-with PolyORB_HI_Generated.Types,
-     PolyORB_HI_Generated.Deployment;
-
-use PolyORB_HI_Generated.Deployment,
-    PolyORB_HI_Generated.Types;
+@@IF@@ @_Param_Names'Length_@ > 0
+with PolyORB_HI_Generated.Types;
+use  PolyORB_HI_Generated.Types;
+@@END_IF@@
+with PolyORB_HI_Generated.Deployment;
+use  PolyORB_HI_Generated.Deployment;
 
 
 with @_CAPITALIZE:Pro_Block_Name_@_Block;

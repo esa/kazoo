@@ -70,6 +70,7 @@ package TASTE.Concurrency_View is
    type AADL_Thread is tagged
       record
          Name                 : Unbounded_String;
+         Partition_Name       : Unbounded_String;
          RCM                  : Unbounded_String;
          Need_Mutex           : Boolean := False;
          Entry_Port_Name      : Unbounded_String;

@@ -477,7 +477,8 @@ package body TASTE.AADL_Parser is
                   declare
                      Thread : constant AADL_Thread :=
                        (Name                 => To_Lower (To_String (F.Name))
-                                                & "_" & PI.Name,
+                        & "_" & PI.Name,
+                        Partition_Name       => US (Partition_Name),
                         RCM                  => US (PI.RCM'Img),
                         Need_Mutex           => (F.Provided.Length > 1),
                         Entry_Port_Name      => PI.Name,

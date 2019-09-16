@@ -1,6 +1,7 @@
 @@-- The following tags are available in this template:
 @@--
 @@-- @_Thread_Name_@       : Thread name
+@@-- @_Partition_Name_@    : Partition containing this thread
 @@-- @_Entry_Port_Name_@   : Name of the PI
 @@-- @_RCM_@               : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 @@-- @_Need_Mutex_@        : True if the PI is shared with others in the protected block

@@ -15,3 +15,10 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+with Interfaces.C;
+
+package Required_Interfaces is
+   --  generated from templates/concurrency_view/ada_ri_wrappers_source/partition.tmplt
+
+   @_Threads'Indent_@
+end Required_Interfaces;

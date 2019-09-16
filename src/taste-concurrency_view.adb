@@ -141,6 +141,7 @@ package body TASTE.Concurrency_View is
       return Result : constant Translate_Set :=
         T.PI.To_Template   --  Template of the PI used to create the thread
         & Assoc ("Thread_Name",       To_String (T.Name))
+        & Assoc ("Partition_Name",    To_String (T.Partition_Name))
         & Assoc ("Entry_Port_Name",   To_String (T.Entry_Port_Name))
         & Assoc ("RCM",               To_String (T.RCM))
         & Assoc ("Need_Mutex",        T.Need_Mutex)
@@ -214,7 +215,8 @@ package body TASTE.Concurrency_View is
             is
                Partition       : constant CV_Partition :=
                  CV.Nodes (Node_Name).Partitions (Partition_Name);
-               Thread_Names    : Tag;
+               Thread_Names,
+               Thread_Has_Param : Vector_Tag;
                Block_Names     : Vector_Tag;
                Block_Languages : Vector_Tag;
                Blocks          : Unbounded_String;
@@ -290,6 +292,12 @@ package body TASTE.Concurrency_View is
                      Threads      := Threads & Newline & Result;
                      Part_Threads := Part_Threads & Newline & Result;
                      Thread_Names := Thread_Names & Name;
+                     --  Set boolean to true if thread has a param
+                     --  That helps backend to know if POHI has generated
+                     --  the "types" package.
+                     Thread_Has_Param := Thread_Has_Param &
+                       (T.PI.Params.Length > 0);
+
                      All_Thread_Names := All_Thread_Names & Name;
                      for P of T.Output_Ports loop
                         for Part_Threads of Partition.Threads loop
@@ -396,6 +404,7 @@ package body TASTE.Concurrency_View is
                Partition_Assoc := Partition.Deployment_Partition.To_Template
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
+                 & Assoc ("Thread_Has_Param",     Thread_Has_Param)
                  & Assoc ("Node_Name",            Node_Name)
                  & Assoc ("Blocks",               Blocks)
                  & Assoc ("Block_Names",          Block_Names)

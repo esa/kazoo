@@ -3,6 +3,7 @@
 @@-- @_Name_@            : Partition name (usually the name of the binary)
 @@-- @_Threads_@         : Code generated for the threads
 @@-- @_Thread_Names_@    : Tag: list of thread names
+@@-- @_Thread_Has_Param_@ :  |_  true if the thread has a param
 @@-- @_Node_Name_@       : Name of the node containing this partition
 @@-- @_Blocks_@          : Code generated for protected functions
 @@-- @_Coverage_@        : True if user requested code coverage enable
@@ -15,3 +16,8 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+package body @_CAPITALIZE:Name_@_Polyorb_Interface is
+   --  generated from templates/concurrency_view/ada_wrappers_body/partition.tmplt
+   @_Blocks'Indent_@
+   @_Threads'Indent_@
+end @_CAPITALIZE:Name_@_Polyorb_Interface;

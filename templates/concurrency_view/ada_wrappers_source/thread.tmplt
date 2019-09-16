@@ -18,35 +18,16 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+
+--  generated from templates/concurrency_view/ada_wrappers_source/thread.tmplt
+procedure @_CAPITALIZE:Thread_Name_@_Init renames @_CAPITALIZE:Pro_Block_Name_@.Init;
+
 @@IF@@ @_Param_Names'Length_@ > 0
-with PolyORB_HI_Generated.Types;
-use  PolyORB_HI_Generated.Types;
+@@TABLE@@
+procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
+   (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl);
+@@END_TABLE@@
+@@ELSE@@
+procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
+   (dummy_Entity : Entity_Type);
 @@END_IF@@
-with PolyORB_HI_Generated.Deployment;
-use  PolyORB_HI_Generated.Deployment;
-
-
-with @_CAPITALIZE:Pro_Block_Name_@_Block;
-
-package @_CAPITALIZE:Thread_Name_@_Wrappers is
-   --  This package is the interface to PolyORB-HI-Ada for provided interfaces
-   --  It calls the user code via the protected block that ensures
-   --  mutual exclusion of the interfaces.
-
-   procedure C_Init_@_CAPITALIZE:Thread_Name_@ renames @_CAPITALIZE:Pro_Block_Name_@_Block.Init;
-
-@@INLINE(   )(\n   )(\n)@@
-   @@IF@@ @_Param_Names'Length_@ > 0
-      @@TABLE@@
-         procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl);
-      @@END_TABLE@@
-   @@ELSE@@
-      procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type);
-   @@END_IF@@
-@@END_INLINE@@
-
-   -- This is the list of remote threads/RIs :
-   @@TABLE@@
-   -- @_Remote_Threads_@.@_Remote_PIs_@
-   @@END_TABLE@@
-end @_CAPITALIZE:Thread_Name_@_Wrappers;

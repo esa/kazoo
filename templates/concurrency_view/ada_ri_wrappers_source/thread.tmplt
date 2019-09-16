@@ -17,10 +17,8 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
-with Interfaces.C;
-
-package @_CAPITALIZE:Thread_Name_@_Async_RI_Wrappers is
-
+package @_CAPITALIZE:Thread_Name_@ is
+   --- generated from templates/concurrency_view/ada_ri_wrappers_source/thread.tmplt
 @@INLINE(   )(\n   )(\n)@@
    @@TABLE@@
       @@IF@@ @_Remote_PI_Sorts'Length_@ > 0
@@ -32,5 +30,4 @@ package @_CAPITALIZE:Thread_Name_@_Async_RI_Wrappers is
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
-
-end @_CAPITALIZE:Thread_Name_@_Async_RI_Wrappers;
+end @_CAPITALIZE:Thread_Name_@;

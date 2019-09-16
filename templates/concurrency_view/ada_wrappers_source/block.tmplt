@@ -7,22 +7,21 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+package @_CAPITALIZE:Name_@ is
+   --  generated from templates/concurrency_view/ada_wrappers_source/block.tmplt
 
-with Interfaces.C;
-
-package @_CAPITALIZE:Name_@_Block is
    --  This package interfaces with the user code directly
    --  It may contain a protected object if a PI requires mutual exclusion
 
    procedure Init
       with Import, Convention => C, Link_Name => "init_@_LOWER:Name_@";
 
-   @@IF@@ @_Protected_PIs_@ /= ""
+@@IF@@ @_Protected_PIs_@ /= ""
    protected @_CAPITALIZE:Name_@_Protected is
       @_Protected_PIs'Indent_@
    end @_CAPITALIZE:Name_@_Protected;
-   @@END_IF@@
+@@END_IF@@
 
    @_Unprotected_PIs'Indent_@
-end @_CAPITALIZE:Name_@_Block;
+end @_CAPITALIZE:Name_@;
 

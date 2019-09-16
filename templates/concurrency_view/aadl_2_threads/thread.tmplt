@@ -1,6 +1,7 @@
 @@-- The following tags are available in this template:
 @@--
 @@-- @_Thread_Name_@       : Thread name
+@@-- @_Partition_Name_@    : Partition containing this thread
 @@-- @_Entry_Port_Name_@   : Name of the PI
 @@-- @_RCM_@               : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 @@-- @_Need_Mutex_@        : True if the PI is shared with others in the protected block
@@ -42,7 +43,7 @@ features
 @@IF@@ @_Use_POHIC_@
         Compute_Entrypoint_Source_Text => "call_@_LOWER:Thread_Name_@"; };
 @@ELSE@@
-        Compute_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@"; };
+        Compute_Entrypoint_Source_Text => "@_CAPITALIZE:Partition_Name_@_Polyorb_Interface.@_CAPITALIZE:Thread_Name_@_@_Entry_Port_Name_@"; };
 @@END_IF@@
 @@END_IF@@
    @@TABLE@@
@@ -61,7 +62,7 @@ properties
 @@IF@@ @_Use_POHIC_@
    Initialize_Entrypoint_Source_Text => "init_@_LOWER:Pro_Block_Name_@";
 @@ELSE@@
-   Initialize_Entrypoint_Source_Text => "@_Thread_Name_@_Wrappers.C_Init_@_Thread_Name_@";
+   Initialize_Entrypoint_Source_Text => "@_CAPITALIZE:Partition_Name_@_Polyorb_Interface.@_CAPITALIZE:Thread_Name_@_Init";
 @@END_IF@@
 @@INLINE(   )(\n   )()@@
 @@IF@@ @_RCM_@ = "SPORADIC_OPERATION"
@@ -70,7 +71,7 @@ properties
 @@IF@@ @_Use_POHIC_@
    Compute_Entrypoint_Source_Text    => "call_@_LOWER:Thread_Name_@";
 @@ELSE@@
-   Compute_Entrypoint_Source_Text    => "@_Thread_Name_@_Wrappers.@_Entry_Port_Name_@";
+   Compute_Entrypoint_Source_Text    => "@_CAPITALIZE:Partition_Name_@_Polyorb_Interface.@_CAPITALIZE:Thread_Name_@_@_Entry_Port_Name_@";
 @@END_IF@@
    Dispatch_Protocol                 => Periodic;
 @@END_IF@@

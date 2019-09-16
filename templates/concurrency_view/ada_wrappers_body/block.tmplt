@@ -7,19 +7,13 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_Language_@ = SDL or @_Language_@ = Ada
-with @_CAPITALIZE:Name_@;
-@@END_IF@@
+package body @_CAPITALIZE:Name_@ is
 
-package body @_CAPITALIZE:Name_@_Block is
-
-   @@IF@@ @_Protected_PIs_@ /= ""
+@@IF@@ @_Protected_PIs_@ /= ""
    protected body @_CAPITALIZE:Name_@_Protected is
       @_Protected_PIs'Indent_@
    end @_CAPITALIZE:Name_@_Protected;
-   @@END_IF@@
+@@END_IF@@
 
    @_Unprotected_PIs'Indent_@
-
-end @_CAPITALIZE:Name_@_Block;
-
+end @_CAPITALIZE:Name_@;

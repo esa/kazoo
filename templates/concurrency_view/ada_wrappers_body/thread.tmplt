@@ -19,44 +19,34 @@
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
 @@IF@@ @_Param_Names'Length_@ > 0
-with Interfaces.C;
+@@TABLE@@
+procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
+   (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl)
+ is
+ @@END_TABLE@@
+@@ELSE@@
+procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
+   (dummy_Entity : Entity_Type)
+ is
 @@END_IF@@
-
-package body @_CAPITALIZE:Thread_Name_@_Wrappers is
-
-   @@INLINE(   )()(\n)@@
-      @@IF@@ @_Param_Names'Length_@ > 0
-         @@TABLE@@
-            procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type; Param_Buffer : @_REPLACE_ALL((-)/_):Param_Types_@_Buffer_Impl) is
-         @@END_TABLE@@
-      @@ELSE@@
-         procedure @_CAPITALIZE:Entry_Port_Name_@ (dummy_Entity : Entity_Type) is
-      @@END_IF@@
-   @@END_INLINE@@
-   @@IF@@ @_Param_Names'Length_@ > 0
-      @@TABLE@@
-      @_CAPITALIZE:Param_Names_@_AdaBuffer : Interfaces.C.char_array (1 .. Interfaces.C.size_t (Param_Buffer.Length)) with Import;
-      for @_CAPITALIZE:Param_Names_@_AdaBuffer'Address use Param_Buffer'Address;
-      @@END_TABLE@@ 
-   begin
-      @@IF@@ @_Need_Mutex_@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@
-      @@ELSE@@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Entry_Port_Name_@
-      @@END_IF@@
-         (@_CAPITALIZE:Param_Names_@_AdaBuffer, @_CAPITALIZE:Param_Names_@_AdaBuffer'Length);
+@@IF@@ @_Param_Names'Length_@ > 0
+@@TABLE@@
+   @_CAPITALIZE:Param_Names_@_AdaBuffer : Interfaces.C.char_array (1 .. Interfaces.C.size_t (Param_Buffer.Length)) with Import;
+   for @_CAPITALIZE:Param_Names_@_AdaBuffer'Address use Param_Buffer'Address;
+@@END_TABLE@@ 
+begin
+   @@IF@@ @_Need_Mutex_@
+   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@
    @@ELSE@@
-   begin
-      @@IF@@ @_Need_Mutex_@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@;
-      @@ELSE@@
-      @_CAPITALIZE:Pro_Block_Name_@_Block.@_CAPITALIZE:Entry_Port_Name_@;
-      @@END_IF@@
+   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Entry_Port_Name_@
    @@END_IF@@
-   end @_CAPITALIZE:Entry_Port_Name_@;
-
-   -- This is the list of remote threads/RIs :
-   @@TABLE@@
-   -- @_Remote_Threads_@.@_Remote_PIs_@
-   @@END_TABLE@@
-end @_CAPITALIZE:Thread_Name_@_Wrappers;
+      (@_CAPITALIZE:Param_Names_@_AdaBuffer, @_CAPITALIZE:Param_Names_@_AdaBuffer'Length);
+@@ELSE@@
+begin
+   @@IF@@ @_Need_Mutex_@
+   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@;
+   @@ELSE@@
+   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Entry_Port_Name_@;
+   @@END_IF@@
+@@END_IF@@
+end @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@;

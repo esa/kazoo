@@ -3,17 +3,14 @@ KAZOO=../../kazoo
 all: c
 
 ada: test-parse-ada
-	make -C output.ada && \
-	cp input_data/obsw.pr output.ada/obsw/SDL/src && \
-	cp input_data/gnc.c output.ada/gnc/C/src && \
-	cd output.ada/build && \
-	ocarina -x main.aadl && \
-	    make -f Makefile.taste
+	cp input_data/obsw.pr output.ada/obsw/SDL/src
+	cp input_data/gnc.c output.ada/gnc/C/src
+	make -C output.ada
 
 c: test-parse-c # Polyorb_HI_C output
-	cp input_data/obsw.pr output.pohic/obsw/SDL/src && \
-	cp input_data/gnc.c output.pohic/gnc/C/src && \
-	make -C output.pohic
+	cp input_data/obsw.pr output.pohic/obsw/SDL/src
+	cp input_data/gnc.c output.pohic/gnc/C/src
+	$(MAKE) -C output.pohic
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \

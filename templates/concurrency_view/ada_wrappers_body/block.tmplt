@@ -10,10 +10,21 @@
 package body @_CAPITALIZE:Name_@ is
 
 @@IF@@ @_Protected_PIs_@ /= ""
+   --  Protected provided interfaces (incl. Sporadic and cyclics)
+   --  from templates/concurrency_view/ada_wrappers_body/pi.tmplt)
    protected body @_CAPITALIZE:Name_@_Protected is
       @_Protected_PIs'Indent_@
    end @_CAPITALIZE:Name_@_Protected;
 @@END_IF@@
-
+   
+   --  Unprotected provided interfaces
+   --  from templates/concurrency_view/ada_wrappers_body/pi.tmplt
    @_Unprotected_PIs'Indent_@
+   --  End if unprotected interfaces
+
+@@IF@@ @_Required_@ /= ""
+   --  Required interfaces (templates/concurrency_view/ada_wrappers_body/ri.tmplt)
+   @_Required'Indent_@
+@@END_IF@@
+
 end @_CAPITALIZE:Name_@;

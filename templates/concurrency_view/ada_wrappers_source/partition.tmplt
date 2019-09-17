@@ -45,11 +45,12 @@ use  PolyORB_HI_Generated.Types;
 @@TABLE@@
   @@IF@@ @_Block_Languages_@ = SDL or @_Block_Languages_@ = Ada
 with @_CAPITALIZE:Block_Names_@;
+pragma Unreferenced (@_CAPITALIZE:Block_Names_@);
   @@END_IF@@
 @@END_TABLE@@
 
-package @_CAPITALIZE:Name_@_Polyorb_Interface is
+package @_CAPITALIZE:Name_@_TASTE_Interface is
    --  generated from templates/concurrency_view/ada_wrappers_source/partition.tmplt
    @_Blocks'Indent_@
    @_Threads'Indent_@
-end @_CAPITALIZE:Name_@_Polyorb_Interface;
+end @_CAPITALIZE:Name_@_TASTE_Interface;

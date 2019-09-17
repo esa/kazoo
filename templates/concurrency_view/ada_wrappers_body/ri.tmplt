@@ -1,10 +1,88 @@
 @@-- The following tags are available in this template:
 @@--
-@@-- @_Name_@                : The name of the interface
-@@-- @_Direction_@           : "PI" or "RI"
-@@-- @_Kind_@                : The RCM Kind
-@@-- @_Parent_Function_@     : The name of the function
-@@-- @_Param_Names_@         : List of parameter names
-@@-- @_Param_Types_@         :   |_ Corresponding parameter types
-@@-- @_Param_Directions_@    :   |_ Corresponding direction
-
+@@-- @_Name_@                   : The name of the interface
+@@-- @_Direction_@              : "PI" or "RI"
+@@-- @_Kind_@                   : The RCM Kind
+@@-- @_Parent_Function_@        : The name of the function
+@@-- @_Language_@               : The implementation language of the function
+@@-- @_Partition_Name_@         : Partition name for parent function
+@@-- @_Param_Names_@            : List of parameter names
+@@-- @_Param_Types_@            :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@       :   |_ Corresponding direction
+@@-- @_Remote_Function_Names_@  : List of callees
+@@-- @_Remote_Interface_Names_@ :   |_ callee's interface name
+@@-- @_Calling_Threads_@        : Calling threads of the containing block
+@@IF@@ @_Param_Names'Length_@ = 0
+   @@SET@@ No_Param=True
+@@END_IF@@
+@@IF@@ @_No_Param_@
+procedure @_CAPITALIZE:Name_@
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@
+@@INLINE(   \()(;\n    )(\))@@
+   @@TABLE'ALIGN_ON(":")@@
+      @_CAPITALIZE:Param_Names_@ : Interfaces.C.char_array; @_CAPITALIZE:Param_Names_@_Size : Integer
+   @@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@
+is
+begin
+@@IF@@ @_Kind_@ = SPORADIC_OPERATION
+   --  Sporadic call
+   case Get_Task_Id is
+@@TABLE@@
+      when @_Partition_Name_@_@_Calling_Threads_@_k =>
+         declare
+            Value : @_Calling_Threads_@_Thread_@_Calling_Threads_@_others_Interface
+               (@_Calling_Threads_@_Thread_@_Calling_Threads_@_others_Port_Type'(OUTPORT_@_Name_@));
+            Err   : PolyORB_Hi.Errors.Error_Kind with Unreferenced;
+            use type PolyORB_HI.Errors.Error_Kind;
+         begin
+@@IF@@ not @_No_Param_@
+@@TABLE@@
+            for I in 1 .. @_Param_Names_@_Size loop
+               Value.OUTPORT_@_Name_@_DATA.Buffer (I) :=
+                  PolyORB_HI_Generated.Types.Stream_Element_Buffer (@_Param_Names_@ (Interfaces.C.size_t (I - 1)));
+            end loop;
+            Value.OUTPORT_@_Name_@_DATA.Length := PolyORB_HI_Generated.Types.Unsigned_32 (@_Param_Names_@_Size);
+@@END_TABLE@@
+@@END_IF@@ @@-- Has param
+            Put_Value (@_Partition_Name_@_@_Calling_Threads_@_k, Value);
+            Err := Send_Output (@_Partition_Name_@_@_Calling_Threads_@_k,
+                               @_Calling_Threads_@_Thread_@_Calling_Threads_@_others_Port_Type'(OUTPORT_@_Name_@));
+           --  TODO : Report the error if any
+         end;
+@@-- End of the "case" block
+@@END_TABLE@@
+      when others => null;
+   end case;
+@@ELSIF@@ @_Kind_@ = UNPROTECTED_OPERATION
+   --  Unprotected call (call function defined in vm_if or SIMULINK.Simulink.c function)
+@@TABLE@@
+@@IF@@ @_No_Param_@
+   @_Remote_Function_Names_@.@_Remote_Interface_Names_@;
+@@ELSE@@
+   @_Remote_Function_Names_@.@_Remote_Interface_Names_@
+@@INLINE(        \()(,\n         )(\);\n)@@
+   @@TABLE@@
+         @_LOWER:Param_Names_@, @_LOWER:Param_Names_@_Size
+   @@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@
+@@END_TABLE@@
+@@ELSE@@ @@-- Protected call
+   --  Protected call of @_Name_@;
+@@TABLE@@
+@@IF@@ @_No_Param_@
+   @_Remote_Function_Names_@.@_Remote_Function_Names_@_Protected.@_Remote_Interface_Names_@;
+@@ELSE@@
+   @_Remote_Function_Names_@.@_Remote_Function_Names_@_Protected.@_Remote_Interface_Names_@
+@@INLINE(        \()(,\n         )(\);\n)@@
+   @@TABLE@@
+         @_LOWER:Param_Names_@, @_LOWER:Param_Names_@_Size
+   @@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@
+@@END_TABLE@@
+@@END_IF@@
+end;

@@ -27,7 +27,7 @@ procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
 @@ELSE@@
 procedure @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@
    (dummy_Entity : Entity_Type)
- is
+is
 @@END_IF@@
 @@IF@@ @_Param_Names'Length_@ > 0
 @@TABLE@@
@@ -42,11 +42,7 @@ begin
    @@END_IF@@
       (@_CAPITALIZE:Param_Names_@_AdaBuffer, @_CAPITALIZE:Param_Names_@_AdaBuffer'Length);
 @@ELSE@@
-begin
-   @@IF@@ @_Need_Mutex_@
+begin @@-- no param
    @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@;
-   @@ELSE@@
-   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Entry_Port_Name_@;
-   @@END_IF@@
 @@END_IF@@
 end @_CAPITALIZE:Thread_Name_@_@_CAPITALIZE:Entry_Port_Name_@;

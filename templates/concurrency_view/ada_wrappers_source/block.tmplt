@@ -7,8 +7,11 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+--  Package wrapping function @_Name_@ : manages the call to functions in vm_if.c 
+--  Provides mutex to handle protected, cyclic and sporadic provided interfaces
+--  Exports the interface functions called by invoke_ri (vm_...)
+--  generated from templates/concurrency_view/ada_wrappers_source/block.tmplt
 package @_CAPITALIZE:Name_@ is
-   --  generated from templates/concurrency_view/ada_wrappers_source/block.tmplt
 
    --  This package interfaces with the user code directly
    --  It may contain a protected object if a PI requires mutual exclusion
@@ -17,11 +20,21 @@ package @_CAPITALIZE:Name_@ is
       with Import, Convention => C, Link_Name => "init_@_LOWER:Name_@";
 
 @@IF@@ @_Protected_PIs_@ /= ""
+   --  Protected provided interfaces (incl. Sporadic and cyclics)
+   --  from templates/concurrency_view/ada_wrappers_source/pi.tmplt)
    protected @_CAPITALIZE:Name_@_Protected is
       @_Protected_PIs'Indent_@
    end @_CAPITALIZE:Name_@_Protected;
 @@END_IF@@
-
+@@IF@@ @_Unprotected_PIs_@ /= ""
+   --  Unprotected provided interfaces
+   --  from templates/concurrency_view/ada_wrappers_source/pi.tmplt
    @_Unprotected_PIs'Indent_@
+@@END_IF@@
+
+@@IF@@ @_Required_@ /= ""
+   --  Required interfaces (templates/concurrency_view/ada_wrappers_source/ri.tmplt)
+   @_Required'Indent_@
+@@END_IF@@
 end @_CAPITALIZE:Name_@;
 

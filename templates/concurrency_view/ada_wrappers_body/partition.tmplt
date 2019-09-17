@@ -16,8 +16,17 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
-package body @_CAPITALIZE:Name_@_Polyorb_Interface is
+with PolyORB_HI.Utils; 
+use  PolyORB_HI.Utils;
+
+@@IF@@ @_Thread_Src_Name'Length_@ > 0
+with PolyORB_HI_Generated.Activity,
+     PolyORB_HI.Errors;
+use  PolyORB_HI_Generated.Activity; 
+@@END_IF@@
+
+package body @_CAPITALIZE:Name_@_TASTE_Interface is
    --  generated from templates/concurrency_view/ada_wrappers_body/partition.tmplt
    @_Blocks'Indent_@
    @_Threads'Indent_@
-end @_CAPITALIZE:Name_@_Polyorb_Interface;
+end @_CAPITALIZE:Name_@_TASTE_Interface;

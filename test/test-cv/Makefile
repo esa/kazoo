@@ -1,6 +1,6 @@
 KAZOO=../../kazoo
 
-all: c
+all: c ada
 
 ada: test-parse-ada
 	cp input_data/obsw.pr output.ada/obsw/SDL/src

@@ -1,0 +1,8 @@
+Demo_BlackBox
+
+This demo shows how to use blackbox devices with parameters encoded in ACN and uPER
+The BB device parameters are received in binary format (not decoded) and can be sent as is to the physical device.
+The interface to the BB Device is synchronous (unprotected). It could be asynchronous...
+There are two callers, one in C and one in Ada, and the build is done for both runtimes (C and Ada)
+
+

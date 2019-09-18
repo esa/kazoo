@@ -1,0 +1,33 @@
+/*
+Automatically generated ACN grammar
+Date was: 04/02/2012
+Time was: 03:59:23
+*/
+
+TASTE-Dataview DEFINITIONS ::= BEGIN
+
+	/*A few simple types to start with ASN.1*/
+	MyInteger[size 16, encoding pos-int]
+
+--  	MyReal[encoding IEEE754-1985-64]
+
+	MyEnum[size 2, encoding pos-int]
+
+	MySeq[] {
+		a [] ,
+		b [size 2, encoding pos-int]
+	}
+
+	MyChoice[] {
+		a [true-value '11'B] ,
+		b []
+	}
+
+	MySeqOf[size 2] {
+		[]
+	}
+
+	MyOctStr[size 3]
+
+END
+

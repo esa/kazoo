@@ -56,7 +56,7 @@ project @_CAPITALIZE:Name_@ is
 @@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada",
 @@END_IF@@
-@@IF@@ @_VP_Name_@ = "" and @_In_Port_Names'Length_@ > 0
+@@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
 @@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
        "../DriversConfig",
 @@END_IF@@ 

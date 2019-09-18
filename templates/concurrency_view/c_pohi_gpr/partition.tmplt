@@ -43,7 +43,7 @@ project @_CAPITALIZE:Name_@ is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
-@@IF@@ @_VP_Name_@ = "" and @_In_Port_Names'Length_@ > 0
+@@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
 @@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
        "../DriversConfig",
 @@END_IF@@ 

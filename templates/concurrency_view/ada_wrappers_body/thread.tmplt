@@ -35,11 +35,11 @@ is
    for @_CAPITALIZE:Param_Names_@_AdaBuffer'Address use Param_Buffer'Address;
 @@END_TABLE@@ 
 begin
-   @@IF@@ @_Need_Mutex_@
+   @@--@@IF@@ @_Need_Mutex_@    cyclic and sporadics are ALWAYS protected
    @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Pro_Block_Name_@_Protected.@_CAPITALIZE:Entry_Port_Name_@
-   @@ELSE@@
-   @_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Entry_Port_Name_@
-   @@END_IF@@
+   @@--@@ELSE@@
+   @@--@_CAPITALIZE:Pro_Block_Name_@.@_CAPITALIZE:Entry_Port_Name_@
+   @@--@@END_IF@@
       (@_CAPITALIZE:Param_Names_@_AdaBuffer, @_CAPITALIZE:Param_Names_@_AdaBuffer'Length);
 @@ELSE@@
 begin @@-- no param

@@ -1,0 +1,173 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_f1
+FEATURES
+  a : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END PI_f1;
+
+SUBPROGRAM IMPLEMENTATION PI_f1.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_f1.others;
+
+SYSTEM Function1
+FEATURES
+  PI_f1 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_f1.others {
+    Taste::coordinates => "117107 54673";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "f1";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_f2
+FEATURES
+  a : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_f2;
+
+SUBPROGRAM IMPLEMENTATION PI_f2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_f2.others;
+
+SYSTEM Function2
+FEATURES
+  PI_f2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_f2.others {
+    Taste::coordinates => "117224 83715";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "f2";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+END Function2.others;
+
+END interfaceview::IV::Function2;
+
+PACKAGE interfaceview::IV::Function3
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_f1
+FEATURES
+  a : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_f1;
+
+SUBPROGRAM IMPLEMENTATION RI_f1.others
+END RI_f1.others;
+
+SUBPROGRAM RI_f2
+FEATURES
+  a : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_f2;
+
+SUBPROGRAM IMPLEMENTATION RI_f2.others
+END RI_f2.others;
+
+SYSTEM Function3
+FEATURES
+  RI_f1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_f1.others {
+    Taste::coordinates => "144855 68078";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "f1";
+    Taste::labelInheritance => "true";
+  };
+  RI_f2 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_f2.others {
+    Taste::coordinates => "144855 76310";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "f2";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END Function3;
+
+SYSTEM IMPLEMENTATION Function3.others
+END Function3.others;
+
+END interfaceview::IV::Function3;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH interfaceview::IV::Function3;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "93591 51616 117107 67489";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::coordinates => "92886 80187 117224 98294";
+  };
+  Function3 : SYSTEM interfaceview::IV::Function3::Function3.others {
+    Taste::coordinates => "144855 64550 166607 83480";
+  };
+CONNECTIONS
+  Function1_PI_f1_Function3_RI_f1 : SUBPROGRAM ACCESS Function1.PI_f1 -> Function3.RI_f1 {
+    Taste::coordinates => "144855 68078 130981 68078 130981 54673 117107 54673";
+  };
+  Function2_PI_f2_Function3_RI_f2 : SUBPROGRAM ACCESS Function2.PI_f2 -> Function3.RI_f2 {
+    Taste::coordinates => "144855 76310 131039 76310 131039 83715 117224 83715";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

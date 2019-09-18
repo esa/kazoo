@@ -38,6 +38,7 @@
 #include "@_LOWER:Name_@.h"
 #include "@_LOWER:Name_@_enums_def.h"
 
+@@IF@@ @_List_Of_ASync_PIs'Length_@ > 1  @@-- 1 because we ignore Poll
 typedef struct _PI_Messages {
    T_@_LOWER:Name_@_PI_list msg_id;
    union {
@@ -48,7 +49,11 @@ typedef struct _PI_Messages {
       @@END_TABLE@@
    } msg_data;
 } PI_Messages;
+@@ELSE@@
+typedef bool PI_Messages;
+@@END_IF@@
 
+@@IF@@ @_List_Of_ASync_RIs'Length_@ > 0
 typedef struct _RI_Messages {
    T_@_LOWER:Name_@_RI_list msg_id;
    union {
@@ -59,6 +64,9 @@ typedef struct _RI_Messages {
       @@END_TABLE@@
    } msg_data;
 } RI_Messages;
+@@ELSE@@
+typedef bool RI_Messages;
+@@END_IF@@
 
 @@IF@@ @_List_Of_PIs'Length_@ > 0
 // Queues of messages going from the binary to the user (PIs, or TMs)

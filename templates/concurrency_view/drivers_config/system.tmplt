@@ -45,7 +45,7 @@
 --  Configuration data for device drivers in distributed systems
 --  This file was generated automatically by taste/kazoo
 @@IF@@ @_Bus_Names'Length_@ > 0
-Taste-Drivers-Configuation DEFINITIONS ::=
+Taste-Drivers-Configuration DEFINITIONS ::=
 BEGIN
 @@INLINE(IMPORTS )(\n        )(;)@@
 @@TABLE@@

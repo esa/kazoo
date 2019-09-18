@@ -131,8 +131,13 @@ subcomponents
 @@TABLE'ALIGN_ON(":")@@
    @_Device_Node_Name_@_@_Device_Names_@ : device @_Device_Classifier_@
       {
+@@IF@@ @_Use_POHIC_@
          Source_Text      => ("../DriversConfig/@_Device_Partition_@/DeviceConfig-@_Device_Node_Name_@-@_Device_Names_@.c");
          Type_Source_Name => "pohidrv_@_Device_Node_Name_@_@_Device_Names_@";
+@@ELSE@@
+         Source_Text      => ("../DriversConfig/@_Device_Partition_@/DeviceConfig-@_Device_Node_Name_@-@_Device_Names_@.ads");
+         Type_Source_Name => "Taste_Drivers_Configuration.pohidrv_@_Device_Node_Name_@_@_Device_Names_@";
+@@END_IF@@
       };
 @@END_TABLE@@
 @@-- Specify the connections for distributed and TSP systems

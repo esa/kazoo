@@ -56,6 +56,10 @@ project @_CAPITALIZE:Name_@ is
 @@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada",
 @@END_IF@@
+@@IF@@ @_VP_Name_@ = "" and @_In_Port_Names'Length_@ > 0
+@@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
+       "../DriversConfig",
+@@END_IF@@ 
 @@TABLE@@
 @@IF@@ @_Block_Languages_@ = SDL
        "../../@_LOWER:Block_Names_@/SDL/code",

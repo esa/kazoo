@@ -85,7 +85,11 @@ air:
 @@IF@@ @_Bus_Names'Length_@ > 0
 DriversConfig/drivers_config.h:	drivers_config.asn
 	mkdir -p DriversConfig
-	asn1.exe -o DriversConfig -c drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
+@@IF@@ @_Use_POHIC_@@
+	mono $(shell which asn1.exe) -o DriversConfig -c drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
+@@ELSE@@
+	mono $(shell which asn1.exe) -o DriversConfig -Ada drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
+@@END_IF@@
 @@ELSE@@
 DriversConfig/drivers_config.h:  # Not a distributed system
 @@END_IF@@

@@ -582,7 +582,7 @@ package body TASTE.Concurrency_View is
                   for Part of Node.Partitions loop
                      exit when Found;
                      if Part.Bound_Functions.Contains
-                       (To_String (BC.Dest_Function))
+                       (To_String (BC.Source_Function)) --  Dest_Function))
                      then
                         Connect_From_Partition :=
                           Connect_From_Partition & Part.Name;
@@ -593,7 +593,7 @@ package body TASTE.Concurrency_View is
                if not Found then
                   raise Concurrency_View_Error with
                     "Could not find partition of function "
-                    & To_String (BC.Dest_Function);
+                    & To_String (BC.Source_Function); --  Dest_Function);
                end if;
             end loop;
 

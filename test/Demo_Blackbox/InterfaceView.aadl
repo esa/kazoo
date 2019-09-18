@@ -125,7 +125,7 @@ FEATURES
   };
   RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
     Taste::coordinates => "1302 384";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "RunDriver";
     Taste::labelInheritance => "true";
   };
@@ -146,7 +146,7 @@ SYSTEM BlackBox
 FEATURES
   PI_RunDriver : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
     Taste::coordinates => "1872 494";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "RunDriver";
@@ -175,7 +175,7 @@ FEATURES
   };
   RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
     Taste::coordinates => "1338 1189";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "RunDriver";
     Taste::labelInheritance => "true";
   };

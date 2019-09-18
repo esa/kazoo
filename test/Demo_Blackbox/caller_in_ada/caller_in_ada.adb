@@ -24,6 +24,7 @@ package body caller_in_ada is
         ---------------------------------------------------------
         procedure pulse is
         begin
+            System.IO.Put_Line ("[Ada] Calling in Ada");
 
             RunDriver(i1, i2, o1, o2);
             system.io.put("[Ada] i1=");

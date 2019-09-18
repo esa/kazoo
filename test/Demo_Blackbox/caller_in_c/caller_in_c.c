@@ -12,6 +12,7 @@ void caller_in_c_PI_pulse()
 {
  static asn1SccMyInteger i1=0, i2=1, o1, o2;
 
+ printf("[C] Calling in C\n");
  caller_in_c_RI_RunDriver(&i1, &i2, &o1, &o2);
 
  printf ("[C] i1 = %lld, i2 = %lld, o1 = %lld, o2 = %lld", i1,i2,o1,o2);

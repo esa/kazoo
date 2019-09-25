@@ -100,7 +100,7 @@ build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
 
 ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
-	asn2aadlPlus $< $@
+	asn2aadlPlus  $< $@
 
 @@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@

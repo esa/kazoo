@@ -19,6 +19,7 @@ DATAVIEW_ACN    := ${DATAVIEW_PATH}/dataview-uniq.acn
 DATAVIEW_ACN    :=
 @@END_IF@@
 DATAVIEW_AADLV1 := ${DATAVIEW_PATH}/dataview_aadlv1.aadl
+DATAVIEW_AADLV2 := ${DATAVIEW_PATH}/dataview_aadlv2.aadl
 
 # Project cache folder is used to speed up all ASN.1-related processing
 export PROJECT_CACHE=${HOME}/.taste_AST_cache
@@ -70,7 +71,8 @@ air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentvie
 	$(MAKE) -j -C build -f Makefile.taste air
 
 # Rule to invoke Ocarina (generation of POHI middleware code)
-build/deploymentview_final/Makefile:	build/main.aadl
+build/deploymentview_final/Makefile:	build/main.aadl ${DATAVIEW_AADLV2} ../ConcurrencyView_Properties.aadl
+	taste-patch-cv-properties.py build/system.aadl ../ConcurrencyView_Properties.aadl
 	cd build && ocarina -x main.aadl
 
 # Create dataview-uniq.asn by concatenating all asn1 input files
@@ -101,6 +103,10 @@ build/system_config.h:	$(wildcard */*/wrappers/*_system_config.h)
 ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 	@@-- Generate DataView.aadl in AADLV1 as this is needed by aadl2glueC
 	asn2aadlPlus  $< $@
+
+${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
+	@@-- Generate DataView.aadl in AADLV2 without -f flag
+	asn2aadlPlus -aadlv2  $< $@
 
 @@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@

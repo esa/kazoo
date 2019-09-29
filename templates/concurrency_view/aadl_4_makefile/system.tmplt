@@ -72,7 +72,7 @@ air:
                 Cheddar_Properties.aadl arinc653.aadl data_model.aadl \
                 TASTE_IV_Properties.aadl TASTE_DV_Properties.aadl \
                 taste_properties.aadl base_types.aadl \
-                ../../DataView.aadl ../../InterfaceView.aadl ../../DeploymentView.aadl \
+                ../dataview/dataview_aadlv2.aadl ../../InterfaceView.aadl ../../DeploymentView.aadl \
                 ../../../common/ocarina_components.aadl && \
         cd deploymentview_final && rm -f Makefile && (configure --keep-files-silent)
 	@echo "XML generated, AIR configuration done, building..."

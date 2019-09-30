@@ -21,7 +21,7 @@ properties
  Ocarina_Config::AADL_Files =>
     ("../../@_Interface_View_@",
      "../../@_Deployment_View_@",
-     "../../@_Data_View_@",
+     "../dataview/dataview_aadlv2.aadl",
      "system.aadl",
 @@IF@@ not @_No_Stdlib_Flag_@     
      "ocarina_components.aadl",

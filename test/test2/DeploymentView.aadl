@@ -1,5 +1,5 @@
 ---------------------------------------------------
--- AADL2.1
+-- AADL2.2
 -- TASTE type deploymentview
 -- 
 -- generated code: do not edit
@@ -77,11 +77,11 @@ PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::Level0_Appear;
+WITH interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Nested1_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear;
-WITH interfaceview::IV::Function1_ShouldNotAppear::MotherClass_Appear;
 WITH interfaceview::IV::Y_Hidden::Z_Shown;
 WITH interfaceview::IV::Instance_of_MotherClass_Appear;
 WITH deploymentview::DV::Node2;
@@ -100,6 +100,9 @@ SUBCOMPONENTS
   IV_Level0_Appear : SYSTEM interfaceview::IV::Level0_Appear::Level0_Appear.others {
     Taste::FunctionName => "Level0_Appear";
   };
+  IV_Nested3_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear::Nested3_Appear.others {
+    Taste::FunctionName => "Nested3_Appear";
+  };
   first_binary : PROCESS deploymentview::DV::Node1::first_binary.others {
     Taste::coordinates => "97495 54172 119317 74971";
     TASTE_DV_Properties::CoverageEnabled => TRUE;
@@ -115,6 +118,7 @@ CONNECTIONS
   generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
   Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Level0_Appear;
+  Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Nested3_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO first_binary;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END Node1.others;
@@ -131,9 +135,6 @@ SUBCOMPONENTS
   };
   IV_Nested2_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear::Nested2_Appear.others {
     Taste::FunctionName => "Nested2_Appear";
-  };
-  IV_MotherClass_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::MotherClass_Appear::MotherClass_Appear.others {
-    Taste::FunctionName => "MotherClass_Appear";
   };
   IV_Z_Shown : SYSTEM interfaceview::IV::Y_Hidden::Z_Shown::Z_Shown.others {
     Taste::FunctionName => "Z_Shown";
@@ -156,7 +157,6 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Nested1_Appear;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Nested2_Appear;
-  Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_MotherClass_Appear;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Z_Shown;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Instance_of_MotherClass_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO second_binary;
@@ -189,11 +189,12 @@ PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear_PI_hello_Level0_Appear_RI_I_say_hello;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Function1_ShouldNotAppear_RI_my_final_result;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Y_Hidden_RI_final_result;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear.Nested3_Appear_PI_Some_Sporadic_Nested1_Appear_RI_Some_Sporadic;
 END deploymentview.others;
 
 PROPERTIES
   Taste::coordinates => "0 0 297000 210000";
-  Taste::version => "2.0";
+  Taste::version => "2.2";
   Taste::interfaceView => "InterfaceView.aadl";
   Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;

@@ -598,12 +598,16 @@ package body TASTE.Interface_View is
          --  Check User properties for first-class attributes
          --  Currently: component type and instance
          for Each of Result.User_Properties loop
-            if Each.Name = "TASTE_IV_Properties::is_Component_Type" and then
+            if (Each.Name = "TASTE_IV_Properties::is_Component_Type"
+                or Each.Name = "Taste::is_Component_Type") and then
                Each.Value = "true"
             then
                Result.Is_Type := True;
             end if;
-            if Each.Name = "TASTE_IV_Properties::is_instance_of" then
+            if Each.Name = "TASTE_IV_Properties::is_instance_of"
+               or Each.Name = "Taste::is_instance_of"
+               or Each.Name = "Taste::is_instance_of2"
+            then
                Result.Instance_Of := Just (Each.Value);
             end if;
          end loop;

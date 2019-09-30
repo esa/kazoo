@@ -26,6 +26,9 @@ skeletons:
 clean-skeletons:
 	rm -rf code
 
+clean-c:
+	rm -rf output.pohic
+
 clean: clean-c clean-skeletons
 
 .PHONY: clean clean-c gdb test-parse-c buildsupport_pohic c skeletons clean-skeletons

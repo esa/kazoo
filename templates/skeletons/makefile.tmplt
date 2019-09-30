@@ -111,7 +111,7 @@ ${DATAVIEW_AADLV1}: ${DATAVIEW_UNIQ}
 
 ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	@@-- Generate DataView.aadl in AADLV2 without -f flag
-	asn2aadlPlus -aadlv2  $< $@
+	asn2aadlPlus --aadlv2  $< $@
 
 @@-- For each function generate the glue code from DMT based on the dataview
 	@@TABLE@@

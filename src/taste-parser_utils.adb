@@ -13,7 +13,7 @@ with Ada.Characters.Latin_1,
      GNAT.Strings,
      GNAT.Command_Line,
      Templates_Parser.Utils,
-     Templates_Parser.Query,
+     --  Templates_Parser.Query,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
@@ -57,14 +57,15 @@ package body TASTE.Parser_Utils is
       New_Line;
    end Banner;
 
-   --  Generate documentation for a translate set
+   --  Generate documentation for a translate set (TODO..)
    procedure Document_Template (Source_Folder, Template_Name : String;
                                 T : Translate_Set)
    is
       procedure Action (Item : Association; Quit : in out Boolean) is
+         pragma Unreferenced (Item);
       begin
-         Put_Debug ("  " & Templates_Parser.Query.Variable (Item) & " - "
-                   & Templates_Parser.Query.Kind (Item)'Img);
+         --  Put_Debug ("  " & Templates_Parser.Query.Variable (Item) & " - "
+         --          & Templates_Parser.Query.Kind (Item)'Img);
          Quit := False;
       end Action;
       procedure Iterate is new For_Every_Association (Action);

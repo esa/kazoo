@@ -5,11 +5,15 @@
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
+OPENGEODE?=opengeode
 
 all: compile-linux
 
 clean:
 	rm -rf obj
+
+edit:
+	cd src && $(OPENGEODE) system_structure.pr @_LOWER:Name_@.pr
 
 generate-code:
 	mkdir -p code && cd code && \

@@ -5,11 +5,19 @@
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
+VISUAL?=kate
 
 all: compile-linux
 
 clean:
 	rm -rf obj
+edit:
+@@INLINE(	$(VISUAL) )( )()@@
+   @@TABLE@@
+      ../../dataview/Ada/@_REPLACE_ALL(-/_):LOWER:ASN1_Modules_@.ads
+   @@END_TABLE@@
+   src/@_LOWER:Name_@.ads src/@_LOWER:Name_@.adb
+@@END_INLINE@@
 
 compile-linux:
 	mkdir -p obj && cd obj && ADA_INCLUDE_PATH=../../../dataview/Ada gnat make ../src/@_LOWER:Name_@

@@ -162,9 +162,15 @@ package body TASTE.Deployment_View is
                SRC_FUNCTION := US (Get_Name_String
                                      (Name (Identifier
                                       (Parent_Subcomponent
-                                           (Parent_Component (SRC))))));
+                                         (Parent_Component (SRC))))));
+               --  The source and destination function/ports are irrelevant
+               --  here because they may not be end-to-end connections in
+               --  case of a hierarchical structure. All bus connections
+               --  must be updated before processing the concurrency view, but
+               --  this can be done only using the interface view information.
                Result := Result
-                 & Bus_Connection'(Dest_Port       => DST_PORT,
+                 & Bus_Connection'(Channel_Name    => US (AIN_Case (Conn)),
+                                   Dest_Port       => DST_PORT,
                                    Dest_Function   => DST_FUNCTION,
                                    Bus_Name        =>
                                      US (Get_Name_String (Bound_Bus_Name)),
@@ -640,6 +646,33 @@ package body TASTE.Deployment_View is
       end loop;
       return Option_Partition.Nothing;
    end Find_Partition;
+
+   procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
+                                  IV : Complete_Interface_View) is
+   begin
+      --  We must find the channel referenced in the bus connection
+      --  among all the connections of the interface view to retrieve
+      --  the end-to-end connections and set the source/dest port properly,
+      --  i.e. not referencing any nesting functions (which are not mapped
+      --  to any partition)
+      for C_DV : Bus_Connection of DV.Connections loop
+         for C_IV : Connection of IV.Connections loop
+            for Channel of C_IV.Channels loop
+               if Channel = C_DV.Channel_Name then
+                  Put_Debug ("End to end: " & To_String (C_IV.Caller)
+                             & "." & To_String (C_IV.RI_Name)
+                             & " -> " & To_String (C_IV.Callee)
+                             & "." & To_String (C_IV.PI_Name));
+                  --  Update the information in the deployment view
+                  C_DV.Source_Function := C_IV.Caller;
+                  C_DV.Source_Port     := C_IV.RI_Name;
+                  C_DV.Dest_Function   := C_IV.Callee;
+                  C_DV.Dest_Port       := C_IV.PI_Name;
+               end if;
+            end loop;
+         end loop;
+      end loop;
+   end Fix_Bus_Connections;
 
    procedure Dump_Nodes (DV : Complete_Deployment_View; Output : File_Type) is
    begin

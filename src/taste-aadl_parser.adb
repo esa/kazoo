@@ -191,6 +191,7 @@ package body TASTE.AADL_Parser is
          then
             AADL_Lib.Append (Result.Configuration.Interface_View.Element);
             Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
+            Result.Deployment_View.Fix_Bus_Connections (Result.Interface_View);
          end if;
       end if;
 

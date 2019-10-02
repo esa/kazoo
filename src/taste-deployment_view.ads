@@ -14,7 +14,8 @@ with Ada.Containers.Indefinite_Ordered_Maps,
      Ocarina.Types,
      Ocarina.Backends.Properties,
      Option_Type,
-     TASTE.Parser_Utils;
+     TASTE.Parser_Utils,
+     TASTE.Interface_View;
 
 use Ada.Containers,
     Ada.Strings.Unbounded,
@@ -23,7 +24,8 @@ use Ada.Containers,
     Ocarina,
     Ocarina.Types,
     Ocarina.Backends.Properties,
-    TASTE.Parser_Utils;
+    TASTE.Parser_Utils,
+    TASTE.Interface_View;
 
 package TASTE.Deployment_View is
 
@@ -71,6 +73,7 @@ package TASTE.Deployment_View is
 
    type Bus_Connection is tagged
       record
+         Channel_Name,
          Source_Function,
          Source_Port,
          Bus_Name,
@@ -204,7 +207,12 @@ package TASTE.Deployment_View is
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function Parse_Deployment_View (System : Node_Id)
                                    return Complete_Deployment_View
-   with Pre => System /= No_Node;
+     with Pre => System /= No_Node;
+
+   --  Replace bus connection ports with end-to-end connections
+   procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
+                                  IV : Complete_Interface_View);
+
    procedure Dump_Nodes       (DV     : Complete_Deployment_View;
                                Output : File_Type);
    procedure Dump_Connections (DV     : Complete_Deployment_View;

@@ -1,17 +1,18 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cd output && make
+	$(MAKE) -C work
 
 generate:
 	$(KAZOO) --gw \
-	               -o output \
-	               --glue \
-		       --debug
+	         -p \
+                 -o work \
+                 --glue \
+                 --debug
 
 test-parse: clean generate
 
 clean:
-	rm -rf output
+	rm -rf work
 
 .PHONY: clean test-parse

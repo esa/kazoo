@@ -160,10 +160,12 @@ package TASTE.Interface_View is
 
    type Connection is
       record
-         Caller  : Unbounded_String;
-         Callee  : Unbounded_String;
-         RI_Name : Unbounded_String;
+         Caller,
+         Callee,
+         RI_Name,
          PI_Name : Unbounded_String;
+         --  Channels: list of channels needed to go from RI to PI
+         Channels : String_Vectors.Vector;
       end record;
 
    package Option_Connection is new Option_Type (Connection);

@@ -574,7 +574,7 @@ package body TASTE.Concurrency_View is
             --  directly provide the partition name of the function so we have
             --  to retrieve it here
             for BC : Bus_Connection of CV.Deployment.Connections loop
-               Connect_Via_Bus   := Connect_Via_Bus & BC.Bus_Name;
+               Connect_Via_Bus   := Connect_Via_Bus   & BC.Bus_Name;
                Connect_Port_Name := Connect_Port_Name & BC.Source_Port;
                Found := False;
                for Node of CV.Deployment.Nodes loop
@@ -582,7 +582,7 @@ package body TASTE.Concurrency_View is
                   for Part of Node.Partitions loop
                      exit when Found;
                      if Part.Bound_Functions.Contains
-                       (To_String (BC.Source_Function)) --  Dest_Function))
+                       (To_String (BC.Source_Function))
                      then
                         Connect_From_Partition :=
                           Connect_From_Partition & Part.Name;
@@ -593,7 +593,7 @@ package body TASTE.Concurrency_View is
                if not Found then
                   raise Concurrency_View_Error with
                     "Could not find partition of function "
-                    & To_String (BC.Source_Function); --  Dest_Function);
+                    & To_String (BC.Source_Function);
                end if;
             end loop;
 

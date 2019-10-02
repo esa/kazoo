@@ -303,6 +303,10 @@ package body TASTE.Interface_View is
       --  Parse a connection
       function Parse_Connection (Conn : Node_Id) return Optional_Connection is
          use Option_Connection;
+         use String_Vectors;
+         Channel_Name : constant String := AIN_Case (Conn);
+         Channels     : String_Vectors.Vector := String_Vectors.Empty_Vector;
+
          Caller  : constant Node_Id := AIN.Item (AIN.First_Node
                                          (AIN.Path (AIN.Destination (Conn))));
          Callee  : constant Node_Id := AIN.Item (AIN.First_Node
@@ -328,16 +332,22 @@ package body TASTE.Interface_View is
          end if;
 
          PI_Name := Get_Interface_Name
-                                  (Get_Referenced_Entity (AIN.Source (Conn)));
+           (Get_Referenced_Entity (AIN.Source (Conn)));
 
-         return Just (Connection'(Caller =>
-           (if Kind (Caller) = K_Subcomponent_Access_Instance then US ("_env")
-            else US (AIN_Case (Caller))),
-                            Callee =>
-           (if Kind (Callee) = K_Subcomponent_Access_Instance then US ("_env")
-            else US (AIN_Case (Callee))),
-                            PI_Name => US (Get_Name_String (PI_Name)),
-                            RI_Name => US (Get_Name_String (RI_Name))));
+         Channels := Channels & Channel_Name;
+
+         return Just (Connection'(
+                      Channels     => Channels,
+                      Caller       =>
+                        (if Kind (Caller) = K_Subcomponent_Access_Instance
+                         then US ("_env")
+                         else US (AIN_Case (Caller))),
+                      Callee       =>
+                        (if Kind (Callee) = K_Subcomponent_Access_Instance
+                         then US ("_env")
+                         else US (AIN_Case (Callee))),
+                      PI_Name      => US (Get_Name_String (PI_Name)),
+                      RI_Name      => US (Get_Name_String (RI_Name))));
       end Parse_Connection;
 
       --  Create a vector of connections for a given system
@@ -471,8 +481,11 @@ package body TASTE.Interface_View is
       --  Recursive function making jumps to find the provided interface
       --  connected to a required interface. It returns a Remote Entity,
       --  which contains the name of the remote PI and the name of the function
-      function Rec_Jump (From : String; RI : String;
-                         Going_Out : Boolean := False) return Remote_Entity is
+      function Rec_Jump (From, RI      : String;
+                         Going_Out     : Boolean := False;
+                         Via_Channels  : in out String_Vectors.Vector)
+                         return Remote_Entity is
+         use String_Vectors;
          Context     : constant String :=
            (if Functions.Contains (Key => From)
             then To_String (Functions.Element (Key => From).Context)
@@ -500,16 +513,18 @@ package body TASTE.Interface_View is
                if Each.Callee = "_env" then
                   Set_Going_Out := True;
                end if;
+               Via_Channels := Via_Channels & Each.Channels;
 
                Result :=
                  (if Functions.Contains (Key => To_String (Each.Callee))
                   then (Function_Name  => Each.Callee,
                         Interface_Name => Each.PI_Name)
-                  else Rec_Jump (From      => (if not Set_Going_Out
-                                               then To_String (Each.Callee)
-                                               else Context),
-                                 Going_Out => Set_Going_Out,
-                                 RI        => To_String (Each.PI_Name)));
+                  else Rec_Jump (From         => (if not Set_Going_Out
+                                                  then To_String (Each.Callee)
+                                                  else Context),
+                                 Going_Out    => Set_Going_Out,
+                                 RI           => To_String (Each.PI_Name),
+                                 Via_Channels => Via_Channels));
             end if;
 
             exit when Each.Caller = Source and Each.RI_Name = US (RI);
@@ -711,10 +726,13 @@ package body TASTE.Interface_View is
       for Each of Functions loop
          for RI of Each.Required loop
             declare
+               Via_Channels : String_Vectors.Vector;
                --  From a RI, follow the connection until the remote PI
+               --  Update list of visited channels on the spot
                Remote : constant Remote_Entity := Rec_Jump
-                                                     (To_String (Each.Name),
-                                                      To_String (RI.Name));
+                 (To_String (Each.Name),
+                  To_String (RI.Name),
+                  Via_Channels => Via_Channels);
             begin
                if Remote.Function_Name /= "Not found!" then
                   RI.Remote_Interfaces.Append (Remote);
@@ -726,10 +744,11 @@ package body TASTE.Interface_View is
 
                   --  Update list of end to end connections with RI->PI
                   End_To_End_Connections := End_To_End_Connections
-                    & (Caller  => Each.Name,
-                       Callee  => Remote.Function_Name,
-                       RI_Name => RI.Name,
-                       PI_Name => Remote.Interface_Name);
+                    & (Channels     => Via_Channels,
+                       Caller       => Each.Name,
+                       Callee       => Remote.Function_Name,
+                       RI_Name      => RI.Name,
+                       PI_Name      => Remote.Interface_Name);
                end if;
             end;
          end loop;
@@ -743,10 +762,11 @@ package body TASTE.Interface_View is
             --  Add periodic PIs to the list of connections
             if PI.RCM = Cyclic_Operation and not Each.Is_Type then
                End_To_End_Connections := End_To_End_Connections
-                 & (Caller  => US ("ENV"),
-                    Callee  => Each.Name,
-                    RI_Name => PI.Name,
-                    PI_Name => PI.Name);
+                 & (Channels     => String_Vectors.Empty_Vector,
+                    Caller       => US ("ENV"),
+                    Callee       => Each.Name,
+                    RI_Name      => PI.Name,
+                    PI_Name      => PI.Name);
             end if;
 
             for Fn of Functions loop
@@ -764,6 +784,16 @@ package body TASTE.Interface_View is
             end loop;
          end loop;
       end loop;
+
+      --  Debug: check end-to-end connection paths
+      --  for C of End_To_End_Connections loop
+      --     Put_Debug ("From " & To_String (C.Caller) & "."
+      --                & To_String (C.RI_Name) & " to " & To_String (C.Callee)
+      --                & "." & To_String (C.PI_Name) & " via ...");
+      --     for P of C.Channels loop
+      --        Put_Debug ("... " & P);
+      --     end loop;
+      --  end loop;
 
       return IV_AST : constant Complete_Interface_View :=
         (Flat_Functions => Functions,

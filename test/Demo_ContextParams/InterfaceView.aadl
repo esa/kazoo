@@ -1,0 +1,146 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::cyclic_function
+PUBLIC
+
+WITH interfaceview::IV::passive_function;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclic_activation
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_activation;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_activation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 500 ms;
+END PI_cyclic_activation.others;
+
+SUBPROGRAM RI_compute_data
+FEATURES
+  my_in : IN PARAMETER DataView::T_SEQUENCE {
+    Taste::encoding => NATIVE;
+  };
+  result : OUT PARAMETER DataView::T_INTEGER {
+    Taste::encoding => NATIVE;
+  };
+END RI_compute_data;
+
+SUBPROGRAM IMPLEMENTATION RI_compute_data.others
+END RI_compute_data.others;
+
+SYSTEM cyclic_function
+FEATURES
+  PI_cyclic_activation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::cyclic_function::PI_cyclic_activation.others {
+    Taste::coordinates => "33 132";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 500 ms;
+    Taste::Deadline => 500 ms;
+    Taste::InterfaceName => "cyclic_activation";
+  };
+  RI_compute_data : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::passive_function::PI_compute_data.others {
+    Taste::coordinates => "203 161";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "compute_data";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END cyclic_function;
+
+SYSTEM IMPLEMENTATION cyclic_function.others
+END cyclic_function.others;
+
+END interfaceview::IV::cyclic_function;
+
+PACKAGE interfaceview::IV::passive_function
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_compute_data
+FEATURES
+  my_in : IN PARAMETER DataView::T_SEQUENCE {
+    Taste::encoding => NATIVE;
+  };
+  result : OUT PARAMETER DataView::T_INTEGER {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_compute_data;
+
+SUBPROGRAM IMPLEMENTATION PI_compute_data.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_compute_data.others;
+
+SYSTEM passive_function
+FEATURES
+  PI_compute_data : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::passive_function::PI_compute_data.others {
+    Taste::coordinates => "350 193";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "compute_data";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END passive_function;
+
+SYSTEM IMPLEMENTATION passive_function.others
+SUBCOMPONENTS
+  test1 : DATA DataView::T_INTEGER {
+    Taste::FS_Default_Value => "42";
+  };
+  test2 : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "-42";
+  };
+END passive_function.others;
+
+END interfaceview::IV::passive_function;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::cyclic_function;
+WITH interfaceview::IV::passive_function;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  cyclic_function : SYSTEM interfaceview::IV::cyclic_function::cyclic_function.others {
+    Taste::coordinates => "33 84 203 239";
+  };
+  passive_function : SYSTEM interfaceview::IV::passive_function::passive_function.others {
+    Taste::coordinates => "350 97 553 274";
+  };
+CONNECTIONS
+  passive_function_PI_compute_data_cyclic_function_RI_compute_data : SUBPROGRAM ACCESS passive_function.PI_compute_data -> cyclic_function.RI_compute_data {
+    Taste::coordinates => "203 161 276 161 276 193 350 193";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

@@ -1,0 +1,49 @@
+DataView DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+T-INTEGER ::= INTEGER (0..255)
+
+--T-BOOL ::= BOOLEAN
+--
+--T-ENUM ::= ENUMERATED { one(1), two(2), three(3) }
+--
+--T-REAL ::= REAL (0.0 .. 7.7)
+
+T-SEQUENCE ::= SEQUENCE {
+	x T-INTEGER,
+	y T-INTEGER
+}
+
+--T-SEQOF ::= SEQUENCE (SIZE (0..5)) OF T-INTEGER
+--
+--T-CHOICE ::= CHOICE {
+--	boolchoice T-BOOL,
+--	enumchoice T-ENUM,
+--	intchoice T-INTEGER
+--}
+--
+--T-SET ::= SET {
+--	ii T-INTEGER,
+--	jj T-BOOL
+--}
+--
+--T-SETOF ::= SET (SIZE(0..5)) OF T-INTEGER
+--
+--T-OCTSTR ::= OCTET STRING (SIZE(0..5))
+--
+--T-NESTED ::= SEQUENCE {
+--	myint T-INTEGER,
+--	mybool T-BOOL,
+--	myenum T-ENUM,
+--	myreal T-REAL,
+--	myseq T-SEQUENCE,
+--	myseqof T-SEQOF,
+--	mychoice T-CHOICE,
+--	myset T-SET,
+--	mysetof T-SETOF,
+--	myoctstr T-OCTSTR
+--}
+
+
+
+
+END

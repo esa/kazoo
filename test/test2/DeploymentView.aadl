@@ -78,13 +78,13 @@ PUBLIC
 
 WITH interfaceview::IV::Level0_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear;
-WITH interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Nested1_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Should_Not_Appear_Either::Nested2_Appear;
 WITH interfaceview::IV::Y_Hidden::Z_Shown;
 WITH interfaceview::IV::Instance_of_MotherClass_Appear;
+WITH interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear;
 WITH deploymentview::DV::Node2;
 WITH ocarina_buses;
 WITH Taste;
@@ -104,9 +104,6 @@ SUBCOMPONENTS
   IV_Nested3_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear::Nested3_Appear.others {
     Taste::FunctionName => "Nested3_Appear";
   };
-  IV_Nested4_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear::Nested4_Appear.others {
-    Taste::FunctionName => "Nested4_Appear";
-  };
   first_binary : PROCESS deploymentview::DV::Node1::first_binary.others {
     Taste::coordinates => "97495 54172 119317 74971";
     TASTE_DV_Properties::CoverageEnabled => TRUE;
@@ -123,7 +120,6 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Level0_Appear;
   Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Nested3_Appear;
-  Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Nested4_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO first_binary;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END Node1.others;
@@ -147,6 +143,9 @@ SUBCOMPONENTS
   IV_Instance_of_MotherClass_Appear : SYSTEM interfaceview::IV::Instance_of_MotherClass_Appear::Instance_of_MotherClass_Appear.others {
     Taste::FunctionName => "Instance_of_MotherClass_Appear";
   };
+  IV_Nested4_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear::Nested4_Appear.others {
+    Taste::FunctionName => "Nested4_Appear";
+  };
   second_binary : PROCESS deploymentview::DV::Node2::second_binary.others {
     Taste::coordinates => "158753 54524 184337 75323";
     Deployment::Port_Number => 0;
@@ -164,6 +163,7 @@ PROPERTIES
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Nested2_Appear;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Z_Shown;
   Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Instance_of_MotherClass_Appear;
+  Taste::APLC_Binding => (reference (second_binary)) APPLIES TO IV_Nested4_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO second_binary;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END Node2.others;

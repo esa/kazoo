@@ -1,0 +1,74 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS demo
+END demo;
+
+PROCESS IMPLEMENTATION demo.others
+END demo.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::cyclic_function;
+WITH interfaceview::IV::passive_function;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_cyclic_function : SYSTEM interfaceview::IV::cyclic_function::cyclic_function.others {
+    Taste::FunctionName => "cyclic_function";
+  };
+  IV_passive_function : SYSTEM interfaceview::IV::passive_function::passive_function.others {
+    Taste::FunctionName => "passive_function";
+  };
+  demo : PROCESS deploymentview::DV::Node1::demo.others {
+    Taste::coordinates => "112762 62064 152193 88336";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "108453 56108 157742 93639";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_cyclic_function;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_passive_function;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "102292 45385 163903 99000";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.2";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

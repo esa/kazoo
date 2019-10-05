@@ -125,20 +125,26 @@ package body TASTE.Backend.Code_Generators is
          CP_Tmpl     : constant Translate_Set := CP_Template (F => F);
          CP_Text     : constant String :=
             (Parse (Prefix_Skeletons & "context_parameters.tmplt", CP_Tmpl));
-         CP_File     : constant String := "Context-"
-                                         & To_Lower (To_String (F.Name))
-                                         & ".asn";
+         CP_File     : constant String :=
+           "Context-" & To_Lower (To_String (F.Name)) & ".asn";
+         CP_File_Dash : Unbounded_String;
+
       begin
+         --  To keep backward compatibility, file name uses dash
+         for C of CP_File loop
+            CP_File_Dash := CP_File_Dash & (if C = '_' then '-' else C);
+         end loop;
+
          if not F.Context_Params.Is_Empty then
             Create_Path (Output_Lang);
-            Put_Debug ("Generating " & CP_File);
+            Put_Debug ("Generating " & To_String (CP_File_Dash));
             Create (File => Output_File,
                     Mode => Out_File,
-                    Name => Output_Lang & CP_File);
+                    Name => Output_Lang & To_String (CP_File_Dash));
             Put_Line (Output_File, CP_Text);
             Close (Output_File);
             All_CP_Files :=
-               All_CP_Files & ("../" & Output_Lang & CP_File);
+               All_CP_Files & ("../" & Output_Lang & To_String (CP_File_Dash));
          end if;
       exception
          when E : End_Error

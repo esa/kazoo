@@ -26,7 +26,7 @@ FEATURES
     Taste::coordinates => "110053 88536";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "123691 102645" APPLIES TO link;
+  Taste::Interface_Coordinates => "123563 102645" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""eth0"", address ""127.0.0.1"", port 5115}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -60,7 +60,7 @@ FEATURES
     Taste::coordinates => "165431 84480";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "158141 102645" APPLIES TO link;
+  Taste::Interface_Coordinates => "158013 102645" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""eth0"", address ""127.0.0.1"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -78,6 +78,7 @@ PUBLIC
 
 WITH interfaceview::IV::Level0_Appear;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear;
+WITH interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH interfaceview::IV::Function1_ShouldNotAppear::Nested1_Appear;
@@ -103,6 +104,9 @@ SUBCOMPONENTS
   IV_Nested3_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested3_Appear::Nested3_Appear.others {
     Taste::FunctionName => "Nested3_Appear";
   };
+  IV_Nested4_Appear : SYSTEM interfaceview::IV::Function1_ShouldNotAppear::Nested4_Appear::Nested4_Appear.others {
+    Taste::FunctionName => "Nested4_Appear";
+  };
   first_binary : PROCESS deploymentview::DV::Node1::first_binary.others {
     Taste::coordinates => "97495 54172 119317 74971";
     TASTE_DV_Properties::CoverageEnabled => TRUE;
@@ -119,6 +123,7 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Level0_Appear;
   Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Nested3_Appear;
+  Taste::APLC_Binding => (reference (first_binary)) APPLIES TO IV_Nested4_Appear;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO first_binary;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END Node1.others;
@@ -175,21 +180,22 @@ SUBCOMPONENTS
     Taste::coordinates => "152498 47148 192474 89594";
   };
   ip_i : BUS ocarina_buses::ip.i {
-    Taste::coordinates => "118165 102645 173427 113227";
+    Taste::coordinates => "118037 102645 173299 113227";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 CONNECTIONS
   Connection2 : BUS ACCESS ip_i -> Node1.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "110053 88536 110053 95590 123691 95590 123691 102645";
+    Taste::coordinates => "110053 88536 110053 95590 123563 95590 123563 102645";
   };
   Connection1 : BUS ACCESS ip_i -> Node2.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "165431 84480 158141 84480 158141 102645";
+    Taste::coordinates => "165431 84480 158013 84480 158013 102645";
   };
 PROPERTIES
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear.Nested3_Appear_PI_Some_Sporadic_Nested1_Appear_RI_Some_Sporadic;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear_PI_hello_Level0_Appear_RI_I_say_hello;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Function1_ShouldNotAppear_RI_my_final_result;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Y_Hidden_PI_Spo_in_Zshown_Function1_ShouldNotAppear_RI_RI2;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Level0_Appear_PI_final_result_Y_Hidden_RI_final_result;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Function1_ShouldNotAppear.Nested3_Appear_PI_Some_Sporadic_Nested1_Appear_RI_Some_Sporadic;
 END deploymentview.others;
 
 PROPERTIES

@@ -116,23 +116,19 @@ package body TASTE.Deployment_View is
                            Properties   => Properties);
       end Parse_Bus;
 
-      function Parse_Connections (CI : Node_Id) return Bus_Connections.Vector
+      procedure Rec_Parse_Connections (AADL_System : Node_Id;
+                                       Result : in out Bus_Connections.Vector)
       is
          use Bus_Connections;
          Conn,
-         Bound_Bus,
-         SRC, DST       : Node_Id;
-         SRC_PORT,
-         DST_PORT,
-         SRC_FUNCTION,
-         DST_FUNCTION   : Unbounded_String;
-         Bound_Bus_Name,
-         If1_Name,
-         If2_Name       : Name_Id;
-         Result         : Bus_Connections.Vector;
+         Bound_Bus      : Node_Id;
+         Bound_Bus_Name : Name_Id;
+         Subs,
+         Sub_System_CI  : Node_Id;
       begin
-         Conn := First_Node (Connections (CI));
+         Conn := First_Node (Connections (AADL_System));
          while Present (Conn) loop
+            Put_Debug ("Parsing Connection " & AIN_Case (Conn));
             --  AADL is confusing because it reverses the meaning of source
             --  and destination. Source is the message receiver (the PI) and
             --  destination is the message sender (the RI)
@@ -140,47 +136,37 @@ package body TASTE.Deployment_View is
             if Bound_Bus /= No_Node then
                Bound_Bus_Name := Name
                   (Identifier (Parent_Subcomponent (Bound_Bus)));
-               DST := Get_Referenced_Entity (Source (Conn));
-               SRC := Get_Referenced_Entity (Destination (Conn));
-               If1_Name := Get_Interface_Name (DST);  --  PI
-               If2_Name := Get_Interface_Name (SRC);  --  RI
-               --  Get_Interface_Name is v1.3.5+ only
-               if If1_Name /= No_Name and If2_Name /= No_Name then
-                  DST_PORT := US (Get_Name_String (If1_Name));  --  PI
-                  SRC_PORT := US (Get_Name_String (If2_Name));  --  RI
-               else
-                  --  Keep compatibility with v1.2
-                  DST_PORT := US (Get_Name_String (Display_Name
-                                                  (Identifier (SRC))));
-                  SRC_PORT := US (Get_Name_String (Display_Name
-                                                  (Identifier (DST))));
-               end if;
-               DST_FUNCTION := US (Get_Name_String
-                                     (Name (Identifier
-                                      (Parent_Subcomponent
-                                         (Parent_Component (DST))))));
-               SRC_FUNCTION := US (Get_Name_String
-                                     (Name (Identifier
-                                      (Parent_Subcomponent
-                                         (Parent_Component (SRC))))));
                --  The source and destination function/ports are irrelevant
                --  here because they may not be end-to-end connections in
                --  case of a hierarchical structure. All bus connections
                --  must be updated before processing the concurrency view, but
                --  this can be done only using the interface view information.
+               Put_Debug ("Added bus connnection: ");
+               Put_Debug (" ... Channel: " & AIN_Case (Conn));
+               Put_Debug (" ... Bus: " & Get_Name_String (Bound_Bus_Name));
+
                Result := Result
-                 & Bus_Connection'(Channel_Name    => US (AIN_Case (Conn)),
-                                   Dest_Port       => DST_PORT,
-                                   Dest_Function   => DST_FUNCTION,
-                                   Bus_Name        =>
+                 & Bus_Connection'(Channel_Name => US (AIN_Case (Conn)),
+                                   Bus_Name     =>
                                      US (Get_Name_String (Bound_Bus_Name)),
-                                   Source_Port     => SRC_PORT,
-                                   Source_Function => SRC_FUNCTION);
+                                   others       => <>);
             end if;
             Conn := Next_Node (Conn);
          end loop;
-         return Result;
-      end Parse_Connections;
+         --  We now check if there are subsystems in the current system
+         --  and go recusively to collect all connections bound to a bus
+         Subs := First_Node (Subcomponents (AADL_System));
+         while Present (Subs) loop
+            Sub_System_CI := Corresponding_Instance (Subs);
+            if Get_Category_Of_Component (Sub_System_CI) = CC_System then
+               Put_Debug ("Sub node: " & AIN_Case (Sub_System_CI));
+               if not Is_Empty (Connections (Sub_System_CI)) then
+                  Rec_Parse_Connections (Sub_System_CI, Result);
+               end if;
+            end if;
+            Subs := Next_Node (Subs);
+         end loop;
+      end Rec_Parse_Connections;
 
       --  Find the bus that is connected to a device through a require access
       procedure Find_Connected_Bus (Device        : Node_Id;
@@ -597,12 +583,20 @@ package body TASTE.Deployment_View is
          CI := Corresponding_Instance (Subs);
 
          if Get_Category_Of_Component (CI) = CC_System then  --  Node
+            Put_Debug ("Deployment node name: " & AIN_Case (CI));
             if not Is_Empty (Connections (CI)) then
-               Conns := Conns & Parse_Connections (CI);
+               --  Parse the connections that are bound to a bus
+               --  the connections are found in the interface view, not
+               --  in the nodes, because of the Actual_Connection_Binding
+               --  property that applies only to interface view connections
+               --  Since the interface view can contain nested functions,
+               --  the Parse_Connections has to go recursively in them
+               --  to find all connection that are bound to a bus
+               Rec_Parse_Connections (CI, Conns);
             end if;
 
             if not Is_Empty (Subcomponents (CI)) then
-               Node := Parse_Node (CI);
+               Node      := Parse_Node (CI);
                Node.Name := US (Get_Name_String (Name (Identifier (Subs))));
                Nodes.Insert (Key      => To_String (Node.Name),
                              New_Item => Node);

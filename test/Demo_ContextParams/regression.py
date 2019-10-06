@@ -4,12 +4,16 @@ import sys
 timeout = 5
 
 binaries = [
-    "binary.ada/binaries/demo", 
-    "binary.c/binaries/demo"]
+    "work/binaries/demo", 
+    "work_ada/binaries/demo"]
 
 expected = [
-    ["\[passive_function\] startup done", "\[cyclic function\] startup done"],
-    ["\[passive_function\] startup done", "\[cyclic function\] startup done"],
+        ["\[passive_function\] startup done: 42 -42",
+         "\[cyclic function\] startup done",
+         "\[TASTE\] Initialization completed for function passive_function",
+         "\[TASTE\] Initialization completed for function cyclic_function",
+         "\[Ada\] Startup:  42 FALSE",
+         "\[TASTE\] Initialization completed for function Function_in_Ada"],
     "cycle: input i=0, j=0",
     "test1 = 0",
     "   result of computation: 0",

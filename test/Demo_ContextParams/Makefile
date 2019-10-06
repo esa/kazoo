@@ -1,6 +1,7 @@
 KAZOO?=kazoo
 
 all:	c ada
+	./regression.py
 
 c:	work/glue_built
 	cp passive_function/passive_function.c work/passive_function/C/src

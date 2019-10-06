@@ -9,6 +9,7 @@ PACKAGE interfaceview::IV::cyclic_function
 PUBLIC
 
 WITH interfaceview::IV::passive_function;
+WITH interfaceview::IV::Function_in_Ada;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -35,19 +36,31 @@ END RI_compute_data;
 SUBPROGRAM IMPLEMENTATION RI_compute_data.others
 END RI_compute_data.others;
 
+SUBPROGRAM RI_run_ada
+END RI_run_ada;
+
+SUBPROGRAM IMPLEMENTATION RI_run_ada.others
+END RI_run_ada.others;
+
 SYSTEM cyclic_function
 FEATURES
   PI_cyclic_activation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::cyclic_function::PI_cyclic_activation.others {
-    Taste::coordinates => "33 132";
+    Taste::coordinates => "47 85";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 500 ms;
     Taste::Deadline => 500 ms;
     Taste::InterfaceName => "cyclic_activation";
   };
   RI_compute_data : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::passive_function::PI_compute_data.others {
-    Taste::coordinates => "203 161";
+    Taste::coordinates => "217 114";
     Taste::RCMoperationKind => unprotected;
     Taste::InterfaceName => "compute_data";
+    Taste::labelInheritance => "true";
+  };
+  RI_run_ada : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function_in_Ada::PI_run_ada.others {
+    Taste::coordinates => "170 192";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run_ada";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -86,7 +99,7 @@ END PI_compute_data.others;
 SYSTEM passive_function
 FEATURES
   PI_compute_data : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::passive_function::PI_compute_data.others {
-    Taste::coordinates => "350 193";
+    Taste::coordinates => "351 135";
     Taste::RCMoperationKind => unprotected;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 100 ms;
@@ -109,11 +122,50 @@ END passive_function.others;
 
 END interfaceview::IV::passive_function;
 
+PACKAGE interfaceview::IV::Function_in_Ada
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_run_ada
+END PI_run_ada;
+
+SUBPROGRAM IMPLEMENTATION PI_run_ada.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run_ada.others;
+
+SYSTEM Function_in_Ada
+FEATURES
+  PI_run_ada : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function_in_Ada::PI_run_ada.others {
+    Taste::coordinates => "171 248";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "run_ada";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => any;
+END Function_in_Ada;
+
+SYSTEM IMPLEMENTATION Function_in_Ada.others
+SUBCOMPONENTS
+  ada1 : DATA DataView::T_INTEGER {
+    Taste::FS_Default_Value => "42";
+  };
+  ada2 : DATA DataView::T_Boolean {
+    Taste::FS_Default_Value => "FALSE";
+  };
+END Function_in_Ada.others;
+
+END interfaceview::IV::Function_in_Ada;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
 WITH interfaceview::IV::cyclic_function;
 WITH interfaceview::IV::passive_function;
+WITH interfaceview::IV::Function_in_Ada;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -126,14 +178,20 @@ END interfaceview;
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   cyclic_function : SYSTEM interfaceview::IV::cyclic_function::cyclic_function.others {
-    Taste::coordinates => "33 84 203 239";
+    Taste::coordinates => "47 37 217 192";
   };
   passive_function : SYSTEM interfaceview::IV::passive_function::passive_function.others {
-    Taste::coordinates => "350 97 553 274";
+    Taste::coordinates => "351 39 554 216";
+  };
+  Function_in_Ada : SYSTEM interfaceview::IV::Function_in_Ada::Function_in_Ada.others {
+    Taste::coordinates => "129 248 274 344";
   };
 CONNECTIONS
   passive_function_PI_compute_data_cyclic_function_RI_compute_data : SUBPROGRAM ACCESS passive_function.PI_compute_data -> cyclic_function.RI_compute_data {
-    Taste::coordinates => "203 161 276 161 276 193 350 193";
+    Taste::coordinates => "217 114 276 114 276 135 351 135";
+  };
+  Function_in_Ada_PI_run_ada_cyclic_function_RI_run_ada : SUBPROGRAM ACCESS Function_in_Ada.PI_run_ada -> cyclic_function.RI_run_ada {
+    Taste::coordinates => "170 192 170 220 171 220 171 248";
   };
 END interfaceview.others;
 

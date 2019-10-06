@@ -1,6 +1,5 @@
 Demo_ContextParams
 
-Tests the "Functional State" / Context Parameters feature of the toolchain.
+Tests the Context Parameters feature of the toolchain, in C and Ada functions.
 
 This feature allows the user to specify some context-dependent properties in functions of the interface view.
-

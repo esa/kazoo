@@ -1,21 +1,21 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	$(MAKE) -C output
+	$(MAKE) -C work
 
 test-parse: clean
 	$(KAZOO) --gw \
-	         -o output \
+	         -o work \
 	         --glue \
 	         --debug
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output \
+	               -o work \
 	               --glue \
 		       --debug
 
 clean:
-	rm -rf output
+	rm -rf work
 
 .PHONY: clean test-parse gdb

@@ -31,6 +31,7 @@
 --  Execution platform : @_CPU_Platform_@
 @@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
 --  Ada runtime        : @_Ada_Runtime_@
+--  CPU Classifier     : @_CPU_Classifier_@
 @@END_IF@@
 
 @@-- Not all systems use Ada so we must not always include Ada dataview folder
@@ -39,15 +40,13 @@
 @@SET@@ Need_Ada = TRUE
 @@END_IF@@
 @@END_TABLE@@
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+with "@_Ada_Runtime_@";
+@@END_IF@@
 --  with "polyorb_hi";
 with "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada/polyorb_hi";
 
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
-project @_CAPITALIZE:Name_@ extends "@_Ada_Runtime_@" is
-@@ELSE@@
 project @_CAPITALIZE:Name_@ is
-@@END_IF@@
-
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
@@ -76,12 +75,20 @@ project @_CAPITALIZE:Name_@ is
    for Exec_Dir   use "../../binaries";
 
    for Languages use ("Ada", "C");
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+   for Target use @_Ada_Runtime_@'Target;
+   for Runtime ("Ada") use @_Ada_Runtime_@'Runtime ("Ada");
+@@END_IF@@
 
    for Main use ("@_LOWER:Name_@.adb");
 
    package Naming is
       --  Custom middleware file names
+     @@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+      for Body ("PolyORB_HI.Output_Low_Level") use "polyorb_hi-output_low_level_gnatruntime.adb";
+     @@ELSE@@
       for Body ("PolyORB_HI.Output_Low_Level") use "polyorb_hi-output_low_level_native.adb";
+     @@END_IF@@
    end Naming;
 
    package Compiler renames PolyORB_HI.Compiler;

@@ -6,18 +6,12 @@
 @@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
 @@-- In standard TASTE systems there is only one partition per node
 # Build of node @_Node_Name_@ for @_CPU_Platform_@
-@@INLINE@@
-@_LOWER:Node_Name_@_@_CPU_Name_@ :
-   @@TABLE@@
-      @_LOWER:Partition_Names_@
-   @@END_TABLE@@
- DriversConfig/drivers_config.h
-@@END_INLINE@@
+@_LOWER:Node_Name_@_@_CPU_Name_@:	@_LOWER:REPLACE_ALL(,/):Partition_Names_@ DriversConfig/drivers_config.h
 	make -j -C @_Node_Name_@ -f Makefile.@_Node_Name_@
 
 # Build of node @_Node_Name_@ for RTEMS
 @@INLINE@@
-@_LOWER:Node_Name_@_rtems_ada :
+@_LOWER:Node_Name_@_rtems_ada:	
    @@TABLE@@
       @_LOWER:Partition_Names_@_rtems_ada
    @@END_TABLE@@
@@ -25,7 +19,7 @@
 
 # Build of node @_Node_Name_@ for AIR
 @@INLINE@@
-@_LOWER:Node_Name_@_air :
+@_LOWER:Node_Name_@_air:	
    @@TABLE@@
       @_LOWER:Partition_Names_@_rtems_ada
    @@END_TABLE@@

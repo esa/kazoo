@@ -29,9 +29,10 @@
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME" and @_Package_Name_@ = ocarina_processors_arm
 --  Ada runtime        : @_Ada_Runtime_@
---  CPU Classifier     : @_CPU_Classifier_@
+--  Package Name       : @_Package_Name_@
+@@SET@@ STM32_GNAT = True
 @@END_IF@@
 
 @@-- Not all systems use Ada so we must not always include Ada dataview folder

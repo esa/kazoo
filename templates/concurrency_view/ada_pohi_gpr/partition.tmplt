@@ -54,7 +54,11 @@ project @_CAPITALIZE:Name_@ is
        "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
+@@IF@@ @_STM32_GNAT_@
+       "../../dataview/Ada_STM32",
+@@ELSE@@
        "../../dataview/Ada",
+@@END_IF@@
 @@END_IF@@
 @@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
 @@-- Detect distributed systems (no virtual processor) - add DriversConfig folder

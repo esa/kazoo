@@ -5,30 +5,42 @@
 @@-- @_Partitions_@      : List of rendered code for partitions
 @@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
 @@-- In standard TASTE systems there is only one partition per node
+# Generated from template in (KAZOO_INSTALL_FOLDER)/templates/concurrency_view/ada_pohi_gpr
 #  @_Node_Name_@ @_CPU_Name_@ @_Ada_Runtime_@
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME" and @_Package_Name_@ = ocarina_processors_arm
+@@SET@@ STM32_GNAT = True
+@@END_IF@@
 
 GNATMAKE = gprbuild
 
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
+@@IF@@ @_STM32_GNAT_@
 export ADA_PROJECT_PATH=${CURDIR}/Ada_Drivers_Library/boards:${CURDIR}/Ada_Drivers_Library/boards/@_REPLACE(_full/):LOWER:Ada_Runtime_@/
+@@END_IF@@
+
+@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
 TARGET = GNAT_Runtime
 @@ELSE@@
 TARGET = NATIVE
 @@END_IF@@
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
-all:	Ada_Drivers_Library/README.md
-@@ELSE@@
-all:
-@@END_IF@@
+
+@@IF@@ @_STM32_GNAT_@
+all:	Ada_Drivers_Library/README.md ../../dataview/Ada_STM32/built
 @@TABLE@@
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"  @@-- No -gnatE for STM32, it fails compiling Ada_Drivers_Library
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static
-@@ELSE@@
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
-@@END_IF@@
+	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:C -DFP_WORD_SIZE=4
 @@END_TABLE@@
 
-@@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
 Ada_Drivers_Library/README.md:
 	git clone https://github.com/Adacore/Ada_Drivers_Library
+
+# STM32 have no support for double precision: we need to call asn1.exe with dedicated flag
+../../dataview/Ada_STM32/built:	../../dataview/dataview-uniq.asn
+	mkdir -p $(dir $@)
+	mono $(shell which asn1.exe) --fp-word-size 4 -equal -Ada -typePrefix asn1Scc -fp AUTO -o $(dir $@) $^
+	touch $@
+
+@@ELSE@@
+all:
+@@TABLE@@
+	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
+@@END_TABLE@@
 @@END_IF@@

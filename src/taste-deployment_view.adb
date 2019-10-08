@@ -643,6 +643,7 @@ package body TASTE.Deployment_View is
 
    procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
                                   IV : Complete_Interface_View) is
+      Found : Boolean;
    begin
       --  We must find the channel referenced in the bus connection
       --  among all the connections of the interface view to retrieve
@@ -650,13 +651,21 @@ package body TASTE.Deployment_View is
       --  i.e. not referencing any nesting functions (which are not mapped
       --  to any partition)
       for C_DV : Bus_Connection of DV.Connections loop
+         Found := False;
          for C_IV : Connection of IV.Connections loop
             for Channel of C_IV.Channels loop
                if Channel = C_DV.Channel_Name then
+                  if Found then
+                     raise Deployment_View_Error with "Two functions"
+                        & " sharing the same parent cannot be bound"
+                        & " to two different nodes - Check "
+                        & To_String (C_IV.Caller);
+                  end if;
                   Put_Debug ("End to end: " & To_String (C_IV.Caller)
                              & "." & To_String (C_IV.RI_Name)
                              & " -> " & To_String (C_IV.Callee)
                              & "." & To_String (C_IV.PI_Name));
+                  Found := True;
                   --  Update the information in the deployment view
                   C_DV.Source_Function := C_IV.Caller;
                   C_DV.Source_Port     := C_IV.RI_Name;

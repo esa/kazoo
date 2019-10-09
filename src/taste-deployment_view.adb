@@ -643,34 +643,38 @@ package body TASTE.Deployment_View is
 
    procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
                                   IV : Complete_Interface_View) is
-      Found : Boolean;
+      use Option_Node;
    begin
       --  We must find the channel referenced in the bus connection
       --  among all the connections of the interface view to retrieve
       --  the end-to-end connections and set the source/dest port properly,
       --  i.e. not referencing any nesting functions (which are not mapped
       --  to any partition)
+      Put_Debug ("Computing end-to-end connections (for bus bindings)");
       for C_DV : Bus_Connection of DV.Connections loop
-         Found := False;
          for C_IV : Connection of IV.Connections loop
             for Channel of C_IV.Channels loop
                if Channel = C_DV.Channel_Name then
-                  if Found then
-                     raise Deployment_View_Error with "Two functions"
-                        & " sharing the same parent cannot be bound"
-                        & " to two different nodes - Check "
-                        & To_String (C_IV.Caller);
-                  end if;
-                  Put_Debug ("End to end: " & To_String (C_IV.Caller)
+                  if Find_Node (DV, To_String (C_IV.Caller))
+                    = Find_Node (DV, To_String (C_IV.Callee))
+                  then
+                     Put_Debug ("No bus connection between "
+                             & To_String (C_IV.Caller)
                              & "." & To_String (C_IV.RI_Name)
-                             & " -> " & To_String (C_IV.Callee)
+                             & " and " & To_String (C_IV.Callee)
                              & "." & To_String (C_IV.PI_Name));
-                  Found := True;
-                  --  Update the information in the deployment view
-                  C_DV.Source_Function := C_IV.Caller;
-                  C_DV.Source_Port     := C_IV.RI_Name;
-                  C_DV.Dest_Function   := C_IV.Callee;
-                  C_DV.Dest_Port       := C_IV.PI_Name;
+                  else
+                     Put_Debug ("Bus connection: " & To_String (C_IV.Caller)
+                                & "." & To_String (C_IV.RI_Name)
+                                & " -> " & To_String (C_IV.Callee)
+                                & "." & To_String (C_IV.PI_Name));
+
+                     --  Update the information in the deployment view
+                     C_DV.Source_Function := C_IV.Caller;
+                     C_DV.Source_Port     := C_IV.RI_Name;
+                     C_DV.Dest_Function   := C_IV.Callee;
+                     C_DV.Dest_Port       := C_IV.PI_Name;
+                  end if;
                end if;
             end loop;
          end loop;

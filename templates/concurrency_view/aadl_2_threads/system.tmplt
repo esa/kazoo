@@ -143,7 +143,7 @@ subcomponents
 @@-- Specify the connections for distributed and TSP systems
 @@IF@@ @_Part_Source_Name'Length_@ > 0
 connections
-@@TABLE@@
+@@TABLE'ALIGN_ON(":", "->")@@
    @_Part_Source_Name_@_@_Part_Source_Port_@ : port @_Part_Source_Name_@.OUTPORT_@_Part_Source_Port_@ -> @_Part_Dest_Name_@.INPORT_@_Part_Dest_Port_@;
 @@END_TABLE@@
 @@END_IF@@

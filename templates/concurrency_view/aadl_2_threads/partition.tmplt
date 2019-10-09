@@ -32,14 +32,14 @@
 process @_CAPITALIZE:Name_@ extends DeploymentView::DV::@_CAPITALIZE:Node_Name_@::@_CAPITALIZE:Name_@
 @@IF@@ @_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0
 features
-@@TABLE@@
+@@TABLE'ALIGN_ON(":", "port")@@
 @@IF@@ @_In_Port_Type_Name_@ /= ""
    INPORT_@_In_Port_Names_@ : in event data port DataView::@_REPLACE_ALL(-/_):In_Port_Type_Name_@_Buffer.impl;
 @@ELSE@@
    INPORT_@_In_Port_Names_@ : in event port;
 @@END_IF@@
 @@END_TABLE@@
-@@TABLE@@
+@@TABLE'ALIGN_ON(":","port")@@
 @@IF@@ @_Out_Port_Type_Name_@ /= ""
    OUTPORT_@_Out_Port_Names_@ : out event data port DataView::@_REPLACE_ALL(-/_):Out_Port_Type_Name_@_Buffer.impl;
 @@ELSE@@
@@ -60,14 +60,14 @@ subcomponents
 @@END_IF@@
 @@IF@@ @_Thread_Src_Name'Length_@ > 0 or @_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0
 connections
-@@TABLE'ALIGN_ON(":","->")@@
+@@TABLE'ALIGN_ON("->")@@
    port @_CAPITALIZE:Thread_Src_Name_@.OUTPORT_@_CAPITALIZE:Thread_Src_Port_@ -> @_CAPITALIZE:Thread_Dst_Name_@.INPORT_@_CAPITALIZE:Thread_Dst_Port_@;
 @@END_TABLE@@
 @@-- connect the partition ports to the threads (happens in distributed or TSP systems only)
-@@TABLE@@
+@@TABLE'ALIGN_ON("->")@@
    port INPORT_@_In_Port_Names_@ -> @_In_Port_Thread_Name_@.INPORT_@_In_Port_Names_@;
 @@END_TABLE@@
-@@TABLE@@
+@@TABLE'ALIGN_ON("->")@@
    port @_Connected_Threads_@.OUTPORT_@_Part_Out_Port_Name_@ -> OUTPORT_@_Part_Out_Port_Name_@;
 @@END_TABLE@@
 @@END_IF@@

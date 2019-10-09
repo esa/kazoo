@@ -17,13 +17,13 @@ end @_Node_Name_@_Board;
 processor implementation @_Node_Name_@_Board.final extends @_CPU_Classifier_@
 @@IF@@ @_VP_Names'Length_@ > 0
 subcomponents
-@@TABLE@@
+@@TABLE'ALIGN_ON(":")@@
    @_VP_Names_@ : virtual processor deploymentview::DV::@_Node_Name_@::@_VP_Names_@.others;
 @@END_TABLE@@
 properties
 @@TABLE@@
    Scheduling_Protocol => (POSIX_1003_Highest_Priority_First_Protocol) applies to @_VP_Names_@;
-   Arinc653::DAL => Level_A applies to @_VP_Names_@;
+   Arinc653::DAL       => Level_A applies to @_VP_Names_@;
 @@END_TABLE@@
 @@END_IF@@
 end @_Node_Name_@_Board.final;

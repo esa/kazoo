@@ -12,6 +12,8 @@
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
 @@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 @@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+@@-- @_CPU_Family_@      : e.g. gr740 or x86
+@@-- @_CPU_Instance_@    : e.g. rtems51_posix or linux
 @@-- @_VP_Name_@         : Virtual processor name on which the partition is bounded
 @@-- @_VP_Platform_@     : Virtual processor platform (e.g. PLATFORM_AIR)
 @@-- @_VP_Classifier_@   : Virtual processor classifier

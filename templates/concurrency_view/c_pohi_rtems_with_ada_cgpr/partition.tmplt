@@ -12,6 +12,8 @@
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
 @@-- @_CPU_Platform_@    : AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 @@-- @_CPU_Classifier_@  : AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+@@-- @_CPU_Family_@      : e.g. gr740 or x86
+@@-- @_CPU_Instance_@    : e.g. rtems51_posix or linux
 @@-- @_VP_Name_@         : Virtual processor name on which the partition is bounded
 @@-- @_VP_Platform_@     : Virtual processor platform (e.g. PLATFORM_AIR)
 @@-- @_VP_Classifier_@   : Virtual processor classifier
@@ -47,20 +49,30 @@ configuration project RTEMS_WITH_ADA is
 
       Common_C_Switches := 
          ("--pipe",
+@@IF@@ @_CPU_Family_@ /= gr740
+          "-mcpu=cypress",
+          "-DLEON3",
+          "-DGAISLER",
+          "-DNDEBUG",
+          "-DBSP_leon3",
+          "-DCORES=1",
+@@END_IF@@
           "-DTARGET=leon.rtems_posix",
           "-DRTEMS_POSIX",
           "-DRTEMS412",
           "-DGRLEON3",
           "-DLEON_RTEMS",
-          "-DLEON3",
-          "-DGAISLER",
-          "-DNDEBUG",
+@@IF@@ @_CPU_Family_@ = gr740
+          "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib",
+@@ELSIF@@  @_CPU_Family_@ = gr712rc
+          "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr712rc/lib",
+@@ELSIF@@  @_CPU_Family_@ = leon2
+          "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon2/lib",
+@@ELSE@@
           "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon3/lib",
+@@END_IF@@
           "-specs=bsp_specs",
-          "-qrtems",
-          "-mcpu=cypress",
-          "-DBSP_leon3",
-          "-DCORES=1");
+          "-qrtems");
 
       for Required_Switches("C") use Common_C_Switches;
       for Required_Switches("C++") use Common_C_Switches;
@@ -102,8 +114,12 @@ configuration project RTEMS_WITH_ADA is
             "-L/opt/rtems-5.1-2019.07.25/lib/gcc/sparc-rtems5/7.4.1/leon3/adalib",
             "-lgnat",
             "-lgnarl",
-            "-lstdc++",
-            "-mcpu=cypress");
+@@IF@@ @_CPU_Family_@ = gr740
+            "-mcpu=leon3",
+@@ELSE@@
+            "-mcpu=cypress",
+@@END_IF@@
+            "-lstdc++");
 
        for Default_Switches ("C") use Common_C_Linker_Switches;
        for Default_Switches ("C++") use Common_C_Linker_Switches;
@@ -115,6 +131,10 @@ configuration project RTEMS_WITH_ADA is
             "-qrtems",
             "-lm",
             "-lgnat",
+@@IF@@ @_CPU_Family_@ = gr740
+            "-mcpu=leon3");
+@@ELSE@@
             "-mcpu=cypress");
+@@END_IF@@
    end Linker;
 end RTEMS_WITH_ADA;

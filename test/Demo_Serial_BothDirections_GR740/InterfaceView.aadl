@@ -1,0 +1,187 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::gr740
+PUBLIC
+
+WITH interfaceview::IV::pc;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_print
+FEATURES
+  inpPC : IN PARAMETER DataView::T_Int8 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 2;
+END PI_print;
+
+SUBPROGRAM IMPLEMENTATION PI_print.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 20 ms;
+END PI_print.others;
+
+SUBPROGRAM PI_cycle
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cycle;
+
+SUBPROGRAM IMPLEMENTATION PI_cycle.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_cycle.others;
+
+SUBPROGRAM RI_fromGr740
+FEATURES
+  aa : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_fromGr740;
+
+SUBPROGRAM IMPLEMENTATION RI_fromGr740.others
+END RI_fromGr740.others;
+
+SYSTEM gr740
+FEATURES
+  PI_print : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::gr740::PI_print.others {
+    Taste::coordinates => "132768 113703";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 5000 ms;
+    Taste::Deadline => 5000 ms;
+    Taste::InterfaceName => "print";
+  };
+  PI_cycle : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::gr740::PI_cycle.others {
+    Taste::coordinates => "109173 89863";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 3000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "cycle";
+  };
+  RI_fromGr740 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::pc::PI_fromGr740.others {
+    Taste::coordinates => "132768 127663";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "fromGr740";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END gr740;
+
+SYSTEM IMPLEMENTATION gr740.others
+END gr740.others;
+
+END interfaceview::IV::gr740;
+
+PACKAGE interfaceview::IV::pc
+PUBLIC
+
+WITH interfaceview::IV::gr740;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclePC
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclePC;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclePC.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_cyclePC.others;
+
+SUBPROGRAM RI_print
+FEATURES
+  inpPC : IN PARAMETER DataView::T_Int8 {
+    Taste::encoding => UPER;
+  };
+END RI_print;
+
+SUBPROGRAM IMPLEMENTATION RI_print.others
+END RI_print.others;
+
+SUBPROGRAM PI_fromGr740
+FEATURES
+  aa : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END PI_fromGr740;
+
+SUBPROGRAM IMPLEMENTATION PI_fromGr740.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_fromGr740.others;
+
+SYSTEM pc
+FEATURES
+  PI_cyclePC : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::pc::PI_cyclePC.others {
+    Taste::coordinates => "166857 91293";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "cyclePC";
+  };
+  RI_print : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::gr740::PI_print.others {
+    Taste::coordinates => "150169 113702";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "print";
+    Taste::labelInheritance => "true";
+  };
+  PI_fromGr740 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::pc::PI_fromGr740.others {
+    Taste::coordinates => "150169 130668";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "fromGr740";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END pc;
+
+SYSTEM IMPLEMENTATION pc.others
+END pc.others;
+
+END interfaceview::IV::pc;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::gr740;
+WITH interfaceview::IV::pc;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  gr740 : SYSTEM interfaceview::IV::gr740::gr740.others {
+    Taste::coordinates => "90101 89863 132768 143256";
+  };
+  pc : SYSTEM interfaceview::IV::pc::pc.others {
+    Taste::coordinates => "150169 91293 189022 143018";
+  };
+CONNECTIONS
+  gr740_PI_print_pc_RI_print : SUBPROGRAM ACCESS gr740.PI_print -> pc.RI_print {
+    Taste::coordinates => "150169 113702 141468 113702 141468 113703 132768 113703";
+  };
+  pc_PI_fromGr740_gr740_RI_fromGr740 : SUBPROGRAM ACCESS pc.PI_fromGr740 -> gr740.RI_fromGr740 {
+    Taste::coordinates => "132768 127663 141468 127663 141468 130668 150169 130668";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

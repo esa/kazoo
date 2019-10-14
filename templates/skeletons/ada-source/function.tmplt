@@ -52,16 +52,30 @@ package @_CAPITALIZE:Name_@ is
    @_Provided_Interfaces_@
 
 @@END_TABLE@@
+
+@@IF@@ @_Required_Interfaces'Length_@ > 0
    --  REQUIRED INTERFACES ---------------------------------------------------
+@@END_IF@@
 @@TABLE@@
    @_Required_Interfaces_@
 
 @@END_TABLE@@
 @@TABLE@@
-   --  FUNCTIONS TO HANDLE TIMER @_Timers_@ ----------------------------------
-   procedure @_CAPITALIZE:Timers_@;
-   procedure Set_@_CAPITALIZE:Timers_@ (Value : access asn1SccT_UInt32);
-   procedure Reset_@_CAPITALIZE:Timers_@;
+   --  Timer @_Timers_@
+   procedure @_CAPITALIZE:Timers_@
+      with Export,
+           Convention => C,
+           Link_Name  => "@_LOWER:Name_@_PI_@_Timers_@";
+
+   procedure Set_@_CAPITALIZE:Timers_@ (Value : in out asn1SccT_UInt32)
+      with Import,
+           Convention => C,
+           Link_Name  => "@_LOWER:Name_@_RI_SET_@_Timers_@";
+
+   procedure Reset_@_CAPITALIZE:Timers_@
+      with Import,
+           Convention => C,
+           Link_Name  => "@_LOWER:Name_@_RI_RESET_@_Timers_@";
 
 @@END_TABLE@@
 

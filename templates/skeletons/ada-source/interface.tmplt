@@ -24,7 +24,12 @@ procedure @_CAPITALIZE:Name_@
 procedure @_CAPITALIZE:Name_@
 @@END_IF@@
 @@IF@@ @_Direction_@ = "PI"
-      with Export, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_PI_@_Name_@";
+      with Export,
+           Convention => C,
+           Link_Name  => "@_LOWER:Parent_Function_@_PI_@_Name_@";
 @@ELSE@@
-      with Import, Convention => C, Link_Name => "@_LOWER:Parent_Function_@_RI_@_Name_@";
+      with Import,
+           Convention => C,
+           Link_Name  => "@_LOWER:Parent_Function_@_RI_@_Name_@";
 @@--   procedure RIÜ@_CAPITALIZE:Name_@ renames @_CAPITALIZE:Name_@;
+@@END_IF@@

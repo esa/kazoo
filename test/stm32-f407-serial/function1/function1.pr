@@ -1,0 +1,99 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process function1;
+    /* CIF TEXT (1547, 110), (399, 178) */
+    -- pulse is rececived every 50 ms. Use a counter to toggle the leds
+    -- at a lower period.
+    dcl counter T_UInt8 := 0;
+    
+    dcl msg Debug_PrintableString;
+    
+    dcl response Debug_PrintableString;
+    /* CIF ENDTEXT */
+    /* CIF START (443, 103), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (438, 158), (79, 35) */
+        NEXTSTATE Init;
+    /* CIF state (1420, 142), (79, 35) */
+    state Leds_Off;
+        /* CIF input (1427, 197), (70, 35) */
+        input pulse;
+            /* CIF decision (1412, 252), (98, 50) */
+            decision counter = 20;
+                /* CIF ANSWER (1363, 322), (70, 24) */
+                (true):
+                    /* CIF task (1350, 366), (94, 35) */
+                    task counter := 0;
+                    /* CIF PROCEDURECALL (1333, 421), (129, 35) */
+                    call Switch_Leds_On;
+                    /* CIF NEXTSTATE (1358, 476), (79, 35) */
+                    NEXTSTATE Leds_On;
+                /* CIF ANSWER (1515, 322), (70, 24) */
+                (false):
+                    /* CIF task (1472, 366), (155, 35) */
+                    task counter := counter + 1;
+                    /* CIF NEXTSTATE (1510, 421), (79, 35) */
+                    NEXTSTATE Leds_Off;
+            enddecision;
+    endstate;
+    /* CIF state (871, 128), (76, 35) */
+    state Leds_On;
+        /* CIF input (875, 183), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (839, 238), (142, 35) */
+            call Get_Message (msg);
+            /* CIF decision (860, 293), (98, 50) */
+            decision length(msg);
+                /* CIF ANSWER (771, 363), (70, 24) */
+                (> 0):
+                    /* CIF decision (759, 407), (94, 50) */
+                    decision msg;
+                        /* CIF ANSWER (651, 477), (70, 24) */
+                        ('ping'):
+                            /* CIF task (582, 521), (208, 35) */
+                            task response := 'TASTE says PONG';
+                        /* CIF ANSWER (873, 477), (70, 24) */
+                        else:
+                            /* CIF task (794, 521), (226, 35) */
+                            task response := 'Received ' // msg // ' ';
+                    enddecision;
+                    /* CIF PROCEDURECALL (717, 571), (177, 38) */
+                    call Send_to_UART(response);
+                    /* CIF task (770, 629), (71, 35) */
+                    task msg := '';
+                /* CIF ANSWER (1028, 363), (70, 24) */
+                else:
+            enddecision;
+            /* CIF decision (860, 679), (98, 50) */
+            decision counter = 20;
+                /* CIF ANSWER (797, 749), (70, 24) */
+                (true):
+                    /* CIF PROCEDURECALL (732, 793), (200, 40) */
+                    call Send_to_UART('Hello world!
+');
+                    /* CIF task (784, 850), (94, 35) */
+                    task counter := 0;
+                    /* CIF PROCEDURECALL (767, 905), (129, 35) */
+                    call Switch_Leds_OFF;
+                    /* CIF NEXTSTATE (792, 960), (79, 35) */
+                    NEXTSTATE Leds_Off;
+                /* CIF ANSWER (984, 749), (70, 24) */
+                (false):
+                    /* CIF task (941, 793), (155, 35) */
+                    task counter := counter + 1;
+                    /* CIF NEXTSTATE (981, 848), (76, 35) */
+                    NEXTSTATE Leds_On;
+            enddecision;
+    endstate;
+    /* CIF state (438, 158), (79, 35) */
+    state Init;
+        /* CIF input (443, 213), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (415, 268), (126, 35) */
+            call Switch_Leds_ON;
+            /* CIF PROCEDURECALL (372, 323), (211, 40) */
+            call Send_to_UART('[INFO] Startup
+');
+            /* CIF NEXTSTATE (440, 381), (76, 35) */
+            NEXTSTATE Leds_On;
+    endstate;
+endprocess function1;

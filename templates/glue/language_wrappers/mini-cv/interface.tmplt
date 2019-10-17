@@ -34,6 +34,8 @@ SUBPROGRAM IMPLEMENTATION @_Name_@.GUI_RI
 SUBPROGRAM IMPLEMENTATION @_Name_@.VHDL
 @@ELSIF@@ @_Language_@ = "Blackbox_C"
 SUBPROGRAM IMPLEMENTATION @_Name_@.C
+@@ELSIF@@ @_Language_@ = SDL
+SUBPROGRAM IMPLEMENTATION @_Name_@.Ada
 @@ELSE@@
 SUBPROGRAM IMPLEMENTATION @_Name_@.@_Language_@
 @@END_IF@@
@@ -49,6 +51,8 @@ PROPERTIES
    Source_Language => C;
 @@ELSIF@@ @_Language_@ = SIMULINK
    Source_Language => Simulink;  @@-- aadl2glueC is case sensitive here
+@@ELSIF@@ @_Language_@ = SDL
+   Source_Language => Ada;
 @@ELSE@@
    Source_Language => @_Language_@;
 @@END_IF@@
@@ -65,6 +69,8 @@ END @_Name_@.GUI_RI;
 END @_Name_@.VHDL;
 @@ELSIF@@ @_Language_@ = "Blackbox_C"
 END @_Name_@.C;
+@@ELSIF@@ @_Language_@ = SDL
+END @_Name_@.Ada;
 @@ELSE@@
 END @_Name_@.@_Language_@;
 @@END_IF@@

@@ -5,6 +5,7 @@ all: c
 c: test-parse
 	cp beater/beater.pr work/beater/SDL/src
 	cp pinglogger/pinglogger.pr work/pinglogger/SDL/src
+	cp driver/driver.c work/driver/C/src
 	cp manager/manager.pr work/manager/SDL/src
 	make -C work
 

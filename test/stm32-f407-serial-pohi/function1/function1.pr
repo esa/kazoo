@@ -1,0 +1,26 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process function1;
+    /* CIF TEXT (1027, 130), (399, 178) */
+    -- pulse is rececived every 50 ms. Use a counter to toggle the leds
+    -- at a lower period.
+    dcl counter T_UInt8 := 0;
+    dcl switch MyBool := false;
+    
+    dcl received_data, response DataOverSerial;
+    /* CIF ENDTEXT */
+    /* CIF START (430, 115), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (425, 170), (79, 35) */
+        NEXTSTATE Running;
+    /* CIF state (699, 177), (70, 35) */
+    state Running;
+        /* CIF input (629, 232), (210, 35) */
+        input Telecommand ( received_data);
+            /* CIF task (642, 287), (183, 35) */
+            task response := received_data;
+            /* CIF output (677, 342), (113, 35) */
+            output Log (response);
+            /* CIF NEXTSTATE (699, 397), (70, 35) */
+            NEXTSTATE -;
+    endstate;
+endprocess function1;

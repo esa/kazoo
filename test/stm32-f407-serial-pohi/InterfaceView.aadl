@@ -1,0 +1,190 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH interfaceview::IV::ground;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Telecommand
+FEATURES
+  some_values : IN PARAMETER DataView::DataOverSerial {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Telecommand;
+
+SUBPROGRAM IMPLEMENTATION PI_Telecommand.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Telecommand.others;
+
+SUBPROGRAM RI_Log
+FEATURES
+  msg_to_print : IN PARAMETER DataView::DataOverSerial {
+    Taste::encoding => UPER;
+  };
+END RI_Log;
+
+SUBPROGRAM IMPLEMENTATION RI_Log.others
+END RI_Log.others;
+
+SYSTEM Function1
+FEATURES
+  PI_Telecommand : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_Telecommand.others {
+    Taste::coordinates => "891 1155";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Telecommand";
+  };
+  RI_Log : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::ground::PI_Log.others {
+    Taste::coordinates => "1124 1043";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Log";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => enabled;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SYSTEM Function2
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_pulse.others {
+    Taste::coordinates => "1824 618";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 500 ms;
+    Taste::InterfaceName => "pulse";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+END Function2.others;
+
+END interfaceview::IV::Function2;
+
+PACKAGE interfaceview::IV::ground
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Log
+FEATURES
+  msg_to_print : IN PARAMETER DataView::DataOverSerial {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Log;
+
+SUBPROGRAM IMPLEMENTATION PI_Log.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Log.others;
+
+SUBPROGRAM RI_Telecommand
+FEATURES
+  some_values : IN PARAMETER DataView::DataOverSerial {
+    Taste::encoding => UPER;
+  };
+END RI_Telecommand;
+
+SUBPROGRAM IMPLEMENTATION RI_Telecommand.others
+END RI_Telecommand.others;
+
+SYSTEM ground
+FEATURES
+  PI_Log : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::ground::PI_Log.others {
+    Taste::coordinates => "1305 1530";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Log";
+  };
+  RI_Telecommand : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_Telecommand.others {
+    Taste::coordinates => "990 1530";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Telecommand";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END ground;
+
+SYSTEM IMPLEMENTATION ground.others
+END ground.others;
+
+END interfaceview::IV::ground;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH interfaceview::IV::ground;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "267 329 1124 1155";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::coordinates => "1824 288 2718 1213";
+  };
+  ground : SYSTEM interfaceview::IV::ground::ground.others {
+    Taste::coordinates => "948 1530 1810 1937";
+  };
+CONNECTIONS
+  Function1_PI_Telecommand_ground_RI_Telecommand : SUBPROGRAM ACCESS Function1.PI_Telecommand -> ground.RI_Telecommand {
+    Taste::coordinates => "990 1530 990 1342 891 1342 891 1155";
+  };
+  ground_PI_Log_Function1_RI_Log : SUBPROGRAM ACCESS ground.PI_Log -> Function1.RI_Log {
+    Taste::coordinates => "1124 1043 1305 1043 1305 1530";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

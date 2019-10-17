@@ -1,0 +1,27 @@
+TASTE-Dataview DEFINITIONS ::=
+BEGIN
+IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
+
+MyBool      ::= BOOLEAN
+
+Debug-PrintableString ::= OCTET STRING (SIZE (0..255))
+
+MySequence ::= SEQUENCE {
+   a BOOLEAN,
+   b INTEGER (0..255),
+   c ENUMERATED { hello, world }
+}
+DataOverSerial ::= CHOICE {
+   msg Debug-PrintableString,
+   seq MySequence
+}
+END
+
+
+
+
+
+
+
+
+

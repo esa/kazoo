@@ -1,0 +1,490 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::GUI
+PUBLIC
+
+WITH interfaceview::IV::Manager;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_dataReport
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_dataReport;
+
+SUBPROGRAM IMPLEMENTATION PI_dataReport.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_dataReport.others;
+
+SUBPROGRAM PI_ping
+FEATURES
+  stamp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_ping;
+
+SUBPROGRAM IMPLEMENTATION PI_ping.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_ping.others;
+
+SUBPROGRAM PI_beatPing
+FEATURES
+  stamp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_beatPing;
+
+SUBPROGRAM IMPLEMENTATION PI_beatPing.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_beatPing.others;
+
+SUBPROGRAM RI_getData
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_getData;
+
+SUBPROGRAM IMPLEMENTATION RI_getData.others
+END RI_getData.others;
+
+SUBPROGRAM RI_setData
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_setData;
+
+SUBPROGRAM IMPLEMENTATION RI_setData.others
+END RI_setData.others;
+
+SYSTEM GUI
+FEATURES
+  PI_dataReport : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_dataReport.others {
+    Taste::coordinates => "112820 84576";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "dataReport";
+  };
+  PI_ping : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_ping.others {
+    Taste::coordinates => "112820 90358";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "ping";
+  };
+  PI_beatPing : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_beatPing.others {
+    Taste::coordinates => "106543 99606";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "beatPing";
+  };
+  RI_getData : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_getData.others {
+    Taste::coordinates => "112820 75655";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getData";
+    Taste::labelInheritance => "true";
+  };
+  RI_setData : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_setData.others {
+    Taste::coordinates => "112820 78959";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "setData";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END GUI;
+
+SYSTEM IMPLEMENTATION GUI.others
+END GUI.others;
+
+END interfaceview::IV::GUI;
+
+PACKAGE interfaceview::IV::Manager
+PUBLIC
+
+WITH interfaceview::IV::GUI;
+WITH interfaceview::IV::Driver;
+WITH interfaceview::IV::PingLogger;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_getData
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getData;
+
+SUBPROGRAM IMPLEMENTATION PI_getData.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getData.others;
+
+SUBPROGRAM PI_setData
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_setData;
+
+SUBPROGRAM IMPLEMENTATION PI_setData.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_setData.others;
+
+SUBPROGRAM PI_pulse
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM RI_dataReport
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_dataReport;
+
+SUBPROGRAM IMPLEMENTATION RI_dataReport.others
+END RI_dataReport.others;
+
+SUBPROGRAM RI_setDataNative
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_setDataNative;
+
+SUBPROGRAM IMPLEMENTATION RI_setDataNative.others
+END RI_setDataNative.others;
+
+SUBPROGRAM RI_getDataNative
+FEATURES
+  gpio : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_getDataNative;
+
+SUBPROGRAM IMPLEMENTATION RI_getDataNative.others
+END RI_getDataNative.others;
+
+SUBPROGRAM RI_ping
+FEATURES
+  stamp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_ping;
+
+SUBPROGRAM IMPLEMENTATION RI_ping.others
+END RI_ping.others;
+
+SUBPROGRAM RI_purePing
+END RI_purePing;
+
+SUBPROGRAM IMPLEMENTATION RI_purePing.others
+END RI_purePing.others;
+
+SYSTEM Manager
+FEATURES
+  PI_getData : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_getData.others {
+    Taste::coordinates => "129669 75655";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getData";
+  };
+  PI_setData : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_setData.others {
+    Taste::coordinates => "129669 78959";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "setData";
+  };
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_pulse.others {
+    Taste::coordinates => "141233 62439";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 500 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_dataReport : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_dataReport.others {
+    Taste::coordinates => "129669 84576";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "dataReport";
+    Taste::labelInheritance => "true";
+  };
+  RI_setDataNative : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Driver::PI_setDataNative.others {
+    Taste::coordinates => "155107 87053";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "setDataNative";
+    Taste::labelInheritance => "true";
+  };
+  RI_getDataNative : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Driver::PI_getDataNative.others {
+    Taste::coordinates => "155107 90852";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "getDataNative";
+    Taste::labelInheritance => "true";
+  };
+  RI_ping : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_ping.others {
+    Taste::coordinates => "129669 90523";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "ping";
+    Taste::labelInheritance => "true";
+  };
+  RI_purePing : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PingLogger::PI_purePing.others {
+    Taste::coordinates => "132146 99440";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "purePing";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Manager;
+
+SYSTEM IMPLEMENTATION Manager.others
+END Manager.others;
+
+END interfaceview::IV::Manager;
+
+PACKAGE interfaceview::IV::Driver
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_setDataNative
+FEATURES
+  gpio : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_setDataNative;
+
+SUBPROGRAM IMPLEMENTATION PI_setDataNative.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_setDataNative.others;
+
+SUBPROGRAM PI_getDataNative
+FEATURES
+  gpio : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_getDataNative;
+
+SUBPROGRAM IMPLEMENTATION PI_getDataNative.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_getDataNative.others;
+
+SYSTEM Driver
+FEATURES
+  PI_setDataNative : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Driver::PI_setDataNative.others {
+    Taste::coordinates => "173442 87053";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "setDataNative";
+  };
+  PI_getDataNative : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Driver::PI_getDataNative.others {
+    Taste::coordinates => "173442 90852";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "getDataNative";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Driver;
+
+SYSTEM IMPLEMENTATION Driver.others
+END Driver.others;
+
+END interfaceview::IV::Driver;
+
+PACKAGE interfaceview::IV::Beater
+PUBLIC
+
+WITH interfaceview::IV::GUI;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_beat
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_beat;
+
+SUBPROGRAM IMPLEMENTATION PI_beat.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_beat.others;
+
+SUBPROGRAM RI_beatPing
+FEATURES
+  stamp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => UPER;
+  };
+END RI_beatPing;
+
+SUBPROGRAM IMPLEMENTATION RI_beatPing.others
+END RI_beatPing.others;
+
+SYSTEM Beater
+FEATURES
+  PI_beat : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Beater::PI_beat.others {
+    Taste::coordinates => "96633 108360";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 10000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "beat";
+  };
+  RI_beatPing : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::GUI::PI_beatPing.others {
+    Taste::coordinates => "106545 108360";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "beatPing";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Beater;
+
+SYSTEM IMPLEMENTATION Beater.others
+END Beater.others;
+
+END interfaceview::IV::Beater;
+
+PACKAGE interfaceview::IV::PingLogger
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_purePing
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_purePing;
+
+SUBPROGRAM IMPLEMENTATION PI_purePing.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_purePing.others;
+
+SYSTEM PingLogger
+FEATURES
+  PI_purePing : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PingLogger::PI_purePing.others {
+    Taste::coordinates => "132313 109186";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "purePing";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END PingLogger;
+
+SYSTEM IMPLEMENTATION PingLogger.others
+END PingLogger.others;
+
+END interfaceview::IV::PingLogger;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::GUI;
+WITH interfaceview::IV::Manager;
+WITH interfaceview::IV::Driver;
+WITH interfaceview::IV::Beater;
+WITH interfaceview::IV::PingLogger;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  GUI : SYSTEM interfaceview::IV::GUI::GUI.others {
+    Taste::coordinates => "82922 62274 112820 99606";
+  };
+  Manager : SYSTEM interfaceview::IV::Manager::Manager.others {
+    Taste::coordinates => "129669 62439 155107 99440";
+  };
+  Driver : SYSTEM interfaceview::IV::Driver::Driver.others {
+    Taste::coordinates => "173442 62604 201358 99440";
+  };
+  Beater : SYSTEM interfaceview::IV::Beater::Beater.others {
+    Taste::coordinates => "88373 108360 114637 134459";
+  };
+  PingLogger : SYSTEM interfaceview::IV::PingLogger::PingLogger.others {
+    Taste::coordinates => "122401 109186 148500 135120";
+  };
+CONNECTIONS
+  GUI_PI_dataReport_Manager_RI_dataReport : SUBPROGRAM ACCESS GUI.PI_dataReport -> Manager.RI_dataReport {
+    Taste::coordinates => "129669 84576 121988 84576 121988 84576 112820 84576";
+  };
+  GUI_PI_ping_Manager_RI_ping : SUBPROGRAM ACCESS GUI.PI_ping -> Manager.RI_ping {
+    Taste::coordinates => "129669 90523 121244 90523 121244 90358 112820 90358";
+  };
+  GUI_PI_beatPing_Beater_RI_beatPing : SUBPROGRAM ACCESS GUI.PI_beatPing -> Beater.RI_beatPing {
+    Taste::coordinates => "106545 108360 106545 103983 106543 103983 106543 99606";
+  };
+  Manager_PI_getData_GUI_RI_getData : SUBPROGRAM ACCESS Manager.PI_getData -> GUI.RI_getData {
+    Taste::coordinates => "112820 75655 122153 75655 122153 75655 129669 75655";
+  };
+  Manager_PI_setData_GUI_RI_setData : SUBPROGRAM ACCESS Manager.PI_setData -> GUI.RI_setData {
+    Taste::coordinates => "112820 78959 122153 78959 122153 78959 129669 78959";
+  };
+  Driver_PI_setDataNative_Manager_RI_setDataNative : SUBPROGRAM ACCESS Driver.PI_setDataNative -> Manager.RI_setDataNative {
+    Taste::coordinates => "155107 87053 164192 87053 164192 87053 173442 87053";
+  };
+  Driver_PI_getDataNative_Manager_RI_getDataNative : SUBPROGRAM ACCESS Driver.PI_getDataNative -> Manager.RI_getDataNative {
+    Taste::coordinates => "155107 90852 164192 90852 164192 90852 173442 90852";
+  };
+  PingLogger_PI_purePing_Manager_RI_purePing : SUBPROGRAM ACCESS PingLogger.PI_purePing -> Manager.RI_purePing {
+    Taste::coordinates => "132146 99440 132146 104313 132313 104313 132313 109186";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

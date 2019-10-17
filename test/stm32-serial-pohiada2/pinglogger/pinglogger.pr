@@ -1,0 +1,16 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process pinglogger;
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (320, 60), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (450, 10), (70, 35) */
+    state Wait;
+        /* CIF input (446, 65), (77, 35) */
+        input purePing;
+            /* CIF PROCEDURECALL (416, 120), (138, 35) */
+            call writeln('PurePing');
+            /* CIF NEXTSTATE (450, 175), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+endprocess pinglogger;

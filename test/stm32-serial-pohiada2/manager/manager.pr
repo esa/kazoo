@@ -1,0 +1,46 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process manager;
+    /* CIF TEXT (899, 76), (272, 140) */
+    DCL gpio T_Int32;
+    DCL stamp T_Int32;
+    /* CIF ENDTEXT */
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF task (309, 65), (91, 35) */
+        task stamp := 0;
+        /* CIF task (318, 120), (73, 35) */
+        task gpio := 0;
+        /* CIF NEXTSTATE (320, 170), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (774, 18), (63, 38) */
+    state Wait;
+        /* CIF input (771, 76), (70, 35) */
+        input pulse;
+            /* CIF task (738, 131), (135, 35) */
+            task stamp := stamp + 1;
+            /* CIF output (758, 186), (95, 35) */
+            output ping(stamp);
+            /* CIF NEXTSTATE (771, 236), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+    /* CIF state (624, 13), (70, 35) */
+    state Wait;
+        /* CIF input (604, 68), (109, 35) */
+        input getData(gpio);
+            /* CIF PROCEDURECALL (584, 123), (149, 35) */
+            call getDataNative(gpio);
+            /* CIF output (594, 173), (129, 35) */
+            output dataReport(gpio);
+            /* CIF NEXTSTATE (623, 228), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+    /* CIF state (450, 10), (70, 35) */
+    state Wait;
+        /* CIF input (431, 65), (107, 35) */
+        input setData(gpio);
+            /* CIF PROCEDURECALL (411, 120), (147, 35) */
+            call setDataNative(gpio);
+            /* CIF NEXTSTATE (449, 170), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+endprocess manager;

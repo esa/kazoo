@@ -1,4 +1,4 @@
-DISABLED_TESTS=common/
+DISABLED_TESTS=common/ shared_components/
 TEST_CASES=$(filter-out $(DISABLED_TESTS), $(sort $(dir $(wildcard */))))
 export MAKEFLAGS="-j $(grep -c ^processor /proc/cpuinfo)"
 

@@ -7,6 +7,7 @@ c: test-parse
 	cp pinglogger/pinglogger.pr work/pinglogger/SDL/src
 	cp driver/driver.c work/driver/C/src
 	cp manager/manager.pr work/manager/SDL/src
+	cp stm32_debug/stm32_debug.adb work/stm32_debug/Ada/src
 	make -C work
 
 test-parse: clean-c
@@ -21,7 +22,7 @@ gdb: clean
 		       --debug
 
 skeletons:
-	$(KAZOO) -p --gw --glue -o work && make -C work dataview
+	$(KAZOO) --gw --glue -o work && make -C work dataview
 
 clean-skeletons:
 	rm -rf work

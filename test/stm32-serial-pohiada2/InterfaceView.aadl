@@ -1,5 +1,5 @@
 ---------------------------------------------------
--- AADL2.1
+-- AADL2.2
 -- TASTE type interfaceview
 -- 
 -- generated code: do not edit
@@ -125,6 +125,7 @@ PUBLIC
 WITH interfaceview::IV::GUI;
 WITH interfaceview::IV::Driver;
 WITH interfaceview::IV::PingLogger;
+WITH interfaceview::IV::stm32_debug;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -157,6 +158,8 @@ PROPERTIES
 END PI_setData.others;
 
 SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_pulse.others
@@ -210,6 +213,38 @@ END RI_purePing;
 SUBPROGRAM IMPLEMENTATION RI_purePing.others
 END RI_purePing.others;
 
+SUBPROGRAM RI_Send_to_UART
+FEATURES
+  chars : IN PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+END RI_Send_to_UART;
+
+SUBPROGRAM IMPLEMENTATION RI_Send_to_UART.others
+END RI_Send_to_UART.others;
+
+SUBPROGRAM RI_Switch_Leds_ON
+END RI_Switch_Leds_ON;
+
+SUBPROGRAM IMPLEMENTATION RI_Switch_Leds_ON.others
+END RI_Switch_Leds_ON.others;
+
+SUBPROGRAM RI_Switch_Leds_OFF
+END RI_Switch_Leds_OFF;
+
+SUBPROGRAM IMPLEMENTATION RI_Switch_Leds_OFF.others
+END RI_Switch_Leds_OFF.others;
+
+SUBPROGRAM RI_Get_Message
+FEATURES
+  Last_Message : OUT PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+END RI_Get_Message;
+
+SUBPROGRAM IMPLEMENTATION RI_Get_Message.others
+END RI_Get_Message.others;
+
 SYSTEM Manager
 FEATURES
   PI_getData : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Manager::PI_getData.others {
@@ -261,6 +296,30 @@ FEATURES
     Taste::coordinates => "132146 99440";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "purePing";
+    Taste::labelInheritance => "true";
+  };
+  RI_Send_to_UART : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Send_to_UART.others {
+    Taste::coordinates => "155107 94412";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Send_to_UART";
+    Taste::labelInheritance => "true";
+  };
+  RI_Switch_Leds_ON : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_ON.others {
+    Taste::coordinates => "155107 97089";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Switch_Leds_ON";
+    Taste::labelInheritance => "true";
+  };
+  RI_Switch_Leds_OFF : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_OFF.others {
+    Taste::coordinates => "155107 89214";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Switch_Leds_OFF";
+    Taste::labelInheritance => "true";
+  };
+  RI_Get_Message : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Get_Message.others {
+    Taste::coordinates => "152734 99440";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Get_Message";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -420,6 +479,100 @@ END PingLogger.others;
 
 END interfaceview::IV::PingLogger;
 
+PACKAGE interfaceview::IV::stm32_debug
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Send_to_UART
+FEATURES
+  chars : IN PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Send_to_UART;
+
+SUBPROGRAM IMPLEMENTATION PI_Send_to_UART.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Send_to_UART.others;
+
+SUBPROGRAM PI_Switch_Leds_ON
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Switch_Leds_ON;
+
+SUBPROGRAM IMPLEMENTATION PI_Switch_Leds_ON.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Switch_Leds_ON.others;
+
+SUBPROGRAM PI_Switch_Leds_OFF
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Switch_Leds_OFF;
+
+SUBPROGRAM IMPLEMENTATION PI_Switch_Leds_OFF.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Switch_Leds_OFF.others;
+
+SUBPROGRAM PI_Get_Message
+FEATURES
+  Last_Message : OUT PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Get_Message;
+
+SUBPROGRAM IMPLEMENTATION PI_Get_Message.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Get_Message.others;
+
+SYSTEM stm32_debug
+FEATURES
+  PI_Send_to_UART : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Send_to_UART.others {
+    Taste::coordinates => "172751 115273";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Send_to_UART";
+  };
+  PI_Switch_Leds_ON : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_ON.others {
+    Taste::coordinates => "172751 119998";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Switch_Leds_ON";
+  };
+  PI_Switch_Leds_OFF : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_OFF.others {
+    Taste::coordinates => "172751 123148";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Switch_Leds_OFF";
+  };
+  PI_Get_Message : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Get_Message.others {
+    Taste::coordinates => "172751 116848";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Get_Message";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+END stm32_debug;
+
+SYSTEM IMPLEMENTATION stm32_debug.others
+END stm32_debug.others;
+
+END interfaceview::IV::stm32_debug;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -428,6 +581,7 @@ WITH interfaceview::IV::Manager;
 WITH interfaceview::IV::Driver;
 WITH interfaceview::IV::Beater;
 WITH interfaceview::IV::PingLogger;
+WITH interfaceview::IV::stm32_debug;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -454,6 +608,9 @@ SUBCOMPONENTS
   PingLogger : SYSTEM interfaceview::IV::PingLogger::PingLogger.others {
     Taste::coordinates => "122401 109186 148500 135120";
   };
+  stm32_debug : SYSTEM interfaceview::IV::stm32_debug::stm32_debug.others {
+    Taste::coordinates => "172751 110548 194758 132280";
+  };
 CONNECTIONS
   GUI_PI_dataReport_Manager_RI_dataReport : SUBPROGRAM ACCESS GUI.PI_dataReport -> Manager.RI_dataReport {
     Taste::coordinates => "129669 84576 121988 84576 121988 84576 112820 84576";
@@ -479,12 +636,24 @@ CONNECTIONS
   PingLogger_PI_purePing_Manager_RI_purePing : SUBPROGRAM ACCESS PingLogger.PI_purePing -> Manager.RI_purePing {
     Taste::coordinates => "132146 99440 132146 104313 132313 104313 132313 109186";
   };
+  stm32_debug_PI_Send_to_UART_Manager_RI_Send_to_UART : SUBPROGRAM ACCESS stm32_debug.PI_Send_to_UART -> Manager.RI_Send_to_UART {
+    Taste::coordinates => "155107 94412 163929 94412 163929 115273 172751 115273";
+  };
+  stm32_debug_PI_Switch_Leds_ON_Manager_RI_Switch_Leds_ON : SUBPROGRAM ACCESS stm32_debug.PI_Switch_Leds_ON -> Manager.RI_Switch_Leds_ON {
+    Taste::coordinates => "155107 97089 163929 97089 163929 119998 172751 119998";
+  };
+  stm32_debug_PI_Switch_Leds_OFF_Manager_RI_Switch_Leds_OFF : SUBPROGRAM ACCESS stm32_debug.PI_Switch_Leds_OFF -> Manager.RI_Switch_Leds_OFF {
+    Taste::coordinates => "155107 89214 163929 89214 163929 123148 172751 123148";
+  };
+  stm32_debug_PI_Get_Message_Manager_RI_Get_Message : SUBPROGRAM ACCESS stm32_debug.PI_Get_Message -> Manager.RI_Get_Message {
+    Taste::coordinates => "152734 99440 152734 116848 172751 116848";
+  };
 END interfaceview.others;
 
 PROPERTIES
   Taste::dataView => ("DataView");
   Taste::dataViewPath => ("DataView.aadl");
   Taste::coordinates => "0 0 297000 210000";
-  Taste::version => "2.0";
+  Taste::version => "2.2";
 END interfaceview::IV;
 

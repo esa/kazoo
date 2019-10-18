@@ -1,0 +1,6 @@
+STM32-Dataview DEFINITIONS ::=
+BEGIN
+
+Debug-PrintableString ::= OCTET STRING (SIZE (0..255))
+
+END

@@ -150,7 +150,7 @@ package body TASTE.Dump is
                end loop;
 
                --  Prepare the deployment view
-               for N of Model.Deployment_View.Nodes loop
+               for N of Model.Deployment_View.Element.Nodes loop
                   if N.Name = "interfaceview" then
                      goto Next_Node;
                   end if;
@@ -224,7 +224,7 @@ package body TASTE.Dump is
                end loop;
 
                --  Add the deployment connections as vector tag
-               for C of Model.Deployment_View.Connections loop
+               for C of Model.Deployment_View.Element.Connections loop
                   Source_Functions := Source_Functions & C.Source_Function;
                   Source_Ports     := Source_Ports     & C.Source_Port;
                   Bus_Names        := Bus_Names        & C.Bus_Name;

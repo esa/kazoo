@@ -73,7 +73,8 @@ package body TASTE.Deployment_View is
    -- AST Builder Functions --
    ---------------------------
 
-   function Parse_Deployment_View (System : Node_Id)
+   function Parse_Deployment_View (System : Node_Id;
+                                   IV     : Complete_Interface_View)
                                    return Complete_Deployment_View
    is
       use type Bus_Connections.Vector;
@@ -85,6 +86,8 @@ package body TASTE.Deployment_View is
       My_Root_System : Node_Id;
       Subs           : Node_Id;
       CI             : Node_Id;
+
+      Result_DV      : Complete_Deployment_View;
 
       function Parse_Bus (Elem : Node_Id; Bus : Node_Id) return Taste_Bus is
          Properties : constant Property_Maps.Map := Get_Properties_Map (CI);
@@ -610,10 +613,14 @@ package body TASTE.Deployment_View is
          Subs := Next_Node (Subs);
       end loop;
 
-      return DV_AST : constant Complete_Deployment_View :=
-        (Nodes          => Nodes,
-         Connections    => Conns,
-         Busses         => Busses);
+      Result_DV := (Nodes          => Nodes,
+                    Connections    => Conns,
+                    Busses         => Busses);
+
+      Result_DV.Fix_Bus_Connections (IV);
+
+      return Result_DV;
+
    end Parse_Deployment_View;
 
    function Find_Node (Deployment    : Complete_Deployment_View;

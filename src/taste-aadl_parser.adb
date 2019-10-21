@@ -170,6 +170,7 @@ package body TASTE.AADL_Parser is
 
    function Parse_Project return TASTE_Model is
       Result : TASTE_Model;
+      use Deployment_View_Holders;
    begin
       Result.Configuration := Initialize;
 
@@ -190,8 +191,9 @@ package body TASTE.AADL_Parser is
            and not Result.Configuration.Deployment_View.Is_Empty
          then
             AADL_Lib.Append (Result.Configuration.Interface_View.Element);
-            Result.Deployment_View := Parse_Deployment_View (Deployment_Root);
-            Result.Deployment_View.Fix_Bus_Connections (Result.Interface_View);
+            Result.Deployment_View :=
+              To_Holder (Parse_Deployment_View
+                         (Deployment_Root, Result.Interface_View));
          end if;
       end if;
 
@@ -251,7 +253,7 @@ package body TASTE.AADL_Parser is
          renames Ada.Strings.Equal_Case_Insensitive;
       Function_Name : constant String := To_String (F);
    begin
-      for Node of Model.Deployment_View.Nodes loop
+      for Node of Model.Deployment_View.Element.Nodes loop
          for Each of Node.Partitions loop
             for Binding of Each.Bound_Functions loop
                if Is_Equal (Binding, Function_Name) then
@@ -371,13 +373,13 @@ package body TASTE.AADL_Parser is
       CV : Taste_Concurrency_View :=
         (Base_Template_Path => Model.Configuration.Binary_Path,
          Base_Output_Path   => Model.Configuration.Output_Dir,
-         Deployment         => Model.Deployment_View,
+         Deployment         => Model.Deployment_View.Element,
          Configuration      => Model.Configuration,
          others             => <>);
       use String_Vectors;
    begin
       --  Initialize the lists of nodes and partitions based on the DV
-      for Node of Model.Deployment_View.Nodes loop
+      for Node of Model.Deployment_View.Element.Nodes loop
          declare
             New_Node : CV_Node :=
               (Deployment_Node => Node, others => <>);
@@ -407,7 +409,7 @@ package body TASTE.AADL_Parser is
          declare
             Function_Name : constant String := To_String (F.Name);
             Node : constant Option_Node.Option :=
-              Model.Deployment_View.Find_Node (Function_Name);
+              Model.Deployment_View.Element.Find_Node (Function_Name);
             Node_Name : constant String :=
               (if Node.Has_Value
                then To_String (Node.Unsafe_Just.Name)
@@ -453,7 +455,7 @@ package body TASTE.AADL_Parser is
                   for Remote of PI.Remote_Interfaces loop
                      declare
                         Remote_Node : constant Option_Node.Option :=
-                          Model.Deployment_View.Find_Node
+                          Model.Deployment_View.Element.Find_Node
                             (To_String (Remote.Function_Name));
                      begin
                         if not Remote_Node.Has_Value
@@ -638,7 +640,7 @@ package body TASTE.AADL_Parser is
                     Mode => Out_File,
                     Name => Output_Path & "/DeploymentView.dump");
             Put_Info ("Dump of the Deployment View");
-            Model.Deployment_View.Debug_Dump (Output);
+            Model.Deployment_View.Element.Debug_Dump (Output);
             Close (Output);
          end if;
 
@@ -691,4 +693,41 @@ package body TASTE.AADL_Parser is
          Errors.Display_Bug_Box (Error);
          raise Quit_Taste;
    end Generate_Code;
+
+   function Process_Function (F : in out Taste_Terminal_Function)
+      return Function_Maps.Map
+   is
+      New_Functions    : Function_Maps.Map;
+   begin
+      --  Look for GUIs and add a Poll PI (if there is at least one RI)
+      if F.Required.Length > 0 and F.Language = "gui" then
+         F.Provided.Insert (Key      => "Poll",
+                            New_Item => (Name            => US ("Poll"),
+                                         Parent_Function => F.Name,
+                                         RCM             => Cyclic_Operation,
+                                         Period_Or_MIAT  => 10,
+                                         others => <>));
+      end if;
+      return New_Functions;
+   end Process_Function;
+
+   function Transform (Model : TASTE_Model) return TASTE_Model is
+      Result        : TASTE_Model := Model;
+      New_Functions : Function_Maps.Map;
+   begin
+      --  Processing of user-defined functions (may return a list of new
+      --  functions that will be added to the model)
+      for F of Result.Interface_View.Flat_Functions loop
+         declare
+            Funcs : constant Function_Maps.Map := Process_Function (F);
+         begin
+            for Each of Funcs loop
+               New_Functions.Insert (Key      => To_String (Each.Name),
+                                     New_Item => Each);
+            end loop;
+         end;
+      end loop;
+      return Result;
+   end Transform;
+
 end TASTE.AADL_Parser;

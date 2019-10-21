@@ -3,17 +3,15 @@ with Ada.Exceptions,
      TASTE,
      TASTE.AADL_Parser,
      TASTE.Parser_Utils,
-     TASTE.Model_Transformations,
      TASTE.Dump;
 use TASTE.AADL_Parser,
-    TASTE.Parser_Utils,
-    TASTE.Model_Transformations;
+    TASTE.Parser_Utils;
 
 procedure Kazoo is
 begin
    declare
       Model       : constant TASTE_Model := Parse_Project;
-      Transformed :          TASTE_Model := Transform (Model);
+      Transformed :          TASTE_Model := Model.Transform;
    begin
       if Model.Configuration.Debug_Flag then
          TASTE.Dump.Dump_Input_Model (Model);

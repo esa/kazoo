@@ -7,6 +7,7 @@
 
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Containers.Indefinite_Vectors,
+     Ada.Containers.Indefinite_Holders,
      Ada.Strings.Unbounded,
      Text_IO,
      Templates_Parser,
@@ -205,13 +206,10 @@ package TASTE.Deployment_View is
                        Function_Name : String) return Option_Node.Option;
 
    --  Function to build up the Ada AST by transforming the one from Ocarina
-   function Parse_Deployment_View (System : Node_Id)
+   function Parse_Deployment_View (System : Node_Id;
+                                   IV     : Complete_Interface_View)
                                    return Complete_Deployment_View
      with Pre => System /= No_Node;
-
-   --  Replace bus connection ports with end-to-end connections
-   procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
-                                  IV : Complete_Interface_View);
 
    procedure Dump_Nodes       (DV     : Complete_Deployment_View;
                                Output : File_Type);
@@ -221,5 +219,18 @@ package TASTE.Deployment_View is
                                Output : File_Type);
    procedure Debug_Dump       (DV     : Complete_Deployment_View;
                                Output : File_Type);
+
+   --  Connect end-to-end functions when there are nested functions
+   procedure Fix_Bus_Connections (DV : in out Complete_Deployment_View;
+                                  IV : Complete_Interface_View);
+
+   --  Define a holder type for the deployment view - to be used as an option
+   --  type in the complete TASTE data model (Deployment view may be absent
+   --  if the tool is only called to generate skeletons).
+   --  Holder containers are a form of built-in option type in Ada
+   package Deployment_View_Holders is new Indefinite_Holders
+     (Complete_Deployment_View);
+
+   subtype Deployment_View_Holder is Deployment_View_Holders.Holder;
 
 end TASTE.Deployment_View;

@@ -1,0 +1,265 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::gui
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_PI1
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_PI1;
+
+SUBPROGRAM IMPLEMENTATION RI_PI1.others
+END RI_PI1.others;
+
+SUBPROGRAM RI_start_ada_timer
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END RI_start_ada_timer;
+
+SUBPROGRAM IMPLEMENTATION RI_start_ada_timer.others
+END RI_start_ada_timer.others;
+
+SUBPROGRAM RI_start_sdl_timer
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END RI_start_sdl_timer;
+
+SUBPROGRAM IMPLEMENTATION RI_start_sdl_timer.others
+END RI_start_sdl_timer.others;
+
+END interfaceview::FV::gui;
+
+PACKAGE interfaceview::FV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_PI1
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_PI1;
+
+SUBPROGRAM IMPLEMENTATION PI_PI1.others
+END PI_PI1.others;
+
+END interfaceview::FV::Function2;
+
+PACKAGE interfaceview::FV::ada_fct
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_start_ada_timer
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_start_ada_timer;
+
+SUBPROGRAM IMPLEMENTATION PI_start_ada_timer.others
+END PI_start_ada_timer.others;
+
+END interfaceview::FV::ada_fct;
+
+PACKAGE interfaceview::FV::sdl_fct
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_start_sdl_timer
+FEATURES
+  toto : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_start_sdl_timer;
+
+SUBPROGRAM IMPLEMENTATION PI_start_sdl_timer.others
+END PI_start_sdl_timer.others;
+
+END interfaceview::FV::sdl_fct;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::FV::Function2;
+WITH interfaceview::FV::ada_fct;
+WITH interfaceview::FV::sdl_fct;
+WITH interfaceview::FV::gui;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM gui
+FEATURES
+  RI_PI1 : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::Function2::PI_PI1.others {
+    Taste::coordinates => "1149 651";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "PI1";
+    Taste::labelInheritance => "true";
+  };
+  RI_start_ada_timer : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::ada_fct::PI_start_ada_timer.others {
+    Taste::coordinates => "1047 1195";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "start_ada_timer";
+    Taste::labelInheritance => "true";
+  };
+  RI_start_sdl_timer : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::sdl_fct::PI_start_sdl_timer.others {
+    Taste::coordinates => "590 1195";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "start_sdl_timer";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+END gui;
+
+SYSTEM IMPLEMENTATION gui.others
+END gui.others;
+
+SYSTEM Function2
+FEATURES
+  PI_PI1 : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Function2::PI_PI1.others {
+    Taste::coordinates => "1693 692";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "PI1";
+  };
+PROPERTIES
+  Source_Language => (C);
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+SUBCOMPONENTS
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "toto";
+  };
+  PI1_impl : SUBPROGRAM interfaceview::FV::Function2::PI_PI1.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_PI1_impl : SUBPROGRAM ACCESS PI1_impl -> PI_PI1;
+END Function2.others;
+
+SYSTEM ada_fct
+FEATURES
+  PI_start_ada_timer : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::ada_fct::PI_start_ada_timer.others {
+    Taste::coordinates => "1641 1508";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "start_ada_timer";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+END ada_fct;
+
+SYSTEM IMPLEMENTATION ada_fct.others
+SUBCOMPONENTS
+  ada_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "hop";
+  };
+  start_ada_timer_impl : SUBPROGRAM interfaceview::FV::ada_fct::PI_start_ada_timer.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_start_ada_timer_impl : SUBPROGRAM ACCESS start_ada_timer_impl -> PI_start_ada_timer;
+END ada_fct.others;
+
+SYSTEM sdl_fct
+FEATURES
+  PI_start_sdl_timer : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::sdl_fct::PI_start_sdl_timer.others {
+    Taste::coordinates => "657 1611";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "start_sdl_timer";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+END sdl_fct;
+
+SYSTEM IMPLEMENTATION sdl_fct.others
+SUBCOMPONENTS
+  sdl_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "toto";
+  };
+  fast_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "hello";
+  };
+  start_sdl_timer_impl : SUBPROGRAM interfaceview::FV::sdl_fct::PI_start_sdl_timer.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_start_sdl_timer_impl : SUBPROGRAM ACCESS start_sdl_timer_impl -> PI_start_sdl_timer;
+END sdl_fct.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  gui : SYSTEM interfaceview::IV::gui.others {
+    Taste::coordinates => "287 462 1149 1195";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2.others {
+    Taste::coordinates => "1693 518 2498 1231";
+  };
+  ada_fct : SYSTEM interfaceview::IV::ada_fct.others {
+    Taste::coordinates => "1641 1308 2606 2077";
+  };
+  sdl_fct : SYSTEM interfaceview::IV::sdl_fct.others {
+    Taste::coordinates => "246 1611 1123 2067";
+  };
+CONNECTIONS
+  Function2_PI1_gui_PI1 : SUBPROGRAM ACCESS Function2.PI_PI1 -> gui.RI_PI1 {
+    Taste::coordinates => "1149 651 1485 651 1485 692 1693 692";
+  };
+  ada_fct_start_ada_timer_gui_start_ada_timer : SUBPROGRAM ACCESS ada_fct.PI_start_ada_timer -> gui.RI_start_ada_timer {
+    Taste::coordinates => "1047 1195 1047 1508 1641 1508";
+  };
+  sdl_fct_start_sdl_timer_gui_start_sdl_timer : SUBPROGRAM ACCESS sdl_fct.PI_start_sdl_timer -> gui.RI_start_sdl_timer {
+    Taste::coordinates => "590 1195 590 1423 657 1423 657 1611";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

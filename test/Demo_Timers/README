@@ -1,0 +1,9 @@
+Demo_Timers
+This demo illustrate the use of RCM-compliant timers in TASTE systems
+
+Timers are specified in the interface view, in the Context Parameters tab of functions.
+
+When setting (activating) a timer, the parameter has to be a multiple of 100 ms.
+
+The demo has a GUI. When you send a message from the GUI, the timer is activated with a 5 seconds timeout.
+After 5 seconds it shall display a message.

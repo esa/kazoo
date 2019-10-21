@@ -796,10 +796,10 @@ package body TASTE.AADL_Parser is
 
                         --  Define protected functions to SET/RESET the timer
                         Set_Name_In_Manager : constant String :=
-                          Function_Name & "_SET_" & Timer_Name;
+                          "SET_" & Function_Name & "_" & Timer_Name;
 
                         Reset_Name_In_Manager : constant String :=
-                          Function_Name & "_RESET_" & Timer_Name;
+                          "RESET_" & Function_Name & "_" & Timer_Name;
 
                         Set_Name_In_Function : constant String :=
                           "SET_" & Timer_Name;
@@ -928,6 +928,10 @@ package body TASTE.AADL_Parser is
                         Model.Interface_View.Connections.Append (Conn_Expire);
                         Model.Interface_View.Connections.Append (Conn_Set);
                         Model.Interface_View.Connections.Append (Conn_Reset);
+
+                        --  Add timer to the list of timers in the manager
+                        Timer_Manager.Timers.Append
+                          (Function_Name & "_" & Timer_Name);
                      end;
                   end loop;
                end loop;

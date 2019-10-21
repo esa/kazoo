@@ -60,7 +60,7 @@ class @_LOWER:Name_@
 @@END_TABLE@@
 
 @@TABLE@@
-   void @_Timers_@();
+   // void @_Timers_@(void);
    /* Call these functions to set/reset @_Timers_@ (value in milliseconds)*/
    void @_LOWER:Name_@_RI_SET_@_Timers_@(asn1SccT_UInt32 *);
    void @_LOWER:Name_@_RI_RESET_@_Timers_@();

@@ -465,7 +465,7 @@ package body TASTE.Backend.Code_Generators is
          --  They are added here. At the moment the user-defined properties
          --  of the interfaces themselves are not part of the template
          --  This could be be added later if needed.
-         Interface_Tmplt := Each.To_Template
+         Interface_Tmplt := Each.Interface_To_Template
                             & Assoc ("Direction",       "PI")
                             & Assoc ("Property_Names",  Property_Names)
                             & Assoc ("Property_Values", Property_Values)
@@ -474,15 +474,17 @@ package body TASTE.Backend.Code_Generators is
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>
-               List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
-               if not Each.Params.Is_Empty then
-                  ASync_PI_Param_Name := ASync_PI_Param_Name
-                    & Each.Params.First_Element.Name;
-                  ASync_PI_Param_Type := ASync_PI_Param_Type &
-                    Each.Params.First_Element.Sort;
-               else
-                  ASync_PI_Param_Name := ASync_PI_Param_Name & "";
-                  ASync_PI_Param_Type := ASync_PI_Param_Type & "";
+               if not Each.Is_Timer then
+                  List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
+                  if not Each.Params.Is_Empty then
+                     ASync_PI_Param_Name := ASync_PI_Param_Name
+                       & Each.Params.First_Element.Name;
+                     ASync_PI_Param_Type := ASync_PI_Param_Type &
+                       Each.Params.First_Element.Sort;
+                  else
+                     ASync_PI_Param_Name := ASync_PI_Param_Name & "";
+                     ASync_PI_Param_Type := ASync_PI_Param_Type & "";
+                  end if;
                end if;
             when others =>
                List_Of_Sync_PIs := List_Of_Sync_PIs & Each.Name;
@@ -494,7 +496,7 @@ package body TASTE.Backend.Code_Generators is
 
       --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
-         Interface_Tmplt := Each.To_Template
+         Interface_Tmplt := Each.Interface_To_Template
                             & Assoc ("Direction", "RI")
                             & Assoc ("Property_Names", Property_Names)
                             & Assoc ("Property_Values", Property_Values)

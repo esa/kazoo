@@ -38,7 +38,8 @@ package TASTE.AADL_Parser is
 
    --  Transform: add Poll cyclic in GUIs, manage timers and taste api
    --  This function can be called if there is a deployment view
-   function Transform (Model : TASTE_Model) return TASTE_Model;
+   procedure Preprocessing (Model : in out TASTE_Model)
+     with Pre => not Model.Deployment_View.Is_Empty;
 
    --  Create the concurrency view and apply the templates for code generation
    procedure Add_Concurrency_View (Model : in out TASTE_Model)

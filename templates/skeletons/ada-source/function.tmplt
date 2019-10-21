@@ -61,12 +61,7 @@ package @_CAPITALIZE:Name_@ is
 
 @@END_TABLE@@
 @@TABLE@@
-   --  Timer @_Timers_@
-   procedure @_CAPITALIZE:Timers_@
-      with Export,
-           Convention => C,
-           Link_Name  => "@_LOWER:Name_@_PI_@_Timers_@";
-
+   --  Timer @_Timers_@ Set and Reset functions
    procedure Set_@_CAPITALIZE:Timers_@ (Value : in out asn1SccT_UInt32)
       with Import,
            Convention => C,

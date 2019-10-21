@@ -32,7 +32,7 @@ SUBPROGRAM IMPLEMENTATION @_Name_@.GUI_PI
 SUBPROGRAM IMPLEMENTATION @_Name_@.GUI_RI
 @@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
 SUBPROGRAM IMPLEMENTATION @_Name_@.VHDL
-@@ELSIF@@ @_Language_@ = "Blackbox_C"
+@@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = Timer_Manager
 SUBPROGRAM IMPLEMENTATION @_Name_@.C
 @@ELSIF@@ @_Language_@ = SDL
 SUBPROGRAM IMPLEMENTATION @_Name_@.Ada
@@ -47,7 +47,7 @@ PROPERTIES
    Source_Language => GUI_RI;
 @@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
    Source_Language => VHDL;
-@@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = CPP
+@@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = CPP or @_Language_@ = Timer_Manager
    Source_Language => C;
 @@ELSIF@@ @_Language_@ = SIMULINK
    Source_Language => Simulink;  @@-- aadl2glueC is case sensitive here
@@ -67,7 +67,7 @@ END @_Name_@.GUI_PI;
 END @_Name_@.GUI_RI;
 @@ELSIF@@ @_Language_@ = "VHDL_BRAVE"
 END @_Name_@.VHDL;
-@@ELSIF@@ @_Language_@ = "Blackbox_C"
+@@ELSIF@@ @_Language_@ = "Blackbox_C" or @_Language_@ = Timer_Manager
 END @_Name_@.C;
 @@ELSIF@@ @_Language_@ = SDL
 END @_Name_@.Ada;

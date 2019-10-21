@@ -711,13 +711,15 @@ package body TASTE.AADL_Parser is
       return New_Functions;
    end Process_Function;
 
-   function Transform (Model : TASTE_Model) return TASTE_Model is
-      Result        : TASTE_Model := Model;
+   procedure Preprocessing (Model : in out TASTE_Model) is
       New_Functions : Function_Maps.Map;
+      DV : Complete_Deployment_View := Model.Deployment_View.Element;
+      use Remote_Entities,
+          Parameters;
    begin
       --  Processing of user-defined functions (may return a list of new
       --  functions that will be added to the model)
-      for F of Result.Interface_View.Flat_Functions loop
+      for F of Model.Interface_View.Flat_Functions loop
          declare
             Funcs : constant Function_Maps.Map := Process_Function (F);
          begin
@@ -727,7 +729,221 @@ package body TASTE.AADL_Parser is
             end loop;
          end;
       end loop;
-      return Result;
-   end Transform;
+
+      --  For each partition generate a timer manager if needed
+      for Node : Taste_Node of DV.Nodes loop
+         for Partition : Taste_Partition of Node.Partitions loop
+            declare
+               Manager_Name  : constant String :=
+                 To_String (Partition.Name) & "_Timer_Manager";
+               Tick_PI       : constant Taste_Interface :=
+                 (Name            => US ("Tick"),
+                  Parent_Function => US (Manager_Name),
+                  Language        => US ("Timer_Manager"),
+
+                  RCM             => Cyclic_Operation,
+                  Period_Or_MIAT  => 10,   --  Configurable parameter?
+                  others          => <>);
+               Timer_Manager : Taste_Terminal_Function :=
+                 (Name     => US (Manager_Name),
+                  Language => US ("Timer_Manager"),
+                  others   => <>);
+               Need_Timer_Manager : Boolean := False;
+            begin
+               Timer_Manager.Provided.Insert (Key      => Manager_Name,
+                                              New_Item => Tick_PI);
+               for Function_Name : String of Partition.Bound_Functions loop
+                  for Timer_Name : String of
+                    Model.Interface_View.Flat_Functions (Function_Name).Timers
+                  loop
+                     Need_Timer_Manager := True;
+                     declare
+                        Name_In_Manager : constant String :=
+                          Function_Name & "_" & Timer_Name;
+
+                        Manager_As_Remote : constant Remote_Entity :=
+                          (Function_Name  => Timer_Manager.Name,
+                           Interface_Name => US (Name_In_Manager));
+
+                        Function_As_Remote : constant Remote_Entity :=
+                          (Function_Name  => US (Function_Name),
+                           Interface_Name => US (Timer_Name));
+
+                        Timer_PI : constant Taste_Interface :=
+                          (Name              => US (Timer_Name),
+                           Parent_Function   => US (Function_Name),
+                           Language          =>
+                             Model.Interface_View.Flat_Functions
+                               (Function_Name).Language,
+                           Remote_Interfaces =>
+                             Remote_Entities.Empty_Vector & Manager_As_Remote,
+                           Params            => Parameters.Empty_Vector,
+                           RCM               => Sporadic_Operation,
+                           Period_Or_Miat    => 1,
+                           Is_Timer          => True,
+                           others            => <>);
+
+                        Timer_RI : constant Taste_Interface :=
+                          (Name              => US (Name_In_Manager),
+                           Parent_Function   => US (Manager_Name),
+                           Language          => US ("Timer_Manager"),
+                           Remote_Interfaces =>
+                             Remote_Entities.Empty_Vector & Function_As_Remote,
+                           Params            => Parameters.Empty_Vector,
+                           RCM               => Sporadic_Operation,
+                           Period_Or_Miat    => 1,
+                           others            => <>);
+
+                        --  Define protected functions to SET/RESET the timer
+                        Set_Name_In_Manager : constant String :=
+                          Function_Name & "_SET_" & Timer_Name;
+
+                        Reset_Name_In_Manager : constant String :=
+                          Function_Name & "_RESET_" & Timer_Name;
+
+                        Set_Name_In_Function : constant String :=
+                          "SET_" & Timer_Name;
+
+                        Reset_Name_In_Function : constant String :=
+                          "RESET_" & Timer_Name;
+
+                        Set_PI_In_Manager : constant Taste_Interface :=
+                          (Name              => US (Set_Name_In_Manager),
+                           Parent_Function   => US (Manager_Name),
+                           Language          => US ("Timer_Manager"),
+                           Remote_Interfaces => Remote_Entities.Empty_Vector &
+                           (Function_Name  => US (Function_Name),
+                            Interface_Name => US (Set_Name_In_Function)),
+                           Params            => Parameters.Empty_Vector &
+                           (Name            => US ("Val"),
+                            Sort            => US ("T_UInt32"),
+                            ASN1_Basic_Type => ASN1_Integer,
+                            ASN1_Module     => US ("TASTE_BasicTypes"),
+                            ASN1_File_Name  => US ("taste-types.asn"),
+                            Encoding        => Native,
+                            Direction       => Param_In),
+                           RCM               => Protected_Operation,
+                           Period_Or_Miat    => 1,
+                           others            => <>);
+
+                        Reset_PI_In_Manager : constant Taste_Interface :=
+                          (Name              => US (Reset_Name_In_Manager),
+                           Parent_Function   => US (Manager_Name),
+                           Language          => US ("Timer_Manager"),
+                           Remote_Interfaces => Remote_Entities.Empty_Vector &
+                           (Function_Name  => US (Function_Name),
+                            Interface_Name => US (Reset_Name_In_Function)),
+                           Params            => Parameters.Empty_Vector,
+                           RCM               => Protected_Operation,
+                           Period_Or_Miat    => 1,
+                           others            => <>);
+
+                        Set_RI_In_Function : constant Taste_Interface :=
+                          (Name              => US (Set_Name_In_Function),
+                           Parent_Function   => US (Function_Name),
+                           Language          =>
+                             Model.Interface_View.Flat_Functions
+                               (Function_Name).Language,
+                           Remote_Interfaces => Remote_Entities.Empty_Vector &
+                           (Function_Name  => US (Manager_Name),
+                            Interface_Name => US (Set_Name_In_Manager)),
+                           Params            => Parameters.Empty_Vector &
+                           (Name           => US ("Val"),
+                            Sort           => US ("T_UInt32"),
+                            ASN1_Basic_Type => ASN1_Integer,
+                            ASN1_Module    => US ("TASTE_BasicTypes"),
+                            ASN1_File_Name => US ("taste-types.asn"),
+                            Encoding       => Native,
+                            Direction      => Param_In),
+                           RCM               => Protected_Operation,
+                           Is_Timer          => True,
+                           Period_Or_Miat    => 1,
+                           others            => <>);
+
+                        Reset_RI_In_Function : constant Taste_Interface :=
+                          (Name              => US (Reset_Name_In_Function),
+                           Parent_Function   => US (Function_Name),
+                           Language          =>
+                             Model.Interface_View.Flat_Functions
+                               (Function_Name).Language,
+                           Remote_Interfaces => Remote_Entities.Empty_Vector &
+                           (Function_Name  => US (Manager_Name),
+                            Interface_Name => US (Reset_Name_In_Manager)),
+                           Params            => Parameters.Empty_Vector,
+                           RCM               => Protected_Operation,
+                           Period_Or_Miat    => 1,
+                           Is_Timer          => True,
+                           others            => <>);
+
+                        --  Create the connections in the interface view
+                        Conn_Expire : constant Connection :=
+                          (Caller   => US (Manager_Name),
+                           Callee   => US (Function_Name),
+                           RI_Name  => US (Name_In_Manager),
+                           PI_Name  => US (Timer_Name),
+                           Channels => String_Vectors.Empty_Vector);
+
+                        Conn_Set : constant Connection :=
+                          (Caller   => US (Function_Name),
+                           Callee   => US (Manager_Name),
+                           RI_Name  => US (Set_Name_In_Function),
+                           PI_Name  => US (Set_Name_In_Manager),
+                           Channels => String_Vectors.Empty_Vector);
+
+                        Conn_Reset : constant Connection :=
+                          (Caller   => US (Function_Name),
+                           Callee   => US (Manager_Name),
+                           RI_Name  => US (Reset_Name_In_Function),
+                           PI_Name  => US (Reset_Name_In_Manager),
+                           Channels => String_Vectors.Empty_Vector);
+                     begin
+                        --  Add timer expiration sporadic PI to the function
+                        --  (modify the interface view in place)
+                        Model.Interface_View.Flat_Functions (Function_Name)
+                          .Provided.Insert (Key      => Timer_Name,
+                                            New_Item => Timer_PI);
+
+                        --  Add corresponding RI in the timer manager
+                        Timer_Manager.Required.Insert (Key => Name_In_Manager,
+                                                       New_Item => Timer_RI);
+
+                        --  Add Set/Reset required interfaces to the function
+                        Model.Interface_View.Flat_Functions (Function_Name)
+                          .Required.Insert (Key      => Set_Name_In_Function,
+                                            New_Item => Set_RI_In_Function);
+
+                        Model.Interface_View.Flat_Functions (Function_Name)
+                          .Required.Insert (Key      => Reset_Name_In_Function,
+                                            New_Item => Reset_RI_In_Function);
+
+                        --  Add corresponding Set/Reset PIs in the manager
+                        Timer_Manager.Provided.Insert
+                          (Key      => Set_Name_In_Manager,
+                           New_Item => Set_PI_In_Manager);
+
+                        Timer_Manager.Provided.Insert
+                          (Key      => Reset_Name_In_Manager,
+                           New_Item => Reset_PI_In_Manager);
+
+                        Model.Interface_View.Connections.Append (Conn_Expire);
+                        Model.Interface_View.Connections.Append (Conn_Set);
+                        Model.Interface_View.Connections.Append (Conn_Reset);
+                     end;
+                  end loop;
+               end loop;
+
+               if Need_Timer_Manager then
+                  --  Add the timer manager to the interface view
+                  Model.Interface_View.Flat_Functions.Insert
+                    (Key      => Manager_Name,
+                     New_Item => Timer_Manager);
+                  --  Bind it in the deployment view
+                  Partition.Bound_Functions.Insert (Manager_Name);
+               end if;
+            end;
+         end loop;
+      end loop;
+      Model.Deployment_View.Replace_Element (DV);
+   end Preprocessing;
 
 end TASTE.AADL_Parser;

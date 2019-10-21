@@ -7,6 +7,7 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@IF@@ @_Direction_@ = PI or not @_Is_Timer_@
 @@IF@@ @_EXIST:Param_Names_@
 @@INLINE@@
 procedure @_CAPITALIZE:Name_@
@@ -32,4 +33,5 @@ procedure @_CAPITALIZE:Name_@
            Convention => C,
            Link_Name  => "@_LOWER:Parent_Function_@_RI_@_Name_@";
 @@--   procedure RIÜ@_CAPITALIZE:Name_@ renames @_CAPITALIZE:Name_@;
+@@END_IF@@
 @@END_IF@@

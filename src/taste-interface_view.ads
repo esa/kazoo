@@ -113,9 +113,10 @@ package TASTE.Interface_View is
          WCET_ms           : Option_ULL.Option := Option_ULL.Nothing;
          Queue_Size        : Option_ULL.Option := Option_ULL.Nothing;
          User_Properties   : Property_Maps.Map;
+         Is_Timer          : Boolean := False;
       end record;
 
-   function To_Template (TI : Taste_Interface) return Translate_Set;
+   function Interface_To_Template (TI : Taste_Interface) return Translate_Set;
 
    package Interfaces_Maps is new Indefinite_Ordered_Maps (String,
                                                            Taste_Interface);

@@ -88,7 +88,7 @@ package body TASTE.Concurrency_View is
 
       for PI of B.Provided loop
          declare
-            Basic : constant Translate_Set := PI.PI.To_Template
+            Basic : constant Translate_Set := PI.PI.Interface_To_Template
               & Assoc ("Protected_Block_Name", To_String (PI.Name))
               & Assoc ("Caller_Is_Local", PI.Local_Caller)
               & Assoc ("Calling_Threads", Calling_Threads);
@@ -102,7 +102,7 @@ package body TASTE.Concurrency_View is
       end loop;
 
       for RI of B.Required loop
-         Result.Required.Append (RI.To_Template
+         Result.Required.Append (RI.Interface_To_Template
                                  & Assoc ("Calling_Threads", Calling_Threads));
       end loop;
 
@@ -139,7 +139,7 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        T.PI.To_Template   --  Template of the PI used to create the thread
+        T.PI.Interface_To_Template  --  PI used to create the thread
         & Assoc ("Thread_Name",       To_String (T.Name))
         & Assoc ("Partition_Name",    To_String (T.Partition_Name))
         & Assoc ("Entry_Port_Name",   To_String (T.Entry_Port_Name))

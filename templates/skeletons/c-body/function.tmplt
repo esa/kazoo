@@ -54,6 +54,6 @@ void @_LOWER:Name_@_startup(void)
 @@TABLE@@
 void @_LOWER:Name_@_PI_@_Timers_@(void)
 {
-   // This function is called when the timer expires
+   // This function is called when the timer @_Timers_@ expires
 }
 @@END_TABLE@@

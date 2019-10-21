@@ -11,6 +11,10 @@
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
+@@-- @_Is_Timer_@            : Flag set to true if this is a timer interface
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
+@@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
+@@IF@@ not @_Is_Timer_@
 @@IF@@ @_LOWER:Kind_@ = "cyclic_operation" or @_LOWER:Kind_@ = "sporadic_operation"
 @@IF@@ @_Param_Names'Length_@ > 0
 /* CIF Keep Specific Geode PARAMNAMES @_Param_Names_@ */
@@ -33,5 +37,6 @@ in/out @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
 @@END_INLINE@@
 @@ELSE@@
    external
+@@END_IF@@
 @@END_IF@@
 @@END_IF@@

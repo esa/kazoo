@@ -7,6 +7,11 @@
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding ASN.1 encoding
+@@-- @_Is_Timer_@            : Flag set to true if this is a timer interface
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
+@@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
+@@IF@@ not @_Is_Timer_@
 @@IF@@ @_EXIST:Param_Names_@
 @@INLINE@@
 procedure @_CAPITALIZE:Name_@
@@ -28,3 +33,4 @@ procedure @_CAPITALIZE:Name_@ is
       --  Write your code here
       null;
    end @_CAPITALIZE:Name_@;
+@@END_IF@@

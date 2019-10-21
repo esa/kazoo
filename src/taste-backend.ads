@@ -26,5 +26,5 @@ package TASTE.Backend is
        elsif Func.Language = "vhdl"            then "VHDL"
        elsif Func.Language = "vhdl_brave"      then "VHDL_BRAVE"
        elsif Func.Language = "micropython"     then "MicroPython"
-       else                                         "None");
+       else  To_String (Func.Language));
 end TASTE.Backend;

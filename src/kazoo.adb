@@ -10,21 +10,21 @@ use TASTE.AADL_Parser,
 procedure Kazoo is
 begin
    declare
-      Model       : constant TASTE_Model := Parse_Project;
-      Transformed :          TASTE_Model := Model.Transform;
+      Model : TASTE_Model := Parse_Project;
    begin
       if Model.Configuration.Debug_Flag then
          TASTE.Dump.Dump_Input_Model (Model);
-         Transformed.Dump;
+         Model.Dump;
       end if;
 
-      if Transformed.Configuration.Glue then
-         Transformed.Add_Concurrency_View;
-         Transformed.Concurrency_View.Generate_CV;
+      if Model.Configuration.Glue then
+         Model.Preprocessing;
+         Model.Add_Concurrency_View;
+         Model.Concurrency_View.Generate_CV;
       end if;
 
-      Transformed.Generate_Build_Script;
-      Transformed.Generate_Code;
+      Model.Generate_Build_Script;
+      Model.Generate_Code;
    end;
 exception
    when TASTE.Quit_TASTE =>

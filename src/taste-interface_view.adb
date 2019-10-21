@@ -1020,7 +1020,8 @@ package body TASTE.Interface_View is
    end Debug_Dump;
 
    --  Create a Templates_Parser translate set for an interface (PI or RI)
-   function To_Template (TI : Taste_Interface) return Translate_Set is
+   function Interface_To_Template (TI : Taste_Interface) return Translate_Set
+   is
       Param_Names,
       Param_Types,
       Param_ASN1_Modules,
@@ -1065,7 +1066,8 @@ package body TASTE.Interface_View is
         & Assoc ("IF_Property_Names",      Property_Names)
         & Assoc ("IF_Property_Values",     Property_Values)
         & Assoc ("Remote_Function_Names",  Remote_Function_Names)
-        & Assoc ("Remote_Interface_Names", Remote_Interface_Names);
-   end To_Template;
+        & Assoc ("Remote_Interface_Names", Remote_Interface_Names)
+        & Assoc ("Is_Timer",               TI.Is_Timer);
+   end Interface_To_Template;
 
 end TASTE.Interface_View;

@@ -61,10 +61,9 @@ void @_LOWER:Name_@_startup(void);
 @@END_TABLE@@
 
 @@TABLE@@
-void @_LOWER:Name_@_PI_@_Timers_@(void);
-/* Call these functions to set/reset @_Timers_@ (value in milliseconds)*/
-void @_LOWER:Name_@_RI_SET_@_Timers_@(asn1SccT_UInt32 *);
-void @_LOWER:Name_@_RI_RESET_@_Timers_@(void);
+// Functions to set/reset time "@_Timers_@" (parameter in milliseconds)
+extern void @_LOWER:Name_@_RI_SET_@_Timers_@(asn1SccT_UInt32 *);
+extern void @_LOWER:Name_@_RI_RESET_@_Timers_@(void);
 @@END_TABLE@@
 
 #ifdef __cplusplus

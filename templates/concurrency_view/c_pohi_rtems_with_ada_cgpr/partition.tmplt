@@ -107,7 +107,15 @@ configuration project RTEMS_WITH_ADA is
       Common_C_Linker_Switches :=
            ("--pipe",
             "-g",
+@@IF@@ @_CPU_Family_@ = gr740
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib",
+@@ELSIF@@  @_CPU_Family_@ = gr712rc
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr712rc/lib",
+@@ELSIF@@  @_CPU_Family_@ = leon2
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon2/lib",
+@@ELSE@@
             "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon3/lib",
+@@END_IF@@
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",
@@ -126,7 +134,15 @@ configuration project RTEMS_WITH_ADA is
        for Default_Switches ("Ada") use
            ("--pipe",
             "-g",
+@@IF@@ @_CPU_Family_@ = gr740
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib",
+@@ELSIF@@  @_CPU_Family_@ = gr712rc
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr712rc/lib",
+@@ELSIF@@  @_CPU_Family_@ = leon2
+            "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon2/lib",
+@@ELSE@@
             "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/leon3/lib",
+@@END_IF@@
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",

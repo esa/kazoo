@@ -6,7 +6,8 @@ with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
-     Ada.Strings.Fixed;
+     Ada.Strings.Fixed,
+     TASTE.Backend;
 
 use Ada.Directories;
 
@@ -18,11 +19,12 @@ package body TASTE.Concurrency_View is
       procedure Dump_Partition (Partition : CV_Partition) is
       begin
          for Block of Partition.Blocks loop
-            Put_Line (Output, "Protected Block : " & To_String (Block.Name));
-            for Provided of Block.Provided loop
+            Put_Line (Output, "Protected Block : "
+                      & To_String (Block.Ref_Function.Name));
+            for Provided of Block.Block_Provided loop
                Put_Line (Output, " |_ PI : " & To_String (Provided.Name));
             end loop;
-            for Required of Block.Required loop
+            for Required of Block.Ref_Function.Required loop
                Put_Line (Output, " |_ RI : " & To_String (Required.Name));
             end loop;
             for Thread of Block.Calling_Threads loop
@@ -34,7 +36,7 @@ package body TASTE.Concurrency_View is
                declare
                   P : constant Taste_Partition :=
                     Block.Node.Unsafe_Just.Find_Partition
-                      (To_String (Block.Name)).Unsafe_Just;
+                      (To_String (Block.Ref_Function.Name)).Unsafe_Just;
                begin
                   Put_Line (Output, " |_ Partition : " & To_String (P.Name));
                   Put_Line (Output, "   |_ Coverage       : "
@@ -78,7 +80,9 @@ package body TASTE.Concurrency_View is
    end Debug_Dump;
 
    --  This function translates a protected block into a template
-   function Prepare_Template (B : Protected_Block) return Block_As_Template is
+   function Prepare_Block_Template (B : Protected_Block)
+                                    return Block_As_Template
+   is
       Calling_Threads : Tag;
       Result          : Block_As_Template;
    begin
@@ -86,7 +90,7 @@ package body TASTE.Concurrency_View is
          Calling_Threads := Calling_Threads & Thread;
       end loop;
 
-      for PI of B.Provided loop
+      for PI of B.Block_Provided loop
          declare
             Basic : constant Translate_Set := PI.PI.Interface_To_Template
               & Assoc ("Protected_Block_Name", To_String (PI.Name))
@@ -101,18 +105,17 @@ package body TASTE.Concurrency_View is
          end;
       end loop;
 
-      for RI of B.Required loop
+      for RI of B.Ref_Function.Required loop
          Result.Required.Append (RI.Interface_To_Template
                                  & Assoc ("Calling_Threads", Calling_Threads));
       end loop;
 
-      Result.Header := +Assoc  ("Name",            To_String (B.Name))
-                       & Assoc ("Language",        B.Language)
+      Result.Header := B.Ref_Function.Function_To_Template.Header
                        & Assoc ("Calling_Threads", Calling_Threads)
                        & Assoc ("Node_Name",       To_String (B.Node.Value_Or
                          (Taste_Node'(Name => US (""), others => <>)).Name));
       return Result;
-   end Prepare_Template;
+   end Prepare_Block_Template;
 
    --  This function translates a thread definition into a template
    function To_Template (T : AADL_Thread) return Translate_Set is
@@ -331,9 +334,10 @@ package body TASTE.Concurrency_View is
 
                for B of Partition.Blocks loop
                   declare
-                     Block_Name   : constant String := To_String (B.Name);
+                     Block_Name   : constant String :=
+                       To_String (B.Ref_Function.Name);
                      Tmpl         : constant Block_As_Template :=
-                       B.Prepare_Template;
+                       B.Prepare_Block_Template;
                      Block_Assoc  : Translate_Set := Tmpl.Header;
                      Pro_PI_Tag   : Unbounded_String;
                      Unpro_PI_Tag : Unbounded_String;
@@ -347,7 +351,7 @@ package body TASTE.Concurrency_View is
                      Block_Check     : constant Boolean :=
                        Exists (Block_File_Id);
                      Block_Tag       : constant Translate_Set :=
-                       +Assoc ("Block_Name", B.Name);
+                       +Assoc ("Block_Name", Block_Name);
                      Block_File_Name : constant String :=
                        (if Block_Check
                         then Strip_String (Parse (Block_File_Id, Block_Tag))
@@ -355,7 +359,8 @@ package body TASTE.Concurrency_View is
                   begin
                      Block_Names     := Block_Names & Block_Name;
                      All_Block_Names := All_Block_Names & Block_Name;
-                     Block_Languages := Block_Languages & B.Language;
+                     Block_Languages := Block_Languages
+                       & TASTE.Backend.Language_Spelling (B.Ref_Function);
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Pro_PI_Tag := Pro_PI_Tag & Newline

@@ -2,6 +2,7 @@
 @@--
 @@-- @_Name_@             : Protected block name
 @@-- @_Language_@         : Implementation language
+@@-- ...all function attribute: Zip_File, etc... are also available
 @@-- @_Calling_Threads_@  : List of calling threads
 @@-- @_Node name_@        : Node name
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
@@ -13,6 +14,9 @@
 ../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb:	../@_LOWER:Name_@/SDL/src/@_LOWER:Name_@.pr ../@_LOWER:Name_@/SDL/src/system_structure.pr
 	# Call opengeode to generate the functional code
 	make -j -C ../@_LOWER:Name_@/SDL generate-code
+@@ELSIF@@ @_Zip_File_@ /= ""
+@_LOWER:Name_@:
+	# Here I should unzip @_Zip_File_@....
 @@ELSE@@
 @_LOWER:Name_@:
 	@# Placeholder if anything has to be done for this function coded in @_Language_@

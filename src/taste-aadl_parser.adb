@@ -280,7 +280,7 @@ package body TASTE.AADL_Parser is
          end if;
 
          --  Then recurse on its (Un)protected RIs.
-         for RI of Partition.Blocks (Block_Id).Required loop
+         for RI of Partition.Blocks (Block_Id).Ref_Function.Required loop
             if RI.RCM = Protected_Operation or RI.RCM = Unprotected_Operation
             then
                for Remote of RI.Remote_Interfaces loop
@@ -421,10 +421,9 @@ package body TASTE.AADL_Parser is
                else "");
 
             Block : Protected_Block :=
-              (Name     => F.Name,
-               Language => US (TASTE.Backend.Language_Spelling (F)),
-               Node     => Node,
-               others   => <>);
+              (Ref_Function => F,
+               Node         => Node,
+               others       => <>);
          begin
             if not Node.Has_Value then
                --  Ignore functions that are not mapped to a node/partition
@@ -472,8 +471,8 @@ package body TASTE.AADL_Parser is
                         end if;
                      end;
                   end loop;
-                  Block.Provided.Insert (Key      => To_String (PI.Name),
-                                         New_Item => New_PI);
+                  Block.Block_Provided.Insert (Key      => To_String (PI.Name),
+                                               New_Item => New_PI);
                end;
                if PI.RCM = Cyclic_Operation or PI.RCM = Sporadic_Operation then
                   declare
@@ -484,7 +483,7 @@ package body TASTE.AADL_Parser is
                         RCM                  => US (PI.RCM'Img),
                         Need_Mutex           => (F.Provided.Length > 1),
                         Entry_Port_Name      => PI.Name,
-                        Protected_Block_name => Block.Name,
+                        Protected_Block_name => Block.Ref_Function.Name,
                         Node                 => Block.Node,
                         PI                   => PI,
                         Output_Ports         => Get_Output_Ports (Model, F));
@@ -497,10 +496,9 @@ package body TASTE.AADL_Parser is
                end if;
                <<next_pi>>
             end loop;
-            Block.Required := F.Required;
             --  Add the block to the Concurrency View
             CV.Nodes (Node_Name).Partitions (Partition_Name).Blocks.Insert
-              (Key      => To_String (Block.Name),
+              (Key      => To_String (Block.Ref_Function.Name),
                New_Item => Block);
          end;
          <<Continue>>
@@ -516,7 +514,9 @@ package body TASTE.AADL_Parser is
             for B of Partition.Blocks loop
                if B.Calling_Threads.Length = 0 then
                   raise Concurrency_View_Error with
-                    "Function " & To_String (B.Name) & " has no active caller";
+                    "Function "
+                    & To_String (B.Ref_Function.Name)
+                    & " has no active caller";
                end if;
             end loop;
 

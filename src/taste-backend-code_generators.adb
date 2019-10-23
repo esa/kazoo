@@ -6,6 +6,7 @@ with Ada.Characters.Handling,
      TASTE.Parser_Utils;
 
 use Ada.Characters.Handling,
+    Ada.Containers,
     Ada.Exceptions,
     Ada.Directories,
     TASTE.Parser_Utils;
@@ -246,7 +247,7 @@ package body TASTE.Backend.Code_Generators is
                File_Tmpl  : constant Translate_Set :=
                   +Assoc  ("Name", Each.Name);
                --  Base output folder where code is generated
-               --  e.g. output/ada/src/
+               --  e.g. output/Ada/src/
                Output_Lang : constant String := Output_Base
                   & To_Lower (To_String (Each.Name))
                   & "/" & Language & "/";
@@ -308,15 +309,14 @@ package body TASTE.Backend.Code_Generators is
                         (Make_Name /= "" and Exists (Output_Dir & Make_Name));
 
                      --  Data needed to process trigger.tmplt
+                     --  Includes function attributes (name, zip file, etc)
+                     --  and the command line configuration (Use_POHIC, etc.)
                      Trig_Tmpl  : constant Translate_Set :=
-                        +Assoc  ("Name",     Each.Name)
-                        & Assoc ("Language", Language_Spelling (Each))
-                        & Assoc ("Is_Type",  Each.Is_Type)
-                        & Assoc ("Instance_Of",
-                                         Each.Instance_Of.Value_Or (US ("")))
-                        & Assoc ("C_Middleware", Model.Configuration.Use_POHIC)
-                        & Assoc ("Filename_Is_Present", Present_F)
-                        & Assoc ("Makefile_Is_Present", Present_M);
+                       Join_Sets (Model.Configuration.To_Template,
+                                  Template.Funcs.Element
+                                    (To_String (Each.Name)).Header)
+                       & Assoc ("Filename_Is_Present", Present_F)
+                       & Assoc ("Makefile_Is_Present", Present_M);
 
                      --  Trigger is set to True by the template
                      Trigger    : constant Boolean :=
@@ -389,13 +389,14 @@ package body TASTE.Backend.Code_Generators is
          ASN1_Modules := ASN1_Modules & Each.ASN1_Module;
          Values       := Values       & Each.Default_Value;
       end loop;
-      return Result : constant Translate_Set := +Assoc ("Name",  F.Name)
-                                      & Assoc ("Sort_Set",       Unique_Sorts)
-                                      & Assoc ("Module_Set",     Corr_Module)
-                                      & Assoc ("CP_Name",        Names)
-                                      & Assoc ("CP_Sort",        Sorts)
-                                      & Assoc ("CP_ASN1_Module", ASN1_Modules)
-                                      & Assoc ("CP_Value",       Values);
+      return Result : constant Translate_Set :=
+        +Assoc ("Name",            F.Name)
+        & Assoc ("Sort_Set",       Unique_Sorts)
+        & Assoc ("Module_Set",     Corr_Module)
+        & Assoc ("CP_Name",        Names)
+        & Assoc ("CP_Sort",        Sorts)
+        & Assoc ("CP_ASN1_Module", ASN1_Modules)
+        & Assoc ("CP_Value",       Values);
    end CP_Template;
 
    --  Makefiles need the function name and the list of ASN.1 files/modules
@@ -409,175 +410,13 @@ package body TASTE.Backend.Code_Generators is
                       & Assoc ("Instance_Of",
                                 F.Instance_Of.Value_Or (US (""))));
 
-   function Func_Template (F : Taste_Terminal_Function) return Func_As_Template
-   is
-      use Ctxt_Params;
-      use Template_Vectors;
-      Result               : Func_As_Template;
-      List_Of_PIs          : Tag;
-      List_Of_RIs          : Tag;
-      List_Of_Sync_PIs     : Tag;
-      List_Of_ASync_PIs,
-      ASync_PI_Param_Name,
-      ASync_PI_Param_Type  : Vector_Tag;
-      List_Of_Sync_RIs,
-      Sync_RIs_Parent      : Vector_Tag;   --  Parent function of the sync RI
-      List_Of_ASync_RIs,
-      ASync_RIs_Parent,
-      ASync_RI_Param_Name,
-      ASync_RI_Param_Type  : Vector_Tag;   --  Parent function of the async RI
-      Timers               : Tag;
-      Property_Names,
-      Property_Values      : Vector_Tag;
-      CP_Names,            --  CP = Context Parameters
-      CP_Types,
-      CP_Values,
-      CP_Asn1Modules,
-      CP_Filenames         : Vector_Tag;
-      PIs_Have_Params,     --  True if at least one PI has an ASN.1 parameter
-      RIs_Have_Params      : Boolean := False;   -- Same for RI
-      Interface_Tmplt      : Translate_Set;
-   begin
-      Result.Header := +Assoc ("Name", F.Name)
-        & Assoc ("Language", Language_Spelling (F))
-        & Assoc ("Has_Context", (Length (F.Context_Params) > 0));
-
-      --  Add context parameters details
-      for Each of F.Context_Params loop
-         CP_Names       := CP_Names       & Each.Name;
-         CP_Types       := CP_Types       & Each.Sort;
-         CP_Values      := CP_Values      & Each.Default_Value;
-         CP_Asn1Modules := CP_Asn1Modules & Each.ASN1_Module;
-         CP_Filenames   := CP_Filenames
-            & Each.ASN1_File_Name.Value_Or (US (""));
-      end loop;
-
-      --  Add all function user-defined properties
-      for Each of F.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
-      end loop;
-
-      --  Add list of all PI names (both synchronous and asynchronous)
-      for Each of F.Provided loop
-         --  Note: some backends need to have access to the function
-         --  user defined properties, and implementation language
-         --  They are added here. At the moment the user-defined properties
-         --  of the interfaces themselves are not part of the template
-         --  This could be be added later if needed.
-         Interface_Tmplt := Each.Interface_To_Template
-                            & Assoc ("Direction",       "PI")
-                            & Assoc ("Property_Names",  Property_Names)
-                            & Assoc ("Property_Values", Property_Values)
-                            & Assoc ("Language",        Language_Spelling (F));
-         Result.Provided := Result.Provided & Interface_Tmplt;
-         List_Of_PIs     := List_Of_PIs & Each.Name;
-         case Each.RCM is
-            when Cyclic_Operation | Sporadic_Operation =>
-               if not Each.Is_Timer then
-                  List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
-                  if not Each.Params.Is_Empty then
-                     ASync_PI_Param_Name := ASync_PI_Param_Name
-                       & Each.Params.First_Element.Name;
-                     ASync_PI_Param_Type := ASync_PI_Param_Type &
-                       Each.Params.First_Element.Sort;
-                  else
-                     ASync_PI_Param_Name := ASync_PI_Param_Name & "";
-                     ASync_PI_Param_Type := ASync_PI_Param_Type & "";
-                  end if;
-               end if;
-            when others =>
-               List_Of_Sync_PIs := List_Of_Sync_PIs & Each.Name;
-         end case;
-         if Each.Params.Length > 0 then
-            PIs_Have_Params := True;
-         end if;
-      end loop;
-
-      --  Add list of all RI names (both synchronous and asynchronous)
-      for Each of F.Required loop
-         Interface_Tmplt := Each.Interface_To_Template
-                            & Assoc ("Direction", "RI")
-                            & Assoc ("Property_Names", Property_Names)
-                            & Assoc ("Property_Values", Property_Values)
-                            & Assoc ("Language", Language_Spelling (F));
-         Result.Required := Result.Required & Interface_Tmplt;
-         List_Of_RIs     := List_Of_RIs & Each.Name;
-         case Each.RCM is
-            when Cyclic_Operation | Sporadic_Operation =>
-               List_Of_ASync_RIs := List_Of_ASync_RIs & Each.Name;
-               if not Each.Params.Is_Empty then
-                  ASync_RI_Param_Name := ASync_RI_Param_Name
-                    & Each.Params.First_Element.Name;
-                  ASync_RI_Param_Type := ASync_RI_Param_Type &
-                    Each.Params.First_Element.Sort;
-               else
-                  ASync_RI_Param_Name := ASync_RI_Param_Name & "";
-                  ASync_RI_Param_Type := ASync_RI_Param_Type & "";
-               end if;
-               --  Find remote function name (only one remote per RI)
-               if not Each.Remote_Interfaces.Is_Empty then
-                  --  We can spot non-connected RIs..
-                  Async_RIs_Parent  := Async_RIs_Parent
-                    & Each.Remote_Interfaces.First_Element.Function_Name;
-               else
-                  Async_RIs_Parent := ASync_RIs_Parent & "";
-               end if;
-            when others =>
-               List_Of_Sync_RIs  := List_Of_Sync_RIs & Each.Name;
-               if not Each.Remote_Interfaces.Is_Empty then
-                  Sync_RIs_Parent   := Sync_RIs_Parent
-                     & Each.Remote_Interfaces.First_Element.Function_Name;
-               end if;
-         end case;
-         if Each.Params.Length > 0 then
-            RIs_Have_Params := True;
-         end if;
-      end loop;
-
-      --  Add list of timers (names)
-      for Each of F.Timers loop
-         Timers := Timers & Each;
-      end loop;
-
-      --  Setup the mapping for the template
-      Result.Header := Result.Header
-        & Assoc ("List_Of_PIs",         List_Of_PIs)
-        & Assoc ("List_Of_RIs",         List_Of_RIs)
-        & Assoc ("List_Of_Sync_PIs",    List_Of_Sync_PIs)
-        & Assoc ("List_Of_Sync_RIs",    List_Of_Sync_RIs)
-        & Assoc ("Sync_RIs_Parent",     Sync_RIs_Parent)
-        & Assoc ("List_Of_ASync_PIs",   List_Of_ASync_PIs)
-        & Assoc ("ASync_PI_Param_Name", ASync_PI_Param_Name)
-        & Assoc ("ASync_PI_Param_Type", ASync_PI_Param_Type)
-        & Assoc ("List_Of_ASync_RIs",   List_Of_ASync_RIs)
-        & Assoc ("ASync_RI_Param_Name", ASync_RI_Param_Name)
-        & Assoc ("ASync_RI_Param_Type", ASync_RI_Param_Type)
-        & Assoc ("Async_RIs_Parent",    Async_RIs_Parent)
-        & Assoc ("Property_Names",      Property_Names)
-        & Assoc ("Property_Values",     Property_Values)
-        & Assoc ("CP_Names",            CP_Names)
-        & Assoc ("CP_Types",            CP_Types)
-        & Assoc ("CP_Values",           CP_Values)
-        & Assoc ("CP_Asn1Modules",      CP_Asn1Modules)
-        & Assoc ("CP_Asn1Filenames",    CP_Filenames)
-        & Assoc ("Is_Type",             F.Is_Type)
-        & Assoc ("Instance_Of",         F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",              Timers)
-        & Assoc ("PIs_Have_Params",     PIs_Have_Params)
-        & Assoc ("RIs_Have_Params",     RIs_Have_Params);
-
-      return Result;
-   end Func_Template;
-
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template is
-      use Func_Maps;
       Result : IV_As_Template;
    begin
       for Each of IV.Flat_Functions loop
          Result.Funcs.Insert (Key      => To_String (Each.Name),
-                              New_Item => Func_Template (Each));
+                              New_Item => Each.Function_To_Template);
       end loop;
       for C of IV.Connections loop
          Result.Callers  := Result.Callers  & C.Caller;

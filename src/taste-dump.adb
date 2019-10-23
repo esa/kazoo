@@ -9,6 +9,7 @@ with Ada.Directories,
      Ada.Strings.Unbounded,
      Templates_Parser,
      TASTE.Parser_Utils,
+     TASTE.Interface_View,
      TASTE.Backend.Code_Generators;
 
 use Ada.Directories,
@@ -16,6 +17,7 @@ use Ada.Directories,
     Ada.Strings.Unbounded,
     Templates_Parser,
     TASTE.Parser_Utils,
+    TASTE.Interface_View,
     TASTE.Backend.Code_Generators;
 
 package body TASTE.Dump is

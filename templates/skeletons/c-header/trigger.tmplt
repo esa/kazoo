@@ -14,7 +14,10 @@
 @@-- @_Language_@            : Implementation language for the function
 @@-- @_Filename_Is_Present_@ : True if target function output already exists
 @@-- @_Makefile_Is_Present_@ : True if target build script already exists
-@@-- @_C_Middleware_@        : True if middleware is in C (e.g. PO-HI-C)
+@@-- @_Zip_File_@            : Optional path to zip file
+@@-- @_Use_POHIC_@           : Command line configuration
+@@-- In addition all other command line configuration values are available
+@@-- as well as all function attributes
 @@IF@@ @_Language_@ = "C"
 TRUE
 @@END_IF@@

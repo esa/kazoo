@@ -36,10 +36,9 @@ package TASTE.Concurrency_View is
 
    type Protected_Block is tagged
       record
-         Name            : Unbounded_String;
-         Language        : Unbounded_String;
-         Provided        : Protected_Block_PIs.Map;
-         Required        : Interfaces_Maps.Map;
+         Ref_Function    : Taste_Terminal_Function;
+         Block_Provided  : Protected_Block_PIs.Map;
+         --  Required interfaces are defined in Ref_Function
          Calling_Threads : String_Sets.Set;
          Node            : Option_Node.Option;
       end record;
@@ -52,7 +51,8 @@ package TASTE.Concurrency_View is
          Unprotected_Provided : Translate_Sets.Vector;
          Required             : Translate_Sets.Vector;
       end record;
-   function Prepare_Template (B : Protected_Block) return Block_As_Template;
+   function Prepare_Block_Template (B : Protected_Block)
+                                    return Block_As_Template;
 
    package Protected_Blocks is new Indefinite_Ordered_Maps
      (String, Protected_Block);

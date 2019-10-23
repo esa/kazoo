@@ -1,5 +1,5 @@
 --  *************************** taste aadl parser ***********************  --
---  (c) 2017 European Space Agency - maxime.perrotin@esa.int
+--  (c) 2017-2019 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Interface View parser
@@ -80,8 +80,8 @@ package TASTE.Interface_View is
 
    type ASN1_Parameter is
       record
-         Name            : Unbounded_String;
-         Sort            : Unbounded_String;
+         Name,
+         Sort,
          ASN1_Module     : Unbounded_String;
          ASN1_Basic_Type : Supported_ASN1_Basic_Type;
          ASN1_File_Name  : Unbounded_String;
@@ -95,7 +95,7 @@ package TASTE.Interface_View is
    --  is connected. There can be several, but connections are optional.
    type Remote_Entity is
       record
-         Function_Name  : Unbounded_String;
+         Function_Name,
          Interface_Name : Unbounded_String;
       end record;
 
@@ -132,12 +132,23 @@ package TASTE.Interface_View is
 
    package Ctxt_Params is new Indefinite_Vectors (Natural, Context_Parameter);
 
-   type Taste_Terminal_Function is
+   --  Type representing a function in the form of a template (for backends)
+   package Template_Vectors is new Indefinite_Vectors (Natural, Translate_Set);
+   type Func_As_Template is
+      record
+         --  Header includes all function attributes (name, language, etc.)
+         Header   : Translate_Set;
+         Provided,
+         Required : Template_Vectors.Vector;
+      end record;
+
+   package Func_Maps is new Indefinite_Ordered_Maps (String, Func_As_Template);
+
+   type Taste_Terminal_Function is tagged
       record
          Name            : Unbounded_String;
          Context         : Unbounded_String      := Null_Unbounded_String;
          Full_Prefix     : Option_UString.Option := Option_UString.Nothing;
-         --  Language        : Supported_Source_Language;
          Language        : Unbounded_String;
          Zip_File        : Option_UString.Option := Option_UString.Nothing;
          Context_Params  : Ctxt_Params.Vector;
@@ -150,6 +161,9 @@ package TASTE.Interface_View is
          Is_Type         : Boolean := False;
          Instance_Of     : Option_UString.Option := Option_UString.Nothing;
       end record;
+
+   function Function_To_Template (F : Taste_Terminal_Function)
+                           return Func_As_Template;
 
    --  Key for the function map is case insensitive
    function "="(Left, Right : Case_Insensitive_String) return Boolean
@@ -186,7 +200,7 @@ package TASTE.Interface_View is
    --  Function to build up the Ada AST by transforming the one from Ocarina
    function Parse_Interface_View (Interface_Root : Node_Id)
                                   return Complete_Interface_View
-   with Pre => Interface_Root /= No_Node;
+     with Pre => Interface_Root /= No_Node;
 
    --  Model transformation API: Rename a function
    procedure Rename_Function (IV       : in out Complete_Interface_View;

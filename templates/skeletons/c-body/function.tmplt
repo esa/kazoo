@@ -2,6 +2,7 @@
 @@--
 @@-- @_Name_@                : The name of the function
 @@-- @_Language_@            : The implementation language
+@@-- @_Zip_File_@            : Optional zip file containing the source code
 @@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
 @@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces

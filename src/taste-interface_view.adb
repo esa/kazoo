@@ -5,6 +5,7 @@
 --  Interface View parser
 
 with Ada.Exceptions,
+     Ada.Directories,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Options,
@@ -1043,7 +1044,9 @@ package body TASTE.Interface_View is
 
       --  Setup the mapping for the template (processed by function.tmplt)
       Result.Header := Result.Header
-        & Assoc ("Zip_File",            F.Zip_File.Value_Or (US ("")))
+        & Assoc ("Zip_File",            (if not F.Zip_File.Has_Value then ""
+                 else Ada.Directories.Full_Name
+                   (To_String (F.Zip_File.Unsafe_Just))))
         & Assoc ("List_Of_PIs",         List_Of_PIs)
         & Assoc ("List_Of_RIs",         List_Of_RIs)
         & Assoc ("List_Of_Sync_PIs",    List_Of_Sync_PIs)

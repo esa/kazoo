@@ -383,6 +383,8 @@ package body TASTE.Concurrency_View is
 
                      Block_Assoc :=
                        Join_Sets (Block_Assoc, CV.Configuration.To_Template)
+                       & Assoc ("Partition_Name",
+                                Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
                        & Assoc ("Required",        RI_Tag);

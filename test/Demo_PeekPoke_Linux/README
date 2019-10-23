@@ -1,0 +1,3 @@
+Test the PeekPoke functionality with imported component from TASTE V2
+
+Compile and link with -no-pie to make sure the symbols are absolute in the binaries

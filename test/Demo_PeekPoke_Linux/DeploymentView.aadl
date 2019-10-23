@@ -1,0 +1,84 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS x86_partition
+END x86_partition;
+
+PROCESS IMPLEMENTATION x86_partition.others
+END x86_partition.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe;
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe_Console;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::FunctionName => "Function1";
+  };
+  IV_Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::FunctionName => "Function2";
+  };
+  IV_TASTE_Probe : SYSTEM interfaceview::IV::Peek_Poke::TASTE_Probe::TASTE_Probe.others {
+    Taste::FunctionName => "TASTE_Probe";
+  };
+  IV_TASTE_Probe_Console : SYSTEM interfaceview::IV::Peek_Poke::TASTE_Probe_Console::TASTE_Probe_Console.others {
+    Taste::FunctionName => "TASTE_Probe_Console";
+  };
+  x86_partition : PROCESS deploymentview::DV::Node1::x86_partition.others {
+    Taste::coordinates => "103490 75961 138866 95559";
+    Deployment::Port_Number => 0;
+  };
+  x86_native : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "99068 70361 143288 98359";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_Function1;
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_Function2;
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_TASTE_Probe;
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_TASTE_Probe_Console;
+  Actual_Processor_Binding => (reference (x86_native)) APPLIES TO x86_partition;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "93541 62361 148815 102359";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

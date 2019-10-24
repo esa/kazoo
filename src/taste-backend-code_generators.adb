@@ -69,8 +69,9 @@ package body TASTE.Backend.Code_Generators is
          Output_File      : File_Type;
          Languages        : Set;
          Unique_Languages : Tag;
-         Functions_Tag    : Vector_Tag;
-         Language_Tag     : Vector_Tag;
+         Functions_Tag,
+         Language_Tag,
+         Has_Context_Param_Tag,
          Is_Type_Tag      : Vector_Tag;
          Content_Set      : Translate_Set;
          Tmplt            : constant String := Prefix_Skeletons
@@ -84,18 +85,21 @@ package body TASTE.Backend.Code_Generators is
             Functions_Tag := Functions_Tag & Each.Name;
             Language_Tag  := Language_Tag & Language_Spelling (Each);
             Is_Type_Tag   := Is_Type_Tag & Each.Is_Type;
+            Has_Context_Param_Tag := Has_Context_Param_Tag
+              & (not Each.Context_Params.Is_Empty);
          end loop;
          for Each of Languages loop
             Unique_Languages := Unique_Languages & To_String (Each);
          end loop;
-         Content_Set := +Assoc  ("Function_Names",   Functions_Tag)
-                        & Assoc ("Language",         Language_Tag)
-                        & Assoc ("Is_Type",          Is_Type_Tag)
-                        & Assoc ("CP_Files",         All_CP_Files)
-                        & Assoc ("Unique_Languages", Unique_Languages)
-                        & Assoc ("ASN1_Files",       Get_ASN1_File_List)
-                        & Assoc ("ACN_Files",        Get_ACN_File_List)
-                        & Assoc ("ASN1_Modules",     Get_Module_List);
+         Content_Set := +Assoc  ("Function_Names",    Functions_Tag)
+                        & Assoc ("Language",          Language_Tag)
+                        & Assoc ("Is_Type",           Is_Type_Tag)
+                        & Assoc ("CP_Files",          All_CP_Files)
+                        & Assoc ("Has_Context_Param", Has_Context_Param_Tag)
+                        & Assoc ("Unique_Languages",  Unique_Languages)
+                        & Assoc ("ASN1_Files",        Get_ASN1_File_List)
+                        & Assoc ("ACN_Files",         Get_ACN_File_List)
+                        & Assoc ("ASN1_Modules",      Get_Module_List);
          Put_Debug ("Generating global Makefile");
          Create (File => Output_File,
                  Mode => Out_File,

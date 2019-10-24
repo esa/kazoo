@@ -3,6 +3,7 @@
 @@-- @_Function_Names_@      : Combined table: list of fuction names...
 @@-- @_Language_@            : ... and corresponding implementation language
 @@-- @_Is_Type_@             : ... and flag if it is a function type
+@@-- @_Has_Context_Param_@   : ... and flag to indicate if function has context parameters        
 @@-- @_CP_Files_@            : List of all context parameters ASN.1 files
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
@@ -208,13 +209,18 @@ dataview/Ada/built: ${DATAVIEW_UNIQ} ${CP_FILES}
 	mkdir -p $(dir $@)
 	asn2dataModel -o $(dir $@) -toAda $^
 	touch $@
-	cd dataview/Ada
-	rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
+	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
         @@END_IF@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@
 	@@IF@@ @_Language_@ = "SDL"
-	ln -fs ../../../$^ @_LOWER:Function_Names_@/@_Language_@/src
+        @@IF@@ @_Has_Context_Param_@
+	# SDL function with context parameters: put them in dataview
+	sed -e '$$s/$$/\n/' -s ${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/SDL/Context-@_LOWER:REPLACE_ALL(_/-):Function_Names_@.asn > @_LOWER:Function_Names_@/SDL/src/dataview-uniq.asn
+        @@ELSE@@
+        # Copy the dataview to SDL function @_Function_Names_@ (no context parameters)
+	cp -u ${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/SDL/src
+        @@END_IF@@
 	@@END_IF@@
 	@@END_TABLE@@
 

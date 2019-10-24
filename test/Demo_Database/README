@@ -1,0 +1,5 @@
+This demo is based on Test_Ada_GUI
+
+In addition it crease an SQL Database that is detected by the GUI
+The GUI offers to store TM/TC to the database and to load TC from it.
+

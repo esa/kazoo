@@ -129,6 +129,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_run_ada
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_run_ada;
 
 SUBPROGRAM IMPLEMENTATION PI_run_ada.others
@@ -141,6 +143,8 @@ FEATURES
   PI_run_ada : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function_in_Ada::PI_run_ada.others {
     Taste::coordinates => "171 248";
     Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "run_ada";
   };
 PROPERTIES
@@ -160,12 +164,52 @@ END Function_in_Ada.others;
 
 END interfaceview::IV::Function_in_Ada;
 
+PACKAGE interfaceview::IV::Function_in_SDL
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SYSTEM Function_in_SDL
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function_in_SDL::PI_pulse.others {
+    Taste::coordinates => "418 270";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Function_in_SDL;
+
+SYSTEM IMPLEMENTATION Function_in_SDL.others
+SUBCOMPONENTS
+  abc : DATA DataView::T_INTEGER {
+    Taste::FS_Default_Value => "42";
+  };
+END Function_in_SDL.others;
+
+END interfaceview::IV::Function_in_SDL;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
 WITH interfaceview::IV::cyclic_function;
 WITH interfaceview::IV::passive_function;
 WITH interfaceview::IV::Function_in_Ada;
+WITH interfaceview::IV::Function_in_SDL;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -185,6 +229,9 @@ SUBCOMPONENTS
   };
   Function_in_Ada : SYSTEM interfaceview::IV::Function_in_Ada::Function_in_Ada.others {
     Taste::coordinates => "129 248 274 344";
+  };
+  Function_in_SDL : SYSTEM interfaceview::IV::Function_in_SDL::Function_in_SDL.others {
+    Taste::coordinates => "346 270 539 424";
   };
 CONNECTIONS
   passive_function_PI_compute_data_cyclic_function_RI_compute_data : SUBPROGRAM ACCESS passive_function.PI_compute_data -> cyclic_function.RI_compute_data {

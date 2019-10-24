@@ -25,6 +25,7 @@ PUBLIC
 WITH interfaceview::IV::cyclic_function;
 WITH interfaceview::IV::passive_function;
 WITH interfaceview::IV::Function_in_Ada;
+WITH interfaceview::IV::Function_in_SDL;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -45,6 +46,9 @@ SUBCOMPONENTS
   IV_Function_in_Ada : SYSTEM interfaceview::IV::Function_in_Ada::Function_in_Ada.others {
     Taste::FunctionName => "Function_in_Ada";
   };
+  IV_Function_in_SDL : SYSTEM interfaceview::IV::Function_in_SDL::Function_in_SDL.others {
+    Taste::FunctionName => "Function_in_SDL";
+  };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "112762 62064 152193 88336";
     Deployment::Port_Number => 0;
@@ -56,6 +60,7 @@ PROPERTIES
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_cyclic_function;
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_passive_function;
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function_in_Ada;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function_in_SDL;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 

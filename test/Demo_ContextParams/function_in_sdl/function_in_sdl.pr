@@ -1,0 +1,19 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Function_In_Sdl;
+    /* CIF TEXT (538, 121), (306, 187) */
+    -- Text area for declarations and comments
+    
+    dcl foo T_INTEGER;
+    /* CIF ENDTEXT */
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF task (241, 65), (227, 35) */
+        task foo  := function_in_sdl_ctxt.abc;;
+        /* CIF PROCEDURECALL (181, 120), (347, 35) */
+        call writeln ('[SDL] Startup with context parameter: ', foo);
+        /* CIF NEXTSTATE (320, 170), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (450, 10), (70, 35) */
+    state Wait;
+    endstate;
+endprocess Function_In_Sdl;

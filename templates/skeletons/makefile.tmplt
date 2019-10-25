@@ -194,6 +194,9 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
         @@END_IF@@  @@-- End of PeekPoke-specifics
         @@-- Add symbolic link to the SQL Database interface for the GUIs, if needed
 	if [ -f sql_db/db.info ]; then cd binaries/@_LOWER:Function_Names_@_GUI && ln -fs ../../sql_db; fi
+        @@-- Copy default UserWidgets.py file for user to customise the GUI widgets
+	# User can edit at will the customisable user widgets python module:
+	cp -u $(shell taste-config --prefix)/share/AutoGUI/UserWidgets.py binaries/@_LOWER:Function_Names_@_GUI
         @@END_IF@@  @@-- End of GUI-specifics
         @@END_TABLE@@
 	touch $@

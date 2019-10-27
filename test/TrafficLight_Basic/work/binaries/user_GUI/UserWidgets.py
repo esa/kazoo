@@ -21,7 +21,7 @@ from asn1_value_editor import UserWidgetsCommon
 
 # ** IMPORTANT **
 # you must list here the classes you want to expose to the GUI:
-__all__ = ['PedestrianButton', 'TrafficLight']
+__all__ = ['PedestrianButton', 'TrafficLight', 'Pedestrian']
 
 
 class PedestrianButton(UserWidgetsCommon.TC):
@@ -103,8 +103,44 @@ class TrafficLight(UserWidgetsCommon.TM):
         ''' Return true if this particular editor is compatible with this
         widget'''
         return editor.messageName == "Color"
+
+class Pedestrian(UserWidgetsCommon.TM):
+    '''Save telemetries in the database'''
+    name = 'View Traffic Light'  # name for the combo button in the GUI
+
+    def __init__(self, parent=None):
+        ''' Initialise the widget '''
+        super(Pedestrian, self).__init__(parent)
+        self.widget = QtGui.QLabel()
+        self.colorMap = { DV.wait: QtGui.QPixmap ("wait.png"),
+                          DV.go: QtGui.QPixmap ("go.png")}
+        self.widget.setPixmap (self.colorMap[DV.wait])
+        self.setWidget(self.widget)
+        self.setWindowTitle(parent.treeItem.text())
+        self.show()
+
+    @Slot()
+    def new_tm(self):
+        ''' Slot called when a TM has been received in the editor '''
+        # Nothing to do, the update() function does nothing thread-related
+        # that would need to be done here
+        pass
+
+    def update(self, value):
+        ''' Receive ASN.1 value '''
+        status = value.Get()
+        self.widget.setPixmap (self.colorMap[status])
+
+    @staticmethod
+    def applicable():
+        ''' Return True to enable this widget '''
         return True
 
+    @staticmethod
+    def editorIsApplicable(editor):
+        ''' Return true if this particular editor is compatible with this
+        widget'''
+        return editor.messageName == "Info_User"
 
 if __name__ == '__main__':
     print 'This module can only be imported from the main TASTE guis'

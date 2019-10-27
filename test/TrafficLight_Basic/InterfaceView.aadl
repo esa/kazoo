@@ -1,0 +1,241 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Controller
+PUBLIC
+
+WITH interfaceview::IV::User;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Button
+FEATURES
+  req : IN PARAMETER DataView::Command {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Button;
+
+SUBPROGRAM IMPLEMENTATION PI_Button.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Button.others;
+
+SUBPROGRAM PI_Initialize
+FEATURES
+  a : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Initialize;
+
+SUBPROGRAM IMPLEMENTATION PI_Initialize.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Initialize.others;
+
+SUBPROGRAM RI_Color
+FEATURES
+  current_color : IN PARAMETER DataView::TL_Color {
+    Taste::encoding => UPER;
+  };
+END RI_Color;
+
+SUBPROGRAM IMPLEMENTATION RI_Color.others
+END RI_Color.others;
+
+SUBPROGRAM RI_Info_User
+FEATURES
+  status : IN PARAMETER DataView::P_Light {
+    Taste::encoding => UPER;
+  };
+END RI_Info_User;
+
+SUBPROGRAM IMPLEMENTATION RI_Info_User.others
+END RI_Info_User.others;
+
+SYSTEM Controller
+FEATURES
+  PI_Button : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Button.others {
+    Taste::coordinates => "111492 63463";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 10 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Button";
+  };
+  PI_Initialize : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Initialize.others {
+    Taste::coordinates => "111492 88663";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Initialize";
+  };
+  RI_Color : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Color.others {
+    Taste::coordinates => "111492 68188";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Color";
+    Taste::labelInheritance => "true";
+  };
+  RI_Info_User : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Info_User.others {
+    Taste::coordinates => "111492 79213";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Info_User";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Controller;
+
+SYSTEM IMPLEMENTATION Controller.others
+SUBCOMPONENTS
+  clock : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Controller.others;
+
+END interfaceview::IV::Controller;
+
+PACKAGE interfaceview::IV::User
+PUBLIC
+
+WITH interfaceview::IV::Controller;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Color
+FEATURES
+  current_color : IN PARAMETER DataView::TL_Color {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Color;
+
+SUBPROGRAM IMPLEMENTATION PI_Color.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Color.others;
+
+SUBPROGRAM PI_Info_User
+FEATURES
+  status : IN PARAMETER DataView::P_Light {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Info_User;
+
+SUBPROGRAM IMPLEMENTATION PI_Info_User.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Info_User.others;
+
+SUBPROGRAM RI_Button
+FEATURES
+  req : IN PARAMETER DataView::Command {
+    Taste::encoding => UPER;
+  };
+END RI_Button;
+
+SUBPROGRAM IMPLEMENTATION RI_Button.others
+END RI_Button.others;
+
+SUBPROGRAM RI_Initialize
+FEATURES
+  a : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => UPER;
+  };
+END RI_Initialize;
+
+SUBPROGRAM IMPLEMENTATION RI_Initialize.others
+END RI_Initialize.others;
+
+SYSTEM User
+FEATURES
+  PI_Color : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Color.others {
+    Taste::coordinates => "140941 67874";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Color";
+  };
+  PI_Info_User : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Info_User.others {
+    Taste::coordinates => "140941 77324";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Info_User";
+  };
+  RI_Button : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Button.others {
+    Taste::coordinates => "140941 61574";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Button";
+    Taste::labelInheritance => "true";
+  };
+  RI_Initialize : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Initialize.others {
+    Taste::coordinates => "140941 88349";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Initialize";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END User;
+
+SYSTEM IMPLEMENTATION User.others
+END User.others;
+
+END interfaceview::IV::User;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Controller;
+WITH interfaceview::IV::User;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Controller : SYSTEM interfaceview::IV::Controller::Controller.others {
+    Taste::coordinates => "85823 58738 111492 90391";
+  };
+  User : SYSTEM interfaceview::IV::User::User.others {
+    Taste::coordinates => "140941 58424 168342 91966";
+  };
+CONNECTIONS
+  Controller_PI_Button_User_RI_Button : SUBPROGRAM ACCESS Controller.PI_Button -> User.RI_Button {
+    Taste::coordinates => "140941 61574 126216 61574 126216 63463 111492 63463";
+  };
+  Controller_PI_Initialize_User_RI_Initialize : SUBPROGRAM ACCESS Controller.PI_Initialize -> User.RI_Initialize {
+    Taste::coordinates => "140941 88349 126216 88349 126216 88663 111492 88663";
+  };
+  User_PI_Color_Controller_RI_Color : SUBPROGRAM ACCESS User.PI_Color -> Controller.RI_Color {
+    Taste::coordinates => "111492 68188 126216 68188 126216 67874 140941 67874";
+  };
+  User_PI_Info_User_Controller_RI_Info_User : SUBPROGRAM ACCESS User.PI_Info_User -> Controller.RI_Info_User {
+    Taste::coordinates => "111492 79213 126216 79213 126216 77324 140941 77324";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

@@ -51,6 +51,6 @@ test:
 	@$(MAKE) -C test
 
 clean:
-	rm -rf obj templates-parser $(exec) *~
+	rm -rf obj $(exec) *~
 
 .PHONY: install clean build edit test templatesParser

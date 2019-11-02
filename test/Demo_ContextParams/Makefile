@@ -14,7 +14,7 @@ ada:	work/glue_built_ada
 	cp passive_function/passive_function.c work_ada/passive_function/C/src
 	cp cyclic_function/cyclic_function.c work_ada/cyclic_function/C/src
 	cp function_in_ada/function_in_ada.adb work_ada/function_in_ada/Ada/src
-	cp function_in_sdl/function_in_sdl.pr work/function_in_sdl/SDL/src
+	cp function_in_sdl/function_in_sdl.pr work_ada/function_in_sdl/SDL/src
 	$(MAKE) -C work_ada
 
 skeletons:	InterfaceView.aadl DataView.aadl

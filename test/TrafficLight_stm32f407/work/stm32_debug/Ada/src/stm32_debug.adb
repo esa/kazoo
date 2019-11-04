@@ -40,22 +40,33 @@ with Interfaces;             use Interfaces;
 
 package body STM32_Debug is
 
-   Transceiver    : USART renames USART_2;
-   Transceiver_AF : constant STM32.GPIO_Alternate_Function := GPIO_AF_USART2_7;
+    
+--  PA2/PA3 are the GPIOs corresponding to the ftdi of the discovery shield
+--  they are used for taste GUI communication
+--  use PC6/PC7 for the debug printf
 
-   TX_Pin         : constant GPIO_Point           := PA2;
-   RX_Pin         : constant GPIO_Point           := PA3;
+--   Transceiver    : USART renames USART_2;
+--   Transceiver_AF : constant STM32.GPIO_Alternate_Function := GPIO_AF_USART2_7;
+--   TX_Pin         : constant GPIO_Point           := PA2;
+--   RX_Pin         : constant GPIO_Point           := PA3;
+--   Controller     : DMA_Controller                renames DMA_1;
+--   Tx_Channel     : constant DMA_Channel_Selector := Channel_4;
+--   Tx_Stream      : constant DMA_Stream_Selector  := Stream_6;
+--   Rx_Channel     : constant DMA_Channel_Selector := Channel_5;
+--   Rx_Stream      : constant DMA_Stream_Selector  := Stream_5;
+--    USART_IRQ      : constant Interrupt_ID := USART2_Interrupt;
 
-   Controller     : DMA_Controller                renames DMA_1;
-   Tx_Channel     : constant DMA_Channel_Selector := Channel_4;
-   Tx_Stream      : constant DMA_Stream_Selector  := Stream_6;
-
+   TX_Pin         : constant GPIO_Point           := PC6;
+   RX_Pin         : constant GPIO_Point           := PC7;
+   Controller     : DMA_Controller                renames DMA_2;
+   Tx_Channel     : constant DMA_Channel_Selector := Channel_5;
+   Tx_Stream      : constant DMA_Stream_Selector  := Stream_7;
    Rx_Channel     : constant DMA_Channel_Selector := Channel_5;
-   Rx_Stream      : constant DMA_Stream_Selector  := Stream_5;
+   Rx_Stream      : constant DMA_Stream_Selector  := Stream_1;
+   USART_IRQ      : constant Interrupt_ID := USART6_Interrupt;
+   Transceiver    : USART renames USART_6;
+   Transceiver_AF : constant STM32.GPIO_Alternate_Function := GPIO_AF_USART6_8;
 
-   --  DMA_Tx_IRQ : constant Interrupt_ID := DMA1_Stream6_Interrupt;
-   --  DMA_Rx_IRQ : constant Interrupt_ID := DMA1_Stream5_Interrupt;
-   USART_IRQ      : constant Interrupt_ID := USART2_Interrupt;
 
    --  One-message buffer for reception
    Incoming_Msg   : aliased asn1sccDebug_PrintableString :=

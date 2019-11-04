@@ -16,9 +16,11 @@ PROPERTIES
   Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.controller_Initialize;
   Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.controller_clock;
   Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.stm32_controller_timer_manager_Tick;
-  Stack_Size => 5kbyte APPLIES TO X86_User.user_Color;
-  Stack_Size => 5kbyte APPLIES TO X86_User.user_Info_User;
-  Stack_Size => 5kbyte APPLIES TO X86_User.user_Poll;
+  Stack_Size => 5 kbyte APPLIES TO X86_User.user_Color;
+  Stack_Size => 5 kbyte APPLIES TO X86_User.user_Info_User;
+  Stack_Size => 5 kbyte APPLIES TO X86_User.user_Poll;
+  Stack_Size => 5kbyte APPLIES TO Stm32_Controller.watchdog_Kick_WD;
+  Stack_Size => 5kbyte APPLIES TO Stm32_Controller.watchdog_pulse;
 END DeploymentView.final;
 
 END Process_Package_proxy;

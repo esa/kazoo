@@ -1,0 +1,25 @@
+
+PACKAGE Process_Package_proxy
+PUBLIC
+WITH Process_Package;
+WITH AI;
+
+SYSTEM DeploymentView
+EXTENDS Process_Package::DeploymentView
+END DeploymentView;
+
+SYSTEM IMPLEMENTATION DeploymentView.final
+EXTENDS Process_Package::DeploymentView.final
+PROPERTIES
+  AI::root_system => "SELECTED";
+  Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.controller_Button;
+  Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.controller_Initialize;
+  Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.controller_clock;
+  Stack_Size => 5 kbyte APPLIES TO Stm32_Controller.stm32_controller_timer_manager_Tick;
+  Stack_Size => 5kbyte APPLIES TO X86_User.user_Color;
+  Stack_Size => 5kbyte APPLIES TO X86_User.user_Info_User;
+  Stack_Size => 5kbyte APPLIES TO X86_User.user_Poll;
+END DeploymentView.final;
+
+END Process_Package_proxy;
+

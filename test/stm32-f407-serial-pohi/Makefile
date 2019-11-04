@@ -19,7 +19,7 @@ gdb: clean
 		       --debug
 
 skeletons:
-	$(KAZOO) -p --gw --glue -o code && make -C work dataview
+	$(KAZOO) --gw --glue -o code && make -C work dataview
 
 clean-skeletons:
 	rm -rf work

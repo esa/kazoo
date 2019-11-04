@@ -1,0 +1,192 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS stm32_controller
+END stm32_controller;
+
+PROCESS IMPLEMENTATION stm32_controller.others
+END stm32_controller.others;
+
+DEVICE STM32F4_serial_pohiada
+EXTENDS ocarina_drivers::STM32F4_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "111178 98108";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "123886 116060" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "{devname ""/dev/ttyUSB0"", speed b115200, bits 8}";
+  Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END STM32F4_serial_pohiada;
+
+DEVICE IMPLEMENTATION STM32F4_serial_pohiada.others
+EXTENDS ocarina_drivers::STM32F4_serial.pohiada
+END STM32F4_serial_pohiada.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV::Node2
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS x86_user
+END x86_user;
+
+PROCESS IMPLEMENTATION x86_user.others
+END x86_user.others;
+
+DEVICE generic_serial_pohiada
+EXTENDS ocarina_drivers::generic_serial
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
+    Taste::coordinates => "169286 98265";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "167507 116060" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "{devname ""/dev/ttyUSB0"", speed b115200, bits 8}";
+  Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/serial.asn";
+  Deployment::Version => "0.1beta";
+END generic_serial_pohiada;
+
+DEVICE IMPLEMENTATION generic_serial_pohiada.others
+EXTENDS ocarina_drivers::generic_serial.pohiada
+END generic_serial_pohiada.others;
+
+END deploymentview::DV::Node2;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Controller;
+WITH interfaceview::IV::stm32_debug;
+WITH ocarina_processors_arm;
+WITH deploymentview::DV::Node1;
+WITH interfaceview::IV::User;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node2;
+WITH ocarina_buses;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+FEATURES
+  STM32F4_serial_pohiada_serial_generic : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Controller : SYSTEM interfaceview::IV::Controller::Controller.others {
+    Taste::FunctionName => "Controller";
+  };
+  IV_stm32_debug : SYSTEM interfaceview::IV::stm32_debug::stm32_debug.others {
+    Taste::FunctionName => "stm32_debug";
+  };
+  stm32_controller : PROCESS deploymentview::DV::Node1::stm32_controller.others {
+    Taste::coordinates => "93490 69482 131385 82832";
+    Deployment::Port_Number => 0;
+  };
+  stm32f407_discovery_gnat2017 : PROCESSOR ocarina_processors_arm::stm32f407_discovery.gnat2017 {
+    Taste::coordinates => "88753 62141 136122 85510";
+  };
+  STM32F4_serial_pohiada : DEVICE deploymentview::DV::Node1::STM32F4_serial_pohiada.others {
+    Taste::coordinates => "100785 89289 123619 98108";
+  };
+CONNECTIONS
+  STM32F4_serial_pohiada_serial_generic_link : BUS ACCESS STM32F4_serial_pohiada_serial_generic -> STM32F4_serial_pohiada.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (stm32_controller)) APPLIES TO IV_Controller;
+  Taste::APLC_Binding => (reference (stm32_controller)) APPLIES TO IV_stm32_debug;
+  Actual_Processor_Binding => (reference (stm32f407_discovery_gnat2017)) APPLIES TO stm32_controller;
+  Actual_Processor_Binding => (reference (stm32f407_discovery_gnat2017)) APPLIES TO STM32F4_serial_pohiada;
+END Node1.others;
+
+SYSTEM Node2
+FEATURES
+  generic_serial_pohiada_serial_generic : REQUIRES BUS ACCESS ocarina_buses::serial.generic;
+END Node2;
+
+SYSTEM IMPLEMENTATION Node2.others
+SUBCOMPONENTS
+  IV_User : SYSTEM interfaceview::IV::User::User.others {
+    Taste::FunctionName => "User";
+  };
+  x86_user : PROCESS deploymentview::DV::Node2::x86_user.others {
+    Taste::coordinates => "160222 68515 191264 82990";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "156342 61636 195144 87084";
+  };
+  generic_serial_pohiada : DEVICE deploymentview::DV::Node2::generic_serial_pohiada.others {
+    Taste::coordinates => "162987 88816 188341 98265";
+  };
+CONNECTIONS
+  generic_serial_pohiada_serial_generic_link : BUS ACCESS generic_serial_pohiada_serial_generic -> generic_serial_pohiada.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (x86_user)) APPLIES TO IV_User;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO x86_user;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_serial_pohiada;
+END Node2.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "82832 51653 142043 104092";
+  };
+  Node2 : SYSTEM Node2.others {
+    Taste::coordinates => "151492 51810 199994 100942";
+  };
+  serial_generic : BUS ocarina_buses::serial.generic {
+    Taste::coordinates => "108186 116060 181727 133382";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+CONNECTIONS
+  Connection2 : BUS ACCESS serial_generic -> Node1.STM32F4_serial_pohiada_serial_generic {
+    Taste::coordinates => "111178 98108 111178 107084 123886 107084 123886 116060";
+  };
+  Connection1 : BUS ACCESS serial_generic -> Node2.generic_serial_pohiada_serial_generic {
+    Taste::coordinates => "169286 98265 169286 107320 167507 107320 167507 116060";
+  };
+PROPERTIES
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.Controller_PI_Button_User_RI_Button;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.Controller_PI_Initialize_User_RI_Initialize;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.User_PI_Color_Controller_RI_Color;
+  Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.User_PI_Info_User_Controller_RI_Info_User;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

@@ -13,44 +13,46 @@ __url__ = "https://taste.tools"
 import sys
 import os
 import importlib
-
+import DV
 try:
     from PySide.QtCore import (QObject, Signal, Slot, Qt, QTimer)
     import PySide.QtGui as QtGui
 except ImportError:
     from PySide2.QtCore import *
-    from PySide.QtGui import *
+    from PySide2.QtGui import *
     from PySide2.QtWidgets import *
 
 from asn1_value_editor import UserWidgetsCommon
 
 # ** IMPORTANT **
 # you must list here the classes you want to expose to the GUI:
-__all__ = ['CustomTC_Widget', 'CustomTM_Widget']
+__all__ = ['PedestrianButton', 'TrafficLight', 'Pedestrian']
 
 
-class CustomTC_Widget(UserWidgetsCommon.TC):
+class PedestrianButton(UserWidgetsCommon.TC):
     ''' Fill / mimick this class to create a custom TC widget '''
-    name = 'My TC Widget' # name on the GUI combo button
+    name = 'Nice Button' # name on the GUI combo button
+    instantiated = False
 
     def __init__(self, asn1_typename, parent):
         ''' Initialise the widget '''
-        super(CustomTC_Widget, self).__init__(asn1_typename, parent)
+        super(PedestrianButton, self).__init__(asn1_typename, parent)
+
+        if PedestrianButton.instantiated:
+            self.close()
+            return
+
         self._asn1_typename = asn1_typename
 
-        # examples of widgets
-        #self.widget = QtGui.QListWidget()
-        #self.widget.itemClicked.connect(self.select)
-        #self.setWidget(self.widget)
-
-        #self.widget = QtGui.QPushButton(asn1_typename)
-        #self.widget.clicked.connect(self.clicked))
-        #self.setWidget(self.widget)
+        self.widget = QtGui.QPushButton("Request passage")
+        self.widget.clicked.connect(self.clicked)
+        self.setWidget(self.widget)
 
         # parent is the ASN.1 value editor
         self.parent = parent
-        self.setWindowTitle("My Window")
+        self.setWindowTitle(parent.messageName)
         self.show()
+        PedestrianButton.instantiated = True
 
     @staticmethod
     def applicable():
@@ -61,49 +63,40 @@ class CustomTC_Widget(UserWidgetsCommon.TC):
     def editorIsApplicable(editor):
         ''' Return true if this particular editor is compatible with this
         widget'''
-        return False
-
-    def select(self, item):
-        ''' Called when user clicks on a line of the table '''
-        #self.parent.asn1Instance.SetData(native_asn1scc._ptr)
+        return editor.messageName == "Button"
 
     def clicked(self):
         ''' Called when user clicks on the button '''
-        # Get the ASN.1 value from the database (in native an1scc format)
-        # self.parent.getVariable(dest=self.parent.asn1Instance)
-
-       #self.parent.tmToEditor(emit_msc=False)
-
-    def onUpdateButtonClick(self, lineNb):
-        ''' When user clicks on Update, the content of the selected TC will
-        be used to feed the main GUI TC editor '''
-        #self.update.emit(as_asn1)   # use signal to send data to the GUI
-
-    def onSendButtonClick(self, lineNb):
-        ''' When user clicks on Send, the selected TC will be sent to the
-        running application '''
-        #self.send.emit(as_asn1)   # use signal to send data to the GUI
+        self.parent.sendTC()
 
 
-class CustomTM_Widget(UserWidgetsCommon.TM):
+class TrafficLight(UserWidgetsCommon.TM):
     '''Save telemetries in the database'''
-    name = 'My Widget'  # name for the combo button in the GUI
+    name = 'View Traffic Light'  # name for the combo button in the GUI
 
     def __init__(self, parent=None):
         ''' Initialise the widget '''
-        super(CustomTM_Widget, self).__init__(parent)
-        self.hide()
+        super(TrafficLight, self).__init__(parent)
+        self.widget = QtGui.QLabel()
+        self.colorMap = { DV.red: QtGui.QPixmap ("red.png"),
+                          DV.orange: QtGui.QPixmap ("orange.png"),
+                          DV.green: QtGui.QPixmap ("green.png") }
+        self.widget.setPixmap (self.colorMap[DV.red])
+        self.setWidget(self.widget)
+        self.setWindowTitle(parent.treeItem.text())
+        self.show()
 
     @Slot()
     def new_tm(self):
         ''' Slot called when a TM has been received in the editor '''
         # Nothing to do, the update() function does nothing thread-related
         # that would need to be done here
-        print('Recorded a new TM in the database')
+        pass
 
     def update(self, value):
         ''' Receive ASN.1 value '''
-        pass
+        color = value.Get()
+        self.widget.setPixmap (self.colorMap[color])
 
     @staticmethod
     def applicable():
@@ -114,8 +107,45 @@ class CustomTM_Widget(UserWidgetsCommon.TM):
     def editorIsApplicable(editor):
         ''' Return true if this particular editor is compatible with this
         widget'''
-        return False
+        return editor.messageName == "Color"
 
+class Pedestrian(UserWidgetsCommon.TM):
+    '''Save telemetries in the database'''
+    name = 'View Traffic Light'  # name for the combo button in the GUI
+
+    def __init__(self, parent=None):
+        ''' Initialise the widget '''
+        super(Pedestrian, self).__init__(parent)
+        self.widget = QtGui.QLabel()
+        self.colorMap = { DV.wait: QtGui.QPixmap ("wait.png"),
+                          DV.go: QtGui.QPixmap ("go.png")}
+        self.widget.setPixmap (self.colorMap[DV.wait])
+        self.setWidget(self.widget)
+        self.setWindowTitle(parent.treeItem.text())
+        self.show()
+
+    @Slot()
+    def new_tm(self):
+        ''' Slot called when a TM has been received in the editor '''
+        # Nothing to do, the update() function does nothing thread-related
+        # that would need to be done here
+        pass
+
+    def update(self, value):
+        ''' Receive ASN.1 value '''
+        status = value.Get()
+        self.widget.setPixmap (self.colorMap[status])
+
+    @staticmethod
+    def applicable():
+        ''' Return True to enable this widget '''
+        return True
+
+    @staticmethod
+    def editorIsApplicable(editor):
+        ''' Return true if this particular editor is compatible with this
+        widget'''
+        return editor.messageName == "Info_User"
 
 if __name__ == '__main__':
     print('This module can only be imported from the main TASTE guis')

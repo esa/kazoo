@@ -26,7 +26,7 @@ DEVICE STM32F4_serial_pohiada
 EXTENDS ocarina_drivers::STM32F4_serial
 FEATURES
   link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
-    Taste::coordinates => "111178 98108";
+    Taste::coordinates => "110233 98108";
   };
 PROPERTIES
   Taste::Interface_Coordinates => "123886 116060" APPLIES TO link;
@@ -63,7 +63,7 @@ DEVICE generic_serial_pohiada
 EXTENDS ocarina_drivers::generic_serial
 FEATURES
   link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::serial.generic {
-    Taste::coordinates => "169286 98265";
+    Taste::coordinates => "169129 98265";
   };
 PROPERTIES
   Taste::Interface_Coordinates => "167507 116060" APPLIES TO link;
@@ -112,14 +112,14 @@ SUBCOMPONENTS
     Taste::FunctionName => "watchdog";
   };
   stm32_controller : PROCESS deploymentview::DV::Node1::stm32_controller.others {
-    Taste::coordinates => "93490 69482 131385 82832";
+    Taste::coordinates => "92545 69482 130440 82832";
     Deployment::Port_Number => 0;
   };
   stm32f407_discovery_gnat2017 : PROCESSOR ocarina_processors_arm::stm32f407_discovery.gnat2017 {
-    Taste::coordinates => "88753 62141 136122 85510";
+    Taste::coordinates => "87808 62141 135177 85510";
   };
   STM32F4_serial_pohiada : DEVICE deploymentview::DV::Node1::STM32F4_serial_pohiada.others {
-    Taste::coordinates => "100785 89289 123619 98108";
+    Taste::coordinates => "99840 89289 122674 98108";
   };
 CONNECTIONS
   STM32F4_serial_pohiada_serial_generic_link : BUS ACCESS STM32F4_serial_pohiada_serial_generic -> STM32F4_serial_pohiada.link;
@@ -149,7 +149,7 @@ SUBCOMPONENTS
     Taste::coordinates => "156342 61636 195144 87084";
   };
   generic_serial_pohiada : DEVICE deploymentview::DV::Node2::generic_serial_pohiada.others {
-    Taste::coordinates => "162987 88816 188341 98265";
+    Taste::coordinates => "162830 88816 188184 98265";
   };
 CONNECTIONS
   generic_serial_pohiada_serial_generic_link : BUS ACCESS generic_serial_pohiada_serial_generic -> generic_serial_pohiada.link;
@@ -165,7 +165,7 @@ END deploymentview;
 SYSTEM IMPLEMENTATION deploymentview.others
 SUBCOMPONENTS
   Node1 : SYSTEM Node1.others {
-    Taste::coordinates => "82832 51653 142043 104092";
+    Taste::coordinates => "81887 51653 141098 104092";
   };
   Node2 : SYSTEM Node2.others {
     Taste::coordinates => "151492 51810 199994 100942";
@@ -176,10 +176,10 @@ SUBCOMPONENTS
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 CONNECTIONS
   Connection2 : BUS ACCESS serial_generic -> Node1.STM32F4_serial_pohiada_serial_generic {
-    Taste::coordinates => "111178 98108 111178 107084 123886 107084 123886 116060";
+    Taste::coordinates => "110233 98108 110233 107084 123886 107084 123886 116060";
   };
   Connection1 : BUS ACCESS serial_generic -> Node2.generic_serial_pohiada_serial_generic {
-    Taste::coordinates => "169286 98265 169286 107320 167507 107320 167507 116060";
+    Taste::coordinates => "169129 98265 169129 107320 167507 107320 167507 116060";
   };
 PROPERTIES
   Actual_Connection_Binding => (reference (serial_generic)) APPLIES TO interfaceview.Controller_PI_Button_User_RI_Button;
@@ -192,6 +192,6 @@ PROPERTIES
   Taste::coordinates => "0 0 297000 210000";
   Taste::version => "2.3";
   Taste::interfaceView => "InterfaceView.aadl";
-  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;
 

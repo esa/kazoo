@@ -101,63 +101,63 @@ END RI_Kick_WD.others;
 SYSTEM Controller
 FEATURES
   PI_Button : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Button.others {
-    Taste::coordinates => "111492 62361";
+    Taste::coordinates => "111649 62204";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 10 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "Button";
   };
   PI_Initialize : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Initialize.others {
-    Taste::coordinates => "111492 76065";
+    Taste::coordinates => "111649 75908";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "Initialize";
   };
   RI_Color : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Color.others {
-    Taste::coordinates => "111492 67086";
+    Taste::coordinates => "111649 66929";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Color";
     Taste::labelInheritance => "true";
   };
   RI_Info_User : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::User::PI_Info_User.others {
-    Taste::coordinates => "111492 70237";
+    Taste::coordinates => "111649 70080";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Info_User";
     Taste::labelInheritance => "true";
   };
   RI_Green_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Green_On.others {
-    Taste::coordinates => "105192 89289";
+    Taste::coordinates => "105349 89132";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Green_On";
     Taste::labelInheritance => "true";
   };
   RI_Orange_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Orange_On.others {
-    Taste::coordinates => "93224 89289";
+    Taste::coordinates => "93381 89132";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Orange_On";
     Taste::labelInheritance => "true";
   };
   RI_Red_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Red_On.others {
-    Taste::coordinates => "83146 89289";
+    Taste::coordinates => "83303 89132";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Red_On";
     Taste::labelInheritance => "true";
   };
   RI_Blue_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_On.others {
-    Taste::coordinates => "111492 85355";
+    Taste::coordinates => "111649 85198";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Blue_On";
     Taste::labelInheritance => "true";
   };
   RI_Blue_Off : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_Off.others {
-    Taste::coordinates => "111492 82836";
+    Taste::coordinates => "111649 82679";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Blue_Off";
     Taste::labelInheritance => "true";
   };
   RI_Kick_WD : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::watchdog::PI_Kick_WD.others {
-    Taste::coordinates => "74486 85986";
+    Taste::coordinates => "74643 85829";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "Kick_WD";
     Taste::labelInheritance => "true";
@@ -466,6 +466,8 @@ PROPERTIES
 END PI_pulse.others;
 
 SUBPROGRAM PI_Kick_WD
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_Kick_WD;
 
 SUBPROGRAM IMPLEMENTATION PI_Kick_WD.others
@@ -517,6 +519,7 @@ FEATURES
   PI_Kick_WD : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::watchdog::PI_Kick_WD.others {
     Taste::coordinates => "83462 125509";
     Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "Kick_WD";
   };
@@ -573,7 +576,7 @@ END interfaceview;
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   Controller : SYSTEM interfaceview::IV::Controller::Controller.others {
-    Taste::coordinates => "74486 57636 111492 89289";
+    Taste::coordinates => "74643 57479 111649 89132";
   };
   User : SYSTEM interfaceview::IV::User::User.others {
     Taste::coordinates => "140941 58424 168342 91966";
@@ -586,34 +589,34 @@ SUBCOMPONENTS
   };
 CONNECTIONS
   Controller_PI_Button_User_RI_Button : SUBPROGRAM ACCESS Controller.PI_Button -> User.RI_Button {
-    Taste::coordinates => "140941 63464 126216 63464 126216 62361 111492 62361";
+    Taste::coordinates => "140941 63464 126216 63464 126216 62204 111649 62204";
   };
   Controller_PI_Initialize_User_RI_Initialize : SUBPROGRAM ACCESS Controller.PI_Initialize -> User.RI_Initialize {
-    Taste::coordinates => "140941 76696 126216 76696 126216 76065 111492 76065";
+    Taste::coordinates => "140941 76696 126216 76696 126216 75908 111649 75908";
   };
   User_PI_Color_Controller_RI_Color : SUBPROGRAM ACCESS User.PI_Color -> Controller.RI_Color {
-    Taste::coordinates => "111492 67086 126216 67086 126216 68189 140941 68189";
+    Taste::coordinates => "111649 66929 126216 66929 126216 68189 140941 68189";
   };
   User_PI_Info_User_Controller_RI_Info_User : SUBPROGRAM ACCESS User.PI_Info_User -> Controller.RI_Info_User {
-    Taste::coordinates => "111492 70237 126216 70237 126216 71340 140941 71340";
+    Taste::coordinates => "111649 70080 126216 70080 126216 71340 140941 71340";
   };
   stm32_debug_PI_Green_On_Controller_RI_Green_On : SUBPROGRAM ACCESS stm32_debug.PI_Green_On -> Controller.RI_Green_On {
-    Taste::coordinates => "105192 89289 105192 108978 145192 108978";
+    Taste::coordinates => "105349 89132 105349 108978 145192 108978";
   };
   stm32_debug_PI_Orange_On_Controller_RI_Orange_On : SUBPROGRAM ACCESS stm32_debug.PI_Orange_On -> Controller.RI_Orange_On {
-    Taste::coordinates => "93224 89289 93224 111183 145192 111183";
+    Taste::coordinates => "93381 89132 93381 111183 145192 111183";
   };
   stm32_debug_PI_Red_On_Controller_RI_Red_On : SUBPROGRAM ACCESS stm32_debug.PI_Red_On -> Controller.RI_Red_On {
-    Taste::coordinates => "83146 89289 83146 114018 145192 114018";
+    Taste::coordinates => "83303 89132 83303 114018 145192 114018";
   };
   stm32_debug_PI_Blue_On_Controller_RI_Blue_On : SUBPROGRAM ACCESS stm32_debug.PI_Blue_On -> Controller.RI_Blue_On {
-    Taste::coordinates => "111492 85355 128184 85355 128184 126616 145192 126616";
+    Taste::coordinates => "111649 85198 128184 85198 128184 126616 145192 126616";
   };
   stm32_debug_PI_Blue_Off_Controller_RI_Blue_Off : SUBPROGRAM ACCESS stm32_debug.PI_Blue_Off -> Controller.RI_Blue_Off {
-    Taste::coordinates => "111492 82836 128184 82836 128184 129136 145192 129136";
+    Taste::coordinates => "111649 82679 128184 82679 128184 129136 145192 129136";
   };
   watchdog_PI_Kick_WD_Controller_RI_Kick_WD : SUBPROGRAM ACCESS watchdog.PI_Kick_WD -> Controller.RI_Kick_WD {
-    Taste::coordinates => "74486 85986 70785 85986 70785 125509 83462 125509";
+    Taste::coordinates => "74643 85829 70785 85829 70785 125509 83462 125509";
   };
   stm32_debug_PI_Send_to_UART_watchdog_RI_Send_to_UART : SUBPROGRAM ACCESS stm32_debug.PI_Send_to_UART -> watchdog.RI_Send_to_UART {
     Taste::coordinates => "111493 127084 119367 127084 119367 104564 145192 104564";

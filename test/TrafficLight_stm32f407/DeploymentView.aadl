@@ -84,6 +84,7 @@ PUBLIC
 
 WITH interfaceview::IV::Controller;
 WITH interfaceview::IV::stm32_debug;
+WITH interfaceview::IV::watchdog;
 WITH ocarina_processors_arm;
 WITH deploymentview::DV::Node1;
 WITH interfaceview::IV::User;
@@ -107,6 +108,9 @@ SUBCOMPONENTS
   IV_stm32_debug : SYSTEM interfaceview::IV::stm32_debug::stm32_debug.others {
     Taste::FunctionName => "stm32_debug";
   };
+  IV_watchdog : SYSTEM interfaceview::IV::watchdog::watchdog.others {
+    Taste::FunctionName => "watchdog";
+  };
   stm32_controller : PROCESS deploymentview::DV::Node1::stm32_controller.others {
     Taste::coordinates => "93490 69482 131385 82832";
     Deployment::Port_Number => 0;
@@ -122,6 +126,7 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (stm32_controller)) APPLIES TO IV_Controller;
   Taste::APLC_Binding => (reference (stm32_controller)) APPLIES TO IV_stm32_debug;
+  Taste::APLC_Binding => (reference (stm32_controller)) APPLIES TO IV_watchdog;
   Actual_Processor_Binding => (reference (stm32f407_discovery_gnat2017)) APPLIES TO stm32_controller;
   Actual_Processor_Binding => (reference (stm32f407_discovery_gnat2017)) APPLIES TO STM32F4_serial_pohiada;
 END Node1.others;
@@ -187,6 +192,6 @@ PROPERTIES
   Taste::coordinates => "0 0 297000 210000";
   Taste::version => "2.3";
   Taste::interfaceView => "InterfaceView.aadl";
-  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;
 

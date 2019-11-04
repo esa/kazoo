@@ -1,0 +1,31 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Watchdog;
+    /* CIF START (408, 21), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (408, 71), (70, 35) */
+        NEXTSTATE Off;
+    /* CIF state (408, 71), (70, 35) */
+    state Off;
+        /* CIF input (408, 126), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (379, 181), (126, 35) */
+            call Switch_Leds_ON;
+            /* CIF PROCEDURECALL (367, 236), (150, 40) */
+            call Send_to_UART('Ping
+');
+            /* CIF NEXTSTATE (408, 296), (70, 35) */
+            NEXTSTATE On;
+    endstate;
+    /* CIF state (612, 43), (70, 35) */
+    state On;
+        /* CIF input (612, 98), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (579, 153), (134, 35) */
+            call SWitch_Leds_OFF;
+            /* CIF PROCEDURECALL (567, 208), (158, 40) */
+            call Send_to_UART('Pong
+');
+            /* CIF NEXTSTATE (612, 268), (70, 35) */
+            NEXTSTATE Off;
+    endstate;
+endprocess Watchdog;

@@ -70,7 +70,9 @@ void init_@_LOWER:Name_@(void)
       extern void init_@_LOWER:Sync_RIs_Parent_@(void);
       init_@_LOWER:Sync_RIs_Parent_@();
 @@END_TABLE@@
+#ifdef __unix__
       puts ("[TASTE] Initialization completed for function @_Name_@");
+#endif
    }
 }
 @@-- For blackbox devices, don't generate the PI functions, they will be

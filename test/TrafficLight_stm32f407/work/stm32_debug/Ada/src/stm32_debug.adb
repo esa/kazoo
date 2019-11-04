@@ -276,8 +276,6 @@ package body STM32_Debug is
 
    begin
       STM32.Board.Initialize_LEDs;
-      All_LEDs_Off;
-      Blue_On;
       Initialize_Hardware;
-
+      All_LEDs_On;
 end STM32_Debug;

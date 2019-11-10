@@ -274,14 +274,30 @@ package body TASTE.Interface_View is
    ----------------------------------------------------------------
 
    function Get_Upper_WCET (Func : Node_Id) return Option_ULL.Option is
-      (if Is_Subprogram_Access (Func) and then Sources (Func) /= No_List
-         and then AIN.First_Node (Sources (Func)) /= No_Node
-         and then Get_Execution_Time (Corresponding_Instance (AIN.Item
-                                           (AIN.First_Node (Sources (Func)))))
-                           /= Empty_Time_Array
-      then Just (To_Milliseconds (Get_Execution_Time (Corresponding_Instance
-                             (AIN.Item (AIN.First_Node (Sources (Func)))))(1)))
-         else Option_ULL.Nothing);
+      Res : Time_Array (0 .. 1);
+   begin
+      --  The WCET of AADL v2.2 models can be parsed simply like this:
+      Res := Get_Execution_Time (Corresponding_Instance (Func));
+      return Just (To_Milliseconds (Res (1)));
+   exception
+      when Constraint_Error =>
+         --  However it fails with older AADL models. We have to use an
+         --  insanely complex method (found in buildsupport code)
+         --  to retrieve the WCET
+         --  This method does not work with v2.2 models, it always returns
+         --  Nothing
+         return
+           (if Is_Subprogram_Access (Func) and then Sources (Func) /= No_List
+            and then AIN.First_Node (Sources (Func)) /= No_Node
+            and then Get_Execution_Time (Corresponding_Instance (AIN.Item
+              (AIN.First_Node (Sources (Func))))) /= Empty_Time_Array
+            then
+               Just (To_Milliseconds
+              (Get_Execution_Time (Corresponding_Instance
+                   (AIN.Item (AIN.First_Node (Sources (Func)))))(1)))
+            else
+               Option_ULL.Nothing);
+   end Get_Upper_WCET;
 
    ---------------------------
    -- AST Builder Functions --
@@ -445,6 +461,7 @@ package body TASTE.Interface_View is
          Result.RCM := Get_RCM_Operation_Kind (If_I);
          Result.Period_Or_MIAT := Get_RCM_Period (If_I);
          Result.WCET_ms := Get_Upper_WCET (If_I);
+
          Result.User_Properties := Get_Properties_Map (If_I);
          --  Parameters:
          if not Is_Empty (AIN.Features (Sub_I)) then

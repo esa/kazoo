@@ -1,0 +1,537 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Controller
+PUBLIC
+
+WITH interfaceview::IV::stm32_debug;
+WITH interfaceview::IV::watchdog;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Initialize
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Initialize;
+
+SUBPROGRAM IMPLEMENTATION PI_Initialize.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Initialize.others;
+
+SUBPROGRAM PI_Button
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Button;
+
+SUBPROGRAM IMPLEMENTATION PI_Button.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Button.others;
+
+SUBPROGRAM RI_Green_On
+END RI_Green_On;
+
+SUBPROGRAM IMPLEMENTATION RI_Green_On.others
+END RI_Green_On.others;
+
+SUBPROGRAM RI_Orange_On
+END RI_Orange_On;
+
+SUBPROGRAM IMPLEMENTATION RI_Orange_On.others
+END RI_Orange_On.others;
+
+SUBPROGRAM RI_Red_On
+END RI_Red_On;
+
+SUBPROGRAM IMPLEMENTATION RI_Red_On.others
+END RI_Red_On.others;
+
+SUBPROGRAM RI_Blue_On
+END RI_Blue_On;
+
+SUBPROGRAM IMPLEMENTATION RI_Blue_On.others
+END RI_Blue_On.others;
+
+SUBPROGRAM RI_Blue_Off
+END RI_Blue_Off;
+
+SUBPROGRAM IMPLEMENTATION RI_Blue_Off.others
+END RI_Blue_Off.others;
+
+SUBPROGRAM RI_Kick_WD
+END RI_Kick_WD;
+
+SUBPROGRAM IMPLEMENTATION RI_Kick_WD.others
+END RI_Kick_WD.others;
+
+SYSTEM Controller
+FEATURES
+  PI_Initialize : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Initialize.others {
+    Taste::coordinates => "77782 89132";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Initialize";
+  };
+  PI_Button : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Button.others {
+    Taste::coordinates => "111649 79375";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Button";
+  };
+  RI_Green_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Green_On.others {
+    Taste::coordinates => "105349 89132";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Green_On";
+    Taste::labelInheritance => "true";
+  };
+  RI_Orange_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Orange_On.others {
+    Taste::coordinates => "93381 89132";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Orange_On";
+    Taste::labelInheritance => "true";
+  };
+  RI_Red_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Red_On.others {
+    Taste::coordinates => "83303 89132";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Red_On";
+    Taste::labelInheritance => "true";
+  };
+  RI_Blue_On : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_On.others {
+    Taste::coordinates => "111649 85894";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Blue_On";
+    Taste::labelInheritance => "true";
+  };
+  RI_Blue_Off : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_Off.others {
+    Taste::coordinates => "111649 82679";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Blue_Off";
+    Taste::labelInheritance => "true";
+  };
+  RI_Kick_WD : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::watchdog::PI_Kick_WD.others {
+    Taste::coordinates => "74643 85829";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Kick_WD";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Controller;
+
+SYSTEM IMPLEMENTATION Controller.others
+SUBCOMPONENTS
+  clock : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Controller.others;
+
+END interfaceview::IV::Controller;
+
+PACKAGE interfaceview::IV::stm32_debug
+PUBLIC
+
+WITH interfaceview::IV::Controller;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Send_to_UART
+FEATURES
+  chars : IN PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Send_to_UART;
+
+SUBPROGRAM IMPLEMENTATION PI_Send_to_UART.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Send_to_UART.others;
+
+SUBPROGRAM PI_Switch_Leds_ON
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Switch_Leds_ON;
+
+SUBPROGRAM IMPLEMENTATION PI_Switch_Leds_ON.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Switch_Leds_ON.others;
+
+SUBPROGRAM PI_Switch_Leds_OFF
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Switch_Leds_OFF;
+
+SUBPROGRAM IMPLEMENTATION PI_Switch_Leds_OFF.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Switch_Leds_OFF.others;
+
+SUBPROGRAM PI_Get_Message
+FEATURES
+  Last_Message : OUT PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Get_Message;
+
+SUBPROGRAM IMPLEMENTATION PI_Get_Message.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Get_Message.others;
+
+SUBPROGRAM PI_Green_On
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Green_On;
+
+SUBPROGRAM IMPLEMENTATION PI_Green_On.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Green_On.others;
+
+SUBPROGRAM PI_Orange_On
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Orange_On;
+
+SUBPROGRAM IMPLEMENTATION PI_Orange_On.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Orange_On.others;
+
+SUBPROGRAM PI_Red_On
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Red_On;
+
+SUBPROGRAM IMPLEMENTATION PI_Red_On.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Red_On.others;
+
+SUBPROGRAM PI_Blue_On
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Blue_On;
+
+SUBPROGRAM IMPLEMENTATION PI_Blue_On.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Blue_On.others;
+
+SUBPROGRAM PI_Blue_Off
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Blue_Off;
+
+SUBPROGRAM IMPLEMENTATION PI_Blue_Off.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Blue_Off.others;
+
+SUBPROGRAM RI_Button
+END RI_Button;
+
+SUBPROGRAM IMPLEMENTATION RI_Button.others
+END RI_Button.others;
+
+SUBPROGRAM PI_Poll_Button
+END PI_Poll_Button;
+
+SUBPROGRAM IMPLEMENTATION PI_Poll_Button.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Poll_Button.others;
+
+SYSTEM stm32_debug
+FEATURES
+  PI_Send_to_UART : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Send_to_UART.others {
+    Taste::coordinates => "145192 129158";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Send_to_UART";
+  };
+  PI_Switch_Leds_ON : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_ON.others {
+    Taste::coordinates => "145192 133522";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Switch_Leds_ON";
+  };
+  PI_Switch_Leds_OFF : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_OFF.others {
+    Taste::coordinates => "145192 131480";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Switch_Leds_OFF";
+  };
+  PI_Get_Message : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Get_Message.others {
+    Taste::coordinates => "145192 126639";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Get_Message";
+  };
+  PI_Green_On : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Green_On.others {
+    Taste::coordinates => "145192 109096";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Green_On";
+  };
+  PI_Orange_On : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Orange_On.others {
+    Taste::coordinates => "145192 111301";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Orange_On";
+  };
+  PI_Red_On : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Red_On.others {
+    Taste::coordinates => "145192 114136";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Red_On";
+  };
+  PI_Blue_On : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_On.others {
+    Taste::coordinates => "145192 106353";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Blue_On";
+  };
+  PI_Blue_Off : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Blue_Off.others {
+    Taste::coordinates => "145192 101826";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Blue_Off";
+  };
+  RI_Button : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Button.others {
+    Taste::coordinates => "149000 99329";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Button";
+    Taste::labelInheritance => "true";
+  };
+  PI_Poll_Button : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Poll_Button.others {
+    Taste::coordinates => "169758 122260";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 50 ms;
+    Taste::InterfaceName => "Poll_Button";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+END stm32_debug;
+
+SYSTEM IMPLEMENTATION stm32_debug.others
+END stm32_debug.others;
+
+END interfaceview::IV::stm32_debug;
+
+PACKAGE interfaceview::IV::watchdog
+PUBLIC
+
+WITH interfaceview::IV::stm32_debug;
+WITH interfaceview::IV::Controller;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_Kick_WD
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Kick_WD;
+
+SUBPROGRAM IMPLEMENTATION PI_Kick_WD.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Kick_WD.others;
+
+SUBPROGRAM RI_Send_to_UART
+FEATURES
+  chars : IN PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+END RI_Send_to_UART;
+
+SUBPROGRAM IMPLEMENTATION RI_Send_to_UART.others
+END RI_Send_to_UART.others;
+
+SUBPROGRAM RI_Get_Message
+FEATURES
+  Last_Message : OUT PARAMETER DataView::Debug_PrintableString {
+    Taste::encoding => NATIVE;
+  };
+END RI_Get_Message;
+
+SUBPROGRAM IMPLEMENTATION RI_Get_Message.others
+END RI_Get_Message.others;
+
+SUBPROGRAM RI_Switch_Leds_OFF
+END RI_Switch_Leds_OFF;
+
+SUBPROGRAM IMPLEMENTATION RI_Switch_Leds_OFF.others
+END RI_Switch_Leds_OFF.others;
+
+SUBPROGRAM RI_Switch_Leds_ON
+END RI_Switch_Leds_ON;
+
+SUBPROGRAM IMPLEMENTATION RI_Switch_Leds_ON.others
+END RI_Switch_Leds_ON.others;
+
+SUBPROGRAM RI_Initialize
+END RI_Initialize;
+
+SUBPROGRAM IMPLEMENTATION RI_Initialize.others
+END RI_Initialize.others;
+
+SYSTEM watchdog
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::watchdog::PI_pulse.others {
+    Taste::coordinates => "96062 123934";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_Kick_WD : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::watchdog::PI_Kick_WD.others {
+    Taste::coordinates => "83462 132938";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Kick_WD";
+  };
+  RI_Send_to_UART : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Send_to_UART.others {
+    Taste::coordinates => "111493 128894";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Send_to_UART";
+    Taste::labelInheritance => "true";
+  };
+  RI_Get_Message : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Get_Message.others {
+    Taste::coordinates => "111493 126435";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Get_Message";
+    Taste::labelInheritance => "true";
+  };
+  RI_Switch_Leds_OFF : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_OFF.others {
+    Taste::coordinates => "111493 131132";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Switch_Leds_OFF";
+    Taste::labelInheritance => "true";
+  };
+  RI_Switch_Leds_ON : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::stm32_debug::PI_Switch_Leds_ON.others {
+    Taste::coordinates => "111493 133384";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Switch_Leds_ON";
+    Taste::labelInheritance => "true";
+  };
+  RI_Initialize : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Controller::PI_Initialize.others {
+    Taste::coordinates => "83462 127742";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Initialize";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END watchdog;
+
+SYSTEM IMPLEMENTATION watchdog.others
+END watchdog.others;
+
+END interfaceview::IV::watchdog;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Controller;
+WITH interfaceview::IV::stm32_debug;
+WITH interfaceview::IV::watchdog;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Controller : SYSTEM interfaceview::IV::Controller::Controller.others {
+    Taste::coordinates => "74643 57479 111649 89132";
+  };
+  stm32_debug : SYSTEM interfaceview::IV::stm32_debug::stm32_debug.others {
+    Taste::coordinates => "145192 99329 169758 135548";
+  };
+  watchdog : SYSTEM interfaceview::IV::watchdog::watchdog.others {
+    Taste::coordinates => "83462 123934 111493 135115";
+  };
+CONNECTIONS
+  Controller_PI_Initialize_watchdog_RI_Initialize : SUBPROGRAM ACCESS Controller.PI_Initialize -> watchdog.RI_Initialize {
+    Taste::coordinates => "83462 127742 77782 127742 77782 89132";
+  };
+  Controller_PI_Button_stm32_debug_RI_Button : SUBPROGRAM ACCESS Controller.PI_Button -> stm32_debug.RI_Button {
+    Taste::coordinates => "149000 99329 149000 79375 111649 79375";
+  };
+  stm32_debug_PI_Green_On_Controller_RI_Green_On : SUBPROGRAM ACCESS stm32_debug.PI_Green_On -> Controller.RI_Green_On {
+    Taste::coordinates => "105349 89132 105349 109096 145192 109096";
+  };
+  stm32_debug_PI_Orange_On_Controller_RI_Orange_On : SUBPROGRAM ACCESS stm32_debug.PI_Orange_On -> Controller.RI_Orange_On {
+    Taste::coordinates => "93381 89132 93381 111301 145192 111301";
+  };
+  stm32_debug_PI_Red_On_Controller_RI_Red_On : SUBPROGRAM ACCESS stm32_debug.PI_Red_On -> Controller.RI_Red_On {
+    Taste::coordinates => "83303 89132 83303 114136 145192 114136";
+  };
+  stm32_debug_PI_Blue_On_Controller_RI_Blue_On : SUBPROGRAM ACCESS stm32_debug.PI_Blue_On -> Controller.RI_Blue_On {
+    Taste::coordinates => "111649 85894 128039 85894 128039 106353 145192 106353";
+  };
+  stm32_debug_PI_Blue_Off_Controller_RI_Blue_Off : SUBPROGRAM ACCESS stm32_debug.PI_Blue_Off -> Controller.RI_Blue_Off {
+    Taste::coordinates => "111649 82679 128184 82679 128184 101826 145192 101826";
+  };
+  watchdog_PI_Kick_WD_Controller_RI_Kick_WD : SUBPROGRAM ACCESS watchdog.PI_Kick_WD -> Controller.RI_Kick_WD {
+    Taste::coordinates => "74643 85829 70785 85829 70785 132938 83462 132938";
+  };
+  stm32_debug_PI_Send_to_UART_watchdog_RI_Send_to_UART : SUBPROGRAM ACCESS stm32_debug.PI_Send_to_UART -> watchdog.RI_Send_to_UART {
+    Taste::coordinates => "111493 128894 119367 128894 119367 129158 145192 129158";
+  };
+  stm32_debug_PI_Switch_Leds_ON_watchdog_RI_Switch_Leds_ON : SUBPROGRAM ACCESS stm32_debug.PI_Switch_Leds_ON -> watchdog.RI_Switch_Leds_ON {
+    Taste::coordinates => "111493 133384 128342 133384 128342 133522 145192 133522";
+  };
+  stm32_debug_PI_Switch_Leds_OFF_watchdog_RI_Switch_Leds_OFF : SUBPROGRAM ACCESS stm32_debug.PI_Switch_Leds_OFF -> watchdog.RI_Switch_Leds_OFF {
+    Taste::coordinates => "111493 131132 128342 131132 128342 131480 145192 131480";
+  };
+  stm32_debug_PI_Get_Message_watchdog_RI_Get_Message : SUBPROGRAM ACCESS stm32_debug.PI_Get_Message -> watchdog.RI_Get_Message {
+    Taste::coordinates => "111493 126435 117320 126435 117320 126639 145192 126639";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

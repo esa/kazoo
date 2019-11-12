@@ -1,0 +1,63 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Watchdog;
+    /* CIF START (408, 21), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (399, 71), (87, 35) */
+        NEXTSTATE Init_Phase;
+    /* CIF state (408, 296), (70, 35) */
+    state Ready;
+        /* CIF input (408, 351), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (378, 406), (128, 35) */
+            call Switch_Leds_Off;
+            /* CIF PROCEDURECALL (346, 461), (193, 40) */
+            call Send_to_UART('Ready
+');
+            /* CIF output (405, 521), (75, 35) */
+            output Initialize;
+            /* CIF NEXTSTATE (408, 571), (70, 35) */
+            NEXTSTATE Off;
+    endstate;
+    /* CIF state (399, 71), (87, 35) */
+    state Init_Phase;
+        /* CIF input (408, 126), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (379, 181), (127, 35) */
+            call Switch_Leds_ON;
+            /* CIF PROCEDURECALL (346, 236), (193, 40) */
+            call Send_to_UART('Starting up
+');
+            /* CIF NEXTSTATE (408, 296), (70, 35) */
+            NEXTSTATE Ready;
+    endstate;
+    /* CIF state (630, 43), (70, 35) */
+    state Off;
+        /* CIF input (626, 98), (77, 35) */
+        input Kick_WD;
+            /* CIF PROCEDURECALL (558, 153), (215, 40) */
+            call Send_to_UART('Go!
+');
+            /* CIF NEXTSTATE (604, 208), (123, 35) */
+            NEXTSTATE Running_Ping;
+    endstate;
+    /* CIF state (789, 264), (118, 35) */
+    state Running_Ping;
+        /* CIF input (814, 319), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (743, 374), (212, 40) */
+            call Send_to_UART('Ping
+');
+            /* CIF NEXTSTATE (792, 434), (113, 35) */
+            NEXTSTATE Running_Pong;
+    endstate;
+    /* CIF state (1002, 265), (118, 35) */
+    state Running_Pong;
+        /* CIF input (1027, 320), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (956, 375), (212, 40) */
+            call Send_to_UART('Pong
+');
+            /* CIF NEXTSTATE (1004, 435), (116, 35) */
+            NEXTSTATE Running_Ping;
+    endstate;
+endprocess Watchdog;

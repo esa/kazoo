@@ -14,7 +14,7 @@ skeletons:
 work/skeletons_built:	InterfaceView.aadl DataView.aadl
 	$(KAZOO) --gw -o work
 	$(MAKE) -C work dataview
-	touch skeletons_built
+	touch work/skeletons_built
 
 work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 	$(KAZOO) -p --glue --gw -o work

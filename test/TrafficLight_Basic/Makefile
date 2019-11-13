@@ -5,6 +5,9 @@ all:	c
 c:	work/glue_built
 	$(MAKE) -C work
 
+edit:
+	taste
+
 skeletons:
 	$(MAKE) work/skeletons_built
 

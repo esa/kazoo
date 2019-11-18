@@ -13,7 +13,7 @@
 @@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
 @@IF@@ not @_Is_Timer_@
 @@IF@@ @_EXIST:Param_Names_@
-void @_LOWER:Parent_Function_@_PI_@_Name_@
+void @_LOWER:Parent_Function_@::@_Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
@@ -24,7 +24,7 @@ asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
 @@END_TABLE@@
 @@END_INLINE@@
 @@ELSE@@
-void @_LOWER:Parent_Function_@_PI_@_Name_@(void)
+void @_LOWER:Parent_Function_@::@_Name_@(void)
 @@END_IF@@
 {
    // Write your code here

@@ -1,0 +1,35 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process type Mother;
+    /* CIF TEXT (703, 66), (267, 176) */
+    -- Text area for declarations and comments
+    
+    dcl a T_Int32 := 1,
+           b T_Int32;
+    /* CIF ENDTEXT */
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (320, 65), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (541, 15), (71, 35) */
+    state Running;
+        /* CIF input (546, 70), (62, 35) */
+        input Pulse;
+            /* CIF PROCEDURECALL (509, 125), (135, 35) */
+            call DoSomething (a, b);
+            /* CIF task (540, 180), (73, 35) */
+            task a := b;
+            /* CIF PROCEDURECALL (526, 235), (101, 35) */
+            call writeln (b, ' ');
+            /* CIF NEXTSTATE (541, 285), (71, 35) */
+            NEXTSTATE Running;
+    endstate;
+    /* CIF state (320, 65), (70, 35) */
+    state Wait;
+        /* CIF input (320, 120), (70, 35) */
+        input Pulse;
+            /* CIF PROCEDURECALL (308, 175), (92, 35) */
+            call writeln('0 ');
+            /* CIF NEXTSTATE (319, 225), (71, 35) */
+            NEXTSTATE Running;
+    endstate;
+endprocess type Mother;

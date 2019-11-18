@@ -1,0 +1,190 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Mother
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Pulse
+END PI_Pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_Pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Pulse.others;
+
+SUBPROGRAM RI_DoSomething
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_DoSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_DoSomething.others
+END RI_DoSomething.others;
+
+SYSTEM Mother
+FEATURES
+  PI_Pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Mother::PI_Pulse.others {
+    Taste::coordinates => "92596 60943";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 500 ms;
+    Taste::InterfaceName => "Pulse";
+  };
+  RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Mother::RI_DoSomething.others {
+    Taste::coordinates => "92596 70864";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "DoSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+  Taste::is_Component_Type => true;
+END Mother;
+
+SYSTEM IMPLEMENTATION Mother.others
+END Mother.others;
+
+END interfaceview::IV::Mother;
+
+PACKAGE interfaceview::IV::Worker
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_DoSomething
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END PI_DoSomething;
+
+SUBPROGRAM IMPLEMENTATION PI_DoSomething.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_DoSomething.others;
+
+SYSTEM Worker
+FEATURES
+  PI_DoSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
+    Taste::coordinates => "154169 98581";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "DoSomething";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Worker;
+
+SYSTEM IMPLEMENTATION Worker.others
+END Worker.others;
+
+END interfaceview::IV::Worker;
+
+PACKAGE interfaceview::IV::Son
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Pulse
+END PI_Pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_Pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Pulse.others;
+
+SUBPROGRAM RI_DoSomething
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_DoSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_DoSomething.others
+END RI_DoSomething.others;
+
+SYSTEM Son
+FEATURES
+  PI_Pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Son::PI_Pulse.others {
+    Taste::coordinates => "91966 98297";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 500 ms;
+    Taste::InterfaceName => "Pulse";
+  };
+  RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
+    Taste::coordinates => "130233 98544";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "DoSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+  Taste::is_Instance_Of => "interfaceview::IV::Mother::Mother.others";
+  Taste::is_Instance_Of2 => classifier(interfaceview::IV::Mother::Mother.others);
+END Son;
+
+SYSTEM IMPLEMENTATION Son.others
+END Son.others;
+
+END interfaceview::IV::Son;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Mother;
+WITH interfaceview::IV::Worker;
+WITH interfaceview::IV::Son;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Mother : SYSTEM interfaceview::IV::Mother::Mother.others {
+    Taste::coordinates => "92596 54801 128816 79053";
+  };
+  Worker : SYSTEM interfaceview::IV::Worker::Worker.others {
+    Taste::coordinates => "154169 92281 191963 118422";
+  };
+  Son : SYSTEM interfaceview::IV::Son::Son.others {
+    Taste::coordinates => "91966 91808 130233 117431";
+  };
+CONNECTIONS
+  Worker_PI_DoSomething_Son_RI_DoSomething : SUBPROGRAM ACCESS Worker.PI_DoSomething -> Son.RI_DoSomething {
+    Taste::coordinates => "130233 98544 142201 98544 142201 98581 154169 98581";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

@@ -1,0 +1,32 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@-- @_Param_Encodings_@     :   |_ Corresponding ASN.1 encoding
+@@-- @_Is_Timer_@            : Flag set to true if this is a timer interface
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
+@@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
+@@IF@@ not @_Is_Timer_@
+@@IF@@ @_EXIST:Param_Names_@
+void @_LOWER:Parent_Function_@_PI_@_Name_@
+@@INLINE(      \()(,\n       )(\)\n)@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+const asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *IN_@_LOWER:Param_Names_@
+@@ELSE@@
+asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+@@ELSE@@
+void @_LOWER:Parent_Function_@_PI_@_Name_@(void)
+@@END_IF@@
+{
+   // Write your code here
+}
+@@END_IF@@

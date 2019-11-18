@@ -6,6 +6,7 @@
 
 with Ada.Exceptions,
      Ada.Directories,
+     Ada.Strings.Fixed,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Options,
@@ -23,6 +24,7 @@ with Ada.Exceptions,
 package body TASTE.Interface_View is
 
    use Ada.Exceptions,
+       Ada.Strings.Fixed,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.Options,
@@ -636,13 +638,45 @@ package body TASTE.Interface_View is
                 or Each.Name = "Taste::is_Component_Type") and then
                Each.Value = "true"
             then
+               Put_Debug ("Component type found : " & To_String (Each.Value));
                Result.Is_Type := True;
             end if;
             if Each.Name = "TASTE_IV_Properties::is_instance_of"
-               or Each.Name = "Taste::is_instance_of"
-               or Each.Name = "Taste::is_instance_of2"
             then
+               --  Old form, should not appear in new designs
                Result.Instance_Of := Just (Each.Value);
+            elsif Each.Name = "Taste::is_Instance_Of"
+            then
+               --  New form, however should be deprecated soon
+               --  String "foo::bar::hello.world" -> we have to extract hello
+               declare
+                  Inp : constant String := To_String (Each.Value);
+                  Sep1 : constant String := "::";
+                  nb1  : constant Natural :=
+                    Ada.Strings.Fixed.Count (Inp, sep1);
+                  sep2 : constant String := ".";
+                  From : Natural := Inp'First;
+                  To : Natural;
+               begin
+                  for I in 0 .. nb1 loop
+                     To := Index (Inp, Sep1, From => From);
+                     if To = 0 then
+                        To := Inp'Last + 1;
+                     end if;
+                     if I < nb1 then
+                        From := To + 2;
+                     end if;
+                  end loop;
+                  To := Index (Inp (From .. To - 1), Sep2, From => From);
+                  Result.Instance_Of := Just (US (Inp (From .. To - 1)));
+               end;
+               Put_Debug ("Instance : "
+                          & To_String
+                            (Result.Instance_Of.Value_Or (US ("???"))));
+            elsif Each.Name = "Taste::is_Instance_Of2" then
+               --  Could not find a way to parse the classifier property,
+               --  see taste-parser_utils.adb
+               null;
             end if;
          end loop;
 

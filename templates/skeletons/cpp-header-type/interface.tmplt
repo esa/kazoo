@@ -1,0 +1,26 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+@@INLINE@@
+@@IF@@ @_Direction_@ = "PI"
+void @_LOWER:Parent_Function_@_PI_@_Name_@(
+@@ELSE@@
+extern void @_LOWER:Parent_Function_@_RI_@_Name_@(
+@@END_IF@@
+@@INLINE(, )@@
+@@TABLE@@
+@@IF@@ @_Param_Directions_@ = "PARAM_IN"
+const asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *
+@@ELSE@@
+asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+);
+@@END_INLINE@@

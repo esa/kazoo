@@ -27,6 +27,7 @@ PUBLIC
 
 WITH interfaceview::IV::Worker;
 WITH interfaceview::IV::Son;
+WITH interfaceview::IV::Daugther;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -44,6 +45,9 @@ SUBCOMPONENTS
   IV_Son : SYSTEM interfaceview::IV::Son::Son.others {
     Taste::FunctionName => "Son";
   };
+  IV_Daugther : SYSTEM interfaceview::IV::Daugther::Daugther.others {
+    Taste::FunctionName => "Daugther";
+  };
   demo : PROCESS deploymentview::DV::Node1::demo.others {
     Taste::coordinates => "109723 74124 143183 93800";
     Deployment::Port_Number => 0;
@@ -54,6 +58,7 @@ SUBCOMPONENTS
 PROPERTIES
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Worker;
   Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Son;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Daugther;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
 END Node1.others;
 
@@ -72,6 +77,6 @@ PROPERTIES
   Taste::coordinates => "0 0 297000 210000";
   Taste::version => "2.3";
   Taste::interfaceView => "InterfaceView.aadl";
-  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;
 

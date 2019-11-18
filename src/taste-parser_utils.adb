@@ -18,6 +18,7 @@ with Ada.Characters.Latin_1,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
+     --  Ocarina.ME_AADL.AADL_Instances.Entities,
      TASTE.Parser_Version;
 
 package body TASTE.Parser_Utils is
@@ -25,6 +26,7 @@ package body TASTE.Parser_Utils is
    use GNAT.OS_Lib,
        GNAT.Command_Line,
        Templates_Parser.Utils,
+       --  Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.Instances.Queries;
 
    procedure Put_Info (Info : String) is
@@ -343,6 +345,26 @@ package body TASTE.Parser_Utils is
          if Present (ATN.Single_Value (prop_value)) then
             --  Only support single-value properties for now
             single_val := ATN.Single_Value (prop_value);
+
+--              declare
+--                 dummy_foo : Node_Id;
+--                 dummy_bar : Name_Id;
+--                 dummy_path : List_Id;
+--              begin
+--                 if ATN.Kind (single_val) = ATN.K_Component_Classifier_Term
+--                 then
+--                    dummy_foo := ATN.Identifier (single_val); -- No exception
+--                    dummy_foo := ATN.Entity (single_val);   -- No exception
+--                    Put_Debug (ATN.Kind (dummy_foo)'Img); -- K_UNITS_TYPE
+--                    dummy_path := ATN.Namespace_Path (single_val);  -- no exc
+--                    dummy_foo := ATN.First_Node (dummy_path); -- exception!
+--                    Put_Debug ("no exception!");
+--                 end if;
+--              exception
+--                 when others =>
+--                    Put_Error ("sorry! exception!");
+--              end;
+
             result.Insert (Key => AIN_Case (property),
                            New_Item => (Name  => US (AIN_Case (property)),
                                         Value =>
@@ -364,9 +386,11 @@ package body TASTE.Parser_Utils is
                  when ATN.K_Enumeration_Term =>
                     Get_Name_String
                        (ATN.Display_Name (ATN.Identifier (single_val))),
-                 when ATN.K_Number_Range_Term =>
-                    "RANGE NOT SUPPORTED!",
-                 when others => "ERROR! Unsupported kind: "
+                 when ATN.K_Number_Range_Term => "RANGE NOT SUPPORTED!",
+                 when ATN.K_Component_Classifier_Term =>
+                    --  Property used e.g. to reference a component type
+                    "Ohoh - I don't know how to parse this property...",
+                 when others => "ERROR! Kazoo does not support Kind: "
                                 & ATN.Kind (single_val)'Img)));
          end if;
          property := AIN.Next_Node (property);

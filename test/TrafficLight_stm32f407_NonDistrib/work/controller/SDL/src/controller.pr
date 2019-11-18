@@ -1,0 +1,155 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Controller;
+    state Red;
+    substructure
+        out (Go_Green);
+            /* CIF START (60, 69), (59, 35) */
+            START;
+                /* CIF NEXTSTATE (16, 119), (148, 35) */
+                NEXTSTATE Everybody_Stopped;
+            /* CIF state (431, 116), (128, 35) */
+            state Walking_Is_Over;
+                /* CIF input (374, 171), (70, 35) */
+                input Clock;
+                    /* CIF return (392, 226), (35, 35) */
+                    return Go_Green;
+                /* CIF input (478, 171), (123, 35) */
+                input Button;
+                    /* CIF task (453, 226), (174, 35) */
+                    task Walk_Requested := True;
+                    /* CIF NEXTSTATE (505, 281), (70, 35) */
+                    NEXTSTATE -;
+            endstate;
+            /* CIF state (238, 112), (73, 35) */
+            state Walking;
+                /* CIF input (239, 167), (70, 35) */
+                input Clock;
+                    /* CIF PROCEDURECALL (235, 222), (79, 35) */
+                    call Blue_Off;
+                    /* CIF PROCEDURECALL (185, 272), (178, 35) */
+                    call Set_Timer (2000, Clock);
+                    /* CIF NEXTSTATE (210, 327), (128, 35) */
+                    NEXTSTATE Walking_Is_Over;
+            endstate;
+            /* CIF state (16, 119), (148, 35) */
+            state Everybody_Stopped;
+                /* CIF input (54, 174), (70, 35) */
+                input Clock;
+                    /* CIF PROCEDURECALL (51, 229), (76, 35) */
+                    call Blue_On;
+                    /* CIF PROCEDURECALL (3, 279), (173, 35) */
+                    call Set_Timer (5000, Clock);
+                    /* CIF task (0, 334), (179, 35) */
+                    task Walk_Requested := False;
+                    /* CIF NEXTSTATE (53, 384), (73, 35) */
+                    NEXTSTATE Walking;
+            endstate;
+    endsubstructure;
+    state Green;
+    substructure
+        in (short);
+        out (Go_Orange);
+            /* CIF START (604, 136), (70, 35) */
+            START short ;
+                /* CIF NEXTSTATE (583, 191), (110, 35) */
+                NEXTSTATE Second_Delay;
+            /* CIF START (343, 131), (70, 35) */
+            START;
+                /* CIF NEXTSTATE (331, 186), (93, 35) */
+                NEXTSTATE First_Delay;
+            /* CIF state (583, 191), (110, 35) */
+            state Second_Delay;
+                /* CIF input (604, 246), (70, 35) */
+                input Clock;
+                    /* CIF return (621, 301), (35, 35) */
+                    return Go_Orange;
+            endstate;
+            /* CIF state (331, 186), (93, 35) */
+            state First_Delay;
+                /* CIF input (206, 241), (70, 35) */
+                input Clock;
+                    /* CIF PROCEDURECALL (154, 296), (173, 35) */
+                    call Set_Timer (5000, Clock);
+                    /* CIF NEXTSTATE (185, 351), (111, 35) */
+                    NEXTSTATE Second_Delay;
+                /* CIF input (361, 241), (123, 35) */
+                input Button;
+                    /* CIF PROCEDURECALL (331, 296), (181, 35) */
+                    call Set_Timer (3000, Clock);
+                    /* CIF NEXTSTATE (364, 346), (117, 35) */
+                    NEXTSTATE Second_Delay;
+            endstate;
+    endsubstructure;
+    /* CIF TEXT (939, 61), (282, 152) */
+    timer clock;
+    
+    dcl dummy t_Boolean;
+    
+    dcl Walk_Requested T_Boolean := False;
+    
+    dcl Cmd Command;
+    
+    dcl blue_led t_boolean := true;
+    /* CIF ENDTEXT */
+    /* CIF START (155, 40), (70, 33) */
+    START;
+        /* CIF NEXTSTATE (152, 93), (75, 35) */
+        NEXTSTATE Off;
+    /* CIF state (973, 314), (70, 35) */
+    state Green;
+        /* CIF connect (1008, 369), (0, 35) */
+        connect Go_Orange;
+            /* CIF PROCEDURECALL (907, 419), (201, 35) */
+            call Set_Timer (2000, Clock);
+            /* CIF PROCEDURECALL (960, 474), (94, 35) */
+            call Orange_On;
+            /* CIF NEXTSTATE (973, 524), (70, 35) */
+            NEXTSTATE Orange;
+    endstate;
+    /* CIF state (773, 61), (70, 35) */
+    state Orange;
+        /* CIF input (773, 116), (70, 35) */
+        input Clock;
+            /* CIF PROCEDURECALL (719, 171), (178, 35) */
+            call Set_Timer (1000, Clock);
+            /* CIF PROCEDURECALL (771, 226), (72, 35) */
+            call Red_On;
+            /* CIF NEXTSTATE (773, 276), (70, 35) */
+            NEXTSTATE Red;
+    endstate;
+    /* CIF state (548, 49), (70, 35) */
+    state Red;
+        /* CIF connect (583, 104), (0, 35) */
+        connect Go_Green;
+            /* CIF PROCEDURECALL (494, 159), (178, 35) */
+            call Set_Timer (5000, Clock);
+            /* CIF PROCEDURECALL (539, 214), (86, 35) */
+            call Green_On;
+            /* CIF decision (520, 264), (124, 50) */
+            decision Walk_requested;
+                /* CIF ANSWER (469, 334), (70, 24) */
+                (True):
+                    /* CIF NEXTSTATE (443, 378), (120, 35) */
+                    NEXTSTATE Green via Short;
+                /* CIF ANSWER (638, 334), (68, 24) */
+                (False):
+                    /* CIF NEXTSTATE (635, 378), (74, 35) */
+                    NEXTSTATE Green;
+            enddecision;
+    endstate;
+    /* CIF state (152, 93), (75, 35) */
+    state Off;
+        /* CIF input (150, 148), (75, 35) */
+        input Initialize;
+            /* CIF output (149, 203), (77, 35) */
+            output Kick_WD;
+            /* CIF PROCEDURECALL (99, 253), (178, 35) */
+            call Set_Timer (1000, Clock);
+            /* CIF PROCEDURECALL (152, 308), (72, 35) */
+            call Red_On;
+            /* CIF PROCEDURECALL (148, 363), (79, 35) */
+            call Blue_Off;
+            /* CIF NEXTSTATE (158, 413), (61, 35) */
+            NEXTSTATE Red;
+    endstate;
+endprocess Controller;

@@ -220,8 +220,9 @@ package body TASTE.Concurrency_View is
                  CV.Nodes (Node_Name).Partitions (Partition_Name);
                Thread_Names,
                Thread_Has_Param : Vector_Tag;
-               Block_Names     : Vector_Tag;
-               Block_Languages : Vector_Tag;
+               Block_Names,
+               Block_Languages,
+               Block_Instance_Of : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -361,6 +362,8 @@ package body TASTE.Concurrency_View is
                      All_Block_Names := All_Block_Names & Block_Name;
                      Block_Languages := Block_Languages
                        & TASTE.Backend.Language_Spelling (B.Ref_Function);
+                     Block_Instance_Of := Block_Instance_Of
+                       & B.Ref_Function.Instance_Of.Value_Or (US (""));
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Pro_PI_Tag := Pro_PI_Tag & Newline
@@ -416,6 +419,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Blocks",               Blocks)
                  & Assoc ("Block_Names",          Block_Names)
                  & Assoc ("Block_Languages",      Block_Languages)
+                 & Assoc ("Block_Instance_Of",    Block_Instance_Of)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)

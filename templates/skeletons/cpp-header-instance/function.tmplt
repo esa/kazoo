@@ -34,30 +34,20 @@
  */
 
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "dataview-uniq.h"
-#include "@_LOWER:Instance_Of_@.h"
-
-extern "C" {
 
 // External declaration of required interfaces
 @_Required_Interfaces_@
 
-// Declaration of the function instance
-@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
-extern @_Instance_Of_@ @_Name_@();
-@@ELSE@@
-@@INLINE@@
-   extern @_Instance_Of_@ @_Name_@
-      @@INLINE(\()(, )(\);)@@
-         @@TABLE@@
-            @_LOWER:Name_@_RI_@_List_Of_RIs_@
-         @@END_TABLE@@
-         @@TABLE@@
-            @_LOWER:Name_@_RI_SET_@_Timers_@, @_LOWER:Name_@_RI_RESET_@_TImers_@
-         @@END_TABLE@@
-      @@END_INLINE@@
-@@END_INLINE@@
+void @_LOWER:Name_@_startup();
 
+@@TABLE@@
 @_Provided_Interfaces_@
+@@END_TABLE@@
+#ifdef __cplusplus
 }
+#endif

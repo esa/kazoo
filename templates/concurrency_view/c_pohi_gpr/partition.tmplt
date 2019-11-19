@@ -7,6 +7,7 @@
 @@-- @_Blocks_@          : Code generated for protected functions
 @@-- @_Block_Names@      : Vector Tag: list of block (user functions) names
 @@-- @_Block_Languages_@ :   |_ Corresponding implementation language
+@@-- @_Block_Instance_Of_@:  |_ Name of parent function (if instance)
 @@-- @_Coverage_@        : True if user requested code coverage enable
 @@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
@@ -62,6 +63,10 @@ project @_CAPITALIZE:Name_@ is
 @@ELSE@@
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/src",
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
+@@END_IF@@
+@@--  CPP Instances: Add the folder of the parent function (in C++)
+@@IF@@ @_EXIST:Block_Instance_Of_@ and @_Block_Languages_@ = CPP
+       "../../@_LOWER:Block_Instance_Of_@/@_Block_Languages_@/src",
 @@END_IF@@
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")

@@ -38,7 +38,7 @@
 
 // Define and use function state inside this context structure
 // avoid defining global/static variable elsewhere
-@_LOWER:Name_@_state ctxt;
+@_LOWER:Name_@_state ctxt_@_LOWER:Name_@;
 
 @@IF@@ @_Has_Context_@
 /* Include Context Parameters (constants defined in the Interface View) */

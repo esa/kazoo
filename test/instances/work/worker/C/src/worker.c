@@ -30,5 +30,17 @@ void worker_PI_DoSomething
 }
 
 
+void worker_PI_pong(void)
+{
+    static asnSccT_Boolean val = true;
+    if (val) {
+       worker_RI_ping_daughter(&val);
+       val = false;
+    }
+    else {
+        worker_RI_ping_twin(&val);
+        val = true;
+    }
+}
 
 

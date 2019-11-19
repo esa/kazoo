@@ -24,8 +24,13 @@ void father::Pulse(void)
    RI_DoSomething(&ctxt.a, &ctxt.b);
    printf("[C++] %lld\n",ctxt.b );
    ctxt.a++;
+   RI_Pong();
 }
 
+void father::ping(const asn1SccT_Boolean *val)
+{
+   printf("[C++] %s\n", *val ? "Ping":"Pong");
+}
 
 
 

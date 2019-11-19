@@ -45,7 +45,7 @@ FEATURES
   };
   RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Mother::RI_DoSomething.others {
     Taste::coordinates => "91651 65510";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "DoSomething";
     Taste::labelInheritance => "false";
   };
@@ -87,7 +87,7 @@ SYSTEM Worker
 FEATURES
   PI_DoSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
     Taste::coordinates => "154169 98581";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "DoSomething";
@@ -143,7 +143,7 @@ FEATURES
   };
   RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
     Taste::coordinates => "120942 98544";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "DoSomething";
     Taste::labelInheritance => "false";
   };
@@ -166,6 +166,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_Pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_Pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_Pulse.others
@@ -192,11 +194,12 @@ FEATURES
     Taste::coordinates => "147083 52282";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "Pulse";
   };
   RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Father::RI_DoSomething.others {
     Taste::coordinates => "131020 65353";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "DoSomething";
     Taste::labelInheritance => "false";
   };
@@ -219,6 +222,8 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 SUBPROGRAM PI_Pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_Pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_Pulse.others
@@ -245,11 +250,12 @@ FEATURES
     Taste::coordinates => "135587 75747";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "Pulse";
   };
   RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
     Taste::coordinates => "132595 86298";
-    Taste::RCMoperationKind => unprotected;
+    Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "DoSomething";
     Taste::labelInheritance => "false";
   };
@@ -265,6 +271,63 @@ END Daugther.others;
 
 END interfaceview::IV::Daugther;
 
+PACKAGE interfaceview::IV::Twin
+PUBLIC
+
+WITH interfaceview::IV::Worker;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_Pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Pulse.others;
+
+SUBPROGRAM RI_DoSomething
+FEATURES
+  a : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_DoSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_DoSomething.others
+END RI_DoSomething.others;
+
+SYSTEM Twin
+FEATURES
+  PI_Pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Twin::PI_Pulse.others {
+    Taste::coordinates => "116987 111581";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Pulse";
+  };
+  RI_DoSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Worker::PI_DoSomething.others {
+    Taste::coordinates => "129976 113528";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "DoSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Taste::is_Instance_Of => "interfaceview::IV::Father::Father.others";
+  Taste::is_Instance_Of2 => classifier(interfaceview::IV::Father::Father.others);
+END Twin;
+
+SYSTEM IMPLEMENTATION Twin.others
+END Twin.others;
+
+END interfaceview::IV::Twin;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -273,6 +336,7 @@ WITH interfaceview::IV::Worker;
 WITH interfaceview::IV::Son;
 WITH interfaceview::IV::Father;
 WITH interfaceview::IV::Daugther;
+WITH interfaceview::IV::Twin;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -299,12 +363,18 @@ SUBCOMPONENTS
   Daugther : SYSTEM interfaceview::IV::Daugther::Daugther.others {
     Taste::coordinates => "112911 75747 151650 86298";
   };
+  Twin : SYSTEM interfaceview::IV::Twin::Twin.others {
+    Taste::coordinates => "103468 111581 129976 126160";
+  };
 CONNECTIONS
   Worker_PI_DoSomething_Son_RI_DoSomething : SUBPROGRAM ACCESS Worker.PI_DoSomething -> Son.RI_DoSomething {
     Taste::coordinates => "120942 98544 142201 98544 142201 98581 154169 98581";
   };
   Worker_PI_DoSomething_Daugther_RI_DoSomething : SUBPROGRAM ACCESS Worker.PI_DoSomething -> Daugther.RI_DoSomething {
     Taste::coordinates => "132595 86298 132595 98581 154169 98581";
+  };
+  Worker_PI_DoSomething_Twin_RI_DoSomething : SUBPROGRAM ACCESS Worker.PI_DoSomething -> Twin.RI_DoSomething {
+    Taste::coordinates => "129976 113528 142072 113528 142072 98581 154169 98581";
   };
 END interfaceview.others;
 

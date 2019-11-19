@@ -24,9 +24,9 @@ void worker_PI_DoSomething
        asn1SccT_Int32 *OUT_b)
 
 {
-    static asn1SccT_Int32 prev = 0;
-    *OUT_b = *IN_a + prev;
-    prev = *IN_a;
+    //static asn1SccT_Int32 prev = 0;
+    *OUT_b = *IN_a + 1; //prev;
+    //prev = *IN_a;
 }
 
 

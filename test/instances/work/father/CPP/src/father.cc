@@ -21,9 +21,9 @@ void father::startup()
 
 void father::Pulse(void)
 {
-   asn1SccT_Int32 a = 1, b=5;
-   RI_DoSomething(&a, &b);
-   printf("[C++] %lld\n", b);
+   RI_DoSomething(&ctxt.a, &ctxt.b);
+   printf("[C++] %lld\n",ctxt.b );
+   ctxt.a++;
 }
 
 

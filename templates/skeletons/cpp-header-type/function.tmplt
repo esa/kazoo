@@ -36,6 +36,7 @@
 #pragma once
 
 #include "dataview-uniq.h"
+#include "@_LOWER:Name_@_state.h"
 
 class @_LOWER:Name_@ {
 @@TABLE@@
@@ -47,6 +48,9 @@ class @_LOWER:Name_@ {
    SET_@_Timers_@_ptr   SET_@_Timers_@;
    RESET_@_Timers_@_ptr RESET_@_Timers_@;
 @@END_TABLE@@
+
+   // the ctxt member allows you to define your per-instance global data
+   @_LOWER:Name_@_state ctxt;
 
 public:
 @@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0

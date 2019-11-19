@@ -41,7 +41,9 @@ extern "C" {
 #include "dataview-uniq.h"
 
 // External declaration of required interfaces
+@@TABLE@@
 @_Required_Interfaces_@
+@@END_TABLE@@
 
 void @_LOWER:Name_@_startup();
 

@@ -3,18 +3,17 @@ KAZOO=../../kazoo
 all: c
 
 ada: test-parse-ada
-	make -C output.ada
-	cp function1/function1.c output.pohic/function1/C/src
-	cp function2/function2.cc output.pohic/function2/CPP/src
-	cd output.ada/build && \
-	ocarina -x main.aadl && \
-	    make -f Makefile.taste
+	cp function1/function1.c work/function1/C/src
+	cp function2/function2.cc work/function2/CPP/src
+	cp function2/function2_state.h work/function2/CPP/src
+	$(MAKE) -C output.ada
 
 c: test-parse-c # Polyorb_HI_C output
-	cp function1/function1.c output.pohic/function1/C/src
-	cp function2/function2.cc output.pohic/function2/CPP/src
-	$(MAKE) -C output.pohic
-	$(MAKE) -C output.pohic build-rtems-ada
+	cp function1/function1.c work/function1/C/src
+	cp function2/function2.cc work/function2/CPP/src
+	cp function2/function2_state.h work/function2/CPP/src
+	$(MAKE) -C work
+	$(MAKE) -C work build-rtems-ada
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \
@@ -24,7 +23,7 @@ test-parse-ada: clean-ada
 
 test-parse-c: clean-c
 	$(KAZOO) -p --gw \
-	         -o output.pohic \
+	         -o work \
 	         --glue -g
 buildsupport_pohic:
 	buildsupport -o output.buildsupport.pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
@@ -34,7 +33,7 @@ buildsupport_pohiada:
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output.pohic \
+	               -o work \
 	               --glue \
 		       --debug
 
@@ -42,13 +41,13 @@ clean-ada:
 	rm -rf output.ada
 
 clean-c:
-	rm -rf output.pohic
+	rm -rf work
 
 skeletons:
-	$(KAZOO) -p --gw --glue -o code && make -C code dataview
+	$(KAZOO) -p --gw --glue -o work && make -C work dataview
 
 clean-skeletons:
-	rm -rf code
+	rm -rf work
 
 clean: clean-ada clean-c clean-skeletons
 

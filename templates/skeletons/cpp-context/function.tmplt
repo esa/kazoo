@@ -25,7 +25,8 @@
 #include "dataview-uniq.h"
 
 class @_LOWER:Name_@_state {
-
+public:
+  // Add your members here
   // int counter;
 
 };

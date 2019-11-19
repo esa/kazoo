@@ -16,5 +16,6 @@ void function1_PI_pulse()
     
     function1_RI_doSomethingInCPP(&i, &o);
     printf("Send %lld, got %lld\n", i, o);
+    i++;
 }
 

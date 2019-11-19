@@ -37,22 +37,43 @@
 
 #include "dataview-uniq.h"
 
-@@IF@@ @_Required_Interfaces'Length_@ > 0 or @_Timers'Length_@ > 0
-template
-<
-   @_Required_Interfaces_@
+class @_LOWER:Name_@ {
 @@TABLE@@
-   void (*SET_@_Timers_@) (asn1SccT_Uint32 *),
-   void (*RESET_@_Timers_@) (void)
+   @_Required_Interfaces_@
 @@END_TABLE@@
->
-@@END_IF@@
-class @_LOWER:Name_@
-{
- public:
-   void startup();
+@@TABLE@@
+   typedef void (*SET_@_Timers_@_ptr)(asn1SccT_Uint32 *);
+   typedef void (*RESET_@_Timers_@_ptr)(void);
+   SET_@_Timers_@_ptr   SET_@_Timers_@;
+   RESET_@_Timers_@_ptr RESET_@_Timers_@;
+@@END_TABLE@@
 
-/* Provided interfaces */
+public:
+@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
+   @_LOWER:Name_@() {}
+@@ELSE@@
+@@INLINE@@
+   @_LOWER:Name_@
+@@INLINE(\()(, )(\):)@@
+@@TABLE@@
+      RI_@_List_Of_RIs_@_ptr RI_@_List_Of_RIs_@_arg
+@@END_TABLE@@
+@@TABLE@@
+      SET_@_Timers_@_ptr SET_@_Timers_@_arg, RESET_@_Timers_@_ptr RESET_@_Timers_@_arg
+@@END_TABLE@@
+@@END_INLINE@@
+@@END_INLINE@@
+@@INLINE(      )(, )( {})@@
+@@TABLE@@
+RI_@_List_Of_RIs_@(RI_@_List_Of_RIs_@_arg)
+@@END_TABLE@@
+@@TABLE@@
+SET_@_Timers_@(SET_@_Timers_@_arg), RESET_@_Timers_@(RESET_@_Timers_@_arg)
+@@END_TABLE@@
+@@END_INLINE@@
+@@END_IF@@  @@-- RI or Timers
+   void startup();
+   /* Provided interfaces */
 @@TABLE@@
    @_Provided_Interfaces_@
 @@END_TABLE@@

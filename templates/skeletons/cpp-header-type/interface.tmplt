@@ -10,8 +10,8 @@
 @@INLINE@@
 @@IF@@ @_Direction_@ = "PI"
 void @_Name_@(
-@@ELSE@@
-void (*RI_@_Name_@) (
+@@ELSE@@  @@-- RI
+typedef void (*RI_@_Name_@_ptr) (
 @@END_IF@@
 @@INLINE(, )@@
 @@TABLE@@
@@ -22,9 +22,8 @@ asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
-@@IF@@ @_Direction_@ = "PI"
 );
-@@ELSE@@
-)
-@@END_IF@@
 @@END_INLINE@@
+@@IF@@ @_Direction_@ = RI
+   RI_@_Name_@_ptr RI_@_Name_@;
+@@END_IF@@

@@ -12,12 +12,15 @@ all: compile-linux
 clean:
 	rm -rf obj
 edit:
-@@INLINE(	$(VISUAL) )( )()@@
-   @@TABLE@@
-      ../../dataview/Ada/@_REPLACE_ALL(-/_):LOWER:ASN1_Modules_@.ads
-   @@END_TABLE@@
-   src/@_LOWER:Name_@.ads src/@_LOWER:Name_@.adb
-@@END_INLINE@@
+	echo "project tmp_@_LOWER:Name_@ is For Source_Dirs use (\"src\", \"../../dataview/Ada/\"); end tmp_@_LOWER:Name_@;" > tmp_@_LOWER:Name_@.gpr
+	gps -P tmp_@_LOWER:Name_@.gpr
+	rm tmp_@_LOWER:Name_@.gpr
+@@--@@INLINE(	$(VISUAL) )( )()@@
+@@--  @@TABLE@@
+@@--     ../../dataview/Ada/@_REPLACE_ALL(-/_):LOWER:ASN1_Modules_@.ads
+@@--  @@END_TABLE@@
+@@--  src/@_LOWER:Name_@.ads src/@_LOWER:Name_@.adb
+@@--@@END_INLINE@@
 
 compile-linux:
 	mkdir -p obj && cd obj && ADA_INCLUDE_PATH=../../../dataview/Ada gnat make ../src/@_LOWER:Name_@

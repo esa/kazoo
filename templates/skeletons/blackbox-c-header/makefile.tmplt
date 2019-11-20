@@ -6,6 +6,7 @@
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
 VISUAL?=kate
+CC?=gcc
 
 all: compile-linux
 
@@ -14,7 +15,13 @@ clean:
 
 edit:
 	$(VISUAL) ../../dataview/C/dataview-uniq.h src/@_LOWER:Name_@.h src/@_LOWER:Name_@.c
+	$(MAKE) syntax-check
+
+syntax-check:
+	$(CC) -c -fsyntax-only ../../dataview/C/dataview-uniq.h src/@_LOWER:Name_@.h src/@_LOWER:Name_@.c -I../../dataview/C
 
 compile-linux:
 	mkdir -p obj && cd obj && gcc -c ../src/*.c
 	if [ -d wrappers ]; then cd obj && gcc -c ../wrappers/*.c; fi
+
+.PHONY: edit syntax-check compile-linux

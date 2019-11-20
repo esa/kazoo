@@ -39,6 +39,7 @@
 #include "@_LOWER:Name_@_state.h"
 
 class @_LOWER:Name_@ {
+   // These are the required interfaces you can call from application code:
 @@TABLE@@
    @_Required_Interfaces_@
 @@END_TABLE@@
@@ -56,7 +57,7 @@ public:
 @@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
    @_LOWER:Name_@() {}
 @@ELSE@@
-@@INLINE@@
+@@INLINE(   )()()@@
    @_LOWER:Name_@
 @@INLINE(\()(, )(\):)@@
 @@TABLE@@

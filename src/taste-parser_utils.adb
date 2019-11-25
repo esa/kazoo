@@ -13,12 +13,11 @@ with Ada.Characters.Latin_1,
      GNAT.Strings,
      GNAT.Command_Line,
      Templates_Parser.Utils,
-     --  Templates_Parser.Query,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
      Ocarina.Instances.Queries,
-     --  Ocarina.ME_AADL.AADL_Instances.Entities,
+     Ocarina.ME_AADL.AADL_Tree.Entities.Properties,
      TASTE.Parser_Version;
 
 package body TASTE.Parser_Utils is
@@ -26,7 +25,7 @@ package body TASTE.Parser_Utils is
    use GNAT.OS_Lib,
        GNAT.Command_Line,
        Templates_Parser.Utils,
-       --  Ocarina.ME_AADL.AADL_Instances.Entities,
+       Ocarina.ME_AADL.AADL_Tree.Entities.Properties,
        Ocarina.Instances.Queries;
 
    procedure Put_Info (Info : String) is
@@ -334,68 +333,61 @@ package body TASTE.Parser_Utils is
    -- Input parameter is an AADL instance    --
    --------------------------------------------
    function Get_Properties_Map (D : Node_Id) return Property_Maps.Map is
-      properties : constant List_Id  := AIN.Properties (D);
-      result     : Property_Maps.Map := Property_Maps.Empty_Map;
-      property   : Node_Id           := AIN.First_Node (properties);
-      prop_value : Node_Id;
-      single_val : Node_Id;
+      Properties : constant List_Id  := AIN.Properties (D);
+      Result     : Property_Maps.Map := Property_Maps.Empty_Map;
+      Property   : Node_Id           := AIN.First_Node (properties);
+      Prop_Value,
+      Single_Val : Node_Id;
    begin
       while Present (property) loop
          prop_value := AIN.Property_Association_Value (property);
          if Present (ATN.Single_Value (prop_value)) then
             --  Only support single-value properties for now
-            single_val := ATN.Single_Value (prop_value);
+            Single_Val := ATN.Single_Value (Prop_Value);
 
---              declare
---                 dummy_foo : Node_Id;
---                 dummy_bar : Name_Id;
---                 dummy_path : List_Id;
---              begin
---                 if ATN.Kind (single_val) = ATN.K_Component_Classifier_Term
---                 then
---                    dummy_foo := ATN.Identifier (single_val); -- No exception
---                    dummy_foo := ATN.Entity (single_val);   -- No exception
---                    Put_Debug (ATN.Kind (dummy_foo)'Img); -- K_UNITS_TYPE
---                    dummy_path := ATN.Namespace_Path (single_val);  -- no exc
---                    dummy_foo := ATN.First_Node (dummy_path); -- exception!
---                    Put_Debug ("no exception!");
---                 end if;
---              exception
---                 when others =>
---                    Put_Error ("sorry! exception!");
---              end;
-
-            result.Insert (Key => AIN_Case (property),
-                           New_Item => (Name  => US (AIN_Case (property)),
-                                        Value =>
-              US (case ATN.Kind (single_val) is
-                 when ATN.K_Signed_AADLNumber =>
-                   Ocarina.AADL_Values.Image
-                      (ATN.Value (ATN.Number_Value (single_val))) &
-                      (if Present (ATN.Unit_Identifier (single_val)) then " " &
-                      Get_Name_String
-                          (ATN.Display_Name (ATN.Unit_Identifier (single_val)))
-                      else ""),
-                 when ATN.K_Literal =>
-                    Ocarina.AADL_Values.Image (ATN.Value (single_val),
-                                               Quoted => False),
-                 when ATN.K_Reference_Term =>
-                    Get_Name_String
-                       (ATN.Display_Name (ATN.First_Node --  XXX must iterate
-                          (ATN.List_Items (ATN.Reference_Term (single_val))))),
-                 when ATN.K_Enumeration_Term =>
-                    Get_Name_String
-                       (ATN.Display_Name (ATN.Identifier (single_val))),
-                 when ATN.K_Number_Range_Term => "RANGE NOT SUPPORTED!",
-                 when ATN.K_Component_Classifier_Term =>
-                    --  Property used e.g. to reference a component type
-                    "Ohoh - I don't know how to parse this property...",
-                 when others => "ERROR! Kazoo does not support Kind: "
-                                & ATN.Kind (single_val)'Img)));
+            Result.Insert
+              (Key      => AIN_Case (property),
+               New_Item =>
+                 (Name => US (AIN_Case (property)),
+                  Value =>
+                    US (case ATN.Kind (single_val) is
+                         when ATN.K_Signed_AADLNumber =>
+                           Ocarina.AADL_Values.Image
+                        (ATN.Value (ATN.Number_Value (single_val))) &
+                      (if Present (ATN.Unit_Identifier (single_val))
+                         then " "
+                         & Get_Name_String
+                           (ATN.Display_Name
+                              (ATN.Unit_Identifier (single_val)))
+                         else ""),
+                         when ATN.K_Literal =>
+                           Ocarina.AADL_Values.Image
+                        (ATN.Value (single_val),
+                         Quoted => False),
+                         when ATN.K_Reference_Term =>
+                           Get_Name_String
+                        (ATN.Display_Name (ATN.First_Node --  XXX must iterate
+                         (ATN.List_Items (ATN.Reference_Term (single_val))))),
+                         when ATN.K_Enumeration_Term =>
+                           Get_Name_String
+                        (ATN.Display_Name (ATN.Identifier (single_val))),
+                         when ATN.K_Number_Range_Term =>
+                           "RANGE NOT SUPPORTED!",
+                         when ATN.K_Component_Classifier_Term =>
+                         --  When property is "classifier (...)" the following
+                         --  returns the name of the component (e.g. foo.other)
+                        Get_Name_String
+                          (AIN.Display_Name
+                               (AIN.Identifier
+                                  (Get_Classifier_Of_Property_Value
+                                     (ATN.Expanded_Single_Value
+                                          (Prop_Value))))),
+                         when others => "ERROR! Kazoo does not support Kind: "
+                      & ATN.Kind (single_val)'Img)));
          end if;
-         property := AIN.Next_Node (property);
+         Property := AIN.Next_Node (Property);
       end loop;
-      return result;
+      return Result;
    end Get_Properties_Map;
 
    --  Initialization step: we look for ocarina on path to define

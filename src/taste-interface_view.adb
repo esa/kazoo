@@ -674,9 +674,23 @@ package body TASTE.Interface_View is
                           & To_String
                             (Result.Instance_Of.Value_Or (US ("???"))));
             elsif Each.Name = "Taste::is_Instance_Of2" then
-               --  Could not find a way to parse the classifier property,
-               --  see taste-parser_utils.adb
-               null;
+               --  Each.Value has the form "foo.other"
+               --  We must keep only "foo"
+               declare
+                  Inp : constant String := To_String (Each.Value);
+                  Sep : constant String := ".";
+                  Idx : constant Natural :=
+                    Index (Inp, Sep, From => Inp'First);
+               begin
+                  Result.Instance_Of := Just (US (Inp (Inp'First .. Idx - 1)));
+               exception
+                  when others =>
+                     Put_Error ("Incorrect instance: "
+                                & To_String (Each.Value));
+               end;
+               Put_Debug ("Instance (New form): "
+                          & To_String
+                            (Result.Instance_Of.Value_Or (US ("???"))));
             end if;
          end loop;
 

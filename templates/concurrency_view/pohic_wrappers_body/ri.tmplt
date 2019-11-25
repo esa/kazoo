@@ -11,11 +11,25 @@
 @@-- @_Param_Directions_@       :   |_ Corresponding direction
 @@-- @_Remote_Function_Names_@  : List of callees
 @@-- @_Remote_Interface_Names_@ :   |_ callee's interface name
+@@-- @_Remote_Languages_@       :   |_ callee's function language
 @@-- @_Calling_Threads_@        : Calling threads of the containing block
 // Required interface @_Name_@ in function @_Parent_Function_@
 @@IF@@ @_Param_Names'Length_@ = 0
    @@SET@@ No_Param=True
 @@END_IF@@
+@@INLINE@@  @@-- Include the relevant header file to call synchronous RIs
+   @@IF@@ @_Kind_@ = PROTECTED_OPERATION or @_Kind_@ = UNPROTECTED_OPERATION
+      @@TABLE@@
+          @@IF@@ @_Remote_Languages_@ = Blackbox_C
+              #include "@_LOWER:Remote_Function_Names_@.h"
+          @@ELSIF@@ @_Remote_Languages_@ = SIMULINK
+              #include "@_Name_@_SIMULINK.Simulink.h"
+          @@ELSE@@
+              #include "@_LOWER:Remote_Function_Names_@_vm_if.h"  // Remote language: @_Remote_Languages_@
+          @@END_IF@@
+      @@END_TABLE@@
+   @@END_IF@@
+@@END_INLINE@@
 @@IF@@ @_No_Param_@
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void)
 @@ELSE@@
@@ -23,9 +37,9 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@INLINE(        \()(,\n         )(\)\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         void *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
+         const char *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
       @@ELSE@@
-         void *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
+         char *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
@@ -42,7 +56,7 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
    __po_hi_request_t request;
    __po_hi_copy_array(&(request.vars.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.buffer),
 @@TABLE@@
- IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@);
+ (void *)IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@);
 @@END_TABLE@@
    request.vars.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.@_LOWER:Calling_Threads_@_global_outport_@_LOWER:Name_@.length = 
 @@TABLE@@
@@ -70,13 +84,23 @@ size_IN_buf_@_LOWER:Param_Names_@;
 @@ELSE@@
    @_LOWER:Remote_Function_Names_@_@_Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@
-   @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
-      @@ELSE@@
-         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
-      @@END_IF@@
-   @@END_TABLE@@
+   @@IF@@ @_Remote_Languages_@ = SIMULINK  @@-- Simulink interfaces use void* instead of const char */char*
+       @@TABLE@@
+          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+             (void *)IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+          @@ELSE@@
+             (void *)OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+   @@ELSE@@
+       @@TABLE@@
+          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+             IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+          @@ELSE@@
+             OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+   @@END_IF@@
 @@END_INLINE@@
 @@END_IF@@
 @@END_TABLE@@
@@ -88,13 +112,23 @@ size_IN_buf_@_LOWER:Param_Names_@;
 @@ELSE@@
    pro_@_Remote_Function_Names_@_@_Remote_Interface_Names_@
 @@INLINE(        \()(,\n         )(\);\n)@@
-   @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
-      @@ELSE@@
-         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
-      @@END_IF@@
-   @@END_TABLE@@
+   @@IF@@ @_Remote_Languages_@ = SIMULINK  @@-- Simulink interfaces use void* instead of const char */char*
+       @@TABLE@@
+          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+             (void *)IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+          @@ELSE@@
+             (void *)OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+   @@ELSE@@
+       @@TABLE@@
+          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+             IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+          @@ELSE@@
+             OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+   @@END_IF@@
 @@END_INLINE@@
 @@END_IF@@
 @@END_TABLE@@

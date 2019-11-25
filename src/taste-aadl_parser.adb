@@ -758,15 +758,21 @@ package body TASTE.AADL_Parser is
                   loop
                      Need_Timer_Manager := True;
                      declare
+                        Func_Language   : constant String :=
+                          TASTE.Backend.Language_Spelling
+                            (Model.Interface_View.Flat_Functions
+                               (Function_Name));
                         Name_In_Manager : constant String :=
                           Function_Name & "_" & Timer_Name;
 
                         Manager_As_Remote : constant Remote_Entity :=
                           (Function_Name  => Timer_Manager.Name,
+                           Language       => US ("C"),
                            Interface_Name => US (Name_In_Manager));
 
                         Function_As_Remote : constant Remote_Entity :=
                           (Function_Name  => US (Function_Name),
+                           Language       => US (Func_Language),
                            Interface_Name => US (Timer_Name));
 
                         Timer_PI : constant Taste_Interface :=
@@ -813,6 +819,7 @@ package body TASTE.AADL_Parser is
                            Language          => US ("Timer_Manager"),
                            Remote_Interfaces => Remote_Entities.Empty_Vector &
                            (Function_Name  => US (Function_Name),
+                            Language       => US (Func_Language),
                             Interface_Name => US (Set_Name_In_Function)),
                            Params            => Parameters.Empty_Vector &
                            (Name            => US ("Val"),
@@ -832,6 +839,7 @@ package body TASTE.AADL_Parser is
                            Language          => US ("Timer_Manager"),
                            Remote_Interfaces => Remote_Entities.Empty_Vector &
                            (Function_Name  => US (Function_Name),
+                            Language       => US (Func_Language),
                             Interface_Name => US (Reset_Name_In_Function)),
                            Params            => Parameters.Empty_Vector,
                            RCM               => Protected_Operation,
@@ -846,6 +854,7 @@ package body TASTE.AADL_Parser is
                                (Function_Name).Language,
                            Remote_Interfaces => Remote_Entities.Empty_Vector &
                            (Function_Name  => US (Manager_Name),
+                            Language       => US ("C"),  --  manager is in C
                             Interface_Name => US (Set_Name_In_Manager)),
                            Params            => Parameters.Empty_Vector &
                            (Name           => US ("Val"),
@@ -868,6 +877,7 @@ package body TASTE.AADL_Parser is
                                (Function_Name).Language,
                            Remote_Interfaces => Remote_Entities.Empty_Vector &
                            (Function_Name  => US (Manager_Name),
+                            Language       => US ("C"),  -- manager is in C
                             Interface_Name => US (Reset_Name_In_Manager)),
                            Params            => Parameters.Empty_Vector,
                            RCM               => Protected_Operation,

@@ -17,9 +17,9 @@ void @_LOWER:Parent_Function_@_@_Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-void *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
+const char *IN_@_LOWER:Param_Names_@, size_t IN_@_LOWER:Param_Names_@_len
 @@ELSE@@
-void *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
+char *OUT_@_LOWER:Param_Names_@, size_t *OUT_@_LOWER:Param_Names_@_len
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@

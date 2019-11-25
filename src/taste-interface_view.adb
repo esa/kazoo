@@ -513,7 +513,8 @@ package body TASTE.Interface_View is
             else (if not Going_Out then From else Parent_Context (From)));
          Source      : constant String :=
            (if Context /= From then From else "_env");
-         Result      : Remote_Entity := (US ("Not found!"), US ("Not found!"));
+         Result      : Remote_Entity :=
+           (US ("Not found!"), US ("Not found!"), US ("Not found!"));
          Connections : Channels.Vector;
          Set_Going_Out : Boolean := False;
       begin
@@ -539,6 +540,9 @@ package body TASTE.Interface_View is
                Result :=
                  (if Functions.Contains (Key => To_String (Each.Callee))
                   then (Function_Name  => Each.Callee,
+                        Language       =>
+                          US (Language_Spelling
+                            (Functions (To_String (Each.Callee)))),
                         Interface_Name => Each.PI_Name)
                   else Rec_Jump (From         => (if not Set_Going_Out
                                                   then To_String (Each.Callee)
@@ -843,8 +847,10 @@ package body TASTE.Interface_View is
                        Remote.Interface_Name = PI.Name
                      then
                         PI.Remote_Interfaces.Append
-                                (Remote_Entity'(Function_Name  => Fn.Name,
-                                                Interface_Name => RI.Name));
+                          (Remote_Entity'(Function_Name  => Fn.Name,
+                                          Language       =>
+                                            US (Language_Spelling (Fn)),
+                                          Interface_Name => RI.Name));
                      end if;
                   end loop;
                end loop;
@@ -1272,7 +1278,8 @@ package body TASTE.Interface_View is
       Property_Names,
       Property_Values,
       Remote_Function_Names,
-      Remote_Interface_Names : Vector_Tag;
+      Remote_Interface_Names,
+      Remote_Languages : Vector_Tag;
    begin
       for Each of TI.Params loop
          Param_Names        := Param_Names & Each.Name;
@@ -1291,6 +1298,7 @@ package body TASTE.Interface_View is
          Remote_Function_Names  := Remote_Function_Names & Each.Function_Name;
          Remote_Interface_Names := Remote_Interface_Names
            & Each.Interface_Name;
+         Remote_Languages := Remote_Languages & Each.Language;
       end loop;
 
       return +Assoc ("Name",               TI.Name)
@@ -1309,6 +1317,7 @@ package body TASTE.Interface_View is
         & Assoc ("IF_Property_Values",     Property_Values)
         & Assoc ("Remote_Function_Names",  Remote_Function_Names)
         & Assoc ("Remote_Interface_Names", Remote_Interface_Names)
+        & Assoc ("Remote_Languages",       Remote_Languages)
         & Assoc ("Is_Timer",               TI.Is_Timer);
    end Interface_To_Template;
 

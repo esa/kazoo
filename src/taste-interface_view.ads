@@ -96,7 +96,8 @@ package TASTE.Interface_View is
    type Remote_Entity is
       record
          Function_Name,
-         Interface_Name : Unbounded_String;
+         Interface_Name,
+         Language        : Unbounded_String;
       end record;
 
    package Remote_Entities is new Indefinite_Vectors (Natural, Remote_Entity);

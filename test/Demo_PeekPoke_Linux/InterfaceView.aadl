@@ -1,0 +1,386 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH interfaceview::IV::Function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM RI_doSomething
+FEATURES
+  abc : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+END RI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_doSomething.others
+END RI_doSomething.others;
+
+SYSTEM Function1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_pulse.others {
+    Taste::coordinates => "103777 52283";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_doSomething.others {
+    Taste::coordinates => "138579 52283";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "doSomething";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_doSomething
+FEATURES
+  abc : IN PARAMETER DataView::MyBool {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION PI_doSomething.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_doSomething.others;
+
+SYSTEM Function2
+FEATURES
+  PI_doSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_doSomething.others {
+    Taste::coordinates => "159209 55432";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "doSomething";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+END Function2.others;
+
+END interfaceview::IV::Function2;
+
+PACKAGE interfaceview::IV::Peek_Poke::TASTE_Probe
+PUBLIC
+
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe_Console;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_add_monitorings
+FEATURES
+  monitorings : IN PARAMETER DataView::TASTE_Peek_list {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_add_monitorings;
+
+SUBPROGRAM IMPLEMENTATION PI_add_monitorings.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_add_monitorings.others;
+
+SUBPROGRAM PI_patch_memory
+FEATURES
+  pokes : IN PARAMETER DataView::TASTE_Poke_list {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_patch_memory;
+
+SUBPROGRAM IMPLEMENTATION PI_patch_memory.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_patch_memory.others;
+
+SUBPROGRAM PI_remove_monitorings
+FEATURES
+  ids : IN PARAMETER DataView::TASTE_Peek_id_list {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_remove_monitorings;
+
+SUBPROGRAM IMPLEMENTATION PI_remove_monitorings.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_remove_monitorings.others;
+
+SUBPROGRAM PI_periodic_monitoring
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_periodic_monitoring;
+
+SUBPROGRAM IMPLEMENTATION PI_periodic_monitoring.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_periodic_monitoring.others;
+
+SUBPROGRAM RI_update_monitorings
+FEATURES
+  monitorings : IN PARAMETER DataView::TASTE_Monitoring_list {
+    Taste::encoding => UPER;
+  };
+END RI_update_monitorings;
+
+SUBPROGRAM IMPLEMENTATION RI_update_monitorings.others
+END RI_update_monitorings.others;
+
+SYSTEM TASTE_Probe
+FEATURES
+  PI_add_monitorings : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_add_monitorings.others {
+    Taste::coordinates => "149125 93209";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "add_monitorings";
+  };
+  PI_patch_memory : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_patch_memory.others {
+    Taste::coordinates => "149125 97934";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "patch_memory";
+  };
+  PI_remove_monitorings : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_remove_monitorings.others {
+    Taste::coordinates => "149125 96359";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "remove_monitorings";
+  };
+  PI_periodic_monitoring : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_periodic_monitoring.others {
+    Taste::coordinates => "157000 91634";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "periodic_monitoring";
+  };
+  RI_update_monitorings : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe_Console::PI_update_monitorings.others {
+    Taste::coordinates => "149125 102659";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "update_monitorings";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("../shared-components/taste_probe.zip");
+END TASTE_Probe;
+
+SYSTEM IMPLEMENTATION TASTE_Probe.others
+SUBCOMPONENTS
+  max_monitoring_number : DATA DataView::TASTE_Peek_limit {
+    Taste::FS_Default_Value => "10";
+  };
+END TASTE_Probe.others;
+
+END interfaceview::IV::Peek_Poke::TASTE_Probe;
+
+PACKAGE interfaceview::IV::Peek_Poke::TASTE_Probe_Console
+PUBLIC
+
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_update_monitorings
+FEATURES
+  monitorings : IN PARAMETER DataView::TASTE_Monitoring_list {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_update_monitorings;
+
+SUBPROGRAM IMPLEMENTATION PI_update_monitorings.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_update_monitorings.others;
+
+SUBPROGRAM RI_add_monitorings
+FEATURES
+  monitorings : IN PARAMETER DataView::TASTE_Peek_list {
+    Taste::encoding => UPER;
+  };
+END RI_add_monitorings;
+
+SUBPROGRAM IMPLEMENTATION RI_add_monitorings.others
+END RI_add_monitorings.others;
+
+SUBPROGRAM RI_patch_memory
+FEATURES
+  pokes : IN PARAMETER DataView::TASTE_Poke_list {
+    Taste::encoding => UPER;
+  };
+END RI_patch_memory;
+
+SUBPROGRAM IMPLEMENTATION RI_patch_memory.others
+END RI_patch_memory.others;
+
+SUBPROGRAM RI_remove_monitorings
+FEATURES
+  ids : IN PARAMETER DataView::TASTE_Peek_id_list {
+    Taste::encoding => UPER;
+  };
+END RI_remove_monitorings;
+
+SUBPROGRAM IMPLEMENTATION RI_remove_monitorings.others
+END RI_remove_monitorings.others;
+
+SYSTEM TASTE_Probe_Console
+FEATURES
+  PI_update_monitorings : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe_Console::PI_update_monitorings.others {
+    Taste::coordinates => "132027 103386";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "update_monitorings";
+  };
+  RI_add_monitorings : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_add_monitorings.others {
+    Taste::coordinates => "132027 92361";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "add_monitorings";
+    Taste::labelInheritance => "true";
+  };
+  RI_patch_memory : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_patch_memory.others {
+    Taste::coordinates => "132027 97086";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "patch_memory";
+    Taste::labelInheritance => "true";
+  };
+  RI_remove_monitorings : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Peek_Poke::TASTE_Probe::PI_remove_monitorings.others {
+    Taste::coordinates => "132027 95511";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "remove_monitorings";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => enabled;
+END TASTE_Probe_Console;
+
+SYSTEM IMPLEMENTATION TASTE_Probe_Console.others
+END TASTE_Probe_Console.others;
+
+END interfaceview::IV::Peek_Poke::TASTE_Probe_Console;
+
+PACKAGE interfaceview::IV::Peek_Poke
+PUBLIC
+
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe;
+WITH interfaceview::IV::Peek_Poke::TASTE_Probe_Console;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM Peek_Poke
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Peek_Poke;
+
+SYSTEM IMPLEMENTATION Peek_Poke.others
+SUBCOMPONENTS
+  TASTE_Probe : SYSTEM interfaceview::IV::Peek_Poke::TASTE_Probe::TASTE_Probe.others {
+    Taste::coordinates => "149125 91634 173430 111276";
+  };
+  TASTE_Probe_Console : SYSTEM interfaceview::IV::Peek_Poke::TASTE_Probe_Console::TASTE_Probe_Console.others {
+    Taste::coordinates => "109559 90786 132027 111135";
+  };
+CONNECTIONS
+  TASTE_Probe_PI_add_monitorings_TASTE_Probe_Console_RI_add_monitorings : SUBPROGRAM ACCESS TASTE_Probe.PI_add_monitorings -> TASTE_Probe_Console.RI_add_monitorings {
+    Taste::coordinates => "132027 92361 140576 92361 140576 93209 149125 93209";
+  };
+  TASTE_Probe_PI_patch_memory_TASTE_Probe_Console_RI_patch_memory : SUBPROGRAM ACCESS TASTE_Probe.PI_patch_memory -> TASTE_Probe_Console.RI_patch_memory {
+    Taste::coordinates => "132027 97086 140576 97086 140576 97934 149125 97934";
+  };
+  TASTE_Probe_PI_remove_monitorings_TASTE_Probe_Console_RI_remove_monitorings : SUBPROGRAM ACCESS TASTE_Probe.PI_remove_monitorings -> TASTE_Probe_Console.RI_remove_monitorings {
+    Taste::coordinates => "132027 95511 140576 95511 140576 96359 149125 96359";
+  };
+  TASTE_Probe_Console_PI_update_monitorings_TASTE_Probe_RI_update_monitorings : SUBPROGRAM ACCESS TASTE_Probe_Console.PI_update_monitorings -> TASTE_Probe.RI_update_monitorings {
+    Taste::coordinates => "149125 102659 140576 102659 140576 103386 132027 103386";
+  };
+END Peek_Poke.others;
+
+END interfaceview::IV::Peek_Poke;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH interfaceview::IV::Peek_Poke;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "103777 49133 138579 74801";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::coordinates => "159209 50707 188184 74801";
+  };
+  Peek_Poke : SYSTEM interfaceview::IV::Peek_Poke::Peek_Poke.others {
+    Taste::coordinates => "105037 85982 179365 117635";
+    TASTE_IV_Properties::Version => "5";
+    Taste::Fill_Color => "#A3C4A4";
+  };
+CONNECTIONS
+  Function2_PI_doSomething_Function1_RI_doSomething : SUBPROGRAM ACCESS Function2.PI_doSomething -> Function1.RI_doSomething {
+    Taste::coordinates => "138579 52283 148894 52283 148894 55432 159209 55432";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.2";
+END interfaceview::IV;
+

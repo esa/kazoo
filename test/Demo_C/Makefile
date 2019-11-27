@@ -5,26 +5,25 @@ export USER_LDFLAGS=
 # you can add folders with source code you want to compile
 export EXTERNAL_SOURCE_PATH=
 
-all: c ada
+all: c ada rtems
 
-ada: kazoo-ada
+ada:
+	rm -rf output.ada
+	$(KAZOO) --gw -o output.ada --glue --debug
 	cp simple_c_function/*.c output.ada/simple_c_function/C/src
 	$(MAKE) -C output.ada
 
-c: kazoo-c  # Polyorb_HI_C output
-	cp simple_c_function/*.c output.c/simple_c_function/C/src
-	$(MAKE) -C output.c
-	$(MAKE) -C output.c build-rtems-ada
+c: # Polyorb_HI_C output
+	rm -rf work
+	$(KAZOO) -p --gw --glue -o work
+	cp simple_c_function/*.c work/simple_c_function/C/src
+	$(MAKE) -C work
 
-kazoo-ada: clean-ada
-	$(KAZOO) --gw \
-	         -o output.ada \
-	         --glue \
-	         --debug
-
-kazoo-c: clean-c
-	$(KAZOO) -p --gw --glue -o output.c
-
+rtems:
+	rm -f output.rtems
+	$(KAZOO) -p --gw --glue -o output.rtems
+	cp simple_c_function/*.c output.rtems/simple_c_function/C/src
+	$(MAKE) -C output.rtems build-rtems-ada
 
 gdb-ada: clean
 	gdb --args $(KAZOO) --gw --glue --debug -o output.gdb
@@ -36,14 +35,17 @@ clean-ada:
 	rm -rf output.ada
 
 clean-c:
-	rm -rf output.c
+	rm -rf work
 
-skeletons-c:
-	$(KAZOO) --gw -o output.c
-	$(MAKE)  -C output.c dataview
+clean-rtems:
+	rm -rf output.rtems
+
+skeletons:
+	$(KAZOO) --gw -o work
+	$(MAKE)  -C work dataview
 
 clean-skeletons: clean-c
 
-clean: clean-ada clean-c
+clean: clean-ada clean-c clean-rtems
 
-.PHONY: clean clean-ada clean-c kazoo-ada kazoo-c gdb-ada gdb-c c ada skeletons-c clean-skeletons
+.PHONY: clean clean-ada clean-c clean-rtems kazoo-ada kazoo-c gdb-ada gdb-c c ada skeletons-c clean-skeletons

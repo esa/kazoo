@@ -515,7 +515,7 @@ package body TASTE.Interface_View is
            (if Context /= From then From else "_env");
          Result      : Remote_Entity :=
            (US ("Not found!"), US ("Not found!"), US ("Not found!"));
-         Connections : Channels.Vector;
+         Connections : Channels.Vector := Channels.Empty_Vector;
          Set_Going_Out : Boolean := False;
       begin
          --  Note: There is a limitation in the interface view when there are
@@ -526,7 +526,10 @@ package body TASTE.Interface_View is
          --  * This is NOT RIGHT and should be fixed by Ellidiss *
 
          --  Retrieve the list of connections of the source function context
-         Connections := Routes_Map.Element (Key => Context);
+         if Routes_Map.Contains (Key => Context) then
+            Connections := Routes_Map.Element (Key => Context);
+         end if;
+
          for Each of Connections loop
             if Each.Caller = Source and Each.RI_Name = US (RI) then
                --  Found the connection in the current context

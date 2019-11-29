@@ -1,0 +1,889 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Simulation_Manager
+PUBLIC
+
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface;
+WITH interfaceview::IV::Console;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Execution_Step
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Execution_Step;
+
+SUBPROGRAM IMPLEMENTATION PI_Execution_Step.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Execution_Step.others;
+
+SUBPROGRAM PI_Module1_In
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module1_In;
+
+SUBPROGRAM IMPLEMENTATION PI_Module1_In.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module1_In.others;
+
+SUBPROGRAM PI_run_simulation
+FEATURES
+  inp : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_run_simulation;
+
+SUBPROGRAM IMPLEMENTATION PI_run_simulation.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_run_simulation.others;
+
+SUBPROGRAM RI_Simulation_Start
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Simulation_Start;
+
+SUBPROGRAM IMPLEMENTATION RI_Simulation_Start.others
+END RI_Simulation_Start.others;
+
+SUBPROGRAM RI_Log
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Log;
+
+SUBPROGRAM IMPLEMENTATION RI_Log.others
+END RI_Log.others;
+
+SYSTEM Simulation_Manager
+FEATURES
+  PI_Execution_Step : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_Execution_Step.others {
+    Taste::coordinates => "75722 46091";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Execution_Step";
+  };
+  PI_Module1_In : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_Module1_In.others {
+    Taste::coordinates => "75954 74544";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module1_In";
+  };
+  PI_run_simulation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_run_simulation.others {
+    Taste::coordinates => "62786 49622";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run_simulation";
+  };
+  RI_Simulation_Start : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface::PI_Module_in.others {
+    Taste::coordinates => "88300 53382";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Simulation_Start";
+    Taste::labelInheritance => "true";
+  };
+  RI_Log : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Console::PI_Log.others {
+    Taste::coordinates => "62786 57383";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Log";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Simulation_Manager;
+
+SYSTEM IMPLEMENTATION Simulation_Manager.others
+END Simulation_Manager.others;
+
+END interfaceview::IV::Simulation_Manager;
+
+PACKAGE interfaceview::IV::Geometry_Module::GeometryModule_Interface
+PUBLIC
+
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Implementation;
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_In
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_In;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_In.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_In.others;
+
+SUBPROGRAM RI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Execute;
+
+SUBPROGRAM IMPLEMENTATION RI_Execute.others
+END RI_Execute.others;
+
+SUBPROGRAM RI_Module_Out
+FEATURES
+  FOV_Defintiion : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_Out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_Out.others
+END RI_Module_Out.others;
+
+SYSTEM GeometryModule_Interface
+FEATURES
+  PI_Module_In : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Interface::PI_Module_In.others {
+    Taste::coordinates => "174837 55028";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_In";
+  };
+  RI_Execute : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Implementation::PI_Execute.others {
+    Taste::coordinates => "193061 64197";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Execute";
+    Taste::labelInheritance => "true";
+  };
+  RI_Module_Out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::PI_Module_In.others {
+    Taste::coordinates => "210815 54204";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_Out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END GeometryModule_Interface;
+
+SYSTEM IMPLEMENTATION GeometryModule_Interface.others
+END GeometryModule_Interface.others;
+
+END interfaceview::IV::Geometry_Module::GeometryModule_Interface;
+
+PACKAGE interfaceview::IV::Geometry_Module::GeometryModule_Implementation
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Execute;
+
+SUBPROGRAM IMPLEMENTATION PI_Execute.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Execute.others;
+
+SYSTEM GeometryModule_Implementation
+FEATURES
+  PI_Execute : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Implementation::PI_Execute.others {
+    Taste::coordinates => "193065 71369";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Execute";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => any;
+END GeometryModule_Implementation;
+
+SYSTEM IMPLEMENTATION GeometryModule_Implementation.others
+SUBCOMPONENTS
+  Orbit_And_Time_Params : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "1";
+  };
+END GeometryModule_Implementation.others;
+
+END interfaceview::IV::Geometry_Module::GeometryModule_Implementation;
+
+PACKAGE interfaceview::IV::Geometry_Module
+PUBLIC
+
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Interface;
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Implementation;
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_In
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_In;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_In.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_In.others;
+
+SUBPROGRAM RI_Module_Out
+FEATURES
+  FOV_Defintiion : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_Out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_Out.others
+END RI_Module_Out.others;
+
+SYSTEM Geometry_Module
+FEATURES
+  PI_Module_In : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Interface::PI_Module_In.others {
+    Taste::coordinates => "162726 55025";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_In";
+  };
+  RI_Module_Out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::PI_Module_In.others {
+    Taste::coordinates => "220575 55967";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_Out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Geometry_Module;
+
+SYSTEM IMPLEMENTATION Geometry_Module.others
+SUBCOMPONENTS
+  GeometryModule_Interface : SYSTEM interfaceview::IV::Geometry_Module::GeometryModule_Interface::GeometryModule_Interface.others {
+    Taste::coordinates => "174837 51969 210815 64197";
+  };
+  GeometryModule_Implementation : SYSTEM interfaceview::IV::Geometry_Module::GeometryModule_Implementation::GeometryModule_Implementation.others {
+    Taste::coordinates => "174249 71369 211991 88183";
+  };
+CONNECTIONS
+  GeometryModule_Interface_PI_Module_In_Geometry_Module_PI_Module_In : SUBPROGRAM ACCESS GeometryModule_Interface.PI_Module_In -> PI_Module_In {
+    Taste::coordinates => "162726 55025 170487 55025 170487 55028 174837 55028";
+  };
+  GeometryModule_Implementation_PI_Execute_GeometryModule_Interface_RI_Execute : SUBPROGRAM ACCESS GeometryModule_Implementation.PI_Execute -> GeometryModule_Interface.RI_Execute {
+    Taste::coordinates => "193061 64197 193061 67254 193065 67254 193065 71369";
+  };
+  Geometry_Module_RI_Module_Out_GeometryModule_Interface_RI_Module_Out : SUBPROGRAM ACCESS RI_Module_Out -> GeometryModule_Interface.RI_Module_Out {
+    Taste::coordinates => "210815 54204 215107 54204 215107 55967 220575 55967";
+  };
+END Geometry_Module.others;
+
+END interfaceview::IV::Geometry_Module;
+
+PACKAGE interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface
+PUBLIC
+
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation;
+WITH interfaceview::IV::Simulation_Manager;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_In
+FEATURES
+  FOV_Defintiion : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_In;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_In.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_In.others;
+
+SUBPROGRAM RI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Execute;
+
+SUBPROGRAM IMPLEMENTATION RI_Execute.others
+END RI_Execute.others;
+
+SUBPROGRAM RI_Module_Out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_Out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_Out.others
+END RI_Module_Out.others;
+
+SYSTEM Scene_Creation_Interface
+FEATURES
+  PI_Module_In : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::PI_Module_In.others {
+    Taste::coordinates => "201880 111111";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_In";
+  };
+  RI_Execute : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation::PI_Execute.others {
+    Taste::coordinates => "184008 115696";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Execute";
+    Taste::labelInheritance => "true";
+  };
+  RI_Module_Out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_Module1_In.others {
+    Taste::coordinates => "165902 107585";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_Out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Scene_Creation_Interface;
+
+SYSTEM IMPLEMENTATION Scene_Creation_Interface.others
+END Scene_Creation_Interface.others;
+
+END interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface;
+
+PACKAGE interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Execute;
+
+SUBPROGRAM IMPLEMENTATION PI_Execute.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Execute.others;
+
+SYSTEM Scene_Creation_Implementation
+FEATURES
+  PI_Execute : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation::PI_Execute.others {
+    Taste::coordinates => "184130 122869";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Execute";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Scene_Creation_Implementation;
+
+SYSTEM IMPLEMENTATION Scene_Creation_Implementation.others
+SUBCOMPONENTS
+  Scene_Model_Data : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "3";
+  };
+END Scene_Creation_Implementation.others;
+
+END interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation;
+
+PACKAGE interfaceview::IV::Scene_Creation_Module
+PUBLIC
+
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface;
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation;
+WITH interfaceview::IV::Simulation_Manager;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_In
+FEATURES
+  FOV_Defintiion : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_In;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_In.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_In.others;
+
+SUBPROGRAM RI_Module_Out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_Out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_Out.others
+END RI_Module_Out.others;
+
+SYSTEM Scene_Creation_Module
+FEATURES
+  PI_Module_In : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::PI_Module_In.others {
+    Taste::coordinates => "211640 111112";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_In";
+  };
+  RI_Module_Out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_Module1_In.others {
+    Taste::coordinates => "153791 107465";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_Out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Scene_Creation_Module;
+
+SYSTEM IMPLEMENTATION Scene_Creation_Module.others
+SUBCOMPONENTS
+  Scene_Creation_Interface : SYSTEM interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::Scene_Creation_Interface.others {
+    Taste::coordinates => "165902 103468 201880 115696";
+  };
+  Scene_Creation_Implementation : SYSTEM interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation::Scene_Creation_Implementation.others {
+    Taste::coordinates => "165314 122869 203056 139683";
+  };
+CONNECTIONS
+  Scene_Creation_Interface_PI_Module_In_Scene_Creation_Module_PI_Module_In : SUBPROGRAM ACCESS Scene_Creation_Interface.PI_Module_In -> PI_Module_In {
+    Taste::coordinates => "211640 111112 203055 111112 203055 111111 201880 111111";
+  };
+  Scene_Creation_Implementation_PI_Execute_Scene_Creation_Interface_RI_Execute : SUBPROGRAM ACCESS Scene_Creation_Implementation.PI_Execute -> Scene_Creation_Interface.RI_Execute {
+    Taste::coordinates => "184008 115696 184008 119282 184130 119282 184130 122869";
+  };
+  Scene_Creation_Module_RI_Module_Out_Scene_Creation_Interface_RI_Module_Out : SUBPROGRAM ACCESS RI_Module_Out -> Scene_Creation_Interface.RI_Module_Out {
+    Taste::coordinates => "165902 107585 160199 107585 160199 107465 153791 107465";
+  };
+END Scene_Creation_Module.others;
+
+END interfaceview::IV::Scene_Creation_Module;
+
+PACKAGE interfaceview::IV::Console
+PUBLIC
+
+WITH interfaceview::IV::Simulation_Manager;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Log
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Log;
+
+SUBPROGRAM IMPLEMENTATION PI_Log.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Log.others;
+
+SUBPROGRAM RI_run_simulation
+FEATURES
+  inp : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_run_simulation;
+
+SUBPROGRAM IMPLEMENTATION RI_run_simulation.others
+END RI_run_simulation.others;
+
+SYSTEM Console
+FEATURES
+  PI_Log : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Console::PI_Log.others {
+    Taste::coordinates => "54674 57378";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Log";
+  };
+  RI_run_simulation : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Simulation_Manager::PI_run_simulation.others {
+    Taste::coordinates => "54674 49500";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run_simulation";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END Console;
+
+SYSTEM IMPLEMENTATION Console.others
+END Console.others;
+
+END interfaceview::IV::Console;
+
+PACKAGE interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface
+PUBLIC
+
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation;
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Interface;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_in
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_in;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_in.others;
+
+SUBPROGRAM RI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Execute;
+
+SUBPROGRAM IMPLEMENTATION RI_Execute.others
+END RI_Execute.others;
+
+SUBPROGRAM RI_Module_out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_out.others
+END RI_Module_out.others;
+
+SYSTEM Observation_Timeline_Interface
+FEATURES
+  PI_Module_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface::PI_Module_in.others {
+    Taste::coordinates => "109230 53263";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_in";
+  };
+  RI_Execute : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation::PI_Execute.others {
+    Taste::coordinates => "127454 63139";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Execute";
+    Taste::labelInheritance => "true";
+  };
+  RI_Module_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Interface::PI_Module_In.others {
+    Taste::coordinates => "145208 55027";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Observation_Timeline_Interface;
+
+SYSTEM IMPLEMENTATION Observation_Timeline_Interface.others
+END Observation_Timeline_Interface.others;
+
+END interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface;
+
+PACKAGE interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Execute;
+
+SUBPROGRAM IMPLEMENTATION PI_Execute.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Execute.others;
+
+SYSTEM Observation_Timeline_Implementation
+FEATURES
+  PI_Execute : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation::PI_Execute.others {
+    Taste::coordinates => "127458 70194";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Execute";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Observation_Timeline_Implementation;
+
+SYSTEM IMPLEMENTATION Observation_Timeline_Implementation.others
+SUBCOMPONENTS
+  Mission_Characteristics : DATA DataView::My_Integer {
+    Taste::FS_Default_Value => "42";
+  };
+END Observation_Timeline_Implementation.others;
+
+END interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation;
+
+PACKAGE interfaceview::IV::Observation_Timeline
+PUBLIC
+
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface;
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation;
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Interface;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_in
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_in;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_in.others;
+
+SUBPROGRAM RI_Module_out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_out.others
+END RI_Module_out.others;
+
+SYSTEM Observation_Timeline
+FEATURES
+  PI_Module_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface::PI_Module_in.others {
+    Taste::coordinates => "97119 53734";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_in";
+  };
+  RI_Module_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Geometry_Module::GeometryModule_Interface::PI_Module_In.others {
+    Taste::coordinates => "154968 55028";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Observation_Timeline;
+
+SYSTEM IMPLEMENTATION Observation_Timeline.others
+SUBCOMPONENTS
+  Observation_Timeline_Interface : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface::Observation_Timeline_Interface.others {
+    Taste::coordinates => "109230 50911 145208 63139";
+  };
+  Observation_Timeline_Implementation : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation::Observation_Timeline_Implementation.others {
+    Taste::coordinates => "108642 70194 146384 87008";
+  };
+CONNECTIONS
+  Observation_Timeline_Interface_PI_Module_in_Observation_Timeline_PI_Module_in : SUBPROGRAM ACCESS Observation_Timeline_Interface.PI_Module_in -> PI_Module_in {
+    Taste::coordinates => "97119 53734 103762 53734 103762 53263 109230 53263";
+  };
+  Observation_Timeline_Implementation_PI_Execute_Observation_Timeline_Interface_RI_Execute : SUBPROGRAM ACCESS Observation_Timeline_Implementation.PI_Execute -> Observation_Timeline_Interface.RI_Execute {
+    Taste::coordinates => "127454 63139 127454 66725 127458 66725 127458 70194";
+  };
+  Observation_Timeline_RI_Module_out_Observation_Timeline_Interface_RI_Module_out : SUBPROGRAM ACCESS RI_Module_out -> Observation_Timeline_Interface.RI_Module_out {
+    Taste::coordinates => "145208 55027 150088 55027 150088 55028 154968 55028";
+  };
+END Observation_Timeline.others;
+
+END interfaceview::IV::Observation_Timeline;
+
+PACKAGE interfaceview::IV::FunctionType1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_myinput
+FEATURES
+  inp1 : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+  inp2 : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp1 : OUT PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END PI_myinput;
+
+SUBPROGRAM IMPLEMENTATION PI_myinput.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_myinput.others;
+
+SUBPROGRAM RI_doSomething
+FEATURES
+  p1 : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION RI_doSomething.others
+END RI_doSomething.others;
+
+SYSTEM FunctionType1
+FEATURES
+  PI_myinput : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FunctionType1::PI_myinput.others {
+    Taste::coordinates => "88662 30442";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "myinput";
+  };
+  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::FunctionType1::RI_doSomething.others {
+    Taste::coordinates => "123998 31165";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "doSomething";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Taste::is_Component_Type => true;
+END FunctionType1;
+
+SYSTEM IMPLEMENTATION FunctionType1.others
+END FunctionType1.others;
+
+END interfaceview::IV::FunctionType1;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Simulation_Manager;
+WITH interfaceview::IV::Geometry_Module;
+WITH interfaceview::IV::Scene_Creation_Module;
+WITH interfaceview::IV::Console;
+WITH interfaceview::IV::Observation_Timeline;
+WITH interfaceview::IV::FunctionType1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Simulation_Manager : SYSTEM interfaceview::IV::Simulation_Manager::Simulation_Manager.others {
+    Taste::coordinates => "62786 46091 88300 74544";
+  };
+  Geometry_Module : SYSTEM interfaceview::IV::Geometry_Module::Geometry_Module.others {
+    Taste::coordinates => "162726 48206 220575 89006";
+  };
+  Scene_Creation_Module : SYSTEM interfaceview::IV::Scene_Creation_Module::Scene_Creation_Module.others {
+    Taste::coordinates => "153791 99705 211640 140505";
+  };
+  Console : SYSTEM interfaceview::IV::Console::Console.others {
+    Taste::coordinates => "34451 46443 54674 64902";
+  };
+  Observation_Timeline : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline.others {
+    Taste::coordinates => "97119 47148 154968 87948";
+  };
+  FunctionType1 : SYSTEM interfaceview::IV::FunctionType1::FunctionType1.others {
+    Taste::coordinates => "88662 26413 123998 41497";
+  };
+CONNECTIONS
+  Simulation_Manager_PI_Module1_In_Scene_Creation_Module_RI_Module_Out : SUBPROGRAM ACCESS Simulation_Manager.PI_Module1_In -> Scene_Creation_Module.RI_Module_Out {
+    Taste::coordinates => "153791 107465 75954 107465 75954 74544";
+  };
+  Simulation_Manager_PI_run_simulation_Console_RI_run_simulation : SUBPROGRAM ACCESS Simulation_Manager.PI_run_simulation -> Console.RI_run_simulation {
+    Taste::coordinates => "54674 49500 59377 49500 59377 49622 62786 49622";
+  };
+  Observation_Timeline_PI_Module_in_Simulation_Manager_RI_Simulation_Start : SUBPROGRAM ACCESS Observation_Timeline.PI_Module_in -> Simulation_Manager.RI_Simulation_Start {
+    Taste::coordinates => "88300 53382 93297 53382 93297 53734 97119 53734";
+  };
+  Console_PI_Log_Simulation_Manager_RI_Log : SUBPROGRAM ACCESS Console.PI_Log -> Simulation_Manager.RI_Log {
+    Taste::coordinates => "62786 57383 59729 57383 59729 57378 54674 57378";
+  };
+  Geometry_Module_PI_Module_In_Observation_Timeline_RI_Module_out : SUBPROGRAM ACCESS Geometry_Module.PI_Module_In -> Observation_Timeline.RI_Module_out {
+    Taste::coordinates => "154968 55028 160553 55028 160553 55025 162726 55025";
+  };
+  Scene_Creation_Module_PI_Module_In_Geometry_Module_RI_Module_Out : SUBPROGRAM ACCESS Scene_Creation_Module.PI_Module_In -> Geometry_Module.RI_Module_Out {
+    Taste::coordinates => "220575 55967 227253 55967 227253 111112 211640 111112";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

@@ -1,0 +1,45 @@
+/* CIF PROCESS (247, 150), (153, 75) */
+process Simulation_Manager;
+    /* CIF TEXT (596, 372), (413, 316) */
+    -- Text area for declarations and comments
+    
+    dcl foo t_boolean,
+          inp T_Int32 := 0;
+    /* CIF ENDTEXT */
+    /* CIF START (200, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (200, 60), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (406, 461), (70, 35) */
+    state * (wait);
+        /* CIF input (367, 516), (147, 35) */
+        input run_simulation(foo);
+            /* CIF NEXTSTATE (406, 571), (70, 35) */
+            NEXTSTATE wait;
+    endstate;
+    /* CIF state (439, 163), (72, 35) */
+    state running;
+        /* CIF input (411, 218), (121, 35) */
+        input Execution_Step;
+            /* CIF output (390, 273), (163, 35) */
+            output Simulation_Start  (inp);
+            /* CIF NEXTSTATE (430, 328), (85, 35) */
+            NEXTSTATE roundtrip;
+    endstate;
+    /* CIF state (720, 90), (83, 35) */
+    state roundtrip;
+        /* CIF input (699, 145), (125, 35) */
+        input Module1_In(inp);
+            /* CIF output (725, 200), (74, 35) */
+            output log (inp);
+            /* CIF NEXTSTATE (726, 255), (71, 35) */
+            NEXTSTATE running;
+    endstate;
+    /* CIF state (200, 60), (70, 35) */
+    state Wait;
+        /* CIF input (159, 115), (151, 35) */
+        input run_simulation (foo);
+            /* CIF NEXTSTATE (198, 170), (72, 35) */
+            NEXTSTATE running;
+    endstate;
+endprocess Simulation_Manager;

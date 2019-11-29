@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <stddef.h>
 
 void myhandler ();
 
@@ -23,6 +24,10 @@ void myhandler ()
 
 void simple_c_function_PI_cyclic_operation()
 {
+    int *a = NULL;
+    *a = 5;
+    int b[2];
+    b[5] = 4;
 	printf ("Hello, world...\n");
 }
 

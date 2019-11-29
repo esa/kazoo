@@ -1,0 +1,107 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS e2es
+END e2es;
+
+PROCESS IMPLEMENTATION e2es.others
+END e2es.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Simulation_Manager;
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Interface;
+WITH interfaceview::IV::Geometry_Module::GeometryModule_Implementation;
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface;
+WITH interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation;
+WITH interfaceview::IV::Console;
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface;
+WITH interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Simulation_Manager : SYSTEM interfaceview::IV::Simulation_Manager::Simulation_Manager.others {
+    Taste::FunctionName => "Simulation_Manager";
+  };
+  IV_GeometryModule_Interface : SYSTEM interfaceview::IV::Geometry_Module::GeometryModule_Interface::GeometryModule_Interface.others {
+    Taste::FunctionName => "GeometryModule_Interface";
+  };
+  IV_GeometryModule_Implementation : SYSTEM interfaceview::IV::Geometry_Module::GeometryModule_Implementation::GeometryModule_Implementation.others {
+    Taste::FunctionName => "GeometryModule_Implementation";
+  };
+  IV_Scene_Creation_Interface : SYSTEM interfaceview::IV::Scene_Creation_Module::Scene_Creation_Interface::Scene_Creation_Interface.others {
+    Taste::FunctionName => "Scene_Creation_Interface";
+  };
+  IV_Scene_Creation_Implementation : SYSTEM interfaceview::IV::Scene_Creation_Module::Scene_Creation_Implementation::Scene_Creation_Implementation.others {
+    Taste::FunctionName => "Scene_Creation_Implementation";
+  };
+  IV_Console : SYSTEM interfaceview::IV::Console::Console.others {
+    Taste::FunctionName => "Console";
+  };
+  IV_Observation_Timeline_Interface : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline_Interface::Observation_Timeline_Interface.others {
+    Taste::FunctionName => "Observation_Timeline_Interface";
+  };
+  IV_Observation_Timeline_Implementation : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline_Implementation::Observation_Timeline_Implementation.others {
+    Taste::FunctionName => "Observation_Timeline_Implementation";
+  };
+  e2es : PROCESS deploymentview::DV::Node1::e2es.others {
+    Taste::coordinates => "111108 68774 149560 102651";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "106301 59095 154367 107490";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Simulation_Manager;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_GeometryModule_Interface;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_GeometryModule_Implementation;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Scene_Creation_Interface;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Scene_Creation_Implementation;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Console;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Observation_Timeline_Interface;
+  Taste::APLC_Binding => (reference (e2es)) APPLIES TO IV_Observation_Timeline_Implementation;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO e2es;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "100293 45268 160375 114403";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

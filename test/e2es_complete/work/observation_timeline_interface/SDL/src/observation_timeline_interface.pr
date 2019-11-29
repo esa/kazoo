@@ -1,0 +1,26 @@
+/* CIF PROCESS (212, 150), (225, 75) */
+process Observation_Timeline_Interface;
+    /* CIF TEXT (647, 192), (285, 296) */
+    -- Text area for declarations and comments
+    
+    dcl inp, outp T_Int32;
+    /* CIF ENDTEXT */
+    /* CIF START (408, 58), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (408, 113), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (567, 60), (70, 35) */
+    state Wait;
+    endstate;
+    /* CIF state (408, 113), (70, 35) */
+    state Wait;
+        /* CIF input (382, 168), (121, 35) */
+        input Module_In (inp);
+            /* CIF PROCEDURECALL (358, 223), (170, 35) */
+            call Execute (inp, outp);
+            /* CIF output (370, 278), (144, 35) */
+            output Module_Out (outp);
+            /* CIF NEXTSTATE (408, 333), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+endprocess Observation_Timeline_Interface;

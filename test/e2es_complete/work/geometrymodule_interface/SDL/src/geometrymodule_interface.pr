@@ -1,0 +1,26 @@
+/* CIF PROCESS (225, 150), (199, 75) */
+process Geometrymodule_Interface;
+    /* CIF TEXT (569, 94), (285, 296) */
+    -- Text area for declarations and comments
+    
+    dcl inp, outp T_Int32;
+    /* CIF ENDTEXT */
+    /* CIF START (377, 12), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (377, 67), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (450, 10), (70, 35) */
+    state Wait;
+    endstate;
+    /* CIF state (377, 67), (70, 35) */
+    state Wait;
+        /* CIF input (349, 122), (121, 35) */
+        input Module_In (inp);
+            /* CIF PROCEDURECALL (325, 177), (170, 35) */
+            call Execute (inp, outp);
+            /* CIF output (338, 232), (144, 35) */
+            output Module_Out (outp);
+            /* CIF NEXTSTATE (375, 287), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+endprocess Geometrymodule_Interface;

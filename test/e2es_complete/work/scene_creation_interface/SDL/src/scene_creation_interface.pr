@@ -1,0 +1,26 @@
+/* CIF PROCESS (232, 150), (185, 75) */
+process Scene_Creation_Interface;
+    /* CIF TEXT (661, 276), (285, 296) */
+    -- Text area for declarations and comments
+    
+    dcl inp, outp T_Int32;
+    /* CIF ENDTEXT */
+    /* CIF START (320, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (320, 60), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (450, 10), (70, 35) */
+    state Wait;
+    endstate;
+    /* CIF state (320, 60), (70, 35) */
+    state Wait;
+        /* CIF input (294, 115), (121, 35) */
+        input Module_In (inp);
+            /* CIF PROCEDURECALL (270, 170), (170, 35) */
+            call Execute (inp, outp);
+            /* CIF output (282, 225), (144, 35) */
+            output Module_Out (outp);
+            /* CIF NEXTSTATE (320, 280), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+endprocess Scene_Creation_Interface;

@@ -1,0 +1,229 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE generic_module::IV::Generic_Module::Generic_Module_Interface
+PUBLIC
+
+WITH generic_module::IV::Generic_Module::Generic_Module_Implementation;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_in
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_in;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_in.others;
+
+SUBPROGRAM RI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Execute;
+
+SUBPROGRAM IMPLEMENTATION RI_Execute.others
+END RI_Execute.others;
+
+SUBPROGRAM RI_Module_out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_out.others
+END RI_Module_out.others;
+
+SYSTEM Generic_Module_Interface
+FEATURES
+  PI_Module_in : PROVIDES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Interface::PI_Module_in.others {
+    Taste::coordinates => "109230 53263";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_in";
+  };
+  RI_Execute : REQUIRES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Implementation::PI_Execute.others {
+    Taste::coordinates => "127454 63139";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Execute";
+    Taste::labelInheritance => "true";
+  };
+  RI_Module_out : REQUIRES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Interface::RI_Module_out.others {
+    Taste::coordinates => "145208 55027";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Generic_Module_Interface;
+
+SYSTEM IMPLEMENTATION Generic_Module_Interface.others
+END Generic_Module_Interface.others;
+
+END generic_module::IV::Generic_Module::Generic_Module_Interface;
+
+PACKAGE generic_module::IV::Generic_Module::Generic_Module_Implementation
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Execute
+FEATURES
+  inp : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Execute;
+
+SUBPROGRAM IMPLEMENTATION PI_Execute.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Execute.others;
+
+SYSTEM Generic_Module_Implementation
+FEATURES
+  PI_Execute : PROVIDES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Implementation::PI_Execute.others {
+    Taste::coordinates => "127458 70312";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Execute";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Generic_Module_Implementation;
+
+SYSTEM IMPLEMENTATION Generic_Module_Implementation.others
+SUBCOMPONENTS
+  Mission_Characteristics : DATA DataView::My_Integer {
+    Taste::FS_Default_Value => "42";
+  };
+END Generic_Module_Implementation.others;
+
+END generic_module::IV::Generic_Module::Generic_Module_Implementation;
+
+PACKAGE generic_module::IV::Generic_Module
+PUBLIC
+
+WITH generic_module::IV::Generic_Module::Generic_Module_Interface;
+WITH generic_module::IV::Generic_Module::Generic_Module_Implementation;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Module_in
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Module_in;
+
+SUBPROGRAM IMPLEMENTATION PI_Module_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Module_in.others;
+
+SUBPROGRAM RI_Module_out
+FEATURES
+  param_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Module_out;
+
+SUBPROGRAM IMPLEMENTATION RI_Module_out.others
+END RI_Module_out.others;
+
+SYSTEM Generic_Module
+FEATURES
+  PI_Module_in : PROVIDES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Interface::PI_Module_in.others {
+    Taste::coordinates => "97119 53381";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Module_in";
+  };
+  RI_Module_out : REQUIRES SUBPROGRAM ACCESS generic_module::IV::Generic_Module::Generic_Module_Interface::RI_Module_out.others {
+    Taste::coordinates => "154968 55028";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Module_out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Generic_Module;
+
+SYSTEM IMPLEMENTATION Generic_Module.others
+SUBCOMPONENTS
+  Generic_Module_Interface : SYSTEM generic_module::IV::Generic_Module::Generic_Module_Interface::Generic_Module_Interface.others {
+    Taste::coordinates => "109230 50911 145208 63139";
+  };
+  Generic_Module_Implementation : SYSTEM generic_module::IV::Generic_Module::Generic_Module_Implementation::Generic_Module_Implementation.others {
+    Taste::coordinates => "108642 70312 146384 87126";
+  };
+CONNECTIONS
+  Generic_Module_Interface_PI_Module_in_Generic_Module_PI_Module_in : SUBPROGRAM ACCESS Generic_Module_Interface.PI_Module_in -> PI_Module_in {
+    Taste::coordinates => "97119 53381 103174 53381 103174 53264 109230 53264";
+  };
+  Generic_Module_Implementation_PI_Execute_Generic_Module_Interface_RI_Execute : SUBPROGRAM ACCESS Generic_Module_Implementation.PI_Execute -> Generic_Module_Interface.RI_Execute {
+    Taste::coordinates => "127454 63140 127454 66609 127458 66609 127458 70312";
+  };
+  Generic_Module_RI_Module_out_Generic_Module_Interface_RI_Module_out : SUBPROGRAM ACCESS RI_Module_out -> Generic_Module_Interface.RI_Module_out {
+    Taste::coordinates => "145208 55027 150088 55027 150088 55028 154968 55028";
+  };
+END Generic_Module.others;
+
+END generic_module::IV::Generic_Module;
+
+PACKAGE generic_module::IV
+PUBLIC
+
+WITH generic_module::IV::Generic_Module;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM generic_module
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END generic_module;
+
+SYSTEM IMPLEMENTATION generic_module.others
+SUBCOMPONENTS
+  Generic_Module : SYSTEM generic_module::IV::Generic_Module::Generic_Module.others {
+    Taste::coordinates => "97119 47148 154968 87948";
+  };
+END generic_module.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END generic_module::IV;
+

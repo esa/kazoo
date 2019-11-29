@@ -763,64 +763,6 @@ END Observation_Timeline.others;
 
 END interfaceview::IV::Observation_Timeline;
 
-PACKAGE interfaceview::IV::FunctionType1
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_myinput
-FEATURES
-  inp1 : IN PARAMETER DataView::T_Boolean {
-    Taste::encoding => NATIVE;
-  };
-  inp2 : IN PARAMETER DataView::T_Int32 {
-    Taste::encoding => NATIVE;
-  };
-  outp1 : OUT PARAMETER DataView::T_Boolean {
-    Taste::encoding => NATIVE;
-  };
-END PI_myinput;
-
-SUBPROGRAM IMPLEMENTATION PI_myinput.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_myinput.others;
-
-SUBPROGRAM RI_doSomething
-FEATURES
-  p1 : IN PARAMETER DataView::T_Boolean {
-    Taste::encoding => NATIVE;
-  };
-END RI_doSomething;
-
-SUBPROGRAM IMPLEMENTATION RI_doSomething.others
-END RI_doSomething.others;
-
-SYSTEM FunctionType1
-FEATURES
-  PI_myinput : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FunctionType1::PI_myinput.others {
-    Taste::coordinates => "88662 30442";
-    Taste::RCMoperationKind => unprotected;
-    Taste::InterfaceName => "myinput";
-  };
-  RI_doSomething : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::FunctionType1::RI_doSomething.others {
-    Taste::coordinates => "123998 31165";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "doSomething";
-    Taste::labelInheritance => "false";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => any;
-  Taste::is_Component_Type => true;
-END FunctionType1;
-
-SYSTEM IMPLEMENTATION FunctionType1.others
-END FunctionType1.others;
-
-END interfaceview::IV::FunctionType1;
-
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -829,7 +771,6 @@ WITH interfaceview::IV::Geometry_Module;
 WITH interfaceview::IV::Scene_Creation_Module;
 WITH interfaceview::IV::Console;
 WITH interfaceview::IV::Observation_Timeline;
-WITH interfaceview::IV::FunctionType1;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -855,9 +796,6 @@ SUBCOMPONENTS
   };
   Observation_Timeline : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline.others {
     Taste::coordinates => "97119 47148 154968 87948";
-  };
-  FunctionType1 : SYSTEM interfaceview::IV::FunctionType1::FunctionType1.others {
-    Taste::coordinates => "88662 26413 123998 41497";
   };
 CONNECTIONS
   Simulation_Manager_PI_Module1_In_Scene_Creation_Module_RI_Module_Out : SUBPROGRAM ACCESS Simulation_Manager.PI_Module1_In -> Scene_Creation_Module.RI_Module_Out {

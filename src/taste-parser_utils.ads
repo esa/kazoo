@@ -84,8 +84,38 @@ package TASTE.Parser_Utils is
       unused_Context    :  Filter_Context) return String;
 
    --  Generate documentation for a translate set
-   procedure Document_Template (Source_Folder, Template_Name : String;
-                                T : Translate_Set);
+   type Template_Category is
+     (Template_Main_Makefile,
+      Template_Context_Parameters,
+      Template_Skeleton_And_Glue_Trigger,
+      Template_Skeleton_Makefile_Filename,
+      Template_Skeleton_Makefile,
+      Template_Skeleton_Function_Filename,
+      Template_Skeleton_Function,
+      Template_Skeleton_Interface,
+      Template_CV_Trigger,
+      Template_CV_File_Node,
+      Template_CV_File_Part,
+      Template_CV_File_Thread,
+      Template_CV_File_Block,
+      Template_CV_Thread,
+      Template_CV_PI,
+      Template_CV_RI,
+      Template_CV_Block,
+      Template_CV_Partition,
+      Template_CV_Node,
+      Template_CV_System,
+      Template_Dump_Interface_View,
+      Template_Dump_Deployment_View);
+
+   package Template_Doc_Maps is new Indefinite_Ordered_Maps
+     (Template_Category, String);
+
+   Doc_Map : Template_Doc_Maps.Map;
+   procedure Dump_Documentation (Output_Folder : String);
+
+   procedure Document_Template (Category : Template_Category;
+                                Tags     : Translate_Set);
 
    AADL_Parser_Error : exception;
 
@@ -154,6 +184,7 @@ package TASTE.Parser_Utils is
          Timer_Resolution : aliased Integer := 100;
          Debug_Flag       : aliased Boolean := False;
          No_Stdlib        : aliased Boolean := False;
+         Generate_Doc     : aliased Boolean := False;
          Other_Files      : String_Vectors.Vector;
       end record;
 

@@ -15,6 +15,7 @@ begin
       if Model.Configuration.Debug_Flag then
          TASTE.Dump.Dump_Input_Model (Model);
          Model.Dump;
+
       end if;
 
       if Model.Configuration.Glue then
@@ -25,6 +26,12 @@ begin
 
       Model.Generate_Build_Script;
       Model.Generate_Code;
+
+      if Model.Configuration.Generate_Doc then
+         Dump_Documentation
+           (Output_Folder =>
+              Model.Configuration.Output_Dir.Element & "/Dump/Doc");
+      end if;
    end;
 exception
    when TASTE.Quit_TASTE =>

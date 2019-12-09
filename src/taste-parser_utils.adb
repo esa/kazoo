@@ -13,6 +13,7 @@ with Ada.Characters.Latin_1,
      GNAT.Strings,
      GNAT.Command_Line,
      Templates_Parser.Utils,
+     Templates_Parser.Query,
      Ocarina.AADL_Values,
      Ocarina.Configuration,
      Ocarina.FE_AADL.Parser,
@@ -24,6 +25,7 @@ package body TASTE.Parser_Utils is
 
    use GNAT.OS_Lib,
        GNAT.Command_Line,
+       Ada.Directories,
        Templates_Parser.Utils,
        Ocarina.ME_AADL.AADL_Tree.Entities.Properties,
        Ocarina.Instances.Queries;
@@ -58,22 +60,44 @@ package body TASTE.Parser_Utils is
       New_Line;
    end Banner;
 
-   --  Generate documentation for a translate set (TODO..)
-   procedure Document_Template (Source_Folder, Template_Name : String;
-                                T : Translate_Set)
+   --  Generate documentation for a translate set
+   procedure Document_Template (Category : Template_Category;
+                                Tags     : Translate_Set)
    is
+      Result : Unbounded_String := "# Tags for " & US (Category'Img);
       procedure Action (Item : Association; Quit : in out Boolean) is
-         pragma Unreferenced (Item);
       begin
-         --  Put_Debug ("  " & Templates_Parser.Query.Variable (Item) & " - "
+         Result :=
+           Result & ASCII.LF & US (Templates_Parser.Query.Variable (Item));
          --          & Templates_Parser.Query.Kind (Item)'Img);
          Quit := False;
       end Action;
       procedure Iterate is new For_Every_Association (Action);
    begin
-      Put_Debug (Template_Name & " (subfolder " & Source_Folder & ")");
-      Iterate (T);
+      if Doc_Map.Contains (Category) then
+         --  Already documented from a previous call - ignore
+         --  (Skeleton and Glue folders share the same template structures)
+         return;
+      end if;
+      Put_Debug ("Documenting template category: " & Category'Img);
+      Iterate (Tags);
+      Doc_Map.Insert (Key => Category, New_Item => To_String (Result));
    end Document_Template;
+
+   procedure Dump_Documentation (Output_Folder : String) is
+      use Template_Doc_Maps;
+      Output_File   : File_Type;
+   begin
+      Create_Path (Output_Folder);
+      for Each in Doc_Map.Iterate loop
+         Put_Debug ("Dump documentation of " & Key (Each)'Img);
+         Create (File => Output_File,
+                 Mode => Out_File,
+                 Name => Output_Folder & "/" & Key (Each)'Img & ".tmplt_doc");
+         Put_Line (Output_File, Element (Each));
+         Close (Output_File);
+      end loop;
+   end Dump_Documentation;
 
    --  Strip function as in Python
    function Strip_String (Input_String : String) return String is
@@ -225,6 +249,10 @@ package body TASTE.Parser_Utils is
                      Switch         => "-s",
                      Long_Switch    => "--no-stdlib",
                      Help           => "Don't use ocarina_components.aadl");
+      Define_Switch (Config, Output => Result.Generate_Doc'Access,
+                     Switch         => "-k",
+                     Long_Switch    => "--doc",
+                     Help           => "Generate templates documentation");
       Define_Switch (Config, Output => Version'Access,
                      Switch         => "-v",
                      Long_Switch    => "--version",

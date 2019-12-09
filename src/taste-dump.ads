@@ -5,8 +5,7 @@
 --  Model of the Concurrency View
 
 with TASTE.AADL_Parser;
-
-use TASTE.AADL_Parser;
+use  TASTE.AADL_Parser;
 
 package TASTE.Dump is
 

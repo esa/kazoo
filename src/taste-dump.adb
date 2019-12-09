@@ -124,13 +124,11 @@ package body TASTE.Dump is
                Result : Unbounded_String;
             begin
                for I of Interfaces loop
-
                   Result := Result & String'(Parse (IF_Template, I)) & Newline;
                end loop;
                return Result;
             end Process_Interfaces;
          begin
-            Document_Template (Prefix, "interfaceview.tmplt", IV_Tags);
             if not Check or not Trigger then
                Put_Info ("Nothing generated from " & Path);
                return;
@@ -251,7 +249,9 @@ package body TASTE.Dump is
               & Assoc ("Dest_Ports",   Dest_Ports);
 
             --  Output is made of interface, deployment and data views
-            Document_Template (Prefix, "interfaceview.tmplt", IV_Tags);
+            Document_Template (Category => Template_Dump_Interface_View,
+                               Tags     => IV_Tags);
+            --  interfaceview.tmplt
             Output_Tags := +Assoc ("Interface_View",
                                    String'(Parse (IV_Template, IV_Tags)))
               & Assoc ("Deployment_View",

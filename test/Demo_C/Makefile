@@ -15,7 +15,7 @@ ada:
 
 c: # Polyorb_HI_C output
 	rm -rf work
-	$(KAZOO) -p --gw --glue -o work
+	$(KAZOO) -p -g --gw --glue -o work
 	cp simple_c_function/*.c work/simple_c_function/C/src
 	$(MAKE) -C work
 

@@ -1,0 +1,110 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|VP_Package_Name
+|@@ADD DESCRIPTION@@
+|-
+|In_Port_Type_Name
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Has_Param
+|@@ADD DESCRIPTION@@
+|-
+|Block_Languages
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Src_Port
+|@@ADD DESCRIPTION@@
+|-
+|Connected_Threads
+|@@ADD DESCRIPTION@@
+|-
+|VP_Name
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Src_Name
+|@@ADD DESCRIPTION@@
+|-
+|In_Port_Thread_Name
+|@@ADD DESCRIPTION@@
+|-
+|Part_Out_Port_Name
+|@@ADD DESCRIPTION@@
+|-
+|Block_Names
+|@@ADD DESCRIPTION@@
+|-
+|Package_Name
+|@@ADD DESCRIPTION@@
+|-
+|Blocks
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Family
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|Block_Instance_Of
+|@@ADD DESCRIPTION@@
+|-
+|Memory_Region
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Names
+|@@ADD DESCRIPTION@@
+|-
+|Threads
+|@@ADD DESCRIPTION@@
+|-
+|VP_Platform
+|@@ADD DESCRIPTION@@
+|-
+|Coverage
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Instance
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Dst_Name
+|@@ADD DESCRIPTION@@
+|-
+|VP_Duration
+|@@ADD DESCRIPTION@@
+|-
+|In_Port_Names
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Name
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Dst_Port
+|@@ADD DESCRIPTION@@
+|-
+|Ada_Runtime
+|@@ADD DESCRIPTION@@
+|-
+|Out_Port_Names
+|@@ADD DESCRIPTION@@
+|-
+|Node_Name
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Platform
+|@@ADD DESCRIPTION@@
+|-
+|Name
+|@@ADD DESCRIPTION@@
+|-
+|Out_Port_Type_Name
+|@@ADD DESCRIPTION@@
+|-
+|Bound_Functions
+|@@ADD DESCRIPTION@@
+|-
+|VP_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|}

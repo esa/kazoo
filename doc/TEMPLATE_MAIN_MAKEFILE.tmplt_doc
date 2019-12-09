@@ -1,0 +1,32 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Function_Names
+|@@ADD DESCRIPTION@@
+|-
+|Has_Context_Param
+|@@ADD DESCRIPTION@@
+|-
+|ASN1_Modules
+|@@ADD DESCRIPTION@@
+|-
+|Language
+|@@ADD DESCRIPTION@@
+|-
+|ACN_Files
+|@@ADD DESCRIPTION@@
+|-
+|CP_Files
+|@@ADD DESCRIPTION@@
+|-
+|Is_Type
+|@@ADD DESCRIPTION@@
+|-
+|ASN1_Files
+|@@ADD DESCRIPTION@@
+|-
+|Unique_Languages
+|@@ADD DESCRIPTION@@
+|-
+|}

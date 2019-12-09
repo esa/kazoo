@@ -1,0 +1,134 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|List_Of_PIs
+|@@ADD DESCRIPTION@@
+|-
+|No_Stdlib_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Output_Dir
+|@@ADD DESCRIPTION@@
+|-
+|Timer_Resolution
+|@@ADD DESCRIPTION@@
+|-
+|CP_Names
+|@@ADD DESCRIPTION@@
+|-
+|CP_Asn1Modules
+|@@ADD DESCRIPTION@@
+|-
+|CP_Asn1Filenames
+|@@ADD DESCRIPTION@@
+|-
+|Has_Context
+|@@ADD DESCRIPTION@@
+|-
+|Timers
+|@@ADD DESCRIPTION@@
+|-
+|ASync_RI_Param_Type
+|@@ADD DESCRIPTION@@
+|-
+|Language
+|@@ADD DESCRIPTION@@
+|-
+|Async_RIs_Parent
+|@@ADD DESCRIPTION@@
+|-
+|Zip_File
+|@@ADD DESCRIPTION@@
+|-
+|CP_Types
+|@@ADD DESCRIPTION@@
+|-
+|Is_Type
+|@@ADD DESCRIPTION@@
+|-
+|Check_Data_View
+|@@ADD DESCRIPTION@@
+|-
+|PIs_Have_Params
+|@@ADD DESCRIPTION@@
+|-
+|Property_Values
+|@@ADD DESCRIPTION@@
+|-
+|List_Of_Sync_RIs
+|@@ADD DESCRIPTION@@
+|-
+|ASync_PI_Param_Name
+|@@ADD DESCRIPTION@@
+|-
+|Filename_Is_Present
+|@@ADD DESCRIPTION@@
+|-
+|RIs_Have_Params
+|@@ADD DESCRIPTION@@
+|-
+|Binary_Path
+|@@ADD DESCRIPTION@@
+|-
+|List_Of_Sync_PIs
+|@@ADD DESCRIPTION@@
+|-
+|CP_Values
+|@@ADD DESCRIPTION@@
+|-
+|Instance_Of
+|@@ADD DESCRIPTION@@
+|-
+|ASync_RI_Param_Name
+|@@ADD DESCRIPTION@@
+|-
+|Property_Names
+|@@ADD DESCRIPTION@@
+|-
+|Sync_RIs_Parent
+|@@ADD DESCRIPTION@@
+|-
+|List_Of_ASync_RIs
+|@@ADD DESCRIPTION@@
+|-
+|Data_View
+|@@ADD DESCRIPTION@@
+|-
+|Debug_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Skeletons
+|@@ADD DESCRIPTION@@
+|-
+|Makefile_Is_Present
+|@@ADD DESCRIPTION@@
+|-
+|Name
+|@@ADD DESCRIPTION@@
+|-
+|List_Of_ASync_PIs
+|@@ADD DESCRIPTION@@
+|-
+|Glue
+|@@ADD DESCRIPTION@@
+|-
+|Use_POHIC
+|@@ADD DESCRIPTION@@
+|-
+|Interface_View
+|@@ADD DESCRIPTION@@
+|-
+|ASync_PI_Param_Type
+|@@ADD DESCRIPTION@@
+|-
+|Other_Files
+|@@ADD DESCRIPTION@@
+|-
+|List_Of_RIs
+|@@ADD DESCRIPTION@@
+|-
+|Deployment_View
+|@@ADD DESCRIPTION@@
+|-
+|}

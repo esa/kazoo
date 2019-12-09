@@ -1,0 +1,50 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Partition_Names
+|@@ADD DESCRIPTION@@
+|-
+|VP_Classifiers
+|@@ADD DESCRIPTION@@
+|-
+|Partitions
+|@@ADD DESCRIPTION@@
+|-
+|VP_Names
+|@@ADD DESCRIPTION@@
+|-
+|Package_Name
+|@@ADD DESCRIPTION@@
+|-
+|VP_Package_Names
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Family
+|@@ADD DESCRIPTION@@
+|-
+|VP_Platforms
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Instance
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Name
+|@@ADD DESCRIPTION@@
+|-
+|Ada_Runtime
+|@@ADD DESCRIPTION@@
+|-
+|CPU_Platform
+|@@ADD DESCRIPTION@@
+|-
+|Node_Name
+|@@ADD DESCRIPTION@@
+|-
+|Has_Memory
+|@@ADD DESCRIPTION@@
+|-
+|}

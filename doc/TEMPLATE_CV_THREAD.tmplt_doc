@@ -1,0 +1,134 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|No_Stdlib_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Interface_Names
+|@@ADD DESCRIPTION@@
+|-
+|Param_Encodings
+|@@ADD DESCRIPTION@@
+|-
+|Pro_Block_Name
+|@@ADD DESCRIPTION@@
+|-
+|Partition_Name
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Threads
+|@@ADD DESCRIPTION@@
+|-
+|Output_Dir
+|@@ADD DESCRIPTION@@
+|-
+|IF_Property_Values
+|@@ADD DESCRIPTION@@
+|-
+|Queue_Size
+|@@ADD DESCRIPTION@@
+|-
+|Timer_Resolution
+|@@ADD DESCRIPTION@@
+|-
+|Param_Types
+|@@ADD DESCRIPTION@@
+|-
+|Param_Names
+|@@ADD DESCRIPTION@@
+|-
+|Remote_PI_Sorts
+|@@ADD DESCRIPTION@@
+|-
+|Language
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Name
+|@@ADD DESCRIPTION@@
+|-
+|Entry_Port_Name
+|@@ADD DESCRIPTION@@
+|-
+|Check_Data_View
+|@@ADD DESCRIPTION@@
+|-
+|Remote_PIs
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Languages
+|@@ADD DESCRIPTION@@
+|-
+|Binary_Path
+|@@ADD DESCRIPTION@@
+|-
+|RCM
+|@@ADD DESCRIPTION@@
+|-
+|Parent_Function
+|@@ADD DESCRIPTION@@
+|-
+|WCET
+|@@ADD DESCRIPTION@@
+|-
+|Data_View
+|@@ADD DESCRIPTION@@
+|-
+|Remote_PI_Modules
+|@@ADD DESCRIPTION@@
+|-
+|Need_Mutex
+|@@ADD DESCRIPTION@@
+|-
+|Period
+|@@ADD DESCRIPTION@@
+|-
+|Debug_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Param_ASN1_Modules
+|@@ADD DESCRIPTION@@
+|-
+|Skeletons
+|@@ADD DESCRIPTION@@
+|-
+|Glue
+|@@ADD DESCRIPTION@@
+|-
+|Node_Name
+|@@ADD DESCRIPTION@@
+|-
+|IF_Property_Names
+|@@ADD DESCRIPTION@@
+|-
+|Name
+|@@ADD DESCRIPTION@@
+|-
+|Interface_View
+|@@ADD DESCRIPTION@@
+|-
+|Use_POHIC
+|@@ADD DESCRIPTION@@
+|-
+|RI_Port_Names
+|@@ADD DESCRIPTION@@
+|-
+|Kind
+|@@ADD DESCRIPTION@@
+|-
+|Other_Files
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Function_Names
+|@@ADD DESCRIPTION@@
+|-
+|Is_Timer
+|@@ADD DESCRIPTION@@
+|-
+|Deployment_View
+|@@ADD DESCRIPTION@@
+|-
+|Param_Directions
+|@@ADD DESCRIPTION@@
+|-
+|}

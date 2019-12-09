@@ -1,0 +1,68 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Remote_Interface_Names
+|@@ADD DESCRIPTION@@
+|-
+|Param_Encodings
+|@@ADD DESCRIPTION@@
+|-
+|IF_Property_Values
+|@@ADD DESCRIPTION@@
+|-
+|Queue_Size
+|@@ADD DESCRIPTION@@
+|-
+|Param_Types
+|@@ADD DESCRIPTION@@
+|-
+|Param_Names
+|@@ADD DESCRIPTION@@
+|-
+|Language
+|@@ADD DESCRIPTION@@
+|-
+|Property_Values
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Languages
+|@@ADD DESCRIPTION@@
+|-
+|Parent_Function
+|@@ADD DESCRIPTION@@
+|-
+|Property_Names
+|@@ADD DESCRIPTION@@
+|-
+|Direction
+|@@ADD DESCRIPTION@@
+|-
+|WCET
+|@@ADD DESCRIPTION@@
+|-
+|Period
+|@@ADD DESCRIPTION@@
+|-
+|Param_ASN1_Modules
+|@@ADD DESCRIPTION@@
+|-
+|IF_Property_Names
+|@@ADD DESCRIPTION@@
+|-
+|Name
+|@@ADD DESCRIPTION@@
+|-
+|Kind
+|@@ADD DESCRIPTION@@
+|-
+|Remote_Function_Names
+|@@ADD DESCRIPTION@@
+|-
+|Is_Timer
+|@@ADD DESCRIPTION@@
+|-
+|Param_Directions
+|@@ADD DESCRIPTION@@
+|-
+|}

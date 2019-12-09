@@ -1,0 +1,164 @@
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Partition_CPU
+|@@ADD DESCRIPTION@@
+|-
+|No_Stdlib_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Bus_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|Unique_Dev_ASN1_Sorts
+|@@ADD DESCRIPTION@@
+|-
+|Device_Partition
+|@@ADD DESCRIPTION@@
+|-
+|Device_ASN1_File
+|@@ADD DESCRIPTION@@
+|-
+|Output_Dir
+|@@ADD DESCRIPTION@@
+|-
+|Partition_Names
+|@@ADD DESCRIPTION@@
+|-
+|Timer_Resolution
+|@@ADD DESCRIPTION@@
+|-
+|Partition_Duration
+|@@ADD DESCRIPTION@@
+|-
+|Nodes
+|@@ADD DESCRIPTION@@
+|-
+|Bus_Names
+|@@ADD DESCRIPTION@@
+|-
+|Device_AADL_Pkg
+|@@ADD DESCRIPTION@@
+|-
+|Part_Source_Name
+|@@ADD DESCRIPTION@@
+|-
+|Part_Dest_Name
+|@@ADD DESCRIPTION@@
+|-
+|Device_Bus_Name
+|@@ADD DESCRIPTION@@
+|-
+|Connect_From_Part
+|@@ADD DESCRIPTION@@
+|-
+|Block_Names
+|@@ADD DESCRIPTION@@
+|-
+|Device_Port_Name
+|@@ADD DESCRIPTION@@
+|-
+|Check_Data_View
+|@@ADD DESCRIPTION@@
+|-
+|Part_Source_Port
+|@@ADD DESCRIPTION@@
+|-
+|Unique_Dev_ASN1_Files
+|@@ADD DESCRIPTION@@
+|-
+|Part_Dest_Port
+|@@ADD DESCRIPTION@@
+|-
+|Device_ASN1_Sort
+|@@ADD DESCRIPTION@@
+|-
+|Node_Major_Frame
+|@@ADD DESCRIPTION@@
+|-
+|Node_CPU_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|Thread_Names
+|@@ADD DESCRIPTION@@
+|-
+|Threads
+|@@ADD DESCRIPTION@@
+|-
+|Connect_Via_Bus
+|@@ADD DESCRIPTION@@
+|-
+|Device_ASN1_Module
+|@@ADD DESCRIPTION@@
+|-
+|Device_Classifier
+|@@ADD DESCRIPTION@@
+|-
+|Binary_Path
+|@@ADD DESCRIPTION@@
+|-
+|Partition_VP
+|@@ADD DESCRIPTION@@
+|-
+|Device_Node_Name
+|@@ADD DESCRIPTION@@
+|-
+|Device_Names
+|@@ADD DESCRIPTION@@
+|-
+|Device_Config
+|@@ADD DESCRIPTION@@
+|-
+|Node_Names
+|@@ADD DESCRIPTION@@
+|-
+|Data_View
+|@@ADD DESCRIPTION@@
+|-
+|Unique_Dev_ASN1_Mod
+|@@ADD DESCRIPTION@@
+|-
+|Debug_Flag
+|@@ADD DESCRIPTION@@
+|-
+|Connect_Port_Name
+|@@ADD DESCRIPTION@@
+|-
+|Skeletons
+|@@ADD DESCRIPTION@@
+|-
+|Glue
+|@@ADD DESCRIPTION@@
+|-
+|Target_Packages
+|@@ADD DESCRIPTION@@
+|-
+|Use_POHIC
+|@@ADD DESCRIPTION@@
+|-
+|Interface_View
+|@@ADD DESCRIPTION@@
+|-
+|Device_CPU
+|@@ADD DESCRIPTION@@
+|-
+|Node_CPU
+|@@ADD DESCRIPTION@@
+|-
+|Other_Files
+|@@ADD DESCRIPTION@@
+|-
+|Node_Has_Memory
+|@@ADD DESCRIPTION@@
+|-
+|Partition_Node
+|@@ADD DESCRIPTION@@
+|-
+|Deployment_View
+|@@ADD DESCRIPTION@@
+|-
+|Bus_AADL_Package
+|@@ADD DESCRIPTION@@
+|-
+|}

@@ -104,6 +104,7 @@ package body TASTE.Backend.Code_Generators is
          Create (File => Output_File,
                  Mode => Out_File,
                  Name => Model.Configuration.Output_Dir.Element & "/Makefile");
+         Document_Template (Template_Main_Makefile, Content_Set);
          Put_Line (Output_File, Parse (Tmplt, Content_Set));
          Close (Output_File);
       end Generate_Global_Makefile;
@@ -116,6 +117,7 @@ package body TASTE.Backend.Code_Generators is
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
       begin
          for Each of Interfaces loop
+            Document_Template (Template_Skeleton_Interface, Each);
             Result := Result & String'(Parse (Tmplt_Sign, Each));
          end loop;
          return Result;
@@ -135,6 +137,7 @@ package body TASTE.Backend.Code_Generators is
          CP_File_Dash : Unbounded_String;
 
       begin
+         Document_Template (Template_Context_Parameters, CP_Tmpl);
          --  To keep backward compatibility, file name uses dash
          for C of CP_File loop
             CP_File_Dash := CP_File_Dash & (if C = '_' then '-' else C);
@@ -200,6 +203,7 @@ package body TASTE.Backend.Code_Generators is
 
          Output_Dir  : constant String := Output_Lang & Output_Sub;
       begin
+         Document_Template (Template_Skeleton_Makefile, Make_Tmpl);
          --  Create directory tree (output/function/language/src)
          Create_Path (Output_Dir);
          if File_Name /= "" then
@@ -328,6 +332,12 @@ package body TASTE.Backend.Code_Generators is
                          and then Strip_String (Parse
                             (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
                   begin
+                     Document_Template (Template_Skeleton_Function_Filename,
+                                        File_Tmpl);
+                     Document_Template (Template_Skeleton_Makefile_Filename,
+                                        File_Tmpl);
+                     Document_Template (Template_Skeleton_And_Glue_Trigger,
+                                        Trig_Tmpl);
                      if Trigger then
                         --  Output code and Makefile from this template folder
                         Process_Template (F           => Each,

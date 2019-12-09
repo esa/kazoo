@@ -64,11 +64,19 @@ package body TASTE.Parser_Utils is
    procedure Document_Template (Category : Template_Category;
                                 Tags     : Translate_Set)
    is
-      Result : Unbounded_String := "# Tags for " & US (Category'Img);
+      Result : Unbounded_String :=
+        "{| class=""wikitable""" & ASCII.LF
+        & "!Parameter name" & ASCII.LF
+        & "!Description" & ASCII.LF
+        & US ("|-");
+
       procedure Action (Item : Association; Quit : in out Boolean) is
       begin
          Result :=
-           Result & ASCII.LF & US (Templates_Parser.Query.Variable (Item));
+           Result & ASCII.LF
+           & "|" & US (Templates_Parser.Query.Variable (Item)) & ASCII.LF
+           & "|@@ADD DESCRIPTION@@" & ASCII.LF
+           & "|-";
          --          & Templates_Parser.Query.Kind (Item)'Img);
          Quit := False;
       end Action;
@@ -81,6 +89,9 @@ package body TASTE.Parser_Utils is
       end if;
       Put_Debug ("Documenting template category: " & Category'Img);
       Iterate (Tags);
+      Result :=
+        Result & ASCII.LF
+        & "|}";
       Doc_Map.Insert (Key => Category, New_Item => To_String (Result));
    end Document_Template;
 

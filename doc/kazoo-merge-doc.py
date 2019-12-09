@@ -83,10 +83,66 @@ def run(options):
     old_content = open (old, "r").readlines()
     new_content = open (new, "r").readlines()
 
-    newdoc = []
+    # Build dictionnaries from the content of the two files
+    assert len(old_content) > 4 and len(new_content) > 5
 
-    #  Write the resulting file
-    with open (result, "wb") as output:
+    # The dict has to be ordered: this can work only with Python 3.6+
+    old_dict = {}
+    current_tag = ""
+    for line in old_content[3:-1]:
+        if line.startswith ("|-"):
+            if current_tag != "":
+                old_dict[current_tag] = descr
+            next_line = "tagname"
+            descr = []
+            current_tag = ""
+        elif next_line == "tagname":
+            current_tag = line
+            next_line = "description"
+        elif next_line == "description":
+            # there can be several description lines
+            descr.append(line.strip())
+    # Don't forget the last line...
+    if current_tag != "":
+        old_dict[current_tag] = descr
+
+    # In the new file, we ignore description, we only care about tag names
+    new_tags = set()
+    next_line = ""
+    for line in new_content[3:-1]:
+        if line.startswith ("|-"):
+            next_line = "tagname"
+            tagname = ""
+        elif next_line == "tagname":
+            new_tags.add(line)
+            next_line = "description"
+        elif next_line == "description":
+            # ignore description
+            pass
+
+    #  Keep the wikimedia header
+    newdoc = [line.strip() for line in old_content[0:3]]
+
+    for name in old_dict.keys():
+        if name not in new_tags:
+            LOG.info ("Tag " + name.strip() + " has been removed")
+        else:
+            LOG.info ("Tag " + name.strip() + " has been kept")
+            new_tags.remove(name)
+            newdoc.append("|-")
+            newdoc.append(name.strip())
+            newdoc.extend(old_dict[name])   # Add the description lines
+
+    # If there are still some items in new_tags, they must be added
+    for name in new_tags:
+        LOG.info ("Tag " + name.strip() + " had been added")
+        newdoc.append("|-")
+        newdoc.append(name.strip())
+        newdoc.append("|DOCUMENTATION MISSING")
+
+    newdoc.append("|}")
+
+    with open (result, "w") as output:
         output.write("\n".join (newdoc))
 
 def main():

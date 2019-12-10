@@ -84,29 +84,32 @@ package TASTE.Parser_Utils is
       unused_Context    :  Filter_Context) return String;
 
    --  Generate documentation for a translate set
+
+   --  Template_Category enumerants reflect the path containing the template
+   --  (directory separator is replaced by an underscore)
    type Template_Category is
-     (Template_Main_Makefile,
-      Template_Context_Parameters,
-      Template_Skeleton_And_Glue_Trigger,
-      Template_Skeleton_Makefile_Filename,
-      Template_Skeleton_Makefile,
-      Template_Skeleton_Function_Filename,
-      Template_Skeleton_Function,
-      Template_Skeleton_Interface,
-      Template_CV_Trigger,
-      Template_CV_File_Node,
-      Template_CV_File_Part,
-      Template_CV_File_Thread,
-      Template_CV_File_Block,
-      Template_CV_Thread,
-      Template_CV_PI,
-      Template_CV_RI,
-      Template_CV_Block,
-      Template_CV_Partition,
-      Template_CV_Node,
-      Template_CV_System,
-      Template_Dump_Interface_View,
-      Template_Dump_Deployment_View);
+     (Templates_Skeletons_Makefile,            --  Main makefile
+      Templates_Skeletons_Context_Parameters,  --  Context Parameters
+      Templates_Skeletons_Sub_Trigger,         --  Trigger per skeleton folder
+      Templates_Skeletons_Sub_Makefile_Filename,
+      Templates_Skeletons_Sub_Makefile,
+      Templates_Skeletons_Sub_Function_Filename,
+      Templates_Skeletons_Sub_Function,
+      Templates_Skeletons_Sub_Interface,
+      Templates_Concurrency_View_Sub_Trigger,
+      Templates_Concurrency_View_Sub_File_Node,
+      Templates_Concurrency_View_Sub_File_Part,
+      Templates_Concurrency_View_Sub_File_Thread,
+      Templates_Concurrency_View_Sub_File_Block,
+      Templates_Concurrency_View_Sub_Thread,
+      Templates_Concurrency_View_Sub_PI,
+      Templates_Concurrency_View_Sub_RI,
+      Templates_Concurrency_View_Sub_Block,
+      Templates_Concurrency_View_Sub_Partition,
+      Templates_Concurrency_View_Sub_Node,
+      Templates_Concurrency_View_Sub_System,
+      Templates_Dump_Interfaceview,
+      Templates_Dump_Deploymentview);
 
    package Template_Doc_Maps is new Indefinite_Ordered_Maps
      (Template_Category, String);

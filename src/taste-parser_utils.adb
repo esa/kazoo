@@ -6,6 +6,7 @@ with Ada.Characters.Latin_1,
      Ada.Strings.Maps,
      Ada.Strings.Fixed,
      Ada.Strings,
+     Ada.Characters.Handling,
      Ada.Directories,
      Ada.Command_Line,
      Ada.Environment_Variables,
@@ -23,7 +24,8 @@ with Ada.Characters.Latin_1,
 
 package body TASTE.Parser_Utils is
 
-   use GNAT.OS_Lib,
+   use Ada.Characters.Handling,
+       GNAT.OS_Lib,
        GNAT.Command_Line,
        Ada.Directories,
        Templates_Parser.Utils,
@@ -104,7 +106,7 @@ package body TASTE.Parser_Utils is
          Put_Debug ("Dump documentation of " & Key (Each)'Img);
          Create (File => Output_File,
                  Mode => Out_File,
-                 Name => Output_Folder & "/" & Key (Each)'Img & ".tmplt_doc");
+                 Name => Output_Folder & "/" & To_Lower (Key (Each)'Img));
          Put_Line (Output_File, Element (Each));
          Close (Output_File);
       end loop;

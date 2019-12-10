@@ -249,8 +249,10 @@ package body TASTE.Dump is
               & Assoc ("Dest_Ports",   Dest_Ports);
 
             --  Output is made of interface, deployment and data views
-            Document_Template (Category => Template_Dump_Interface_View,
+            Document_Template (Category => Templates_Dump_Interfaceview,
                                Tags     => IV_Tags);
+            Document_Template (Category => Templates_Dump_Deploymentview,
+                               Tags     => DV_Tags);
             --  interfaceview.tmplt
             Output_Tags := +Assoc ("Interface_View",
                                    String'(Parse (IV_Template, IV_Tags)))

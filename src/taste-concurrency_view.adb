@@ -252,7 +252,8 @@ package body TASTE.Concurrency_View is
                --  Part_File_Name may contain a subfolder
                Subfolder       : Unbounded_String;
             begin
-               Document_Template (Template_CV_File_Part, Part_Tag);
+               Document_Template
+                 (Templates_Concurrency_View_Sub_File_Part, Part_Tag);
                for Each of Partition.In_Ports loop
                   Input_Port_Names := Input_Port_Names & Each.Port_Name;
                   Input_Port_Type_Name := Input_Port_Type_Name
@@ -294,8 +295,11 @@ package body TASTE.Concurrency_View is
                         then Strip_String (Parse (Thread_File_Id, Thread_Tag))
                         else "");
                   begin
-                     Document_Template (Template_CV_Thread,      Thread_Assoc);
-                     Document_Template (Template_CV_File_Thread, Thread_Tag);
+                     Document_Template
+                       (Templates_Concurrency_View_Sub_Thread, Thread_Assoc);
+                     Document_Template
+                       (Templates_Concurrency_View_Sub_File_Thread,
+                        Thread_Tag);
 
                      Threads      := Threads & Newline & Result;
                      Part_Threads := Part_Threads & Newline & Result;
@@ -362,7 +366,8 @@ package body TASTE.Concurrency_View is
                         then Strip_String (Parse (Block_File_Id, Block_Tag))
                         else "");
                   begin
-                     Document_Template (Template_CV_File_Block, Block_Tag);
+                     Document_Template
+                       (Templates_Concurrency_View_Sub_File_Block, Block_Tag);
                      Block_Names     := Block_Names & Block_Name;
                      All_Block_Names := All_Block_Names & Block_Name;
                      Block_Languages := Block_Languages
@@ -372,7 +377,7 @@ package body TASTE.Concurrency_View is
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Document_Template
-                          (Template_CV_PI,
+                          (Templates_Concurrency_View_Sub_PI,
                            PI_Assoc & Assoc ("Partition_Name", ""));
                         Pro_PI_Tag := Pro_PI_Tag & Newline
                           & String'(Parse (Path & "/pi.tmplt",
@@ -387,7 +392,7 @@ package body TASTE.Concurrency_View is
                      end loop;
                      for RI_Assoc of Tmpl.Required loop
                         Document_Template
-                          (Template_CV_RI,
+                          (Templates_Concurrency_View_Sub_RI,
                            RI_Assoc & Assoc ("Partition_Name", ""));
 
                         RI_Tag := RI_Tag & Newline
@@ -405,7 +410,8 @@ package body TASTE.Concurrency_View is
                        & Assoc ("Required",        RI_Tag);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
-                     Document_Template (Template_CV_Block, Block_Assoc);
+                     Document_Template
+                       (Templates_Concurrency_View_Sub_Block, Block_Assoc);
 
                      Blocks := Blocks & Newline & To_String (Result);
 
@@ -451,7 +457,8 @@ package body TASTE.Concurrency_View is
                Part_Content :=
                  Parse (Path & "/partition.tmplt", Partition_Assoc);
 
-               Document_Template (Template_CV_Partition, Partition_Assoc);
+               Document_Template
+                 (Templates_Concurrency_View_Sub_Partition, Partition_Assoc);
 
                --  Save the content of the partition in a file
                --  (if required at template folder level)
@@ -532,7 +539,8 @@ package body TASTE.Concurrency_View is
                           CV.Nodes (Node_Name).Deployment_Node.Package_Name)
                  & Assoc ("Ada_Runtime",
                           CV.Nodes (Node_Name).Deployment_Node.Ada_Runtime);
-               Document_Template (Template_CV_Node, Node_Assoc);
+               Document_Template
+                 (Templates_Concurrency_View_Sub_Node, Node_Assoc);
                return Parse (Path & "/node.tmplt", Node_Assoc);
             end Generate_Node;
 
@@ -656,8 +664,10 @@ package body TASTE.Concurrency_View is
                     (if Trigger then Generate_Node (Node_Name)
                      else "");
                begin
-                  Document_Template (Template_CV_File_Node, Filename_Set);
-                  Document_Template (Template_CV_Trigger, Trig_Tmpl);
+                  Document_Template
+                    (Templates_Concurrency_View_Sub_File_Node, Filename_Set);
+                  Document_Template
+                    (Templates_Concurrency_View_Sub_Trigger, Trig_Tmpl);
                   if Trigger then
 
                      --  Associate node name, CPU name and CPU classifier
@@ -824,7 +834,8 @@ package body TASTE.Concurrency_View is
                        Mode => Out_File,
                        Name => CV_Out_Dir & File_Sys);
                Put_Line (Output_File, Parse (Tmpl_Sys, Set_Sys));
-               Document_Template (Template_CV_System, Set_Sys);
+               Document_Template
+                 (Templates_Concurrency_View_Sub_System, Set_Sys);
                Close (Output_File);
             end if;
          end;

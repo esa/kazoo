@@ -1,3 +1,0 @@
-@@IF@@ @_Language_@ /= GUI
---sub@_REPLACE(SDL/Ada):REPLACE(VDM/C):Language_@ @_Function_Name_@ \
-@@END_IF@@

@@ -2,19 +2,18 @@
 !Parameter name
 !Description
 |-
-|ASN1_Modules
-|@@ADD DESCRIPTION@@
-|-
-|Is_Type
-|@@ADD DESCRIPTION@@
-|-
-|Instance_Of
-|@@ADD DESCRIPTION@@
+|Name
+|The function name
 |-
 |ASN1_Files
-|@@ADD DESCRIPTION@@
+|List of all ASN.1 files
 |-
-|Name
-|@@ADD DESCRIPTION@@
+|ASN1_Modules
+|List of all ASN.1 modules
 |-
+|Is_Type
+|Flag set to True for function type
+|-
+|Instance_Of
+|Name of function type if instance
 |}

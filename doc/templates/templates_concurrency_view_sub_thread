@@ -2,133 +2,132 @@
 !Parameter name
 !Description
 |-
-|No_Stdlib_Flag
-|@@ADD DESCRIPTION@@
-|-
-|Remote_Interface_Names
-|@@ADD DESCRIPTION@@
-|-
-|Param_Encodings
-|@@ADD DESCRIPTION@@
-|-
-|Pro_Block_Name
-|@@ADD DESCRIPTION@@
+|Thread_Name
+|Thread name
 |-
 |Partition_Name
-|@@ADD DESCRIPTION@@
-|-
-|Remote_Threads
-|@@ADD DESCRIPTION@@
-|-
-|Output_Dir
-|@@ADD DESCRIPTION@@
-|-
-|IF_Property_Values
-|@@ADD DESCRIPTION@@
-|-
-|Queue_Size
-|@@ADD DESCRIPTION@@
-|-
-|Timer_Resolution
-|@@ADD DESCRIPTION@@
-|-
-|Param_Types
-|@@ADD DESCRIPTION@@
-|-
-|Param_Names
-|@@ADD DESCRIPTION@@
-|-
-|Remote_PI_Sorts
-|@@ADD DESCRIPTION@@
-|-
-|Language
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Name
-|@@ADD DESCRIPTION@@
+|Partition containing this thread
 |-
 |Entry_Port_Name
-|@@ADD DESCRIPTION@@
-|-
-|Check_Data_View
-|@@ADD DESCRIPTION@@
-|-
-|Remote_PIs
-|@@ADD DESCRIPTION@@
-|-
-|Remote_Languages
-|@@ADD DESCRIPTION@@
-|-
-|Binary_Path
-|@@ADD DESCRIPTION@@
+|Name of the PI
 |-
 |RCM
-|@@ADD DESCRIPTION@@
-|-
-|Parent_Function
-|@@ADD DESCRIPTION@@
-|-
-|WCET
-|@@ADD DESCRIPTION@@
-|-
-|Data_View
-|@@ADD DESCRIPTION@@
-|-
-|Remote_PI_Modules
-|@@ADD DESCRIPTION@@
+|One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
 |-
 |Need_Mutex
-|@@ADD DESCRIPTION@@
+|True if the PI is shared with others in the protected block
 |-
-|Period
-|@@ADD DESCRIPTION@@
-|-
-|Debug_Flag
-|@@ADD DESCRIPTION@@
-|-
-|Param_ASN1_Modules
-|@@ADD DESCRIPTION@@
-|-
-|Skeletons
-|@@ADD DESCRIPTION@@
-|-
-|Glue
-|@@ADD DESCRIPTION@@
+|Pro_Block_Name
+|Name of the protected function
 |-
 |Node_Name
-|@@ADD DESCRIPTION@@
+|Name of the deployment node
 |-
-|IF_Property_Names
-|@@ADD DESCRIPTION@@
+|Remote_Threads
+|Vector tag: output remote thread list
+|-
+|Remote_PIs
+| |_ Associated PI Name
+|-
+|Remote_PI_Sorts
+| |_ Optional param type of the remote thread
+|-
+|Remote_PI_Modules
+| |_ Asn1 module of the optional param type
 |-
 |Name
-|@@ADD DESCRIPTION@@
-|-
-|Interface_View
-|@@ADD DESCRIPTION@@
-|-
-|Use_POHIC
-|@@ADD DESCRIPTION@@
-|-
-|RI_Port_Names
-|@@ADD DESCRIPTION@@
+|
 |-
 |Kind
-|@@ADD DESCRIPTION@@
+|
 |-
-|Other_Files
-|@@ADD DESCRIPTION@@
+|Parent_Function
+|Tags related to the PI that is at the origin of the thread creation: shoud be useless here
+|-
+|Param_Names
+|
+|-
+|Period
+|
+|-
+|WCET
+|
+|-
+|Queue_Size
+|relevant here
+|-
+|IF_Property_Names
+|
+|-
+|Skeletons
+|from kazoo configuration
+|-
+|Glue
+|from kazoo configuration
+|-
+|Param_Encodings
+|DOCUMENTATION MISSING
+|-
+|Param_ASN1_Modules
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
 |-
 |Remote_Function_Names
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
+|-
+|Param_Types
+|DOCUMENTATION MISSING
+|-
+|Language
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
 |-
 |Is_Timer
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
 |-
-|Deployment_View
-|@@ADD DESCRIPTION@@
+|Remote_Languages
+|DOCUMENTATION MISSING
 |-
 |Param_Directions
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
 |-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|RI_Port_Names
+|DOCUMENTATION MISSING
+|-
+|IF_Property_Values
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Remote_Interface_Names
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
 |}

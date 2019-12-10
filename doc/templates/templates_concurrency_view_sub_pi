@@ -2,70 +2,69 @@
 !Parameter name
 !Description
 |-
-|Remote_Interface_Names
-|@@ADD DESCRIPTION@@
-|-
-|Param_Encodings
-|@@ADD DESCRIPTION@@
-|-
-|Partition_Name
-|@@ADD DESCRIPTION@@
-|-
-|Calling_Threads
-|@@ADD DESCRIPTION@@
-|-
-|IF_Property_Values
-|@@ADD DESCRIPTION@@
-|-
-|Queue_Size
-|@@ADD DESCRIPTION@@
-|-
-|Param_Types
-|@@ADD DESCRIPTION@@
-|-
-|Param_Names
-|@@ADD DESCRIPTION@@
-|-
-|Language
-|@@ADD DESCRIPTION@@
-|-
-|Protected_Block_Name
-|@@ADD DESCRIPTION@@
-|-
-|Remote_Languages
-|@@ADD DESCRIPTION@@
-|-
-|Parent_Function
-|@@ADD DESCRIPTION@@
-|-
-|WCET
-|@@ADD DESCRIPTION@@
-|-
-|Caller_Is_Local
-|@@ADD DESCRIPTION@@
-|-
-|Period
-|@@ADD DESCRIPTION@@
-|-
-|Param_ASN1_Modules
-|@@ADD DESCRIPTION@@
-|-
-|IF_Property_Names
-|@@ADD DESCRIPTION@@
-|-
 |Name
-|@@ADD DESCRIPTION@@
+|The name of the interface
 |-
 |Kind
-|@@ADD DESCRIPTION@@
+|The RCM Kind
 |-
-|Remote_Function_Names
-|@@ADD DESCRIPTION@@
+|Parent_Function
+|The name of the function
 |-
-|Is_Timer
-|@@ADD DESCRIPTION@@
+|Param_Names
+|List of parameter names
+|-
+|Param_Types
+| |_ Corresponding parameter types
 |-
 |Param_Directions
-|@@ADD DESCRIPTION@@
+| |_ Corresponding direction
 |-
+|Param_Encodings
+|DOCUMENTATION MISSING
+|-
+|Partition_Name
+|DOCUMENTATION MISSING
+|-
+|Param_ASN1_Modules
+|DOCUMENTATION MISSING
+|-
+|Remote_Function_Names
+|DOCUMENTATION MISSING
+|-
+|Language
+|DOCUMENTATION MISSING
+|-
+|Is_Timer
+|DOCUMENTATION MISSING
+|-
+|Remote_Languages
+|DOCUMENTATION MISSING
+|-
+|WCET
+|DOCUMENTATION MISSING
+|-
+|Caller_Is_Local
+|DOCUMENTATION MISSING
+|-
+|IF_Property_Values
+|DOCUMENTATION MISSING
+|-
+|IF_Property_Names
+|DOCUMENTATION MISSING
+|-
+|Protected_Block_Name
+|DOCUMENTATION MISSING
+|-
+|Period
+|DOCUMENTATION MISSING
+|-
+|Remote_Interface_Names
+|DOCUMENTATION MISSING
+|-
+|Queue_Size
+|DOCUMENTATION MISSING
+|-
+|Calling_Threads
+|DOCUMENTATION MISSING
 |}

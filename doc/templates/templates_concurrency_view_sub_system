@@ -2,163 +2,161 @@
 !Parameter name
 !Description
 |-
-|Partition_CPU
-|@@ADD DESCRIPTION@@
-|-
-|No_Stdlib_Flag
-|@@ADD DESCRIPTION@@
-|-
-|Bus_Classifier
-|@@ADD DESCRIPTION@@
-|-
-|Unique_Dev_ASN1_Sorts
-|@@ADD DESCRIPTION@@
-|-
-|Device_Partition
-|@@ADD DESCRIPTION@@
-|-
-|Device_ASN1_File
-|@@ADD DESCRIPTION@@
-|-
-|Output_Dir
-|@@ADD DESCRIPTION@@
-|-
-|Partition_Names
-|@@ADD DESCRIPTION@@
-|-
-|Timer_Resolution
-|@@ADD DESCRIPTION@@
-|-
-|Partition_Duration
-|@@ADD DESCRIPTION@@
-|-
 |Nodes
-|@@ADD DESCRIPTION@@
-|-
-|Bus_Names
-|@@ADD DESCRIPTION@@
-|-
-|Device_AADL_Pkg
-|@@ADD DESCRIPTION@@
-|-
-|Part_Source_Name
-|@@ADD DESCRIPTION@@
-|-
-|Part_Dest_Name
-|@@ADD DESCRIPTION@@
-|-
-|Device_Bus_Name
-|@@ADD DESCRIPTION@@
-|-
-|Connect_From_Part
-|@@ADD DESCRIPTION@@
-|-
-|Block_Names
-|@@ADD DESCRIPTION@@
-|-
-|Device_Port_Name
-|@@ADD DESCRIPTION@@
-|-
-|Check_Data_View
-|@@ADD DESCRIPTION@@
-|-
-|Part_Source_Port
-|@@ADD DESCRIPTION@@
-|-
-|Unique_Dev_ASN1_Files
-|@@ADD DESCRIPTION@@
-|-
-|Part_Dest_Port
-|@@ADD DESCRIPTION@@
-|-
-|Device_ASN1_Sort
-|@@ADD DESCRIPTION@@
-|-
-|Node_Major_Frame
-|@@ADD DESCRIPTION@@
-|-
-|Node_CPU_Classifier
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Names
-|@@ADD DESCRIPTION@@
-|-
-|Threads
-|@@ADD DESCRIPTION@@
-|-
-|Connect_Via_Bus
-|@@ADD DESCRIPTION@@
-|-
-|Device_ASN1_Module
-|@@ADD DESCRIPTION@@
-|-
-|Device_Classifier
-|@@ADD DESCRIPTION@@
-|-
-|Binary_Path
-|@@ADD DESCRIPTION@@
-|-
-|Partition_VP
-|@@ADD DESCRIPTION@@
-|-
-|Device_Node_Name
-|@@ADD DESCRIPTION@@
-|-
-|Device_Names
-|@@ADD DESCRIPTION@@
-|-
-|Device_Config
-|@@ADD DESCRIPTION@@
+|Code generated for the nodes
 |-
 |Node_Names
-|@@ADD DESCRIPTION@@
-|-
-|Data_View
-|@@ADD DESCRIPTION@@
-|-
-|Unique_Dev_ASN1_Mod
-|@@ADD DESCRIPTION@@
-|-
-|Debug_Flag
-|@@ADD DESCRIPTION@@
-|-
-|Connect_Port_Name
-|@@ADD DESCRIPTION@@
-|-
-|Skeletons
-|@@ADD DESCRIPTION@@
-|-
-|Glue
-|@@ADD DESCRIPTION@@
-|-
-|Target_Packages
-|@@ADD DESCRIPTION@@
-|-
-|Use_POHIC
-|@@ADD DESCRIPTION@@
-|-
-|Interface_View
-|@@ADD DESCRIPTION@@
-|-
-|Device_CPU
-|@@ADD DESCRIPTION@@
+|Vector Tag of node names
 |-
 |Node_CPU
-|@@ADD DESCRIPTION@@
+|Corresponding CPU name (eg x86_linux)
 |-
-|Other_Files
-|@@ADD DESCRIPTION@@
+|Node_CPU_Classifier
+|CPU Classifier (ocarina...::x86_linux)
 |-
-|Node_Has_Memory
-|@@ADD DESCRIPTION@@
+|Node_Major_Frame
+|Time in milliseconds allocated to the CPU (TSP only)
+|-
+|Partition_Names
+|Vector Tag of partition names
 |-
 |Partition_Node
-|@@ADD DESCRIPTION@@
+|Corresponding node name
 |-
-|Deployment_View
-|@@ADD DESCRIPTION@@
+|Partition_CPU
+|Corresponding CPU name
+|-
+|Partition_Duration
+|Corresponding time allocation (TSP only)
+|-
+|Partition_VP
+|Virtual processor binding (TSP only)
+|-
+|Threads
+|Code generated for the threads
+|-
+|Thread_Names
+|List of all threads in the complete system
+|-
+|Target_Packages
+|List of all target package names in the complete system
+|-
+|Part_Source_Name
+|Inter-partition connections : partition source name (vector tag)
+|-
+|Part_Source_Port
+| |_ Corresponding port name
+|-
+|Part_Dest_Name
+| |_ Corresponding name of the remote partition
+|-
+|Part_Dest_Port
+| |_ Corresponding name of the port on the remote partition
+|-
+|Bus_Names
+|Vector tag: busses present in the system
 |-
 |Bus_AADL_Package
-|@@ADD DESCRIPTION@@
+| |_ corresponding AADL Package
 |-
+|Bus_Classifier
+| |_ corresponding AADL classifier
+|-
+|Device_Node_Name
+|
+|-
+|Device_Partition
+|-
+|Device_AADL_Pkg
+|
+|-
+|Device_Classifier
+|
+|-
+|Device_CPU
+|
+|-
+|Device_Config
+|
+|-
+|Device_Bus_Name
+|
+|-
+|Device_Port_Name
+|
+|-
+|Device_ASN1_File
+|
+|-
+|Device_ASN1_Sort
+|
+|-
+|Device_ASN1_Module
+|Device drivers (vector tag)
+|-
+|Unique_Dev_ASN1_Files
+|List of ASN.1 files/module/type for device configuration with no duplicates (vector tag)
+|-
+|Unique_Dev_ASN1_Mod
+| |_  corresponding asn1 module
+|-
+|Unique_Dev_ASN1_Sorts
+| |_  type name
+|-
+|Connect_From_Part
+|Vector tag - bus connection: partition source
+|-
+|Connect_Via_Bus
+| |_ bus name
+|-
+|Connect_Port_Name
+| |_ port name
+|-
+|Glue
+|DOCUMENTATION MISSING
+|-
+|Block_Names
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Device_Names
+|DOCUMENTATION MISSING
+|-
+|Node_Has_Memory
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
 |}

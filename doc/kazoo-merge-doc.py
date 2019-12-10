@@ -48,40 +48,48 @@ def parse_args():
             help='Display debug information')
     parser.add_argument(
             '-o',
-            '--output',
+            '--outputfolder',
             type=str,
-            metavar='out_file',
-            default='updated.mediawiki',
+            metavar='out_folder',
+            default='templates',
             help='Output file name')
     parser.add_argument(
             '-i',
-            '--old',
+            '--oldfolder',
             type=str,
-            default='old.mediawiki',
+            default='./preprocess/output',
             metavar='old',
             help='Previous file containing tags description')
     parser.add_argument(
             '-n',
-            '--new',
+            '--newfolder',
             type=str,
-            default='new.mediawiki',
+            default='./new-templates',
             metavar='new',
             help='Freshly generated tag list')
+    parser.add_argument(
+            '-k',
+            '--orderlist',
+            type=str,
+            default='./order.txt',
+            metavar='order',
+            help='List of ordered template files to be processed')
+
     return parser.parse_args()
 
-def run(options):
-    old    = options.old
-    new    = options.new
-    result = options.output
-    out_folder = options.output if options.output else '.'
-    #os.makedirs(out_folder, exist_ok=True)
-    if not os.path.exists(old) or not os.path.exists(new):
-        LOG.error ("Input file(s) missing, check --help.")
-        return
 
+def process_one_file (tmplt: str, old: str, new: str, res_folder: str) -> None:
     #  Read the input files
-    old_content = open (old, "r").readlines()
-    new_content = open (new, "r").readlines()
+    try:
+        old_content = open(old, "r").readlines()
+    except FileNotFoundError:
+        LOG.info("Skipping template " + old + " (file not found)")
+        return
+    try:
+        new_content = open(new, "r").readlines()
+    except FileNotFoundError:
+        LOG.info("Skipping template " + new + " (file not found)")
+        return
 
     # Build dictionnaries from the content of the two files
     assert len(old_content) > 4 and len(new_content) > 5
@@ -142,8 +150,34 @@ def run(options):
 
     newdoc.append("|}")
 
-    with open (result, "w") as output:
+    with open (res_folder+"/"+tmplt, "w") as output:
         output.write("\n".join (newdoc))
+
+
+def run(options):
+    old_folder    = options.oldfolder
+    new_folder    = options.newfolder
+    result_folder = options.outputfolder
+    os.makedirs(result_folder, exist_ok=True)
+    if not os.path.exists(old_folder):
+        LOG.error ("Input folder(s) missing, check --help - " + old_folder)
+        return
+    if not os.path.exists(new_folder):
+        LOG.error ("Input folder(s) missing, check --help - " + new_folder )
+        return
+
+    if not os.path.exists(options.orderlist):
+        LOG.error ("Missing order specification file " + options.orderlist)
+        return
+
+    orderlist = open(options.orderlist, "r").readlines()
+
+    for each in orderlist:
+        name=each.strip()
+        process_one_file (tmplt=name,
+                         old=old_folder+"/"+name,
+                         new=new_folder+"/"+name,
+                         res_folder=result_folder)
 
 def main():
     ''' Tool entry point '''

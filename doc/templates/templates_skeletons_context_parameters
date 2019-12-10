@@ -2,25 +2,24 @@
 !Parameter name
 !Description
 |-
+|Name
+|Function name
+|-
 |Sort_Set
-|@@ADD DESCRIPTION@@
+|Set of types used for this Context Parameter file
 |-
 |Module_Set
-|@@ADD DESCRIPTION@@
-|-
-|CP_Value
-|@@ADD DESCRIPTION@@
+|... corresponding module (needed for ASN.1 "IMPORTS")
 |-
 |CP_Name
-|@@ADD DESCRIPTION@@
-|-
-|CP_ASN1_Module
-|@@ADD DESCRIPTION@@
+|Table of context parameter names
 |-
 |CP_Sort
-|@@ADD DESCRIPTION@@
+|... corresponding ASN.1 type
 |-
-|Name
-|@@ADD DESCRIPTION@@
+|CP_ASN1_Module
+|... in ASN.1 module
 |-
+|CP_Value
+|... with default value
 |}

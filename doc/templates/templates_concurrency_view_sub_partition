@@ -2,109 +2,108 @@
 !Parameter name
 !Description
 |-
-|VP_Package_Name
-|@@ADD DESCRIPTION@@
-|-
-|In_Port_Type_Name
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Has_Param
-|@@ADD DESCRIPTION@@
-|-
-|Block_Languages
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Src_Port
-|@@ADD DESCRIPTION@@
-|-
-|Connected_Threads
-|@@ADD DESCRIPTION@@
-|-
-|VP_Name
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Src_Name
-|@@ADD DESCRIPTION@@
-|-
-|In_Port_Thread_Name
-|@@ADD DESCRIPTION@@
-|-
-|Part_Out_Port_Name
-|@@ADD DESCRIPTION@@
-|-
-|Block_Names
-|@@ADD DESCRIPTION@@
-|-
-|Package_Name
-|@@ADD DESCRIPTION@@
-|-
-|Blocks
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Family
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Classifier
-|@@ADD DESCRIPTION@@
-|-
-|Block_Instance_Of
-|@@ADD DESCRIPTION@@
-|-
-|Memory_Region
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Names
-|@@ADD DESCRIPTION@@
+|Name
+|Partition name (usually the name of the binary)
 |-
 |Threads
-|@@ADD DESCRIPTION@@
+|Code generated for the threads
 |-
-|VP_Platform
-|@@ADD DESCRIPTION@@
-|-
-|Coverage
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Instance
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Dst_Name
-|@@ADD DESCRIPTION@@
-|-
-|VP_Duration
-|@@ADD DESCRIPTION@@
-|-
-|In_Port_Names
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Name
-|@@ADD DESCRIPTION@@
-|-
-|Thread_Dst_Port
-|@@ADD DESCRIPTION@@
-|-
-|Ada_Runtime
-|@@ADD DESCRIPTION@@
-|-
-|Out_Port_Names
-|@@ADD DESCRIPTION@@
+|Thread_Names
+|Tag: list of thread names
 |-
 |Node_Name
-|@@ADD DESCRIPTION@@
+|Name of the node containing this partition
+|-
+|Blocks
+|Code generated for protected functions
+|-
+|Block_Names
+|Tag: list of block (user functions) names
+|-
+|Coverage
+|True if user requested code coverage enable
+|-
+|Package_Name
+|AADL Package name for the target (e.g. ocarina_porocessors_x86)
+|-
+|CPU_Name
+|CPU AADL Identifier (e.g. x86_inst)
+|-
+|CPU_Family
+|CPU Kind (e.g. leon3)
+|-
+|CPU_Instance
+|AADL component instance (e.g. rtems_posix)
 |-
 |CPU_Platform
-|@@ADD DESCRIPTION@@
+|AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 |-
-|Name
-|@@ADD DESCRIPTION@@
+|CPU_Classifier
+|AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
 |-
-|Out_Port_Type_Name
-|@@ADD DESCRIPTION@@
+|VP_Name
+|Virtual processor name on which the partition is bounded
 |-
-|Bound_Functions
-|@@ADD DESCRIPTION@@
+|VP_Platform
+|Virtual processor platform (e.g. PLATFORM_AIR)
 |-
 |VP_Classifier
-|@@ADD DESCRIPTION@@
+|Virtual processor classifier
 |-
+|Bound_Functions
+|List of user functions from Interface view
+|-
+|Thread_Src_Name
+|Vector tag : connection thread name (source)
+|-
+|Thread_Dst_Name
+|Vector tag : connection thread name (dest)
+|-
+|Thread_Src_Port
+|Vector tag : connection port name (source)
+|-
+|Thread_Dst_Port
+|Vector tag : connection port name (dest)
+|-
+|In_Port_Names
+|Vector tag: input ports of the partition
+|-
+|In_Port_Thread_Name
+| |_ corresponding thread inside the partition
+|-
+|In_Port_Type_Name
+| |_ corresponding parameter type name (optional)
+|-
+|Out_Port_Names
+|Vector tag: output ports of the partition
+|-
+|Out_Port_Type_Name
+| |_ corresponding parameter type name (optional)
+|-
+|Part_Out_Port_Name
+|Vector tag: output ports of the partition (can be several times the same)
+|-
+|Connected_Threads
+| |_ Corresponding thread connected to it
+|-
+|Block_Languages
+|DOCUMENTATION MISSING
+|-
+|VP_Duration
+|DOCUMENTATION MISSING
+|-
+|Block_Instance_Of
+|DOCUMENTATION MISSING
+|-
+|Thread_Has_Param
+|DOCUMENTATION MISSING
+|-
+|Ada_Runtime
+|DOCUMENTATION MISSING
+|-
+|Memory_Region
+|DOCUMENTATION MISSING
+|-
+|VP_Package_Name
+|DOCUMENTATION MISSING
 |}

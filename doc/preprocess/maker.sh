@@ -19,5 +19,6 @@ find . -type f -iname '*.post' | \
     while read ANS ; do \
         cat "$ANS" | sed 1d > output/"$(echo ${ANS/.tmplt.post/.post} | sed 's,[/-],_,g')"
     done
-
+sed -i 's,[/-],_,g' output/order.txt
+sed -i 's,\..*,,g' output/order.txt
 rm -rf templates

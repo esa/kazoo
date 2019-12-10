@@ -2,46 +2,45 @@
 !Parameter name
 !Description
 |-
-|No_Stdlib_Flag
-|@@ADD DESCRIPTION@@
-|-
-|Output_Dir
-|@@ADD DESCRIPTION@@
-|-
-|Timer_Resolution
-|@@ADD DESCRIPTION@@
-|-
-|Check_Data_View
-|@@ADD DESCRIPTION@@
-|-
 |Filename_Is_Present
-|@@ADD DESCRIPTION@@
-|-
-|Binary_Path
-|@@ADD DESCRIPTION@@
-|-
-|Data_View
-|@@ADD DESCRIPTION@@
-|-
-|Debug_Flag
-|@@ADD DESCRIPTION@@
+|true if file with name returned by filenode.tmplt exists
 |-
 |Skeletons
-|@@ADD DESCRIPTION@@
+|from kazoo configuration
 |-
 |Glue
-|@@ADD DESCRIPTION@@
-|-
-|Use_POHIC
-|@@ADD DESCRIPTION@@
-|-
-|Interface_View
-|@@ADD DESCRIPTION@@
-|-
-|Other_Files
-|@@ADD DESCRIPTION@@
+|from kazoo configuration
 |-
 |Deployment_View
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
 |-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
 |}

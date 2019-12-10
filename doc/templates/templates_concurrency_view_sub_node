@@ -2,49 +2,48 @@
 !Parameter name
 !Description
 |-
-|Partition_Names
-|@@ADD DESCRIPTION@@
-|-
-|VP_Classifiers
-|@@ADD DESCRIPTION@@
-|-
-|Partitions
-|@@ADD DESCRIPTION@@
-|-
-|VP_Names
-|@@ADD DESCRIPTION@@
-|-
-|Package_Name
-|@@ADD DESCRIPTION@@
-|-
-|VP_Package_Names
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Family
-|@@ADD DESCRIPTION@@
-|-
-|VP_Platforms
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Classifier
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Instance
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Name
-|@@ADD DESCRIPTION@@
-|-
-|Ada_Runtime
-|@@ADD DESCRIPTION@@
-|-
-|CPU_Platform
-|@@ADD DESCRIPTION@@
-|-
 |Node_Name
-|@@ADD DESCRIPTION@@
+|Name of the node from deployment view
+|-
+|Partition_Names
+|Tag listing the partitions in this node
 |-
 |Has_Memory
-|@@ADD DESCRIPTION@@
+|Boolean flag indicating that a memory is defined for this node
 |-
+|Partitions
+|List of rendered code for partitions
+|-
+|VP_Names
+|Vector tag: list of virtual processors on this node
+|-
+|VP_Package_Names
+| |_ Corresponding package name
+|-
+|VP_Platforms
+| |_ Corresponding platform name
+|-
+|VP_Classifiers
+| |_ Corresponding aadl classifier
+|-
+|Ada_Runtime
+|DOCUMENTATION MISSING
+|-
+|Package_Name
+|DOCUMENTATION MISSING
+|-
+|CPU_Platform
+|DOCUMENTATION MISSING
+|-
+|CPU_Family
+|DOCUMENTATION MISSING
+|-
+|CPU_Name
+|DOCUMENTATION MISSING
+|-
+|CPU_Classifier
+|DOCUMENTATION MISSING
+|-
+|CPU_Instance
+|DOCUMENTATION MISSING
 |}

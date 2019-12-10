@@ -2,145 +2,144 @@
 !Parameter name
 !Description
 |-
-|No_Stdlib_Flag
-|@@ADD DESCRIPTION@@
-|-
-|List_Of_PIs
-|@@ADD DESCRIPTION@@
-|-
-|Required
-|@@ADD DESCRIPTION@@
-|-
-|Partition_Name
-|@@ADD DESCRIPTION@@
-|-
-|Unprotected_PIs
-|@@ADD DESCRIPTION@@
-|-
-|Output_Dir
-|@@ADD DESCRIPTION@@
-|-
-|Calling_Threads
-|@@ADD DESCRIPTION@@
-|-
-|Timer_Resolution
-|@@ADD DESCRIPTION@@
-|-
-|CP_Names
-|@@ADD DESCRIPTION@@
-|-
-|CP_Asn1Modules
-|@@ADD DESCRIPTION@@
-|-
-|CP_Asn1Filenames
-|@@ADD DESCRIPTION@@
-|-
-|Has_Context
-|@@ADD DESCRIPTION@@
-|-
-|Timers
-|@@ADD DESCRIPTION@@
-|-
-|ASync_RI_Param_Type
-|@@ADD DESCRIPTION@@
-|-
-|Async_RIs_Parent
-|@@ADD DESCRIPTION@@
+|Name
+|Protected block name
 |-
 |Language
-|@@ADD DESCRIPTION@@
+|Implementation language
 |-
-|Is_Type
-|@@ADD DESCRIPTION@@
-|-
-|CP_Types
-|@@ADD DESCRIPTION@@
-|-
-|Zip_File
-|@@ADD DESCRIPTION@@
-|-
-|Check_Data_View
-|@@ADD DESCRIPTION@@
-|-
-|PIs_Have_Params
-|@@ADD DESCRIPTION@@
-|-
-|Property_Values
-|@@ADD DESCRIPTION@@
-|-
-|ASync_PI_Param_Name
-|@@ADD DESCRIPTION@@
-|-
-|List_Of_Sync_RIs
-|@@ADD DESCRIPTION@@
-|-
-|Binary_Path
-|@@ADD DESCRIPTION@@
-|-
-|RIs_Have_Params
-|@@ADD DESCRIPTION@@
-|-
-|List_Of_Sync_PIs
-|@@ADD DESCRIPTION@@
-|-
-|Instance_Of
-|@@ADD DESCRIPTION@@
-|-
-|CP_Values
-|@@ADD DESCRIPTION@@
-|-
-|ASync_RI_Param_Name
-|@@ADD DESCRIPTION@@
-|-
-|Property_Names
-|@@ADD DESCRIPTION@@
-|-
-|Sync_RIs_Parent
-|@@ADD DESCRIPTION@@
-|-
-|Data_View
-|@@ADD DESCRIPTION@@
-|-
-|List_Of_ASync_RIs
-|@@ADD DESCRIPTION@@
+|Calling_Threads
+|List of calling threads
 |-
 |Protected_PIs
-|@@ADD DESCRIPTION@@
+|Protected Provided interfaces (from pi.tmplt)
 |-
-|Debug_Flag
-|@@ADD DESCRIPTION@@
+|Unprotected_PIs
+|Unprotected Provided interfaces (from pi.tmplt)
 |-
-|Skeletons
-|@@ADD DESCRIPTION@@
+|Required
+|Required interfaces (from ri.tmplt)
+|-
+|Is_Type
+|DOCUMENTATION MISSING
 |-
 |Glue
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
 |-
-|Node_Name
-|@@ADD DESCRIPTION@@
-|-
-|List_Of_ASync_PIs
-|@@ADD DESCRIPTION@@
-|-
-|Name
-|@@ADD DESCRIPTION@@
-|-
-|Interface_View
-|@@ADD DESCRIPTION@@
-|-
-|Use_POHIC
-|@@ADD DESCRIPTION@@
-|-
-|ASync_PI_Param_Type
-|@@ADD DESCRIPTION@@
-|-
-|Other_Files
-|@@ADD DESCRIPTION@@
+|Partition_Name
+|DOCUMENTATION MISSING
 |-
 |List_Of_RIs
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|CP_Values
+|DOCUMENTATION MISSING
+|-
+|List_Of_PIs
+|DOCUMENTATION MISSING
+|-
+|List_Of_Sync_RIs
+|DOCUMENTATION MISSING
+|-
+|List_Of_ASync_RIs
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Sync_RIs_Parent
+|DOCUMENTATION MISSING
+|-
+|Zip_File
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|List_Of_Sync_PIs
+|DOCUMENTATION MISSING
+|-
+|Property_Values
+|DOCUMENTATION MISSING
+|-
+|ASync_RI_Param_Type
+|DOCUMENTATION MISSING
+|-
+|Node_Name
+|DOCUMENTATION MISSING
+|-
+|Has_Context
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Type
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Async_RIs_Parent
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Timers
+|DOCUMENTATION MISSING
+|-
+|CP_Types
+|DOCUMENTATION MISSING
 |-
 |Deployment_View
-|@@ADD DESCRIPTION@@
+|DOCUMENTATION MISSING
 |-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Instance_Of
+|DOCUMENTATION MISSING
+|-
+|ASync_RI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|CP_Names
+|DOCUMENTATION MISSING
+|-
+|List_Of_ASync_PIs
+|DOCUMENTATION MISSING
+|-
+|RIs_Have_Params
+|DOCUMENTATION MISSING
+|-
+|CP_Asn1Filenames
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Property_Names
+|DOCUMENTATION MISSING
+|-
+|CP_Asn1Modules
+|DOCUMENTATION MISSING
+|-
+|PIs_Have_Params
+|DOCUMENTATION MISSING
 |}

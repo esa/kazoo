@@ -3,30 +3,29 @@
 !Description
 |-
 |Function_Names
-|@@ADD DESCRIPTION@@
-|-
-|Has_Context_Param
-|@@ADD DESCRIPTION@@
-|-
-|ASN1_Modules
-|@@ADD DESCRIPTION@@
+|Combined table: list of fuction names...
 |-
 |Language
-|@@ADD DESCRIPTION@@
-|-
-|ACN_Files
-|@@ADD DESCRIPTION@@
-|-
-|CP_Files
-|@@ADD DESCRIPTION@@
+|... and corresponding implementation language
 |-
 |Is_Type
-|@@ADD DESCRIPTION@@
+|... and flag if it is a function type
 |-
-|ASN1_Files
-|@@ADD DESCRIPTION@@
+|Has_Context_Param
+|... and flag to indicate if function has context parameters
+|-
+|CP_Files
+|List of all context parameters ASN.1 files
 |-
 |Unique_Languages
-|@@ADD DESCRIPTION@@
+|List of all languages used in the system
 |-
+|ASN1_Files
+|List of all ASN.1 files
+|-
+|ACN_Files
+|List of all ACN files
+|-
+|ASN1_Modules
+|List of all ASN.1 modules
 |}

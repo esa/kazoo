@@ -2,67 +2,66 @@
 !Parameter name
 !Description
 |-
-|Remote_Interface_Names
-|@@ADD DESCRIPTION@@
-|-
-|Param_Encodings
-|@@ADD DESCRIPTION@@
-|-
-|IF_Property_Values
-|@@ADD DESCRIPTION@@
-|-
-|Queue_Size
-|@@ADD DESCRIPTION@@
-|-
-|Param_Types
-|@@ADD DESCRIPTION@@
-|-
-|Param_Names
-|@@ADD DESCRIPTION@@
-|-
-|Language
-|@@ADD DESCRIPTION@@
-|-
-|Property_Values
-|@@ADD DESCRIPTION@@
-|-
-|Remote_Languages
-|@@ADD DESCRIPTION@@
-|-
-|Parent_Function
-|@@ADD DESCRIPTION@@
-|-
-|Property_Names
-|@@ADD DESCRIPTION@@
+|Name
+|The name of the interface
 |-
 |Direction
-|@@ADD DESCRIPTION@@
-|-
-|WCET
-|@@ADD DESCRIPTION@@
-|-
-|Period
-|@@ADD DESCRIPTION@@
-|-
-|Param_ASN1_Modules
-|@@ADD DESCRIPTION@@
-|-
-|IF_Property_Names
-|@@ADD DESCRIPTION@@
-|-
-|Name
-|@@ADD DESCRIPTION@@
+|"PI" or "RI"
 |-
 |Kind
-|@@ADD DESCRIPTION@@
+|The RCM Kind
 |-
-|Remote_Function_Names
-|@@ADD DESCRIPTION@@
+|Parent_Function
+|The name of the function
 |-
-|Is_Timer
-|@@ADD DESCRIPTION@@
+|Language
+|The implementation language of the function
+|-
+|Property_Names
+|All AADL properties (names) associated to the function
+|-
+|Property_Values
+|... and corresponding values
+|-
+|Param_Names
+|List of parameter names
+|-
+|Param_Types
+| |_ Corresponding parameter types
 |-
 |Param_Directions
-|@@ADD DESCRIPTION@@
+| |_ Corresponding direction
 |-
+|Param_Encodings
+| |_ Corresponding ASN.1 encoding
+|-
+|Is_Timer
+|Flag set to true if this is a timer interface
+|-
+|Period
+|Property of the interface
+|-
+|WCET
+|Property of the interface
+|-
+|Queue_Size
+|Property of the interface
+|-
+|IF_Property_Names
+| and Values	User-defined properties (vector tag)
+|-
+|Param_ASN1_Modules
+|DOCUMENTATION MISSING
+|-
+|Remote_Function_Names
+|DOCUMENTATION MISSING
+|-
+|Remote_Languages
+|DOCUMENTATION MISSING
+|-
+|IF_Property_Values
+|DOCUMENTATION MISSING
+|-
+|Remote_Interface_Names
+|DOCUMENTATION MISSING
 |}

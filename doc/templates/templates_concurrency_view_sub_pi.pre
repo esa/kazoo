@@ -1,0 +1,2 @@
+The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
+The result of every evaluation is joined to one string and passed as a parameter to block.tmplt

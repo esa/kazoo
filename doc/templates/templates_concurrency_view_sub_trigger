@@ -11,36 +11,36 @@
 |Glue
 |from kazoo configuration
 |-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
+|Interface_View
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
 |DOCUMENTATION MISSING
 |-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
-|-
-|Interface_View
+|Timer_Resolution
 |DOCUMENTATION MISSING
 |-
 |Other_Files
 |DOCUMENTATION MISSING
 |-
-|Timer_Resolution
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
 |DOCUMENTATION MISSING
 |-
 |Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
 |DOCUMENTATION MISSING
 |}

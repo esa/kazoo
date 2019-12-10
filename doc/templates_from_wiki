@@ -1,0 +1,871 @@
+Kazoo is a part of TASTE tool-chain.
+
+
+== Input files ==
+* InterfaceView.aadl
+* DeploymentView.aadl
+* DataView.aadl
+* DataView.asn
+* DataView.acn
+
+== Internal representation of system ==
+Taste uses Ocarina library to parse input aadl files.
+The internal representation of system consists of thre major structures:
+* InterfaceView
+* DeploymentView
+* ConcurrencyView
+
+The InterfaceView representation contains of list of functions. Every function contains provided interfaces and required interfaces. Optionally a function may contain context parameters.
+The InterfaceView representation contains also connections between provided interfaces and required interfaces.
+The InterfaceView representation is used to create skeletons and glue code.
+
+The DeploymentView constists of Nodes, Buses and connections between them.
+The Node contains Partitions, Processors and Drivers.
+The Partition contains a list of bounded functions.
+The DeploymentView is not directly used for code generation.
+
+The ConcurrencyView is generated from DeploymentView.
+The ConcurrencyView consists of list of Nodes.
+Every Node consists of list of Partitions and list of Drivers.
+Every Partition consists of list of Threads.
+Every Thread has a list of assigned functions from InterfaceView.
+
+The ConcurrencyView is used for generation of rest of glue code and also middleware integration.
+
+== build-script.sh generation ==
+The file build-script.sh is generated from build-script.tmplt.
+The template files: build-script-gen.tmplt, build-script-func.tmplt and build-script-zip.tmplt are evaluated earlier, and the output is passed to main template as parameters.
+
+== Code skeletons generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every function from InterfaceView:
+    for every subdirectory
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            evaluate template function-filename.tmplt if exists
+            evaluate template makefile-filename.tmplt if exists
+            evaluate template interface.tmplt for required interfaces of function
+            evaluate template interface.tmplt for provided interfaces of function
+            evaluate template makefile.tmplt and optionally save output to file
+            evaluate template function.tmplt and optionally save output to file
+    if function has context parameters then
+        evaluate template context_parameters.tmplt and save the output to file
+</nowiki>
+
+
+== Glue code generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every function from InterfaceView:
+    for every subdirectory
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            evaluate template function-filename.tmplt if exists
+            evaluate template makefile-filename.tmplt if exists
+            evaluate template interface.tmplt for required interfaces of function
+            evaluate template interface.tmplt for provided interfaces of function
+            evaluate template makefile.tmplt and optionally save output to file
+            evaluate template function.tmplt and optionally save output to file
+</nowiki>
+
+
+== Concurrency View generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every subdirectory
+    for every node from ConcurrencyView
+        evaluate template filenode.tmplt
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            for every partition from node:
+                evaluate template filepart.tmplt
+                evaluate template thread.tmplt
+                evaluate template filethread.tmplt
+                evaluate template fileblock.tmplt
+                evaluate template pi.tmplt
+                evaluate template pi.tmplt (with other parameters)
+                evaluate template ri.tmplt
+                evaluate template block.tmplt
+                evaluate template partition.tmplt
+        evaluate template node.tmplt
+    evaluate template system.tmplt
+</nowiki>
+
+== Templates ==
+=== templates/build-script.tmplt ===
+This template is evaluated only once. The output is saved to the file build-script.sh within output directory.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Interface_View_Path
+|Path to the interface view file
+|-
+|Output_Path
+|Output directory
+|-
+|Generate_Code
+|Concatenated result from evaluation of build-script-gencode.tmplt
+|-
+|Zip_Code
+|Concatenated result from evaluation of build-script-zip.tmplt
+|-
+|Functions
+|Concatenated result from evaluation of build-script-func.tmplt
+|}
+=== templates/skeletons/makefile.tmplt ===
+This template is evaluated only once. The output is saved to the Makefile within output directory.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Function_Names
+|Combined table: list of fuction names...
+|-
+|Language
+|... and corresponding implementation language
+|-
+|Is_Type
+|... and flag if it is a function type
+|-
+|Has_Context_Param
+|... and flag to indicate if function has context parameters
+|-
+|Has_Context_Param_Tag	
+|
+|-
+|CP_Files
+|List of all context parameters ASN.1 files
+|-
+|Unique_Languages
+|List of all languages used in the system
+|-
+|ASN1_Files
+|List of all ASN.1 files
+|-
+|ACN_Files
+|List of all ACN files
+|-
+|ASN1_Modules
+|List of all ASN.1 modules
+|}
+=== templates/skeletons/context-parameters.tmplt ===
+This template is evaluated for every function which has context parameters. The output is saved to the file Context-<function name>.asn
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|Function name
+|-
+|Sort_Set
+|Set of types used for this Context Parameter file
+|-
+|Module_Set
+|... corresponding module (needed for ASN.1 "IMPORTS")
+|-
+|CP_Name
+|Table of context parameter names
+|-
+|CP_Sort
+|... corresponding ASN.1 type
+|-
+|CP_ASN1_Module
+|... in ASN.1 module
+|-
+|CP_Value
+|... with default value
+|}
+=== templates/skeletons/sub/trigger.tmplt ===
+This template is evaluated to trigger processing of other files from given directory.
+If the result of evaluation is equal to "TRUE", then other files will be processed.
+This template is identical for Skeleton and Glue subfolders.
+
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|-
+|Is_Type
+|True if function type
+|-
+|Instance_Of
+|Name of instance or empty string
+|-
+|Language
+|Implementation	language for the function
+|-
+|Filename_Is_Present
+|True if target function output already exists
+|-
+|Makefile_Is_Present
+|True if target build script already exists
+|-
+|Zip_File
+|Optional path to zip file
+|-
+|Use_POHIC
+|Command line configuration
+|}
+=== templates/skeletons/sub/makefile-filename.tmplt ===
+This file is optional, if exists the result of parsing of this file is a name of output file for makefile.tmplt, otherwise this template will not be processed.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|}
+=== templates/skeletons/sub/function-filename.tmplt ===
+This file is optional, if exists the result of parsing of this file is a name of output file for function.tmplt, otherwise this template will not be processed.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|}
+=== templates/skeletons/sub/interface.tmplt ===
+This file is processed twice, first time for required interfaces of the function from Interface View, second time for the provided interfaces. The results are parameters for processing function.tmplt
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the interface
+|-
+|Direction
+|"PI" or "RI"
+|-
+|Kind
+|The RCM Kind
+|-
+|Parent_Function
+|The name of the function
+|-
+|Language
+|The implementation language of the function
+|-
+|Property_Names
+|All AADL properties (names) associated to the function
+|-
+|Property_Values
+|... and corresponding values
+|-
+|Param_Names
+|List of parameter names
+|-
+|Param_Types
+| |_ Corresponding parameter types
+|-
+|Param_Directions
+| |_ Corresponding direction
+|-
+|Param_Encodings
+| |_ Corresponding ASN.1 encoding
+|-
+|Is_Timer
+|Flag set to true if this is a timer interface
+|-
+|Period
+|Property of the interface
+|-
+|WCET
+|Property of the interface
+|-
+|Queue_Size
+|Property of the interface
+|-
+|IF_Property_Names
+| and Values	User-defined properties (vector tag)
+|}
+=== templates/skeletons/sub/makefile.tmplt ===
+This template is processed when makefile-filename.tmplt exists.
+The output of this template is saved to the file with name returned by processing makefile-filename.tmplt In directory [functionname]/[ languagename]
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The function name
+|-
+|ASN1_Files
+|List of all ASN.1 files
+|-
+|ASN1_Modules
+|List of all ASN.1 modules
+|-
+|Is_Type
+|Flag set to True for function type
+|-
+|Instance_Of
+|Name of function type if instance
+|}
+=== templates/skeletons/sub/function.tmplt ===
+This template is processed when function-filename.tmplt exists.
+The output of this template is save to the file with name returned by processing function-filename.tmplt in directory [functionname]/[languagename]/src.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|-
+|Language
+|The implementation language
+|-
+|List_Of_PIs
+|List of all Provided Interfaces (just names)
+|-
+|List_Of_RIs
+|List of all Required Interfaces (just names)
+|-
+|List_Of_Sync_PIs
+|List of synchronous Provided Interfaces
+|-
+|List_Of_Sync_RIs
+|List of synchronous Required Interfaces
+|-
+|List_Of_ASync_PIs
+|List of asynchronous Provided Interfaces
+|-
+|List_Of_ASync_RIs
+|List of asynchronous Required Interfaces
+|-
+|ASN1_Modules
+|List of ASN.1 Modules names
+|-
+|ASN1_Files
+|List of ASN.1 Files with path
+|-
+|Timers
+|List of timers (just names)
+|-
+|Has_Context
+|Flag, True if there are context parameters
+|-
+|CP_Names
+|List of Context Parameter names
+|-
+|CP_Types
+|List of Context Parameter types
+|-
+|Provided_Interfaces
+|From template: Provided interfaces with params
+|-
+|Required_Interfaces
+|From template: Required interfaces with params
+|-
+|Property_Names
+|List of User-defined properties (names)
+|-
+|Property_Values
+|List of User-defined properties (values)
+|-
+|Is_Type Flag
+|True if function is a component type
+|-
+|Instance_Of
+|Optional name of component type
+|}
+=== templates/concurrency_view/sub/filenode.tmplt ===
+This file is optional. This file is processed for every node. The result of this file is a filename for result of processing node.tmplt.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Node_Name
+|Name of the node as defined in the Deployment View
+|-
+|}
+=== templates/concurrency_view/sub/trigger.tmplt ===
+This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Filename_Is_Present
+|true if file with name returned by filenode.tmplt exists
+|-
+|Skeletons
+|from kazoo configuration
+|-
+|Glue
+|from kazoo configuration
+|-
+|POHIC
+|from kazoo configuration
+|-
+|Debug
+|from kazoo configuration
+|-
+|No_Stdlib
+|from kazoo configuration
+|}
+=== templates/concurrency_view/sub/filepart.tmplt ===
+This file is processed for every partition in every node. This file is optional.
+If the result is not empty then is used as a file name for parsing partition.tmplt
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Partition_Name
+|Partition name
+|}
+=== templates/concurrency_view/sub/thread.tmplt ===
+This file is processed for every thread in every partition in every node.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Thread_Name
+|Thread name
+|-
+|Partition_Name
+|Partition containing this thread
+|-
+|Entry_Port_Name
+|Name of the PI
+|-
+|RCM
+|One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
+|-
+|Need_Mutex
+|True if the PI is shared with others in the protected block
+|-
+|Pro_Block_Name
+|Name of the protected function
+|-
+|Node_Name
+|Name of the deployment node
+|-
+|Remote_Threads
+|Vector tag: output remote thread list
+|-
+|RI_Port_Name
+| |_ Corresponding local RI name
+|-
+|Remote_PIs
+| |_ Associated PI Name
+|-
+|Remote_PI_Sorts
+| |_ Optional param type of the remote thread
+|-
+|Remote_PI_Modules
+| |_ Asn1 module of the optional param type
+|-
+|Name
+| 
+|-
+|Kind
+| 
+|-
+|Parent_Function
+|Tags related to the PI that is at the origin of the thread creation: shoud be useless here
+|-
+|Param_Names
+|
+|-
+|Types
+|
+|-
+|ASN1_Modules
+|
+|-
+|Encodings
+|
+|-
+|Directions
+|param vector tag
+|-
+|Period
+|
+|-
+|WCET
+|
+|-
+|Queue_Size
+|relevant here
+|-
+|IF_Property_Names
+|
+|-
+|Values
+|user properties (vector tag)
+|-
+|Skeletons
+|from kazoo configuration
+|-
+|Glue
+|from kazoo configuration
+|-
+|POHIC
+|from kazoo configuration
+|-
+|Debug
+|from kazoo configuration
+|-
+|No_Stdlib
+|from kazoo configuration
+|}
+=== templates/concurrency_view/sub/filethread.tmplt ===
+This file is processed for every thread in every partition in every node.
+The result of this template is used as a file name to save thread.tmplt. If the result is empty the file will be not created.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Thread_Name
+|Thread name
+|}
+=== templates/concurrency_view/sub/fileblock.tmplt ===
+This template is evaluated for every block in partition.
+The result of this template is used as a file name to save block.tmplt. If the result is empty then the file will not be created.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Block_Name
+|Block Name
+|}
+=== templates/concurrency_view/sub/pi.tmplt ===
+The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
+The result of every evaluation is joined to one string and passed as a parameter to block.tmplt
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the interface
+|-
+|Direction
+|"PI" or "RI"
+|-
+|Kind
+|The RCM Kind
+|-
+|Parent_Function
+|The name of the function
+|-
+|Param_Names
+|List of parameter names
+|-
+|Param_Types
+| |_ Corresponding parameter types
+|-
+|Param_Directions
+| |_ Corresponding direction
+|}
+=== templates/concurrency_view/sub/ri.tmplt ===
+The template ri.tmplt is evaluated many times for every required interface.
+The result of every evaluation is koined to one string and passed as a parameter to block.tmplt
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the interface
+|-
+|Direction
+|"PI" or "RI"
+|-
+|Kind
+|The RCM Kind
+|-
+|Parent_Function
+|The name of the function
+|-
+|Param_Names
+|List of parameter names
+|-
+|Param_Types
+|Corresponding parameter types
+|-
+|Param_Directions
+|Corresponding direction
+|}
+=== templates/concurrency_view/sub/block.tmplt ===
+This template is evaluated for every block.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|Protected block name
+|-
+|Language
+|Implementation language
+|-
+|Calling_Threads
+|List of calling threads
+|-
+|Node name
+|Node name
+|-
+|Protected_PIs
+|Protected Provided interfaces (from pi.tmplt)
+|-
+|Unprotected_PIs
+|Unprotected Provided interfaces (from pi.tmplt)
+|-
+|Required
+|Required interfaces (from ri.tmplt)
+|}
+
+And all the system configuration obtained from the command line:	
+Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
+Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
+No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+
+=== templates/concurrency_view/sub/partition.tmplt ===
+This file is evaluated for every partition.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|Partition name (usually the name of the binary)
+|-
+|Threads
+|Code generated for the threads
+|-
+|Thread_Names
+|Tag: list of thread names
+|-
+|Node_Name
+|Name of the node containing this partition
+|-
+|Blocks
+|Code generated for protected functions
+|-
+|Block_Names
+|Tag: list of block (user functions) names
+|-
+|Coverage
+|True if user requested code coverage enable
+|-
+|Package_Name
+|AADL Package name for the target (e.g. ocarina_porocessors_x86)
+|-
+|CPU_Name
+|CPU AADL Identifier (e.g. x86_inst)
+|-
+|CPU_Family
+|CPU Kind (e.g. leon3)
+|-
+|CPU_Instance
+|AADL component instance (e.g. rtems_posix)
+|-
+|CPU_Platform
+|AADL CPU_Platform (e.g. PLATFORM_NATIVE)
+|-
+|CPU_Classifier
+|AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
+|-
+|VP_Name
+|Virtual processor name on which the partition is bounded
+|-
+|VP_Platform
+|Virtual processor platform (e.g. PLATFORM_AIR)
+|-
+|VP_Classifier
+|Virtual processor classifier
+|-
+|Bound_Functions
+|List of user functions from Interface view
+|-
+|Thread_Src_Name
+|Vector tag : connection thread name (source)
+|-
+|Thread_Dst_Name
+|Vector tag : connection thread name (dest)
+|-
+|Thread_Src_Port
+|Vector tag : connection port name (source)
+|-
+|Thread_Dst_Port
+|Vector tag : connection port name (dest)
+|-
+|In_Port_Names
+|Vector tag: input ports of the partition
+|-
+|In_Port_Thread_Name
+| |_ corresponding thread inside the partition
+|-
+|In_Port_Type_Name
+| |_ corresponding parameter type name (optional)
+|-
+|Out_Port_Names
+|Vector tag: output ports of the partition
+|-
+|Out_Port_Type_Name
+| |_ corresponding parameter type name (optional)
+|-
+|Part_Out_Port_Name
+|Vector tag: output ports of the partition (can be several times the same)
+|-
+|Connected_Threads
+| |_ Corresponding thread connected to it
+|}
+=== templates/concurrency_view/sub/node.tmplt ===
+This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Node_Name
+|Name of the node from deployment view
+|-
+|Partition_Names
+|Tag listing the partitions in this node
+|-
+|Has_Memory
+|Boolean flag indicating that a memory is defined for this node
+|-
+|Partitions
+|List of rendered code for partitions
+|-
+|VP_Names
+|Vector tag: list of virtual processors on this node
+|-
+|VP_Package_Names
+| |_ Corresponding package name
+|-
+|VP_Platforms
+| |_ Corresponding platform name
+|-
+|VP_Classifiers
+| |_ Corresponding aadl classifier
+|-
+|CPU_Name, Family, Instance, Platform, Classifier, Ada_Runtime
+|Info about CPU
+|}
+=== templates/concurrency_view/sub/system.tmplt ===
+This file is evaluated for every node. The result of this file is save to the file with name returned by 
+filesys.tmplt.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Nodes
+|Code generated for the nodes
+|-
+|Node_Names
+|Vector Tag of node names
+|-
+|Node_CPU
+|Corresponding CPU name (eg x86_linux)
+|-
+|Node_CPU_Classifier
+|CPU Classifier (ocarina...::x86_linux)
+|-
+|Node_Major_Frame
+|Time in milliseconds allocated to the CPU (TSP only)
+|-
+|Partition_Names
+|Vector Tag of partition names
+|-
+|Partition_Node
+|Corresponding node name
+|-
+|Partition_CPU
+|Corresponding CPU name
+|-
+|Partition_Duration
+|Corresponding time allocation (TSP only)
+|-
+|Partition_VP
+|Virtual processor binding (TSP only)
+|-
+|Threads
+|Code generated for the threads
+|-
+|Thread_Names
+|List of all threads in the complete system
+|-
+|Target_Packages
+|List of all target package names in the complete system
+|-
+|Part_Source_Name
+|Inter-partition connections : partition source name (vector tag)
+|-
+|Part_Source_Port
+| |_ Corresponding port name
+|-
+|Part_Dest_Name
+| |_ Corresponding name of the remote partition
+|-
+|Part_Dest_Port
+| |_ Corresponding name of the port on the remote partition
+|-
+|Bus_Names
+|Vector tag: busses present in the system
+|-
+|Bus_AADL_Package
+| |_ corresponding AADL Package
+|-
+|Bus_Classifier
+| |_ corresponding AADL classifier
+|-
+|Device_Names		
+| 
+|-
+|Device_Node_Name
+| 
+|-
+|Device_Partition
+|-- Partition name associated to the driver (currently only one supported per node)
+|-
+|Device_AADL_Pkg
+| 
+|-
+|Device_Classifier
+| 
+|-
+|Device_CPU
+| 
+|-
+|Device_Config
+| 
+|-
+|Device_Bus_Name
+| 
+|-
+|Device_Port_Name
+| 
+|-
+|Device_ASN1_File
+| 
+|-
+|Device_ASN1_Sort
+|
+|-
+|Device_ASN1_Module
+|Device drivers (vector tag)
+|-
+|Unique_Dev_ASN1_Files
+|List of ASN.1 files/module/type for device configuration with no duplicates (vector tag)
+|-
+|Unique_Dev_ASN1_Mod
+| |_  corresponding asn1 module
+|-
+|Unique_Dev_ASN1_Sorts
+| |_  type name
+|-
+|Connect_From_Part
+|Vector tag - bus connection: partition source
+|-
+|Connect_Via_Bus
+| |_ bus name
+|-
+|Connect_Port_Name
+| |_ port name
+|}
+
+And all the system configuration obtained from the command line:	
+Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
+Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
+No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

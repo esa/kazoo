@@ -1,0 +1,2 @@
+This file is evaluated for every node. The result of this file is save to the file with name returned by 
+filesys.tmplt.

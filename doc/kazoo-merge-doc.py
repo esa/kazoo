@@ -19,6 +19,8 @@ import signal
 import argparse
 import traceback
 import logging
+import shutil
+from itertools import chain
 from typing import List, Dict, Tuple
 
 LOG = logging.getLogger(__name__)
@@ -84,12 +86,15 @@ def process_one_file (tmplt: str, old: str, new: str, res_folder: str) -> None:
         old_content = open(old, "r").readlines()
     except FileNotFoundError:
         LOG.info("Skipping template " + old + " (file not found)")
-        return
+        raise
     try:
         new_content = open(new, "r").readlines()
     except FileNotFoundError:
         LOG.info("Skipping template " + new + " (file not found)")
-        return
+        raise
+
+    shutil.copyfile(old + ".pre", res_folder + "/" + tmplt + ".pre")
+    shutil.copyfile(old + ".post", res_folder + "/" + tmplt + ".post")
 
     # Build dictionnaries from the content of the two files
     assert len(old_content) > 4 and len(new_content) > 5
@@ -172,12 +177,27 @@ def run(options):
 
     orderlist = open(options.orderlist, "r").readlines()
 
+    wiki_output = open(result_folder + "/templates_from_wiki", "w")
+    wiki_output.write("== Templates ==\n")
+
     for each in orderlist:
         name=each.strip()
-        process_one_file (tmplt=name,
-                         old=old_folder+"/"+name,
-                         new=new_folder+"/"+name,
-                         res_folder=result_folder)
+        try:
+            process_one_file (tmplt=name,
+                             old=old_folder+"/"+name,
+                             new=new_folder+"/"+name,
+                             res_folder=result_folder)
+        except FileNotFoundError:
+            pass
+        else:
+            wiki_output.write(f"\n=== {name} ===\n")
+            pre_content=open(result_folder+"/"+name+".pre", "r").readlines()
+            middle_content=open(result_folder+"/"+name, "r").readlines()
+            post_content=open(result_folder+"/"+name+".post", "r").readlines()
+            for lines in chain(pre_content, middle_content, post_content):
+                wiki_output.write(lines)
+
+    wiki_output.close()
 
 def main():
     ''' Tool entry point '''

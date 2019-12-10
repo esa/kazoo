@@ -26,7 +26,16 @@
 |VP_Classifiers
 | |_ Corresponding aadl classifier
 |-
-|Ada_Runtime
+|CPU_Classifier
+|DOCUMENTATION MISSING
+|-
+|CPU_Family
+|DOCUMENTATION MISSING
+|-
+|CPU_Instance
+|DOCUMENTATION MISSING
+|-
+|CPU_Name
 |DOCUMENTATION MISSING
 |-
 |Package_Name
@@ -35,15 +44,6 @@
 |CPU_Platform
 |DOCUMENTATION MISSING
 |-
-|CPU_Family
-|DOCUMENTATION MISSING
-|-
-|CPU_Name
-|DOCUMENTATION MISSING
-|-
-|CPU_Classifier
-|DOCUMENTATION MISSING
-|-
-|CPU_Instance
+|Ada_Runtime
 |DOCUMENTATION MISSING
 |}

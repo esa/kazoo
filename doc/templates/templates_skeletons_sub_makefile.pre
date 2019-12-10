@@ -1,0 +1,2 @@
+This template is processed when makefile-filename.tmplt exists.
+The output of this template is saved to the file with name returned by processing makefile-filename.tmplt In directory [functionname]/[ languagename]

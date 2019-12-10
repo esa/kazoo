@@ -1,0 +1,5 @@
+
+And all the system configuration obtained from the command line:	
+Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
+Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
+No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

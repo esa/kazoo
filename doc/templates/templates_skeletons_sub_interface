@@ -50,18 +50,18 @@
 |IF_Property_Names
 | and Values	User-defined properties (vector tag)
 |-
-|Param_ASN1_Modules
+|IF_Property_Values
 |DOCUMENTATION MISSING
 |-
-|Remote_Function_Names
+|Remote_Interface_Names
 |DOCUMENTATION MISSING
 |-
 |Remote_Languages
 |DOCUMENTATION MISSING
 |-
-|IF_Property_Values
+|Remote_Function_Names
 |DOCUMENTATION MISSING
 |-
-|Remote_Interface_Names
+|Param_ASN1_Modules
 |DOCUMENTATION MISSING
 |}

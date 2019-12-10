@@ -156,6 +156,7 @@ def process_one_file (tmplt: str, old: str, new: str, res_folder: str) -> None:
     newdoc.append("|}")
 
     with open (res_folder+"/"+tmplt, "w") as output:
+        LOG.debug (f"Writing to {res_folder}/{tmplt}")
         output.write("\n".join (newdoc))
 
 
@@ -181,7 +182,8 @@ def run(options):
     wiki_output.write("== Templates ==\n")
 
     for each in orderlist:
-        name=each.strip()
+        filename=each.strip()
+        name=filename.replace("/", "_").replace("-", "_").split(".tmplt")[0]
         try:
             process_one_file (tmplt=name,
                              old=old_folder+"/"+name,
@@ -190,7 +192,7 @@ def run(options):
         except FileNotFoundError:
             pass
         else:
-            wiki_output.write(f"\n=== {name} ===\n")
+            wiki_output.write(f"\n=== {filename} ===\n")
             pre_content=open(result_folder+"/"+name+".pre", "r").readlines()
             middle_content=open(result_folder+"/"+name, "r").readlines()
             post_content=open(result_folder+"/"+name+".post", "r").readlines()

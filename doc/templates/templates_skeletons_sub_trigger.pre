@@ -1,4 +1,0 @@
-This template is evaluated to trigger processing of other files from given directory.
-If the result of evaluation is equal to "TRUE", then other files will be processed.
-This template is identical for Skeleton and Glue subfolders.
-

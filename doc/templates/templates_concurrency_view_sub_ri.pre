@@ -1,2 +1,0 @@
-The template ri.tmplt is evaluated many times for every required interface.
-The result of every evaluation is koined to one string and passed as a parameter to block.tmplt

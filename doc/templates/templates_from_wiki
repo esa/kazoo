@@ -1,6 +1,120 @@
-== Templates ==
+Kazoo is a part of TASTE tool-chain.
 
-=== templates_skeletons_makefile ===
+
+== Input files ==
+* InterfaceView.aadl
+* DeploymentView.aadl
+* DataView.aadl
+* DataView.asn
+* DataView.acn
+
+== Internal representation of system ==
+Taste uses Ocarina library to parse input aadl files.
+The internal representation of system consists of thre major structures:
+* InterfaceView
+* DeploymentView
+* ConcurrencyView
+
+The InterfaceView representation contains of list of functions. Every function contains provided interfaces and required interfaces. Optionally a function may contain context parameters.
+The InterfaceView representation contains also connections between provided interfaces and required interfaces.
+The InterfaceView representation is used to create skeletons and glue code.
+
+The DeploymentView constists of Nodes, Buses and connections between them.
+The Node contains Partitions, Processors and Drivers.
+The Partition contains a list of bounded functions.
+The DeploymentView is not directly used for code generation.
+
+The ConcurrencyView is generated from DeploymentView.
+The ConcurrencyView consists of list of Nodes.
+Every Node consists of list of Partitions and list of Drivers.
+Every Partition consists of list of Threads.
+Every Thread has a list of assigned functions from InterfaceView.
+
+The ConcurrencyView is used for generation of rest of glue code and also middleware integration.
+
+== build-script.sh generation ==
+The file build-script.sh is generated from build-script.tmplt.
+The template files: build-script-gen.tmplt, build-script-func.tmplt and build-script-zip.tmplt are evaluated earlier, and the output is passed to main template as parameters.
+
+== Code skeletons generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every function from InterfaceView:
+    for every subdirectory
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            evaluate template function-filename.tmplt if exists
+            evaluate template makefile-filename.tmplt if exists
+            evaluate template interface.tmplt for required interfaces of function
+            evaluate template interface.tmplt for provided interfaces of function
+            evaluate template makefile.tmplt and optionally save output to file
+            evaluate template function.tmplt and optionally save output to file
+    if function has context parameters then
+        evaluate template context_parameters.tmplt and save the output to file
+</nowiki>
+
+
+== Glue code generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every function from InterfaceView:
+    for every subdirectory
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            evaluate template function-filename.tmplt if exists
+            evaluate template makefile-filename.tmplt if exists
+            evaluate template interface.tmplt for required interfaces of function
+            evaluate template interface.tmplt for provided interfaces of function
+            evaluate template makefile.tmplt and optionally save output to file
+            evaluate template function.tmplt and optionally save output to file
+</nowiki>
+
+
+== Concurrency View generation ==
+Algorithm in pseudocode:
+ <nowiki>
+for every subdirectory
+    for every node from ConcurrencyView
+        evaluate template filenode.tmplt
+        evaluate template trigger.tmplt
+        if result is equal to “TRUE” then
+            for every partition from node:
+                evaluate template filepart.tmplt
+                evaluate template thread.tmplt
+                evaluate template filethread.tmplt
+                evaluate template fileblock.tmplt
+                evaluate template pi.tmplt
+                evaluate template pi.tmplt (with other parameters)
+                evaluate template ri.tmplt
+                evaluate template block.tmplt
+                evaluate template partition.tmplt
+        evaluate template node.tmplt
+    evaluate template system.tmplt
+</nowiki>
+
+== Templates ==
+=== templates/build-script.tmplt ===
+This template is evaluated only once. The output is saved to the file build-script.sh within output directory.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Interface_View_Path
+|Path to the interface view file
+|-
+|Output_Path
+|Output directory
+|-
+|Generate_Code
+|Concatenated result from evaluation of build-script-gencode.tmplt
+|-
+|Zip_Code
+|Concatenated result from evaluation of build-script-zip.tmplt
+|-
+|Functions
+|Concatenated result from evaluation of build-script-func.tmplt
+|}
+=== templates/skeletons/makefile.tmplt ===
 This template is evaluated only once. The output is saved to the Makefile within output directory.
 {| class="wikitable"
 !Parameter name
@@ -18,6 +132,9 @@ This template is evaluated only once. The output is saved to the Makefile within
 |Has_Context_Param
 |... and flag to indicate if function has context parameters
 |-
+|Has_Context_Param_Tag	
+|
+|-
 |CP_Files
 |List of all context parameters ASN.1 files
 |-
@@ -33,7 +150,7 @@ This template is evaluated only once. The output is saved to the Makefile within
 |ASN1_Modules
 |List of all ASN.1 modules
 |}
-=== templates_skeletons_context_parameters ===
+=== templates/skeletons/context-parameters.tmplt ===
 This template is evaluated for every function which has context parameters. The output is saved to the file Context-<function name>.asn
 {| class="wikitable"
 !Parameter name
@@ -60,7 +177,7 @@ This template is evaluated for every function which has context parameters. The 
 |CP_Value
 |... with default value
 |}
-=== templates_skeletons_sub_trigger ===
+=== templates/skeletons/sub/trigger.tmplt ===
 This template is evaluated to trigger processing of other files from given directory.
 If the result of evaluation is equal to "TRUE", then other files will be processed.
 This template is identical for Skeleton and Glue subfolders.
@@ -92,113 +209,8 @@ This template is identical for Skeleton and Glue subfolders.
 |-
 |Use_POHIC
 |Command line configuration
-|-
-|List_Of_PIs
-|DOCUMENTATION MISSING
-|-
-|PIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|CP_Names
-|DOCUMENTATION MISSING
-|-
-|CP_Values
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|Has_Context
-|DOCUMENTATION MISSING
-|-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|CP_Types
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_PIs
-|DOCUMENTATION MISSING
-|-
-|Interface_View
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
-|DOCUMENTATION MISSING
-|-
-|Property_Values
-|DOCUMENTATION MISSING
-|-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|List_Of_Sync_RIs
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Sync_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|Timer_Resolution
-|DOCUMENTATION MISSING
-|-
-|Check_Data_View
-|DOCUMENTATION MISSING
-|-
-|List_Of_Sync_PIs
-|DOCUMENTATION MISSING
-|-
-|Other_Files
-|DOCUMENTATION MISSING
-|-
-|Skeletons
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
-|DOCUMENTATION MISSING
-|-
-|List_Of_RIs
-|DOCUMENTATION MISSING
-|-
-|Glue
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
-|Async_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|RIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
-|-
-|Property_Names
-|DOCUMENTATION MISSING
-|-
-|Timers
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Name
-|DOCUMENTATION MISSING
 |}
-=== templates_skeletons_sub_makefile_filename ===
+=== templates/skeletons/sub/makefile-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for makefile.tmplt, otherwise this template will not be processed.
 {| class="wikitable"
 !Parameter name
@@ -207,7 +219,7 @@ This file is optional, if exists the result of parsing of this file is a name of
 |Name
 |The name of the function
 |}
-=== templates_skeletons_sub_function_filename ===
+=== templates/skeletons/sub/function-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for function.tmplt, otherwise this template will not be processed.
 {| class="wikitable"
 !Parameter name
@@ -216,7 +228,7 @@ This file is optional, if exists the result of parsing of this file is a name of
 |Name
 |The name of the function
 |}
-=== templates_skeletons_sub_interface ===
+=== templates/skeletons/sub/interface.tmplt ===
 This file is processed twice, first time for required interfaces of the function from Interface View, second time for the provided interfaces. The results are parameters for processing function.tmplt
 {| class="wikitable"
 !Parameter name
@@ -269,23 +281,8 @@ This file is processed twice, first time for required interfaces of the function
 |-
 |IF_Property_Names
 | and Values	User-defined properties (vector tag)
-|-
-|IF_Property_Values
-|DOCUMENTATION MISSING
-|-
-|Remote_Interface_Names
-|DOCUMENTATION MISSING
-|-
-|Remote_Languages
-|DOCUMENTATION MISSING
-|-
-|Remote_Function_Names
-|DOCUMENTATION MISSING
-|-
-|Param_ASN1_Modules
-|DOCUMENTATION MISSING
 |}
-=== templates_skeletons_sub_makefile ===
+=== templates/skeletons/sub/makefile.tmplt ===
 This template is processed when makefile-filename.tmplt exists.
 The output of this template is saved to the file with name returned by processing makefile-filename.tmplt In directory [functionname]/[ languagename]
 {| class="wikitable"
@@ -307,7 +304,84 @@ The output of this template is saved to the file with name returned by processin
 |Instance_Of
 |Name of function type if instance
 |}
-=== templates_concurrency_view_sub_trigger ===
+=== templates/skeletons/sub/function.tmplt ===
+This template is processed when function-filename.tmplt exists.
+The output of this template is save to the file with name returned by processing function-filename.tmplt in directory [functionname]/[languagename]/src.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|-
+|Language
+|The implementation language
+|-
+|List_Of_PIs
+|List of all Provided Interfaces (just names)
+|-
+|List_Of_RIs
+|List of all Required Interfaces (just names)
+|-
+|List_Of_Sync_PIs
+|List of synchronous Provided Interfaces
+|-
+|List_Of_Sync_RIs
+|List of synchronous Required Interfaces
+|-
+|List_Of_ASync_PIs
+|List of asynchronous Provided Interfaces
+|-
+|List_Of_ASync_RIs
+|List of asynchronous Required Interfaces
+|-
+|ASN1_Modules
+|List of ASN.1 Modules names
+|-
+|ASN1_Files
+|List of ASN.1 Files with path
+|-
+|Timers
+|List of timers (just names)
+|-
+|Has_Context
+|Flag, True if there are context parameters
+|-
+|CP_Names
+|List of Context Parameter names
+|-
+|CP_Types
+|List of Context Parameter types
+|-
+|Provided_Interfaces
+|From template: Provided interfaces with params
+|-
+|Required_Interfaces
+|From template: Required interfaces with params
+|-
+|Property_Names
+|List of User-defined properties (names)
+|-
+|Property_Values
+|List of User-defined properties (values)
+|-
+|Is_Type Flag
+|True if function is a component type
+|-
+|Instance_Of
+|Optional name of component type
+|}
+=== templates/concurrency_view/sub/filenode.tmplt ===
+This file is optional. This file is processed for every node. The result of this file is a filename for result of processing node.tmplt.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Node_Name
+|Name of the node as defined in the Deployment View
+|-
+|}
+=== templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
 {| class="wikitable"
 !Parameter name
@@ -322,40 +396,26 @@ This file is processed for every node. The result of this file indicates if the 
 |Glue
 |from kazoo configuration
 |-
-|Interface_View
-|DOCUMENTATION MISSING
+|POHIC
+|from kazoo configuration
 |-
-|Check_Data_View
-|DOCUMENTATION MISSING
+|Debug
+|from kazoo configuration
 |-
-|Timer_Resolution
-|DOCUMENTATION MISSING
-|-
-|Other_Files
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
-|-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|Use_POHIC
-|DOCUMENTATION MISSING
-|-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
+|No_Stdlib
+|from kazoo configuration
 |}
-=== templates_concurrency_view_sub_thread ===
+=== templates/concurrency_view/sub/filepart.tmplt ===
+This file is processed for every partition in every node. This file is optional.
+If the result is not empty then is used as a file name for parsing partition.tmplt
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Partition_Name
+|Partition name
+|}
+=== templates/concurrency_view/sub/thread.tmplt ===
 This file is processed for every thread in every partition in every node.
 {| class="wikitable"
 !Parameter name
@@ -385,6 +445,9 @@ This file is processed for every thread in every partition in every node.
 |Remote_Threads
 |Vector tag: output remote thread list
 |-
+|RI_Port_Name
+| |_ Corresponding local RI name
+|-
 |Remote_PIs
 | |_ Associated PI Name
 |-
@@ -395,16 +458,28 @@ This file is processed for every thread in every partition in every node.
 | |_ Asn1 module of the optional param type
 |-
 |Name
-|
+| 
 |-
 |Kind
-|
+| 
 |-
 |Parent_Function
 |Tags related to the PI that is at the origin of the thread creation: shoud be useless here
 |-
 |Param_Names
 |
+|-
+|Types
+|
+|-
+|ASN1_Modules
+|
+|-
+|Encodings
+|
+|-
+|Directions
+|param vector tag
 |-
 |Period
 |
@@ -418,79 +493,45 @@ This file is processed for every thread in every partition in every node.
 |IF_Property_Names
 |
 |-
+|Values
+|user properties (vector tag)
+|-
 |Skeletons
 |from kazoo configuration
 |-
 |Glue
 |from kazoo configuration
 |-
-|RI_Port_Names
-|DOCUMENTATION MISSING
+|POHIC
+|from kazoo configuration
 |-
-|IF_Property_Values
-|DOCUMENTATION MISSING
+|Debug
+|from kazoo configuration
 |-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|Param_Directions
-|DOCUMENTATION MISSING
-|-
-|Param_Types
-|DOCUMENTATION MISSING
-|-
-|Interface_View
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
-|DOCUMENTATION MISSING
-|-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|Use_POHIC
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
-|-
-|Is_Timer
-|DOCUMENTATION MISSING
-|-
-|Timer_Resolution
-|DOCUMENTATION MISSING
-|-
-|Check_Data_View
-|DOCUMENTATION MISSING
-|-
-|Other_Files
-|DOCUMENTATION MISSING
-|-
-|Param_Encodings
-|DOCUMENTATION MISSING
-|-
-|Remote_Interface_Names
-|DOCUMENTATION MISSING
-|-
-|Remote_Languages
-|DOCUMENTATION MISSING
-|-
-|Language
-|DOCUMENTATION MISSING
-|-
-|Remote_Function_Names
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
-|-
-|Param_ASN1_Modules
-|DOCUMENTATION MISSING
+|No_Stdlib
+|from kazoo configuration
 |}
-=== templates_concurrency_view_sub_pi ===
+=== templates/concurrency_view/sub/filethread.tmplt ===
+This file is processed for every thread in every partition in every node.
+The result of this template is used as a file name to save thread.tmplt. If the result is empty the file will be not created.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Thread_Name
+|Thread name
+|}
+=== templates/concurrency_view/sub/fileblock.tmplt ===
+This template is evaluated for every block in partition.
+The result of this template is used as a file name to save block.tmplt. If the result is empty then the file will not be created.
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Block_Name
+|Block Name
+|}
+=== templates/concurrency_view/sub/pi.tmplt ===
 The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
 The result of every evaluation is joined to one string and passed as a parameter to block.tmplt
 {| class="wikitable"
@@ -499,6 +540,9 @@ The result of every evaluation is joined to one string and passed as a parameter
 |-
 |Name
 |The name of the interface
+|-
+|Direction
+|"PI" or "RI"
 |-
 |Kind
 |The RCM Kind
@@ -514,56 +558,8 @@ The result of every evaluation is joined to one string and passed as a parameter
 |-
 |Param_Directions
 | |_ Corresponding direction
-|-
-|IF_Property_Values
-|DOCUMENTATION MISSING
-|-
-|Period
-|DOCUMENTATION MISSING
-|-
-|Is_Timer
-|DOCUMENTATION MISSING
-|-
-|Param_Encodings
-|DOCUMENTATION MISSING
-|-
-|Remote_Interface_Names
-|DOCUMENTATION MISSING
-|-
-|Remote_Languages
-|DOCUMENTATION MISSING
-|-
-|Language
-|DOCUMENTATION MISSING
-|-
-|Queue_Size
-|DOCUMENTATION MISSING
-|-
-|IF_Property_Names
-|DOCUMENTATION MISSING
-|-
-|Calling_Threads
-|DOCUMENTATION MISSING
-|-
-|Remote_Function_Names
-|DOCUMENTATION MISSING
-|-
-|Caller_Is_Local
-|DOCUMENTATION MISSING
-|-
-|Partition_Name
-|DOCUMENTATION MISSING
-|-
-|WCET
-|DOCUMENTATION MISSING
-|-
-|Param_ASN1_Modules
-|DOCUMENTATION MISSING
-|-
-|Protected_Block_Name
-|DOCUMENTATION MISSING
 |}
-=== templates_concurrency_view_sub_ri ===
+=== templates/concurrency_view/sub/ri.tmplt ===
 The template ri.tmplt is evaluated many times for every required interface.
 The result of every evaluation is koined to one string and passed as a parameter to block.tmplt
 {| class="wikitable"
@@ -572,6 +568,9 @@ The result of every evaluation is koined to one string and passed as a parameter
 |-
 |Name
 |The name of the interface
+|-
+|Direction
+|"PI" or "RI"
 |-
 |Kind
 |The RCM Kind
@@ -587,50 +586,8 @@ The result of every evaluation is koined to one string and passed as a parameter
 |-
 |Param_Directions
 |Corresponding direction
-|-
-|IF_Property_Values
-|DOCUMENTATION MISSING
-|-
-|Period
-|DOCUMENTATION MISSING
-|-
-|Is_Timer
-|DOCUMENTATION MISSING
-|-
-|Param_Encodings
-|DOCUMENTATION MISSING
-|-
-|Remote_Interface_Names
-|DOCUMENTATION MISSING
-|-
-|Remote_Languages
-|DOCUMENTATION MISSING
-|-
-|Language
-|DOCUMENTATION MISSING
-|-
-|Queue_Size
-|DOCUMENTATION MISSING
-|-
-|IF_Property_Names
-|DOCUMENTATION MISSING
-|-
-|Calling_Threads
-|DOCUMENTATION MISSING
-|-
-|Remote_Function_Names
-|DOCUMENTATION MISSING
-|-
-|Partition_Name
-|DOCUMENTATION MISSING
-|-
-|WCET
-|DOCUMENTATION MISSING
-|-
-|Param_ASN1_Modules
-|DOCUMENTATION MISSING
 |}
-=== templates_concurrency_view_sub_block ===
+=== templates/concurrency_view/sub/block.tmplt ===
 This template is evaluated for every block.
 {| class="wikitable"
 !Parameter name
@@ -645,6 +602,9 @@ This template is evaluated for every block.
 |Calling_Threads
 |List of calling threads
 |-
+|Node name
+|Node name
+|-
 |Protected_PIs
 |Protected Provided interfaces (from pi.tmplt)
 |-
@@ -653,137 +613,14 @@ This template is evaluated for every block.
 |-
 |Required
 |Required interfaces (from ri.tmplt)
-|-
-|List_Of_PIs
-|DOCUMENTATION MISSING
-|-
-|PIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|CP_Names
-|DOCUMENTATION MISSING
-|-
-|CP_Values
-|DOCUMENTATION MISSING
-|-
-|Node_Name
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|Has_Context
-|DOCUMENTATION MISSING
-|-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|CP_Types
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_PIs
-|DOCUMENTATION MISSING
-|-
-|Interface_View
-|DOCUMENTATION MISSING
-|-
-|Instance_Of
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
-|DOCUMENTATION MISSING
-|-
-|Property_Values
-|DOCUMENTATION MISSING
-|-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|List_Of_Sync_RIs
-|DOCUMENTATION MISSING
-|-
-|Use_POHIC
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Sync_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|Timer_Resolution
-|DOCUMENTATION MISSING
-|-
-|Check_Data_View
-|DOCUMENTATION MISSING
-|-
-|List_Of_Sync_PIs
-|DOCUMENTATION MISSING
-|-
-|Other_Files
-|DOCUMENTATION MISSING
-|-
-|Skeletons
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
-|DOCUMENTATION MISSING
-|-
-|List_Of_RIs
-|DOCUMENTATION MISSING
-|-
-|Glue
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
-|Zip_File
-|DOCUMENTATION MISSING
-|-
-|Async_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|Partition_Name
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|Property_Names
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
-|-
-|RIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|Timers
-|DOCUMENTATION MISSING
-|-
-|Is_Type
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Name
-|DOCUMENTATION MISSING
 |}
+
 And all the system configuration obtained from the command line:	
 Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
 Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
 No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
 
-
-=== templates_concurrency_view_sub_partition ===
+=== templates/concurrency_view/sub/partition.tmplt ===
 This file is evaluated for every partition.
 {| class="wikitable"
 !Parameter name
@@ -872,29 +709,8 @@ This file is evaluated for every partition.
 |-
 |Connected_Threads
 | |_ Corresponding thread connected to it
-|-
-|Block_Languages
-|DOCUMENTATION MISSING
-|-
-|Ada_Runtime
-|DOCUMENTATION MISSING
-|-
-|Block_Instance_Of
-|DOCUMENTATION MISSING
-|-
-|Memory_Region
-|DOCUMENTATION MISSING
-|-
-|Thread_Has_Param
-|DOCUMENTATION MISSING
-|-
-|VP_Duration
-|DOCUMENTATION MISSING
-|-
-|VP_Package_Name
-|DOCUMENTATION MISSING
 |}
-=== templates_concurrency_view_sub_node ===
+=== templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
 {| class="wikitable"
 !Parameter name
@@ -924,28 +740,10 @@ This file is evaluated for every node. The result of this file is saved to the f
 |VP_Classifiers
 | |_ Corresponding aadl classifier
 |-
-|CPU_Classifier
-|DOCUMENTATION MISSING
-|-
-|CPU_Family
-|DOCUMENTATION MISSING
-|-
-|CPU_Instance
-|DOCUMENTATION MISSING
-|-
-|CPU_Name
-|DOCUMENTATION MISSING
-|-
-|Package_Name
-|DOCUMENTATION MISSING
-|-
-|CPU_Platform
-|DOCUMENTATION MISSING
-|-
-|Ada_Runtime
-|DOCUMENTATION MISSING
+|CPU_Name, Family, Instance, Platform, Classifier, Ada_Runtime
+|Info about CPU
 |}
-=== templates_concurrency_view_sub_system ===
+=== templates/concurrency_view/sub/system.tmplt ===
 This file is evaluated for every node. The result of this file is save to the file with name returned by 
 filesys.tmplt.
 {| class="wikitable"
@@ -1012,31 +810,35 @@ filesys.tmplt.
 |Bus_Classifier
 | |_ corresponding AADL classifier
 |-
+|Device_Names		
+| 
+|-
 |Device_Node_Name
-|
+| 
 |-
 |Device_Partition
+|-- Partition name associated to the driver (currently only one supported per node)
 |-
 |Device_AADL_Pkg
-|
+| 
 |-
 |Device_Classifier
-|
+| 
 |-
 |Device_CPU
-|
+| 
 |-
 |Device_Config
-|
+| 
 |-
 |Device_Bus_Name
-|
+| 
 |-
 |Device_Port_Name
-|
+| 
 |-
 |Device_ASN1_File
-|
+| 
 |-
 |Device_ASN1_Sort
 |
@@ -1061,55 +863,8 @@ filesys.tmplt.
 |-
 |Connect_Port_Name
 | |_ port name
-|-
-|No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|Deployment_View
-|DOCUMENTATION MISSING
-|-
-|Device_Names
-|DOCUMENTATION MISSING
-|-
-|Interface_View
-|DOCUMENTATION MISSING
-|-
-|Debug_Flag
-|DOCUMENTATION MISSING
-|-
-|Data_View
-|DOCUMENTATION MISSING
-|-
-|Use_POHIC
-|DOCUMENTATION MISSING
-|-
-|Node_Has_Memory
-|DOCUMENTATION MISSING
-|-
-|Output_Dir
-|DOCUMENTATION MISSING
-|-
-|Timer_Resolution
-|DOCUMENTATION MISSING
-|-
-|Check_Data_View
-|DOCUMENTATION MISSING
-|-
-|Skeletons
-|DOCUMENTATION MISSING
-|-
-|Other_Files
-|DOCUMENTATION MISSING
-|-
-|Block_Names
-|DOCUMENTATION MISSING
-|-
-|Glue
-|DOCUMENTATION MISSING
-|-
-|Binary_Path
-|DOCUMENTATION MISSING
 |}
+
 And all the system configuration obtained from the command line:	
 Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
 Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	

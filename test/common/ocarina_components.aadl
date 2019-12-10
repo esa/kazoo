@@ -2203,18 +2203,32 @@ end gumstix;
 --   end gumstix.rtems;
 
 end ocarina_processors_arm;
+property set Processor_Properties is
+   Core_Id : aadlinteger 0 .. Max_Aadlinteger applies to (virtual processor);
+end Processor_Properties;
+
 package ocarina_processors_leon
 public
 
 with Deployment;
+with Processor_Properties;
 
 processor leon
 end leon;
  
 processor leon3 extends leon
 end leon3;
- 
+
+virtual processor leon3_core
+end leon3_core;
+
+virtual processor implementation leon3_core.generic
+end leon3_core.generic;
+
 processor implementation leon3.AIR
+subcomponents
+    Core_1 : virtual processor leon3_core.generic { Processor_Properties::Core_Id => 0;};
+    Core_2 : virtual processor leon3_core.generic { Processor_Properties::Core_Id => 1;};
 properties
    Deployment::Execution_Platform => AIR;
 end leon3.AIR;

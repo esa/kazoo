@@ -9,7 +9,7 @@ all:
 	$(MAKE) -C preprocess
 	cp preprocess/output/order.txt .
 	./kazoo-merge-doc.py
-	rm -rf tmp new-templates
+	rm -rf tmp new-templates preprocess/output
 
 clean:
 	rm -rf preprocess/output/*

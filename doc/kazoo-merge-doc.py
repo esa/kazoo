@@ -184,6 +184,9 @@ def run(options):
     for each in orderlist:
         filename=each.strip()
         name=filename.replace("/", "_").replace("-", "_").split(".tmplt")[0]
+        middle_file = f"{result_folder}/{name}"
+        pre_file    = f"{middle_file}.pre"
+        post_file   = f"{middle_file}.post"
         try:
             process_one_file (tmplt=name,
                              old=old_folder+"/"+name,
@@ -193,11 +196,16 @@ def run(options):
             pass
         else:
             wiki_output.write(f"\n=== {filename} ===\n")
-            pre_content=open(result_folder+"/"+name+".pre", "r").readlines()
-            middle_content=open(result_folder+"/"+name, "r").readlines()
-            post_content=open(result_folder+"/"+name+".post", "r").readlines()
+            pre_content    = open(pre_file, "r").readlines()
+            middle_content = open(middle_file, "r").readlines()
+            post_content   = open(post_file, "r").readlines()
             for lines in chain(pre_content, middle_content, post_content):
                 wiki_output.write(lines)
+
+            # Once the wiki file is generated, delete intermediate files
+            os.remove(pre_file)
+            os.remove(middle_file)
+            os.remove(post_file)
 
     wiki_output.close()
 

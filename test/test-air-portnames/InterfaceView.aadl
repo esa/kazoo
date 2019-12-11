@@ -1,5 +1,5 @@
 ---------------------------------------------------
--- AADL2.1
+-- AADL2.2
 -- TASTE type interfaceview
 -- 
 -- generated code: do not edit
@@ -22,6 +22,8 @@ PROPERTIES
 END PI_s;
 
 SUBPROGRAM IMPLEMENTATION PI_s.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_s.others;
 
 SUBPROGRAM RI_new1
@@ -72,6 +74,8 @@ PROPERTIES
 END PI_h;
 
 SUBPROGRAM IMPLEMENTATION PI_h.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_h.others;
 
 SUBPROGRAM PI_new
@@ -84,6 +88,8 @@ PROPERTIES
 END PI_new;
 
 SUBPROGRAM IMPLEMENTATION PI_new.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_new.others;
 
 SUBPROGRAM RI_s
@@ -141,6 +147,8 @@ PROPERTIES
 END PI_cycl;
 
 SUBPROGRAM IMPLEMENTATION PI_cycl.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_cycl.others;
 
 SUBPROGRAM RI_t
@@ -194,6 +202,8 @@ PROPERTIES
 END PI_t;
 
 SUBPROGRAM IMPLEMENTATION PI_t.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_t.others;
 
 SYSTEM Function2
@@ -215,6 +225,55 @@ END Function2.others;
 
 END interfaceview::IV::Function2;
 
+PACKAGE interfaceview::IV::R2
+PUBLIC
+
+WITH interfaceview::IV::hello;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_s
+FEATURES
+  t : IN PARAMETER DataView::TASTE_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_s;
+
+SUBPROGRAM IMPLEMENTATION RI_s.others
+END RI_s.others;
+
+SUBPROGRAM PI_h2
+END PI_h2;
+
+SUBPROGRAM IMPLEMENTATION PI_h2.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_h2.others;
+
+SYSTEM R2
+FEATURES
+  RI_s : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::hello::PI_s.others {
+    Taste::coordinates => "156144 85338";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "s";
+    Taste::labelInheritance => "true";
+  };
+  PI_h2 : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::R2::PI_h2.others {
+    Taste::coordinates => "189239 89691";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::InterfaceName => "h2";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END R2;
+
+SYSTEM IMPLEMENTATION R2.others
+END R2.others;
+
+END interfaceview::IV::R2;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -222,6 +281,7 @@ WITH interfaceview::IV::hello;
 WITH interfaceview::IV::read;
 WITH interfaceview::IV::Function1;
 WITH interfaceview::IV::Function2;
+WITH interfaceview::IV::R2;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -245,9 +305,15 @@ SUBCOMPONENTS
   Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
     Taste::coordinates => "97180 11096 124920 34243";
   };
+  R2 : SYSTEM interfaceview::IV::R2::R2.others {
+    Taste::coordinates => "155418 85338 189239 104354";
+  };
 CONNECTIONS
   hello_PI_s_read_RI_s : SUBPROGRAM ACCESS hello.PI_s -> read.RI_s {
     Taste::coordinates => "154957 53700 142043 53700 142043 47716 129130 47716";
+  };
+  hello_PI_s_R2_RI_s : SUBPROGRAM ACCESS hello.PI_s -> R2.RI_s {
+    Taste::coordinates => "156144 85338 156144 47716 129130 47716";
   };
   read_PI_new_hello_RI_new1 : SUBPROGRAM ACCESS read.PI_new -> hello.RI_new1 {
     Taste::coordinates => "129130 58476 142043 58476 142043 65025 154957 65025";
@@ -261,6 +327,6 @@ PROPERTIES
   Taste::dataView => ("DataView");
   Taste::dataViewPath => ("DataView.aadl");
   Taste::coordinates => "0 0 297000 210000";
-  Taste::version => "2.0";
+  Taste::version => "2.3";
 END interfaceview::IV;
 

@@ -1,5 +1,5 @@
 ---------------------------------------------------
--- AADL2.1
+-- AADL2.2
 -- TASTE type deploymentview
 -- 
 -- generated code: do not edit
@@ -108,6 +108,7 @@ PUBLIC
 
 WITH interfaceview::IV::hello;
 WITH interfaceview::IV::read;
+WITH interfaceview::IV::R2;
 WITH interfaceview::IV::Function1;
 WITH interfaceview::IV::Function2;
 WITH ocarina_processors_leon;
@@ -141,6 +142,9 @@ SUBCOMPONENTS
   };
   IV_read : SYSTEM interfaceview::IV::read::read.others {
     Taste::FunctionName => "read";
+  };
+  IV_R2 : SYSTEM interfaceview::IV::R2::R2.others {
+    Taste::FunctionName => "R2";
   };
   part2 : PROCESS deploymentview::DV::Node1::part2.others {
     Taste::coordinates => "110548 78423 139209 88029";
@@ -182,6 +186,7 @@ PROPERTIES
   Actual_Processor_Binding => (reference (part1_VP)) APPLIES TO part1;
   Actual_Memory_Binding => (reference (main_memory.part1_Segment)) APPLIES TO part1;
   Taste::APLC_Binding => (reference (part2)) APPLIES TO IV_read;
+  Taste::APLC_Binding => (reference (part2)) APPLIES TO IV_R2;
   Actual_Processor_Binding => (reference (proc1)) APPLIES TO part2_VP;
   Actual_Processor_Binding => (reference (part2_VP)) APPLIES TO part2;
   Actual_Memory_Binding => (reference (main_memory.part2_Segment)) APPLIES TO part2;
@@ -193,19 +198,19 @@ PROPERTIES
   Actual_Processor_Binding => (reference (proc1)) APPLIES TO part4_VP;
   Actual_Processor_Binding => (reference (part4_VP)) APPLIES TO part4;
   Actual_Memory_Binding => (reference (main_memory.part4_Segment)) APPLIES TO part4;
-  ARINC653::Module_Major_Frame => 1000ms APPLIES TO proc1;
+  ARINC653::Module_Major_Frame => 1000 ms APPLIES TO proc1;
   ARINC653::Module_Schedule => (
 	[ Partition => reference(part1_VP);
-	  Duration => 200ms;
+	  Duration => 200 ms;
 	  Periodic_Processing_Start => False; ],
 	[ Partition => reference(part3_VP);
-	  Duration => 200ms;
+	  Duration => 200 ms;
 	  Periodic_Processing_Start => False; ],
 	[ Partition => reference(part4_VP);
-	  Duration => 200ms;
+	  Duration => 200 ms;
 	  Periodic_Processing_Start => False; ],
 	[ Partition => reference(part2_VP);
-	  Duration => 200ms;
+	  Duration => 200 ms;
 	  Periodic_Processing_Start => False; ]
 ) APPLIES TO proc1;
 END Node1.others;
@@ -223,8 +228,8 @@ END deploymentview.others;
 
 PROPERTIES
   Taste::coordinates => "0 0 297000 210000";
-  Taste::version => "2.0";
+  Taste::version => "2.3";
   Taste::interfaceView => "InterfaceView.aadl";
-  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;
 

@@ -132,6 +132,7 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("EXTERNAL_SOURCE_PATH", ":")
+        & external_as_list("@_UPPER:Name_@_EXTERNAL_SOURCE_PATH", ":")
         & external_as_list("ADA_INCLUDE_PATH", ":");
 
    --  These files are not needed to use POHIC: don' t compile them

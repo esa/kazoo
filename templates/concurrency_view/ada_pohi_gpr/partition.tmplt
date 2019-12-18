@@ -74,6 +74,7 @@ project @_CAPITALIZE:Name_@ is
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("EXTERNAL_SOURCE_PATH", ":")
+        & external_as_list("@_UPPER:Name_@_EXTERNAL_SOURCE_PATH", ":")
         & external_as_list("ADA_INCLUDE_PATH", ":");
 
    for Object_Dir use "obj_ada";

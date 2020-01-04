@@ -1,0 +1,1 @@
+Test program with an Ada function on RTEMS. To check that elaboration is done correctly from adainit

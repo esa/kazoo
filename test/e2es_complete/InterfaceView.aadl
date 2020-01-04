@@ -763,49 +763,6 @@ END Observation_Timeline.others;
 
 END interfaceview::IV::Observation_Timeline;
 
-PACKAGE interfaceview::IV::Function1
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_abc
-END PI_abc;
-
-SUBPROGRAM IMPLEMENTATION PI_abc.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_abc.others;
-
-SUBPROGRAM RI_RI1
-END RI_RI1;
-
-SUBPROGRAM IMPLEMENTATION RI_RI1.others
-END RI_RI1.others;
-
-SYSTEM Function1
-FEATURES
-  PI_abc : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_abc.others {
-    Taste::coordinates => "97236 115109";
-    Taste::RCMoperationKind => unprotected;
-    Taste::InterfaceName => "abc";
-  };
-  RI_RI1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::RI_RI1.others {
-    Taste::coordinates => "118404 111581";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "RI1";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (C);
-  Taste::Active_Interfaces => any;
-END Function1;
-
-SYSTEM IMPLEMENTATION Function1.others
-END Function1.others;
-
-END interfaceview::IV::Function1;
-
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -814,7 +771,6 @@ WITH interfaceview::IV::Geometry_Module;
 WITH interfaceview::IV::Scene_Creation_Module;
 WITH interfaceview::IV::Console;
 WITH interfaceview::IV::Observation_Timeline;
-WITH interfaceview::IV::Function1;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -840,9 +796,6 @@ SUBCOMPONENTS
   };
   Observation_Timeline : SYSTEM interfaceview::IV::Observation_Timeline::Observation_Timeline.others {
     Taste::coordinates => "97119 47148 154968 87948";
-  };
-  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
-    Taste::coordinates => "97236 111581 121340 125102";
   };
 CONNECTIONS
   Simulation_Manager_PI_Module1_In_Scene_Creation_Module_RI_Module_Out : SUBPROGRAM ACCESS Simulation_Manager.PI_Module1_In -> Scene_Creation_Module.RI_Module_Out {

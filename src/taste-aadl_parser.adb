@@ -77,6 +77,7 @@ package body TASTE.AADL_Parser is
          File_Descr := Ocarina.Files.Load_File (File_Name);
          Interface_Root := Ocarina.Parser.Parse (AADL_Language,
                                                  Interface_Root, File_Descr);
+
          if Interface_Root = No_Node then
             raise AADL_Parser_Error with "Interface view is incorrect";
          end if;

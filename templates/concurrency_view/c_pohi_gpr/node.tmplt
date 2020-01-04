@@ -14,6 +14,11 @@ all:	debug_rtems_leon3_with_ada
 all:	air
 @@END_IF@@
 
+simulate:
+@@TABLE@@
+	gprbuild -p -P @_Partition_Names_@_simulator.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+
 debug_native:
 @@TABLE@@
 	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""

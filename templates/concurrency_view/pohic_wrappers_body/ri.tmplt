@@ -22,9 +22,9 @@
       @@TABLE@@
           @@IF@@ @_Remote_Languages_@ = Blackbox_C
               #include "@_LOWER:Remote_Function_Names_@.h"
-          @@ELSIF@@ @_Remote_Languages_@ = SIMULINK
-              #include "@_Name_@_SIMULINK.Simulink.h"
-          @@ELSE@@
+@@--          @@ELSIF@@ @_Remote_Languages_@ = SIMULINK
+@@--              #include "@_Name_@_SIMULINK.Simulink.h"
+          @@ELSE@@  @@-- Now a vm_if function is wrapping the DMT-generated one
               #include "@_LOWER:Remote_Function_Names_@_vm_if.h"  // Remote language: @_Remote_Languages_@
           @@END_IF@@
       @@END_TABLE@@

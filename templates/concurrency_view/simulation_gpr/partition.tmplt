@@ -46,10 +46,11 @@ library project @_CAPITALIZE:Name_@_Simulator is
 @@IF@@ @_Need_Ada_@
    --  In order to get the libinit and libfinal functions:
    for Library_Standalone use "encapsulated";
+   for Library_Options use ("-lrt", "-lm");
    for Interfaces use
-     ("@_LOWER:Name_@_simulator_interface.c",
+     ("@_LOWER:Name_@_simulator_interface.h",
 @@TABLE@@
-      "@_LOWER:Block_Names_@_vm_if.c",
+      "@_LOWER:Block_Names_@_vm_if.h",
 @@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
       "@_LOWER:Block_Names_@.ads",
 @@END_IF@@
@@ -135,20 +136,4 @@ library project @_CAPITALIZE:Name_@_Simulator is
                 & external_as_list("USER_CFLAGS", " ");
       end case;
    end Compiler;
-
-   package Linker is
-      for Default_Switches ("C") use
-         ("-g",
-          "-fPIC",
-          "-lrt",
-          "-lpthread",
-          "-lm",
-          "-Wl,-gc-sections")
-          & external_as_list("USER_LDFLAGS", " ");
-   end Linker;
-
---  package Builder is
---     for Executable ("main.c") use "@_Name_@";
---  end Builder;
-   
 end @_CAPITALIZE:Name_@_Simulator;

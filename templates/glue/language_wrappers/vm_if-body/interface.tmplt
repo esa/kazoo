@@ -11,6 +11,9 @@
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding encoding (Default, Native, UPER, ACN)
+@@IF@@ @_Kind_@ /= UNPROTECTED_OPERATION
+   @@SET@@ Static="static "  @@-- Parameters of unprotected operations must be on the stack to avoid race conditions
+@@END_IF@@
 @@IF@@ @_EXIST:Param_Names_@
 void @_LOWER:Parent_Function_@_@_Name_@
 @@INLINE(      \()(,\n       )(\)\n)@@
@@ -24,11 +27,11 @@ void @_LOWER:Parent_Function_@_@_Name_@
 @@END_INLINE@@
 {
 
-@@TABLE@@    @@-- decode input parameters into static variables
+@@TABLE@@    @@-- decode input/output parameters into static variables or stack in case of unprotected operations
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ IN_@_UPPER:Param_Names_@;
+   @_Static_@asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ IN_@_UPPER:Param_Names_@;
 @@ELSE@@
-   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ OUT_@_UPPER:Param_Names_@;
+   @_Static_@asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ OUT_@_UPPER:Param_Names_@;
 @@END_IF@@
 #ifdef __unix__
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"

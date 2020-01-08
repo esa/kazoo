@@ -1,0 +1,30 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+PROCESS function1;
+    /* CIF TEXT (597, 130), (287, 140) */
+    -- Text area for declarations and comments
+
+dcl inp, outp myinteger := 0;
+    /* CIF ENDTEXT */
+    /* CIF START (392, 15), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (392, 65), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF STATE (392, 65), (70, 35) */
+    STATE Wait;
+        /* CIF INPUT (391, 120), (71, 35) */
+        INPUT pulse;
+            /* CIF PROCEDURECALL (357, 170), (138, 35) */
+            CALL unp_pi(inp, outp);
+            /* CIF DECISION (377, 220), (98, 50) */
+            DECISION outp = inp;
+                    /* CIF ANSWER (319, 290), (70, 23) */
+                    (true):
+                    /* CIF ANSWER (436, 290), (70, 23) */
+                    (false):
+                        /* CIF PROCEDURECALL (399, 328), (144, 35) */
+                        CALL writeln('ERROR!');
+            ENDDECISION;
+            /* CIF NEXTSTATE (391, 378), (70, 35) */
+            NEXTSTATE -;
+    ENDSTATE;
+ENDPROCESS function1;

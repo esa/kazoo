@@ -1,0 +1,84 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS demo
+END demo;
+
+PROCESS IMPLEMENTATION demo.others
+END demo.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Function1 : SYSTEM interfaceview::IV::Function1.others {
+    Taste::coordinates => "872 980 990 1262";
+    Taste::FunctionName => "Function1";
+  };
+  IV_Function2 : SYSTEM interfaceview::IV::Function2.others {
+    Taste::coordinates => "1201 1021 1298 1200";
+    Taste::FunctionName => "Function2";
+  };
+  IV_Function3 : SYSTEM interfaceview::IV::Function3.others {
+    Taste::coordinates => "1165 1277 1729 1493";
+    Taste::FunctionName => "Function3";
+  };
+  IV_Function4 : SYSTEM interfaceview::IV::Function4.others {
+    Taste::coordinates => "1529 1011 1929 1164";
+    Taste::FunctionName => "Function4";
+  };
+  demo : PROCESS deploymentview::DV::Node1::demo.others {
+    Taste::coordinates => "791 837 2031 1534";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux32 : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "651 633 2201 1628";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function1;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function2;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function3;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Function4;
+  Actual_Processor_Binding => (reference (x86_linux32)) APPLIES TO demo;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "457 349 2395 1770";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

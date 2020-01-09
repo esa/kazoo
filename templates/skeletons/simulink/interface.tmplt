@@ -14,70 +14,173 @@ if (exist('@_Name_@') == 4),
    simulink('open');
    load_system('@_Name_@');
    open_system('@_Name_@');
-     inportHan = find_system('Operate_lift','FindAll','on', 'SearchDepth', 1, 'BlockType','Inport');
-     outportHan = find_system('Operate_lift','FindAll','on', 'SearchDepth', 1, 'BlockType','Outport');
-     % ---------------------------------------------------------------------------------
-     % start by removing the Bus Selectors / then lines / finally ports 
-     % ---------------------------------------------------------------------------------
-     % get the handles of all the lines connected to inports 
-     for i=1:length(inportHan)
-             inports_positions(i,:) = get_param(inportHan(i),'Position'); % remember Inport's position
-             line_structsIn(i)=get_param(inportHan(i),'LineHandles'); % get the structures
-             inLinesHan(i)=line_structsIn(i).Outport;        % get the line connected to the block's Outport
-             if (inLinesHan(i) ~= -1) % if exists
-                     dstBlock = get_param(inLinesHan(i),'DstBlockHandle'); % get the destination block's handle
-                     if (strcmp(get_param(dstBlock,'BlockType'),'BusSelector'))
-                             bussel_positions(i,:) = get_param(dstBlock,'Position'); % remember Bus Selector's position
-                             blockLineStructs = get_param(dstBlock,'LineHandles'); % get the line connected structures
-                             blockLineHandles = blockLineStructs.Outport; % get the line handlers connected to the bus's outports
-                             for j=1:length(blockLineHandles)
-                                     if (blockLineHandles(j) ~= -1)
-                                             delete(blockLineHandles(j));
-                                     end
-                             end
-                             delete_block(dstBlock); % delete it if it is a Bus Selector Block
-                     end
-                     delete(inLinesHan(i)); % delete the respective line
-             end
-             delete_block(inportHan(i)); % delete the outdated inport block
-     end
-     % now remove the outports
-     for i=1:length(outportHan)
-             outports_positions(i,:) = get_param(outportHan(i),'Position'); % remember Outport's position
-             line_structsOut(i)=get_param(outportHan(i),'LineHandles'); % get the structures
-             outLinesHan(i)=line_structsOut(i).Inport;       % get the line connected to the block's Inport
-             if (outLinesHan(i) ~= -1) % if exists
-                     srcBlock = get_param(outLinesHan(i),'SrcBlockHandle'); % get the source block's handle
-                     if (strcmp(get_param(srcBlock,'BlockType'),'BusCreator'))
-                             buscre_positions(i,:) = get_param(srcBlock,'Position'); % remember Bus Creator's position
-                             blockLineStructs = get_param(srcBlock,'LineHandles'); % get the line connected structures
-                             blockLineHandles = blockLineStructs.Inport; % get the line handlers connected to the bus's outports
-                             for j=1:length(blockLineHandles)
-                                     if (blockLineHandles(j) ~= -1)
-                                             delete(blockLineHandles(j));
-                                     end
-                             end
-                             delete_block(srcBlock); % delete it if it is a Bus Creator Block
-                     end
-                     delete(outLinesHan(i)); % delete the respective line
-     end
-             delete_block(outportHan(i)); % delete the outdated outport block
-     end
+   inportHan = find_system('Operate_lift','FindAll','on', 'SearchDepth', 1, 'BlockType','Inport');
+   outportHan = find_system('Operate_lift','FindAll','on', 'SearchDepth', 1, 'BlockType','Outport');
+   % ---------------------------------------------------------------------------------
+   % start by removing the Bus Selectors / then lines / finally ports 
+   % ---------------------------------------------------------------------------------
+   % get the handles of all the lines connected to inports 
+   for i=1:length(inportHan)
+      inports_positions(i,:) = get_param(inportHan(i),'Position'); % remember Inport's position
+      line_structsIn(i)=get_param(inportHan(i),'LineHandles'); % get the structures
+      inLinesHan(i)=line_structsIn(i).Outport;        % get the line connected to the block's Outport
+      if (inLinesHan(i) ~= -1) % if exists
+         dstBlock = get_param(inLinesHan(i),'DstBlockHandle'); % get the destination block's handle
+         if (strcmp(get_param(dstBlock,'BlockType'),'BusSelector'))
+            bussel_positions(i,:) = get_param(dstBlock,'Position'); % remember Bus Selector's position
+            blockLineStructs = get_param(dstBlock,'LineHandles'); % get the line connected structures
+            blockLineHandles = blockLineStructs.Outport; % get the line handlers connected to the bus's outports
+            for j=1:length(blockLineHandles)
+               if (blockLineHandles(j) ~= -1)
+                  delete(blockLineHandles(j));
+               end
+            end
+            delete_block(dstBlock); % delete it if it is a Bus Selector Block
+         end
+         delete(inLinesHan(i)); % delete the respective line
+      end
+      delete_block(inportHan(i)); % delete the outdated inport block
+   end
+   % now remove the outports
+   for i=1:length(outportHan)
+      outports_positions(i,:) = get_param(outportHan(i),'Position'); % remember Outport's position
+      line_structsOut(i)=get_param(outportHan(i),'LineHandles'); % get the structures
+      outLinesHan(i)=line_structsOut(i).Inport;       % get the line connected to the block's Inport
+      if (outLinesHan(i) ~= -1) % if exists
+         srcBlock = get_param(outLinesHan(i),'SrcBlockHandle'); % get the source block's handle
+         if (strcmp(get_param(srcBlock,'BlockType'),'BusCreator'))
+            buscre_positions(i,:) = get_param(srcBlock,'Position'); % remember Bus Creator's position
+            blockLineStructs = get_param(srcBlock,'LineHandles'); % get the line connected structures
+            blockLineHandles = blockLineStructs.Inport; % get the line handlers connected to the bus's outports
+            for j=1:length(blockLineHandles)
+                    if (blockLineHandles(j) ~= -1)
+                            delete(blockLineHandles(j));
+                    end
+            end
+            delete_block(srcBlock); % delete it if it is a Bus Creator Block
+         end
+         delete(outLinesHan(i)); % delete the respective line
+      end
+      delete_block(outportHan(i)); % delete the outdated outport block
+   end
 else
-     simulink('open');
-     new_system('@_Name_@');
-     open_system('@_Name_@');
+   simulink('open');
+   new_system('@_Name_@');
+   open_system('@_Name_@');
 end
-
-@@TABLE@@
+@@TABLE'TERSE@@
 @@IF@@ @_Param_Directions_@ = PARAM_IN
 add_block('simulink/Sources/In1', '@_Name_@/@_Param_Names_@');
-@@-- Etc.
+@@--  set port icon's position and size
+if inports_positions(@_TABLE_LINE_@)>0
+   set_param('@_Name_@/@_Param_Names_@','Position', inports_positions(@_TABLE_LINE_@,:));
+else
+   @@-- y position is incremented by 100 for each input
+   set_param('@_Name_@/@_Param_Names_@','Position',[25 @_"*"(100):TABLE_LINE_@ 55 @_"+"(14):"*"(100):TABLE_LINE_@]);
+end
+@@--  set BusOutputAsStruct to 'on'
+set_param('@_Name_@/@_Param_Names_@','BusOutputAsStruct','on');
+@@--  COMPLEX type (e.g.NOT  enum, real, int, boolean), then use a bus!
+@@--        if (!isOfBasicType(tmp->value)) {
+@@--  set the properties specification by bus object to 'on'
+set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
+@@--   set the asn1 type of the bus object for validating input bus
+set_param('@_Name_@/@_Param_Names_@','BusObject','@_Param_Types_@');
+@@--   create the respective type's bus and a line from the port to the bus
+add_block('simulink/Commonly Used Blocks/Bus Selector','@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel');
+add_line('@_Name_@','@_Param_Names_@/1','@_Param_Names_@_@_Param_Types_@_BusSel/1');
+@@--   set BUS selector outputs to be consistent with the complex type fields
+setOutputsBusSelector(@_Param_Names_@, '@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel');
+@@--   set BUS icon's position and size
+if bussel_positions(@_TABLE_LINE_@) > 0
+   set_param('@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel','Position', bussel_positions(@_TABLE_LINE_@,:));
+else
+   set_param('@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel','Position',[95 @_"-"(19):"*"(100):TABLE_LINE_@ 125 @_"+"(19):"*"(100):TABLE_LINE_@]);
+end
+@@--   BASIC type (and if the function did not fail returning -1 )
+@@--        else if (isOfBasicType(tmp->value) != -1) {
+@@--  set inport's asn1 type
+set_param('@_Name_@/@_Param_Names_@','DataType','Specify via Dialog');
+set_param('@_Name_@/@_Param_Names_@','OutDataType','@_Param_Types_@');
+@@--        }
+@@--  TODO: else: cover the occasion when the function will fail
+@@--  increment posY for 100 at a time
+@@--        posY += 100;
 @@END_IF@@
 @@END_TABLE@@
 
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
+@@--  create the outport
+    add_block('simulink/Sinks/Out1','%s/%s');\n",
+                i->name, tmp->value->name);
+
+@@-- set port icon's position and size */
+        if outports_positions(%d)>0\n", idx);
+        \tset_param('%s/%s','Position', outports_positions(%d,:));\n",
+                i->name, tmp->value->name, idx);
+        else\n");
+        \tset_param('%s/%s','Position',[%d %d %d %d]);\n",
+                i->name, tmp->value->name, posX, posY, posX + portSizeX,
+                posY + portSizeY);
+        end\n");
+
+@@-- COMPLEX type */
+        if (!isOfBasicType(tmp->value)) {
+            set_param('%s/%s','UseBusObject','on');\n",
+                    i->name, tmp->value->name);
+            set_param('%s/%s','BusObject','%s');\n",
+                    i->name, tmp->value->name, (tmp->value->type));
+
+@@-- create the respective type's bus and a line from the bus to the port */
+                    "add_block('simulink/Commonly Used Blocks/Bus Creator','%s/%s_%s_BusCre');\n",
+                    i->name, tmp->value->name, tmp->value->type);
+            add_line('%s','%s_%s_BusCre/1','%s/1');\n",
+                    i->name, tmp->value->name, tmp->value->type,
+                    tmp->value->name);
+@@-- set BUS creator inputs to be consistent with the name of the complex type fields */
+            setInputsBusCreator(%s,'%s/%s_%s_BusCre');\n",
+                    tmp->value->type, i->name, tmp->value->name,
+                    tmp->value->type);
+
+@@-- set the properties specification by bus object to 'on' */
+            set_param('%s/%s','UseBusObject','on');\n",
+                    i->name, tmp->value->name);
+
+@@-- set the NonVirtualBus to 'on' */
+            set_param('%s/%s','BusOutputAsStruct','on');\n",
+                    i->name, tmp->value->name);
+
+@@-- set BUS object with the name of the complex type */
+                    "set_param('%s/%s_%s_BusCre','BusObject','%s');\n",
+                    i->name, tmp->value->name, tmp->value->type,
+                    tmp->value->type);
+@@-- set BUS icon's position and size */
+            if buscre_positions(%d)>0\n", idx);
+                    "\tset_param('%s/%s_%s_BusCre','Position', buscre_positions(%d,:));\n",
+                    i->name, tmp->value->name, tmp->value->type, idx);
+            else\n");
+                    "\tset_param('%s/%s_%s_BusCre','Position',[%d %d %d %d]);\n",
+                    i->name, tmp->value->name, tmp->value->type,
+                    (posX - 70), posY - busSizeY / 2,
+                    (posX - 70) + busSizeX, posY + busSizeY / 2);
+            end\n");
+
+@@-- set UseBusObject flag to ON */
+                    "set_param('%s/%s_%s_BusCre','UseBusObject','on');\n",
+                    i->name, tmp->value->name, tmp->value->type);
+@@-- set NonVirtualBus flag to ON */
+                    "set_param('%s/%s_%s_BusCre','NonVirtualBus','on');\n",
+                    i->name, tmp->value->name, tmp->value->type);
+
+        }
+@@-- BASIC type (and if the function did not fail returning -1 ) */
+        else if (isOfBasicType(tmp->value) != -1) {
+            set_param('%s/%s','DataType','Specify via Dialog');\n", i->name, tmp->value->name); @@-- set outport's asn1 type */
+            set_param('%s/%s','OutDataType','%s');\n",
+                    i->name, tmp->value->name, tmp->value->type);;
+        }
+@@-- TODO: else: cover the occasion when the function will fail */
 @@END_IF@@
 @@END_TABLE@@
 

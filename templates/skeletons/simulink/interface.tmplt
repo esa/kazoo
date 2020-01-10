@@ -6,6 +6,7 @@
 @@-- @_Parent_Function_@     : The name of the function
 @@-- @_Param_Names_@         : List of parameter names
 @@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Basic_Types_@   :   |_ Corresponding ASN1 Basic type (ASN1_SEQUENCE, ASN1_SEQUENCEOF, ASN1_ENUMERATED, ASN1_SET, ASN1_SETOF, ASN1_INTEGER, ASN1_BOOLEAN, ASN1_REAL, ASN1_OCTETSTRING, ASN1_CHOICE, ASN1_STRING, ASN1_UNKNOWN)
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@-- @_Param_Encodings_@     :   |_ Corresponding ASN.1 encoding
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
@@ -68,119 +69,87 @@ else
    new_system('@_Name_@');
    open_system('@_Name_@');
 end
-@@TABLE'TERSE@@
+% These are the parameters for this Simulink function:
+@@TABLE@@
+   % Name: @_Param_Names_@
+   % Direction: @_Param_Directions_@
+@@END_TABLE@@
+
+@@TABLE@@
 @@IF@@ @_Param_Directions_@ = PARAM_IN
 add_block('simulink/Sources/In1', '@_Name_@/@_Param_Names_@');
 @@--  set port icon's position and size
-if inports_positions(@_TABLE_LINE_@)>0
+if inports_positions(@_TABLE_LINE_@) > 0
    set_param('@_Name_@/@_Param_Names_@','Position', inports_positions(@_TABLE_LINE_@,:));
 else
-   @@-- y position is incremented by 100 for each input
+@@-- y position is incremented by 100 for each input
    set_param('@_Name_@/@_Param_Names_@','Position',[25 @_"*"(100):TABLE_LINE_@ 55 @_"+"(14):"*"(100):TABLE_LINE_@]);
 end
 @@--  set BusOutputAsStruct to 'on'
 set_param('@_Name_@/@_Param_Names_@','BusOutputAsStruct','on');
-@@--  COMPLEX type (e.g.NOT  enum, real, int, boolean), then use a bus!
-@@--        if (!isOfBasicType(tmp->value)) {
+@@--  BASIC type (enum, real, int, boolean)
+@@IF@@ @_Param_Basic_Types_@ = ASN1_ENUMERATED or @_Param_Basic_Types_@ = ASN1_REAL or @_Param_Basic_Types_@ = ASN1_INTEGER or @_Param_Basic_Types_@ = ASN1_BOOLEAN
+set_param('@_Name_@/@_Param_Names_@','DataType','Specify via Dialog');
+set_param('@_Name_@/@_Param_Names_@','OutDataType','@_REPLACE_ALL(-/_):Param_Types_@');
+@@ELSE@@
 @@--  set the properties specification by bus object to 'on'
 set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
 @@--   set the asn1 type of the bus object for validating input bus
-set_param('@_Name_@/@_Param_Names_@','BusObject','@_Param_Types_@');
+set_param('@_Name_@/@_Param_Names_@','BusObject','@_REPLACE_ALL(-/_):Param_Types_@');
 @@--   create the respective type's bus and a line from the port to the bus
-add_block('simulink/Commonly Used Blocks/Bus Selector','@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel');
-add_line('@_Name_@','@_Param_Names_@/1','@_Param_Names_@_@_Param_Types_@_BusSel/1');
+add_block('simulink/Commonly Used Blocks/Bus Selector','@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel');
+add_line('@_Name_@','@_Param_Names_@/1','@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel/1');
 @@--   set BUS selector outputs to be consistent with the complex type fields
-setOutputsBusSelector(@_Param_Names_@, '@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel');
+setOutputsBusSelector(@_Param_Names_@, '@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel');
 @@--   set BUS icon's position and size
 if bussel_positions(@_TABLE_LINE_@) > 0
-   set_param('@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel','Position', bussel_positions(@_TABLE_LINE_@,:));
+   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel','Position', bussel_positions(@_TABLE_LINE_@,:));
 else
-   set_param('@_Name_@/@_Param_Names_@_@_Param_Types_@_BusSel','Position',[95 @_"-"(19):"*"(100):TABLE_LINE_@ 125 @_"+"(19):"*"(100):TABLE_LINE_@]);
+   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel','Position',[95 @_"-"(19):"*"(100):TABLE_LINE_@ 125 @_"+"(19):"*"(100):TABLE_LINE_@]);
 end
-@@--   BASIC type (and if the function did not fail returning -1 )
-@@--        else if (isOfBasicType(tmp->value) != -1) {
-@@--  set inport's asn1 type
-set_param('@_Name_@/@_Param_Names_@','DataType','Specify via Dialog');
-set_param('@_Name_@/@_Param_Names_@','OutDataType','@_Param_Types_@');
-@@--        }
-@@--  TODO: else: cover the occasion when the function will fail
-@@--  increment posY for 100 at a time
-@@--        posY += 100;
+@@END_IF@@
 @@END_IF@@
 @@END_TABLE@@
 
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
 @@--  create the outport
-    add_block('simulink/Sinks/Out1','%s/%s');\n",
-                i->name, tmp->value->name);
-
-@@-- set port icon's position and size */
-        if outports_positions(%d)>0\n", idx);
-        \tset_param('%s/%s','Position', outports_positions(%d,:));\n",
-                i->name, tmp->value->name, idx);
-        else\n");
-        \tset_param('%s/%s','Position',[%d %d %d %d]);\n",
-                i->name, tmp->value->name, posX, posY, posX + portSizeX,
-                posY + portSizeY);
-        end\n");
-
-@@-- COMPLEX type */
-        if (!isOfBasicType(tmp->value)) {
-            set_param('%s/%s','UseBusObject','on');\n",
-                    i->name, tmp->value->name);
-            set_param('%s/%s','BusObject','%s');\n",
-                    i->name, tmp->value->name, (tmp->value->type));
-
-@@-- create the respective type's bus and a line from the bus to the port */
-                    "add_block('simulink/Commonly Used Blocks/Bus Creator','%s/%s_%s_BusCre');\n",
-                    i->name, tmp->value->name, tmp->value->type);
-            add_line('%s','%s_%s_BusCre/1','%s/1');\n",
-                    i->name, tmp->value->name, tmp->value->type,
-                    tmp->value->name);
-@@-- set BUS creator inputs to be consistent with the name of the complex type fields */
-            setInputsBusCreator(%s,'%s/%s_%s_BusCre');\n",
-                    tmp->value->type, i->name, tmp->value->name,
-                    tmp->value->type);
-
-@@-- set the properties specification by bus object to 'on' */
-            set_param('%s/%s','UseBusObject','on');\n",
-                    i->name, tmp->value->name);
-
-@@-- set the NonVirtualBus to 'on' */
-            set_param('%s/%s','BusOutputAsStruct','on');\n",
-                    i->name, tmp->value->name);
-
-@@-- set BUS object with the name of the complex type */
-                    "set_param('%s/%s_%s_BusCre','BusObject','%s');\n",
-                    i->name, tmp->value->name, tmp->value->type,
-                    tmp->value->type);
-@@-- set BUS icon's position and size */
-            if buscre_positions(%d)>0\n", idx);
-                    "\tset_param('%s/%s_%s_BusCre','Position', buscre_positions(%d,:));\n",
-                    i->name, tmp->value->name, tmp->value->type, idx);
-            else\n");
-                    "\tset_param('%s/%s_%s_BusCre','Position',[%d %d %d %d]);\n",
-                    i->name, tmp->value->name, tmp->value->type,
-                    (posX - 70), posY - busSizeY / 2,
-                    (posX - 70) + busSizeX, posY + busSizeY / 2);
-            end\n");
-
-@@-- set UseBusObject flag to ON */
-                    "set_param('%s/%s_%s_BusCre','UseBusObject','on');\n",
-                    i->name, tmp->value->name, tmp->value->type);
-@@-- set NonVirtualBus flag to ON */
-                    "set_param('%s/%s_%s_BusCre','NonVirtualBus','on');\n",
-                    i->name, tmp->value->name, tmp->value->type);
-
-        }
-@@-- BASIC type (and if the function did not fail returning -1 ) */
-        else if (isOfBasicType(tmp->value) != -1) {
-            set_param('%s/%s','DataType','Specify via Dialog');\n", i->name, tmp->value->name); @@-- set outport's asn1 type */
-            set_param('%s/%s','OutDataType','%s');\n",
-                    i->name, tmp->value->name, tmp->value->type);;
-        }
-@@-- TODO: else: cover the occasion when the function will fail */
+add_block('simulink/Sinks/Out1','@_Name_@/@_Param_Names_@');
+@@-- set port icon's position and size
+if outports_positions(@_TABLE_LINE_@) > 0
+   set_param('@_Name_@/@_Param_Names_@','Position', outports_positions(@_TABLE_LINE_@,:));
+else
+   set_param('@_Name_@/@_Param_Names_@','Position',[430 @_"*"(100):TABLE_LINE_@ 460 @_"+"(14):"*"(100):TABLE_LINE_@]);
+end
+@@-- BASIC type
+@@IF@@ @_Param_Basic_Types_@ = ASN1_ENUMERATED or @_Param_Basic_Types_@ = ASN1_REAL or @_Param_Basic_Types_@ = ASN1_INTEGER or @_Param_Basic_Types_@ = ASN1_BOOLEAN
+set_param('@_Name_@/@_Param_Names_@','DataType','Specify via Dialog');  @@-- set outport's asn1 type
+set_param('@_Name_@/@_Param_Names_@','OutDataType','@_REPLACE_ALL(-/_):Param_Types_@');
+@@ELSE@@
+set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
+set_param('@_Name_@/@_Param_Names_@','BusObject','@_REPLACE_ALL(-/_):Param_Types_@');
+@@-- create the respective type's bus and a line from the bus to the port
+add_block('simulink/Commonly Used Blocks/Bus Creator','@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
+add_line('@_Name_@','@_Paam_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre/1','@_Param_Names_@/1');
+@@-- set BUS creator inputs to be consistent with the name of the complex type fields
+setInputsBusCreator(@_Param_types_@,'@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
+@@-- set the properties specification by bus object to 'on'
+set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
+@@-- set the NonVirtualBus to 'on'
+set_param('@_Name_@/@_Param_Names_@','BusOutputAsStruct','on');
+@@-- set BUS object with the name of the complex type
+ set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre','BusObject','@_REPLACE_ALL(-/_):Param_Types_@');
+@@-- set BUS icon's position and size
+if buscre_positions(@_TABLE_LINE_@) > 0
+   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre','Position', buscre_positions(@_TABLE_LINE_@,:));
+else
+   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre','Position',[360 @_"-"(19):"*"(100):TABLE_LINE_@ 365 @_"+"(19):"*"(100):TABLE_LINE_@]);
+end
+@@-- set UseBusObject flag to ON
+set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre','UseBusObject','on');
+@@-- set NonVirtualBus flag to ON
+set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre','NonVirtualBus','on');
+@@END_IF@@
 @@END_IF@@
 @@END_TABLE@@
 

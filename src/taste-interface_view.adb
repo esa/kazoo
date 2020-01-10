@@ -1276,6 +1276,7 @@ package body TASTE.Interface_View is
       Param_Names,
       Param_Types,
       Param_ASN1_Modules,
+      Param_Basic_Types,
       Param_Directions,
       Param_Encodings,
       Property_Names,
@@ -1287,6 +1288,7 @@ package body TASTE.Interface_View is
       for Each of TI.Params loop
          Param_Names        := Param_Names & Each.Name;
          Param_Types        := Param_Types & Each.Sort;
+         Param_Basic_Types  := Param_Basic_Types & Each.ASN1_Basic_Type'Img;
          Param_ASN1_Modules := Param_ASN1_Modules & Each.ASN1_Module;
          Param_Directions   := Param_Directions & Each.Direction'Img;
          Param_Encodings    := Param_Encodings & Each.Encoding'Img;
@@ -1314,6 +1316,7 @@ package body TASTE.Interface_View is
         & Assoc ("Param_Names",            Param_Names)
         & Assoc ("Param_Types",            Param_Types)
         & Assoc ("Param_ASN1_Modules",     Param_ASN1_Modules)
+        & Assoc ("Param_Basic_Types",      Param_Basic_Types)
         & Assoc ("Param_Encodings",        Param_Encodings)
         & Assoc ("Param_Directions",       Param_Directions)
         & Assoc ("IF_Property_Names",      Property_Names)

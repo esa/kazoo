@@ -3,13 +3,13 @@ KAZOO=../../kazoo
 all: c
 
 c: test-parse-c # Polyorb_HI_C output
-	cp controller/controller.pr output.pohic/controller/SDL/src
-	cp lift_model/* output.pohic/lift_model/SIMULINK/src
-	make -C output.pohic
+	cp controller/controller.pr work/controller/SDL/src
+	cp lift_model/* work/lift_model/SIMULINK/src
+	make -C work
 
 test-parse-c: clean-c
 	$(KAZOO) -p --gw \
-	         -o output.pohic \
+	         -o work \
 	         --glue -g
 buildsupport_pohic:
 	buildsupport -o output.buildsupport.pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
@@ -19,18 +19,18 @@ buildsupport_pohiada:
 
 gdb: clean
 	gdb --args $(KAZOO) --gw -p \
-	               -o output.pohic \
+	               -o work \
 	               --glue \
 		       --debug
 
 clean-c:
-	rm -rf output.pohic
+	rm -rf work
 
 skeletons:
-	$(KAZOO) -p --gw --glue -o code && make -C code dataview
+	$(KAZOO) -p --gw --glue -o work && make -C work dataview
 
 clean-skeletons:
-	rm -rf code
+	rm -rf work
 
 clean: clean-c clean-skeletons
 

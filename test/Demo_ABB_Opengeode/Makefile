@@ -2,6 +2,11 @@ KAZOO=../../kazoo
 
 all: c
 
+simu:	test-parse-c
+	cp controller/controller.pr work/controller/SDL/src
+	cp lift_model/* work/lift_model/SIMULINK/src
+	$(MAKE) -C work simu
+
 c: test-parse-c # Polyorb_HI_C output
 	cp controller/controller.pr work/controller/SDL/src
 	cp lift_model/* work/lift_model/SIMULINK/src
@@ -34,4 +39,4 @@ clean-skeletons:
 
 clean: clean-c clean-skeletons
 
-.PHONY: clean clean-c gdb test-parse-c buildsupport_pohic buildsupport_pohiada c skeletons clean-skeletons
+.PHONY: clean simu clean-c gdb test-parse-c buildsupport_pohic buildsupport_pohiada c skeletons clean-skeletons

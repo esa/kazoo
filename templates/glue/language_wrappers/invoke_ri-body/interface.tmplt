@@ -29,6 +29,16 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@
 void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@END_IF@@
 {
+   // Check that we are not in the startup transition
+   if (false == @_LOWER:Parent_Function_@_initialized) {
+      #ifdef __unix__
+         puts("A call to @_LOWER:Parent_Function_@_RI_@_Name_@ was made during system startup.");
+         puts("This is not allowed because the system is not yet fully initialized. Please fix your code/models");
+      #endif
+      // crash the application
+      abort();
+   }
+
    #ifdef __unix__
       // Log MSC data on Linux when environment variable is set
       static int innerMsc = -1;
@@ -63,7 +73,6 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
          puts ("[ERROR] ASN.1 Encoding failed in @_LOWER:Parent_Function_@_RI_@_Name_@, parameter @_Param_Names_@");
       #endif
         /* Crash the application due to message loss */
-        extern void abort (void);
         abort();
    }
 @@END_IF@@

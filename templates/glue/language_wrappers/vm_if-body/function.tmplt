@@ -48,13 +48,12 @@
 extern void adainit(void);
 @@END_IF@@
 
+@@-- define a global initialization flag for the function, that is checked in invoke_ri
+@@-- to prevent calls to RIs during the startup function
+bool @_LOWER:Name_@_initialized = false;
 void init_@_LOWER:Name_@(void)
 {
-   static bool init = false;
-
-   if (!init) {
-      init = true;
-
+   if (!@_LOWER:Name_@_initialized) {
 @@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
       // Call user code startup function
       @_LOWER:Name_@_startup();
@@ -73,6 +72,7 @@ void init_@_LOWER:Name_@(void)
 #ifdef __unix__
       puts ("[TASTE] Initialization completed for function @_Name_@");
 #endif
+      @_LOWER:Name_@_initialized = true;
    }
 }
 @@-- For blackbox devices, don't generate the PI functions, they will be

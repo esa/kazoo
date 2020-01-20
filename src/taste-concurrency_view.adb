@@ -653,7 +653,17 @@ package body TASTE.Concurrency_View is
 
                   Trig_Tmpl    : constant Translate_Set :=
                     CV.Configuration.To_Template
-                    & Assoc ("Filename_Is_Present", Present);
+                    & Assoc ("Filename_Is_Present", Present)
+                    & Assoc ("CPU_Name",
+                             CV.Nodes (Node_Name).Deployment_Node.CPU_Name)
+                    & Assoc ("CPU_Family",
+                             CV.Nodes (Node_Name).Deployment_Node.CPU_Family)
+                    & Assoc ("CPU_Platform",
+                             CV.Nodes (Node_Name).Deployment_Node
+                               .CPU_Platform'Img)
+                    & Assoc ("CPU_Classifier",
+                             CV.Nodes (Node_Name).Deployment_Node
+                               .CPU_Classifier);
 
                   Trigger      : constant Boolean :=
                     (Node_Name /= "interfaceview"

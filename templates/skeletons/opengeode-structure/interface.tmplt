@@ -15,14 +15,15 @@
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
 @@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
 @@IF@@ not @_Is_Timer_@
-@@IF@@ @_LOWER:Kind_@ = "cyclic_operation" or @_LOWER:Kind_@ = "sporadic_operation"
+@@-- Declare a signal for all PIs, including (un)protected interfaces
+@@IF@@ @_Direction_@ = PI
 @@IF@@ @_Param_Names'Length_@ > 0
 /* CIF Keep Specific Geode PARAMNAMES @_Param_Names_@ */
    signal @_Name_@ (@_REPLACE_ALL((-)/_):Param_Types_@)
-@@ELSE@@
+@@ELSE@@ @@-- no params
 signal @_Name_@
 @@END_IF@@
-@@ELSE@@
+@@ELSE@@    @@-- Required interface
 procedure @_Name_@;
 @@IF@@ @_EXIST:Param_Names_@
       fpar
@@ -30,7 +31,7 @@ procedure @_Name_@;
 @@TABLE@@
 @@IF@@ @_Param_Directions_@ = "PARAM_IN"
 in     @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
-@@ELSE@@
+@@ELSE@@  @@-- output parameter
 in/out @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
 @@END_IF@@
 @@END_TABLE@@

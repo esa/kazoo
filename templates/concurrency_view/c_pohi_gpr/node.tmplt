@@ -12,6 +12,8 @@ all:	debug_native
 all:	debug_rtems_leon3_with_ada
 @@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR
 all:	air
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ
+all:    zynq
 @@END_IF@@
 
 debug_native:
@@ -31,6 +33,13 @@ air:
 	gprbuild -c -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
 	gprbuild -l -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+
+zynq:
+@@TABLE@@
+	# We need to compile and link separately because the linker script must
+	# be copied to the obj folder. Path cannot be set manually with -T
+	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release_native:

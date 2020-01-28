@@ -24,10 +24,6 @@ void myhandler ()
 
 void simple_c_function_PI_cyclic_operation()
 {
-    int *a = NULL;
-    *a = 5;
-    int b[2];
-    b[5] = 4;
-	printf ("Hello, world...\n");
+    printf ("Hello, world...\n");
 }
 

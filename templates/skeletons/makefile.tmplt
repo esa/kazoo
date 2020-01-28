@@ -29,6 +29,10 @@ export PROJECT_CACHE=${HOME}/.taste_AST_cache
 
 all:	build-default
 
+# Build a simulator of the system
+simu:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
+	$(MAKE) -j -C build -f Makefile.taste simu
+
 @@-- global check to check which dataviews are neeeded
 @@TABLE@@
   @@IF@@ @_Unique_Languages_@ = Ada or @_Unique_Languages_@ = SDL
@@ -250,4 +254,4 @@ clean:
 	rm -rf binaries dataview
 	$(MAKE) -C build -f Makefile.taste clean
 
-.PHONY: clean compile-all-linux function-instances-linux function-types-linux build-default dataview build-rtems-ada dataview
+.PHONY: clean simu compile-all-linux function-instances-linux function-types-linux build-default dataview build-rtems-ada dataview

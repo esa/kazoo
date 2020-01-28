@@ -1,0 +1,284 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::Function1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+END PI_pulse.others;
+
+SUBPROGRAM RI_unp_pi
+FEATURES
+  inp : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_unp_pi;
+
+SUBPROGRAM IMPLEMENTATION RI_unp_pi.others
+END RI_unp_pi.others;
+
+END interfaceview::FV::Function1;
+
+PACKAGE interfaceview::FV::Function2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+END PI_pulse.others;
+
+SUBPROGRAM RI_unp_pi
+FEATURES
+  inp : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_unp_pi;
+
+SUBPROGRAM IMPLEMENTATION RI_unp_pi.others
+END RI_unp_pi.others;
+
+END interfaceview::FV::Function2;
+
+PACKAGE interfaceview::FV::Function3
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_unp_pi
+FEATURES
+  inp : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_unp_pi;
+
+SUBPROGRAM IMPLEMENTATION PI_unp_pi.others
+END PI_unp_pi.others;
+
+SUBPROGRAM RI_unp_ri
+FEATURES
+  inp : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_unp_ri;
+
+SUBPROGRAM IMPLEMENTATION RI_unp_ri.others
+END RI_unp_ri.others;
+
+END interfaceview::FV::Function3;
+
+PACKAGE interfaceview::FV::Function4
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_unp_ri
+FEATURES
+  inp : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+  outp : OUT PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END PI_unp_ri;
+
+SUBPROGRAM IMPLEMENTATION PI_unp_ri.others
+END PI_unp_ri.others;
+
+END interfaceview::FV::Function4;
+
+PACKAGE interfaceview::IV
+-- { interfaceview::IV - 1662 103 2744 457 
+--this demo checks that there are no race conditions in unprotected calls due to taste glue code 
+--}
+PUBLIC
+
+WITH interfaceview::FV::Function1;
+WITH interfaceview::FV::Function3;
+WITH interfaceview::FV::Function2;
+WITH interfaceview::FV::Function4;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM Function1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Function1::PI_pulse.others {
+    Taste::coordinates => "451 446";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1500 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_unp_pi : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::Function3::PI_unp_pi.others {
+    Taste::coordinates => "1082 600";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "unp_pi";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+SUBCOMPONENTS
+  pulse_impl : SUBPROGRAM interfaceview::FV::Function1::PI_pulse.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_pulse_impl : SUBPROGRAM ACCESS pulse_impl -> PI_pulse;
+END Function1.others;
+
+SYSTEM Function2
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Function2::PI_pulse.others {
+    Taste::coordinates => "538 1493";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1200 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_unp_pi : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::Function3::PI_unp_pi.others {
+    Taste::coordinates => "1139 1370";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "unp_pi";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+SUBCOMPONENTS
+  pulse_impl : SUBPROGRAM interfaceview::FV::Function2::PI_pulse.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_pulse_impl : SUBPROGRAM ACCESS pulse_impl -> PI_pulse;
+END Function2.others;
+
+SYSTEM Function3
+FEATURES
+  PI_unp_pi : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Function3::PI_unp_pi.others {
+    Taste::coordinates => "1831 1010";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "unp_pi";
+  };
+  RI_unp_ri : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::Function4::PI_unp_ri.others {
+    Taste::coordinates => "2221 1518";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "unp_ri";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+END Function3;
+
+SYSTEM IMPLEMENTATION Function3.others
+SUBCOMPONENTS
+  unp_pi_impl : SUBPROGRAM interfaceview::FV::Function3::PI_unp_pi.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_unp_pi_impl : SUBPROGRAM ACCESS unp_pi_impl -> PI_unp_pi;
+END Function3.others;
+
+SYSTEM Function4
+FEATURES
+  PI_unp_ri : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Function4::PI_unp_ri.others {
+    Taste::coordinates => "2216 1770";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "unp_ri";
+  };
+PROPERTIES
+  Source_Language => (C);
+END Function4;
+
+SYSTEM IMPLEMENTATION Function4.others
+SUBCOMPONENTS
+  unp_ri_impl : SUBPROGRAM interfaceview::FV::Function4::PI_unp_ri.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_unp_ri_impl : SUBPROGRAM ACCESS unp_ri_impl -> PI_unp_ri;
+END Function4.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1.others {
+    Taste::coordinates => "451 272 1082 928";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2.others {
+    Taste::coordinates => "538 1205 1139 1821";
+  };
+  Function3 : SYSTEM interfaceview::IV::Function3.others {
+    Taste::coordinates => "1831 605 2585 1518";
+  };
+  Function4 : SYSTEM interfaceview::IV::Function4.others {
+    Taste::coordinates => "1810 1770 2601 2100";
+  };
+CONNECTIONS
+  Function3_unp_pi_Function1_unp_pi : SUBPROGRAM ACCESS Function3.PI_unp_pi -> Function1.RI_unp_pi {
+    Taste::coordinates => "1082 600 1456 600 1456 1010 1831 1010";
+  };
+  Function3_unp_pi_Function2_unp_pi : SUBPROGRAM ACCESS Function3.PI_unp_pi -> Function2.RI_unp_pi {
+    Taste::coordinates => "1139 1370 1457 1370 1457 1010 1831 1010";
+  };
+  Function4_unp_ri_Function3_unp_ri : SUBPROGRAM ACCESS Function4.PI_unp_ri -> Function3.RI_unp_ri {
+    Taste::coordinates => "2221 1518 2221 1644 2216 1644 2216 1770";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

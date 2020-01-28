@@ -4,16 +4,14 @@ all: c
 
 ada: test-parse-ada
 	make -C output.ada && \
-	cp displayer/displayer.adb output.pohic/displayer/Ada/src
-	cp router/router.adb output.pohic/router/Ada/src
-	cd output.ada/build && \
-	ocarina -x main.aadl && \
-	    make -f Makefile.taste
+	cp displayer/displayer.adb output.ada/displayer/Ada/src
+	cp router/router.adb output.ada/router/Ada/src
+	$(MAKE) -C output.ada
 
 c: test-parse-c # Polyorb_HI_C output
-	cp displayer/displayer.adb output.pohic/displayer/Ada/src
-	cp router/router.adb output.pohic/router/Ada/src
-	make -C output.pohic
+	cp displayer/displayer.adb work/displayer/Ada/src
+	cp router/router.adb work/router/Ada/src
+	$(MAKE) -C work
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \
@@ -23,8 +21,9 @@ test-parse-ada: clean-ada
 
 test-parse-c: clean-c
 	$(KAZOO) -p --gw \
-	         -o output.pohic \
+	         -o work \
 	         --glue
+
 buildsupport_pohic:
 	buildsupport -o output.buildsupport.pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
 
@@ -33,7 +32,7 @@ buildsupport_pohiada:
 
 gdb: clean
 	gdb --args $(KAZOO) --gw \
-	               -o output.pohic \
+	               -o work \
 	               --glue \
 		       --debug
 
@@ -41,13 +40,13 @@ clean-ada:
 	rm -rf output.ada
 
 clean-c:
-	rm -rf output.pohic
+	rm -rf work
 
 skeletons:
-	$(KAZOO) -p --gw --glue -o code && make -C code dataview
+	$(KAZOO) -p --gw --glue -o work && $(MAKE) -C work dataview
 
 clean-skeletons:
-	rm -rf code
+	rm -rf work
 
 clean: clean-ada clean-c clean-skeletons
 

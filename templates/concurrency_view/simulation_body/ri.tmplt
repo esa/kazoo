@@ -1,0 +1,64 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                   : The name of the interface
+@@-- @_Direction_@              : "PI" or "RI"
+@@-- @_Kind_@                   : The RCM Kind
+@@-- @_Parent_Function_@        : The name of the function
+@@-- @_Language_@               : The implementation language of the function
+@@-- @_Partition_Name_@         : Partition name for parent function
+@@-- @_Param_Names_@            : List of parameter names
+@@-- @_Param_Types_@            :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@       :   |_ Corresponding direction
+@@-- @_Remote_Function_Names_@  : List of callees
+@@-- @_Remote_Interface_Names_@ :   |_ callee's interface name
+@@-- @_Remote_Languages_@       :   |_ callee's function language
+@@-- @_Calling_Threads_@        : Calling threads of the containing block
+// Required interface @_Name_@ in function @_Parent_Function_@
+@@IF@@ @_Param_Names'Length_@ = 0
+   @@SET@@ No_Param=True
+@@END_IF@@
+@@IF@@ @_No_Param_@
+void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void)
+@@ELSE@@
+@@INLINE@@
+void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+   @@INLINE(\()(, )(\))@@
+       @@TABLE@@
+          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+             const char *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
+          @@ELSE@@
+              char *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+   @@END_INLINE@@      
+@@END_INLINE@@
+@@END_IF@@
+{
+   if (NULL == sim_@_LOWER:Parent_Function_@_@_LOWER:Name_@) {
+      puts("[ERROR] The simulator must call register_@_LOWER:Parent_Function_@_@_LOWER:Name_@ first");
+   }
+   else {
+   @@IF@@ @_No_Param_@
+      sim_@_LOWER:Parent_Function_@_@_LOWER:Name_@();
+   @@ELSE@@
+      @@INLINE(      )()()@@
+         sim_@_LOWER:Parent_Function_@_@_LOWER:Name_@
+         @@INLINE(\()(, )(\);)@@
+            @@TABLE@@
+               @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+                  IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
+               @@ELSE@@
+                  OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
+               @@END_IF@@
+            @@END_TABLE@@
+         @@END_INLINE@@      
+      @@END_INLINE@@
+   @@END_IF@@
+   }
+}
+
+void register_@_LOWER:Parent_Function_@_@_LOWER:Name_@ (RI_@_LOWER:Parent_Function_@_@_LOWER:Name_@_t ptr)
+{
+  sim_@_LOWER:Parent_Function_@_@_LOWER:Name_@ = ptr;
+}
+

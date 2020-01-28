@@ -20,7 +20,7 @@ c: # Polyorb_HI_C output
 	$(MAKE) -C work
 
 rtems:
-	rm -f output.rtems
+	rm -rf output.rtems
 	$(KAZOO) -p --gw --glue -o output.rtems
 	cp simple_c_function/*.c output.rtems/simple_c_function/C/src
 	$(MAKE) -C output.rtems build-rtems-ada

@@ -47,6 +47,11 @@
 @@END_IF@@
 #include "dataview-uniq.h"
 
+// reference to flag preventing calls to RIs during the startup transition
+extern bool @_LOWER:Name_@_initialized;
+// in case that happens, use system's abort function to crash the application
+extern void abort (void);
+
 @@-- For blackbox devices, don't generate the RI code here, because their parameters are different
 @@-- (they are already encoded, not using native ASN.1 types)
 @@IF@@ @_Language_@ /= "Blackbox_C"

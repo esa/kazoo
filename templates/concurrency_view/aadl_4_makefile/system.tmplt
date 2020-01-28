@@ -49,6 +49,14 @@ all:
 @@END_TABLE@@
 @@END_INLINE@@
 
+# Generate a dynamic library excluding the runtime for each node
+@@INLINE()( )()@@
+simu:
+@@TABLE@@
+@_LOWER:Node_Names_@_simu
+@@END_TABLE@@
+@@END_INLINE@@
+
 @@INLINE()( )()@@
 rtems_ada:
 @@TABLE@@
@@ -91,7 +99,7 @@ DriversConfig/drivers_config.h:	drivers_config.asn
 	mono $(shell which asn1.exe) -o DriversConfig -Ada drivers_config.asn @_REPLACE_ALL(,/ ):UNIQ(,):Device_ASN1_File_@
 @@END_IF@@
 @@ELSE@@
-DriversConfig/drivers_config.h:  # Not a distributed system
+DriversConfig/drivers_config.h:  # Not a distributed system => nothing to do
 @@END_IF@@
 
 @_Nodes_@

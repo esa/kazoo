@@ -6,10 +6,12 @@ with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
-     Ada.Strings.Fixed,
+     --  Ada.Strings.Fixed,
+     GNAT.Directory_Operations,   -- Contains Dir_Name
      TASTE.Backend;
 
-use Ada.Directories;
+use Ada.Directories,
+    GNAT.Directory_Operations;
 
 package body TASTE.Concurrency_View is
 
@@ -249,8 +251,6 @@ package body TASTE.Concurrency_View is
                  (if Part_Check then Strip_String (Parse (File_Id, Part_Tag))
                   else "");
                Part_Content    : Unbounded_String;
-               --  Part_File_Name may contain a subfolder
-               Subfolder       : Unbounded_String;
             begin
                Document_Template
                  (Templates_Concurrency_View_Sub_File_Part, Part_Tag);
@@ -463,26 +463,12 @@ package body TASTE.Concurrency_View is
                --  Save the content of the partition in a file
                --  (if required at template folder level)
                if Part_File_Name /= "" then
-                  declare
-                     Last_Slash : constant Natural :=
-                       Ada.Strings.Fixed.Index
-                         (Source    => Part_File_Name,
-                          From      => Part_File_Name'Last,
-                          Pattern   => "/",
-                          Going     => Ada.Strings.Backward);
-                  begin
-                     Subfolder := US (Part_File_Name (1 .. Last_Slash));
-                  exception
-                     when Ada.Strings.Index_Error =>
-                        Subfolder := US ("");
-                  end;
-
                   Create_Path (CV_Out_Dir & Node_Name
-                               & "/" & To_String (Subfolder));
+                               & Dir_Separator & Dir_Name (Part_File_Name));
                   Create (File => Output_File,
                           Mode => Out_File,
-                          Name =>
-                            CV_Out_Dir & Node_Name & "/" & Part_File_Name);
+                          Name => CV_Out_Dir
+                             & Node_Name & Dir_Separator & Part_File_Name);
                   Put_Line (Output_File, To_String (Part_Content));
                   Close (Output_File);
                end if;

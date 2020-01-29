@@ -16,7 +16,7 @@
 @@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
 @@IF@@ not @_Is_Timer_@
 @@-- Declare a signal for all PIs, including (un)protected interfaces
-@@IF@@ @_Direction_@ = PI
+@@IF@@ @_Direction_@ = PI or @_Kind_@ = SPORADIC_OPERATION
 @@IF@@ @_Param_Names'Length_@ > 0
 /* CIF Keep Specific Geode PARAMNAMES @_Param_Names_@ */
    signal @_Name_@ (@_REPLACE_ALL((-)/_):Param_Types_@)

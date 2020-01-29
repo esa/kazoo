@@ -289,7 +289,8 @@ package body TASTE.Concurrency_View is
                      Thread_Check     : constant Boolean :=
                        Exists (Thread_File_Id);
                      Thread_Tag       : constant Translate_Set :=
-                       +Assoc ("Thread_Name", Name);
+                       +Assoc ("Thread_Name", Name)
+                       & Assoc ("Partition_Name", Partition_Name);
                      Thread_File_Name : constant String :=
                        (if Thread_Check
                         then Strip_String (Parse (Thread_File_Id, Thread_Tag))
@@ -329,7 +330,26 @@ package body TASTE.Concurrency_View is
                      --  Save the content of the thread in a file
                      --  (if required at template folder level)
                      if Thread_File_Name /= "" then
-                        Create_Path (CV_Out_Dir & Node_Name);
+                        declare
+                           Last_Slash : constant Natural :=
+                             Ada.Strings.Fixed.Index
+                             (Source    => Thread_File_Name,
+                              From      => Thread_File_Name'Last,
+                              Pattern   => "/",
+                              Going     => Ada.Strings.Backward);
+                        begin
+                           Subfolder := US (Thread_File_Name
+                                              (1 .. Last_Slash));
+                        exception
+                           when Ada.Strings.Index_Error =>
+                              Subfolder := US ("");
+                        end;
+
+                        Create_Path (CV_Out_Dir
+                                       & Node_Name
+                                       & "/" & To_String (Subfolder));
+                        Put_Debug ("Saving thread to file : " & CV_Out_Dir
+                                     & Node_Name & "/" & Thread_File_Name);
                         Create (File => Output_File,
                                 Mode => Out_File,
                                 Name =>

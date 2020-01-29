@@ -289,7 +289,8 @@ package body TASTE.Concurrency_View is
                      Thread_Check     : constant Boolean :=
                        Exists (Thread_File_Id);
                      Thread_Tag       : constant Translate_Set :=
-                       +Assoc ("Thread_Name", Name);
+                       +Assoc ("Thread_Name", Name)
+                       & Assoc ("Partition_Name", Partition_Name);
                      Thread_File_Name : constant String :=
                        (if Thread_Check
                         then Strip_String (Parse (Thread_File_Id, Thread_Tag))
@@ -329,12 +330,13 @@ package body TASTE.Concurrency_View is
                      --  Save the content of the thread in a file
                      --  (if required at template folder level)
                      if Thread_File_Name /= "" then
-                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create_Path (CV_Out_Dir & Node_Name & Dir_Separator
+                                       & Dir_Name (Thread_File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name =>
-                                  CV_Out_Dir & Node_Name
-                                & "/" & Thread_File_Name);
+                                Name => CV_Out_Dir
+                                  & Node_Name & Dir_Separator
+                                  & Thread_File_Name);
                         Put_Line (Output_File, Result);
                         Close (Output_File);
                      end if;
@@ -418,11 +420,14 @@ package body TASTE.Concurrency_View is
                      --  Save the content of the block in a file
                      --  (if required at template folder level)
                      if Block_File_Name /= "" then
-                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create_Path (CV_Out_Dir & Node_Name
+                                       & Dir_Separator
+                                       & Dir_Name (Block_File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name => CV_Out_Dir & Node_Name
-                                        & "/" & Block_File_Name);
+                                Name => CV_Out_Dir
+                                  & Node_Name & Dir_Separator
+                                  & Block_File_Name);
                         Put_Line (Output_File, To_String (Result));
                         Close (Output_File);
                      end if;
@@ -714,10 +719,12 @@ package body TASTE.Concurrency_View is
 
                      Nodes := Nodes & Newline & Node_Content;
                      if File_Name /= "" then
-                        Create_Path (Output_Dir);
+                        Create_Path (Output_Dir & Dir_Separator
+                                       & Dir_Name (File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name => Output_Dir & "/" & File_Name);
+                                Name => Output_Dir
+                                  & Dir_Separator & File_Name);
                         Put_Line (Output_File, Node_Content);
                         Close (Output_File);
                      end if;
@@ -825,10 +832,11 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Connect_From_Part",   Connect_From_Partition)
                  & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
                  & Assoc ("Connect_Port_Name",   Connect_Port_Name);
-               Create_Path (CV_Out_Dir);
+               Create_Path (CV_Out_Dir
+                           & Dir_Separator & Dir_Name (File_Sys));
                Create (File => Output_File,
                        Mode => Out_File,
-                       Name => CV_Out_Dir & File_Sys);
+                       Name => CV_Out_Dir & Dir_Separator & File_Sys);
                Put_Line (Output_File, Parse (Tmpl_Sys, Set_Sys));
                Document_Template
                  (Templates_Concurrency_View_Sub_System, Set_Sys);

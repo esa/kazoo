@@ -6,4 +6,6 @@
 @@--    Use_POHIC
 @@--    Debug_Flag
 @@--    No_Stdlib
-@_Use_POHIC_@
+@@IF@@ @_Use_POHIC_@ and @_CPU_Platform_@ /= PLATFORM_MSP430_FREERTOS
+TRUE
+@@END_IF@@

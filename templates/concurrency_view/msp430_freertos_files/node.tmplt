@@ -1,0 +1,59 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@       : Name of the node from deployment view
+@@-- @_Partition_Names_@ : Tag listing the partitions in this node
+@@-- @_Partitions_@      : List of rendered code for partitions
+@@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
+@@-- In standard TASTE systems there is only one partition per node
+#!/bin/bash
+
+if [ -z "${FREERTOS_PATH}" ]
+then
+	>&2 echo "Cannot find FreeRTOS distribution files."
+    >&2 echo "Environment variable FREERTOS_PATH not set."
+	exit 1
+exit
+
+FREERTOS_DISTRIBUTION=${FREERTOS_PATH}
+
+FREERTOS_FILES=(
+Source/stream_buffer.c
+Source/timers.c
+Source/event_groups.c
+Source/include/list.h
+Source/include/portable.h
+Source/include/stream_buffer.h
+Source/include/deprecated_definitions.h
+Source/include/task.h
+Source/include/message_buffer.h
+Source/include/queue.h
+Source/include/projdefs.h
+Source/include/croutine.h
+Source/include/StackMacros.h
+Source/include/mpu_prototypes.h
+Source/include/event_groups.h
+Source/include/mpu_wrappers.h
+Source/include/stack_macros.h
+Source/include/timers.h
+Source/include/semphr.h
+Source/include/FreeRTOS.h
+Source/tasks.c
+Source/list.c
+Source/queue.c
+Source/croutine.c
+Source/portable/MemMang/heap_4.c
+Source/portable/GCC/MSP430FR5969/port.c
+Source/portable/GCC/MSP430FR5969/portmacro.h)
+
+for file in ${FREERTOS_FILES[*]}
+do
+	directory=$(dirname FreeRTOS/${file})
+	if [ ! -d ${directory} ]
+	then
+		mkdir -p ${directory}
+	fi
+	if [ ! -e FreeRTOS/${file} ]
+	then
+		cp ${FREERTOS_DISTRIBUTION}/${file} FreeRTOS/${file}
+	fi
+done

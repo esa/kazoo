@@ -69,6 +69,17 @@ package body TASTE.Deployment_View is
       return Root_System (Root_Instance);
    end Initialize;
 
+   function Device_Driver_Name (Driver : Taste_Device_Driver) return String is
+      Dot : constant Natural := Index (Driver.Name, ".");
+      Name : constant String := To_String (Driver.Name);
+      Device_Name : constant String :=
+        (if Dot > 0
+           then Name (Name'First .. Dot - 1)
+           else "ERROR_MALFORMED_DEVICE_NAME");
+   begin
+         return Device_Name;
+   end Device_Driver_Name;
+
    function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
                                 return Translate_Set is
       Device_Names : Vector_Tag;
@@ -84,14 +95,8 @@ package body TASTE.Deployment_View is
    begin
       for Driver of Drivers loop
          declare
-            Dot : constant Natural := Index (Driver.Name, ".");
-            Name : constant String := To_String (Driver.Name);
-            Device_Name : constant String :=
-              (if Dot > 0
-                 then Name (Name'First .. Dot - 1)
-                 else "ERROR_MALFORMED_DEVICE_NAME");
          begin
-            Device_Names := Device_Names & Device_Name;
+            Device_Names := Device_Names & Driver.Device_Driver_Name;
             Device_Package_Names := Device_Package_Names
               & Driver.Package_Name;
             Device_Classifiers := Device_Classifiers

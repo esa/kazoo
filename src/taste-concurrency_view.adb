@@ -751,18 +751,7 @@ package body TASTE.Concurrency_View is
                end if;
 
                for D : Taste_Device_Driver of N.Drivers loop
-                  declare
-                     Dot : constant Natural := Index (D.Name, ".");
-                     Name : constant String := To_String (D.Name);
-                     Result : constant String :=
-                       (if Dot > 0
-                        then Name (Name'First .. Dot - 1)
-                        else "ERROR_MALFORMED_DEVICE_NAME");
-                  begin
-                     --  Device names are in the form ethernet0.other
-                     --  Get rid of the ".other"
-                     Device_Names := Device_Names & Result;
-                  end;
+                  Device_Names := Device_Names & D.Device_Driver_Name;
                   Device_Node_Name  := Device_Node_Name & N.Name;
                   Device_Partition_Name :=  -- There must be only one
                     Device_Partition_Name & N.Partitions.First_Element.Name;

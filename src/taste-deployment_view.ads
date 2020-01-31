@@ -101,6 +101,9 @@ package TASTE.Deployment_View is
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);
 
+   function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
+                                return Translate_Set;
+
    --  Memory component specified at node level
    type Taste_Memory is
       record

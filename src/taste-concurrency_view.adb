@@ -435,7 +435,11 @@ package body TASTE.Concurrency_View is
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
-               Partition_Assoc := Partition.Deployment_Partition.To_Template
+               Partition_Assoc := Join_Sets (Partition.Deployment_Partition
+                                               .To_Template,
+                                             Drivers_To_Template
+                                               (CV.Nodes (Node_Name)
+                                                  .Deployment_Node.Drivers))
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Thread_Has_Param",     Thread_Has_Param)
@@ -507,7 +511,9 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := +Assoc ("Partitions", Partitions)
+               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers)
+                 & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'
                       (CV.Nodes (Node_Name).Deployment_Node.Memory.Name /= ""))

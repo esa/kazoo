@@ -9,6 +9,11 @@ from multiprocessing import cpu_count
 from concurrent      import futures
 
 
+def openLog(name, mode='w'):
+    logs = os.path.join(os.path.dirname(os.path.abspath(__file__)),'logs')
+    os.makedirs(logs, exist_ok=True)
+    return open(os.path.join(logs, name + '.err'), mode)
+
 def colorMe(result, msg):
     if sys.stdout.isatty():
         code = "1" if result else "2"
@@ -28,13 +33,13 @@ def main():
             result = each.result()
             errcode, stdout, stderr, path, rule = result
             name = path.replace("/", "")
-            print("%40s: %s" % (name,
+            print("(%3d / %3d) %40s: %s" % (len(results)+1, len(paths), name,
                colorMe (errcode, '[OK]' if errcode==0
-                  else '[FAILED] ... build log in /tmp/{}.err'.format(name))))
+                  else '[FAILED] ... build log in logs/{}.err'.format(name))))
             sys.stdout.flush()
             if errcode != 0:
                 # Failure: save the log immediately
-                with open("/tmp/{}.err".format(name), 'w') as f:
+                with openLog(name) as f:
                     f.write("=" * 80)
                     f.write("ERROR: %s %s" % (name, rule))
                     if stdout:
@@ -68,21 +73,21 @@ def make(rule, path):
         stderr=subprocess.PIPE
     )
     stdout, stderr = proc.communicate()
-    errcode = proc.wait()
+    errcode = proc.returncode
     return (errcode, stdout, stderr, path, rule)
 
 
 def summarize(results, elapsed):
     ''' At the end display the errors of project that failed '''
     failed = 0
-    with open("/tmp/kazoo.err", "w") as f:
+    with openLog("kazoo", "w") as f:
         f.write("kazoo test report")
         f.write("-----------------")
     for errcode, stdout, stderr, path, rule in results:
         if errcode == 0:
             continue
         failed += 1
-        with open("/tmp/kazoo.err", 'a') as f:
+        with openLog("kazoo", 'a') as f:
             f.write("=" * 80)
             f.write("ERROR: %s %s" % (path, rule))
             if stdout:
@@ -94,7 +99,7 @@ def summarize(results, elapsed):
                 f.write("-" * 80)
     print("Finished in %.3fs" % elapsed)
     if failed:
-        print("Test report in /tmp/kazoo.err")
+        print("Test report in logs/kazoo.err")
     print("%s tests, %s errors" % (len(results), failed))
     return 0 if not failed else 1
 

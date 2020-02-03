@@ -14,5 +14,6 @@
 |No stdlib          : @_YES_NO:No_Stdlib_Flag_@
 |Timer resolution   : @_Timer_Resolution_@
 |Use PolyORB-HI-C   : @_YES_NO:Use_POHIC_@
+|Target             : @_Target_@
 |
 -----------------------------------------------------------

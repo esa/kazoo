@@ -12,7 +12,7 @@ then
 	>&2 echo "Cannot find FreeRTOS distribution files."
     >&2 echo "Environment variable FREERTOS_PATH not set."
 	exit 1
-exit
+fi
 
 FREERTOS_DISTRIBUTION=${FREERTOS_PATH}
 

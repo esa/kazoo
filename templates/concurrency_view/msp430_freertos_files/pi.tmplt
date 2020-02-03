@@ -11,38 +11,3 @@
 @@-- @_Remote_Function_Names_@  : List of callers
 @@-- @_Remote_Interface_Names_@ :   |_ caller's interface name
 @@-- @_Calling_Threads_@        : Calling threads of the containing block
-@@IF@@ @_Kind_@ = PROTECTED_OPERATION
-   @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
-void pro_@_Parent_Function_@_@_Name_@(void)
-   @@ELSE@@   @@-- contains param(s)
-void pro_@_Parent_Function_@_@_Name_@
-   @@INLINE(      \()(,\n       )(\)\n)@@
-      @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         const char *IN_buf_@_LOWER:Param_Names_@, size_t size_IN_buf_@_LOWER:Param_Names_@
-      @@ELSE@@
-         char *OUT_buf_@_LOWER:Param_Names_@, size_t *size_OUT_buf_@_LOWER:Param_Names_@
-      @@END_IF@@
-      @@END_TABLE@@
-   @@END_INLINE@@
-   @@END_IF@@
-@@END_IF@@
-{
-   extern process_package__taste_protected_object @_LOWER:Parent_Function_@_protected;
-   __po_hi_protected_lock (@_LOWER:Parent_Function_@_protected.protected_id);
-@@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
-   @_LOWER:Parent_Function_@_@_Name_@();
-@@ELSE@@
-   @_LOWER:Parent_Function_@_@_Name_@
-@@INLINE(      \()(,\n       )(\);\n)@@
-      @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@
-      @@ELSE@@
-         OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@
-      @@END_IF@@
-      @@END_TABLE@@
-@@END_INLINE@@
-@@END_IF@@  
-   __po_hi_protected_unlock (@_LOWER:Parent_Function_@_protected.protected_id);
-}

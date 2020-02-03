@@ -7,12 +7,3 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_Required_@ /= ""
-// Required interfaces of function @_Name_@
-@_Required_@
-@@END_IF@@
-@@IF@@ @_Language_@ /= SIMULINK  @@-- Simulink's glue is generated from DMT
-#include "@_LOWER:Name_@_vm_if.h"
-@@END_IF@@
-
-@_Protected_PIs_@

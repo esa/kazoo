@@ -9,12 +9,12 @@
 
 if [ -z "${FREERTOS_PATH}" ]
 then
-	>&2 echo "Cannot find FreeRTOS distribution files."
+    >&2 echo "Cannot find FreeRTOS distribution files."
     >&2 echo "Environment variable FREERTOS_PATH not set."
-	exit 1
+    exit 1
 fi
 
-FREERTOS_DISTRIBUTION=${FREERTOS_PATH}
+FREERTOS_DISTRIBUTION="${FREERTOS_PATH}"
 
 FREERTOS_FILES=(
 Source/stream_buffer.c
@@ -47,13 +47,13 @@ Source/portable/GCC/MSP430FR5969/portmacro.h)
 
 for file in ${FREERTOS_FILES[*]}
 do
-	directory=$(dirname FreeRTOS/${file})
-	if [ ! -d ${directory} ]
-	then
-		mkdir -p ${directory}
-	fi
-	if [ ! -e FreeRTOS/${file} ]
-	then
-		cp ${FREERTOS_DISTRIBUTION}/${file} FreeRTOS/${file}
-	fi
+    directory=$(dirname FreeRTOS/${file})
+    if [ ! -d "${directory}" ]
+    then
+        mkdir -p "${directory}"
+    fi
+    if [ ! -e "FreeRTOS/${file}" ]
+    then
+        cp "${FREERTOS_DISTRIBUTION}/${file}" "FreeRTOS/${file}"
+    fi
 done

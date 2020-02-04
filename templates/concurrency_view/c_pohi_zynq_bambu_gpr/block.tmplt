@@ -7,6 +7,78 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+project @_CAPITALIZE:Node_Name_@_Zynq_Bambu_@_LOWER:Name_@ is
 @@IF@@ @_LOWER:Language_@ = simulink
-@_STRIP:Protected_PIs_@
+
+   type Build_Type is ("Debug", "Release");
+   Build : Build_Type := external ("CFG", "Debug");
+
+   --  for Create_Missing_Dirs use "True"; (not supported in Debian 9, use -p instead)
+   for Object_Dir use "Bambu";
+   for Exec_Dir   use "../../binaries";
+   for Languages use ("Simulink");
+
+   for Main use (
+    "@_STRIP:Unprotected_PIs_@.c"
+);
+
+
+   package Compiler is
+      Common_Bambu_Switches :=
+          ("--compiler=I386_CLANG4",
+           "--experimental-setup=BAMBU-BALANCED",
+           "--no-iob",
+           "--clock-period=40",
+           "-funroll-loops",
+           "-fno-inline",
+           "--speculative-sdc-scheduling",
+           "-DSTATIC="" ",
+           "--generate-interface=INFER",
+           "-v4",
+           "--do-not-expose-globals",
+           "-wH",
+           "--panda-parameter=none-registered-ptrdefault=1",
+            "-I../../../dataview/C");
+
+    for Switches ("@_STRIP:Unprotected_PIs_@.c") use Common_Bambu_Switches &
+        ("-I../../../@_LOWER:Name_@/SIMULINK/src",
+        "-I../../../@_LOWER:Name_@/SIMULINK/wrappers",
+        "--clock-name=clock_@_STRIP:Unprotected_PIs_@",
+        "--reset-name=reset_@_STRIP:Unprotected_PIs_@",
+        "--start-name=start_@_STRIP:Unprotected_PIs_@",
+        "--done-name=finish_@_STRIP:Unprotected_PIs_@",
+        "--top-fname=bambu_@_STRIP:Unprotected_PIs_@",
+        "../../../@_LOWER:Name_@/SIMULINK/wrappers/@_STRIP:Unprotected_PIs_@_bambu.c");
+
+      case Build is
+         when "Release" =>
+            for Default_Switches ("Simulink") use Common_Bambu_Switches & ("-O2")
+                & external_as_list("USER_CFLAGS", "");
+         when "Debug" =>
+            for Default_Switches ("Simulink") use Common_Bambu_Switches & ("")
+                & external_as_list("USER_CFLAGS", "");
+      end case;
+   end Compiler;
+
+   package Linker is
+      for Default_Switches ("Simulink") use
+          external_as_list("USER_LDFLAGS", "");
+   end Linker;
+
+   package Builder is
+      for Executable_Suffix use ".bit";
+      for Executable ("@_STRIP:Unprotected_PIs_@.c") use "@_Name_@_bambu";
+   end Builder;
+
+   --  following to be updated with all relevant source dirs
+   for Source_Dirs use
+    (
+       "../../@_LOWER:Name_@/SIMULINK/src"
+);
+    
+    for Excluded_Source_Files use
+      ("ert_main.c");
+
 @@END_IF@@
+
+end @_CAPITALIZE:Node_Name_@_Zynq_Bambu_@_LOWER:Name_@;

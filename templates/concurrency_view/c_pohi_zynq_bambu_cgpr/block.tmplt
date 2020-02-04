@@ -7,6 +7,3 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_LOWER:Language_@ = simulink
-"@_STRIP:Unprotected_PIs_@_bambu.c",
-@@END_IF@@

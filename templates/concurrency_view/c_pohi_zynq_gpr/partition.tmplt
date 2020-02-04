@@ -34,24 +34,20 @@
 @@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
    @@SET@@ Distributed_System = TRUE
 @@END_IF@@
-@@-- Not all systems use Ada so we must not always include Ada dataview folder
-@@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
-   @@SET@@ Need_Ada = TRUE
-@@END_IF@@
-@@END_TABLE@@
 
-aggregate project @_CAPITALIZE:Name_@_Zynq_Bambu is
-     for Project_Files use (
+aggregate project @_CAPITALIZE:Name_@_Zynq is
+for Project_Files use (
 @@INLINE(,)@@
 @@TABLE@@
 @@IF@@ @_LOWER:Block_Languages_@ = simulink
-"zynq_bambu_@_LOWER:Block_Names_@.gpr"
+"@_LOWER:Name_@_zynq_bambu.gpr"
+@@ELSE@@
+"@_LOWER:Name_@_zynq_rtems.gpr"
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
 );
 
-end @_CAPITALIZE:Name_@_Zynq_Bambu;
+end @_CAPITALIZE:Name_@_Zynq;
 
 

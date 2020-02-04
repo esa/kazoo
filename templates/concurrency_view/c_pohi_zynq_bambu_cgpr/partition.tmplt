@@ -51,15 +51,13 @@ configuration project ZYNQ_RTEMS is
       Common_C_Switches := 
          ("--pipe",
           "-DRTEMS_POSIX",
-          "-DRTEMS412",
           "-DTARGET=zynq",
           "-mthumb",
           "-march=armv7-a",
           "-mfpu=neon",
           "-mfloat-abi=hard",
           "-mtune=cortex-a9",
-          "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
---            "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
+          "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
           "-specs=bsp_specs",
           "-qrtems");
 
@@ -91,38 +89,37 @@ configuration project ZYNQ_RTEMS is
       for Body_Suffix ("Simulink") use ".c";
       for Dot_Replacement use "-";
    end Naming;
-   for Archive_Builder use ("arm-rtems5-ar" , "cr");
+  @@-- for Archive_Builder use ("arm-rtems5-ar" , "cr");
 
-   package Linker is
-      for Driver use "arm-rtems5-gcc";
-      Common_C_Linker_Switches :=
-           ("--pipe",
-            "-mthumb",
-            "-march=armv7-a",
-            "-mfpu=neon",
-            "-mfloat-abi=hard",
-            "-mtune=cortex-a9",
-            "-g",
-            "-fdiagnostics-show-option",
-            "-ffunction-sections",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
---            "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
-            "-specs=bsp_specs",
-            "-qrtems",
-            "-lm",
-            "-lbsd",
-            "-Wl,-gc-sections");
-
-       for Default_Switches ("C") use Common_C_Linker_Switches;
-       for Default_Switches ("C++") use Common_C_Linker_Switches;
-       for Default_Switches ("Ada") use
-           ("--pipe",
-            "-g",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
---            "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
-            "-specs=bsp_specs",
-            "-qrtems",
-            "-lm",
-            "-lgnat");
-   end Linker;
+@@-- no linker step defined yet, leaving as placeholder
+@@--   package Linker is
+@@--      for Driver use "arm-rtems5-gcc";
+@@--      Common_C_Linker_Switches :=
+@@--           ("--pipe",
+@@--            "-mthumb",
+@@--            "-march=armv7-a",
+@@--            "-mfpu=neon",
+@@--            "-mfloat-abi=hard",
+@@--            "-mtune=cortex-a9",
+@@--            "-g",
+@@--            "-fdiagnostics-show-option",
+@@--            "-ffunction-sections",
+@@--            "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
+@@--            "-specs=bsp_specs",
+@@--            "-qrtems",
+@@--            "-lm",
+@@--            "-lstdc++",
+@@--            "-Wl,-gc-sections");
+@@--
+@@--       for Default_Switches ("C") use Common_C_Linker_Switches;
+@@--       for Default_Switches ("C++") use Common_C_Linker_Switches;
+@@--       for Default_Switches ("Ada") use
+@@--           ("--pipe",
+@@--           "-g",
+@@--            "-B/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib",
+@@--            "-specs=bsp_specs",
+@@--            "-qrtems",
+@@--            "-lm",
+@@--            "-lgnat");
+@@--   end Linker;
 end ZYNQ_RTEMS;

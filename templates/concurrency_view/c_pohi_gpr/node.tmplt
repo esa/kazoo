@@ -43,11 +43,10 @@ air:
 @@END_TABLE@@
 
 zynq:
+# No linker step defined for Bambu build yet, leaving a separate link step for RTEMS only. Should be removed when Vivado calls are defined.
 @@TABLE@@
-	# We need to compile and link separately because the linker script must
-	# be copied to the obj folder. Path cannot be set manually with -T
-	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
-	gprbuild -p -v -f --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_bambu.gpr -XCFG="Debug" -cargs:Simulink -DSTATIC=""
+	gprbuild -c -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -l -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 

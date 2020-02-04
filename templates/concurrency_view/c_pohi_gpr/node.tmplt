@@ -14,6 +14,8 @@ all:	debug_rtems_leon3_with_ada
 all:	air
 @@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ
 all:    zynq
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ_QEMU
+all:    zynq_qemu
 @@END_IF@@
 
 simulate:
@@ -46,6 +48,12 @@ zynq:
 	# be copied to the obj folder. Path cannot be set manually with -T
 	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 	gprbuild -p -v -f --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_bambu.gpr -XCFG="Debug" -cargs:Simulink -DSTATIC=""
+@@END_TABLE@@
+
+
+zynq_qemu:
+@@TABLE@@
+	gprbuild -p -v --config=zynq_rtems_qemu.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems_qemu.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 release_native:

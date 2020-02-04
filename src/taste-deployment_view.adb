@@ -120,18 +120,18 @@ package body TASTE.Deployment_View is
       end loop;
 
       return +Assoc ("Device_Names", Device_Names)
-        & Assoc ("Device_Package_Names", Device_Package_Names)
-        & Assoc ("Device_Classifiers", Device_Classifiers)
-        & Assoc ("Device_Associated_Processor_Names",
+        & Assoc ("Device_AADL_Pkg", Device_Package_Names)
+        & Assoc ("Device_Classifier", Device_Classifiers)
+        & Assoc ("Device_CPU",
                  Device_Associated_Processor_Names)
-        & Assoc ("Device_Configurations", Device_Configurations)
-        & Assoc ("Device_Accessed_Bus_Names",
+        & Assoc ("Device_Config", Device_Configurations)
+        & Assoc ("Device_Bus_Name",
                  Device_Accessed_Bus_Names)
-        & Assoc ("Device_Accessed_Port_Names",
+        & Assoc ("Device_Port_Name",
                  Device_Accessed_Port_Names)
-        & Assoc ("Device_ASN1_Filenames", Device_ASN1_Filenames)
-        & Assoc ("Device_ASN1_Typenames", Device_ASN1_Typenames)
-        & Assoc ("Device_ASN1_Modules", Device_ASN1_Modules);
+        & Assoc ("Device_ASN1_File", Device_ASN1_Filenames)
+        & Assoc ("Device_ASN1_Sort", Device_ASN1_Typenames)
+        & Assoc ("Device_ASN1_Module", Device_ASN1_Modules);
    end Drivers_To_Template;
 
    ---------------------------

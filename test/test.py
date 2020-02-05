@@ -26,6 +26,7 @@ def main():
     results = []
     rule = sys.argv[1]
     paths = sys.argv[2:]
+    print (f"Running {len(paths)} tests using {cpu_count()} processors")
 
     with futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
         fs = [executor.submit(partial(make, rule), path) for path in paths]

@@ -76,7 +76,16 @@ void @_LOWER:Parent_Function_@_@_Name_@
 
 @@TABLE@@    @@-- encode output parameters
 @@IF@@ @_Param_Directions_@ = "PARAM_OUT"
-   *OUT_@_LOWER:Param_Names_@_len = Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@ ((void *)OUT_@_LOWER:Param_Names_@, sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@), &OUT_@_UPPER:Param_Names_@);
+   *OUT_@_LOWER:Param_Names_@_len = Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
+      ((void *)OUT_@_LOWER:Param_Names_@,
+@@IF@@ @_Param_Encodings_@ = NATIVE
+       sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
+@@ELSIF@@ @_Param_Encodings_@ = UPER
+       asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING,
+@@ELSIF@@ @_Param_Encodings_@ = ACN
+       asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING,
+@@END_IF@@
+       &OUT_@_UPPER:Param_Names_@);
 @@END_IF@@
 @@END_TABLE@@
 }

@@ -82,15 +82,15 @@ package body TASTE.Deployment_View is
 
    function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
                                 return Translate_Set is
-      Device_Names : Vector_Tag;
-      Device_Package_Names : Vector_Tag;
-      Device_Classifiers : Vector_Tag;
-      Device_Associated_Processor_Names : Vector_Tag;
-      Device_Configurations : Vector_Tag;
-      Device_Accessed_Bus_Names : Vector_Tag;
-      Device_Accessed_Port_Names : Vector_Tag;
-      Device_ASN1_Filenames : Vector_Tag;
-      Device_ASN1_Typenames : Vector_Tag;
+      Device_Names,
+      Device_Package_Names,
+      Device_Classifiers,
+      Device_Associated_Processor_Names,
+      Device_Configurations,
+      Device_Accessed_Bus_Names,
+      Device_Accessed_Port_Names,
+      Device_ASN1_Filenames,
+      Device_ASN1_Typenames,
       Device_ASN1_Modules : Vector_Tag;
    begin
       for Driver of Drivers loop

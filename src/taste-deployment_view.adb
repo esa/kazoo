@@ -69,6 +69,71 @@ package body TASTE.Deployment_View is
       return Root_System (Root_Instance);
    end Initialize;
 
+   function Device_Driver_Name (Driver : Taste_Device_Driver) return String is
+      Dot : constant Natural := Index (Driver.Name, ".");
+      Name : constant String := To_String (Driver.Name);
+      Device_Name : constant String :=
+        (if Dot > 0
+           then Name (Name'First .. Dot - 1)
+           else "ERROR_MALFORMED_DEVICE_NAME");
+   begin
+         return Device_Name;
+   end Device_Driver_Name;
+
+   function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
+                                return Translate_Set is
+      Device_Names : Vector_Tag;
+      Device_Package_Names : Vector_Tag;
+      Device_Classifiers : Vector_Tag;
+      Device_Associated_Processor_Names : Vector_Tag;
+      Device_Configurations : Vector_Tag;
+      Device_Accessed_Bus_Names : Vector_Tag;
+      Device_Accessed_Port_Names : Vector_Tag;
+      Device_ASN1_Filenames : Vector_Tag;
+      Device_ASN1_Typenames : Vector_Tag;
+      Device_ASN1_Modules : Vector_Tag;
+   begin
+      for Driver of Drivers loop
+         declare
+         begin
+            Device_Names := Device_Names & Driver.Device_Driver_Name;
+            Device_Package_Names := Device_Package_Names
+              & Driver.Package_Name;
+            Device_Classifiers := Device_Classifiers
+              & Driver.Device_Classifier;
+            Device_Associated_Processor_Names
+              := Device_Associated_Processor_Names
+              & Driver.Associated_Processor_Name;
+            Device_Configurations := Device_Configurations
+              & Driver.Device_Configuration;
+            Device_Accessed_Bus_Names :=  Device_Accessed_Bus_Names
+              & Driver.Accessed_Bus_Name;
+            Device_Accessed_Port_Names := Device_Accessed_Port_Names
+              & Driver.Accessed_Port_Name;
+            Device_ASN1_Filenames := Device_ASN1_Filenames
+              & Driver.ASN1_Filename;
+            Device_ASN1_Typenames := Device_ASN1_Typenames
+              & Driver.ASN1_Typename;
+            Device_ASN1_Modules := Device_ASN1_Modules
+              & Driver.ASN1_Module;
+         end;
+      end loop;
+
+      return +Assoc ("Device_Names", Device_Names)
+        & Assoc ("Device_AADL_Pkg", Device_Package_Names)
+        & Assoc ("Device_Classifier", Device_Classifiers)
+        & Assoc ("Device_CPU",
+                 Device_Associated_Processor_Names)
+        & Assoc ("Device_Config", Device_Configurations)
+        & Assoc ("Device_Bus_Name",
+                 Device_Accessed_Bus_Names)
+        & Assoc ("Device_Port_Name",
+                 Device_Accessed_Port_Names)
+        & Assoc ("Device_ASN1_File", Device_ASN1_Filenames)
+        & Assoc ("Device_ASN1_Sort", Device_ASN1_Typenames)
+        & Assoc ("Device_ASN1_Module", Device_ASN1_Modules);
+   end Drivers_To_Template;
+
    ---------------------------
    -- AST Builder Functions --
    ---------------------------

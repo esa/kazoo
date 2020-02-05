@@ -98,8 +98,13 @@ package TASTE.Deployment_View is
          ASN1_Module               : Unbounded_String;
       end record;
 
+   function Device_Driver_Name (Driver : Taste_Device_Driver) return String;
+
    package Taste_Drivers is
      new Indefinite_Vectors (Natural, Taste_Device_Driver);
+
+   function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
+                                return Translate_Set;
 
    --  Memory component specified at node level
    type Taste_Memory is

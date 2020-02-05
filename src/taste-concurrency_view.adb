@@ -435,7 +435,11 @@ package body TASTE.Concurrency_View is
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
-               Partition_Assoc := Partition.Deployment_Partition.To_Template
+               Partition_Assoc := Join_Sets (Partition.Deployment_Partition
+                                               .To_Template,
+                                             Drivers_To_Template
+                                               (CV.Nodes (Node_Name)
+                                                  .Deployment_Node.Drivers))
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Thread_Has_Param",     Thread_Has_Param)
@@ -507,7 +511,9 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := +Assoc ("Partitions", Partitions)
+               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers)
+                 & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'
                       (CV.Nodes (Node_Name).Deployment_Node.Memory.Name /= ""))
@@ -560,25 +566,15 @@ package body TASTE.Concurrency_View is
             Bus_Names,
             Bus_AADL_Pkg,
             Bus_Classifier  : Vector_Tag;  --  System busses
-            Device_Names,
             Device_Node_Name,
-            Device_Partition_Name,
-            Device_AADL_Pkg,
-            Device_Classifier,
-            Device_CPU,
-            Device_Configuration,
-            Device_Accessed_Bus_Name,
-            Device_Accessed_Port_Name,
-            Device_ASN1_Filename,
-            Device_ASN1_Typename,
-            Device_ASN1_Module : Vector_Tag;  --  Device drivers
+            Device_Partition_Name : Vector_Tag;
+            All_Drivers : Taste_Drivers.Vector;
 
             --  To keep a list of ASN.1 files/modules without duplicates:
             Unique_ASN1_Sorts_Set : String_Sets.Set;
             Unique_ASN1_Files,
             Unique_ASN1_Sorts,
             Unique_ASN1_Modules : Vector_Tag;
-
             Connect_From_Partition,           --  Partition to bus connections
             Connect_Port_Name,
             Connect_Via_Bus    : Vector_Tag;
@@ -744,37 +740,12 @@ package body TASTE.Concurrency_View is
                     "Drivers in multi-partition systems are not supported";
                end if;
 
+               All_Drivers.Append (N.Drivers);
+
                for D : Taste_Device_Driver of N.Drivers loop
-                  declare
-                     Dot : constant Natural := Index (D.Name, ".");
-                     Name : constant String := To_String (D.Name);
-                     Result : constant String :=
-                       (if Dot > 0
-                        then Name (Name'First .. Dot - 1)
-                        else "ERROR_MALFORMED_DEVICE_NAME");
-                  begin
-                     --  Device names are in the form ethernet0.other
-                     --  Get rid of the ".other"
-                     Device_Names := Device_Names & Result;
-                  end;
                   Device_Node_Name  := Device_Node_Name & N.Name;
                   Device_Partition_Name :=  -- There must be only one
                     Device_Partition_Name & N.Partitions.First_Element.Name;
-                  Device_AADL_Pkg   := Device_AADL_Pkg & D.Package_Name;
-                  Device_Classifier := Device_Classifier & D.Device_Classifier;
-                  Device_CPU := Device_CPU & D.Associated_Processor_Name;
-                  Device_Configuration :=
-                    Device_Configuration & D.Device_Configuration;
-                  Device_Accessed_Bus_Name :=
-                    Device_Accessed_Bus_Name & D.Accessed_Bus_Name;
-                  Device_Accessed_Port_Name :=
-                    Device_Accessed_Port_Name & D.Accessed_Port_Name;
-                  Device_ASN1_Filename :=
-                    Device_ASN1_Filename & D.ASN1_Filename;
-                  Device_ASN1_Typename :=
-                    Device_ASN1_Typename & D.ASN1_Typename;
-                  Device_ASN1_Module := Device_ASN1_Module & D.ASN1_Module;
-
                   --  Update list of types and files without duplicates
                   if not Unique_ASN1_Sorts_Set.Contains
                     (Strip_String (To_String (D.ASN1_Typename)))
@@ -791,7 +762,8 @@ package body TASTE.Concurrency_View is
 
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
                --  Generate from system.tmplt
-               Set_Sys := CV.Configuration.To_Template
+               Set_Sys := Join_Sets (CV.Configuration.To_Template,
+                                     Drivers_To_Template (All_Drivers))
                  & Assoc ("Nodes",       Nodes)
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
@@ -814,18 +786,8 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Bus_Names",           Bus_Names)
                  & Assoc ("Bus_AADL_Package",    Bus_AADL_Pkg)
                  & Assoc ("Bus_Classifier",      Bus_Classifier)
-                 & Assoc ("Device_Names",        Device_Names)
                  & Assoc ("Device_Node_Name",    Device_Node_Name)
                  & Assoc ("Device_Partition",    Device_Partition_Name)
-                 & Assoc ("Device_AADL_Pkg",     Device_AADL_Pkg)
-                 & Assoc ("Device_Classifier",   Device_Classifier)
-                 & Assoc ("Device_CPU",          Device_CPU)
-                 & Assoc ("Device_Config",       Device_Configuration)
-                 & Assoc ("Device_Bus_Name",     Device_Accessed_Bus_Name)
-                 & Assoc ("Device_Port_Name",    Device_Accessed_Port_Name)
-                 & Assoc ("Device_ASN1_File",    Device_ASN1_Filename)
-                 & Assoc ("Device_ASN1_Sort",    Device_ASN1_Typename)
-                 & Assoc ("Device_ASN1_Module",  Device_ASN1_Module)
                  & Assoc ("Unique_Dev_ASN1_Files", Unique_ASN1_Files)
                  & Assoc ("Unique_Dev_ASN1_Mod",   Unique_ASN1_Modules)
                  & Assoc ("Unique_Dev_ASN1_Sorts", Unique_ASN1_Sorts)

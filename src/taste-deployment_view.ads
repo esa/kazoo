@@ -93,6 +93,8 @@ package TASTE.Deployment_View is
          Device_Configuration,
          Accessed_Bus_Name,
          Accessed_Port_Name,
+         Init_Function,
+         Init_Language,
          ASN1_Filename,
          ASN1_Typename,
          ASN1_Module               : Unbounded_String;

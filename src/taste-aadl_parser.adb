@@ -34,15 +34,11 @@ use Ada.Text_IO,
     Ocarina;
 
 --  for the parsing of ConcurrencyView_Properties.aadl:
---  to be moved when functionality is completed
---  with ocarina.options, ocarina.backends.utils;
-with ocarina.BE_AADL; use ocarina.BE_AADL;
---  with ocarina.BE_AADL.Components;
+--  with ocarina.BE_AADL; use ocarina.BE_AADL;
 with Ocarina.ME_AADL.AADL_Tree.Nodes;
 with Ocarina.ME_AADL.AADL_Tree.Nutils;
 use Ocarina.ME_AADL.AADL_Tree.Nodes;
 use Ocarina.ME_AADL.AADL_Tree.Nutils;
---  use ocarina.BE_AADL.Components;
 
 package body TASTE.AADL_Parser is
 
@@ -515,7 +511,10 @@ package body TASTE.AADL_Parser is
                         Protected_Block_name => Block.Ref_Function.Name,
                         Node                 => Block.Node,
                         PI                   => PI,
-                        Output_Ports         => Get_Output_Ports (Model, F));
+                        Output_Ports         => Get_Output_Ports (Model, F),
+                        Priority             => US ("1"),
+                        Dispatch_Offset_Ms   => US ("0"),
+                        Stack_Size_In_Kb     => US ("10"));
                   begin
                      CV.Nodes
                        (Node_Name).Partitions (Partition_Name).Threads.Include
@@ -993,7 +992,6 @@ package body TASTE.AADL_Parser is
       Nodes,                    --  To iterate on lists of nodes
       AADL_Package,
       System_Impl : Node_Id := No_Node;
-      pragma Unreferenced (Model);
       procedure Report_Error is
       begin
          Put_Info ("No valid user-defined Concurrency View properties found:");
@@ -1010,7 +1008,7 @@ package body TASTE.AADL_Parser is
          return;
       end if;
       --  AADL Unparser (add with/use Ocarina.BE_AADL):
-      Generate_AADL_Model (Concurrency_Properties_Root, False);
+      --  Generate_AADL_Model (Concurrency_Properties_Root, False);
       Put_Info ("Analysing user-defined Concurrency View properties");
 
       Nodes := First_Node (Declarations (Concurrency_Properties_Root));
@@ -1061,6 +1059,7 @@ package body TASTE.AADL_Parser is
             Number, Unit : Node_Id;
             Number_Str,
             Unit_Str     : Unbounded_String := US ("");
+            Found        : Boolean := False;
          begin
             if Single_Value (Prop_Val) = No_Node then
                Put_Debug ("CV_Properties Error 4 - " & Prop_Name);
@@ -1092,6 +1091,16 @@ package body TASTE.AADL_Parser is
                Unit_Str := US (Get_Name_String (Display_Name (Unit)));
             end if;
 
+            --  Check that the units are the expected ones (kb/ms)
+            if (Prop_Name = "Stack_Size" and then Unit_Str /= "kbyte")
+              or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
+            then
+               Put_Error ("Unsupported units used in "
+                          & "ConcurrencyView_Properties.aadl. Stack_Size unit "
+                          & "is 'kbyte' and Dispatch_Offset is 'ms'");
+               return;
+            end if;
+
             --  Last we find the partition and thread it applies to.
             --  (Check ocarina-be_aadl-properties.adb)
             Paths := First_Node (Applies_To);
@@ -1118,9 +1127,43 @@ package body TASTE.AADL_Parser is
                      List_Node := Next_Node (List_Node);
                   end loop;
                end;
-               Put_Info (Prop_Name & " := " & To_String (Number_str) & " "
-                         & To_String (Unit_Str) & " applies to "
-                         & To_String (Partition) & "." & To_String (Thread));
+
+               --  We completed the parsing of one property
+               --  Prop_Name = Number_Str Unit_Str applies to Partition Thread
+               Put_Debug (Prop_Name & " := " & To_String (Number_str) & " "
+                          & To_String (Unit_Str) & " applies to "
+                          & To_String (Partition) & "." & To_String (Thread));
+
+               --  Checking in the generated concurrency view if the
+               --  partition and thread actually exist, and apply the property
+               Found := False;
+               for Node of Model.Concurrency_View.Nodes loop
+                  exit when Found;
+                  if Node.Partitions.Contains (To_String (Partition))
+                    and then Node.Partitions (To_String (Partition))
+                      .Threads.Contains (To_String (Thread))
+                  then
+                     if Prop_Name = "Priority" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Priority := Number_Str;
+                     elsif Prop_Name = "Stack_Size" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Stack_Size_In_Kb :=
+                            Number_Str;
+                     elsif Prop_Name = "Dispatch_Offset" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Dispatch_Offset_Ms :=
+                            Number_Str;
+                     end if;
+                     Found := True;
+                  end if;
+               end loop;
+               if not Found then
+                  Put_Info ("The ConcurrencyView_Properties.aadl file "
+                            & "references non-existing partition/thread : "
+                            & To_String (Partition) & "."
+                            & To_String (Thread));
+               end if;
 
                Paths := Next_Node (Paths);
             end loop;
@@ -1128,7 +1171,6 @@ package body TASTE.AADL_Parser is
          <<Next_Property>>
          Nodes := Next_Node (Nodes);
       end loop;
-      --  Model.CV_Properties := CV_Properties;
    end Add_CV_Properties;
 
 end TASTE.AADL_Parser;

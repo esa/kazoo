@@ -6,6 +6,8 @@
 
 with Ada.Containers.Indefinite_Ordered_Maps,
      Ada.Strings.Unbounded,
+     Ada.Strings.Equal_Case_Insensitive,
+     Ada.Strings.Less_Case_Insensitive,
      Text_IO,
      Templates_Parser,
      TASTE.Parser_Utils,
@@ -23,6 +25,11 @@ use Ada.Containers,
 package TASTE.Concurrency_View is
 
    Concurrency_View_Error : exception;
+
+   function "="(Left, Right : Case_Insensitive_String) return Boolean
+       renames Ada.Strings.Equal_Case_Insensitive;
+   function "<"(Left, Right : Case_Insensitive_String) return Boolean
+       renames Ada.Strings.Less_Case_Insensitive;
 
    type Protected_Block_PI is
       record
@@ -77,12 +84,16 @@ package TASTE.Concurrency_View is
          Protected_Block_Name : Unbounded_String;
          Output_Ports         : Ports.Map;
          Node                 : Option_Node.Option;
+         Priority,
+         Dispatch_Offset_Ms,
+         Stack_Size_In_Kb     : Unbounded_String := Null_Unbounded_String;
          PI                   : Taste_Interface; --  Contains period, etc.
       end record;
 
    function To_Template (T : AADL_Thread) return Translate_Set;
 
-   package AADL_Threads is new Indefinite_Ordered_Maps (String, AADL_Thread);
+   package AADL_Threads is new Indefinite_Ordered_Maps
+     (Case_Insensitive_String, AADL_Thread);
 
    type Partition_In_Port is
       record
@@ -115,7 +126,8 @@ package TASTE.Concurrency_View is
          Out_Ports            : Partition_Out_Ports.Map;
       end record;
 
-   package CV_Partitions is new Indefinite_Ordered_Maps (String, CV_Partition);
+   package CV_Partitions is new Indefinite_Ordered_Maps
+     (Case_Insensitive_String, CV_Partition);
 
    --  A node may contain several partitions (in case of TSP)
    type CV_Node is tagged
@@ -124,7 +136,8 @@ package TASTE.Concurrency_View is
          Partitions      : CV_Partitions.Map;
       end record;
 
-   package CV_Nodes is new Indefinite_Ordered_Maps (String, CV_Node);
+   package CV_Nodes is new Indefinite_Ordered_Maps
+     (Case_Insensitive_String, CV_Node);
 
    --  CV is made of a list of nodes, each containing a list of partitions
    --  Partitions contain threads and passive functions as created during

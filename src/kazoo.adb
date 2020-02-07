@@ -15,12 +15,12 @@ begin
       if Model.Configuration.Debug_Flag then
          TASTE.Dump.Dump_Input_Model (Model);
          Model.Dump;
-
       end if;
 
       if Model.Configuration.Glue then
          Model.Preprocessing;
          Model.Add_Concurrency_View;
+         Model.Add_CV_Properties;
          Model.Concurrency_View.Generate_CV;
       end if;
 

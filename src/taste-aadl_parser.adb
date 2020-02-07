@@ -514,7 +514,7 @@ package body TASTE.AADL_Parser is
                         Output_Ports         => Get_Output_Ports (Model, F),
                         Priority             => US ("1"),
                         Dispatch_Offset_Ms   => US ("0"),
-                        Stack_Size_In_Kb     => US ("10"));
+                        Stack_Size_In_Kb     => US ("50"));
                   begin
                      CV.Nodes
                        (Node_Name).Partitions (Partition_Name).Threads.Include

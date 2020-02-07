@@ -812,10 +812,10 @@ This template is evaluated for every block.
 |-
 |Target
 |DOCUMENTATION MISSING
-|}And all the system configuration obtained from the command line:	
-Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
+|}Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
 Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
 No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+
 
 
 
@@ -929,6 +929,42 @@ This file is evaluated for every partition.
 |-
 |VP_Duration
 |DOCUMENTATION MISSING
+|-
+|Device_CPU
+|DOCUMENTATION MISSING
+|-
+|Device_Bus_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Init
+|DOCUMENTATION MISSING
+|-
+|Device_AADL_Pkg
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Module
+|DOCUMENTATION MISSING
+|-
+|Device_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Config
+|DOCUMENTATION MISSING
+|-
+|Device_Names
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_File
+|DOCUMENTATION MISSING
+|-
+|Device_Classifier
+|DOCUMENTATION MISSING
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Sort
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -979,6 +1015,42 @@ This file is evaluated for every node. The result of this file is saved to the f
 |DOCUMENTATION MISSING
 |-
 |CPU_Instance
+|DOCUMENTATION MISSING
+|-
+|Device_CPU
+|DOCUMENTATION MISSING
+|-
+|Device_Bus_Name
+|DOCUMENTATION MISSING
+|-
+|Device_AADL_Pkg
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Module
+|DOCUMENTATION MISSING
+|-
+|Device_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Config
+|DOCUMENTATION MISSING
+|-
+|Device_Names
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_File
+|DOCUMENTATION MISSING
+|-
+|Device_Classifier
+|DOCUMENTATION MISSING
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Sort
+|DOCUMENTATION MISSING
+|-
+|Device_Init
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/system.tmplt ===
@@ -1148,7 +1220,12 @@ filesys.tmplt.
 |-
 |Target
 |DOCUMENTATION MISSING
-|}And all the system configuration obtained from the command line:	
-Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_Init
+|DOCUMENTATION MISSING
+|}Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
 Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
 No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

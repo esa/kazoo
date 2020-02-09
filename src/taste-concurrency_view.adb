@@ -357,6 +357,8 @@ package body TASTE.Concurrency_View is
                      Unpro_PI_Tag : Unbounded_String;
                      RI_Tag       : Unbounded_String;
                      Result       : Unbounded_String;
+                     Property_Names,
+                     Property_Values : Vector_Tag;
 
                      --  Optionally generate block code in separate files
                      --  (if fileblock.tmplt present and contains a filename)
@@ -379,6 +381,12 @@ package body TASTE.Concurrency_View is
                        & TASTE.Backend.Language_Spelling (B.Ref_Function);
                      Block_Instance_Of := Block_Instance_Of
                        & B.Ref_Function.Instance_Of.Value_Or (US (""));
+
+                     for TASTE_property of B.Ref_Function.User_Properties loop
+                        Property_Names := Property_Names & TASTE_property.Name;
+                        Property_Values := Property_Values
+                            & TASTE_property.Value;
+                     end loop;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Document_Template
@@ -412,7 +420,9 @@ package body TASTE.Concurrency_View is
                                 Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
-                       & Assoc ("Required",        RI_Tag);
+                       & Assoc ("Required",        RI_Tag)
+                       & Assoc ("Property_Names",        Property_Names)
+                       & Assoc ("Property_Values",        Property_Values);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
                      Document_Template

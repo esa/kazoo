@@ -32,7 +32,7 @@ project @_CAPITALIZE:Node_Name_@_Zynq_Bambu_@_LOWER:Name_@ is
            "-funroll-loops",
            "-fno-inline",
            "--speculative-sdc-scheduling",
-           "-DSTATIC="" ",
+           "-DSTATIC= ",
            "--generate-interface=INFER",
            "-v4",
            "--do-not-expose-globals",

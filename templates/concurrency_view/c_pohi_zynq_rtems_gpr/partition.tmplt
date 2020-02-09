@@ -105,7 +105,6 @@ project @_CAPITALIZE:Name_@_Zynq_RTEMS is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
     ("@_LOWER:Name_@",
---        "/opt/rtems-5.1-2019.12.03/arm-rtems5/xilinx_zynq_zc706/lib/include",
       "/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib/include",
 @@IF@@ @_Distributed_System_@
       "../deploymentview_final/polyorb-hi-c/include/drivers/configuration",

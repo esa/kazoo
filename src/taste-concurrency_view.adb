@@ -227,7 +227,8 @@ package body TASTE.Concurrency_View is
                Thread_Has_Param : Vector_Tag;
                Block_Names,
                Block_Languages,
-               Block_Instance_Of : Vector_Tag;
+               Block_Instance_Of,
+               Block_FPGAConf  : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -386,7 +387,18 @@ package body TASTE.Concurrency_View is
                         Property_Names := Property_Names & TASTE_property.Name;
                         Property_Values := Property_Values
                             & TASTE_property.Value;
+                        if TASTE_property.Name =
+                            "TASTE_IV_Properties::FPGA_Configurations"
+                        then
+                           Block_FPGAConf := Block_FPGAConf &
+                                TASTE_property.Value;
+                        end if;
                      end loop;
+
+                     if Size (Block_FPGAConf) /= Size (Block_Names)
+                     then
+                        Block_FPGAConf := Block_FPGAConf & "";
+                     end if;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Document_Template
@@ -461,6 +473,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Names",          Block_Names)
                  & Assoc ("Block_Languages",      Block_Languages)
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
+                 & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)

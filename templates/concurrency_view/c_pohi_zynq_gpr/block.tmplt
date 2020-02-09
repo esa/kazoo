@@ -7,6 +7,6 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@IF@@ @_LOWER:Language_@ = simulink
-"@_STRIP:Unprotected_PIs_@_bambu.c",
-@@END_IF@@
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@        |_ Vector Tag: List of User-defined properties (values)
+

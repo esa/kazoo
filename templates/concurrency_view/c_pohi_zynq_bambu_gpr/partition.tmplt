@@ -7,6 +7,7 @@
 @@-- @_Blocks_@          : Code generated for protected functions
 @@-- @_Block_Names@      : Vector Tag: list of block (user functions) names
 @@-- @_Block_Languages_@ :   |_ Corresponding implementation language
+@@-- @_Block_FPGAConf_@  :   |_ Corresponding FPGA Configuration property value
 @@-- @_Coverage_@        : True if user requested code coverage enable
 @@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
@@ -45,13 +46,14 @@ aggregate project @_CAPITALIZE:Name_@_Zynq_Bambu is
      for Project_Files use (
 @@INLINE(,)@@
 @@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = simulink
-"zynq_bambu_@_LOWER:Block_Names_@.gpr"
+@@IF@@ not @_IS_EMPTY:Block_FPGAConf_@ 
+"@_LOWER:Block_Names_@_zynq_bambu.gpr"
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
 );
 
 end @_CAPITALIZE:Name_@_Zynq_Bambu;
+
 
 

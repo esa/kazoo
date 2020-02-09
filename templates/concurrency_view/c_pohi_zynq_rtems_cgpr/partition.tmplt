@@ -37,7 +37,7 @@ configuration project ZYNQ_RTEMS is
       for Driver ("C") use "arm-rtems5-gcc";
       for Driver ("Ada") use "arm-rtems5-gcc";
       for Driver ("C++") use "arm-rtems5-g++";
-      for Driver ("Simulink") use "bambu";
+      for Driver ("FPGA") use "bambu";
 
       for Leading_Required_Switches ("C") use ("-c");
       for Leading_Required_Switches ("C++") use ("-c");
@@ -87,8 +87,8 @@ configuration project ZYNQ_RTEMS is
       for Spec_Suffix ("Ada") use ".ads";
       for Body_Suffix ("Ada") use ".adb";
        for Body_Suffix ("C++") use ".cc";
-      for Spec_Suffix ("Simulink") use ".h";
-      for Body_Suffix ("Simulink") use ".c";
+      for Spec_Suffix ("FPGA") use ".h";
+      for Body_Suffix ("FPGA") use ".c";
       for Dot_Replacement use "-";
    end Naming;
    for Archive_Builder use ("arm-rtems5-ar" , "cr");

@@ -34,8 +34,6 @@
 @@END_TABLE@@
  * Timers              : @_Timers_@
  */
-// debug : @_PIs_Have_Params_@, @_RIs_Have_Params_@
-#include <stdbool.h>
 #include "@_LOWER:Name_@_vm_if.h"
 @@IF@@ @_PIs_Have_Params_@
 #include "C_ASN1_Types.h"
@@ -47,14 +45,17 @@
 @@IF@@ @_Language_@ = Ada or @_Language_@ = SDL
 extern void adainit(void);
 @@END_IF@@
-
+@@TABLE@@
+extern void init_@_LOWER:Sync_RIs_Parent_@(void);
+extern unsigned @_LOWER:Sync_RIs_Parent_@_initialized;
+@@END_TABLE@@
 @@-- define a global initialization flag for the function, that is checked in invoke_ri
 @@-- to prevent calls to RIs during the startup function
-bool @_LOWER:Name_@_initialized = false;
+unsigned @_LOWER:Name_@_initialized = 0;
 void init_@_LOWER:Name_@(void)
 {
    if (!@_LOWER:Name_@_initialized) {
-      @_LOWER:Name_@_initialized = true;
+      @_LOWER:Name_@_initialized = 1;
 @@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
       // Call user code startup function
       @_LOWER:Name_@_startup();
@@ -67,12 +68,14 @@ void init_@_LOWER:Name_@(void)
       // init function. Multiple calls are prevented by the "init" guard.
 @@END_IF@@
 @@TABLE@@
-      extern void init_@_LOWER:Sync_RIs_Parent_@(void);
-      init_@_LOWER:Sync_RIs_Parent_@();
+      if (0 == @_LOWER:Sync_RIs_Parent_@_initialized) {
+          init_@_LOWER:Sync_RIs_Parent_@();
+      }
 @@END_TABLE@@
 #ifdef __unix__
       puts ("[TASTE] Initialization completed for function @_Name_@");
 #endif
+      @_LOWER:Name_@_initialized = 2;
    }
 }
 @@-- For blackbox devices, don't generate the PI functions, they will be

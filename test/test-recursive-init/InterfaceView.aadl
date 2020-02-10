@@ -1,0 +1,178 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Function1
+PUBLIC
+
+WITH interfaceview::IV::Function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_done
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_done;
+
+SUBPROGRAM IMPLEMENTATION PI_done.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_done.others;
+
+SUBPROGRAM PI_plastic
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_plastic;
+
+SUBPROGRAM IMPLEMENTATION PI_plastic.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_plastic.others;
+
+SUBPROGRAM RI_doSth
+END RI_doSth;
+
+SUBPROGRAM IMPLEMENTATION RI_doSth.others
+END RI_doSth.others;
+
+SYSTEM Function1
+FEATURES
+  PI_done : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_done.others {
+    Taste::coordinates => "124563 79056";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "done";
+  };
+  PI_plastic : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_plastic.others {
+    Taste::coordinates => "109761 58581";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "plastic";
+  };
+  RI_doSth : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_doSth.others {
+    Taste::coordinates => "124563 63306";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "doSth";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function1;
+
+SYSTEM IMPLEMENTATION Function1.others
+END Function1.others;
+
+END interfaceview::IV::Function1;
+
+PACKAGE interfaceview::IV::Function2
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_doSth
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_doSth;
+
+SUBPROGRAM IMPLEMENTATION PI_doSth.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_doSth.others;
+
+SUBPROGRAM RI_done
+END RI_done;
+
+SUBPROGRAM IMPLEMENTATION RI_done.others
+END RI_done.others;
+
+SUBPROGRAM PI_shoot
+END PI_shoot;
+
+SUBPROGRAM IMPLEMENTATION PI_shoot.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_shoot.others;
+
+SYSTEM Function2
+FEATURES
+  PI_doSth : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_doSth.others {
+    Taste::coordinates => "151964 64093";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "doSth";
+  };
+  RI_done : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Function1::PI_done.others {
+    Taste::coordinates => "151964 78268";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "done";
+    Taste::labelInheritance => "true";
+  };
+  PI_shoot : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Function2::PI_shoot.others {
+    Taste::coordinates => "167714 60943";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::InterfaceName => "shoot";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Function2;
+
+SYSTEM IMPLEMENTATION Function2.others
+END Function2.others;
+
+END interfaceview::IV::Function2;
+
+PACKAGE interfaceview::IV
+-- { interfaceview::IV - 119367 99840 171806 127083 
+--This demo makes a RI call during initialization
+--This should be detected.
+--
+--Also the initialization should not go in loop due to the circular dependency of function1 and function2 
+--}
+PUBLIC
+
+WITH interfaceview::IV::Function1;
+WITH interfaceview::IV::Function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Function1 : SYSTEM interfaceview::IV::Function1::Function1.others {
+    Taste::coordinates => "96218 58581 124563 82518";
+  };
+  Function2 : SYSTEM interfaceview::IV::Function2::Function2.others {
+    Taste::coordinates => "151964 60943 179207 82517";
+  };
+CONNECTIONS
+  Function1_PI_done_Function2_RI_done : SUBPROGRAM ACCESS Function1.PI_done -> Function2.RI_done {
+    Taste::coordinates => "151964 78268 138893 78268 138893 79056 124563 79056";
+  };
+  Function2_PI_doSth_Function1_RI_doSth : SUBPROGRAM ACCESS Function2.PI_doSth -> Function1.RI_doSth {
+    Taste::coordinates => "124563 63306 138893 63306 138893 64093 151964 64093";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

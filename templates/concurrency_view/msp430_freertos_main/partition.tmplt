@@ -176,9 +176,7 @@ int main(void)
     @_LOWER:Bound_Functions_@_semaphore = xSemaphoreCreateMutex();
 @@END_TABLE@@
 
-@@TABLE@@
-    @_Thread_Names_@_global_queue = xQueueCreate(1, sizeof(struct QueueElement));
-@@END_TABLE@@
+@_Threads_@
 
 @@TABLE@@
     init_@_LOWER:Bound_Functions_@();

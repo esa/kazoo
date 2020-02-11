@@ -18,3 +18,4 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+    @_Thread_Name_@_global_queue = xQueueCreate(@_Queue_Size_@, sizeof(struct QueueElement));

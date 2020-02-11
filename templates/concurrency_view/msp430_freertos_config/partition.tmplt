@@ -35,7 +35,7 @@
 
 #define configAPPLICATION_ALLOCATED_HEAP        1
 #define configUSE_PREEMPTION                    1
-#define configMAX_PRIORITIES                    ( 5 )
+#define configMAX_PRIORITIES                    ( 10 )
 #define configCPU_CLOCK_HZ                      ( 8000000 )
 #define configTICK_RATE_HZ                      ( 1000 )
 #define configTOTAL_HEAP_SIZE                   ( 6 * 1024 )

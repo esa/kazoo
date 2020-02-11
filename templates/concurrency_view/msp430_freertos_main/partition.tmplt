@@ -167,6 +167,7 @@ void vApplicationSetupTimerInterrupt(void)
     TA0CTL |= MC_1;
 }
 
+
 // the main function
 int main(void)
 {
@@ -174,22 +175,10 @@ int main(void)
 
 @@TABLE@@
     @_LOWER:Bound_Functions_@_semaphore = xSemaphoreCreateMutex();
-@@END_TABLE@@
-
-@_Threads_@
-
-@@TABLE@@
     init_@_LOWER:Bound_Functions_@();
 @@END_TABLE@@
 
-@@TABLE@@
-    xTaskCreate(prv_@_Thread_Names_@Task,
-                "@_Thread_Names_@",
-                configMINIMAL_STACK_SIZE,
-                NULL,
-                1,
-                NULL);
-@@END_TABLE@@
+@_Threads_@
 
     vTaskStartScheduler();
 

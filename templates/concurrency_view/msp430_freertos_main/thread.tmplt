@@ -19,3 +19,10 @@
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
     @_Thread_Name_@_global_queue = xQueueCreate(@_Queue_Size_@, sizeof(struct QueueElement));
+
+    xTaskCreate(prv_@_Thread_Name_@Task,
+                "@_Thread_Name_@",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                @_Priority_@,
+                NULL);

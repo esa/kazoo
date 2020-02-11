@@ -144,23 +144,23 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        T.PI.Interface_To_Template  --  PI used to create the thread
-        & Assoc ("Thread_Name",        To_String (T.Name))
-        & Assoc ("Partition_Name",     To_String (T.Partition_Name))
-        & Assoc ("Entry_Port_Name",    To_String (T.Entry_Port_Name))
-        & Assoc ("RCM",                To_String (T.RCM))
-        & Assoc ("Need_Mutex",         T.Need_Mutex)
-        & Assoc ("Pro_Block_Name",     To_String (T.Protected_Block_Name))
-        & Assoc ("Node_Name",          To_String (T.Node.Value_Or
+        T.PI.Interface_To_Template      --  PI used to create the thread
+        & Assoc ("Thread_Name",         To_String (T.Name))
+        & Assoc ("Partition_Name",      To_String (T.Partition_Name))
+        & Assoc ("Entry_Port_Name",     To_String (T.Entry_Port_Name))
+        & Assoc ("RCM",                 To_String (T.RCM))
+        & Assoc ("Need_Mutex",          T.Need_Mutex)
+        & Assoc ("Pro_Block_Name",      To_String (T.Protected_Block_Name))
+        & Assoc ("Node_Name",           To_String (T.Node.Value_Or
           (Taste_Node'(Name => US (""), others => <>)).Name))
-        & Assoc ("Remote_Threads",     Remote_Thread)
-        & Assoc ("RI_Port_Names",      RI_Port_Name)
-        & Assoc ("Remote_PIs",         Remote_PI)
-        & Assoc ("Remote_PI_Sorts",    Remote_PI_Sort)
-        & Assoc ("Remote_PI_Modules",  Remote_PI_Module)
-        & Assoc ("Priority",           To_String (T.Priority))
-        & Assoc ("Dispatch_Offset_ms", To_String (T.Dispatch_Offset_Ms))
-        & Assoc ("Stack_Size_kb",      To_String (T.Stack_Size_In_Kb));
+        & Assoc ("Remote_Threads",      Remote_Thread)
+        & Assoc ("RI_Port_Names",       RI_Port_Name)
+        & Assoc ("Remote_PIs",          Remote_PI)
+        & Assoc ("Remote_PI_Sorts",     Remote_PI_Sort)
+        & Assoc ("Remote_PI_Modules",   Remote_PI_Module)
+        & Assoc ("Priority",            To_String (T.Priority))
+        & Assoc ("Dispatch_Offset_ms",  To_String (T.Dispatch_Offset_Ms))
+        & Assoc ("Stack_Size_In_Bytes", To_String (T.Stack_Size_In_Bytes));
    end To_Template;
 
    --  Generate the code by iterating over template folders

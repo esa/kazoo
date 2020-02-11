@@ -86,7 +86,7 @@ package TASTE.Concurrency_View is
          Node                 : Option_Node.Option;
          Priority,
          Dispatch_Offset_Ms,
-         Stack_Size_In_Kb     : Unbounded_String := Null_Unbounded_String;
+         Stack_Size_In_Bytes  : Unbounded_String := Null_Unbounded_String;
          PI                   : Taste_Interface; --  Contains period, etc.
       end record;
 

@@ -1046,6 +1046,7 @@ package body TASTE.Interface_View is
            & Assoc ("Language",        Language_Spelling (F));
 
          Result.Provided := Result.Provided & Interface_Tmplt;
+         --  Note: List of PIs include timers, while List_Of_(A)Sync do not.
          List_Of_PIs     := List_Of_PIs & Each.Name;
          case Each.RCM is
             when Cyclic_Operation | Sporadic_Operation =>

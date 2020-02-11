@@ -48,7 +48,7 @@
 #include "dataview-uniq.h"
 
 // reference to flag preventing calls to RIs during the startup transition
-extern bool @_LOWER:Name_@_initialized;
+extern unsigned @_LOWER:Name_@_initialized;
 // in case that happens, use system's abort function to crash the application
 extern void abort (void);
 

@@ -197,6 +197,9 @@ This template is identical for Skeleton and Glue subfolders.
 |-
 |Data_View
 |DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/makefile-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for makefile.tmplt, otherwise this template will not be processed.
@@ -284,6 +287,9 @@ This file is processed twice, first time for required interfaces of the function
 |-
 |Remote_Function_Names
 |DOCUMENTATION MISSING
+|-
+|Param_Basic_Types
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/makefile.tmplt ===
 This template is processed when makefile-filename.tmplt exists.
@@ -353,6 +359,21 @@ This file is processed for every node. The result of this file indicates if the 
 |DOCUMENTATION MISSING
 |-
 |Data_View
+|DOCUMENTATION MISSING
+|-
+|CPU_Family
+|DOCUMENTATION MISSING
+|-
+|CPU_Platform
+|DOCUMENTATION MISSING
+|-
+|CPU_Name
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|CPU_Classifier
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/thread.tmplt ===
@@ -489,6 +510,12 @@ This file is processed for every thread in every partition in every node.
 |-
 |Data_View
 |DOCUMENTATION MISSING
+|-
+|Param_Basic_Types
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/pi.tmplt ===
 The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
@@ -562,6 +589,9 @@ The result of every evaluation is joined to one string and passed as a parameter
 |-
 |Remote_Function_Names
 |DOCUMENTATION MISSING
+|-
+|Param_Basic_Types
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/ri.tmplt ===
 The template ri.tmplt is evaluated many times for every required interface.
@@ -628,6 +658,9 @@ The result of every evaluation is koined to one string and passed as a parameter
 |DOCUMENTATION MISSING
 |-
 |Remote_Function_Names
+|DOCUMENTATION MISSING
+|-
+|Param_Basic_Types
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/block.tmplt ===
@@ -776,11 +809,14 @@ This template is evaluated for every block.
 |-
 |Data_View
 |DOCUMENTATION MISSING
-|}
-And all the system configuration obtained from the command line:	
-Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
-Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
+|-
+|Target
+|DOCUMENTATION MISSING
+|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
 No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+
+
+
 
 
 === templates/concurrency_view/sub/partition.tmplt ===
@@ -893,6 +929,42 @@ This file is evaluated for every partition.
 |-
 |VP_Duration
 |DOCUMENTATION MISSING
+|-
+|Device_CPU
+|DOCUMENTATION MISSING
+|-
+|Device_Bus_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Init
+|DOCUMENTATION MISSING
+|-
+|Device_AADL_Pkg
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Module
+|DOCUMENTATION MISSING
+|-
+|Device_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Config
+|DOCUMENTATION MISSING
+|-
+|Device_Names
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_File
+|DOCUMENTATION MISSING
+|-
+|Device_Classifier
+|DOCUMENTATION MISSING
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Sort
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -943,6 +1015,42 @@ This file is evaluated for every node. The result of this file is saved to the f
 |DOCUMENTATION MISSING
 |-
 |CPU_Instance
+|DOCUMENTATION MISSING
+|-
+|Device_CPU
+|DOCUMENTATION MISSING
+|-
+|Device_Bus_Name
+|DOCUMENTATION MISSING
+|-
+|Device_AADL_Pkg
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Module
+|DOCUMENTATION MISSING
+|-
+|Device_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Device_Config
+|DOCUMENTATION MISSING
+|-
+|Device_Names
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_File
+|DOCUMENTATION MISSING
+|-
+|Device_Classifier
+|DOCUMENTATION MISSING
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_ASN1_Sort
+|DOCUMENTATION MISSING
+|-
+|Device_Init
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/system.tmplt ===
@@ -1109,8 +1217,14 @@ filesys.tmplt.
 |-
 |Data_View
 |DOCUMENTATION MISSING
-|}
-And all the system configuration obtained from the command line:	
-Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,	
-Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Device_Language
+|DOCUMENTATION MISSING
+|-
+|Device_Init
+|DOCUMENTATION MISSING
+|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
 No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

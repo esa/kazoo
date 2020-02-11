@@ -69,6 +69,79 @@ package body TASTE.Deployment_View is
       return Root_System (Root_Instance);
    end Initialize;
 
+   function Device_Driver_Name (Driver : Taste_Device_Driver) return String is
+      Dot : constant Natural := Index (Driver.Name, ".");
+      Name : constant String := To_String (Driver.Name);
+      Device_Name : constant String :=
+        (if Dot > 0
+           then Name (Name'First .. Dot - 1)
+           else "ERROR_MALFORMED_DEVICE_NAME");
+   begin
+         return Device_Name;
+   end Device_Driver_Name;
+
+   function Drivers_To_Template (Drivers : Taste_Drivers.Vector)
+                                return Translate_Set is
+      Device_Names,
+      Device_Package_Names,
+      Device_Classifiers,
+      Device_Associated_Processor_Names,
+      Device_Configurations,
+      Device_Accessed_Bus_Names,
+      Device_Accessed_Port_Names,
+      Device_Init_Entrypoints,
+      Device_Init_Languages,
+      Device_ASN1_Filenames,
+      Device_ASN1_Typenames,
+      Device_ASN1_Modules : Vector_Tag;
+   begin
+      for Driver of Drivers loop
+         declare
+         begin
+            Device_Names := Device_Names & Driver.Device_Driver_Name;
+            Device_Package_Names := Device_Package_Names
+              & Driver.Package_Name;
+            Device_Classifiers := Device_Classifiers
+              & Driver.Device_Classifier;
+            Device_Associated_Processor_Names :=
+              Device_Associated_Processor_Names
+              & Driver.Associated_Processor_Name;
+            Device_Configurations := Device_Configurations
+              & Driver.Device_Configuration;
+            Device_Accessed_Bus_Names :=  Device_Accessed_Bus_Names
+              & Driver.Accessed_Bus_Name;
+            Device_Accessed_Port_Names := Device_Accessed_Port_Names
+              & Driver.Accessed_Port_Name;
+            Device_ASN1_Filenames := Device_ASN1_Filenames
+              & Driver.ASN1_Filename;
+            Device_ASN1_Typenames := Device_ASN1_Typenames
+              & Driver.ASN1_Typename;
+            Device_ASN1_Modules := Device_ASN1_Modules
+              & Driver.ASN1_Module;
+            Device_Init_Entrypoints := Device_Init_Entrypoints
+              & Driver.Init_Function;
+            Device_Init_Languages := Device_Init_Languages
+              & Driver.Init_Language;
+         end;
+      end loop;
+
+      return +Assoc ("Device_Names", Device_Names)
+        & Assoc ("Device_AADL_Pkg", Device_Package_Names)
+        & Assoc ("Device_Classifier", Device_Classifiers)
+        & Assoc ("Device_CPU",
+                 Device_Associated_Processor_Names)
+        & Assoc ("Device_Config", Device_Configurations)
+        & Assoc ("Device_Bus_Name",
+                 Device_Accessed_Bus_Names)
+        & Assoc ("Device_Port_Name",
+                 Device_Accessed_Port_Names)
+        & Assoc ("Device_ASN1_File", Device_ASN1_Filenames)
+        & Assoc ("Device_ASN1_Sort", Device_ASN1_Typenames)
+        & Assoc ("Device_ASN1_Module", Device_ASN1_Modules)
+        & Assoc ("Device_Init", Device_Init_Entrypoints)
+        & Assoc ("Device_Language", Device_Init_Languages);
+   end Drivers_To_Template;
+
    ---------------------------
    -- AST Builder Functions --
    ---------------------------
@@ -209,10 +282,37 @@ package body TASTE.Deployment_View is
          Accessed_Port              : Node_Id;
          Device_Implementation      : Node_Id;
          Configuration_Data         : Node_Id;
+         --  Init_Data is the subprogram containing the initialization function
+         Driver_Init_Data           : Node_Id;
       begin
          Result.Name := US (Get_Name_String (Name (Identifier (CI))));
 
+         --  Get_Implementation returns the "abstract driver" part of the
+         --  device, which comes from the "Device_Driver" property of the
+         --  instance
          Device_Implementation := Get_Implementation (CI);
+
+         --  Devices have a subprogram pointed to by this property:
+         --  Initialize_Entrypoint => classifier (Native_UART::Initialize);
+         --  This subprorgam has two properties of interest, e.g.:
+         --     Source_Name => "PolyORB_HI_Drivers_Native_UART.Initialize";
+         --     Source_Language => (Ada);
+         Driver_Init_Data := Get_Classifier_Property
+           (CI, Get_String_Name ("initialize_entrypoint"));
+
+         if Driver_Init_Data /= No_Node and then
+           Is_Defined_Property (Driver_Init_Data, "source_name")
+         then
+            Result.Init_Function :=
+              US (Get_Name_String (Get_String_Property
+                  (Driver_Init_Data, "source_name")));
+         else
+            Result.Init_Function := US ("Error: driver init function missing");
+         end if;
+         Result.Init_Language := US (Get_Language (Driver_Init_Data));
+
+         Put_Debug ("Driver init: " & To_String (Result.Init_Function));
+         Put_Debug ("Driver Language: " & To_String (Result.Init_Language));
 
          if Device_Implementation /= No_Node and then
             Is_Defined_Property (Device_Implementation,
@@ -740,6 +840,10 @@ package body TASTE.Deployment_View is
                       & To_String (Driver.ASN1_Typename));
             Put_Line (Output, "    |_ ASN.1 Module  : "
                       & To_String (Driver.ASN1_Module));
+            Put_Line (Output, "    |_ Init function : "
+                      & To_String (Driver.Init_Function));
+            Put_Line (Output, "    |_ Language : "
+                      & To_String (Driver.Init_Language));
          end loop;
       end loop;
    end Dump_Nodes;

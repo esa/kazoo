@@ -13,6 +13,7 @@ with System.Assertions,
      GNAT.Command_Line,
      Errors,
      Locations,
+     Ocarina.AADL_Values,
      Ocarina.Namet,
      Ocarina.Configuration,
      Ocarina.Files,
@@ -31,6 +32,13 @@ use Ada.Text_IO,
     Locations,
     Ocarina.Namet,
     Ocarina;
+
+--  for the parsing of ConcurrencyView_Properties.aadl:
+--  with ocarina.BE_AADL; use ocarina.BE_AADL;
+with Ocarina.ME_AADL.AADL_Tree.Nodes;
+with Ocarina.ME_AADL.AADL_Tree.Nutils;
+use Ocarina.ME_AADL.AADL_Tree.Nodes;
+use Ocarina.ME_AADL.AADL_Tree.Nutils;
 
 package body TASTE.AADL_Parser is
 
@@ -166,6 +174,23 @@ package body TASTE.AADL_Parser is
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;
+
+      --  If present, try and parse ConcurrencyView_Properties.aadl
+      Set_Str_To_Name_Buffer ("ConcurrencyView_Properties.aadl");
+      File_Name := Ocarina.Files.Search_File (Name_Find);
+      if File_Name = No_Name then
+         Put_Debug ("No ConcurrencyView_Properties.aadl file found");
+      else
+         Put_Info ("Parsing ConcurrencyView_Properties.aadl");
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+
+         Concurrency_Properties_Root := Ocarina.Parser.Parse
+           (AADL_Language, Concurrency_Properties_Root, File_Descr);
+         if Concurrency_Properties_Root = No_Node then
+            raise AADL_Parser_Error with
+              "Error parsing ConcurrencyView_Properties.aadl";
+         end if;
+      end if;
       return Cfg;
    end Initialize;
 
@@ -209,14 +234,13 @@ package body TASTE.AADL_Parser is
       end if;
 
       Ocarina.Configuration.Reset_Modules;
-      Ocarina.Reset;
+      --  Ocarina.Reset;  (No: This make the CV_Properties analysis fail)
 
       if Result.Configuration.Check_Data_View then
          raise Quit_Taste;
       end if;
 
       Semantic_Check.Check_Model (Result);
-
       return Result;
    exception
       when Error : AADL_Parser_Error
@@ -487,7 +511,10 @@ package body TASTE.AADL_Parser is
                         Protected_Block_name => Block.Ref_Function.Name,
                         Node                 => Block.Node,
                         PI                   => PI,
-                        Output_Ports         => Get_Output_Ports (Model, F));
+                        Output_Ports         => Get_Output_Ports (Model, F),
+                        Priority             => US ("1"),
+                        Dispatch_Offset_Ms   => US ("0"),
+                        Stack_Size_In_Kb     => US ("50"));
                   begin
                      CV.Nodes
                        (Node_Name).Partitions (Partition_Name).Threads.Include
@@ -960,5 +987,190 @@ package body TASTE.AADL_Parser is
       end loop;
       Model.Deployment_View.Replace_Element (DV);
    end Preprocessing;
+
+   procedure Add_CV_Properties (Model : in out TASTE_Model) is
+      Nodes,                    --  To iterate on lists of nodes
+      AADL_Package,
+      System_Impl : Node_Id := No_Node;
+      procedure Report_Error is
+      begin
+         Put_Info ("No valid user-defined Concurrency View properties found:");
+         Put_Info ("Task priorities, offset and stack size will use default");
+         Put_Info ("values. IMPORTANT: you should set them in the editor!");
+      end Report_Error;
+   begin
+      if Concurrency_Properties_Root = No_Node
+        or else Kind (Concurrency_Properties_Root) /= K_AADL_Specification
+        or else Is_Empty (Declarations (Concurrency_Properties_Root))
+      then
+         Put_Debug ("CV_Properties Error 1");
+         Report_Error;
+         return;
+      end if;
+      --  AADL Unparser (add with/use Ocarina.BE_AADL):
+      --  Generate_AADL_Model (Concurrency_Properties_Root, False);
+      Put_Info ("Analysing user-defined Concurrency View properties");
+
+      Nodes := First_Node (Declarations (Concurrency_Properties_Root));
+
+      --  First look for the package declaration
+      while Present (Nodes) loop
+         case Kind (Nodes) is
+            when K_Package_Specification => AADL_Package := Nodes;
+            when others                  => null;
+         end case;
+         Nodes := Next_Node (Nodes);
+      end loop;
+
+      if AADL_Package = No_Node then
+         Put_Debug ("CV_Properties Error 2");
+         Report_Error;
+         return;
+      end if;
+
+      --  Then look for the system implementation
+      Nodes := First_Node (Declarations (AADL_Package));
+      while Present (Nodes) loop
+         case Kind (Nodes) is
+            when K_Component_Implementation => System_Impl := Nodes;
+            when others                     => null;
+         end case;
+         Nodes := Next_Node (Nodes);
+      end loop;
+      if System_Impl = No_Node or else Is_Empty (ATN.Properties (System_Impl))
+      then
+         Put_Debug ("CV_Properties Error 3");
+         Report_Error;
+         return;
+      end if;
+
+      Nodes := First_Node (ATN.Properties (System_Impl));
+      while Present (Nodes) loop --  Iterate over the properties
+         declare
+            Prop_Val   : Node_Id := Property_Association_Value (Nodes);
+            Applies_To : constant List_Id := Applies_To_Prop (Nodes);
+            Paths      : Node_Id;   --  property applies to path
+            Partition,
+            Thread     : Unbounded_String := Null_Unbounded_String;
+            --  Prop_Name shall be Stack_Size, Priority, or Dispatch_Offset
+            Prop_Name  : constant String :=
+              (Get_Name_String (Display_Name (Identifier (Nodes))));
+
+            Number, Unit : Node_Id;
+            Number_Str,
+            Unit_Str     : Unbounded_String := US ("");
+            Found        : Boolean := False;
+         begin
+            if Single_Value (Prop_Val) = No_Node then
+               Put_Debug ("CV_Properties Error 4 - " & Prop_Name);
+               Report_Error;
+               return;
+            end if;
+            if (Prop_Name /= "Stack_Size" and Prop_Name /= "Priority"
+              and Prop_Name /= "Dispatch_Offset") or else Is_Empty (Applies_To)
+            then
+               Put_Debug ("Discarding unsupported CV Property: " & Prop_Name);
+               goto Next_Property;
+            end if;
+
+            --  Recovering the property value - they are all signed numbers
+            --  Check Ocarina-be_aadl-properties-values.adb for info
+            Prop_Val := Single_Value (Prop_Val);
+
+            if Kind (Prop_Val) /= K_Signed_AADLNumber then
+               Put_Debug ("CV_Properties Error 5 - " & Prop_Name);
+               Report_Error;
+               return;
+            end if;
+
+            --  OK We have the value and the unit:
+            Number := Number_Value (Prop_Val);
+            Number_Str := US (AADL_Values.Image (Value (Number)));
+            Unit   := Unit_Identifier (Prop_Val);
+            if Present (Unit) then
+               Unit_Str := US (Get_Name_String (Display_Name (Unit)));
+            end if;
+
+            --  Check that the units are the expected ones (kb/ms)
+            if (Prop_Name = "Stack_Size" and then Unit_Str /= "kbyte")
+              or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
+            then
+               Put_Error ("Unsupported units used in "
+                          & "ConcurrencyView_Properties.aadl. Stack_Size unit "
+                          & "is 'kbyte' and Dispatch_Offset is 'ms'");
+               return;
+            end if;
+
+            --  Last we find the partition and thread it applies to.
+            --  (Check ocarina-be_aadl-properties.adb)
+            Paths := First_Node (Applies_To);
+            while Present (Paths) loop
+               declare
+                  Contained_Elts : constant List_Id := List_Items (Paths);
+                  List_Node      : Node_Id :=
+                    (if not Is_Empty (Contained_Elts)
+                     then First_Node (Contained_Elts)
+                     else No_Node);
+               begin
+                  --  The following gets the path Partition.Thread_Name
+                  --  If a longer path is needed a refactoring must be done
+                  while Present (List_Node) loop
+                     --  Kind (List_Node) = K_Identifier
+                     if Partition = Null_Unbounded_String then
+                        Partition := US (Get_Name_String
+                          (Display_Name (List_Node)));
+                     else
+                        Thread := US
+                          (Get_Name_String (Display_Name (List_Node)));
+                     end if;
+                     exit when Thread /= Null_Unbounded_String;
+                     List_Node := Next_Node (List_Node);
+                  end loop;
+               end;
+
+               --  We completed the parsing of one property
+               --  Prop_Name = Number_Str Unit_Str applies to Partition Thread
+               Put_Debug (Prop_Name & " := " & To_String (Number_str) & " "
+                          & To_String (Unit_Str) & " applies to "
+                          & To_String (Partition) & "." & To_String (Thread));
+
+               --  Checking in the generated concurrency view if the
+               --  partition and thread actually exist, and apply the property
+               Found := False;
+               for Node of Model.Concurrency_View.Nodes loop
+                  exit when Found;
+                  if Node.Partitions.Contains (To_String (Partition))
+                    and then Node.Partitions (To_String (Partition))
+                      .Threads.Contains (To_String (Thread))
+                  then
+                     if Prop_Name = "Priority" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Priority := Number_Str;
+                     elsif Prop_Name = "Stack_Size" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Stack_Size_In_Kb :=
+                            Number_Str;
+                     elsif Prop_Name = "Dispatch_Offset" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Thread)).Dispatch_Offset_Ms :=
+                            Number_Str;
+                     end if;
+                     Found := True;
+                  end if;
+               end loop;
+               if not Found then
+                  Put_Info ("The ConcurrencyView_Properties.aadl file "
+                            & "references non-existing partition/thread : "
+                            & To_String (Partition) & "."
+                            & To_String (Thread));
+               end if;
+
+               Paths := Next_Node (Paths);
+            end loop;
+         end;
+         <<Next_Property>>
+         Nodes := Next_Node (Nodes);
+      end loop;
+   end Add_CV_Properties;
 
 end TASTE.AADL_Parser;

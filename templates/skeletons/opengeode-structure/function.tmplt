@@ -2,11 +2,11 @@
 @@--
 @@-- @_Name_@                : The name of the function
 @@-- @_Language_@            : The implementation language
-@@-- @_List_Of_PIs_@         : List of all Provided Interfaces (just names)
+@@-- @_List_Of_PIs_@         : List of all Provided Interfaces, including timers
 @@-- @_List_Of_RIs_@         : List of all Required Interfaces (just names)
 @@-- @_List_Of_Sync_PIs@     : List of synchronous Provided Interfaces
 @@-- @_List_Of_Sync_RIs@     : List of synchronous Required Interfaces
-@@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces
+@@-- @_List_Of_ASync_PIs@    : List of asynchronous Provided Interfaces, excluding timers
 @@-- @_List_Of_ASync_RIs@    : List of asynchronous Required Interfaces
 @@-- @_ASN1_Modules_@        : List of ASN.1 Modules names
 @@-- @_ASN1_Files_@          : List of ASN.1 Files with path
@@ -38,17 +38,22 @@ use Datamodel;
 
 system @_CAPITALIZE:Name_@;
 
-@@TABLE@@
+@@TABLE'TERSE@@
    @_STRIP:Provided_Interfaces_@;
 @@END_TABLE@@
 
-@@TABLE@@
+@@TABLE'TERSE@@
    @_STRIP:Required_Interfaces_@;
 
 @@END_TABLE@@
    channel c
 @@IF@@ @_EXIST:List_Of_ASync_PIs_@
-      from env to @_CAPITALIZE:Name_@ with @_List_Of_PIs_@;
+   @@IF@@ @_EXIST:List_Of_Sync_PIs_@
+      @@-- dont use @_List_Of_PIs_@ because it includes timers
+      from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@, @_List_Of_Sync_PIs_@;
+   @@ELSE@@
+      from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@;
+   @@END_IF@@
 @@END_IF@@
 @@IF@@ @_EXIST:List_Of_ASync_RIs_@
       from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@;
@@ -59,7 +64,12 @@ system @_CAPITALIZE:Name_@;
 
       signalroute r
 @@IF@@ @_EXIST:List_Of_ASync_PIs_@
-         from env to @_CAPITALIZE:Name_@ with @_List_Of_PIs_@;
+   @@IF@@ @_EXIST:List_Of_Sync_PIs_@
+      @@-- dont use @_List_Of_PIs_@ because it includes timers
+      from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@, @_List_Of_Sync_PIs_@;
+   @@ELSE@@
+      from env to @_CAPITALIZE:Name_@ with @_List_Of_ASync_PIs_@;
+   @@END_IF@@
 @@END_IF@@
 @@IF@@ @_EXIST:List_Of_ASync_RIs_@
       from @_CAPITALIZE:Name_@ to env with @_List_Of_ASync_RIs_@;

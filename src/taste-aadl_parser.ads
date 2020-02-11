@@ -20,9 +20,14 @@ use Ada.Strings.Unbounded,
     TASTE.Data_View;
 
 package TASTE.AADL_Parser is
-   Interface_Root  : Node_Id := No_Node;
-   Deployment_Root : Node_Id := No_Node;
-   Dataview_Root   : Node_Id := No_Node;
+   Interface_Root,
+   Deployment_Root,
+   Dataview_Root : Node_Id := No_Node;
+
+   --  ConcurrencyView_Properties.aadl is parsed but not analyzed,
+   --  as it contains reference to the system threads which have not
+   --  been created yet. The backend templates get access to the values.
+   Concurrency_Properties_Root : Node_Id := No_Node;
 
    --  Definition of the data model of a TASTE system
    type TASTE_Model is tagged
@@ -44,6 +49,15 @@ package TASTE.AADL_Parser is
    --  Create the concurrency view and apply the templates for code generation
    procedure Add_Concurrency_View (Model : in out TASTE_Model)
      with Pre => not Model.Deployment_View.Is_Empty;
+
+   --  Parse the ConcurrencyView_Properties.aadl file to extract user-defined
+   --  thread priorities, dispatch offset, stack sizes. Parsing is done at
+   --  AST level only, the model is not semantically checked because at this
+   --  point in the parsing the actual set of thread has not been computed,
+   --  so the AADL file references non-existing artefacts. There can be
+   --  reference to threads that will not be created at all, in which case
+   --  they can be ignored or reported to the user for information.
+   procedure Add_CV_Properties (Model : in out TASTE_Model);
 
    function Find_Binding (Model : TASTE_Model;
                           F     : Unbounded_String)

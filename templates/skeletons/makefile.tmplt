@@ -81,7 +81,9 @@ air:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentvie
 
 # Rule to invoke Ocarina (generation of POHI middleware code)
 build/deploymentview_final/Makefile:	build/main.aadl ${DATAVIEW_AADLV2} ../ConcurrencyView_Properties.aadl
-	taste-patch-cv-properties.py build/system.aadl ../ConcurrencyView_Properties.aadl
+        # patching the cv properties is not needed anymore, as kazoo parses
+        # natively the ConcurrencyView_Properties.aadl file now
+	#taste-patch-cv-properties.py build/system.aadl ../ConcurrencyView_Properties.aadl
 	cd build && ocarina -x main.aadl
 
 @@-- ConcurrencyView_Properties is normally always present (even if empty) as

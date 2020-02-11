@@ -71,15 +71,33 @@ SemaphoreHandle_t @_LOWER:Bound_Functions_@_semaphore;
 QueueHandle_t @_Thread_Names_@_global_queue = NULL;
 @@END_TABLE@@
 
-
 // heap declaration
 __attribute__ ((persistent)) uint8_t ucHeap[configTOTAL_HEAP_SIZE] = { 0 };
 
 // function to setup hardware
 static void prvSetupHardware()
 {
-    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    // stop watchdog timer
+    WDTCTL = WDTPW | WDTHOLD;
+
     PM5CTL0 &= ~LOCKLPM5;
+
+    // Unlock clock registers
+    CSCTL0_H = CSKEY >> 8;
+
+    // Set DCO to 8MHz
+    CSCTL1 = DCOFSEL_3 | DCORSEL;
+
+    // select LFXTCLK for ACLK
+    // select DCO for SMCLK
+    // select DCO for MCLK
+    CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK;
+
+    // Set all dividers
+    CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;
+
+    // Lock clock registers
+    CSCTL0_H = 0;
 }
 
 // memory allocations error handler

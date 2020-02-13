@@ -77,7 +77,6 @@ project @_CAPITALIZE:Name_@_Zynq_RTEMS is
 @@IF@@ @_Distributed_System_@
            "-D__PO_HI_USE_TRANSPORT",
 @@END_IF@@
-           "-DSTATIC= ",
            "-Wstrict-prototypes",
            "-Wnested-externs",
            "-Wl,-gc-sections");

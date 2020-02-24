@@ -242,6 +242,9 @@ package body TASTE.Concurrency_View is
                Input_Port_Thread_Name  : Vector_Tag;
                Output_Port_Names,
                Output_Port_Type_Name   : Vector_Tag;
+               Out_Port_Remote_Partition : Vector_Tag;
+               Out_Port_Remote_Function : Vector_Tag;
+               Out_Port_Remote_Port_Name : Vector_Tag;
                Part_Out_Port_Names,  --  there can be multiple threads
                Connected_Threads : Vector_Tag;  -- on one partition outport
 
@@ -275,6 +278,12 @@ package body TASTE.Concurrency_View is
                        & Each.Port_Name;
                      Connected_Threads := Connected_Threads & T;
                   end loop;
+                  Out_Port_Remote_Partition := Out_Port_Remote_Partition
+                    & Each.Remote_Partition_Name;
+                  Out_Port_Remote_Port_Name := Out_Port_Remote_Port_Name
+                    & Each.Remote_Port_Name;
+                  Out_Port_Remote_Function := Out_Port_Remote_Function
+                    & Each.Remote_Function_Name;
                end loop;
 
                for T of Partition.Threads loop
@@ -479,6 +488,12 @@ package body TASTE.Concurrency_View is
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)
                  & Assoc ("Out_Port_Names",       Output_Port_Names)
                  & Assoc ("Out_Port_Type_Name",   Output_Port_Type_Name)
+                 & Assoc ("Out_Port_Remote_Partition",
+                          Out_Port_Remote_Partition)
+                 & Assoc ("Out_Port_Remote_Port_Name",
+                          Out_Port_Remote_Port_Name)
+                 & Assoc ("Out_Port_Remote_Function",
+                          Out_Port_Remote_Function)
                  & Assoc ("Part_Out_Port_Name",   Part_Out_Port_Names)
                  & Assoc ("Connected_Threads",    Connected_Threads)
                  & Assoc ("Thread_Src_Name",      Thread_Src_Name)

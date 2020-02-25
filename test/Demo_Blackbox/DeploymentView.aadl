@@ -1,79 +1,82 @@
 ---------------------------------------------------
--- AADL2.0
--- TASTE
--- (c)Ellidiss Technologies
+-- AADL2.2
+-- TASTE type deploymentview
 -- 
+-- generated code: do not edit
 ---------------------------------------------------
 
-PACKAGE deploymentview::DV::obj89
+PACKAGE deploymentview::DV::Node1
 PUBLIC
 
 WITH Taste;
 WITH Deployment;
 WITH TASTE_DV_Properties;
-PROCESS demo_driver
-END demo_driver;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS demo
+END demo;
 
-PROCESS IMPLEMENTATION demo_driver.others
-END demo_driver.others;
+PROCESS IMPLEMENTATION demo.others
+END demo.others;
 
-END deploymentview::DV::obj89;
+END deploymentview::DV::Node1;
 
 PACKAGE deploymentview::DV
 PUBLIC
 
+WITH interfaceview::IV::Caller_in_Ada;
+WITH interfaceview::IV::BlackBox;
+WITH interfaceview::IV::Caller_in_C;
 WITH ocarina_processors_x86;
-WITH deploymentview::DV::obj89;
+WITH deploymentview::DV::Node1;
 WITH Taste;
 WITH Deployment;
 WITH interfaceview::IV;
 WITH TASTE_DV_Properties;
-SYSTEM obj89
-END obj89;
+SYSTEM Node1
+END Node1;
 
-SYSTEM IMPLEMENTATION obj89.others
+SYSTEM IMPLEMENTATION Node1.others
 SUBCOMPONENTS
-  IV_Caller_in_C : SYSTEM interfaceview::IV::Caller_in_C.others {
-    Taste::coordinates => "845 443 1395 599";
-    Taste::FunctionName => "Caller_in_C";
-  };
-  IV_Caller_in_Ada : SYSTEM interfaceview::IV::Caller_in_Ada.others {
-    Taste::coordinates => "1522 439 2637 630";
+  IV_Caller_in_Ada : SYSTEM interfaceview::IV::Caller_in_Ada::Caller_in_Ada.others {
     Taste::FunctionName => "Caller_in_Ada";
   };
-  IV_BlackBox : SYSTEM interfaceview::IV::BlackBox.others {
-    Taste::coordinates => "1076 724 1996 1165";
+  IV_BlackBox : SYSTEM interfaceview::IV::BlackBox::BlackBox.others {
     Taste::FunctionName => "BlackBox";
   };
-  demo_driver : PROCESS deploymentview::DV::obj89::demo_driver.others {
-    Taste::coordinates => "785 345 2688 1180";
+  IV_Caller_in_C : SYSTEM interfaceview::IV::Caller_in_C::Caller_in_C.others {
+    Taste::FunctionName => "Caller_in_C";
+  };
+  demo : PROCESS deploymentview::DV::Node1::demo.others {
+    Taste::coordinates => "820 758 2044 1358";
     Deployment::Port_Number => 0;
   };
-  obj99 : PROCESSOR ocarina_processors_x86::x86.linux {
-    Taste::coordinates => "722 211 2801 1211";
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "667 587 2197 1444";
   };
 PROPERTIES
-  Taste::APLC_Binding => (reference (demo_driver)) APPLIES TO IV_Caller_in_C;
-  Taste::APLC_Binding => (reference (demo_driver)) APPLIES TO IV_Caller_in_Ada;
-  Taste::APLC_Binding => (reference (demo_driver)) APPLIES TO IV_BlackBox;
-  Actual_Processor_Binding => (reference (obj99)) APPLIES TO demo_driver;
-END obj89.others;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Caller_in_Ada;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_BlackBox;
+  Taste::APLC_Binding => (reference (demo)) APPLIES TO IV_Caller_in_C;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO demo;
+END Node1.others;
 
 SYSTEM deploymentview
 END deploymentview;
 
 SYSTEM IMPLEMENTATION deploymentview.others
 SUBCOMPONENTS
-  obj89 : SYSTEM obj89.others {
-    Taste::coordinates => "485 96 2853 1243";
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "476 342 2388 1566";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 END deploymentview.others;
 
 PROPERTIES
   Taste::coordinates => "0 0 2970 2100";
-  Taste::version => "1.3.17";
+  Taste::version => "2.3";
   Taste::interfaceView => "InterfaceView.aadl";
-  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
 END deploymentview::DV;
 

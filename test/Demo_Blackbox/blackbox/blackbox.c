@@ -5,7 +5,7 @@
 #include <string.h>
 
 
-void init_blackbox()
+void blackbox_startup()
 {   
     printf ("[blackbox] startup\n");
 }

@@ -516,6 +516,15 @@ This file is processed for every thread in every partition in every node.
 |-
 |Target
 |DOCUMENTATION MISSING
+|-
+|Priority
+|DOCUMENTATION MISSING
+|-
+|Dispatch_Offset_ms
+|DOCUMENTATION MISSING
+|-
+|Stack_Size_In_Bytes
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/pi.tmplt ===
 The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
@@ -812,8 +821,8 @@ This template is evaluated for every block.
 |-
 |Target
 |DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|}No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+
 
 
 
@@ -1226,5 +1235,4 @@ filesys.tmplt.
 |-
 |Device_Init
 |DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|}No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)

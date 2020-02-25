@@ -144,23 +144,23 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        T.PI.Interface_To_Template  --  PI used to create the thread
-        & Assoc ("Thread_Name",        To_String (T.Name))
-        & Assoc ("Partition_Name",     To_String (T.Partition_Name))
-        & Assoc ("Entry_Port_Name",    To_String (T.Entry_Port_Name))
-        & Assoc ("RCM",                To_String (T.RCM))
-        & Assoc ("Need_Mutex",         T.Need_Mutex)
-        & Assoc ("Pro_Block_Name",     To_String (T.Protected_Block_Name))
-        & Assoc ("Node_Name",          To_String (T.Node.Value_Or
+        T.PI.Interface_To_Template      --  PI used to create the thread
+        & Assoc ("Thread_Name",         To_String (T.Name))
+        & Assoc ("Partition_Name",      To_String (T.Partition_Name))
+        & Assoc ("Entry_Port_Name",     To_String (T.Entry_Port_Name))
+        & Assoc ("RCM",                 To_String (T.RCM))
+        & Assoc ("Need_Mutex",          T.Need_Mutex)
+        & Assoc ("Pro_Block_Name",      To_String (T.Protected_Block_Name))
+        & Assoc ("Node_Name",           To_String (T.Node.Value_Or
           (Taste_Node'(Name => US (""), others => <>)).Name))
-        & Assoc ("Remote_Threads",     Remote_Thread)
-        & Assoc ("RI_Port_Names",      RI_Port_Name)
-        & Assoc ("Remote_PIs",         Remote_PI)
-        & Assoc ("Remote_PI_Sorts",    Remote_PI_Sort)
-        & Assoc ("Remote_PI_Modules",  Remote_PI_Module)
-        & Assoc ("Priority",           To_String (T.Priority))
-        & Assoc ("Dispatch_Offset_ms", To_String (T.Dispatch_Offset_Ms))
-        & Assoc ("Stack_Size_kb",      To_String (T.Stack_Size_In_Kb));
+        & Assoc ("Remote_Threads",      Remote_Thread)
+        & Assoc ("RI_Port_Names",       RI_Port_Name)
+        & Assoc ("Remote_PIs",          Remote_PI)
+        & Assoc ("Remote_PI_Sorts",     Remote_PI_Sort)
+        & Assoc ("Remote_PI_Modules",   Remote_PI_Module)
+        & Assoc ("Priority",            To_String (T.Priority))
+        & Assoc ("Dispatch_Offset_ms",  To_String (T.Dispatch_Offset_Ms))
+        & Assoc ("Stack_Size_In_Bytes", To_String (T.Stack_Size_In_Bytes));
    end To_Template;
 
    --  Generate the code by iterating over template folders
@@ -227,7 +227,8 @@ package body TASTE.Concurrency_View is
                Thread_Has_Param : Vector_Tag;
                Block_Names,
                Block_Languages,
-               Block_Instance_Of : Vector_Tag;
+               Block_Instance_Of,
+               Block_FPGAConf  : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -357,6 +358,8 @@ package body TASTE.Concurrency_View is
                      Unpro_PI_Tag : Unbounded_String;
                      RI_Tag       : Unbounded_String;
                      Result       : Unbounded_String;
+                     Property_Names,
+                     Property_Values : Vector_Tag;
 
                      --  Optionally generate block code in separate files
                      --  (if fileblock.tmplt present and contains a filename)
@@ -379,6 +382,23 @@ package body TASTE.Concurrency_View is
                        & TASTE.Backend.Language_Spelling (B.Ref_Function);
                      Block_Instance_Of := Block_Instance_Of
                        & B.Ref_Function.Instance_Of.Value_Or (US (""));
+
+                     for TASTE_property of B.Ref_Function.User_Properties loop
+                        Property_Names := Property_Names & TASTE_property.Name;
+                        Property_Values := Property_Values
+                            & TASTE_property.Value;
+                        if TASTE_property.Name =
+                            "TASTE_IV_Properties::FPGA_Configurations"
+                        then
+                           Block_FPGAConf := Block_FPGAConf &
+                                TASTE_property.Value;
+                        end if;
+                     end loop;
+
+                     if Size (Block_FPGAConf) /= Size (Block_Names)
+                     then
+                        Block_FPGAConf := Block_FPGAConf & "";
+                     end if;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
                         Document_Template
@@ -412,7 +432,9 @@ package body TASTE.Concurrency_View is
                                 Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
-                       & Assoc ("Required",        RI_Tag);
+                       & Assoc ("Required",        RI_Tag)
+                       & Assoc ("Property_Names",        Property_Names)
+                       & Assoc ("Property_Values",        Property_Values);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
                      Document_Template
@@ -451,6 +473,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Names",          Block_Names)
                  & Assoc ("Block_Languages",      Block_Languages)
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
+                 & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)

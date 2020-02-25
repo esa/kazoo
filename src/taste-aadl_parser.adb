@@ -514,7 +514,7 @@ package body TASTE.AADL_Parser is
                         Output_Ports         => Get_Output_Ports (Model, F),
                         Priority             => US ("1"),
                         Dispatch_Offset_Ms   => US ("0"),
-                        Stack_Size_In_Kb     => US ("50"));
+                        Stack_Size_In_Bytes  => US ("50000"));
                   begin
                      CV.Nodes
                        (Node_Name).Partitions (Partition_Name).Threads.Include
@@ -1092,13 +1092,24 @@ package body TASTE.AADL_Parser is
             end if;
 
             --  Check that the units are the expected ones (kb/ms)
-            if (Prop_Name = "Stack_Size" and then Unit_Str /= "kbyte")
+            if (Prop_Name = "Stack_Size"
+                and then (Unit_Str /= "kbyte" and Unit_Str /= "byte"))
               or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
             then
                Put_Error ("Unsupported units used in "
-                          & "ConcurrencyView_Properties.aadl. Stack_Size unit "
-                          & "is 'kbyte' and Dispatch_Offset is 'ms'");
+                          & "ConcurrencyView_Properties.aadl. Stack_Size in "
+                          & "'byte' or 'kbyte' and Dispatch_Offset in 'ms'");
                return;
+            end if;
+
+            if Prop_Name = "Stack_Size" and Unit_Str = "kbytes" then
+               --  Convert from kbytes to bytes
+               declare
+                  Value_In_Bytes : constant Integer :=
+                    Integer'Value (To_String (Number_Str)) * 1000;
+               begin
+                  Number_Str := US (Value_In_Bytes'Img);
+               end;
             end if;
 
             --  Last we find the partition and thread it applies to.
@@ -1148,7 +1159,7 @@ package body TASTE.AADL_Parser is
                           .Threads (To_String (Thread)).Priority := Number_Str;
                      elsif Prop_Name = "Stack_Size" then
                         Node.Partitions (To_String (Partition))
-                          .Threads (To_String (Thread)).Stack_Size_In_Kb :=
+                          .Threads (To_String (Thread)).Stack_Size_In_Bytes :=
                             Number_Str;
                      elsif Prop_Name = "Dispatch_Offset" then
                         Node.Partitions (To_String (Partition))

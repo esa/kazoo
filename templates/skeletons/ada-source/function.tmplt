@@ -48,18 +48,13 @@ package @_CAPITALIZE:Name_@ is
 @@END_TABLE@@
 
    --  PROVIDED INTERFACES ---------------------------------------------------
-@@TABLE@@
-   @_Provided_Interfaces_@
-
-@@END_TABLE@@
+   @_Provided_Interfaces'Indent_@
 
 @@IF@@ @_Required_Interfaces'Length_@ > 0
    --  REQUIRED INTERFACES ---------------------------------------------------
 @@END_IF@@
-@@TABLE@@
-   @_Required_Interfaces_@
+   @_Required_Interfaces'Indent_@
 
-@@END_TABLE@@
 @@TABLE@@
    --  Timer @_Timers_@ Set and Reset functions
    procedure Set_@_CAPITALIZE:Timers_@ (Value : in out asn1SccT_UInt32)

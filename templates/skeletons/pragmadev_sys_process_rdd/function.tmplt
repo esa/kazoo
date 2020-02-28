@@ -37,13 +37,9 @@
 <Description></Description>
 <Text>use ASN1Types;
 
-@@TABLE@@
 @_Provided_Interfaces_@
-@@END_TABLE@@
 
-@@TABLE@@
 @_Required_Interfaces_@
-@@END_TABLE@@
 
 </Text>
 </Symbol>

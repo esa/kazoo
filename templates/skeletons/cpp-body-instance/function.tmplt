@@ -61,6 +61,4 @@ extern "C" void @_LOWER:Name_@_startup()
    @_Name_@.startup();
 }
 
-@@TABLE@@
 @_Provided_Interfaces_@
-@@END_TABLE@@

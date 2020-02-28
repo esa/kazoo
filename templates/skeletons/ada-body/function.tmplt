@@ -34,10 +34,8 @@
 
 package body @_CAPITALIZE:Name_@ is
 
-@@TABLE@@
-   @_Provided_Interfaces_@
+   @_Provided_Interfaces'Indent_@
 
-@@END_TABLE@@
 @@TABLE@@
    procedure @_CAPITALIZE:Timers_@ is
    begin

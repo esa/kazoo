@@ -51,10 +51,7 @@ void @_LOWER:Name_@_startup(void)
    // std::cout << "[@_Name_@] Startup" << std::endl;
 }
 
-@@TABLE@@
 @_Provided_Interfaces_@
-
-@@END_TABLE@@
 
 @@TABLE@@
 void @_LOWER:Name_@_PI_@_Timers_@(void)

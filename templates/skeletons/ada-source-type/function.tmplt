@@ -33,9 +33,7 @@
 with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@;
 generic
-@@TABLE'TERSE@@
-   @_Required_Interfaces_@
-@@END_TABLE@@
+   @_Required_Interfaces'Indent_@
 @@TABLE@@
    with procedure Set_@_Timers_@ (Val : in out Asn1sccT_Uint32);
    with procedure Reset_@_Timers_@;
@@ -54,7 +52,5 @@ package @_CAPITALIZE:Name_@ is
      end record;
 @@END_IF@@
 
-@@TABLE@@
-   @_Provided_Interfaces_@
-@@END_TABLE@@
+   @_Provided_Interfaces'Indent_@
 end @_CAPITALIZE:Name_@;

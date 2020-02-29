@@ -65,7 +65,9 @@ package TASTE.Parser_Utils is
      (if Is_Tty then ASCII.ESC & "[4m" else "");
    function White_Bold return String is (if Is_Tty then White & Bold else "");
 
+   --  Remove spaces/newlines at beginning/end of string
    function Strip_String (Input_String : String) return String;
+   function Strip_String (Input_US : Unbounded_String) return Unbounded_String;
 
    procedure Put_Info  (Info  : String);
    procedure Put_Error (Error : String);

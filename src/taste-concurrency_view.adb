@@ -682,7 +682,8 @@ package body TASTE.Concurrency_View is
                     (Node_Name /= "interfaceview"
                      and then Exists (Path & "/trigger.tmplt") and then
                      Strip_String
-                       (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                       (String'(Parse (Path & "/trigger.tmplt", Trig_Tmpl))) =
+                        "TRUE");
                   Node_Content : constant String :=
                     (if Trigger then Generate_Node (Node_Name)
                      else "");

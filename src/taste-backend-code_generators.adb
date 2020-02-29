@@ -119,13 +119,13 @@ package body TASTE.Backend.Code_Generators is
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
       begin
          for Each of Interfaces loop
-            if Result /= Null_Unbounded_String then
-               Result := Result & ASCII.LF;
-            end if;
+            --  if Result /= Null_Unbounded_String then
+            --     Result := Result & ASCII.LF;
+            --  end if;
             Document_Template (Templates_Skeletons_Sub_Interface, Each);
             Result := Result & US (String'(Parse (Tmplt_Sign, Each)));
          end loop;
-         return Result;
+         return Strip_String (Result);
       end Process_Interfaces;
 
       --  Generate the ASN.1 files translating Context Parameters
@@ -335,7 +335,8 @@ package body TASTE.Backend.Code_Generators is
                      Trigger    : constant Boolean :=
                         (Exists (Path & "/trigger.tmplt")
                          and then Strip_String (Parse
-                            (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                           (Path & "/trigger.tmplt", Trig_Tmpl)) =
+                           String'("TRUE"));
                   begin
                      Document_Template
                        (Templates_Skeletons_Sub_Function_Filename, File_Tmpl);

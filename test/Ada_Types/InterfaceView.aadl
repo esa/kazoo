@@ -1,0 +1,275 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Toto
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_doSomething
+FEATURES
+  a_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b_in : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+  c_out : OUT PARAMETER DataView::My_Integer {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION PI_doSomething.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_doSomething.others;
+
+SUBPROGRAM PI_compute_Pi
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_compute_Pi;
+
+SUBPROGRAM IMPLEMENTATION PI_compute_Pi.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_compute_Pi.others;
+
+SUBPROGRAM RI_run
+FEATURES
+  a : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_run;
+
+SUBPROGRAM IMPLEMENTATION RI_run.others
+END RI_run.others;
+
+SUBPROGRAM RI_walk
+END RI_walk;
+
+SUBPROGRAM IMPLEMENTATION RI_walk.others
+END RI_walk.others;
+
+SYSTEM Toto
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Toto::PI_pulse.others {
+    Taste::coordinates => "100115 70236";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_doSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Toto::PI_doSomething.others {
+    Taste::coordinates => "100115 76257";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "doSomething";
+  };
+  PI_compute_Pi : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Toto::PI_compute_Pi.others {
+    Taste::coordinates => "100115 84284";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "compute_Pi";
+  };
+  RI_run : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Toto::RI_run.others {
+    Taste::coordinates => "139135 72689";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run";
+    Taste::labelInheritance => "false";
+  };
+  RI_walk : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Toto::RI_walk.others {
+    Taste::coordinates => "139135 80939";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "walk";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+  Taste::is_Component_Type => true;
+END Toto;
+
+SYSTEM IMPLEMENTATION Toto.others
+SUBCOMPONENTS
+  namo : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "1";
+  };
+  address : DATA DataView::T_Boolean {
+    Taste::FS_Default_Value => "FALSE";
+  };
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Toto.others;
+
+END interfaceview::IV::Toto;
+
+PACKAGE interfaceview::IV::FunctionInstance1
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_doSomething
+FEATURES
+  a_in : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+  b_in : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+  c_out : OUT PARAMETER DataView::My_Integer {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_doSomething;
+
+SUBPROGRAM IMPLEMENTATION PI_doSomething.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_doSomething.others;
+
+SUBPROGRAM PI_compute_Pi
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_compute_Pi;
+
+SUBPROGRAM IMPLEMENTATION PI_compute_Pi.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_compute_Pi.others;
+
+SUBPROGRAM RI_run
+FEATURES
+  a : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_run;
+
+SUBPROGRAM IMPLEMENTATION RI_run.others
+END RI_run.others;
+
+SUBPROGRAM RI_walk
+END RI_walk;
+
+SUBPROGRAM IMPLEMENTATION RI_walk.others
+END RI_walk.others;
+
+SYSTEM FunctionInstance1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FunctionInstance1::PI_pulse.others {
+    Taste::coordinates => "162324 74293";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_doSomething : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FunctionInstance1::PI_doSomething.others {
+    Taste::coordinates => "162324 80133";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "doSomething";
+  };
+  PI_compute_Pi : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::FunctionInstance1::PI_compute_Pi.others {
+    Taste::coordinates => "162324 87920";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "compute_Pi";
+  };
+  RI_run : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::FunctionInstance1::RI_run.others {
+    Taste::coordinates => "200175 76672";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "run";
+    Taste::labelInheritance => "false";
+  };
+  RI_walk : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::FunctionInstance1::RI_walk.others {
+    Taste::coordinates => "200175 84675";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "walk";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+  Taste::is_Instance_Of => "interfaceview::IV::Toto::Toto.others";
+  Taste::is_Instance_Of2 => classifier(interfaceview::IV::Toto::Toto.others);
+END FunctionInstance1;
+
+SYSTEM IMPLEMENTATION FunctionInstance1.others
+SUBCOMPONENTS
+  namo : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "1";
+  };
+  address : DATA DataView::T_Boolean {
+    Taste::FS_Default_Value => "FALSE";
+  };
+  my_timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END FunctionInstance1.others;
+
+END interfaceview::IV::FunctionInstance1;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Toto;
+WITH interfaceview::IV::FunctionInstance1;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Toto : SYSTEM interfaceview::IV::Toto::Toto.others {
+    Taste::coordinates => "100115 64216 139135 101453";
+  };
+  FunctionInstance1 : SYSTEM interfaceview::IV::FunctionInstance1::FunctionInstance1.others {
+    Taste::coordinates => "162324 68453 200175 104574";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

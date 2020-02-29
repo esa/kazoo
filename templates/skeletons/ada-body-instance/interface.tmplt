@@ -15,7 +15,7 @@ begin
 end @_CAPITALIZE:Name_@;
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@
-@@INLINE(   ()(;\n    )(\) is)@@
+@@INLINE(   \()(;\n    )(\) is)@@
    @@-- ALIGN_ON below does not work on the "out":
    @@TABLE'ALIGN_ON(":", "out")@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

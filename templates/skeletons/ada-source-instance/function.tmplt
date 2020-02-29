@@ -34,6 +34,9 @@
 @@TABLE'ALIGN_ON("use")@@
 with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@;
+
+with @_CAPITALIZE:Instance_Of_@;
+
 package @_CAPITALIZE:Name_@ is
    @_Required_Interfaces'Indent_@
 

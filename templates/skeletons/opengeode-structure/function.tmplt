@@ -38,9 +38,9 @@ use Datamodel;
 
 system @_CAPITALIZE:Name_@;
 
-   @_Provided_Interfaces'Indent_@;
+   @_Provided_Interfaces'Indent_@
 
-   @_Required_Interfaces'Indent_@;
+   @_Required_Interfaces'Indent_@
 
    channel c
 @@IF@@ @_EXIST:List_Of_ASync_PIs_@

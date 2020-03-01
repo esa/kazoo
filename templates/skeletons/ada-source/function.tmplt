@@ -50,7 +50,7 @@ package @_CAPITALIZE:Name_@ is
    --  PROVIDED INTERFACES ---------------------------------------------------
    @_Provided_Interfaces'Indent_@
 
-@@IF@@ @_Required_Interfaces'Length_@ > 0
+@@IF@@ @_Required_Interfaces_@ /= ""
    --  REQUIRED INTERFACES ---------------------------------------------------
 @@END_IF@@
    @_Required_Interfaces'Indent_@

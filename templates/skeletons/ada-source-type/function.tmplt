@@ -32,6 +32,10 @@
 @@TABLE'ALIGN_ON("use")@@
 with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@;
+@@IF@@ @_Has_Context_@
+with Context_@_CAPITALIZE:Name_@; use Context_@_CAPITALIZE:Name_@;
+@@END_IF@@
+
 generic
    @_Required_Interfaces'Indent_@
 @@TABLE@@
@@ -47,7 +51,7 @@ package @_CAPITALIZE:Name_@ is
    type Context is tagged
      record
         @@TABLE'ALIGN_ON(":")@@
-        @_CP_Names_@ : Asn1Scc@_REPLACE_ALL(-/_):CP_Types_@;
+        @_CP_Names_@ : Asn1Scc@_REPLACE_ALL(-/_):CP_Types_@ := @_CAPITALIZE:Name_@_Ctxt.@_CAPITALIZE:CP_Names_@;
         @@END_TABLE@@
      end record;
 @@END_IF@@

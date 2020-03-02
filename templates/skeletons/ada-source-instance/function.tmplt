@@ -33,6 +33,9 @@
 with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@;
 
+@@IF@@ @_Has_Context_@
+with Context_@_CAPITALIZE:Name_@; use Context_@_CAPITALIZE:Name_@;
+@@END_IF@@
 with @_CAPITALIZE:Instance_Of_@;
 
 package @_CAPITALIZE:Name_@ is
@@ -57,10 +60,19 @@ package @_CAPITALIZE:Name_@ is
 @@END_IF@@
    use Instances;
 
-   --  ---------------------------------- Static context declaration
+   --  --------------- Static context declaration and initialization
    --  -------------------------------------------------------------
 
+   @@IF@@ @_Has_Context_@
+   Instance : Instances.Context :=
+   @@INLINE(      \()(,\n       )(\);)@@
+      @@TABLE'ALIGN_ON("=>")@@
+         @_CAPITALIZE:CP_Names_@ => @_CAPITALIZE:Name_@_Ctxt.@_CAPITALIZE:CP_Names_@
+      @@END_TABLE@@
+   @@END_INLINE@@
+   @@ELSE@@
    Instance : Instances.Context;
+   @@END_IF@@
 
    --  ------------------------------ Provided interfaces hooks in C
    --  -------------------------------------------------------------

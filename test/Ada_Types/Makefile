@@ -7,6 +7,7 @@ KAZOO?=kazoo
 all:	c
 
 c:	work/glue_built
+	cp input_data/test_me.pr work/test_me/SDL/src/
 	$(MAKE) -C work
 
 skeletons:

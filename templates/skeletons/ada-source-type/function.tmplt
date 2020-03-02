@@ -53,7 +53,7 @@ package @_CAPITALIZE:Name_@ is
 @@END_IF@@
 
    @@TABLE@@
-   procedure @_CAPITALIZE:Timers_@ (Self : Context);
+   procedure @_CAPITALIZE:Timers_@ (Self : in out Context);
    @@END_TABLE@@
 
    @_Provided_Interfaces'Indent_@

@@ -28,7 +28,7 @@ package body @_CAPITALIZE:Name_@ is
    @_Provided_Interfaces'Indent_@
 
    @@TABLE@@
-   procedure @_CAPITALIZE:Timers_@ (Self : Context) is
+   procedure @_CAPITALIZE:Timers_@ (Self : in out Context) is
    begin
       null;   --  Define the behaviour when the timer expires
    end @_CAPITALIZE:Timers_@;

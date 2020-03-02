@@ -9,10 +9,10 @@
 @@-- @_Param_Directions_@    :   |_ Corresponding direction
 @@IF@@ @_Direction_@ = "PI"
 @@IF@@ @_Param_Names'Length_@ = 0
-procedure @_CAPITALIZE:Name_@ (Self : Context) is
+procedure @_CAPITALIZE:Name_@ (Self : in out Context) is
 @@ELSE@@
 procedure @_CAPITALIZE:Name_@
-   (Self : Context;
+   (Self : in out Context;
 @@INLINE(    )(;\n    )(\) is)@@
    @@-- ALIGN_ON below does not work on the "out":
    @@TABLE'ALIGN_ON(":", "out")@@

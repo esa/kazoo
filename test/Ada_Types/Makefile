@@ -8,6 +8,7 @@ all:	c
 
 c:	work/glue_built
 	cp input_data/test_me.pr work/test_me/SDL/src/
+	cp input_data/toto.adb work/toto/Ada/src/
 	$(MAKE) -C work
 
 skeletons:

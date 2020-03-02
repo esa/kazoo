@@ -15,6 +15,6 @@
 @@-- @_Filename_Is_Present_@ : True if target function output already exists
 @@-- @_Makefile_Is_Present_@ : True if target build script already exists
 @@-- @_C_Middleware_@        : True if middleware is in C (e.g. PO-HI-C)
-@@IF@@ @_Language_@ = Ada and not @_Filename_Is_Present_@ and @_Zip_File_@ = "" and @_EXIST:Instance_Of_@
+@@IF@@ @_Language_@ = Ada and @_EXIST:Instance_Of_@
 TRUE
 @@END_IF@@

@@ -26,4 +26,12 @@ package body @_CAPITALIZE:Name_@ is
    --  edit the interface view and add them to the Context Parameters tab
 
    @_Provided_Interfaces'Indent_@
+
+   @@TABLE@@
+   procedure @_CAPITALIZE:Timers_@ (Self : Context) is
+   begin
+      null;   --  Define the behaviour when the timer expires
+   end @_CAPITALIZE:Timers_@;
+
+   @@END_TABLE@@
 end @_CAPITALIZE:Name_@;

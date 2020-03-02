@@ -29,8 +29,6 @@
 --    |_ @_Property_Names_@ = @_Property_Values_@
 @@END_TABLE@@
 
-@@-- TODO: add the timers
-
 @@TABLE'ALIGN_ON("use")@@
 with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 @@END_TABLE@@;
@@ -38,19 +36,41 @@ with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 with @_CAPITALIZE:Instance_Of_@;
 
 package @_CAPITALIZE:Name_@ is
+
+   --  ------------------------------ Required interfaces hooks in C
+   --  -------------------------------------------------------------
+
    @_Required_Interfaces'Indent_@
+
+   --  ------------------------------- Generic package instanciation
+   --  -------------------------------------------------------------
 
 @@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
    package Instances is new @_CAPITALIZE:Instance_Of_@;
 @@ELSE@@
-   package Instance is new @_CAPITALIZE:Instance_Of_@
+   package Instances is new @_CAPITALIZE:Instance_Of_@
       @@INLINE(     \()(,\n      )(\);)@@
          @@TABLE'ALIGN_ON("=>")@@
             RI_@_CAPITALIZE:List_Of_RIs_@ => RI_@_CAPITALIZE:List_Of_RIs_@       
          @@END_TABLE@@
       @@END_INLINE@@
 @@END_IF@@
+   use Instances;
+
+   --  ---------------------------------- Static context declaration
+   --  -------------------------------------------------------------
+
    Instance : Instances.Context;
-   
+
+   --  ------------------------------ Provided interfaces hooks in C
+   --  -------------------------------------------------------------
+
    @_Provided_Interfaces'Indent_@
+
+@@--  @@TABLE@@
+@@--  procedure @_CAPITALIZE:Timers_@
+@@--    with Export,
+@@--         Convention => C,
+@@--         Link_Name  => "@_LOWER:Name_@_PI_@_Timers_@";
+@@--  @@END_TABLE@@
 end @_CAPITALIZE:Name_@;

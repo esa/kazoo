@@ -35,8 +35,8 @@ with @_CAPITALIZE:ASN1_Modules_@; use @_CAPITALIZE:ASN1_Modules_@;
 generic
    @_Required_Interfaces'Indent_@
 @@TABLE@@
-   with procedure Set_@_Timers_@ (Val : in out Asn1sccT_Uint32);
-   with procedure Reset_@_Timers_@;
+   with procedure RI_Set_@_Timers_@ (Val : in out Asn1sccT_Uint32);
+   with procedure RI_Reset_@_Timers_@;
 @@END_TABLE@@
 package @_CAPITALIZE:Name_@ is
 @@IF@@ @_CP_Names'Length_@ = 0
@@ -51,6 +51,10 @@ package @_CAPITALIZE:Name_@ is
         @@END_TABLE@@
      end record;
 @@END_IF@@
+
+   @@TABLE@@
+   procedure @_CAPITALIZE:Timers_@ (Self : Context);
+   @@END_TABLE@@
 
    @_Provided_Interfaces'Indent_@
 end @_CAPITALIZE:Name_@;

@@ -26,4 +26,5 @@ package body @_CAPITALIZE:Name_@ is
    --  edit the interface view and add them to the Context Parameters tab
 
    @_Provided_Interfaces'Indent_@
+
 end @_CAPITALIZE:Name_@;

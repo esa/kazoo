@@ -630,6 +630,8 @@ package body TASTE.AADL_Parser is
                                                  Type_Name   => Sort,
                                                  Remote_Partition_Name =>
                                                    Part.Unsafe_Just.Name,
+                                                 Remote_Function_Name =>
+                                                   Remote.Function_Name,
                                                  Remote_Port_Name =>
                                                    Remote.Interface_Name));
                               else

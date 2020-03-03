@@ -323,7 +323,7 @@ package body TASTE.Interface_View is
       --  Parse a connection
       function Parse_Connection (Conn : Node_Id) return Optional_Connection is
          use Option_Connection;
-         use String_Vectors;
+
          Channel_Name : constant String := AIN_Case (Conn);
          Channels     : String_Vectors.Vector := String_Vectors.Empty_Vector;
 
@@ -506,7 +506,7 @@ package body TASTE.Interface_View is
                          Going_Out     : Boolean := False;
                          Via_Channels  : in out String_Vectors.Vector)
                          return Remote_Entity is
-         use String_Vectors;
+
          Context     : constant String :=
            (if Functions.Contains (Key => From)
             then To_String (Functions.Element (Key => From).Context)
@@ -599,7 +599,6 @@ package body TASTE.Interface_View is
                   when CC_Data =>
                      declare
                         CP : constant Context_Parameter := Parse_CP (Subco);
-                        use String_Vectors;
                      begin
                         if CP.Sort = "Timer" then
                            Result.Timers := Result.Timers

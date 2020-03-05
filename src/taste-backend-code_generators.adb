@@ -3,13 +3,15 @@ with Ada.Characters.Handling,
      Ada.Containers.Ordered_Sets,
      Ada.Exceptions,
      Ada.Directories,
-     TASTE.Parser_Utils;
+     TASTE.Parser_Utils,
+     TASTE.Deployment_View;
 
 use Ada.Characters.Handling,
     Ada.Containers,
     Ada.Exceptions,
     Ada.Directories,
-    TASTE.Parser_Utils;
+    TASTE.Parser_Utils,
+    TASTE.Deployment_View;
 
 --  This package covers the generation of code for all supported languages
 --  There is no code that is specific to one particular language. The package
@@ -22,7 +24,8 @@ package body TASTE.Backend.Code_Generators is
       All_CP_Files     : Tag;  --  List of Context Parameters ASN.1 files
       Template         : constant IV_As_Template :=
                                 Interface_View_Template (Model.Interface_View);
-
+      DV : constant Deployment_View_Holder :=
+          Model.Deployment_View;
       --  Path to the input templates files
       Prefix           : constant String :=
         Model.Configuration.Binary_Path.Element & "/templates/";
@@ -72,7 +75,9 @@ package body TASTE.Backend.Code_Generators is
          Functions_Tag,
          Language_Tag,
          Has_Context_Param_Tag,
-         Is_Type_Tag      : Vector_Tag;
+         Is_Type_Tag,
+         Is_FPGA_Tag,
+         CPU_Platform_Tag : Vector_Tag;
          Content_Set      : Translate_Set;
          Tmplt            : constant String := Prefix_Skeletons
                                                & "makefile.tmplt";
@@ -87,15 +92,39 @@ package body TASTE.Backend.Code_Generators is
             Is_Type_Tag   := Is_Type_Tag & Each.Is_Type;
             Has_Context_Param_Tag := Has_Context_Param_Tag
               & (not Each.Context_Params.Is_Empty);
+
+            if Each.User_Properties.Contains
+                ("TASTE_IV_Properties::FPGA_Configurations")
+            then
+               Is_FPGA_Tag := Is_FPGA_Tag & True;
+            else
+               Is_FPGA_Tag := Is_FPGA_Tag & False;
+            end if;
+
+            if not DV.Is_Empty then
+               for Each_Node of Model.Deployment_View.Element.Nodes loop
+                  for Each_Partition of  Each_Node.Partitions loop
+                     if Each_Partition.Bound_Functions.Contains
+                      (To_String (Each.Name))
+                     then
+                        CPU_Platform_Tag := CPU_Platform_Tag
+                         & Each_Node.CPU_Platform'Img;
+                     end if;
+                  end loop;
+               end loop;
+            end if;
          end loop;
          for Each of Languages loop
             Unique_Languages := Unique_Languages & To_String (Each);
          end loop;
+
          Content_Set := +Assoc  ("Function_Names",    Functions_Tag)
                         & Assoc ("Language",          Language_Tag)
                         & Assoc ("Is_Type",           Is_Type_Tag)
                         & Assoc ("CP_Files",          All_CP_Files)
                         & Assoc ("Has_Context_Param", Has_Context_Param_Tag)
+                        & Assoc ("Is_FPGA",           Is_FPGA_Tag)
+                        & Assoc ("CPU_Platform",      CPU_Platform_Tag)
                         & Assoc ("Unique_Languages",  Unique_Languages)
                         & Assoc ("ASN1_Files",        Get_ASN1_File_List)
                         & Assoc ("ACN_Files",         Get_ACN_File_List)
@@ -440,4 +469,5 @@ package body TASTE.Backend.Code_Generators is
       end loop;
       return Result;
    end Interface_View_Template;
+
 end TASTE.Backend.Code_Generators;

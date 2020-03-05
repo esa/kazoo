@@ -3,7 +3,9 @@
 @@-- @_Function_Names_@      : Combined table: list of fuction names...
 @@-- @_Language_@            : ... and corresponding implementation language
 @@-- @_Is_Type_@             : ... and flag if it is a function type
-@@-- @_Has_Context_Param_@   : ... and flag to indicate if function has context parameters        
+@@-- @_Has_Context_Param_@   : ... and flag to indicate if function has context parameters 
+@@-- @_Is_FPGA_@	     : ... and true if it is an FPGA Function        		
+@@-- @_CPU_Platform_@	     : ... and respective CPU platform        	
 @@-- @_CP_Files_@            : List of all context parameters ASN.1 files
 @@-- @_Unique_Languages_@    : List of all languages used in the system
 @@-- @_ASN1_Files_@          : List of all ASN.1 files
@@ -138,7 +140,11 @@ ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
 @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
+	@@IF@@ @_Is_FPGA_@ and @_CPU_Platform_@ = PLATFORM_ZYNQ
+	aadl2glueC -fpga ZYNQZC706 -o $(dir $@) $^
+	@@ELSE@@
 	aadl2glueC -o $(dir $@) $^
+	@@END_IF@@
 	touch $@
 
 	@@END_IF@@

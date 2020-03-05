@@ -22,9 +22,9 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
    for Exec_Dir   use "../../binaries";
    for Languages use ("FPGA");
 
-   for Main use (
-    "@_STRIP:Unprotected_PIs_@.c"
-);
+--   for Main use (
+--    "@_STRIP:Unprotected_PIs_@.c"
+--);
 
 
    package Compiler is
@@ -62,11 +62,6 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
                 & external_as_list("USER_CFLAGS", "");
       end case;
    end Compiler;
-
-   package Linker is
-      for Default_Switches ("FPGA") use
-          external_as_list("USER_LDFLAGS", "");
-   end Linker;
 
    package Builder is
       for Executable_Suffix use ".bit";

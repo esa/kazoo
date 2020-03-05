@@ -94,6 +94,7 @@ configuration project ZYNQ_RTEMS is
 
    package Linker is
       for Driver use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
+
       Common_C_Linker_Switches :=
            ("--pipe",
             "-mthumb",
@@ -121,5 +122,6 @@ configuration project ZYNQ_RTEMS is
             "-qrtems",
             "-lm",
             "-lgnat");
+
    end Linker;
 end ZYNQ_RTEMS;

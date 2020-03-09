@@ -38,14 +38,10 @@ use Datamodel;
 
 system @_CAPITALIZE:Name_@;
 
-@@TABLE'TERSE@@
-   @_STRIP:Provided_Interfaces_@;
-@@END_TABLE@@
+   @_Provided_Interfaces'Indent_@
 
-@@TABLE'TERSE@@
-   @_STRIP:Required_Interfaces_@;
+   @_Required_Interfaces'Indent_@
 
-@@END_TABLE@@
    channel c
 @@IF@@ @_EXIST:List_Of_ASync_PIs_@
    @@IF@@ @_EXIST:List_Of_Sync_PIs_@

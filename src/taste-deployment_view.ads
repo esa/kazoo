@@ -39,7 +39,7 @@ package TASTE.Deployment_View is
    Empty_Deployment_View_Error : exception;
 
    --  List of Ocarina AADL models needed to parse the deployment view
-   AADL_Lib : String_Vectors.Vector :=
+   Deployment_AADL_Lib : String_Vectors.Vector :=
      Empty_Vector
      & "TASTE_DV_Properties.aadl"
      & "TASTE_IV_Properties.aadl"

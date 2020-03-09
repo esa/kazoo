@@ -79,12 +79,15 @@ package body TASTE.AADL_Parser is
          Interface_Root := Ocarina.Parser.Parse
            (AADL_Language, Interface_Root, File_Descr);
 
-         --  Parse TASTE_IV_Properties.aadl
-         Set_Str_To_Name_Buffer ("TASTE_IV_Properties.aadl");
-         File_Name  := Ocarina.Files.Search_File (Name_Find);
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-         Interface_Root := Ocarina.Parser.Parse (AADL_Language,
-                                                 Interface_Root, File_Descr);
+         --  Parse library of AADL files (TASTE_IV_Properties, etc.)
+         for Each of Interface_AADL_Lib loop
+            Set_Str_To_Name_Buffer (Each);
+            File_Name  := Ocarina.Files.Search_File (Name_Find);
+            File_Descr := Ocarina.Files.Load_File (File_Name);
+            Interface_Root := Ocarina.Parser.Parse (AADL_Language,
+                                                    Interface_Root,
+                                                    File_Descr);
+         end loop;
 
          if Interface_Root = No_Node then
             raise AADL_Parser_Error with "Interface view is incorrect";
@@ -210,13 +213,14 @@ package body TASTE.AADL_Parser is
          end;
 
          if not Result.Configuration.No_Stdlib then
-            AADL_Lib.Append ("ocarina_components.aadl");
+            Deployment_AADL_Lib.Append ("ocarina_components.aadl");
          end if;
 
          if Deployment_Root /= No_Node
            and not Result.Configuration.Deployment_View.Is_Empty
          then
-            AADL_Lib.Append (Result.Configuration.Interface_View.Element);
+            Deployment_AADL_Lib.Append
+              (Result.Configuration.Interface_View.Element);
             Result.Deployment_View :=
               To_Holder (Parse_Deployment_View
                          (Deployment_Root, Result.Interface_View));
@@ -626,6 +630,8 @@ package body TASTE.AADL_Parser is
                                                  Type_Name   => Sort,
                                                  Remote_Partition_Name =>
                                                    Part.Unsafe_Just.Name,
+                                                 Remote_Function_Name =>
+                                                   Remote.Function_Name,
                                                  Remote_Port_Name =>
                                                    Remote.Interface_Name));
                               else

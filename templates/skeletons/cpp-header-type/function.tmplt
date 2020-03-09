@@ -40,9 +40,7 @@
 
 class @_LOWER:Name_@ {
    // These are the required interfaces you can call from application code:
-@@TABLE@@
    @_Required_Interfaces_@
-@@END_TABLE@@
 @@TABLE@@
    typedef void (*SET_@_Timers_@_ptr)(asn1SccT_Uint32 *);
    typedef void (*RESET_@_Timers_@_ptr)(void);
@@ -79,7 +77,5 @@ SET_@_Timers_@(SET_@_Timers_@_arg), RESET_@_Timers_@(RESET_@_Timers_@_arg)
 @@END_IF@@  @@-- RI or Timers
    void startup();
    /* Provided interfaces */
-@@TABLE@@
-   @_Provided_Interfaces_@
-@@END_TABLE@@
+   @_Provided_Interfaces'Indent_@
 };

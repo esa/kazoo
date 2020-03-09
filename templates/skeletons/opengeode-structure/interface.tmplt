@@ -15,29 +15,29 @@
 @@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : Properties of the interface
 @@-- @_IF_Property_Names_@, _Values_@ : User-defined properties (vector tag)
 @@IF@@ not @_Is_Timer_@
-@@-- Declare a signal for all PIs, including (un)protected interfaces
-@@IF@@ @_Direction_@ = PI or @_Kind_@ = SPORADIC_OPERATION
-@@IF@@ @_Param_Names'Length_@ > 0
+   @@-- Declare a signal for all PIs, including (un)protected interfaces
+   @@IF@@ @_Direction_@ = PI or @_Kind_@ = SPORADIC_OPERATION
+      @@IF@@ @_Param_Names'Length_@ > 0
 /* CIF Keep Specific Geode PARAMNAMES @_Param_Names_@ */
-   signal @_Name_@ (@_REPLACE_ALL((-)/_):Param_Types_@)
-@@ELSE@@ @@-- no params
-signal @_Name_@
-@@END_IF@@
-@@ELSE@@    @@-- Required interface
+signal @_Name_@ (@_REPLACE_ALL((-)/_):Param_Types_@);
+      @@ELSE@@
+signal @_Name_@;
+      @@END_IF@@
+   @@ELSE@@
 procedure @_Name_@;
-@@IF@@ @_EXIST:Param_Names_@
-      fpar
-@@INLINE(         )(,\n         )(;\n   external)@@
-@@TABLE@@
-@@IF@@ @_Param_Directions_@ = "PARAM_IN"
-in     @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
-@@ELSE@@  @@-- output parameter
-in/out @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
-@@END_IF@@
-@@END_TABLE@@
-@@END_INLINE@@
-@@ELSE@@
-   external
-@@END_IF@@
-@@END_IF@@
+      @@IF@@ @_EXIST:Param_Names_@
+   fpar
+         @@INLINE(         )(,\n         )(;\n   external;)@@
+            @@TABLE@@
+               @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+                  in     @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
+               @@ELSE@@  @@-- output parameter
+                  in/out @_CAPITALIZE:Param_Names_@ @_REPLACE_ALL((-)/_):Param_Types_@
+               @@END_IF@@
+            @@END_TABLE@@
+         @@END_INLINE@@
+      @@ELSE@@
+   external;
+      @@END_IF@@
+   @@END_IF@@
 @@END_IF@@

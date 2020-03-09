@@ -1,0 +1,51 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+--  @_Direction_@ : @_Name_@ (@_CAPITALIZE:Kind_@)
+@@IF@@ @_Direction_@ = "PI"
+@@IF@@ @_Param_Names'Length_@ > 0
+procedure @_CAPITALIZE:Name_@
+   @@INLINE(   \()(;\n    )(\))@@
+      @@TABLE'ALIGN_ON(":", "out")@@
+         @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+            @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@
+         @@ELSE@@
+            @_CAPITALIZE:Param_Names_@ : out asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@
+         @@END_IF@@
+      @@END_TABLE@@
+   @@END_INLINE@@
+@@ELSE@@
+@@-- PI without parameter
+procedure @_CAPITALIZE:Name_@
+@@END_IF@@
+  with Export,
+       Convention => C,
+       Link_Name  => "@_LOWER:Parent_Function_@_PI_@_Name_@";
+@@ELSE@@
+@@--RI, either with parameter:
+@@IF@@ @_Param_Names'Length_@ = 0
+procedure RI_@_CAPITALIZE:Name_@
+@@ELSE@@
+@@-- RI with parameter(s)
+procedure RI_@_CAPITALIZE:Name_@
+   @@INLINE(   \()(;\n    )(\))@@
+      @@TABLE'ALIGN_ON(":", "out")@@
+         @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+            @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@
+         @@ELSE@@
+            @_CAPITALIZE:Param_Names_@ : out asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@
+         @@END_IF@@
+      @@END_TABLE@@
+   @@END_INLINE@@
+@@END_IF@@
+  with Import,
+       Convention => C,
+       Link_Name  => "@_LOWER:Parent_Function_@_RI_@_Name_@";
+@@END_IF@@
+

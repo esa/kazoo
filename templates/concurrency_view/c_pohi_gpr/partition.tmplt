@@ -57,15 +57,15 @@ project @_CAPITALIZE:Name_@ is
        "../../dataview/Ada",
 @@END_IF@@
 @@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = sdl
+@@IF@@ @_Block_Languages_@ = SDL
        "../../@_LOWER:Block_Names_@/SDL/code",
        "../../@_LOWER:Block_Names_@/SDL/wrappers",
 @@ELSE@@
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/src",
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
 @@END_IF@@
-@@--  CPP Instances: Add the folder of the parent function (in C++)
-@@IF@@ @_EXIST:Block_Instance_Of_@ and @_Block_Languages_@ = CPP
+@@--  Instances: Add the folder of the parent function (in C++ and Ada)
+@@IF@@ @_EXIST:Block_Instance_Of_@ and (@_Block_Languages_@ = CPP or @_Block_Languages_@ = Ada)
        "../../@_LOWER:Block_Instance_Of_@/@_Block_Languages_@/src",
 @@END_IF@@
 @@END_TABLE@@

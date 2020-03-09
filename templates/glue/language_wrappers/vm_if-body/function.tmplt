@@ -81,7 +81,5 @@ void init_@_LOWER:Name_@(void)
 @@-- For blackbox devices, don't generate the PI functions, they will be
 @@-- generated as skeleton functions. The init function only must be there.
 @@IF@@ @_Language_@ /= "Blackbox_C"
-@@TABLE@@
 @_Provided_Interfaces_@
-@@END_TABLE@@
 @@END_IF@@

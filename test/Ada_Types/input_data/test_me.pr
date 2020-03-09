@@ -1,0 +1,36 @@
+/* CIF PROCESS (337, 136), (150, 75) */
+process Test_Me;
+    /* CIF TEXT (595, 75), (267, 201) */
+    -- Text area for declarations and comments
+    
+    
+    
+    dcl result my_Integer;
+    
+    dcl someBool T_boolean;
+    /* CIF ENDTEXT */
+    /* CIF START (361, 12), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (361, 67), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (361, 67), (70, 35) */
+    state Wait;
+        /* CIF input (226, 122), (70, 35) */
+        input walk;
+            /* CIF PROCEDURECALL (201, 177), (121, 40) */
+            call doSomething
+(42, false, result);
+            /* CIF PROCEDURECALL (164, 237), (194, 35) */
+            call writeln('Walk Result:', result);
+            /* CIF NEXTSTATE (226, 291), (70, 35) */
+            NEXTSTATE -;
+        /* CIF input (400, 122), (113, 35) */
+        input run (someBool);
+            /* CIF PROCEDURECALL (370, 177), (173, 35) */
+            call writeln ('run ', someBool);
+            /* CIF output (410, 232), (92, 35) */
+            output compute_Pi;
+            /* CIF NEXTSTATE (421, 282), (70, 35) */
+            NEXTSTATE -;
+    endstate;
+endprocess Test_Me;

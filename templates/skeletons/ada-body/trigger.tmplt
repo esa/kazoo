@@ -18,6 +18,6 @@
 @@-- @_Use_POHIC_@           : Command line configuration
 @@-- In addition all other command line configuration values are available
 @@-- as well as all function attributes
-@@IF@@ @_Language_@ = "Ada" and not @_Filename_Is_Present_@ and @_Zip_File_@ = ""
+@@IF@@ @_Language_@ = "Ada" and not @_Filename_Is_Present_@ and @_Zip_File_@ = "" and not @_Is_Type_@ and not @_EXIST:Instance_Of_@
 TRUE
 @@END_IF@@

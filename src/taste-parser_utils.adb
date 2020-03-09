@@ -122,6 +122,9 @@ package body TASTE.Parser_Utils is
       return Ada.Strings.Fixed.Trim (Input_String, Strip_Set, Strip_Set);
    end Strip_String;
 
+   function Strip_String (Input_US : Unbounded_String) return Unbounded_String
+   is (US (Strip_String (To_String (Input_US))));
+
    --  str.join as in Python - join string arrays with a separator
    function Join_Strings (Str_Set : String_Sets.Set;
                           Sep     : String             := ", ";

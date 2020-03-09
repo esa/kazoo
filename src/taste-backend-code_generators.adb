@@ -109,18 +109,23 @@ package body TASTE.Backend.Code_Generators is
          Close (Output_File);
       end Generate_Global_Makefile;
 
-      --  Render a set (Tag) of interfaces by applying a template
+      --  Render a set of interfaces by applying a template
+      --  Result is an unbounded string, allowing each interface to use
+      --  multiple lines (combined with 'Indent)
       function Process_Interfaces (Interfaces : Template_Vectors.Vector;
-                                   Path       : String) return Tag
+                                   Path       : String) return Unbounded_String
       is
-         Result : Tag;
+         Result : Unbounded_String := Null_Unbounded_String;
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
       begin
          for Each of Interfaces loop
+            --  if Result /= Null_Unbounded_String then
+            --     Result := Result & ASCII.LF;
+            --  end if;
             Document_Template (Templates_Skeletons_Sub_Interface, Each);
-            Result := Result & String'(Parse (Tmplt_Sign, Each));
+            Result := Result & US (String'(Parse (Tmplt_Sign, Each)));
          end loop;
-         return Result;
+         return Strip_String (Result);
       end Process_Interfaces;
 
       --  Generate the ASN.1 files translating Context Parameters
@@ -330,7 +335,8 @@ package body TASTE.Backend.Code_Generators is
                      Trigger    : constant Boolean :=
                         (Exists (Path & "/trigger.tmplt")
                          and then Strip_String (Parse
-                            (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                           (Path & "/trigger.tmplt", Trig_Tmpl)) =
+                           String'("TRUE"));
                   begin
                      Document_Template
                        (Templates_Skeletons_Sub_Function_Filename, File_Tmpl);

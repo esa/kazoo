@@ -33,14 +33,17 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#define configAPPLICATION_ALLOCATED_HEAP        1
+#define configAPPLICATION_ALLOCATED_HEAP        0
+#define configSUPPORT_DYNAMIC_ALLOCATION        0
+#define configSUPPORT_STATIC_ALLOCATION         1
+
 #define configUSE_PREEMPTION                    1
 #define configMAX_PRIORITIES                    ( 10 )
 #define configCPU_CLOCK_HZ                      ( 8000000 )
 #define configTICK_RATE_HZ                      ( 1000 )
-#define configTOTAL_HEAP_SIZE                   ( 6 * 1024 )
+
 #define configMAX_TASK_NAME_LEN                 ( 15 )
-#define configUSE_TRACE_FACILITY                1
+#define configUSE_TRACE_FACILITY                0
 #define configUSE_16_BIT_TICKS                  0
 #define configIDLE_SHOULD_YIELD                 1
 #define configUSE_CO_ROUTINES                   0
@@ -52,17 +55,18 @@
 #define configUSE_ALTERNATIVE_API               0
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS 0
 #define configENABLE_BACKWARD_COMPATIBILITY     0
+#define configUSE_TASK_NOTIFICATIONS            0
 
 /* Hook function related definitions. */
-#define configUSE_TICK_HOOK             1
-#define configUSE_IDLE_HOOK             1
-#define configUSE_MALLOC_FAILED_HOOK    1
+#define configUSE_TICK_HOOK             0
+#define configUSE_IDLE_HOOK             0
+#define configUSE_MALLOC_FAILED_HOOK    0
 #define configCHECK_FOR_STACK_OVERFLOW  2
 
 /* Software timer related definitions. */
 #define configUSE_TIMERS                1
 #define configTIMER_TASK_PRIORITY       ( configMAX_PRIORITIES - 1 )
-#define configTIMER_QUEUE_LENGTH        5
+#define configTIMER_QUEUE_LENGTH        1
 #define configTIMER_TASK_STACK_DEPTH    ( configMINIMAL_STACK_SIZE )
 
 /* Event group related definitions. */
@@ -73,7 +77,6 @@
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES           0
-#define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
 #define INCLUDE_vTaskPrioritySet                1
 #define INCLUDE_uxTaskPriorityGet               1
@@ -90,7 +93,7 @@
 #define INCLUDE_xEventGroupSetBitsFromISR       1
 #define INCLUDE_xTimerPendFunctionCall          1
 
-#define configUSE_STATS_FORMATTING_FUNCTIONS    1
+#define configUSE_STATS_FORMATTING_FUNCTIONS    0
 
 #define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
 
@@ -98,11 +101,7 @@
 
 #define configCOMMAND_INT_MAX_OUTPUT_SIZE 1500
 
-#define configAPPLICATION_PROVIDES_cOutputBuffer 1
-
-#define configINCLUDE_QUERY_HEAP_COMMAND    1
-
-#define configCLI_BAUD_RATE         19200
+#define configINCLUDE_QUERY_HEAP_COMMAND    0
 
 #ifdef __LARGE_DATA_MODEL__
         #define configMINIMAL_STACK_SIZE        ( ( unsigned short ) 85 )

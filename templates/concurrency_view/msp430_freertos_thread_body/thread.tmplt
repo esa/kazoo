@@ -25,7 +25,7 @@
 #include "semphr.h"
 #include "timers.h"
 
-#include "types.h"
+#include "transport.h"
 #include "msp430_partition_interface.h"
 
 extern QueueHandle_t @_Thread_Name_@_global_queue;
@@ -33,35 +33,41 @@ extern QueueHandle_t @_Thread_Name_@_global_queue;
 @@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
 void prv@_Thread_Name_@TimerCallback(TimerHandle_t timer)
 {
-    struct QueueElement task;
-	task.buf = NULL;
-	task.len = 0;
-	xQueueSend(@_Thread_Name_@_global_queue, &task, 0);
+    struct Request request;
+    //request.m_data = NULL;
+    request.m_length = 0;
+    xQueueSend(@_Thread_Name_@_global_queue, &request, 0);
 }
+
+__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_timer_buffer;
+__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_timer;
 
 @@END_IF@@
 void prv_@_Thread_Name_@Task(void* prParameters)
 {
-	extern QueueHandle_t @_Thread_Name_@_global_queue;
+    extern QueueHandle_t @_Thread_Name_@_global_queue;
 @@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
     TickType_t period = pdMS_TO_TICKS(@_Period_@);
-    TimerHandle_t timer = xTimerCreate("@_Thread_Name_@Timer",
-										  period,
-										  pdTRUE,
-										  NULL,
-										  &prv@_Thread_Name_@TimerCallback);
-	xTimerStart(timer, portMAX_DELAY);
+    prv_@_LOWER:Thread_Name_@_timer = xTimerCreateStatic("@_Thread_Name_@Timer",
+                                                         period,
+                                                         pdTRUE,
+                                                         NULL,
+                                                         &prv@_Thread_Name_@TimerCallback,
+                                                         &prv_@_LOWER:Thread_Name_@_timer_buffer);
+    xTimerStart(prv_@_LOWER:Thread_Name_@_timer, portMAX_DELAY);
 @@END_IF@@
 
-	while(1)
-	{
-	    struct QueueElement task;
-		xQueueReceive(@_Thread_Name_@_global_queue, &task, portMAX_DELAY);
-
-		call_@_LOWER:Thread_Name_@(task.buf, task.len);
-		if(task.buf != NULL)
-		{
-			vPortFree(task.buf);
-		}
-	}
+    while(1)
+    {
+        struct Request request;
+        BaseType_t result = xQueueReceive(@_Thread_Name_@_global_queue, &request, portMAX_DELAY);
+        if(result == pdTRUE)
+        {
+            call_@_LOWER:Thread_Name_@((const char*)request.m_data, request.m_length);
+            //if(request.m_data != NULL)
+            //{
+                //vPortFree(request.m_data);
+            //}
+        }
+    }
 }

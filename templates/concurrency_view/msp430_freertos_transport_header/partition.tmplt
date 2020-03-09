@@ -30,13 +30,41 @@
 @@-- @_Out_Port_Names_@       : Vector tag: output ports of the partition
 @@-- @_Out_Port_Thread_Name_@ :     |_ corresponding thread inside the partition
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
-#ifndef TYPES_H_INCLUDED
-#define TYPES_H_INCLUDED
+#ifndef TRANSPORT_H_INCLUDED
+#define TRANSPORT_H_INCLUDED
 
-struct QueueElement
+#include <stdint.h>
+
+struct Request
 {
-	char* buf;
-	size_t len;
+	uint32_t m_length;
+    uint8_t m_data[8];
+
 };
+
+@@IF@@ @_In_Port_Names_@ /= "" AND @_Out_Port_Names_@ /= ""
+
+struct Message
+{
+    uint32_t m_port;
+    uint32_t m_length;
+    uint8_t m_data[8];
+
+};
+
+void process_incomming_message(struct Message* msg);
+
+typedef void (*RemoteTransportFuncPtr)(uint8_t* data, uint32_t length);
+void register_remote_transport_func(RemoteTransportFuncPtr fn);
+
+@@TABLE@@
+void deliver_to_@_Out_Port_Remote_Function_@_@_Out_Port_Remote_Port_Name_@(struct Request* task);
+@@END_TABLE@@
+
+@@END_IF@@
+
+@@TABLE@@
+void deliver_to_@_Thread_Names_@(struct Request* task);
+@@END_TABLE@@
 
 #endif

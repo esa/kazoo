@@ -63,10 +63,12 @@ project @_CAPITALIZE:Name_@ is
 @@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada",
 @@END_IF@@
-	   "FreeRTOS/Source",
-	   "FreeRTOS/Source/portable/MemMang",
-	   "FreeRTOS/Source/portable/GCC/MSP430FR5969"
-	);
+@@TABLE@@
+       "@_LOWER:Name_@/drivers/@_Device_Names_@",
+@@END_TABLE@@
+       "FreeRTOS/Source",
+       "FreeRTOS/Source/portable/GCC/MSP430FR5969"
+    );
 
    for Object_Dir use "obj";
    for Exec_Dir   use "../../binaries";
@@ -93,9 +95,11 @@ project @_CAPITALIZE:Name_@ is
                 "-mmcu=msp430fr5969",
                 "-msmall",
                 "-Wall",
-				"-Wextra",
-				"-Wpedantic",
-				"-Wno-unused-parameter",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wno-unused-parameter",
+                "-fstack-usage",
+                "-Wstack-usage=256",
                 "-O2");
          when "Debug" =>
             for Default_Switches ("C") use
@@ -106,10 +110,12 @@ project @_CAPITALIZE:Name_@ is
                 "-mmcu=msp430fr5969",
                 "-msmall",
                 "-Wall",
-				"-Wextra",
-				"-Wpedantic",
-				"-Wno-unused-parameter",
-                "-Og",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wno-unused-parameter",
+                "-O0",
+                "-fstack-usage",
+                "-Wstack-usage=256",
                 "-g");
       end case;
    end Compiler;
@@ -126,11 +132,13 @@ project @_CAPITALIZE:Name_@ is
           "-mmcu=msp430fr5969",
           "-msmall",
           "-Wall",
-		  "-Wextra",
-		  "-Wpedantic",
-		  "-Wno-unused-parameter",
+          "-Wextra",
+          "-Wpedantic",
+          "-Wno-unused-parameter",
           "-Wl,-Map=main.map",
           "-Wl,--gc-sections",
+          "-fstack-usage",
+          "-Wstack-usage=256",
           "-Tmsp430fr5969.ld");
    end Linker;
 

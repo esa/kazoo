@@ -9,7 +9,7 @@
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
 @@-- @_Property_Names_@      : List of User-defined properties (names)
 @@-- @_Property_Values_@        |_ Vector Tag: List of User-defined properties (values)
-@@IF@@ @_LOWER:Language_@ = simulink
+@@IF@@ @_LOWER:Language_@ = simulink or @_LOWER:Language_@ = c
 @@TABLE@@
 @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and not @_IS_EMPTY:LOWER:Property_Values_@
 project @_CAPITALIZE:Name_@_Zynq_Bambu is
@@ -21,11 +21,6 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
    for Object_Dir use "Bambu";
    for Exec_Dir   use "../../binaries";
    for Languages use ("FPGA");
-
---   for Main use (
---    "@_STRIP:Unprotected_PIs_@.c"
---);
-
 
    package Compiler is
       Common_Bambu_Switches :=
@@ -43,15 +38,16 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
            "--panda-parameter=none-registered-ptrdefault=1",
             "-I../../../dataview/C");
 
-    for Switches ("@_STRIP:Unprotected_PIs_@.c") use Common_Bambu_Switches &
-        ("-I../../../@_LOWER:Name_@/SIMULINK/src",
-        "-I../../../@_LOWER:Name_@/SIMULINK/wrappers",
+    for Switches ("FPGA") use Common_Bambu_Switches &
+        ("-I../../../@_LOWER:Name_@/@_Language_@/src",
+        "-I../../../@_LOWER:Name_@/@_Language_@/wrappers",
         "--clock-name=clock_@_STRIP:Unprotected_PIs_@",
         "--reset-name=reset_@_STRIP:Unprotected_PIs_@",
         "--start-name=start_@_STRIP:Unprotected_PIs_@",
         "--done-name=finish_@_STRIP:Unprotected_PIs_@",
         "--top-fname=bambu_@_STRIP:Unprotected_PIs_@",
-        "../../../@_LOWER:Name_@/SIMULINK/wrappers/@_STRIP:Unprotected_PIs_@_bambu.c");
+        "../../../@_LOWER:Name_@/@_Language_@/wrappers/@_STRIP:Unprotected_PIs_@_bambu.c");
+
 
       case Build is
          when "Release" =>
@@ -63,19 +59,18 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
       end case;
    end Compiler;
 
-   package Builder is
-      for Executable_Suffix use ".bit";
-      for Executable ("@_STRIP:Unprotected_PIs_@.c") use "@_Name_@_bambu";
-   end Builder;
-
-   --  following to be updated with all relevant source dirs
+  --  following to be updated with all relevant source dirs
    for Source_Dirs use
     (
-       "../../@_LOWER:Name_@/SIMULINK/src"
+       "../../@_LOWER:Name_@/@_Language_@/src"
 );
     
     for Excluded_Source_Files use
-      ("ert_main.c");
+      (
+        @@IF@@ @_LOWER:Language_@ = simulink 
+        "ert_main.c"
+        @@END_IF@@
+        );
 
 
 end @_CAPITALIZE:Name_@_Zynq_Bambu;

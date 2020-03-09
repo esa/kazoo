@@ -9,7 +9,7 @@
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
 @@-- @_Property_Names_@         : Required interfaces (from ri.tmplt)
 @@-- @_Property_Values_@        : Required interfaces (from ri.tmplt)
-@@IF@@ @_LOWER:Language_@ = simulink
+@@IF@@ @_LOWER:Language_@ = simulink or @_LOWER:Language_@ = c
 @@TABLE@@
     @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and @_LOWER:Property_Values_@ /= ""
 "@_STRIP:Unprotected_PIs_@_bambu.c",

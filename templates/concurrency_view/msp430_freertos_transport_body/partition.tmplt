@@ -74,7 +74,7 @@ void deliver_to_@_Out_Port_Remote_Function_@_@_Out_Port_Remote_Port_Name_@(struc
 {
     if(remote_transport_func != NULL)
     {
-        remote_transport_func(task->buf, task->len);
+        remote_transport_func(task->m_data, task->m_length);
     }
 }
 @@END_TABLE@@

@@ -1,0 +1,103 @@
+AIR-IOP-DEVICE-DATAVIEW DEFINITIONS ::=
+BEGIN
+
+IOP-Device-Identifier ::= CHOICE {
+   eth     IOP-ETHn,
+   grspw   IOP-GRSPWn,
+   can     IOP-CANn,
+   spwrtr  IOP-SPWRTR,
+   mil     IOP-MILn
+}
+
+IP-Address ::= SEQUENCE (SIZE (4)) OF INTEGER (0..255)
+MAC-Address ::= SEQUENCE (SIZE(6)) OF INTEGER (0..255)
+
+IOP-ETHn ::= SEQUENCE {
+   n  INTEGER (0..7),   -- Max range not specified
+   ip IP-Address,
+   mac MAC-Address,
+   routes SEQUENCE (SIZE (1..5)) OF Route -- Max size not specified
+}
+
+Route ::= SEQUENCE {
+   route-ip IP-Address,
+   route-mac MAC-Address,
+   route-port INTEGER (0..65535)
+}
+
+IOP-GRSPWn ::= SEQUENCE {
+   n INTEGER (0 .. 7),
+   addr INTEGER (-1 .. 31),
+   mask INTEGER (0 .. 255),
+   retry INTEGER (-1 .. 50),
+   rx-max INTEGER (4 .. 1520),
+   pro BOOLEAN,
+   routes SEQUENCE (SIZE (1 .. 5)) OF INTEGER (-1 .. 31)
+}
+
+IOP-CANn ::= SEQUENCE {
+   n INTEGER (0 .. 7),
+   baud INTEGER (0 .. 2048),
+   code INTEGER (0 .. 4294967295),
+   mask  INTEGER (0 .. 4294967295),
+   selection INTEGER (0 .. 1),
+   enable0 INTEGER (0 .. 1),
+   enable1 INTEGER (0 .. 1),
+   routes SEQUENCE (SIZE (1 .. 5)) OF Can-Route
+}
+
+Can-Route ::= SEQUENCE {
+   extended BOOLEAN,
+   rtr BOOLEAN,
+   can-id INTEGER (0 .. 7) --  Max range not specified
+}
+
+IOP-MILn ::= SEQUENCE {
+   major-frame INTEGER (0 .. 10000000),
+   slots SEQUENCE (SIZE (1 .. 10)) OF MIL-Slot,   -- Range not specified
+   routes SEQUENCE (SIZE (1 .. 5)) OF MIL-Route -- Range not specified
+}
+
+MIL-Slot ::= SEQUENCE {
+   slot-bus ENUMERATED { bus-a, bus-b },
+   slot-type ENUMERATED { rt-bc, bc-rt, rt-rt },
+   slot-addr INTEGER (0 .. 31),
+   slot-subAddr  INTEGER (0 .. 31),
+   slot-wcmc INTEGER (0 .. 32),
+   slot-time INTEGER (0 .. 1000000),
+   slot-addrTx INTEGER (0 .. 30),
+   slot-subAddrTx INTEGER (0 ..30)
+}
+
+MIL-Route ::= SEQUENCE {
+   route-addr INTEGER (0 .. 31),
+   route-subAddr INTEGER (0 .. 31)
+}
+
+IOP-SPWRTR ::= SEQUENCE {
+   flags SPW-Flags,
+   config SPW-Config,
+   idd INTEGER (0 .. 2048),
+   idiv INTEGER (0 .. 2048),
+   prescaler INTEGER (0 .. 2048)   
+}
+
+SPW-Flags ::= SEQUENCE {
+   timer-reload-register BOOLEAN,
+   timer-prescaler-register BOOLEAN,
+   clock-divisor-register BOOLEAN,
+   instance-id-register BOOLEAN,
+   config-register BOOLEAN
+}
+
+SPW-Config ::= SEQUENCE {
+   spw-reset BOOLEAN,
+   auto-disconnect BOOLEAN,
+   link-start-on-request BOOLEAN,
+   self-addressing-enable BOOLEAN,
+   time-code-control-flag-mode BOOLEAN,
+   memory-error BOOLEAN
+}
+
+END
+

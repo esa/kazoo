@@ -21,13 +21,13 @@ expected = [
 
 p = None
 try:
-    p = subprocess.Popen("output.pohic/binaries/pinger", stdout=subprocess.PIPE)
+    p = subprocess.Popen("work/binaries/pinger", stdout=subprocess.PIPE)
     if p == None:
 	sys.exit(1)
 except:
     sys.exit(1)
 result=commonRegression.test(
-    ["output.pohic/binaries/pingee"],
+    ["work/binaries/pingee"],
     expected, 
     timeout)
 if 0!=result:

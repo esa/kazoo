@@ -98,8 +98,6 @@ project @_CAPITALIZE:Name_@ is
                 "-Wextra",
                 "-Wpedantic",
                 "-Wno-unused-parameter",
-                "-fstack-usage",
-                "-Wstack-usage=256",
                 "-O2");
          when "Debug" =>
             for Default_Switches ("C") use
@@ -114,8 +112,6 @@ project @_CAPITALIZE:Name_@ is
                 "-Wpedantic",
                 "-Wno-unused-parameter",
                 "-O0",
-                "-fstack-usage",
-                "-Wstack-usage=256",
                 "-g");
       end case;
    end Compiler;
@@ -137,8 +133,6 @@ project @_CAPITALIZE:Name_@ is
           "-Wno-unused-parameter",
           "-Wl,-Map=main.map",
           "-Wl,--gc-sections",
-          "-fstack-usage",
-          "-Wstack-usage=256",
           "-Tmsp430fr5969.ld");
    end Linker;
 

@@ -1,8 +1,12 @@
 DISABLED_TESTS=common/ shared-components/ logs/
 TEST_CASES=$(sort $(filter-out $(DISABLED_TESTS), $(dir $(wildcard */))))
 export MAKEFLAGS="-j $(grep -c ^processor /proc/cpuinfo)"
+MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
+TEST_BASE_DIR   := $(dir $(MAKEFILE_PATH))
 
 all:
+	find . -name "DataView.aadl" -exec sed -i "s,/home/taste/tool-inst/share/taste-types,${TEST_BASE_DIR}/common,g" {} \;
+	find . -name "DataView.aadl" -exec sed -i "s,/home/taste/tool-src/kazoo/test,${TEST_BASE_DIR},g" {} \;
 	@python3 test.py all $(TEST_CASES)
 
 test-parse:

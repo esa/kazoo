@@ -47,8 +47,8 @@
 @@IF@@ @_CPU_Platform_@ = "PLATFORM_GNAT_RUNTIME"
 with "@_Ada_Runtime_@";
 @@END_IF@@
-with "../deploymentview_final/polyorb-hi-ada/polyorb_hi";
---  with "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada/polyorb_hi";
+--  with "polyorb_hi";
+with "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada/polyorb_hi";
 
 project @_CAPITALIZE:Name_@ is
    --  following to be updated with all relevant source dirs

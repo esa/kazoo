@@ -1,4 +1,5 @@
-image: $CI_REGISTRY_IMAGE/taste:latest
+# image: $CI_REGISTRY_IMAGE/taste:latest
+image: taste:latest
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

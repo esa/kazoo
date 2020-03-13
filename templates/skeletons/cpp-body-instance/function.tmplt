@@ -41,7 +41,7 @@
 @@END_IF@@
 
 // Declaration of the function instance
-@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
+@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0 and not @_Has_Context_@
 extern @_LOWER:Instance_Of_@ @_Name_@();
 @@ELSE@@
 @@INLINE@@
@@ -53,6 +53,9 @@ extern @_LOWER:Instance_Of_@ @_Name_@();
          @@TABLE@@
             @_LOWER:Name_@_RI_SET_@_Timers_@, @_LOWER:Name_@_RI_RESET_@_TImers_@
          @@END_TABLE@@
+         @@IF@@ @_Has_Context_@
+            @_LOWER:Name_@_ctxt
+         @@END_IF@@
       @@END_INLINE@@
 @@END_INLINE@@
 

@@ -12,7 +12,7 @@ from concurrent      import futures
 def openLog(name, mode='w'):
     logs = os.path.join(os.path.dirname(os.path.abspath(__file__)),'logs')
     os.makedirs(logs, exist_ok=True)
-    return open(os.path.join(logs, name + '.err'), mode)
+    return open(os.path.join(logs, name + '.err.txt'), mode)
 
 def colorMe(result, msg):
     if sys.stdout.isatty():

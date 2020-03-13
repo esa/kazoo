@@ -152,7 +152,7 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	mkdir -p $(dir $@)
 	# asn2dataModel does not take the ACN files, and only calls asn1.exe
 	# asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
-	asn1.exe -typePrefix asn1Scc -equal -fp AUTO -o $(dir $@) -c -uPER -ACN $^
+	mono $(shell which asn1.exe) -typePrefix asn1Scc -equal -fp AUTO -o $(dir $@) -c -uPER -ACN $^
 	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
 	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
 	cd dataview/C && msgPrinter ../dataview-uniq.asn

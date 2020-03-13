@@ -18,13 +18,13 @@ skeletons:
 	$(MAKE) work/skeletons_built
 
 work/skeletons_built:	InterfaceView.aadl DataView.aadl
-	taste-update-data-view
+	#taste-update-data-view
 	$(KAZOO) --gw -o work
 	$(MAKE) -C work dataview
 	touch $@
 
 work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
-	taste-update-data-view
+	#taste-update-data-view
 	$(KAZOO) -p --glue --gw -o work
 	touch $@
 

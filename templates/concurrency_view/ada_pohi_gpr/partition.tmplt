@@ -54,7 +54,8 @@ project @_CAPITALIZE:Name_@ is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
-       "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada",
+       --  "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-ada",
+       "../deploymentview_final/polyorb-hi-ada",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
 @@IF@@ @_STM32_GNAT_@

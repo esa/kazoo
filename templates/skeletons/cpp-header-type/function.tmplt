@@ -37,6 +37,9 @@
 
 #include "dataview-uniq.h"
 #include "@_LOWER:Name_@_state.h"
+@@IF@@ @_Has_Context_@
+#include "Context-@_LOWER:REPLACE_ALL(_/-):Name_@.h"
+@@END_IF@@
 
 class @_LOWER:Name_@ {
    // These are the required interfaces you can call from application code:
@@ -51,28 +54,39 @@ class @_LOWER:Name_@ {
    // the ctxt member allows you to define your per-instance global data
    @_LOWER:Name_@_state ctxt;
 
+   @@IF@@ @_Has_Context_@
+   // Context parameters specified in the interface view
+   asn1SccContext_@_LOWER:Name_@ config;
+   @@END_IF@@
+
 public:
-@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0
+@@IF@@ @_List_Of_RIs'Length_@ = 0 and @_Timers'Length_@ = 0 and not @_Has_Context_@
    @_LOWER:Name_@() {}
 @@ELSE@@
 @@INLINE(   )()()@@
    @_LOWER:Name_@
-@@INLINE(\()(, )(\):)@@
-@@TABLE@@
-      RI_@_List_Of_RIs_@_ptr RI_@_List_Of_RIs_@_arg
-@@END_TABLE@@
-@@TABLE@@
-      SET_@_Timers_@_ptr SET_@_Timers_@_arg, RESET_@_Timers_@_ptr RESET_@_Timers_@_arg
-@@END_TABLE@@
+      @@INLINE(\()(, )(\):)@@
+         @@TABLE@@
+            RI_@_List_Of_RIs_@_ptr RI_@_List_Of_RIs_@_arg
+         @@END_TABLE@@
+         @@TABLE@@
+            SET_@_Timers_@_ptr SET_@_Timers_@_arg, RESET_@_Timers_@_ptr RESET_@_Timers_@_arg
+        @@END_TABLE@@
+        @@IF@@ @_Has_Context_@
+            asn1SccContext_@_LOWER:Name_@ config_arg=@_LOWER:Name_@_ctxt
+        @@END_IF@@
+      @@END_INLINE@@
 @@END_INLINE@@
-@@END_INLINE@@
-@@INLINE(      )(, )( {})@@
-@@TABLE@@
-RI_@_List_Of_RIs_@(RI_@_List_Of_RIs_@_arg)
-@@END_TABLE@@
-@@TABLE@@
-SET_@_Timers_@(SET_@_Timers_@_arg), RESET_@_Timers_@(RESET_@_Timers_@_arg)
-@@END_TABLE@@
+@@INLINE(      )(,\n      )( {})@@
+   @@TABLE@@
+      RI_@_List_Of_RIs_@(RI_@_List_Of_RIs_@_arg)
+   @@END_TABLE@@
+   @@TABLE@@
+      SET_@_Timers_@(SET_@_Timers_@_arg), RESET_@_Timers_@(RESET_@_Timers_@_arg)
+   @@END_TABLE@@
+   @@IF@@ @_Has_Context_@
+      config(config_arg)
+   @@END_IF@@
 @@END_INLINE@@
 @@END_IF@@  @@-- RI or Timers
    void startup();

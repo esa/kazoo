@@ -1,4 +1,5 @@
-image: $CI_REGISTRY_IMAGE/taste:latest
+# image: $CI_REGISTRY_IMAGE/taste:latest
+image: taste:latest
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -16,6 +17,6 @@ build:
     - ./docker_workaround.sh
   artifacts:
     paths:
-      - 'test/logs/*.err'
+      - 'test/logs/*.err.txt'
     when: on_failure
     expire_in: 2 weeks

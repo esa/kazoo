@@ -1,5 +1,5 @@
 DISABLED_TESTS=common/ shared-components/ logs/
-export EXPECTED_FAILURES=test-stm32/ air-iop1
+export EXPECTED_FAILURES=test-stm32/ air-iop1 stm32-serial-pohiada2 test-air-portnames stm32-f407-serial-pohi test-air-multiports test-air-interpartcomm  stm32-f407-serial  test-air-2cyclics stm32-f407-encodeReal TrafficLight_stm32f407_NonDistrib TrafficLight_stm32f407
 TEST_CASES=$(sort $(filter-out $(DISABLED_TESTS), $(dir $(wildcard */))))
 export MAKEFLAGS="-j $(grep -c ^processor /proc/cpuinfo)"
 MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))

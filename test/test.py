@@ -53,10 +53,10 @@ def main():
                     try:
                         if stdout:
                             f.write("-- stdout " + "-" * 70)
-                            f.write(stdout.decode())
+                            f.write(stdout.decode('utf-8', 'replace'))
                         if stderr:
                             f.write("-- stderr " + "-" * 70)
-                            f.write(stderr.decode())
+                            f.write(stderr.decode('utf-8', 'replace'))
                             f.write("-" * 80)
                     except UnicodeDecodeError as err:
                         print("Unicode error in project", name)

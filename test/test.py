@@ -50,13 +50,17 @@ def main():
                 with openLog(name) as f:
                     f.write("=" * 80)
                     f.write("ERROR: %s %s" % (name, rule))
-                    if stdout:
-                        f.write("-- stdout " + "-" * 70)
-                        f.write(stdout.decode())
-                    if stderr:
-                        f.write("-- stderr " + "-" * 70)
-                        f.write(stderr.decode())
-                        f.write("-" * 80)
+                    try:
+                        if stdout:
+                            f.write("-- stdout " + "-" * 70)
+                            f.write(stdout.decode())
+                        if stderr:
+                            f.write("-- stderr " + "-" * 70)
+                            f.write(stderr.decode())
+                            f.write("-" * 80)
+                    except UnicodeDecodeError as err:
+                        print("Unicode error in project", name)
+                        print(str(err))
             if errcode != 0 and path in xfails:
                # for "expected failures", set errcode to None
                result = (None, stdout, stderr, path, rule)
@@ -99,16 +103,6 @@ def summarize(results, elapsed):
             continue
         if errcode is not None:
             failed += 1
-        with openLog("kazoo", 'a') as f:
-            f.write("=" * 80)
-            f.write("ERROR: %s %s" % (path, rule))
-            if stdout:
-                f.write("-- stdout " + "-" * 70)
-                f.write(stdout.decode())
-            if stderr:
-                f.write("-- stderr " + "-" * 70)
-                f.write(stderr.decode())
-                f.write("-" * 80)
     print("Finished in %.3fs" % elapsed)
     print("%s tests, %s errors" % (len(results), failed))
     return 0 if not failed else 1

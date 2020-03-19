@@ -442,7 +442,7 @@ void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length)
 }
 
 __attribute__ ((persistent)) StackType_t prv_spg_serial_msp430_minimal_poller_stack[configMINIMAL_STACK_SIZE] = {0};
-__attribute__ ((persistent)) StaticTask_t prv_spg_serial_msp430_minimal_poller_tcb;
+__attribute__ ((persistent)) StaticTask_t prv_spg_serial_msp430_minimal_poller_tcb = {0};
 
 /*
  * initialization function
@@ -494,11 +494,55 @@ void spg_serial_msp430_minimal_init(void)
         uart_setup_parity(PARITY_DISABLED, PARITY_EVEN);
     }
 
-
-
     uart_setup_byte_order(LSB);
-    uart_setup_character_bits(CHAR_8BIT);
-    uart_setup_baudrate(BAUDRATE_19200);
+
+    if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.bits)
+    {
+        switch(pohidrv_@_Node_Name_@_msp430_serial_minimal.bits)
+        {
+        case 7:
+            uart_setup_character_bits(CHAR_7BIT);
+            break;
+        case 8:
+            uart_setup_character_bits(CHAR_8BIT);
+            break;
+        default:
+            uart_setup_character_bits(CHAR_8BIT);
+        }
+    }
+    else
+    {
+        uart_setup_character_bits(CHAR_8BIT);
+    }
+
+    if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.speed)
+    {
+        switch(pohidrv_@_Node_Name_@_msp430_serial_minimal.speed)
+        {
+        case Baudrate_T_b9600:
+            uart_setup_baudrate(BAUDRATE_9600);
+            break;
+        case Baudrate_T_b19200:
+            uart_setup_baudrate(BAUDRATE_19200);
+            break;
+        case Baudrate_T_b38400:
+            uart_setup_baudrate(BAUDRATE_38400);
+            break;
+        case Baudrate_T_b57600:
+            uart_setup_baudrate(BAUDRATE_57600);
+            break;
+        case Baudrate_T_b115200:
+            uart_setup_baudrate(BAUDRATE_115200);
+            break;
+        default:
+            uart_setup_baudrate(BAUDRATE_9600);
+        }
+    }
+    else
+    {
+        uart_setup_baudrate(BAUDRATE_9600);
+    }
+
     uart_setup_stop_bits(ONE);
 
     // enable receive interrupts

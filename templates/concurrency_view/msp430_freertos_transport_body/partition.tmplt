@@ -34,20 +34,25 @@
 
 #include <msp430.h>
 #include <string.h>
+
+// use header genrated by ocarina for port identyfication
+#include <deployment.h>
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
 
 @@IF@@ @_In_Port_Names_@ /= "" AND @_Out_Port_Names_@ /= ""
-static RemoteTransportFuncPtr remote_transport_func = NULL;
+__attribute__ ((persistent)) static RemoteTransportFuncPtr remote_transport_func = NULL;
 void register_remote_transport_func(RemoteTransportFuncPtr fn)
 {
     remote_transport_func = fn;
 }
 
-// in future, this should be table
+@@TABLE@@
 extern QueueHandle_t @_In_Port_Thread_Name_@_global_queue;
+@@END_TABLE@@
 
 void process_incomming_message(struct Message* msg)
 {
@@ -62,9 +67,17 @@ void process_incomming_message(struct Message* msg)
         request.m_length = 0;
     }
 
-    xQueueSend(@_In_Port_Thread_Name_@_global_queue,
-               &request,
-               0);
+    switch(msg->m_port)
+    {
+@@TABLE@@
+        case @_LOWER:In_Port_Thread_Name_@_global_inport_@_LOWER:In_Port_Names_@:
+            xQueueSend(@_In_Port_Thread_Name_@_global_queue,
+                       &request,
+                       0);
+
+            break;
+@@END_TABLE@@
+    }
 }
 
 @@END_IF@@
@@ -74,7 +87,9 @@ void deliver_to_@_Out_Port_Remote_Function_@_@_Out_Port_Remote_Port_Name_@(struc
 {
     if(remote_transport_func != NULL)
     {
-        remote_transport_func(task->m_data, task->m_length);
+        remote_transport_func(task->m_data,
+                              task->m_length,
+                              (uint32_t) @_LOWER:Out_Port_Remote_Function_@_@_LOWER:Out_Port_Remote_Port_Name_@_global_inport_@_LOWER:Out_Port_Remote_Port_Name_@);
     }
 }
 @@END_TABLE@@

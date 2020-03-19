@@ -34,13 +34,12 @@ extern QueueHandle_t @_Thread_Name_@_global_queue;
 void prv@_Thread_Name_@TimerCallback(TimerHandle_t timer)
 {
     struct Request request;
-    //request.m_data = NULL;
     request.m_length = 0;
     xQueueSend(@_Thread_Name_@_global_queue, &request, 0);
 }
 
-__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_timer_buffer;
-__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_timer;
+__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_timer_buffer = {0};
+__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_timer = {0};
 
 @@END_IF@@
 void prv_@_Thread_Name_@Task(void* prParameters)
@@ -64,10 +63,6 @@ void prv_@_Thread_Name_@Task(void* prParameters)
         if(result == pdTRUE)
         {
             call_@_LOWER:Thread_Name_@((const char*)request.m_data, request.m_length);
-            //if(request.m_data != NULL)
-            //{
-                //vPortFree(request.m_data);
-            //}
         }
     }
 }

@@ -1,0 +1,61 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Master;
+    /* CIF TEXT (354, 10), (270, 250) */
+    -- Timers defined in the interface view
+    -- Use SET_TIMER (value, timer name)
+    -- and RESET_TIMER (timer name) in a
+    -- PROCEDURE CALL symbol to use them
+    timer myTimer;
+    
+    dcl count T_uInt8 := 0;
+    /* CIF ENDTEXT */
+    /* CIF START (786, 10), (70, 35) */
+    START;
+        /* CIF output (766, 65), (111, 35) */
+        output You_Are_Free;
+        /* CIF PROCEDURECALL (723, 115), (197, 35) */
+        call SET_timer (1000, myTimer);
+        /* CIF PROCEDURECALL (636, 170), (371, 35) */
+        call writeln('[MASTER] Set timer and call Slave during init');
+        /* CIF NEXTSTATE (786, 220), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (786, 220), (70, 35) */
+    state Wait;
+        /* CIF input (508, 275), (77, 35) */
+        input mytimer;
+            /* CIF decision (512, 330), (70, 50) */
+            decision count;
+                /* CIF ANSWER (236, 400), (70, 25) */
+                (0):
+                    /* CIF PROCEDURECALL (0, 450), (542, 35) */
+                    call writeln('[MASTER] Timer expired, Slave did not answer within 1 sec (as expected)');
+                    /* CIF PROCEDURECALL (126, 505), (290, 35) */
+                    call writeln('[MASTER] Trying again');
+                    /* CIF output (215, 560), (111, 35) */
+                    output You_Are_Free;
+                    /* CIF PROCEDURECALL (172, 615), (197, 35) */
+                    call SET_timer (1000, myTimer);
+                    /* CIF task (203, 670), (135, 35) */
+                    task count := 1;
+                /* CIF ANSWER (703, 400), (70, 25) */
+                (> 0):
+                    /* CIF PROCEDURECALL (553, 445), (368, 35) */
+                    call writeln('[MASTER] FAILED! I was expecting an answer');
+            enddecision;
+            /* CIF NEXTSTATE (512, 722), (70, 35) */
+            NEXTSTATE wait;
+        /* CIF input (1117, 275), (89, 35) */
+        input thank_you;
+            /* CIF PROCEDURECALL (933, 330), (456, 35) */
+            call writeln('[MASTER] Got Answer from slave (should be after 2nd call)');
+            /* CIF PROCEDURECALL (964, 385), (395, 35) */
+            call writeln ('You may now press Ctrl-C to stop the application');
+            /* CIF PROCEDURECALL (1075, 435), (172, 35) */
+            call RESEt_timer (mytimer);
+            /* CIF NEXTSTATE (1126, 485), (70, 35) */
+            NEXTSTATE done;
+    endstate;
+    /* CIF state (916, 10), (70, 35) */
+    state done;
+    endstate;
+endprocess Master;

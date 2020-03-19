@@ -34,6 +34,6 @@
 
 void spg_serial_msp430_minimal_init(void);
 void spg_serial_msp430_minimal_poller(void* param);
-void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length);
+void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t port);
 
 #endif

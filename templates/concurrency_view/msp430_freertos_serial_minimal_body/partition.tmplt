@@ -326,21 +326,20 @@ enum PACKET_STATE
 
 void process_packet(uint8_t* data, int length)
 {
-    struct Message msg;
-
-    if(length > 0)
+    if(length > 4)
     {
-        msg.m_port = 0;
-        msg.m_length = length;
-        memcpy(msg.m_data, data, length);
+        struct Message msg;
+
+        memcpy(&msg.m_port, data, sizeof(uint32_t));
+        memcpy(msg.m_data, data + sizeof(uint32_t), length - sizeof(uint32_t));
+        msg.m_length = length - sizeof(uint32_t);
+
+        process_incomming_message(&msg);
     }
     else
     {
-        msg.m_port = 0;
-        msg.m_length = 0;
+        // the packet does not contain valid Message
     }
-
-    process_incomming_message(&msg);
 }
 
 int serial_total_received_characters = 0;
@@ -416,13 +415,25 @@ void spg_serial_msp430_minimal_poller(void* param)
 static SemaphoreHandle_t sender_semaphore;
 static StaticSemaphore_t sender_semaphore_buffer;
 
-void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length)
+void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t port)
 {
     xSemaphoreTake(sender_semaphore, portMAX_DELAY);
 
     uart_putc(PACKET_START_BYTE);
 
     uint32_t iter;
+
+    for(iter = 0; iter < 4; ++iter)
+    {
+        uint8_t packet_byte = ((uint8_t*)(&port))[iter];
+
+        if(packet_byte == PACKET_START_BYTE || packet_byte == PACKET_STOP_BYTE || packet_byte == PACKET_ESCAPE_BYTE)
+        {
+            uart_putc(PACKET_ESCAPE_BYTE);
+        }
+
+        uart_putc(packet_byte);
+    }
 
     for(iter = 0; iter < length; ++iter)
     {

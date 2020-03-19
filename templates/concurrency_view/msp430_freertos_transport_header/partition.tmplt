@@ -54,7 +54,7 @@ struct Message
 
 void process_incomming_message(struct Message* msg);
 
-typedef void (*RemoteTransportFuncPtr)(uint8_t* data, uint32_t length);
+typedef void (*RemoteTransportFuncPtr)(uint8_t* data, uint32_t length, uint32_t port);
 void register_remote_transport_func(RemoteTransportFuncPtr fn);
 
 @@TABLE@@

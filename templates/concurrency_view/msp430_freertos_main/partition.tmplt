@@ -51,20 +51,6 @@
 extern void init_@_LOWER:Bound_Functions_@(void);
 @@END_TABLE@@
 
-@@TABLE@@
-__attribute__ ((persistent)) SemaphoreHandle_t @_LOWER:Bound_Functions_@_semaphore;
-__attribute__ ((persistent)) StaticSemaphore_t prv_@_LOWER:Bound_Functions_@_mutex_buffer;
-@@END_TABLE@@
-
-@@TABLE@@
-//QueueHandle_t @_Thread_Names_@_global_queue = NULL;
-@@END_TABLE@@
-
-@_Threads_@
-
-// heap declaration
-// __attribute__ ((persistent)) uint8_t ucHeap[configTOTAL_HEAP_SIZE] = { 0 };
-
 // function to setup hardware
 static void prvSetupHardware()
 {
@@ -95,7 +81,6 @@ static void prvSetupHardware()
     @_Device_Init_@();
 @@END_TABLE@@
 }
-
 
 // stack overflow handler
 void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
@@ -139,7 +124,7 @@ void vApplicationSetupTimerInterrupt(void)
     TA0CTL |= MC_1;
 }
 
-__attribute__ ((persistent)) StaticTask_t xIdleTaskTCB;
+__attribute__ ((persistent)) StaticTask_t xIdleTaskTCB = {0};
 __attribute__ ((persistent)) StackType_t xIdleTaskStack[configMINIMAL_STACK_SIZE] = {0};
 
 void vApplicationGetIdleTaskMemory(StaticTask_t** ppxIdleTaskPCBBuffer,
@@ -152,7 +137,7 @@ void vApplicationGetIdleTaskMemory(StaticTask_t** ppxIdleTaskPCBBuffer,
     *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
 }
 
-__attribute__ ((persistent)) StaticTask_t xTimerTaskTCB;
+__attribute__ ((persistent)) StaticTask_t xTimerTaskTCB = {0};
 __attribute__ ((persistent)) StackType_t xTimerTaskStack[configMINIMAL_STACK_SIZE] = {0};
 
 void vApplicationGetTimerTaskMemory(StaticTask_t** ppxTimerTaskPCBBuffer,
@@ -164,6 +149,13 @@ void vApplicationGetTimerTaskMemory(StaticTask_t** ppxTimerTaskPCBBuffer,
     *ppxTimerTaskStackBuffer = xTimerTaskStack;
     *pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
 }
+
+@@TABLE@@
+__attribute__ ((persistent)) SemaphoreHandle_t @_LOWER:Bound_Functions_@_semaphore = {0};
+__attribute__ ((persistent)) StaticSemaphore_t prv_@_LOWER:Bound_Functions_@_mutex_buffer = {0};
+@@END_TABLE@@
+
+@_Threads_@
 
 // the main function
 int main(void)

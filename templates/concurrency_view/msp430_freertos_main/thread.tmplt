@@ -20,11 +20,11 @@
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
 
 __attribute__ ((persistent)) QueueHandle_t @_Thread_Name_@_global_queue = NULL;
-__attribute__ ((persistent)) StaticQueue_t prv_@_LOWER:Thread_Name_@_static_queue = {};
+__attribute__ ((persistent)) StaticQueue_t prv_@_LOWER:Thread_Name_@_static_queue = {0};
 __attribute__ ((persistent)) uint8_t prv_@_LOWER:Thread_Name_@_queue_area[@_Queue_Size_@ * sizeof(struct Request)] = {0};
 
-__attribute__ ((persistent)) StaticTask_t prv_@_LOWER:Thread_Name_@_tcb;
-__attribute__ ((persistent)) static StackType_t prv_@_LOWER:Thread_Name_@_stack[@_Stack_Size_In_Bytes_@ / sizeof(StackType_t)] = {0};
+__attribute__ ((persistent)) StaticTask_t prv_@_LOWER:Thread_Name_@_tcb = {0};
+__attribute__ ((persistent)) StackType_t prv_@_LOWER:Thread_Name_@_stack[@_Stack_Size_In_Bytes_@ / sizeof(StackType_t)] = {0};
 //__attribute__ ((persistent)) StackType_t prv_@_LOWER:Thread_Name_@_stack[configMINIMAL_STACK_SIZE] = {0};
 
 static void initialize_thread_@_LOWER:Thread_Name_@()

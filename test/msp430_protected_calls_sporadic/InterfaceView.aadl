@@ -1,0 +1,193 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::function1
+PUBLIC
+
+WITH interfaceview::IV::function2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclic_interface
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_interface;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_interface.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 40 ms;
+END PI_cyclic_interface.others;
+
+SUBPROGRAM RI_protected_interface
+FEATURES
+  in1 : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_protected_interface;
+
+SUBPROGRAM IMPLEMENTATION RI_protected_interface.others
+END RI_protected_interface.others;
+
+SYSTEM function1
+FEATURES
+  PI_cyclic_interface : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function1::PI_cyclic_interface.others {
+    Taste::coordinates => "85352 77006";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 800 ms;
+    Taste::Deadline => 5000 ms;
+    Taste::InterfaceName => "cyclic_interface";
+  };
+  RI_protected_interface : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function2::PI_protected_interface.others {
+    Taste::coordinates => "122044 77008";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "protected_interface";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END function1;
+
+SYSTEM IMPLEMENTATION function1.others
+END function1.others;
+
+END interfaceview::IV::function1;
+
+PACKAGE interfaceview::IV::function2
+PUBLIC
+
+WITH interfaceview::IV::function3;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_protected_interface
+FEATURES
+  in1 : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END PI_protected_interface;
+
+SUBPROGRAM IMPLEMENTATION PI_protected_interface.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 30 ms;
+END PI_protected_interface.others;
+
+SUBPROGRAM RI_sporadic_interface
+FEATURES
+  param1 : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_sporadic_interface;
+
+SUBPROGRAM IMPLEMENTATION RI_sporadic_interface.others
+END RI_sporadic_interface.others;
+
+SYSTEM function2
+FEATURES
+  PI_protected_interface : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function2::PI_protected_interface.others {
+    Taste::coordinates => "142674 77005";
+    Taste::RCMoperationKind => protected;
+    Taste::Deadline => 40 ms;
+    Taste::InterfaceName => "protected_interface";
+  };
+  RI_sporadic_interface : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::function3::PI_sporadic_interface.others {
+    Taste::coordinates => "182043 77007";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sporadic_interface";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END function2;
+
+SYSTEM IMPLEMENTATION function2.others
+END function2.others;
+
+END interfaceview::IV::function2;
+
+PACKAGE interfaceview::IV::function3
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_sporadic_interface
+FEATURES
+  param1 : IN PARAMETER DataView::T_Int32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_sporadic_interface;
+
+SUBPROGRAM IMPLEMENTATION PI_sporadic_interface.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 5 ms;
+END PI_sporadic_interface.others;
+
+SYSTEM function3
+FEATURES
+  PI_sporadic_interface : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::function3::PI_sporadic_interface.others {
+    Taste::coordinates => "216530 77008";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 30 ms;
+    Taste::InterfaceName => "sporadic_interface";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END function3;
+
+SYSTEM IMPLEMENTATION function3.others
+END function3.others;
+
+END interfaceview::IV::function3;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::function1;
+WITH interfaceview::IV::function2;
+WITH interfaceview::IV::function3;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  function1 : SYSTEM interfaceview::IV::function1::function1.others {
+    Taste::coordinates => "85352 66140 122044 119682";
+  };
+  function2 : SYSTEM interfaceview::IV::function2::function2.others {
+    Taste::coordinates => "142674 66612 182043 119682";
+  };
+  function3 : SYSTEM interfaceview::IV::function3::function3.others {
+    Taste::coordinates => "216530 66140 267552 120154";
+  };
+CONNECTIONS
+  function2_PI_protected_interface_function1_RI_protected_interface : SUBPROGRAM ACCESS function2.PI_protected_interface -> function1.RI_protected_interface {
+    Taste::coordinates => "122044 77008 138343 77008 138343 77005 142674 77005";
+  };
+  function3_PI_sporadic_interface_function2_RI_sporadic_interface : SUBPROGRAM ACCESS function3.PI_sporadic_interface -> function2.RI_sporadic_interface {
+    Taste::coordinates => "182043 77007 199286 77007 199286 77008 216530 77008";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

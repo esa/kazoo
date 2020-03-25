@@ -15,6 +15,7 @@ void read_PI_h()
     printf("read_RI_s is sending %s\n", someBool?"TRUE":"FALSE");
     read_RI_s(&someBool);
     someBool = someBool?false:true;
+    read_RI_z(&someBool);
 }
 
 void read_PI_new(const asn1SccTASTE_Boolean *IN_c)

@@ -17,5 +17,13 @@ void function1_PI_cycl()
     someBool = someBool?false:true;
 }
 
+void function1_PI_z
+      (const asn1SccTASTE_Boolean *IN_param1)
 
+{
+       // Write your code here
+        printf("function1_PI_z is sending %s\n", *IN_param1?"TRUE":"FALSE");
+        function1_RI_t(IN_param1);
+
+} 
 

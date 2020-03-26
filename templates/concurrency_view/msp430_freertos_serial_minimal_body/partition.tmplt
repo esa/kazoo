@@ -43,7 +43,7 @@
 
 #include "msp430_serial_minimal.h"
 
-#define RING_BUFFER_SIZE 36
+#define RING_BUFFER_SIZE 16
 
 typedef struct
 {
@@ -235,6 +235,9 @@ static void uart_putc(uint8_t c)
     ring_buffer_push(&stdout_buffer, c);
     /* enable interrupt to transmit */
     UCA0IE |= UCTXIE;
+
+    __asm__ volatile("nop");
+    __asm__ volatile("nop");
 }
 
 static uint8_t uart_getc(void)
@@ -342,20 +345,8 @@ void process_packet(uint8_t* data, int length)
     }
 }
 
-int serial_total_received_characters = 0;
-uint8_t serial_last_received_characters[20] = {0};
-int serial_last_received_characters_index = 0;
-
 void spg_serial_msp430_minimal_poller(void* param)
 {
-    serial_total_received_characters = 0;
-    int dummy_i;
-    for(dummy_i = 0; dummy_i < 20; ++ dummy_i)
-    {
-        serial_last_received_characters[dummy_i] = '\0';
-    }
-    serial_last_received_characters_index = 0;
-
     uint8_t buffer[32];
     int counter = 0;
     enum PACKET_STATE state = WAITING_FOR_START_BYTE;
@@ -363,13 +354,6 @@ void spg_serial_msp430_minimal_poller(void* param)
     while(1)
     {
         uint8_t c = uart_getc();
-        ++serial_total_received_characters;
-        serial_last_received_characters[serial_last_received_characters_index] = c;
-        ++serial_last_received_characters_index;
-        if(serial_last_received_characters_index == 20)
-        {
-            serial_last_received_characters_index = 0;
-        }
 
         switch(state)
         {
@@ -405,6 +389,7 @@ void spg_serial_msp430_minimal_poller(void* param)
 
         case ESCAPE_STARTED:
             buffer[counter] = c;
+            ++counter;
             state = RECEIVING_MESSAGE;
             break;
 
@@ -412,8 +397,8 @@ void spg_serial_msp430_minimal_poller(void* param)
     }
 }
 
-static SemaphoreHandle_t sender_semaphore;
-static StaticSemaphore_t sender_semaphore_buffer;
+static SemaphoreHandle_t sender_semaphore = {0};
+static StaticSemaphore_t sender_semaphore_buffer = {0};
 
 void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t port)
 {

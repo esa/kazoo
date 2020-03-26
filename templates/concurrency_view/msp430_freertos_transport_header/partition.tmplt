@@ -38,7 +38,7 @@
 struct Request
 {
 	uint32_t m_length;
-    uint8_t m_data[8];
+    uint8_t m_data[16];
 
 };
 
@@ -48,7 +48,7 @@ struct Message
 {
     uint32_t m_port;
     uint32_t m_length;
-    uint8_t m_data[8];
+    uint8_t m_data[16];
 
 };
 

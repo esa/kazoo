@@ -49,13 +49,11 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 	struct Request request;
 	if(size_IN_buf_@_LOWER:Param_Names_@ != 0)
 	{
-		//request.m_data = pvPortMalloc(size_IN_buf_@_LOWER:Param_Names_@);
 		request.m_length = size_IN_buf_@_LOWER:Param_Names_@;
 		memcpy(request.m_data, IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@);
 	}
 	else
 	{
-		//request.m_data = NULL;
 		request.m_length = 0;
 	}
     deliver_to_@_Remote_Function_Names_@_@_Remote_Interface_Names_@(&request);

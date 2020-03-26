@@ -92,19 +92,25 @@ project @_CAPITALIZE:Name_@ is
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-I../../deploymentview_final/@_LOWER:Name_@",
+                "-I../../deploymentview_final/polyorb-hi-c/include",
                 "-mmcu=msp430fr5969",
                 "-msmall",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
                 "-Wno-unused-parameter",
-                "-O2");
+                "-Wl,--gc-sections",
+                "-g",
+                "-Os");
          when "Debug" =>
             for Default_Switches ("C") use
                ("-I/opt/ti/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-I../../deploymentview_final/@_LOWER:Name_@",
+                "-I../../deploymentview_final/polyorb-hi-c/include",
                 "-mmcu=msp430fr5969",
                 "-msmall",
                 "-Wall",

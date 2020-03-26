@@ -25,7 +25,6 @@ __attribute__ ((persistent)) uint8_t prv_@_LOWER:Thread_Name_@_queue_area[@_Queu
 
 __attribute__ ((persistent)) StaticTask_t prv_@_LOWER:Thread_Name_@_tcb = {0};
 __attribute__ ((persistent)) StackType_t prv_@_LOWER:Thread_Name_@_stack[@_Stack_Size_In_Bytes_@ / sizeof(StackType_t)] = {0};
-//__attribute__ ((persistent)) StackType_t prv_@_LOWER:Thread_Name_@_stack[configMINIMAL_STACK_SIZE] = {0};
 
 static void initialize_thread_@_LOWER:Thread_Name_@()
 {
@@ -37,7 +36,6 @@ static void initialize_thread_@_LOWER:Thread_Name_@()
     xTaskCreateStatic(prv_@_Thread_Name_@Task,
                 "@_Thread_Name_@",
                 @_Stack_Size_In_Bytes_@ / sizeof(StackType_t),
-                //configMINIMAL_STACK_SIZE,
                 NULL,
                 @_Priority_@,
                 prv_@_LOWER:Thread_Name_@_stack,

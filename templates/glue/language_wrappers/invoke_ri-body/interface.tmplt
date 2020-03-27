@@ -65,7 +65,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@IF@@ @_Param_Directions_@ = PARAM_IN
    // Encode parameter @_Param_Names_@
   @@IF@@ @_Param_Encodings_@ = NATIVE
-   static char IN_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)] = {0};
+   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ IN_buf_@_LOWER:Param_Names_@;
   @@ELSIF@@ @_Param_Encodings_@ = UPER
    static char IN_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING] = {0};
   @@ELSIF@@ @_Param_Encodings_@ = ACN
@@ -73,7 +73,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
   @@END_IF@@
    int size_IN_buf_@_LOWER:Param_Names_@ =
       Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
-        ((void *)IN_buf_@_LOWER:Param_Names_@,
+        ((void *)&IN_buf_@_LOWER:Param_Names_@,
   @@IF@@ @_Param_Encodings_@ = NATIVE
           sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
   @@ELSIF@@ @_Param_Encodings_@ = UPER
@@ -96,7 +96,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Buffer for decoding parameter @_Param_Names_@
   @@IF@@ @_Param_Encodings_@ = NATIVE
-   static char OUT_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ OUT_buf_@_LOWER:Param_Names_@;
   @@ELSIF@@ @_Param_Encodings_@ = UPER
    static char OUT_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING];
   @@ELSIF@@ @_Param_Encodings_@ = ACN
@@ -125,9 +125,9 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@INLINE(     \()(,\n      )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
+         (void*)IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
       @@ELSE@@
-         OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
+         &OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
@@ -137,7 +137,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Decode parameter @_Param_Names_@
    if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
-              (OUT_@_LOWER:Param_Names_@, OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
+              (OUT_@_LOWER:Param_Names_@, &OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
 #ifdef __unix__
       puts ("[ERROR] ASN.1 Decoding failed in @_LOWER:Parent_Function_@_RI_@_Name_@, parameter @_Param_Names_@");
 #endif

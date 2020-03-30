@@ -44,7 +44,7 @@
 
 #pragma once
 @@IF@@ @_Language_@ /= SIMULINK
-#ifdef __unix__
+#if defined(__unix__) || defined (__MSP430__)
    #include <stdlib.h>
    #include <stdio.h>
 #else

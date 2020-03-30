@@ -125,9 +125,9 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@INLINE(     \()(,\n      )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         (void*)IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
+         (void *)&IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
       @@ELSE@@
-         &OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
+         (void *)&OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
@@ -137,7 +137,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Decode parameter @_Param_Names_@
    if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
-              (OUT_@_LOWER:Param_Names_@, &OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
+              (OUT_@_LOWER:Param_Names_@, (void *)&OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
 #ifdef __unix__
       puts ("[ERROR] ASN.1 Decoding failed in @_LOWER:Parent_Function_@_RI_@_Name_@, parameter @_Param_Names_@");
 #endif

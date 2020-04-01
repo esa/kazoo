@@ -30,6 +30,13 @@
 @@-- @_Out_Port_Names_@       : Vector tag: output ports of the partition
 @@-- @_Out_Port_Thread_Name_@ :     |_ corresponding thread inside the partition
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
+@@TABLE@@
+@@IF@@ not @_IS_EMPTY:Block_FPGAConf_@ 
+#@_UPPER:Block_Names_@_SIZE := $(shell stat -L -c %s ../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers/TASTE-VHDL-DESIGN/project/bitfile.bit)
+#@_UPPER:Block_Names_@_OFFSET := 0
+@@END_IF@@
+@@END_TABLE@@
+
 @@INLINE@@
 @_LOWER:Name_@ :
 @@TABLE@@
@@ -38,5 +45,15 @@
 @@END_IF@@
 @@END_TABLE@@
 @@END_INLINE@@
+@@TABLE@@
+@@IF@@ not @_IS_EMPTY:Block_FPGAConf_@
+#ifeq ($(@_UPPER:Block_Names_@_SIZE),) 
+#	$(error No bit file found for @_LOWER:Block_Names_@)
+#else
+#	sed -i -e 's/\bSIZE_@_UPPER:Block_Names_@\b/$(@_UPPER:Block_Names_@_SIZE)/g' @_LOWER:Name_@_bitfiles.h
+#endif
+@@END_IF@@
+@@END_TABLE@@
+
 
 @_Blocks_@

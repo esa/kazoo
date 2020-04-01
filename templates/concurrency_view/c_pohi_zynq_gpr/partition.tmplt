@@ -50,7 +50,7 @@ for Project_Files use (
 @@IF@@ @_bambu_needed_@ = TRUE
     "@_LOWER:Name_@_zynq_bambu.gpr"
 @@END_IF@@
-@@IF@@ @_rtems_needed_@ = TRUE
+@@IF@@ @_bambu_needed_@ /= TRUE and @_rtems_needed_@ = TRUE
     "@_LOWER:Name_@_zynq_rtems.gpr"
 @@END_IF@@
 @@END_INLINE@@

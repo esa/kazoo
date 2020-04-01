@@ -47,6 +47,9 @@ zynq:
 	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 	make -f Makefile.bambu
+@@TABLE@@
+	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
 
 
 zynq_qemu:

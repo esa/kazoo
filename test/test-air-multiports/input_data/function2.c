@@ -11,6 +11,6 @@ void function2_startup()
 void function2_PI_t(const asn1SccTASTE_Boolean *IN_t)
 {
     /* Write your code here! */
-    printf("function2.c got %s ", *IN_t?"TRUE\n":"FALSE\n");
+    printf("[function2] PI_t got %s \n", *IN_t?"TRUE\n":"FALSE\n");
 }
 

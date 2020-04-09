@@ -17,3 +17,12 @@
 @@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
 @@--
 @@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+        @@IF@@ @_Param_Names_@ /= ""
+        @@IF@@ @_Param_Encodings_@ = NATIVE
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+        @@ELSIF@@ @_Param_Encodings_@ = UPER
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING];
+        @@ELSIF@@ @_Param_Encodings_@ = ACN
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING];
+        @@END_IF@@
+        @@END_IF@@

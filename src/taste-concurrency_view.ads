@@ -97,26 +97,31 @@ package TASTE.Concurrency_View is
 
    type Partition_In_Port is
       record
-         Port_Name, Thread_Name, Type_Name : Unbounded_String;
-         Remote_Partition_Name : Unbounded_String; --  Other side
+         Port_Name,
+         Thread_Name,
+         Type_Name,
+         Remote_Partition_Name : Unbounded_String;
+         Queue_Size            : Unbounded_String := US ("1");
       end record;
 
    package Partition_In_Ports is
-     new Indefinite_Ordered_Maps (String, Partition_In_Port);
+     new Indefinite_Ordered_Maps (Case_Insensitive_String, Partition_In_Port);
 
    --  Output ports of partitions can be connected to more than one
    --  thread output port. A vector of thread is needed to hold the list
    type Partition_Out_Port is
       record
-         Port_Name, Type_Name  : Unbounded_String;
+         Port_Name,
+         Type_Name             : Unbounded_String;
          Connected_Threads     : String_Vectors.Vector;
          Remote_Partition_Name,
          Remote_Function_Name,
          Remote_Port_Name      : Unbounded_String; --  Other side
+         Queue_Size            : Unbounded_String;
       end record;
 
    package Partition_Out_Ports is
-     new Indefinite_Ordered_Maps (String, Partition_Out_Port);
+     new Indefinite_Ordered_Maps (Case_Insensitive_String, Partition_Out_Port);
 
    type CV_Partition is tagged
       record

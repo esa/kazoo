@@ -587,6 +587,7 @@ package body TASTE.AADL_Parser is
                               New_Item => (Port_Name   => T.Entry_Port_Name,
                                            Thread_Name => T.Name,
                                            Type_Name   => Sort,
+                                           Queue_Size  => US ("1"),
                                            Remote_Partition_Name
                                                     => Part.Unsafe_Just.Name));
                         end if;
@@ -633,7 +634,8 @@ package body TASTE.AADL_Parser is
                                                  Remote_Function_Name =>
                                                    Remote.Function_Name,
                                                  Remote_Port_Name =>
-                                                   Remote.Interface_Name));
+                                                   Remote.Interface_Name,
+                                                 Queue_Size => US ("1")));
                               else
                                  --  Port already exists: just add this thread
                                  Partition.Out_Ports
@@ -1004,17 +1006,30 @@ package body TASTE.AADL_Parser is
          Put_Info ("Task priorities, offset and stack size will use default");
          Put_Info ("values. IMPORTANT: you should set them in the editor!");
       end Report_Error;
+      function Port_Str (Comp : String) return String is
+         --  Return the port name without "inport"/"outport" prefix
+         --  Note, these prefixes do not exist in the AST, they are added
+         --  in the concurrency view output template. It is therefore wrong
+         --  here to assume they are here. this should be refactored
+         Size : constant Integer := Comp'Length;
+      begin
+         if Size >= 8 and then Comp (Comp'First + 6) = '_' then
+            return Comp (Comp'First + 7 .. Comp'Last);
+         elsif Size >= 9 and Comp (Comp'First + 7) = '_' then
+            return Comp (Comp'First + 8 .. Comp'Last);
+         else
+            return Comp;
+         end if;
+      end Port_Str;
+
    begin
       if Concurrency_Properties_Root = No_Node
         or else Kind (Concurrency_Properties_Root) /= K_AADL_Specification
         or else Is_Empty (Declarations (Concurrency_Properties_Root))
       then
-         Put_Debug ("CV_Properties Error 1");
          Report_Error;
          return;
       end if;
-      --  AADL Unparser (add with/use Ocarina.BE_AADL):
-      --  Generate_AADL_Model (Concurrency_Properties_Root, False);
       Put_Info ("Analysing user-defined Concurrency View properties");
 
       Nodes := First_Node (Declarations (Concurrency_Properties_Root));
@@ -1029,7 +1044,6 @@ package body TASTE.AADL_Parser is
       end loop;
 
       if AADL_Package = No_Node then
-         Put_Debug ("CV_Properties Error 2");
          Report_Error;
          return;
       end if;
@@ -1045,7 +1059,6 @@ package body TASTE.AADL_Parser is
       end loop;
       if System_Impl = No_Node or else Is_Empty (ATN.Properties (System_Impl))
       then
-         Put_Debug ("CV_Properties Error 3");
          Report_Error;
          return;
       end if;
@@ -1053,15 +1066,14 @@ package body TASTE.AADL_Parser is
       Nodes := First_Node (ATN.Properties (System_Impl));
       while Present (Nodes) loop --  Iterate over the properties
          declare
-            Prop_Val   : Node_Id := Property_Association_Value (Nodes);
-            Applies_To : constant List_Id := Applies_To_Prop (Nodes);
-            Paths      : Node_Id;   --  property applies to path
+            Prop_Val     : Node_Id := Property_Association_Value (Nodes);
+            Applies_To   : constant List_Id := Applies_To_Prop (Nodes);
+            Paths        : Node_Id;   --  property applies to path
             Partition,
-            Thread     : Unbounded_String := Null_Unbounded_String;
-            --  Prop_Name shall be Stack_Size, Priority, or Dispatch_Offset
-            Prop_Name  : constant String :=
+            Component    : Unbounded_String := Null_Unbounded_String;
+            --  Prop_Name is Queue_Size, Stack_Size, Priority, Dispatch_Offset
+            Prop_Name    : constant String :=
               (Get_Name_String (Display_Name (Identifier (Nodes))));
-
             Number, Unit : Node_Id;
             Number_Str,
             Unit_Str     : Unbounded_String := US ("");
@@ -1072,8 +1084,10 @@ package body TASTE.AADL_Parser is
                Report_Error;
                return;
             end if;
-            if (Prop_Name /= "Stack_Size" and Prop_Name /= "Priority"
-              and Prop_Name /= "Dispatch_Offset") or else Is_Empty (Applies_To)
+            if (Prop_Name     /= "Stack_Size"
+                and Prop_Name /= "Priority"
+                and Prop_Name /= "Dispatch_Offset"
+                and Prop_Name /= "Queue_Size") or else Is_Empty (Applies_To)
             then
                Put_Debug ("Discarding unsupported CV Property: " & Prop_Name);
                goto Next_Property;
@@ -1084,15 +1098,16 @@ package body TASTE.AADL_Parser is
             Prop_Val := Single_Value (Prop_Val);
 
             if Kind (Prop_Val) /= K_Signed_AADLNumber then
-               Put_Debug ("CV_Properties Error 5 - " & Prop_Name);
+               Put_Debug ("CV_Properties Error: " & Prop_Name);
                Report_Error;
                return;
             end if;
 
             --  OK We have the value and the unit:
-            Number := Number_Value (Prop_Val);
+            Number     := Number_Value (Prop_Val);
             Number_Str := US (AADL_Values.Image (Value (Number)));
-            Unit   := Unit_Identifier (Prop_Val);
+            Unit       := Unit_Identifier (Prop_Val);
+
             if Present (Unit) then
                Unit_Str := US (Get_Name_String (Display_Name (Unit)));
             end if;
@@ -1120,7 +1135,7 @@ package body TASTE.AADL_Parser is
                end;
             end if;
 
-            --  Last we find the partition and thread it applies to.
+            --  Last we find the partition and component it applies to.
             --  (Check ocarina-be_aadl-properties.adb)
             Paths := First_Node (Applies_To);
             while Present (Paths) loop
@@ -1131,7 +1146,7 @@ package body TASTE.AADL_Parser is
                      then First_Node (Contained_Elts)
                      else No_Node);
                begin
-                  --  The following gets the path Partition.Thread_Name
+                  --  The following gets the path Partition.Component_Name
                   --  If a longer path is needed a refactoring must be done
                   while Present (List_Node) loop
                      --  Kind (List_Node) = K_Identifier
@@ -1139,49 +1154,80 @@ package body TASTE.AADL_Parser is
                         Partition := US (Get_Name_String
                           (Display_Name (List_Node)));
                      else
-                        Thread := US
+                        Component := US
                           (Get_Name_String (Display_Name (List_Node)));
                      end if;
-                     exit when Thread /= Null_Unbounded_String;
+                     exit when Component /= Null_Unbounded_String;
                      List_Node := Next_Node (List_Node);
                   end loop;
                end;
 
                --  We completed the parsing of one property
-               --  Prop_Name = Number_Str Unit_Str applies to Partition Thread
                Put_Debug (Prop_Name & " := " & To_String (Number_str) & " "
-                          & To_String (Unit_Str) & " applies to "
-                          & To_String (Partition) & "." & To_String (Thread));
+                          & To_String (Unit_Str)
+                          & " applies to "
+                          & To_String (Partition)
+                          & "."
+                          & To_String (Component));
 
                --  Checking in the generated concurrency view if the
-               --  partition and thread actually exist, and apply the property
+               --  partition and component actually exist to apply the property
+
                Found := False;
                for Node of Model.Concurrency_View.Nodes loop
                   exit when Found;
-                  if Node.Partitions.Contains (To_String (Partition))
-                    and then Node.Partitions (To_String (Partition))
-                      .Threads.Contains (To_String (Thread))
-                  then
-                     if Prop_Name = "Priority" then
-                        Node.Partitions (To_String (Partition))
-                          .Threads (To_String (Thread)).Priority := Number_Str;
-                     elsif Prop_Name = "Stack_Size" then
-                        Node.Partitions (To_String (Partition))
-                          .Threads (To_String (Thread)).Stack_Size_In_Bytes :=
-                            Number_Str;
-                     elsif Prop_Name = "Dispatch_Offset" then
-                        Node.Partitions (To_String (Partition))
-                          .Threads (To_String (Thread)).Dispatch_Offset_Ms :=
-                            Number_Str;
+                  --  First find the partition
+                  Found := Node.Partitions.Contains (To_String (Partition));
+                  if Found then
+                     if Prop_Name = "Queue_Size" then
+                        --  Property applies to a port, check if it exists,
+                        Found := Node.Partitions (To_String (Partition))
+                          .In_Ports.Contains (Port_Str (To_String (Component)))
+                          or else
+                            Node.Partitions (To_String (Partition))
+                              .Out_Ports.Contains
+                                (Port_Str (To_String (Component)));
+                     else
+                        --  Property applies to a thread, check if it exists
+                        Found := Node.Partitions (To_String (Partition))
+                          .Threads.Contains (To_String (Component));
                      end if;
-                     Found := True;
+
+                     if Found and Prop_Name = "Priority" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Priority := Number_Str;
+                     elsif Found and Prop_Name = "Stack_Size" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Stack_Size_In_Bytes := Number_Str;
+                     elsif Found and Prop_Name = "Dispatch_Offset" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Dispatch_Offset_Ms := Number_Str;
+                     elsif Found and Prop_Name = "Queue_Size" then
+                        if Node.Partitions (To_String (Partition))
+                          .In_Ports.Contains (Port_Str (To_String (Component)))
+                        then
+                           Node.Partitions (To_String (Partition))
+                             .In_Ports (Port_Str (To_String (Component)))
+                             .Queue_Size := Number_Str;
+                        else
+                           Node.Partitions (To_String (Partition))
+                             .Out_Ports (Port_Str (To_String (Component)))
+                             .Queue_Size := Number_Str;
+                        end if;
+                     else
+                        Found := False;
+                     end if;
                   end if;
                end loop;
+
                if not Found then
                   Put_Info ("The ConcurrencyView_Properties.aadl file "
-                            & "references non-existing partition/thread : "
+                            & "references a non-existing component : "
                             & To_String (Partition) & "."
-                            & To_String (Thread));
+                            & To_String (Component));
                end if;
 
                Paths := Next_Node (Paths);

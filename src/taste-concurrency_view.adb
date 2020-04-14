@@ -239,9 +239,11 @@ package body TASTE.Concurrency_View is
                Thread_Dst_Port : Vector_Tag;
                Input_Port_Names,
                Input_Port_Type_Name,
+               Input_Port_Queue_Size,
                Input_Port_Thread_Name  : Vector_Tag;
                Output_Port_Names,
-               Output_Port_Type_Name   : Vector_Tag;
+               Output_Port_Type_Name,
+               Output_Port_Queue_Size  : Vector_Tag;
                Out_Port_Remote_Partition : Vector_Tag;
                Out_Port_Remote_Function : Vector_Tag;
                Out_Port_Remote_Port_Name : Vector_Tag;
@@ -267,6 +269,8 @@ package body TASTE.Concurrency_View is
                     & Each.Type_Name;
                   Input_Port_Thread_Name :=
                     Input_Port_Thread_Name & Each.Thread_Name;
+                  Input_Port_Queue_Size :=
+                    Input_Port_Queue_Size & Each.Queue_Size;
                end loop;
                for Each of Partition.Out_Ports loop
                   Output_Port_Names := Output_Port_Names & Each.Port_Name;
@@ -284,6 +288,8 @@ package body TASTE.Concurrency_View is
                     & Each.Remote_Port_Name;
                   Out_Port_Remote_Function := Out_Port_Remote_Function
                     & Each.Remote_Function_Name;
+                  Output_Port_Queue_Size :=
+                    Output_Port_Queue_Size & Each.Queue_Size;
                end loop;
 
                for T of Partition.Threads loop
@@ -485,9 +491,11 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
+                 & Assoc ("In_Port_Queue_Size",   Input_Port_Queue_Size)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)
                  & Assoc ("Out_Port_Names",       Output_Port_Names)
                  & Assoc ("Out_Port_Type_Name",   Output_Port_Type_Name)
+                 & Assoc ("Out_Port_Queue_Size",  Output_Port_Queue_Size)
                  & Assoc ("Out_Port_Remote_Partition",
                           Out_Port_Remote_Partition)
                  & Assoc ("Out_Port_Remote_Port_Name",

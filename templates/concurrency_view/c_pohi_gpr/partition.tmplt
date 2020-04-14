@@ -180,6 +180,7 @@ project @_CAPITALIZE:Name_@ is
           "-lpthread",
           "-lm",
           "-Wl,-gc-sections")
+          & external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
           & external_as_list("USER_LDFLAGS", " ");
    end Linker;
 

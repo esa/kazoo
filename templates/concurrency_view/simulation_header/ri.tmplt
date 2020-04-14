@@ -27,7 +27,7 @@ typedef void (*RI_@_LOWER:Parent_Function_@_@_LOWER:Name_@_t)
    @@END_TABLE@@
 @@END_INLINE@@
 @@END_IF@@
-// Declaation of the function called by invoke_ri when user invokes the RI:
+// Declaration of the function called by invoke_ri when user invokes the RI:
 @@IF@@ @_Param_Names'Length_@ = 0
 void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@(void);
 @@ELSE@@

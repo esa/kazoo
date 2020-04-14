@@ -79,7 +79,8 @@ project @_CAPITALIZE:Name_@_AIR is
 
    package Linker is
       for Default_Switches ("C") use
-         external_as_list("USER_LDFLAGS", " ");
+         external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
+         & external_as_list("USER_LDFLAGS", " ");
    end Linker;
 
    package Builder is

@@ -119,6 +119,7 @@ library project @_CAPITALIZE:Name_@_Simulator is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
@@ -133,6 +134,7 @@ library project @_CAPITALIZE:Name_@_Simulator is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
       end case;
    end Compiler;

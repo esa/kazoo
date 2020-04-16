@@ -153,6 +153,7 @@ project @_CAPITALIZE:Name_@ is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
@@ -166,6 +167,7 @@ project @_CAPITALIZE:Name_@ is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
       end case;
       --  Increase command line size to avoid using --specs and support ccache

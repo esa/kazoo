@@ -86,9 +86,11 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
       case Build is
          when "Release" =>
             for Default_Switches ("C") use Common_C_Switches & ("-O2", "-DNDEBUG")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use Common_C_Switches & ("-D__PO_HI_USE_VCD=1")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
       end case;
    end Compiler;

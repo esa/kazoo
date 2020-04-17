@@ -312,6 +312,9 @@ The output of this template is saved to the file with name returned by processin
 |-
 |Instance_Of
 |Name of function type if instance
+|-
+|Has_CP
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
@@ -515,6 +518,15 @@ This file is processed for every thread in every partition in every node.
 |DOCUMENTATION MISSING
 |-
 |Target
+|DOCUMENTATION MISSING
+|-
+|Priority
+|DOCUMENTATION MISSING
+|-
+|Dispatch_Offset_ms
+|DOCUMENTATION MISSING
+|-
+|Stack_Size_In_Bytes
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/pi.tmplt ===
@@ -812,8 +824,8 @@ This template is evaluated for every block.
 |-
 |Target
 |DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|}
+
 
 
 
@@ -964,6 +976,24 @@ This file is evaluated for every partition.
 |DOCUMENTATION MISSING
 |-
 |Device_ASN1_Sort
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Function
+|DOCUMENTATION MISSING
+|-
+|In_Port_Queue_Size
+|DOCUMENTATION MISSING
+|-
+|Block_FPGAConf
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Partition
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Queue_Size
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
@@ -1226,5 +1256,4 @@ filesys.tmplt.
 |-
 |Device_Init
 |DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|}

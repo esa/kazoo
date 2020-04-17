@@ -419,13 +419,16 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("CP_Value",       Values);
    end CP_Template;
 
-   --  Makefiles need the function name and the list of ASN.1 files/modules
+   --  A Makefile can be generated for each function
+   --  with a rule to edit the function using an IDE, model editor, etc.
+   --  (this is defined in the template)
    function Function_Makefile_Template (F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag) return Translate_Set
    is (Translate_Set'(+Assoc  ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules))
+                      & Assoc ("Has_CP",       not F.Context_Params.Is_Empty)
                       & Assoc ("Is_Type",      F.Is_Type)
                       & Assoc ("Instance_Of",
                                 F.Instance_Of.Value_Or (US (""))));

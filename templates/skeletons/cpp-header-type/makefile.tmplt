@@ -5,6 +5,7 @@
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
+@@-- @_Has_CP_@              : Flag: true if function has context parameters
 VISUAL?=kate
 
 all: compile-linux
@@ -13,7 +14,19 @@ clean:
 	rm -rf obj
 
 edit:
-	$(VISUAL) ../../dataview/C/dataview-uniq.h src/@_LOWER:Name_@.h src/@_LOWER:Name_@.cc
+    @@IF@@ not @_Has_CP_@
+	$(VISUAL) ../../dataview/C/dataview-uniq.h \
+                  src/@_LOWER:Name_@.h \
+                  src/@_LOWER:Name_@_state.h \
+                  src/@_LOWER:Name_@.cc
+    @@ELSE@@
+	$(VISUAL) ../../dataview/C/dataview-uniq.h \
+                  ../../dataview/C/Context-@_LOWER:REPLACE_ALL(_/-):Name_@.h \
+                  ../../dataview/C/Context-@_LOWER:REPLACE_ALL(_/-):Name_@.c \
+                  src/@_LOWER:Name_@.h \
+                  src/@_LOWER:Name_@_state.h \
+                  src/@_LOWER:Name_@.cc
+    @@END_IF@@
 
 compile-linux:
 	mkdir -p obj && cd obj && g++ -c ../src/*.cc

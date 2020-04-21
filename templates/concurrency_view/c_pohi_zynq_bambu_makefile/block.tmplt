@@ -14,7 +14,7 @@
 @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and not @_IS_EMPTY:LOWER:Property_Values_@
 @_LOWER:Name_@: 
 	cp Bambu/bambu_@_STRIP:Unprotected_PIs_@.vhd ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src
-	cp Bambu/*.mem ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src
+	find Bambu -name \*.mem -exec cp {} ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src \;
 	make -C ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/project
 
 @@END_IF@@

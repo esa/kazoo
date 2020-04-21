@@ -37,14 +37,14 @@
 @@END_IF@@
 @@END_TABLE@@
 
-@@INLINE@@
 @_LOWER:Name_@ :
+	echo "Building HW functions for partition @_LOWER:Name_@"
 @@TABLE@@
 @@IF@@ not @_IS_EMPTY:Block_FPGAConf_@ 
-@_LOWER:Block_Names_@
+	$(MAKE) -f Makefile.bambu @_LOWER:Block_Names_@
 @@END_IF@@
 @@END_TABLE@@
-@@END_INLINE@@
+
 @@TABLE@@
 @@IF@@ not @_IS_EMPTY:Block_FPGAConf_@
 #ifeq ($(@_UPPER:Block_Names_@_SIZE),) 
@@ -55,5 +55,15 @@
 @@END_IF@@
 @@END_TABLE@@
 
-
 @_Blocks_@
+
+@@INLINE@@
+.PHONY: all @_LOWER:Name_@
+@@TABLE@@
+@@IF@@ not @_IS_EMPTY:Block_FPGAConf_@ 
+    @_LOWER:Block_Names_@
+@@END_IF@@
+@@END_TABLE@@
+@@END_INLINE@@
+
+

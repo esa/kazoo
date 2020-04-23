@@ -61,7 +61,7 @@ def main():
                     except (UnicodeEncodeError, UnicodeDecodeError) as err:
                         print("Unicode error in project", name)
                         f.write(str(err))
-            if errcode != 0 and path in xfails:
+            if errcode != 0 and name in xfails:
                # for "expected failures", set errcode to None
                result = (None, stdout, stderr, path, rule)
             results.append(result)

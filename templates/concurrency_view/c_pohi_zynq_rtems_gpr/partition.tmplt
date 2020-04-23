@@ -177,7 +177,6 @@ project @_CAPITALIZE:Name_@_Zynq_RTEMS is
        "trace_manager.c",
        "um_threads.c",
        "cheddar_schedule.cc",
-       "remote_configuration.cc",
-       "trace_manager.cc");
+       "remote_configuration.cc");
 
 end @_CAPITALIZE:Name_@_Zynq_RTEMS;

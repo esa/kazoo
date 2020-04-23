@@ -136,8 +136,7 @@ project @_CAPITALIZE:Name_@ is
        "trace_manager.c",
        "um_threads.c",
        "cheddar_schedule.cc",
-       "remote_configuration.cc",
-       "trace_manager.cc");
+       "remote_configuration.cc");
 
    package Compiler is
       case Build is

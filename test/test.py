@@ -58,9 +58,9 @@ def main():
                             f.write("-- stderr " + "-" * 70)
                             f.write(stderr.decode('utf-8', 'replace'))
                             f.write("-" * 80)
-                    except UnicodeDecodeError as err:
+                    except (UnicodeEncodeError, UnicodeDecodeError) as err:
                         print("Unicode error in project", name)
-                        print(str(err))
+                        f.write(str(err))
             if errcode != 0 and path in xfails:
                # for "expected failures", set errcode to None
                result = (None, stdout, stderr, path, rule)

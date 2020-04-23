@@ -122,6 +122,9 @@ package body TASTE.Parser_Utils is
       return Ada.Strings.Fixed.Trim (Input_String, Strip_Set, Strip_Set);
    end Strip_String;
 
+   function Strip_String (Input_US : Unbounded_String) return Unbounded_String
+   is (US (Strip_String (To_String (Input_US))));
+
    --  str.join as in Python - join string arrays with a separator
    function Join_Strings (Str_Set : String_Sets.Set;
                           Sep     : String             := ", ";
@@ -175,7 +178,11 @@ package body TASTE.Parser_Utils is
       Command : constant String := Ada.Command_Line.Command_Name;
       use String_Holders;
 
-      IV, DeplV, DataV, OutDir : aliased GNAT.Strings.String_Access := null;
+      IV,
+      DeplV,
+      DataV,
+      OutDir,
+      Target : aliased GNAT.Strings.String_Access := null;
    begin
       --  Retrieve the path of the kazoo binary, to have a base prefix
       --  to find the templates folder
@@ -237,6 +244,11 @@ package body TASTE.Parser_Utils is
                      Long_Switch    => "--output=",
                      Help           => "Output directory (created if absent)",
                      Argument       => "Folder");
+      Define_Switch (Config, Output => Target'Access,
+                     Switch         => "-t:",
+                     Long_Switch    => "--target=",
+                     Help           => "User-defined target (default pohic)",
+                     Argument       => "pohic");
       Define_Switch (Config, Output => Result.Skeletons'Access,
                      Switch         => "-w",
                      Long_Switch    => "--gw",
@@ -299,6 +311,11 @@ package body TASTE.Parser_Utils is
          then To_Holder (OutDir.all)
          else To_Holder ("."));
 
+      Result.Target :=
+        (if Target /= null and then Target.all'Length > 0
+         then To_Holder (Target.all)
+         else To_Holder ("pohic"));
+
       if Version then
          raise Exit_From_Command_Line;
       end if;
@@ -331,6 +348,7 @@ package body TASTE.Parser_Utils is
               & Assoc ("Binary_Path",      Config.Binary_Path.Element)
               & Assoc ("Check_Data_View",  Config.Check_Data_View)
               & Assoc ("Output_Dir",       Config.Output_Dir.Element)
+              & Assoc ("Target",           Config.Target.Element)
               & Assoc ("Skeletons",        Config.Skeletons)
               & Assoc ("Glue",             Config.Glue)
               & Assoc ("Use_POHIC",        Config.Use_POHIC)

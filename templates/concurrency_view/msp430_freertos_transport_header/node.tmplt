@@ -1,0 +1,7 @@
+\@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@       : Name of the node from deployment view
+@@-- @_Partition_Names_@ : Tag listing the partitions in this node
+@@-- @_Partitions_@      : List of rendered code for partitions
+@@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
+@@-- In standard TASTE systems there is only one partition per node

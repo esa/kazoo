@@ -65,7 +65,9 @@ package TASTE.Parser_Utils is
      (if Is_Tty then ASCII.ESC & "[4m" else "");
    function White_Bold return String is (if Is_Tty then White & Bold else "");
 
+   --  Remove spaces/newlines at beginning/end of string
    function Strip_String (Input_String : String) return String;
+   function Strip_String (Input_US : Unbounded_String) return Unbounded_String;
 
    procedure Put_Info  (Info  : String);
    procedure Put_Error (Error : String);
@@ -175,11 +177,12 @@ package TASTE.Parser_Utils is
    subtype String_Holder is String_Holders.Holder;
    type Taste_Configuration is tagged
       record
-         Binary_Path      : String_Holder;
-         Interface_View   : String_Holder;
-         Deployment_View  : String_Holder;
-         Data_View        : String_Holder;
-         Output_Dir       : String_Holder;
+         Binary_Path,
+         Interface_View,
+         Deployment_View,
+         Data_View,
+         Output_Dir,
+         Target           : String_Holder;
          Check_Data_View  : aliased Boolean := False;
          Skeletons        : aliased Boolean := True;
          Glue             : aliased Boolean := False;

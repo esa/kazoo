@@ -12,15 +12,21 @@ void read_PI_h()
 {
     static asn1SccT_Boolean someBool = true;
     /* Write your code here! */
-    printf("read_RI_s is sending %s\n", someBool?"TRUE":"FALSE");
+    printf("[read] PI_h\n");
+    printf("[read] Calling RI_s %s\n", someBool?"TRUE":"FALSE");
+
     read_RI_s(&someBool);
+
     someBool = someBool?false:true;
+    printf("[read] Calling RI_z %s\n", someBool?"TRUE":"FALSE");
+
+    read_RI_z(&someBool);
 }
 
 void read_PI_new(const asn1SccTASTE_Boolean *IN_c)
 {
         /* Write your code here! */
-        printf("read.c got %s ", *IN_c?"TRUE\n":"FALSE\n");
+        printf("[read] PI_new: got %s ", *IN_c?"TRUE\n":"FALSE\n");
 }
 
 

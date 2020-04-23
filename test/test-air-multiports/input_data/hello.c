@@ -11,7 +11,9 @@ void hello_startup()
 void hello_PI_s(const asn1SccTASTE_Boolean *IN_t)
 {
     /* Write your code here! */
-    printf("hello.c got %s ", *IN_t?"TRUE\n":"FALSE\n");
+    printf("[hello] PI_s: got %s\n", *IN_t?"TRUE":"FALSE");
+    printf("[hello] Calling RI_new %s\n", *IN_t?"TRUE":"FALSE");
+
     hello_RI_new(IN_t);
 
 }

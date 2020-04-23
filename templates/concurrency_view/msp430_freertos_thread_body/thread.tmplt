@@ -1,0 +1,68 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Thread_Name_@       : Thread name
+@@-- @_Entry_Port_Name_@   : Name of the PI
+@@-- @_RCM_@               : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
+@@-- @_Need_Mutex_@        : True if the PI is shared with others in the protected block
+@@-- @_Pro_Block_Name_@    : Name of the protected function
+@@-- @_Node_Name_@         : Name of the deployment node
+@@-- @_Remote_Threads_@    : Vector tag: output remote thread list
+@@-- @_RI_Port_Name_@      :    |_ Corresponding local RI name
+@@-- @_Remote_PIs_@        :    |_ Associated PI Name
+@@-- @_Remote_PI_Sorts_@   :    |_ Optional param type of the remote thread
+@@-- @_Remote_PI_Modules_@ :    |_ Asn1 module of the optional param type
+@@-- Tags related to the PI that is at the origin of the thread creation:
+@@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
+@@-- @_Param_Names_@, _Types_@, _ASN1_Modules, _Encodings_@, _Directions_@ : param vector tag
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
+@@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
+@@--
+@@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+#include "thread_@_LOWER:Thread_Name_@.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "timers.h"
+
+#include "transport.h"
+#include "msp430_partition_interface.h"
+
+extern QueueHandle_t @_Thread_Name_@_global_queue;
+
+@@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
+void prv@_Thread_Name_@TimerCallback(TimerHandle_t timer)
+{
+    struct Request request;
+    request.m_length = 0;
+    xQueueSend(@_Thread_Name_@_global_queue, &request, 0);
+}
+
+__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_timer_buffer = {0};
+__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_timer = {0};
+
+@@END_IF@@
+void prv_@_Thread_Name_@Task(void* prParameters)
+{
+    extern QueueHandle_t @_Thread_Name_@_global_queue;
+@@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
+    TickType_t period = pdMS_TO_TICKS(@_Period_@);
+    prv_@_LOWER:Thread_Name_@_timer = xTimerCreateStatic("@_Thread_Name_@Timer",
+                                                         period,
+                                                         pdTRUE,
+                                                         NULL,
+                                                         &prv@_Thread_Name_@TimerCallback,
+                                                         &prv_@_LOWER:Thread_Name_@_timer_buffer);
+    xTimerStart(prv_@_LOWER:Thread_Name_@_timer, portMAX_DELAY);
+@@END_IF@@
+
+    while(1)
+    {
+        struct Request request;
+        BaseType_t result = xQueueReceive(@_Thread_Name_@_global_queue, &request, portMAX_DELAY);
+        if(result == pdTRUE)
+        {
+            call_@_LOWER:Thread_Name_@((const char*)request.m_data, request.m_length);
+        }
+    }
+}

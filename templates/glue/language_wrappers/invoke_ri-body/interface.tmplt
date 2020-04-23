@@ -30,7 +30,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@END_IF@@
 {
    // Check that we are not in the startup transition
-   if (false == @_LOWER:Parent_Function_@_initialized) {
+   if (2 != @_LOWER:Parent_Function_@_initialized) {
       #ifdef __unix__
          puts("A call to @_LOWER:Parent_Function_@_RI_@_Name_@ was made during system startup.");
          puts("This is not allowed because the system is not yet fully initialized. Please fix your code/models");
@@ -64,10 +64,24 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@TABLE'TERSE@@
 @@IF@@ @_Param_Directions_@ = PARAM_IN
    // Encode parameter @_Param_Names_@
-   static char IN_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)] = {0};
+  @@IF@@ @_Param_Encodings_@ = NATIVE
+   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ IN_buf_@_LOWER:Param_Names_@;
+  @@ELSIF@@ @_Param_Encodings_@ = UPER
+   static char IN_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING] = {0};
+  @@ELSIF@@ @_Param_Encodings_@ = ACN
+   static char IN_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING] = {0};
+  @@END_IF@@
    int size_IN_buf_@_LOWER:Param_Names_@ =
       Encode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
-        ((void *)IN_buf_@_LOWER:Param_Names_@, sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@), (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ *)IN_@_LOWER:Param_Names_@);
+        ((void *)&IN_buf_@_LOWER:Param_Names_@,
+  @@IF@@ @_Param_Encodings_@ = NATIVE
+          sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@),
+  @@ELSIF@@ @_Param_Encodings_@ = UPER
+          asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING,
+  @@ELSIF@@ @_Param_Encodings_@ = ACN
+          asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING,
+  @@END_IF@@
+          (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ *)IN_@_LOWER:Param_Names_@);
    if (-1 == size_IN_buf_@_LOWER:Param_Names_@) {
       #ifdef __unix__
          puts ("[ERROR] ASN.1 Encoding failed in @_LOWER:Parent_Function_@_RI_@_Name_@, parameter @_Param_Names_@");
@@ -81,7 +95,13 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@TABLE'TERSE@@
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Buffer for decoding parameter @_Param_Names_@
-   static char OUT_buf_@_LOWER:Param_Names_@[sizeof(asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+  @@IF@@ @_Param_Encodings_@ = NATIVE
+   static asn1Scc@_REPLACE_ALL(-/_):Param_Types_@ OUT_buf_@_LOWER:Param_Names_@;
+  @@ELSIF@@ @_Param_Encodings_@ = UPER
+   static char OUT_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING];
+  @@ELSIF@@ @_Param_Encodings_@ = ACN
+   static char OUT_buf_@_LOWER:Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING];
+  @@END_IF@@
    size_t      size_OUT_buf_@_LOWER:Param_Names_@ = 0;
 @@END_IF@@
 @@END_TABLE@@
@@ -105,9 +125,9 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@INLINE(     \()(,\n      )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
+         (void *)&IN_buf_@_LOWER:Param_Names_@, (size_t)size_IN_buf_@_LOWER:Param_Names_@
       @@ELSE@@
-         OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
+         (void *)&OUT_buf_@_LOWER:Param_Names_@, &size_OUT_buf_@_LOWER:Param_Names_@
       @@END_IF@@
    @@END_TABLE@@
 @@END_INLINE@@
@@ -117,7 +137,7 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@IF@@ @_Param_Directions_@ = PARAM_OUT
    // Decode parameter @_Param_Names_@
    if (0 != Decode_@_Param_Encodings_@_@_REPLACE_ALL(-/_):Param_Types_@
-              (OUT_@_LOWER:Param_Names_@, OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
+              (OUT_@_LOWER:Param_Names_@, (void *)&OUT_buf_@_LOWER:Param_Names_@, size_OUT_buf_@_LOWER:Param_Names_@)) {
 #ifdef __unix__
       puts ("[ERROR] ASN.1 Decoding failed in @_LOWER:Parent_Function_@_RI_@_Name_@, parameter @_Param_Names_@");
 #endif

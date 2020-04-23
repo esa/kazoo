@@ -1,0 +1,11 @@
+@@-- The following boolean tags are available to decide if the file
+@@-- shall be generated or not:
+@@--    Filename_Is_Present
+@@--    Skeletons
+@@--    Glue
+@@--    Use_POHIC
+@@--    Debug
+@@--    No_Stdlib
+@@IF@@ @_CPU_Platform_@ = PLATFORM_MSP430_FREERTOS
+TRUE
+@@END_IF@@

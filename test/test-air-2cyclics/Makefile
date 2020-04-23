@@ -25,6 +25,6 @@ gdb: clean
 		 ../common/ocarina_components.aadl
 
 clean:
-	rm -rf output
+	rm -rf work
 
 .PHONY: clean test-parse gdb

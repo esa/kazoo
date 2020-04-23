@@ -44,21 +44,15 @@ extern "C" {
 #ifdef __unix__
    #include <stdlib.h>
    #include <stdio.h>
-#else
-   typedef unsigned size_t;
 #endif
 
 void @_LOWER:Name_@_startup(void);
 
 /* Provided interfaces */
-@@TABLE@@
 @_Provided_Interfaces_@
-@@END_TABLE@@
 
 /* Required interfaces */
-@@TABLE@@
 @_Required_Interfaces_@
-@@END_TABLE@@
 
 @@TABLE@@
 // Functions to set/reset time "@_Timers_@" (parameter in milliseconds)

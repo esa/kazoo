@@ -105,7 +105,9 @@ package body TASTE.Dump is
             Filename      : constant String :=
               (if Check then Strip_String (Parse (File_Template)) else "");
             Trigger       : constant Boolean :=
-              (Check and then (Strip_String (Parse (Trig_Template)) = "TRUE"));
+              (Check
+               and then
+                 (String'(Strip_String (Parse (Trig_Template))) = "TRUE"));
 
             IV_Tags     : Translate_Set;   -- Interface View
             DV_Tags     : Translate_Set;   -- Deployment View

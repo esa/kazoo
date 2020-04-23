@@ -1,0 +1,18 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                : The name of the interface
+@@-- @_Direction_@           : "PI" or "RI"
+@@-- @_Kind_@                : The RCM Kind
+@@-- @_Parent_Function_@     : The name of the function
+@@-- @_Param_Names_@         : List of parameter names
+@@-- @_Param_Types_@         :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@    :   |_ Corresponding direction
+        @@IF@@ @_Kind_@ = SPORADIC_OPERATION
+        @@IF@@ @_Param_Encodings_@ = NATIVE
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+        @@ELSIF@@ @_Param_Encodings_@ = UPER
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING];
+        @@ELSIF@@ @_Param_Encodings_@ = ACN
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING];
+        @@END_IF@@
+        @@END_IF@@

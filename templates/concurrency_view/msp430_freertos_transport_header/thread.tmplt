@@ -1,0 +1,28 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Thread_Name_@       : Thread name
+@@-- @_Entry_Port_Name_@   : Name of the PI
+@@-- @_RCM_@               : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
+@@-- @_Pro_Block_Name_@    : Name of the protected function
+@@-- @_Node_Name_@         : Name of the deployment node
+@@-- @_Remote_Threads_@    : Vector tag: output remote thread list
+@@-- @_RI_Port_Name_@      :    |_ Corresponding local RI name
+@@-- @_Remote_PIs_@        :    |_ Associated PI Name
+@@-- @_Remote_PI_Sorts_@   :    |_ Optional param type of the remote thread
+@@-- @_Remote_PI_Modules_@ :    |_ Asn1 module of the optional param type
+@@-- Tags related to the PI that is at the origin of the thread creation:
+@@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
+@@-- @_Param_Names_@, _Types_@, _ASN1_Modules, _Encodings_@, _Directions_@ : param vector tag
+@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
+@@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
+@@--
+@@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+        @@IF@@ @_Param_Names_@ /= ""
+        @@IF@@ @_Param_Encodings_@ = NATIVE
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[sizeof (asn1Scc@_REPLACE_ALL(-/_):Param_Types_@)];
+        @@ELSIF@@ @_Param_Encodings_@ = UPER
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ENCODING];
+        @@ELSIF@@ @_Param_Encodings_@ = ACN
+        char @_Parent_Function_@_@_Name_@_@_Param_Names_@[asn1Scc@_REPLACE_ALL(-/_):Param_Types_@_REQUIRED_BYTES_FOR_ACN_ENCODING];
+        @@END_IF@@
+        @@END_IF@@

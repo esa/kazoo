@@ -1,0 +1,20 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@             : Protected block name
+@@-- @_Language_@         : Implementation language
+@@-- @_Calling_Threads_@  : List of calling threads
+@@-- @_Node name_@        : Node name
+@@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
+@@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
+@@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@IF@@ @_Protected_PIs_@ /= ""
+// Protected provided interfaces of function @_Name_@
+@_Protected_PIs_@
+// End of the protected provided interfaces of function @_Name_@
+@@END_IF@@
+@@IF@@ @_Required_@ /= ""
+
+// Required interfaces of function @_Name_@
+@_Required_@
+// End of the required interfaces of function @_Name_@
+@@END_IF@@

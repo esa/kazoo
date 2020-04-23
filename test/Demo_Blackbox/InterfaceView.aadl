@@ -1,13 +1,14 @@
 ---------------------------------------------------
--- AADL2.0
--- TASTE
--- (c)Ellidiss Technologies
+-- AADL2.2
+-- TASTE type interfaceview
 -- 
+-- generated code: do not edit
 ---------------------------------------------------
 
-PACKAGE interfaceview::FV::Caller_in_Ada
+PACKAGE interfaceview::IV::Caller_in_Ada
 PUBLIC
 
+WITH interfaceview::IV::BlackBox;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -17,6 +18,8 @@ PROPERTIES
 END PI_pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_pulse.others;
 
 SUBPROGRAM RI_RunDriver
@@ -38,9 +41,32 @@ END RI_RunDriver;
 SUBPROGRAM IMPLEMENTATION RI_RunDriver.others
 END RI_RunDriver.others;
 
-END interfaceview::FV::Caller_in_Ada;
+SYSTEM Caller_in_Ada
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Caller_in_Ada::PI_pulse.others {
+    Taste::coordinates => "550 324";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::BlackBox::PI_RunDriver.others {
+    Taste::coordinates => "1265 374";
+    Taste::RCMoperationKind => protected;
+    Taste::InterfaceName => "RunDriver";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (Ada);
+  Taste::Active_Interfaces => enabled;
+END Caller_in_Ada;
 
-PACKAGE interfaceview::FV::BlackBox
+SYSTEM IMPLEMENTATION Caller_in_Ada.others
+END Caller_in_Ada.others;
+
+END interfaceview::IV::Caller_in_Ada;
+
+PACKAGE interfaceview::IV::BlackBox
 PUBLIC
 
 WITH Taste;
@@ -65,13 +91,33 @@ PROPERTIES
 END PI_RunDriver;
 
 SUBPROGRAM IMPLEMENTATION PI_RunDriver.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_RunDriver.others;
 
-END interfaceview::FV::BlackBox;
+SYSTEM BlackBox
+FEATURES
+  PI_RunDriver : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::BlackBox::PI_RunDriver.others {
+    Taste::coordinates => "1872 494";
+    Taste::RCMoperationKind => protected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "RunDriver";
+  };
+PROPERTIES
+  Source_Language => (Blackbox_device);
+  Taste::Active_Interfaces => enabled;
+END BlackBox;
 
-PACKAGE interfaceview::FV::Caller_in_C
+SYSTEM IMPLEMENTATION BlackBox.others
+END BlackBox.others;
+
+END interfaceview::IV::BlackBox;
+
+PACKAGE interfaceview::IV::Caller_in_C
 PUBLIC
 
+WITH interfaceview::IV::BlackBox;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -81,6 +127,8 @@ PROPERTIES
 END PI_pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_pulse.others;
 
 SUBPROGRAM RI_RunDriver
@@ -102,116 +150,63 @@ END RI_RunDriver;
 SUBPROGRAM IMPLEMENTATION RI_RunDriver.others
 END RI_RunDriver.others;
 
-END interfaceview::FV::Caller_in_C;
-
-PACKAGE interfaceview::IV
-PUBLIC
-
-WITH interfaceview::FV::Caller_in_Ada;
-WITH interfaceview::FV::BlackBox;
-WITH interfaceview::FV::Caller_in_C;
-WITH interfaceview::FV;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SYSTEM Caller_in_Ada
-FEATURES
-  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Caller_in_Ada::PI_pulse.others {
-    Taste::coordinates => "587 334";
-    Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "pulse";
-  };
-  RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
-    Taste::coordinates => "1302 384";
-    Taste::RCMoperationKind => protected;
-    Taste::InterfaceName => "RunDriver";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (Ada);
-END Caller_in_Ada;
-
-SYSTEM IMPLEMENTATION Caller_in_Ada.others
-SUBCOMPONENTS
-  pulse_impl : SUBPROGRAM interfaceview::FV::Caller_in_Ada::PI_pulse.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_pulse_impl : SUBPROGRAM ACCESS pulse_impl -> PI_pulse;
-END Caller_in_Ada.others;
-
-SYSTEM BlackBox
-FEATURES
-  PI_RunDriver : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
-    Taste::coordinates => "1872 494";
-    Taste::RCMoperationKind => protected;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "RunDriver";
-  };
-PROPERTIES
-  Source_Language => (Blackbox_device);
-END BlackBox;
-
-SYSTEM IMPLEMENTATION BlackBox.others
-SUBCOMPONENTS
-  RunDriver_impl : SUBPROGRAM interfaceview::FV::BlackBox::PI_RunDriver.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_RunDriver_impl : SUBPROGRAM ACCESS RunDriver_impl -> PI_RunDriver;
-END BlackBox.others;
-
 SYSTEM Caller_in_C
 FEATURES
-  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Caller_in_C::PI_pulse.others {
-    Taste::coordinates => "576 1142";
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Caller_in_C::PI_pulse.others {
+    Taste::coordinates => "556 1135";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "pulse";
   };
-  RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::BlackBox::PI_RunDriver.others {
-    Taste::coordinates => "1338 1189";
+  RI_RunDriver : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::BlackBox::PI_RunDriver.others {
+    Taste::coordinates => "1318 1182";
     Taste::RCMoperationKind => protected;
     Taste::InterfaceName => "RunDriver";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
   Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
 END Caller_in_C;
 
 SYSTEM IMPLEMENTATION Caller_in_C.others
-SUBCOMPONENTS
-  pulse_impl : SUBPROGRAM interfaceview::FV::Caller_in_C::PI_pulse.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_pulse_impl : SUBPROGRAM ACCESS pulse_impl -> PI_pulse;
 END Caller_in_C.others;
 
+END interfaceview::IV::Caller_in_C;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Caller_in_Ada;
+WITH interfaceview::IV::BlackBox;
+WITH interfaceview::IV::Caller_in_C;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
 SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
 END interfaceview;
 
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
-  Caller_in_Ada : SYSTEM interfaceview::IV::Caller_in_Ada.others {
-    Taste::coordinates => "587 243 1302 896";
+  Caller_in_Ada : SYSTEM interfaceview::IV::Caller_in_Ada::Caller_in_Ada.others {
+    Taste::coordinates => "550 233 1265 886";
   };
-  BlackBox : SYSTEM interfaceview::IV::BlackBox.others {
+  BlackBox : SYSTEM interfaceview::IV::BlackBox::BlackBox.others {
     Taste::coordinates => "1872 359 2688 1008";
   };
-  Caller_in_C : SYSTEM interfaceview::IV::Caller_in_C.others {
-    Taste::coordinates => "576 1037 1338 1690";
+  Caller_in_C : SYSTEM interfaceview::IV::Caller_in_C::Caller_in_C.others {
+    Taste::coordinates => "556 1030 1318 1683";
   };
 CONNECTIONS
-  BlackBox_RunDriver_Caller_in_Ada_RunDriver : SUBPROGRAM ACCESS BlackBox.PI_RunDriver -> Caller_in_Ada.RI_RunDriver {
-    Taste::coordinates => "1302 384 1579 384 1579 494 1872 494";
+  BlackBox_PI_RunDriver_Caller_in_Ada_RI_RunDriver : SUBPROGRAM ACCESS BlackBox.PI_RunDriver -> Caller_in_Ada.RI_RunDriver {
+    Taste::coordinates => "1265 374 1579 374 1579 494 1872 494";
   };
-  BlackBox_RunDriver_Caller_in_C_RunDriver : SUBPROGRAM ACCESS BlackBox.PI_RunDriver -> Caller_in_C.RI_RunDriver {
-    Taste::coordinates => "1338 1189 1597 1189 1597 494 1872 494";
+  BlackBox_PI_RunDriver_Caller_in_C_RI_RunDriver : SUBPROGRAM ACCESS BlackBox.PI_RunDriver -> Caller_in_C.RI_RunDriver {
+    Taste::coordinates => "1318 1182 1597 1182 1597 494 1872 494";
   };
 END interfaceview.others;
 
@@ -219,14 +214,6 @@ PROPERTIES
   Taste::dataView => ("DataView");
   Taste::dataViewPath => ("DataView.aadl");
   Taste::coordinates => "0 0 2970 2100";
-  Taste::version => "1.3.17";
+  Taste::version => "2.3";
 END interfaceview::IV;
-
-PACKAGE interfaceview::FV
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-END interfaceview::FV;
 

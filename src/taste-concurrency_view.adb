@@ -6,10 +6,12 @@ with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
-     Ada.Strings.Fixed,
+     --  Ada.Strings.Fixed,
+     GNAT.Directory_Operations,   -- Contains Dir_Name
      TASTE.Backend;
 
-use Ada.Directories;
+use Ada.Directories,
+    GNAT.Directory_Operations;
 
 package body TASTE.Concurrency_View is
 
@@ -142,20 +144,23 @@ package body TASTE.Concurrency_View is
       end loop;
 
       return Result : constant Translate_Set :=
-        T.PI.Interface_To_Template  --  PI used to create the thread
-        & Assoc ("Thread_Name",       To_String (T.Name))
-        & Assoc ("Partition_Name",    To_String (T.Partition_Name))
-        & Assoc ("Entry_Port_Name",   To_String (T.Entry_Port_Name))
-        & Assoc ("RCM",               To_String (T.RCM))
-        & Assoc ("Need_Mutex",        T.Need_Mutex)
-        & Assoc ("Pro_Block_Name",    To_String (T.Protected_Block_Name))
-        & Assoc ("Node_Name",         To_String (T.Node.Value_Or
+        T.PI.Interface_To_Template      --  PI used to create the thread
+        & Assoc ("Thread_Name",         To_String (T.Name))
+        & Assoc ("Partition_Name",      To_String (T.Partition_Name))
+        & Assoc ("Entry_Port_Name",     To_String (T.Entry_Port_Name))
+        & Assoc ("RCM",                 To_String (T.RCM))
+        & Assoc ("Need_Mutex",          T.Need_Mutex)
+        & Assoc ("Pro_Block_Name",      To_String (T.Protected_Block_Name))
+        & Assoc ("Node_Name",           To_String (T.Node.Value_Or
           (Taste_Node'(Name => US (""), others => <>)).Name))
-        & Assoc ("Remote_Threads",    Remote_Thread)
-        & Assoc ("RI_Port_Names",     RI_Port_Name)
-        & Assoc ("Remote_PIs",        Remote_PI)
-        & Assoc ("Remote_PI_Sorts",   Remote_PI_Sort)
-        & Assoc ("Remote_PI_Modules", Remote_PI_Module);
+        & Assoc ("Remote_Threads",      Remote_Thread)
+        & Assoc ("RI_Port_Names",       RI_Port_Name)
+        & Assoc ("Remote_PIs",          Remote_PI)
+        & Assoc ("Remote_PI_Sorts",     Remote_PI_Sort)
+        & Assoc ("Remote_PI_Modules",   Remote_PI_Module)
+        & Assoc ("Priority",            To_String (T.Priority))
+        & Assoc ("Dispatch_Offset_ms",  To_String (T.Dispatch_Offset_Ms))
+        & Assoc ("Stack_Size_In_Bytes", To_String (T.Stack_Size_In_Bytes));
    end To_Template;
 
    --  Generate the code by iterating over template folders
@@ -234,9 +239,14 @@ package body TASTE.Concurrency_View is
                Thread_Dst_Port : Vector_Tag;
                Input_Port_Names,
                Input_Port_Type_Name,
+               Input_Port_Queue_Size,
                Input_Port_Thread_Name  : Vector_Tag;
                Output_Port_Names,
-               Output_Port_Type_Name   : Vector_Tag;
+               Output_Port_Type_Name,
+               Output_Port_Queue_Size  : Vector_Tag;
+               Out_Port_Remote_Partition : Vector_Tag;
+               Out_Port_Remote_Function : Vector_Tag;
+               Out_Port_Remote_Port_Name : Vector_Tag;
                Part_Out_Port_Names,  --  there can be multiple threads
                Connected_Threads : Vector_Tag;  -- on one partition outport
 
@@ -250,8 +260,6 @@ package body TASTE.Concurrency_View is
                  (if Part_Check then Strip_String (Parse (File_Id, Part_Tag))
                   else "");
                Part_Content    : Unbounded_String;
-               --  Part_File_Name may contain a subfolder
-               Subfolder       : Unbounded_String;
             begin
                Document_Template
                  (Templates_Concurrency_View_Sub_File_Part, Part_Tag);
@@ -261,6 +269,8 @@ package body TASTE.Concurrency_View is
                     & Each.Type_Name;
                   Input_Port_Thread_Name :=
                     Input_Port_Thread_Name & Each.Thread_Name;
+                  Input_Port_Queue_Size :=
+                    Input_Port_Queue_Size & Each.Queue_Size;
                end loop;
                for Each of Partition.Out_Ports loop
                   Output_Port_Names := Output_Port_Names & Each.Port_Name;
@@ -272,6 +282,14 @@ package body TASTE.Concurrency_View is
                        & Each.Port_Name;
                      Connected_Threads := Connected_Threads & T;
                   end loop;
+                  Out_Port_Remote_Partition := Out_Port_Remote_Partition
+                    & Each.Remote_Partition_Name;
+                  Out_Port_Remote_Port_Name := Out_Port_Remote_Port_Name
+                    & Each.Remote_Port_Name;
+                  Out_Port_Remote_Function := Out_Port_Remote_Function
+                    & Each.Remote_Function_Name;
+                  Output_Port_Queue_Size :=
+                    Output_Port_Queue_Size & Each.Queue_Size;
                end loop;
 
                for T of Partition.Threads loop
@@ -290,7 +308,8 @@ package body TASTE.Concurrency_View is
                      Thread_Check     : constant Boolean :=
                        Exists (Thread_File_Id);
                      Thread_Tag       : constant Translate_Set :=
-                       +Assoc ("Thread_Name", Name);
+                       +Assoc ("Thread_Name", Name)
+                       & Assoc ("Partition_Name", Partition_Name);
                      Thread_File_Name : constant String :=
                        (if Thread_Check
                         then Strip_String (Parse (Thread_File_Id, Thread_Tag))
@@ -330,12 +349,13 @@ package body TASTE.Concurrency_View is
                      --  Save the content of the thread in a file
                      --  (if required at template folder level)
                      if Thread_File_Name /= "" then
-                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create_Path (CV_Out_Dir & Node_Name & Dir_Separator
+                                       & Dir_Name (Thread_File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name =>
-                                  CV_Out_Dir & Node_Name
-                                & "/" & Thread_File_Name);
+                                Name => CV_Out_Dir
+                                  & Node_Name & Dir_Separator
+                                  & Thread_File_Name);
                         Put_Line (Output_File, Result);
                         Close (Output_File);
                      end if;
@@ -440,11 +460,14 @@ package body TASTE.Concurrency_View is
                      --  Save the content of the block in a file
                      --  (if required at template folder level)
                      if Block_File_Name /= "" then
-                        Create_Path (CV_Out_Dir & Node_Name);
+                        Create_Path (CV_Out_Dir & Node_Name
+                                       & Dir_Separator
+                                       & Dir_Name (Block_File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name => CV_Out_Dir & Node_Name
-                                        & "/" & Block_File_Name);
+                                Name => CV_Out_Dir
+                                  & Node_Name & Dir_Separator
+                                  & Block_File_Name);
                         Put_Line (Output_File, To_String (Result));
                         Close (Output_File);
                      end if;
@@ -452,7 +475,11 @@ package body TASTE.Concurrency_View is
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
-               Partition_Assoc := Partition.Deployment_Partition.To_Template
+               Partition_Assoc := Join_Sets (Partition.Deployment_Partition
+                                               .To_Template,
+                                             Drivers_To_Template
+                                               (CV.Nodes (Node_Name)
+                                                  .Deployment_Node.Drivers))
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Thread_Has_Param",     Thread_Has_Param)
@@ -464,9 +491,17 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
+                 & Assoc ("In_Port_Queue_Size",   Input_Port_Queue_Size)
                  & Assoc ("In_Port_Type_Name",    Input_Port_Type_Name)
                  & Assoc ("Out_Port_Names",       Output_Port_Names)
                  & Assoc ("Out_Port_Type_Name",   Output_Port_Type_Name)
+                 & Assoc ("Out_Port_Queue_Size",  Output_Port_Queue_Size)
+                 & Assoc ("Out_Port_Remote_Partition",
+                          Out_Port_Remote_Partition)
+                 & Assoc ("Out_Port_Remote_Port_Name",
+                          Out_Port_Remote_Port_Name)
+                 & Assoc ("Out_Port_Remote_Function",
+                          Out_Port_Remote_Function)
                  & Assoc ("Part_Out_Port_Name",   Part_Out_Port_Names)
                  & Assoc ("Connected_Threads",    Connected_Threads)
                  & Assoc ("Thread_Src_Name",      Thread_Src_Name)
@@ -486,26 +521,12 @@ package body TASTE.Concurrency_View is
                --  Save the content of the partition in a file
                --  (if required at template folder level)
                if Part_File_Name /= "" then
-                  declare
-                     Last_Slash : constant Natural :=
-                       Ada.Strings.Fixed.Index
-                         (Source    => Part_File_Name,
-                          From      => Part_File_Name'Last,
-                          Pattern   => "/",
-                          Going     => Ada.Strings.Backward);
-                  begin
-                     Subfolder := US (Part_File_Name (1 .. Last_Slash));
-                  exception
-                     when Ada.Strings.Index_Error =>
-                        Subfolder := US ("");
-                  end;
-
                   Create_Path (CV_Out_Dir & Node_Name
-                               & "/" & To_String (Subfolder));
+                               & Dir_Separator & Dir_Name (Part_File_Name));
                   Create (File => Output_File,
                           Mode => Out_File,
-                          Name =>
-                            CV_Out_Dir & Node_Name & "/" & Part_File_Name);
+                          Name => CV_Out_Dir
+                             & Node_Name & Dir_Separator & Part_File_Name);
                   Put_Line (Output_File, To_String (Part_Content));
                   Close (Output_File);
                end if;
@@ -539,7 +560,9 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := +Assoc ("Partitions", Partitions)
+               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers)
+                 & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'
                       (CV.Nodes (Node_Name).Deployment_Node.Memory.Name /= ""))
@@ -592,25 +615,15 @@ package body TASTE.Concurrency_View is
             Bus_Names,
             Bus_AADL_Pkg,
             Bus_Classifier  : Vector_Tag;  --  System busses
-            Device_Names,
             Device_Node_Name,
-            Device_Partition_Name,
-            Device_AADL_Pkg,
-            Device_Classifier,
-            Device_CPU,
-            Device_Configuration,
-            Device_Accessed_Bus_Name,
-            Device_Accessed_Port_Name,
-            Device_ASN1_Filename,
-            Device_ASN1_Typename,
-            Device_ASN1_Module : Vector_Tag;  --  Device drivers
+            Device_Partition_Name : Vector_Tag;
+            All_Drivers : Taste_Drivers.Vector;
 
             --  To keep a list of ASN.1 files/modules without duplicates:
             Unique_ASN1_Sorts_Set : String_Sets.Set;
             Unique_ASN1_Files,
             Unique_ASN1_Sorts,
             Unique_ASN1_Modules : Vector_Tag;
-
             Connect_From_Partition,           --  Partition to bus connections
             Connect_Port_Name,
             Connect_Via_Bus    : Vector_Tag;
@@ -692,7 +705,8 @@ package body TASTE.Concurrency_View is
                     (Node_Name /= "interfaceview"
                      and then Exists (Path & "/trigger.tmplt") and then
                      Strip_String
-                       (Parse (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                       (String'(Parse (Path & "/trigger.tmplt", Trig_Tmpl))) =
+                        "TRUE");
                   Node_Content : constant String :=
                     (if Trigger then Generate_Node (Node_Name)
                      else "");
@@ -751,10 +765,12 @@ package body TASTE.Concurrency_View is
 
                      Nodes := Nodes & Newline & Node_Content;
                      if File_Name /= "" then
-                        Create_Path (Output_Dir);
+                        Create_Path (Output_Dir & Dir_Separator
+                                       & Dir_Name (File_Name));
                         Create (File => Output_File,
                                 Mode => Out_File,
-                                Name => Output_Dir & "/" & File_Name);
+                                Name => Output_Dir
+                                  & Dir_Separator & File_Name);
                         Put_Line (Output_File, Node_Content);
                         Close (Output_File);
                      end if;
@@ -774,37 +790,12 @@ package body TASTE.Concurrency_View is
                     "Drivers in multi-partition systems are not supported";
                end if;
 
+               All_Drivers.Append (N.Drivers);
+
                for D : Taste_Device_Driver of N.Drivers loop
-                  declare
-                     Dot : constant Natural := Index (D.Name, ".");
-                     Name : constant String := To_String (D.Name);
-                     Result : constant String :=
-                       (if Dot > 0
-                        then Name (Name'First .. Dot - 1)
-                        else "ERROR_MALFORMED_DEVICE_NAME");
-                  begin
-                     --  Device names are in the form ethernet0.other
-                     --  Get rid of the ".other"
-                     Device_Names := Device_Names & Result;
-                  end;
                   Device_Node_Name  := Device_Node_Name & N.Name;
                   Device_Partition_Name :=  -- There must be only one
                     Device_Partition_Name & N.Partitions.First_Element.Name;
-                  Device_AADL_Pkg   := Device_AADL_Pkg & D.Package_Name;
-                  Device_Classifier := Device_Classifier & D.Device_Classifier;
-                  Device_CPU := Device_CPU & D.Associated_Processor_Name;
-                  Device_Configuration :=
-                    Device_Configuration & D.Device_Configuration;
-                  Device_Accessed_Bus_Name :=
-                    Device_Accessed_Bus_Name & D.Accessed_Bus_Name;
-                  Device_Accessed_Port_Name :=
-                    Device_Accessed_Port_Name & D.Accessed_Port_Name;
-                  Device_ASN1_Filename :=
-                    Device_ASN1_Filename & D.ASN1_Filename;
-                  Device_ASN1_Typename :=
-                    Device_ASN1_Typename & D.ASN1_Typename;
-                  Device_ASN1_Module := Device_ASN1_Module & D.ASN1_Module;
-
                   --  Update list of types and files without duplicates
                   if not Unique_ASN1_Sorts_Set.Contains
                     (Strip_String (To_String (D.ASN1_Typename)))
@@ -821,7 +812,8 @@ package body TASTE.Concurrency_View is
 
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
                --  Generate from system.tmplt
-               Set_Sys := CV.Configuration.To_Template
+               Set_Sys := Join_Sets (CV.Configuration.To_Template,
+                                     Drivers_To_Template (All_Drivers))
                  & Assoc ("Nodes",       Nodes)
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
@@ -844,28 +836,19 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Bus_Names",           Bus_Names)
                  & Assoc ("Bus_AADL_Package",    Bus_AADL_Pkg)
                  & Assoc ("Bus_Classifier",      Bus_Classifier)
-                 & Assoc ("Device_Names",        Device_Names)
                  & Assoc ("Device_Node_Name",    Device_Node_Name)
                  & Assoc ("Device_Partition",    Device_Partition_Name)
-                 & Assoc ("Device_AADL_Pkg",     Device_AADL_Pkg)
-                 & Assoc ("Device_Classifier",   Device_Classifier)
-                 & Assoc ("Device_CPU",          Device_CPU)
-                 & Assoc ("Device_Config",       Device_Configuration)
-                 & Assoc ("Device_Bus_Name",     Device_Accessed_Bus_Name)
-                 & Assoc ("Device_Port_Name",    Device_Accessed_Port_Name)
-                 & Assoc ("Device_ASN1_File",    Device_ASN1_Filename)
-                 & Assoc ("Device_ASN1_Sort",    Device_ASN1_Typename)
-                 & Assoc ("Device_ASN1_Module",  Device_ASN1_Module)
                  & Assoc ("Unique_Dev_ASN1_Files", Unique_ASN1_Files)
                  & Assoc ("Unique_Dev_ASN1_Mod",   Unique_ASN1_Modules)
                  & Assoc ("Unique_Dev_ASN1_Sorts", Unique_ASN1_Sorts)
                  & Assoc ("Connect_From_Part",   Connect_From_Partition)
                  & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
                  & Assoc ("Connect_Port_Name",   Connect_Port_Name);
-               Create_Path (CV_Out_Dir);
+               Create_Path (CV_Out_Dir
+                           & Dir_Separator & Dir_Name (File_Sys));
                Create (File => Output_File,
                        Mode => Out_File,
-                       Name => CV_Out_Dir & File_Sys);
+                       Name => CV_Out_Dir & Dir_Separator & File_Sys);
                Put_Line (Output_File, Parse (Tmpl_Sys, Set_Sys));
                Document_Template
                  (Templates_Concurrency_View_Sub_System, Set_Sys);

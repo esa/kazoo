@@ -1,0 +1,141 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::master
+PUBLIC
+
+WITH interfaceview::IV::slave;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM RI_you_are_free
+END RI_you_are_free;
+
+SUBPROGRAM IMPLEMENTATION RI_you_are_free.others
+END RI_you_are_free.others;
+
+SUBPROGRAM PI_Thank_you
+END PI_Thank_you;
+
+SUBPROGRAM IMPLEMENTATION PI_Thank_you.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Thank_you.others;
+
+SYSTEM master
+FEATURES
+  RI_you_are_free : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::slave::PI_you_are_free.others {
+    Taste::coordinates => "121574 63728";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "you_are_free";
+    Taste::labelInheritance => "true";
+  };
+  PI_Thank_you : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::master::PI_Thank_you.others {
+    Taste::coordinates => "121574 79016";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "Thank_you";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END master;
+
+SYSTEM IMPLEMENTATION master.others
+SUBCOMPONENTS
+  mytimer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END master.others;
+
+END interfaceview::IV::master;
+
+PACKAGE interfaceview::IV::slave
+PUBLIC
+
+WITH interfaceview::IV::master;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_you_are_free
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_you_are_free;
+
+SUBPROGRAM IMPLEMENTATION PI_you_are_free.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_you_are_free.others;
+
+SUBPROGRAM RI_Thank_you
+END RI_Thank_you;
+
+SUBPROGRAM IMPLEMENTATION RI_Thank_you.others
+END RI_Thank_you.others;
+
+SYSTEM slave
+FEATURES
+  PI_you_are_free : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::slave::PI_you_are_free.others {
+    Taste::coordinates => "138388 63845";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "you_are_free";
+  };
+  RI_Thank_you : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::master::PI_Thank_you.others {
+    Taste::coordinates => "138388 79133";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Thank_you";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END slave;
+
+SYSTEM IMPLEMENTATION slave.others
+END slave.others;
+
+END interfaceview::IV::slave;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::master;
+WITH interfaceview::IV::slave;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  master : SYSTEM interfaceview::IV::master::master.others {
+    Taste::coordinates => "90534 60200 121574 86890";
+  };
+  slave : SYSTEM interfaceview::IV::slave::slave.others {
+    Taste::coordinates => "138388 61493 173779 87242";
+  };
+CONNECTIONS
+  slave_PI_you_are_free_master_RI_you_are_free : SUBPROGRAM ACCESS slave.PI_you_are_free -> master.RI_you_are_free {
+    Taste::coordinates => "121574 63728 129981 63728 129981 63845 138388 63845";
+  };
+  master_PI_Thank_you_slave_RI_Thank_you : SUBPROGRAM ACCESS master.PI_Thank_you -> slave.RI_Thank_you {
+    Taste::coordinates => "138388 79133 129981 79133 129981 79016 121574 79016";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

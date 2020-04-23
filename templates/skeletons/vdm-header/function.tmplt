@@ -38,13 +38,8 @@ operations
    public Startup: () ==> ()
    Startup () is subclass responsibility;
 
-@@TABLE@@
-   @_STRIP:Provided_Interfaces_@;
-@@END_TABLE@@
+   @_STRIP:Provided_Interfaces'Indent_@;
 
-@@TABLE@@
-   @_STRIP:Required_Interfaces_@;
-
-@@END_TABLE@@
+   @_STRIP:Required_Interfaces'Indent_@;
 
 end @_Name_@_Interface

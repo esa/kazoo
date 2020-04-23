@@ -1,9 +1,15 @@
 KAZOO=../../kazoo
 # Add compiler and linker flags
 export USER_CFLAGS=
+# Global: 
 export USER_LDFLAGS=
+# Per partition:
+export DEMO_C_USER_LDFLAGS=
 # you can add folders with source code you want to compile
+# Global:
 export EXTERNAL_SOURCE_PATH=
+# Per partition:
+export DEMO_C_EXTERNAL_SOURCE_PATH=
 
 all: c ada rtems
 

@@ -48,8 +48,4 @@ void @_LOWER:Name_@::startup()
    // puts ("[@_Name_@] Startup");
 }
 
-@@TABLE@@
 @_Provided_Interfaces_@
-
-
-@@END_TABLE@@

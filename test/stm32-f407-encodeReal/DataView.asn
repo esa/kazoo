@@ -1,0 +1,11 @@
+TASTE-Dataview DEFINITIONS ::=
+BEGIN
+IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
+
+MyBool      ::= BOOLEAN
+
+Debug-PrintableString ::= OCTET STRING (SIZE (0..255))
+
+TFloat ::= REAL(-3.40281E38..3.40281E38)
+
+END

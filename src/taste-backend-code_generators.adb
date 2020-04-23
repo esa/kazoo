@@ -138,18 +138,23 @@ package body TASTE.Backend.Code_Generators is
          Close (Output_File);
       end Generate_Global_Makefile;
 
-      --  Render a set (Tag) of interfaces by applying a template
+      --  Render a set of interfaces by applying a template
+      --  Result is an unbounded string, allowing each interface to use
+      --  multiple lines (combined with 'Indent)
       function Process_Interfaces (Interfaces : Template_Vectors.Vector;
-                                   Path       : String) return Tag
+                                   Path       : String) return Unbounded_String
       is
-         Result : Tag;
+         Result : Unbounded_String := Null_Unbounded_String;
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
       begin
          for Each of Interfaces loop
+            --  if Result /= Null_Unbounded_String then
+            --     Result := Result & ASCII.LF;
+            --  end if;
             Document_Template (Templates_Skeletons_Sub_Interface, Each);
-            Result := Result & String'(Parse (Tmplt_Sign, Each));
+            Result := Result & US (String'(Parse (Tmplt_Sign, Each)));
          end loop;
-         return Result;
+         return Strip_String (Result);
       end Process_Interfaces;
 
       --  Generate the ASN.1 files translating Context Parameters
@@ -359,7 +364,8 @@ package body TASTE.Backend.Code_Generators is
                      Trigger    : constant Boolean :=
                         (Exists (Path & "/trigger.tmplt")
                          and then Strip_String (Parse
-                            (Path & "/trigger.tmplt", Trig_Tmpl)) = "TRUE");
+                           (Path & "/trigger.tmplt", Trig_Tmpl)) =
+                           String'("TRUE"));
                   begin
                      Document_Template
                        (Templates_Skeletons_Sub_Function_Filename, File_Tmpl);
@@ -442,13 +448,16 @@ package body TASTE.Backend.Code_Generators is
         & Assoc ("CP_Value",       Values);
    end CP_Template;
 
-   --  Makefiles need the function name and the list of ASN.1 files/modules
+   --  A Makefile can be generated for each function
+   --  with a rule to edit the function using an IDE, model editor, etc.
+   --  (this is defined in the template)
    function Function_Makefile_Template (F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag) return Translate_Set
    is (Translate_Set'(+Assoc  ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules))
+                      & Assoc ("Has_CP",       not F.Context_Params.Is_Empty)
                       & Assoc ("Is_Type",      F.Is_Type)
                       & Assoc ("Instance_Of",
                                 F.Instance_Of.Value_Or (US (""))));

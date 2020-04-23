@@ -26,13 +26,21 @@ use Ada.Containers,
 
 package TASTE.Interface_View is
 
-   use Option_UString;
-   use Option_ULL;
+   use Option_UString,
+       Option_ULL,
+       String_Vectors;
 
    --  Exceptions specific to the Interface View
    No_RCM_Error      : exception;   -- Missing Periodic, Sporadic... property
    Interface_Error   : exception;   -- Any kind of interface parsing error
    Function_Error    : exception;   -- Any kind of function parsing error
+
+   --  List of Ocarina AADL models needed to parse the interface view
+   Interface_AADL_Lib : String_Vectors.Vector :=
+     Empty_Vector
+     & "TASTE_IV_Properties.aadl"
+     & "taste_properties.aadl"
+     & "arinc653.aadl";
 
    type Synchronism is (Sync, Async);
 

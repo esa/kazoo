@@ -35,7 +35,7 @@
 @@END_TABLE@@
  * Timers              : @_Timers_@
  */
-@@IF@@ @_Required_Interfaces'Length_@ > 0
+@@IF@@ @_Required_Interfaces_@ /= ""
 #include <stdlib.h>
 #ifdef __unix__
    #include <stdio.h>
@@ -48,17 +48,15 @@
 #include "dataview-uniq.h"
 
 // reference to flag preventing calls to RIs during the startup transition
-extern bool @_LOWER:Name_@_initialized;
+extern unsigned @_LOWER:Name_@_initialized;
 // in case that happens, use system's abort function to crash the application
 extern void abort (void);
 
 @@-- For blackbox devices, don't generate the RI code here, because their parameters are different
 @@-- (they are already encoded, not using native ASN.1 types)
 @@IF@@ @_Language_@ /= "Blackbox_C"
-@@TABLE@@
 @_Required_Interfaces_@
-@@END_TABLE@@
 @@END_IF@@
 @@ELSE@@
 /* There are no required interfaces for this function... */
-@@END_IF@@  @@-- Required_Interfaces'Length > 0
+@@END_IF@@

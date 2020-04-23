@@ -1,0 +1,85 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process function1;
+    /* CIF TEXT (80, 621), (273, 257) */
+    -- Text area for declarations and comments
+    
+    dcl someReal TFloat := 3.14;
+    
+    dcl someStr Debug_PrintableString;
+    /* CIF ENDTEXT */
+    /* CIF TEXT (1547, 110), (399, 178) */
+    -- pulse is rececived every 50 ms. Use a counter to toggle the leds
+    -- at a lower period.
+    dcl counter T_UInt8 := 0;
+    
+    dcl msg Debug_PrintableString;
+    
+    dcl response Debug_PrintableString;
+    /* CIF ENDTEXT */
+    /* CIF START (443, 103), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (438, 158), (79, 35) */
+        NEXTSTATE Init;
+    /* CIF state (438, 158), (79, 35) */
+    state Init;
+        /* CIF input (443, 213), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (415, 268), (126, 35) */
+            call Switch_Leds_ON;
+            /* CIF PROCEDURECALL (372, 323), (211, 40) */
+            call Send_to_UART('[INFO] Startup
+');
+            /* CIF NEXTSTATE (436, 383), (82, 35) */
+            NEXTSTATE Leds_On;
+    endstate;
+    /* CIF state (871, 128), (76, 35) */
+    state Leds_On;
+        /* CIF input (875, 183), (70, 35) */
+        input pulse;
+            /* CIF decision (860, 238), (98, 50) */
+            decision counter = 20;
+                /* CIF ANSWER (797, 308), (69, 24) */
+                (true):
+                    /* CIF PROCEDURECALL (710, 352), (242, 35) */
+                    call Float_to_String (someReal, somestr);
+                    /* CIF task (733, 407), (197, 35) */
+                    task someReal := someReal + 0.5;
+                    /* CIF PROCEDURECALL (744, 457), (175, 35) */
+                    call Send_To_UART (somestr);
+                    /* CIF task (784, 507), (94, 35) */
+                    task counter := 0;
+                    /* CIF PROCEDURECALL (767, 562), (129, 35) */
+                    call Switch_Leds_OFF;
+                    /* CIF NEXTSTATE (792, 617), (79, 35) */
+                    NEXTSTATE Leds_Off;
+                /* CIF ANSWER (1004, 308), (70, 24) */
+                (false):
+                    /* CIF task (961, 351), (155, 35) */
+                    task counter := counter + 1;
+                    /* CIF NEXTSTATE (1001, 406), (76, 35) */
+                    NEXTSTATE Leds_On;
+            enddecision;
+    endstate;
+    /* CIF state (1419, 142), (79, 35) */
+    state Leds_Off;
+        /* CIF input (1427, 197), (70, 35) */
+        input pulse;
+            /* CIF decision (1412, 252), (98, 50) */
+            decision counter = 20;
+                /* CIF ANSWER (1363, 322), (70, 24) */
+                (true):
+                    /* CIF task (1350, 366), (94, 35) */
+                    task counter := 0;
+                    /* CIF PROCEDURECALL (1333, 421), (129, 35) */
+                    call Switch_Leds_On;
+                    /* CIF NEXTSTATE (1358, 476), (79, 35) */
+                    NEXTSTATE Leds_On;
+                /* CIF ANSWER (1515, 322), (70, 24) */
+                (false):
+                    /* CIF task (1472, 366), (155, 35) */
+                    task counter := counter + 1;
+                    /* CIF NEXTSTATE (1510, 421), (79, 35) */
+                    NEXTSTATE Leds_Off;
+            enddecision;
+    endstate;
+endprocess function1;

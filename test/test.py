@@ -9,6 +9,11 @@ from multiprocessing import cpu_count
 from concurrent      import futures
 
 
+def openLog(name, mode='w'):
+    logs = os.path.join(os.path.dirname(os.path.abspath(__file__)),'logs')
+    os.makedirs(logs, exist_ok=True)
+    return open(os.path.join(logs, name + '.err.txt'), mode)
+
 def colorMe(result, msg):
     if sys.stdout.isatty():
         code = "1" if result else "2"
@@ -21,6 +26,10 @@ def main():
     results = []
     rule = sys.argv[1]
     paths = sys.argv[2:]
+    # the following line is temporarily disabled so that it can run on
+    # old versions of python that did not support f-strings
+    #print (f"Running {len(paths)} tests using {cpu_count()} processors")
+    xfails = os.environ['EXPECTED_FAILURES']
 
     with futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
         fs = [executor.submit(partial(make, rule), path) for path in paths]
@@ -28,22 +37,33 @@ def main():
             result = each.result()
             errcode, stdout, stderr, path, rule = result
             name = path.replace("/", "")
-            print("%40s: %s" % (name,
-               colorMe (errcode, '[OK]' if errcode==0
-                  else '[FAILED] ... build log in /tmp/{}.err'.format(name))))
+            print("(%3d / %3d) %40s: %s" % (len(results)+1, len(paths), name,
+               colorMe (errcode,
+                   '[OK]' if errcode==0
+                   else '[EXPECTED FAILURE] ... build log in logs/{}.err.txt'
+                        .format(name) if name in xfails
+                   else '[FAILED] ... build log in logs/{}.err.txt'
+                   .format(name))))
             sys.stdout.flush()
             if errcode != 0:
                 # Failure: save the log immediately
-                with open("/tmp/{}.err".format(name), 'w') as f:
+                with openLog(name) as f:
                     f.write("=" * 80)
                     f.write("ERROR: %s %s" % (name, rule))
-                    if stdout:
-                        f.write("-- stdout " + "-" * 70)
-                        f.write(stdout.decode())
-                    if stderr:
-                        f.write("-- stderr " + "-" * 70)
-                        f.write(stderr.decode())
-                        f.write("-" * 80)
+                    try:
+                        if stdout:
+                            f.write("-- stdout " + "-" * 70)
+                            f.write(stdout.decode('utf-8', 'replace'))
+                        if stderr:
+                            f.write("-- stderr " + "-" * 70)
+                            f.write(stderr.decode('utf-8', 'replace'))
+                            f.write("-" * 80)
+                    except UnicodeDecodeError as err:
+                        print("Unicode error in project", name)
+                        print(str(err))
+            if errcode != 0 and path in xfails:
+               # for "expected failures", set errcode to None
+               result = (None, stdout, stderr, path, rule)
             results.append(result)
             # don't use the map function, because it keeps the order of
             # submission, meaning that even if a job finishes before the
@@ -68,33 +88,22 @@ def make(rule, path):
         stderr=subprocess.PIPE
     )
     stdout, stderr = proc.communicate()
-    errcode = proc.wait()
+    errcode = proc.returncode
     return (errcode, stdout, stderr, path, rule)
 
 
 def summarize(results, elapsed):
     ''' At the end display the errors of project that failed '''
     failed = 0
-    with open("/tmp/kazoo.err", "w") as f:
+    with openLog("kazoo", "w") as f:
         f.write("kazoo test report")
         f.write("-----------------")
     for errcode, stdout, stderr, path, rule in results:
         if errcode == 0:
             continue
-        failed += 1
-        with open("/tmp/kazoo.err", 'a') as f:
-            f.write("=" * 80)
-            f.write("ERROR: %s %s" % (path, rule))
-            if stdout:
-                f.write("-- stdout " + "-" * 70)
-                f.write(stdout.decode())
-            if stderr:
-                f.write("-- stderr " + "-" * 70)
-                f.write(stderr.decode())
-                f.write("-" * 80)
+        if errcode is not None:
+            failed += 1
     print("Finished in %.3fs" % elapsed)
-    if failed:
-        print("Test report in /tmp/kazoo.err")
     print("%s tests, %s errors" % (len(results), failed))
     return 0 if not failed else 1
 

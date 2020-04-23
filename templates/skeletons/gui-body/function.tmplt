@@ -167,10 +167,7 @@ void @_LOWER:Name_@_PI_Poll(void)
    return;
 }
 
-@@TABLE@@
 @_Provided_Interfaces_@
-
-@@END_TABLE@@
 
 @@TABLE@@
 void @_LOWER:Name_@_PI_@_Timers_@(void)

@@ -13,6 +13,7 @@ with System.Assertions,
      GNAT.Command_Line,
      Errors,
      Locations,
+     Ocarina.AADL_Values,
      Ocarina.Namet,
      Ocarina.Configuration,
      Ocarina.Files,
@@ -31,6 +32,13 @@ use Ada.Text_IO,
     Locations,
     Ocarina.Namet,
     Ocarina;
+
+--  for the parsing of ConcurrencyView_Properties.aadl:
+--  with ocarina.BE_AADL; use ocarina.BE_AADL;
+with Ocarina.ME_AADL.AADL_Tree.Nodes;
+with Ocarina.ME_AADL.AADL_Tree.Nutils;
+use Ocarina.ME_AADL.AADL_Tree.Nodes;
+use Ocarina.ME_AADL.AADL_Tree.Nutils;
 
 package body TASTE.AADL_Parser is
 
@@ -71,12 +79,15 @@ package body TASTE.AADL_Parser is
          Interface_Root := Ocarina.Parser.Parse
            (AADL_Language, Interface_Root, File_Descr);
 
-         --  Parse TASTE_IV_Properties.aadl
-         Set_Str_To_Name_Buffer ("TASTE_IV_Properties.aadl");
-         File_Name  := Ocarina.Files.Search_File (Name_Find);
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-         Interface_Root := Ocarina.Parser.Parse (AADL_Language,
-                                                 Interface_Root, File_Descr);
+         --  Parse library of AADL files (TASTE_IV_Properties, etc.)
+         for Each of Interface_AADL_Lib loop
+            Set_Str_To_Name_Buffer (Each);
+            File_Name  := Ocarina.Files.Search_File (Name_Find);
+            File_Descr := Ocarina.Files.Load_File (File_Name);
+            Interface_Root := Ocarina.Parser.Parse (AADL_Language,
+                                                    Interface_Root,
+                                                    File_Descr);
+         end loop;
 
          if Interface_Root = No_Node then
             raise AADL_Parser_Error with "Interface view is incorrect";
@@ -166,6 +177,23 @@ package body TASTE.AADL_Parser is
          Dataview_root := Ocarina.Parser.Parse
                             (AADL_Language, Dataview_root, File_Descr);
       end if;
+
+      --  If present, try and parse ConcurrencyView_Properties.aadl
+      Set_Str_To_Name_Buffer ("ConcurrencyView_Properties.aadl");
+      File_Name := Ocarina.Files.Search_File (Name_Find);
+      if File_Name = No_Name then
+         Put_Debug ("No ConcurrencyView_Properties.aadl file found");
+      else
+         Put_Info ("Parsing ConcurrencyView_Properties.aadl");
+         File_Descr := Ocarina.Files.Load_File (File_Name);
+
+         Concurrency_Properties_Root := Ocarina.Parser.Parse
+           (AADL_Language, Concurrency_Properties_Root, File_Descr);
+         if Concurrency_Properties_Root = No_Node then
+            raise AADL_Parser_Error with
+              "Error parsing ConcurrencyView_Properties.aadl";
+         end if;
+      end if;
       return Cfg;
    end Initialize;
 
@@ -185,13 +213,14 @@ package body TASTE.AADL_Parser is
          end;
 
          if not Result.Configuration.No_Stdlib then
-            AADL_Lib.Append ("ocarina_components.aadl");
+            Deployment_AADL_Lib.Append ("ocarina_components.aadl");
          end if;
 
          if Deployment_Root /= No_Node
            and not Result.Configuration.Deployment_View.Is_Empty
          then
-            AADL_Lib.Append (Result.Configuration.Interface_View.Element);
+            Deployment_AADL_Lib.Append
+              (Result.Configuration.Interface_View.Element);
             Result.Deployment_View :=
               To_Holder (Parse_Deployment_View
                          (Deployment_Root, Result.Interface_View));
@@ -209,14 +238,13 @@ package body TASTE.AADL_Parser is
       end if;
 
       Ocarina.Configuration.Reset_Modules;
-      Ocarina.Reset;
+      --  Ocarina.Reset;  (No: This make the CV_Properties analysis fail)
 
       if Result.Configuration.Check_Data_View then
          raise Quit_Taste;
       end if;
 
       Semantic_Check.Check_Model (Result);
-
       return Result;
    exception
       when Error : AADL_Parser_Error
@@ -487,7 +515,10 @@ package body TASTE.AADL_Parser is
                         Protected_Block_name => Block.Ref_Function.Name,
                         Node                 => Block.Node,
                         PI                   => PI,
-                        Output_Ports         => Get_Output_Ports (Model, F));
+                        Output_Ports         => Get_Output_Ports (Model, F),
+                        Priority             => US ("1"),
+                        Dispatch_Offset_Ms   => US ("0"),
+                        Stack_Size_In_Bytes  => US ("50000"));
                   begin
                      CV.Nodes
                        (Node_Name).Partitions (Partition_Name).Threads.Include
@@ -556,6 +587,7 @@ package body TASTE.AADL_Parser is
                               New_Item => (Port_Name   => T.Entry_Port_Name,
                                            Thread_Name => T.Name,
                                            Type_Name   => Sort,
+                                           Queue_Size  => US ("1"),
                                            Remote_Partition_Name
                                                     => Part.Unsafe_Just.Name));
                         end if;
@@ -599,8 +631,11 @@ package body TASTE.AADL_Parser is
                                                  Type_Name   => Sort,
                                                  Remote_Partition_Name =>
                                                    Part.Unsafe_Just.Name,
+                                                 Remote_Function_Name =>
+                                                   Remote.Function_Name,
                                                  Remote_Port_Name =>
-                                                   Remote.Interface_Name));
+                                                   Remote.Interface_Name,
+                                                 Queue_Size => US ("1")));
                               else
                                  --  Port already exists: just add this thread
                                  Partition.Out_Ports
@@ -960,5 +995,247 @@ package body TASTE.AADL_Parser is
       end loop;
       Model.Deployment_View.Replace_Element (DV);
    end Preprocessing;
+
+   procedure Add_CV_Properties (Model : in out TASTE_Model) is
+      Nodes,                    --  To iterate on lists of nodes
+      AADL_Package,
+      System_Impl : Node_Id := No_Node;
+      procedure Report_Error is
+      begin
+         Put_Info ("No valid user-defined Concurrency View properties found:");
+         Put_Info ("Task priorities, offset and stack size will use default");
+         Put_Info ("values. IMPORTANT: you should set them in the editor!");
+      end Report_Error;
+      function Port_Str (Comp : String) return String is
+         --  Return the port name without "inport"/"outport" prefix
+         --  Note, these prefixes do not exist in the AST, they are added
+         --  in the concurrency view output template. It is therefore wrong
+         --  here to assume they are here. this should be refactored
+         Size : constant Integer := Comp'Length;
+      begin
+         if Size >= 8 and then Comp (Comp'First + 6) = '_' then
+            return Comp (Comp'First + 7 .. Comp'Last);
+         elsif Size >= 9 and Comp (Comp'First + 7) = '_' then
+            return Comp (Comp'First + 8 .. Comp'Last);
+         else
+            return Comp;
+         end if;
+      end Port_Str;
+
+   begin
+      if Concurrency_Properties_Root = No_Node
+        or else Kind (Concurrency_Properties_Root) /= K_AADL_Specification
+        or else Is_Empty (Declarations (Concurrency_Properties_Root))
+      then
+         Report_Error;
+         return;
+      end if;
+      Put_Info ("Analysing user-defined Concurrency View properties");
+
+      Nodes := First_Node (Declarations (Concurrency_Properties_Root));
+
+      --  First look for the package declaration
+      while Present (Nodes) loop
+         case Kind (Nodes) is
+            when K_Package_Specification => AADL_Package := Nodes;
+            when others                  => null;
+         end case;
+         Nodes := Next_Node (Nodes);
+      end loop;
+
+      if AADL_Package = No_Node then
+         Report_Error;
+         return;
+      end if;
+
+      --  Then look for the system implementation
+      Nodes := First_Node (Declarations (AADL_Package));
+      while Present (Nodes) loop
+         case Kind (Nodes) is
+            when K_Component_Implementation => System_Impl := Nodes;
+            when others                     => null;
+         end case;
+         Nodes := Next_Node (Nodes);
+      end loop;
+      if System_Impl = No_Node or else Is_Empty (ATN.Properties (System_Impl))
+      then
+         Report_Error;
+         return;
+      end if;
+
+      Nodes := First_Node (ATN.Properties (System_Impl));
+      while Present (Nodes) loop --  Iterate over the properties
+         declare
+            Prop_Val     : Node_Id := Property_Association_Value (Nodes);
+            Applies_To   : constant List_Id := Applies_To_Prop (Nodes);
+            Paths        : Node_Id;   --  property applies to path
+            Partition,
+            Component    : Unbounded_String := Null_Unbounded_String;
+            --  Prop_Name is Queue_Size, Stack_Size, Priority, Dispatch_Offset
+            Prop_Name    : constant String :=
+              (Get_Name_String (Display_Name (Identifier (Nodes))));
+            Number, Unit : Node_Id;
+            Number_Str,
+            Unit_Str     : Unbounded_String := US ("");
+            Found        : Boolean := False;
+         begin
+            if Single_Value (Prop_Val) = No_Node then
+               Put_Debug ("CV_Properties Error 4 - " & Prop_Name);
+               Report_Error;
+               return;
+            end if;
+            if (Prop_Name     /= "Stack_Size"
+                and Prop_Name /= "Priority"
+                and Prop_Name /= "Dispatch_Offset"
+                and Prop_Name /= "Queue_Size") or else Is_Empty (Applies_To)
+            then
+               Put_Debug ("Discarding unsupported CV Property: " & Prop_Name);
+               goto Next_Property;
+            end if;
+
+            --  Recovering the property value - they are all signed numbers
+            --  Check Ocarina-be_aadl-properties-values.adb for info
+            Prop_Val := Single_Value (Prop_Val);
+
+            if Kind (Prop_Val) /= K_Signed_AADLNumber then
+               Put_Debug ("CV_Properties Error: " & Prop_Name);
+               Report_Error;
+               return;
+            end if;
+
+            --  OK We have the value and the unit:
+            Number     := Number_Value (Prop_Val);
+            Number_Str := US (AADL_Values.Image (Value (Number)));
+            Unit       := Unit_Identifier (Prop_Val);
+
+            if Present (Unit) then
+               Unit_Str := US (Get_Name_String (Display_Name (Unit)));
+            end if;
+
+            --  Check that the units are the expected ones (kb/ms)
+            if (Prop_Name = "Stack_Size"
+                and then (Unit_Str /= "kbytes" and Unit_Str /= "bytes"))
+              or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
+            then
+               Put_Error ("Unsupported unit '"
+                          & To_String (Unit_Str)
+                          & "' used in ConcurrencyView_Properties.aadl. "
+                          & " Stack_Size shall be in "
+                          & "'byte' or 'kbyte' and Dispatch_Offset in 'ms'");
+               return;
+            end if;
+
+            if Prop_Name = "Stack_Size" and Unit_Str = "kbytes" then
+               --  Convert from kbytes to bytes
+               declare
+                  Value_In_Bytes : constant Integer :=
+                    Integer'Value (To_String (Number_Str)) * 1000;
+               begin
+                  Number_Str := US (Value_In_Bytes'Img);
+               end;
+            end if;
+
+            --  Last we find the partition and component it applies to.
+            --  (Check ocarina-be_aadl-properties.adb)
+            Paths := First_Node (Applies_To);
+            while Present (Paths) loop
+               declare
+                  Contained_Elts : constant List_Id := List_Items (Paths);
+                  List_Node      : Node_Id :=
+                    (if not Is_Empty (Contained_Elts)
+                     then First_Node (Contained_Elts)
+                     else No_Node);
+               begin
+                  --  The following gets the path Partition.Component_Name
+                  --  If a longer path is needed a refactoring must be done
+                  while Present (List_Node) loop
+                     --  Kind (List_Node) = K_Identifier
+                     if Partition = Null_Unbounded_String then
+                        Partition := US (Get_Name_String
+                          (Display_Name (List_Node)));
+                     else
+                        Component := US
+                          (Get_Name_String (Display_Name (List_Node)));
+                     end if;
+                     exit when Component /= Null_Unbounded_String;
+                     List_Node := Next_Node (List_Node);
+                  end loop;
+               end;
+
+               --  We completed the parsing of one property
+               Put_Debug (Prop_Name & " := " & To_String (Number_str) & " "
+                          & To_String (Unit_Str)
+                          & " applies to "
+                          & To_String (Partition)
+                          & "."
+                          & To_String (Component));
+
+               --  Checking in the generated concurrency view if the
+               --  partition and component actually exist to apply the property
+
+               Found := False;
+               for Node of Model.Concurrency_View.Nodes loop
+                  exit when Found;
+                  --  First find the partition
+                  Found := Node.Partitions.Contains (To_String (Partition));
+                  if Found then
+                     if Prop_Name = "Queue_Size" then
+                        --  Property applies to a port, check if it exists,
+                        Found := Node.Partitions (To_String (Partition))
+                          .In_Ports.Contains (Port_Str (To_String (Component)))
+                          or else
+                            Node.Partitions (To_String (Partition))
+                              .Out_Ports.Contains
+                                (Port_Str (To_String (Component)));
+                     else
+                        --  Property applies to a thread, check if it exists
+                        Found := Node.Partitions (To_String (Partition))
+                          .Threads.Contains (To_String (Component));
+                     end if;
+
+                     if Found and Prop_Name = "Priority" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Priority := Number_Str;
+                     elsif Found and Prop_Name = "Stack_Size" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Stack_Size_In_Bytes := Number_Str;
+                     elsif Found and Prop_Name = "Dispatch_Offset" then
+                        Node.Partitions (To_String (Partition))
+                          .Threads (To_String (Component))
+                            .Dispatch_Offset_Ms := Number_Str;
+                     elsif Found and Prop_Name = "Queue_Size" then
+                        if Node.Partitions (To_String (Partition))
+                          .In_Ports.Contains (Port_Str (To_String (Component)))
+                        then
+                           Node.Partitions (To_String (Partition))
+                             .In_Ports (Port_Str (To_String (Component)))
+                             .Queue_Size := Number_Str;
+                        else
+                           Node.Partitions (To_String (Partition))
+                             .Out_Ports (Port_Str (To_String (Component)))
+                             .Queue_Size := Number_Str;
+                        end if;
+                     else
+                        Found := False;
+                     end if;
+                  end if;
+               end loop;
+
+               if not Found then
+                  Put_Info ("The ConcurrencyView_Properties.aadl file "
+                            & "references a non-existing component : "
+                            & To_String (Partition) & "."
+                            & To_String (Component));
+               end if;
+
+               Paths := Next_Node (Paths);
+            end loop;
+         end;
+         <<Next_Property>>
+         Nodes := Next_Node (Nodes);
+      end loop;
+   end Add_CV_Properties;
 
 end TASTE.AADL_Parser;

@@ -24,10 +24,7 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 	touch $@
 
 clean:
-	rm -rf work/build
-	rm -f work/glue_built work/skeletons_built
-	find work -type d -name "wrappers" -exec rm -rf {} +
-	find work -type d -name "*_GUI" -exec rm -rf {} +
+	rm -rf work
 
 .PHONY: clean skeletons c
 

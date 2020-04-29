@@ -228,6 +228,7 @@ package body TASTE.Concurrency_View is
                Block_Names,
                Block_Languages,
                Block_Instance_Of,
+               Block_Is_Shared_Type,
                Block_FPGAConf  : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
@@ -398,6 +399,14 @@ package body TASTE.Concurrency_View is
                      Block_Instance_Of := Block_Instance_Of
                        & B.Ref_Function.Instance_Of.Value_Or (US (""));
 
+                     --  Check if the function type for this instance is in the
+                     --  list of shared library folders instead of in the model
+                     Block_Is_Shared_Type := Block_Is_Shared_Type
+                       & (B.Ref_Function.Instance_Of.Has_Value and then
+                          CV.Configuration.Shared_Types.Contains
+                            (To_String
+                               (B.Ref_Function.Instance_Of.Unsafe_Just)));
+
                      for TASTE_property of B.Ref_Function.User_Properties loop
                         Property_Names := Property_Names & TASTE_property.Name;
                         Property_Values := Property_Values
@@ -475,11 +484,10 @@ package body TASTE.Concurrency_View is
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
-               Partition_Assoc := Join_Sets (Partition.Deployment_Partition
-                                               .To_Template,
-                                             Drivers_To_Template
-                                               (CV.Nodes (Node_Name)
-                                                  .Deployment_Node.Drivers))
+               Partition_Assoc :=
+                 Join_Sets (Partition.Deployment_Partition.To_Template,
+                            Drivers_To_Template
+                              (CV.Nodes (Node_Name).Deployment_Node.Drivers))
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Thread_Has_Param",     Thread_Has_Param)
@@ -488,6 +496,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Names",          Block_Names)
                  & Assoc ("Block_Languages",      Block_Languages)
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
+                 & Assoc ("Block_Is_Shared_Type", Block_Is_Shared_Type)
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)

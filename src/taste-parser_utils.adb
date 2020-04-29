@@ -333,10 +333,15 @@ package body TASTE.Parser_Utils is
    end To_Template_Tag;
 
    function To_Template (Config : Taste_Configuration) return Translate_Set is
-      Vec    : Tag;
+      Vec,
+      Shared_Libs : Tag;
    begin
       for Each of Config.Other_Files loop
          Vec := Vec & Each;
+      end loop;
+
+      for Each of Config.Shared_Types loop
+         Shared_Libs := Shared_Libs & Each;
       end loop;
 
       return (+Assoc  ("Interface_View", Config.Interface_View.Element)
@@ -356,7 +361,9 @@ package body TASTE.Parser_Utils is
               & Assoc ("Debug_Flag",       Config.Debug_Flag)
               & Assoc ("No_Stdlib_Flag",   Config.No_Stdlib)
               & Assoc ("Timer_Resolution", Config.Timer_Resolution)
-              & Assoc ("Other_Files", Vec));
+              & Assoc ("Shared_Lib_Dir",   Config.Shared_Lib_Dir)
+              & Assoc ("Shared_Types",     Shared_Libs)
+              & Assoc ("Other_Files",      Vec));
    end To_Template;
 
    procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is

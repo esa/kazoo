@@ -118,8 +118,9 @@ package body TASTE.AADL_Parser is
       end loop;
    exception
       when Ada.IO_Exceptions.Name_Error =>
-         raise AADL_Parser_Error
-           with "Shared library folder not found: " & Shared_Types;
+         Put_Error ("Shared library folder not found: " & Shared_Types);
+         --  raise AADL_Parser_Error
+         --    with "Shared library folder not found: " & Shared_Types;
    end Find_Shared_Libraries;
 
    procedure Initialize (Model : out TASTE_Model) is

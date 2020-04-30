@@ -94,20 +94,25 @@ package body TASTE.AADL_Parser is
       F              : Types.Int := Ocarina.Files.Sources.First;
       File_Name      : Name_Id;
       File_Descr     : Location;
+      Current        : Unbounded_String;
    begin
       loop
+         Current :=  US (Get_Name_String (Ocarina.Files.Sources.Table (F)));
          File_Name := Ocarina.Files.Search_File
            (Ocarina.Files.Sources.Table (F));
          if File_Name = No_Name then
-            Put_Info
-              ("File not found: "
-               & Get_Name_String (Ocarina.Files.Sources.Table (F)));
-         else
-            Put_Info
-              ("Loading dependency: "
-               & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+            Put_Info ("File not found: " & To_String (Current));
+         elsif Current /= "gruart.aadl" and Current /= "grspw.aadl"
+           and Current /= "native_uart.aadl" and Current /= "generic_bus.aadl"
+           and Current /= "gr_cpci_x4cv.aadl"
+           and Current /= "processor_properties.aadl"
+         then
+            Put_Info ("Loading dependency: " & To_String (Current));
+
             File_Descr := Ocarina.Files.Load_File (File_Name);
             Dest := Ocarina.Parser.Parse (AADL_Language, Dest, File_Descr);
+         else
+            Put_Info ("Ignoring duplicate: " & To_String (Current));
          end if;
          exit when F = Ocarina.Files.Sources.Last;
          F := F + 1;

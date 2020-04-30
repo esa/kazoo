@@ -46,15 +46,6 @@ package body TASTE.Deployment_View is
    begin
       --  Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
 
-      --  Parse all AADL files possibly needed to instantiate the model
---        for Each of Deployment_AADL_Lib loop
---           Set_Str_To_Name_Buffer (Each);
---           F := Ocarina.Files.Search_File (Name_Find);
---           Loc := Ocarina.Files.Load_File (F);
---           Root_Depl := Ocarina.Parser.Parse (Get_String_Name ("aadl"),
---                                              Root_Depl, Loc);
---        end loop;
-
       Success := Ocarina.Analyzer.Analyze (AADL_Language, Root);
 
       if not Success then

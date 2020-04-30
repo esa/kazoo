@@ -39,8 +39,8 @@ package TASTE.Interface_View is
    Interface_AADL_Lib : String_Vectors.Vector :=
      Empty_Vector
      & "TASTE_IV_Properties.aadl"
-     & "taste_properties.aadl"
-     & "arinc653.aadl";
+     & "taste_properties.aadl";
+--     & "arinc653.aadl";
 
    type Synchronism is (Sync, Async);
 

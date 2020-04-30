@@ -296,20 +296,20 @@ package body TASTE.Parser_Utils is
       --  We must set the values in the holders based on the parsed strings
       Result.Interface_View :=
         (if IV /= null and then IV.all'Length > 0
-         then To_Holder (IV.all) else Empty_Holder);
+         then To_Holder (IV.all) else To_Holder (Default_Interface_View));
 
       Result.Deployment_View :=
         (if DeplV /= null and then DeplV.all'Length > 0
-         then To_Holder (DeplV.all) else Empty_Holder);
+         then To_Holder (DeplV.all) else To_Holder (Default_Deployment_View));
 
       Result.Data_View :=
         (if DataV /= null and then DataV.all'Length > 0
-         then To_Holder (DataV.all) else Empty_Holder);
+         then To_Holder (DataV.all) else To_Holder (Default_Data_View));
 
       Result.Output_Dir :=
         (if OutDir /= null and then OutDir.all'Length > 0
          then To_Holder (OutDir.all)
-         else To_Holder ("."));
+         else To_Holder ("work"));
 
       Result.Target :=
         (if Target /= null and then Target.all'Length > 0

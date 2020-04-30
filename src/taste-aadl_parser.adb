@@ -58,14 +58,7 @@ package body TASTE.AADL_Parser is
       --  To iterate on folders:
       ST      : Search_Type;
       Current : Directory_Entry_Type;
-
-      --  To iterate on AADL files:
---      AADL_ST      : Search_Type;
---      AADL_Current : Directory_Entry_Type;
    begin
-      --  Enable the "-y" flag from Ocarina to load and parse automatically the
-      --  dependencies (WITH ...) of the AADL model.
-
       Model.Configuration.Shared_Lib_Dir := US (Shared_Types);
       Start_Search (Search    => ST,
                     Pattern   => "",
@@ -74,46 +67,21 @@ package body TASTE.AADL_Parser is
       if not More_Entries (ST) then
          Put_Info ("No shared components found");
       end if;
+
       while More_Entries (ST) loop
          Get_Next_Entry (ST, Current);
-         if Base_Name (Full_Name (Current)) = "" then
+         if Base_Name (Full_Name (Current)) /= "" then
             --  Ignore "." and ".." folders
-            goto Next_Component;
+
+            --  Add folder to Ocarina include path (equivalent to -I)
+            Ocarina.Options.Add_Library_Path (Full_Name (Current) & "/");
+
+            --  The model keeps a list of shared types for the backends
+            Model.Configuration.Shared_Types.Append
+              (Base_Name (Full_Name (Current)));
+
+            Put_Info ("Added " & Full_Name (Current) & " to Include path");
          end if;
-
-         --  Add folder to Ocarina include path (equivalent to -I)
-         Ocarina.Options.Add_Library_Path (Full_Name (Current) & "/");
-
-         --  The model keeps a list of shared types for the backends
-         Model.Configuration.Shared_Types.Append
-           (Base_Name (Full_Name (Current)));
-
-         Put_Info ("Added " & Full_Name (Current) & " to Include path");
-
-         --  Search for AADL files in the subfolders
---           Start_Search
---             (Search    => AADL_ST,
---              Pattern   => "*.aadl",
---              Directory => Full_Name (Current),
---              Filter    => (Ordinary_File => True, others => False));
---
---           if not More_Entries (AADL_ST) then
---              Put_Info ("No AADL file in " & Full_Name (Current));
---           end if;
---
---           while More_Entries (AADL_ST) loop
---              Get_Next_Entry (AADL_ST, AADL_Current);
---              --  Add everything for the parser
---              if Base_Name (Full_Name (AADL_Current)) /= "DataView" then
---                 Put_Info ("Found shared type: " & Full_Name (AADL_Current));
---                 Interface_AADL_Lib.Append (Full_Name (AADL_Current));
---                 Deployment_AADL_Lib.Append (Full_Name (AADL_Current));
---                 --  Store the list of shared types in the configuration
---                 Model.Configuration.Shared_Types.Append
---                   (Base_Name (Full_Name (AADL_Current)));
---              end if;
---           end loop;
-         <<Next_Component>>
       end loop;
    exception
       when Ada.IO_Exceptions.Name_Error =>
@@ -132,6 +100,8 @@ package body TASTE.AADL_Parser is
       --  some arguments (all file parameters).
       Parse_Command_Line (Model.Configuration);
       Initialize_Ocarina;
+      --  Enable the "-y" flag from Ocarina to load and parse automatically the
+      --  dependencies (WITH ...) of the AADL model.
       Ocarina.Options.Auto_Load_AADL_Files := True;
       Ocarina.Options.Verbose := True;
 
@@ -152,20 +122,19 @@ package body TASTE.AADL_Parser is
       if not Model.Configuration.Interface_View.Is_Empty then
          Set_Str_To_Name_Buffer (Model.Configuration.Interface_View.Element);
 
-         File_Name := Ocarina.Files.Search_File (Name_Find);
-         if File_Name = No_Name then
-            raise AADL_Parser_Error
-              with "Interface View file not found : "
-              & Model.Configuration.Interface_View.Element;
-         end if;
+         Interface_AADL_Lib.Append
+           (Model.Configuration.Interface_View.Element);
 
-         Ocarina.Files.Add_File_To_Parse_List (File_Name, False);
+         Interface_AADL_Lib.Append (Model.Configuration.Data_View.Element);
 
-         --  Parse library of AADL files (TASTE_IV_Properties, etc.)
+         for Each of Model.Configuration.Other_Files loop
+            Interface_AADL_Lib.Append (Each);
+         end loop;
+
+         --  Define the set of AADL files related to the interface view
          for Each of Interface_AADL_Lib loop
-            Set_Str_To_Name_Buffer (Each);
-            File_Name  := Ocarina.Files.Search_File (Name_Find);
-            Ocarina.Files.Add_File_To_Parse_List  (File_Name, False);
+            Ocarina.Files.Add_File_To_Parse_List
+              (Get_String_Name (Each), False);
          end loop;
 
          declare
@@ -176,26 +145,32 @@ package body TASTE.AADL_Parser is
                  (Ocarina.Files.Sources.Table (F));
                if File_Name = No_Name then
                   Put_Info
-                    ("Cannot find file "
-                       & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+                    ("File not found: "
+                     & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+               else
+
+--                 elsif Get_Name_String
+--                     (Ocarina.Files.Sources.Table (F)) /= "data_model.aadl"
+--                 then
+                  Put_Info
+                    ("Loading dependency: "
+                     & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+                  File_Descr := Ocarina.Files.Load_File (File_Name);
+                  Interface_Root := Ocarina.Parser.Parse (AADL_Language,
+                                                          Interface_Root,
+                                                          File_Descr);
                end if;
-
-               File_Descr := Ocarina.Files.Load_File (File_Name);
-
-               Interface_Root := Ocarina.Parser.Parse (AADL_Language,
-                                                       Interface_Root,
-                                                       File_Descr);
-               if Interface_Root = No_Node then
-                  raise AADL_Parser_Error with "Interface view is incorrect";
-               end if;
-
                exit when F = Ocarina.Files.Sources.Last;
                F := F + 1;
             end loop;
          end;
       end if;
-      --  XXX at this stage, sources has the list of all files parsed
-      --  should consider reseting it
+
+      if Interface_Root = No_Node then
+         raise AADL_Parser_Error with "Interface view is incorrect";
+      else
+         Model.Interface_View := Parse_Interface_View (Interface_Root);
+      end if;
 
       if Model.Configuration.Glue then
          --  Look for a deployment view (or DeploymentView.aadl by default)
@@ -228,6 +203,7 @@ package body TASTE.AADL_Parser is
          --  (List of files specified in the command line)
          Set_Str_To_Name_Buffer (Each);
          File_Name := Ocarina.Files.Search_File (Name_Find);
+         Put_Info ("Parsing additional file: " & Each);
 
          if File_Name = No_Name then
             raise AADL_Parser_Error with "File not found: " & Each;
@@ -235,8 +211,8 @@ package body TASTE.AADL_Parser is
 
          File_Descr := Ocarina.Files.Load_File (File_Name);
 
-         Interface_Root := Ocarina.Parser.Parse
-           (AADL_Language, Interface_Root, File_Descr);
+         --  Interface_Root := Ocarina.Parser.Parse
+         --    (AADL_Language, Interface_Root, File_Descr);
 
          if Deployment_Root /= No_Node then
             Deployment_Root := Ocarina.Parser.Parse
@@ -252,15 +228,7 @@ package body TASTE.AADL_Parser is
               with "Could not find " & Model.Configuration.Data_View.Element;
          end if;
       else
-         --  Try with default name (DataView.aadl)
-         Set_Str_To_Name_Buffer (Default_Data_View);
-         File_Name := Ocarina.Files.Search_File (Name_Find);
-         if File_Name /= No_Name then
-            Model.Configuration.Data_View := To_Holder (Default_Data_View);
-         elsif Model.Configuration.Check_Data_View then
-            --  No dataview found, while user asked explicitly for a check
-            raise AADL_Parser_Error with "Could not find DataView.aadl";
-         end if;
+         raise AADL_Parser_Error with "No data view found";
       end if;
 
       if File_Name /= No_Name then
@@ -269,10 +237,10 @@ package body TASTE.AADL_Parser is
          File_Descr := Ocarina.Files.Load_File (File_Name);
 
          --  Add the Data View to the Interface View root, if any
-         if Interface_Root /= No_Node then
-            Interface_Root := Ocarina.Parser.Parse
-              (AADL_Language, Interface_Root, File_Descr);
-         end if;
+--           if Interface_Root /= No_Node then
+--              Interface_Root := Ocarina.Parser.Parse
+--                (AADL_Language, Interface_Root, File_Descr);
+--           end if;
 
          --  Add the Data View to the Deployment View root, if any
          if Deployment_Root /= No_Node then
@@ -311,12 +279,12 @@ package body TASTE.AADL_Parser is
 
       if Interface_Root /= No_Node then
          --  Parse Interface and Deployment View
-         begin
-            Result.Interface_View := Parse_Interface_View (Interface_Root);
-         exception
-            when System.Assertions.Assert_Failure =>
-               raise AADL_Parser_Error with "Interface view parsing error";
-         end;
+--           begin
+--              Result.Interface_View := Parse_Interface_View (Interface_Root);
+--           exception
+--              when System.Assertions.Assert_Failure =>
+--                 raise AADL_Parser_Error with "Interface view parsing error";
+--           end;
 
          if not Result.Configuration.No_Stdlib then
             Deployment_AADL_Lib.Append ("ocarina_components.aadl");
@@ -353,6 +321,9 @@ package body TASTE.AADL_Parser is
       Semantic_Check.Check_Model (Result);
       return Result;
    exception
+      when Error : System.Assertions.Assert_Failure =>
+         Put_Error ("Parsing error: " & Exception_Message (Error));
+         raise Quit_Taste;
       when Error : AADL_Parser_Error
          | Interface_Error
          | Function_Error

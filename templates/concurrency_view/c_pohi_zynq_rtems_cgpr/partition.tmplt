@@ -34,9 +34,9 @@
 -- Generic gprbuild configuration file for rtems5 with Ada support for leon3
 configuration project ZYNQ_RTEMS is
    package Compiler is
-      for Driver ("C") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
-      for Driver ("Ada") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
-      for Driver ("C++") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-g++";
+      for Driver ("C") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-gcc";
+      for Driver ("Ada") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-gcc";
+      for Driver ("C++") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-g++";
       for Driver ("FPGA") use "bambu";
 
       for Leading_Required_Switches ("C") use ("-c");
@@ -58,7 +58,7 @@ configuration project ZYNQ_RTEMS is
           "-mfpu=neon",
           "-mfloat-abi=hard",
           "-mtune=cortex-a9",
-          "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
+          "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_zc706/lib",
           "-specs=bsp_specs",
           "-qrtems");
 
@@ -90,10 +90,10 @@ configuration project ZYNQ_RTEMS is
       for Body_Suffix ("FPGA") use ".c";
       for Dot_Replacement use "-";
    end Naming;
-   for Archive_Builder use ("/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-ar" , "cr");
+   for Archive_Builder use ("/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-ar" , "cr");
 
    package Linker is
-      for Driver use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
+      for Driver use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-gcc";
 
       Common_C_Linker_Switches :=
            ("--pipe",
@@ -105,7 +105,7 @@ configuration project ZYNQ_RTEMS is
             "-g",
             "-fdiagnostics-show-option",
             "-ffunction-sections",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
+            "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_zc706/lib",
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",
@@ -117,7 +117,7 @@ configuration project ZYNQ_RTEMS is
        for Default_Switches ("Ada") use
            ("--pipe",
             "-g",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_zc706/lib",
+            "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_zc706/lib",
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",

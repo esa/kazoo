@@ -34,9 +34,9 @@
 -- Generic gprbuild configuration file for rtems5 with Ada support for leon3
 configuration project ZYNQ_RTEMS_QEMU is
    package Compiler is
-      for Driver ("C") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
-      for Driver ("Ada") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-gcc";
-      for Driver ("C++") use "/opt/rtems-5.1-2020.01.24/bin/arm-rtems5-g++";
+      for Driver ("C") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-gcc";
+      for Driver ("Ada") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-gcc";
+      for Driver ("C++") use "/opt/rtems-5.1-2020.04.29/bin/arm-rtems5-g++";
 
       for Leading_Required_Switches ("C") use ("-c");
       for Leading_Required_Switches ("C++") use ("-c");
@@ -56,7 +56,7 @@ configuration project ZYNQ_RTEMS_QEMU is
           "-mfpu=neon",
           "-mfloat-abi=hard",
           "-mtune=cortex-a9",
-          "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_a9_qemu/lib",
+          "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_a9_qemu/lib",
           "-specs=bsp_specs",
           "-qrtems");
 
@@ -101,7 +101,7 @@ configuration project ZYNQ_RTEMS_QEMU is
             "-g",
             "-fdiagnostics-show-option",
             "-ffunction-sections",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_a9_qemu/lib",
+            "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_a9_qemu/lib",
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",
@@ -114,7 +114,7 @@ configuration project ZYNQ_RTEMS_QEMU is
            ("--pipe",
             "-O0",
             "-g",
-            "-B/opt/rtems-5.1-2020.01.24/arm-rtems5/xilinx_zynq_a9_qemu/lib",
+            "-B/opt/rtems-5.1-2020.04.29/arm-rtems5/xilinx_zynq_a9_qemu/lib",
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",

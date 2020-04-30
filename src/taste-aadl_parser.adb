@@ -90,6 +90,30 @@ package body TASTE.AADL_Parser is
          --    with "Shared library folder not found: " & Shared_Types;
    end Find_Shared_Libraries;
 
+   procedure Parse_Set_Of_AADL_Files (Dest : in out Node_Id) is
+      F              : Types.Int := Ocarina.Files.Sources.First;
+      File_Name      : Name_Id;
+      File_Descr     : Location;
+   begin
+      loop
+         File_Name := Ocarina.Files.Search_File
+           (Ocarina.Files.Sources.Table (F));
+         if File_Name = No_Name then
+            Put_Info
+              ("File not found: "
+               & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+         else
+            Put_Info
+              ("Loading dependency: "
+               & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+            File_Descr := Ocarina.Files.Load_File (File_Name);
+            Dest := Ocarina.Parser.Parse (AADL_Language, Dest, File_Descr);
+         end if;
+         exit when F = Ocarina.Files.Sources.Last;
+         F := F + 1;
+      end loop;
+   end Parse_Set_Of_AADL_Files;
+
    procedure Initialize (Model : out TASTE_Model) is
       File_Name      : Name_Id;
       File_Descr     : Location;
@@ -107,118 +131,85 @@ package body TASTE.AADL_Parser is
 
       AADL_Language := Get_String_Name ("aadl");
 
-      if Model.Configuration.Interface_View.Is_Empty
-        and not Model.Configuration.Check_Data_View
-      then
-         --  Use "InterfaceView.aadl" by default, if nothing else is specified
-         --  and if the tool is not only called to check the data view
-         Model.Configuration.Interface_View :=
-           To_Holder (Default_Interface_View);
-      end if;
-
       Find_Shared_Libraries (Model);
 
-      --  An interface view is expected, look for it and parse it
-      if not Model.Configuration.Interface_View.Is_Empty then
-         Set_Str_To_Name_Buffer (Model.Configuration.Interface_View.Element);
+      --  -------------------------
+      --  Parse the interface view
+      --  -------------------------
 
-         Interface_AADL_Lib.Append
-           (Model.Configuration.Interface_View.Element);
+      --  Add InterfaceView.aadl:
+      Interface_AADL_Lib.Append (Model.Configuration.Interface_View.Element);
 
-         Interface_AADL_Lib.Append (Model.Configuration.Data_View.Element);
+      --  Add DataView.aadl:
+      Interface_AADL_Lib.Append (Model.Configuration.Data_View.Element);
 
-         for Each of Model.Configuration.Other_Files loop
-            Interface_AADL_Lib.Append (Each);
-         end loop;
+      --  Add other files given by the user in the command line:
+      for Each of Model.Configuration.Other_Files loop
+         Interface_AADL_Lib.Append (Each);
+      end loop;
 
-         --  Define the set of AADL files related to the interface view
-         for Each of Interface_AADL_Lib loop
-            Ocarina.Files.Add_File_To_Parse_List
-              (Get_String_Name (Each), False);
-         end loop;
+      --  Prepare Ocarina by setting the list of files:
+      for Each of Interface_AADL_Lib loop
+         Ocarina.Files.Add_File_To_Parse_List (Get_String_Name (Each), False);
+      end loop;
 
-         declare
-            F : Types.Int := Ocarina.Files.Sources.First;
-         begin
-            loop
-               File_Name := Ocarina.Files.Search_File
-                 (Ocarina.Files.Sources.Table (F));
-               if File_Name = No_Name then
-                  Put_Info
-                    ("File not found: "
-                     & Get_Name_String (Ocarina.Files.Sources.Table (F)));
-               else
-
---                 elsif Get_Name_String
---                     (Ocarina.Files.Sources.Table (F)) /= "data_model.aadl"
---                 then
-                  Put_Info
-                    ("Loading dependency: "
-                     & Get_Name_String (Ocarina.Files.Sources.Table (F)));
-                  File_Descr := Ocarina.Files.Load_File (File_Name);
-                  Interface_Root := Ocarina.Parser.Parse (AADL_Language,
-                                                          Interface_Root,
-                                                          File_Descr);
-               end if;
-               exit when F = Ocarina.Files.Sources.Last;
-               F := F + 1;
-            end loop;
-         end;
-      end if;
+      --  Call Ocarina to parse the AADL files:
+      Parse_Set_Of_AADL_Files (Dest => Interface_Root);
 
       if Interface_Root = No_Node then
-         raise AADL_Parser_Error with "Interface view is incorrect";
+         raise AADL_Parser_Error with "Interface view parsing error";
       else
          Model.Interface_View := Parse_Interface_View (Interface_Root);
       end if;
 
+      --  ---------------------------------------------------------
+      --  Parse the deployment view if Glue generation is requested
+      --  ---------------------------------------------------------
+
       if Model.Configuration.Glue then
-         --  Look for a deployment view (or DeploymentView.aadl by default)
-         --  if the glue generation is requested. Not needed for skeletons.
-         if Model.Configuration.Deployment_View.Is_Empty then
-            Model.Configuration.Deployment_View :=
-              To_Holder (Default_Deployment_View);
+
+         --  Reset Ocarina's list of AADL files:
+         Ocarina.Files.Sources.Free;
+
+         --  Add DeploymentView.aadl:
+         Deployment_AADL_Lib.Append
+           (Model.Configuration.Deployment_View.Element);
+
+         --  Add InterfaceView.aadl:
+         Deployment_AADL_Lib.Append
+           (Model.Configuration.Interface_View.Element);
+
+         --  Add DataView.aadl
+         Deployment_AADL_Lib.Append (Model.Configuration.Data_View.Element);
+
+         --  Add other files given by the user in the command line:
+         for Each of Model.Configuration.Other_Files loop
+            Deployment_AADL_Lib.Append (Each);
+         end loop;
+
+         --  Unless otherwise specified, add ocarina_components.aadl:
+         if not Model.Configuration.No_Stdlib then
+            Deployment_AADL_Lib.Append ("ocarina_components.aadl");
          end if;
 
-         Set_Str_To_Name_Buffer (Model.Configuration.Deployment_View.Element);
+         --  Prepare Ocarina by setting the list of files:
+         for Each of Deployment_AADL_Lib loop
+            Ocarina.Files.Add_File_To_Parse_List
+              (Get_String_Name (Each), False);
+         end loop;
 
-         File_Name := Ocarina.Files.Search_File (Name_Find);
-         if File_Name = No_Name then
-            raise AADL_Parser_Error
-              with "Deployment View file not found : "
-              & Model.Configuration.Deployment_View.Element;
-         end if;
-
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-         Deployment_Root := Ocarina.Parser.Parse
-           (AADL_Language, Deployment_Root, File_Descr);
+         --  Call Ocarina to parse the AADL files:
+         Parse_Set_Of_AADL_Files (Dest => Deployment_Root);
 
          if Deployment_Root = No_Node then
             raise AADL_Parser_Error with "Deployment View is incorrect";
+         else
+            Model.Deployment_View :=
+              Deployment_View_Holders.To_Holder
+                (Parse_Deployment_View
+                   (Deployment_Root, Model.Interface_View));
          end if;
       end if;
-
-      for Each of Model.Configuration.Other_Files loop
-         --  Add other files to the Interface and (if any) deployment roots
-         --  (List of files specified in the command line)
-         Set_Str_To_Name_Buffer (Each);
-         File_Name := Ocarina.Files.Search_File (Name_Find);
-         Put_Info ("Parsing additional file: " & Each);
-
-         if File_Name = No_Name then
-            raise AADL_Parser_Error with "File not found: " & Each;
-         end if;
-
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-
-         --  Interface_Root := Ocarina.Parser.Parse
-         --    (AADL_Language, Interface_Root, File_Descr);
-
-         if Deployment_Root /= No_Node then
-            Deployment_Root := Ocarina.Parser.Parse
-              (AADL_Language, Deployment_Root, File_Descr);
-         end if;
-      end loop;
 
       if not Model.Configuration.Data_View.Is_Empty then
          Set_Str_To_Name_Buffer (Model.Configuration.Data_View.Element);
@@ -236,21 +227,10 @@ package body TASTE.AADL_Parser is
 
          File_Descr := Ocarina.Files.Load_File (File_Name);
 
-         --  Add the Data View to the Interface View root, if any
---           if Interface_Root /= No_Node then
---              Interface_Root := Ocarina.Parser.Parse
---                (AADL_Language, Interface_Root, File_Descr);
---           end if;
-
-         --  Add the Data View to the Deployment View root, if any
-         if Deployment_Root /= No_Node then
-            Deployment_Root := Ocarina.Parser.Parse
-               (AADL_Language, Deployment_Root, File_Descr);
-         end if;
          --  Also parse the data view as a root component
          Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
-         Dataview_root := Ocarina.Parser.Parse
-                            (AADL_Language, Dataview_root, File_Descr);
+         Dataview_Root := Ocarina.Parser.Parse
+                            (AADL_Language, Dataview_Root, File_Descr);
       end if;
 
       --  If present, try and parse ConcurrencyView_Properties.aadl
@@ -273,33 +253,9 @@ package body TASTE.AADL_Parser is
 
    function Parse_Project return TASTE_Model is
       Result : TASTE_Model;
-      use Deployment_View_Holders;
+      --  use Deployment_View_Holders;
    begin
       Initialize (Model => Result);
-
-      if Interface_Root /= No_Node then
-         --  Parse Interface and Deployment View
---           begin
---              Result.Interface_View := Parse_Interface_View (Interface_Root);
---           exception
---              when System.Assertions.Assert_Failure =>
---                 raise AADL_Parser_Error with "Interface view parsing error";
---           end;
-
-         if not Result.Configuration.No_Stdlib then
-            Deployment_AADL_Lib.Append ("ocarina_components.aadl");
-         end if;
-
-         if Deployment_Root /= No_Node
-           and not Result.Configuration.Deployment_View.Is_Empty
-         then
-            Deployment_AADL_Lib.Append
-              (Result.Configuration.Interface_View.Element);
-            Result.Deployment_View :=
-              To_Holder (Parse_Deployment_View
-                         (Deployment_Root, Result.Interface_View));
-         end if;
-      end if;
 
       if not Result.Configuration.Data_View.Is_Empty then
          begin

@@ -472,7 +472,7 @@ package body TASTE.Parser_Utils is
       Ocarina.AADL_Version := Ocarina.AADL_V2;
       Ocarina.Configuration.Init_Modules;
       --  Following is needed to parse the interface view
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
    end Initialize_Ocarina;
 
    --  There is no "&" operator for Translate sets...

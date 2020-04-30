@@ -65,7 +65,6 @@ package body TASTE.AADL_Parser is
    begin
       --  Enable the "-y" flag from Ocarina to load and parse automatically the
       --  dependencies (WITH ...) of the AADL model.
-      Ocarina.Options.Auto_Load_AADL_Files := True;
 
       Model.Configuration.Shared_Lib_Dir := US (Shared_Types);
       Start_Search (Search    => ST,
@@ -133,6 +132,8 @@ package body TASTE.AADL_Parser is
       --  some arguments (all file parameters).
       Parse_Command_Line (Model.Configuration);
       Initialize_Ocarina;
+      Ocarina.Options.Auto_Load_AADL_Files := True;
+      Ocarina.Options.Verbose := True;
 
       AADL_Language := Get_String_Name ("aadl");
 
@@ -158,25 +159,43 @@ package body TASTE.AADL_Parser is
               & Model.Configuration.Interface_View.Element;
          end if;
 
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-
-         Interface_Root := Ocarina.Parser.Parse
-           (AADL_Language, Interface_Root, File_Descr);
+         Ocarina.Files.Add_File_To_Parse_List (File_Name, False);
 
          --  Parse library of AADL files (TASTE_IV_Properties, etc.)
          for Each of Interface_AADL_Lib loop
             Set_Str_To_Name_Buffer (Each);
             File_Name  := Ocarina.Files.Search_File (Name_Find);
-            File_Descr := Ocarina.Files.Load_File (File_Name);
-            Interface_Root := Ocarina.Parser.Parse (AADL_Language,
-                                                    Interface_Root,
-                                                    File_Descr);
+            Ocarina.Files.Add_File_To_Parse_List  (File_Name, False);
          end loop;
 
-         if Interface_Root = No_Node then
-            raise AADL_Parser_Error with "Interface view is incorrect";
-         end if;
+         declare
+            F : Types.Int := Ocarina.Files.Sources.First;
+         begin
+            loop
+               File_Name := Ocarina.Files.Search_File
+                 (Ocarina.Files.Sources.Table (F));
+               if File_Name = No_Name then
+                  Put_Info
+                    ("Cannot find file "
+                       & Get_Name_String (Ocarina.Files.Sources.Table (F)));
+               end if;
+
+               File_Descr := Ocarina.Files.Load_File (File_Name);
+
+               Interface_Root := Ocarina.Parser.Parse (AADL_Language,
+                                                       Interface_Root,
+                                                       File_Descr);
+               if Interface_Root = No_Node then
+                  raise AADL_Parser_Error with "Interface view is incorrect";
+               end if;
+
+               exit when F = Ocarina.Files.Sources.Last;
+               F := F + 1;
+            end loop;
+         end;
       end if;
+      --  XXX at this stage, sources has the list of all files parsed
+      --  should consider reseting it
 
       if Model.Configuration.Glue then
          --  Look for a deployment view (or DeploymentView.aadl by default)

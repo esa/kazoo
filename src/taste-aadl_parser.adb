@@ -175,6 +175,7 @@ package body TASTE.AADL_Parser is
 
          --  Reset Ocarina's list of AADL files:
          Ocarina.Files.Sources.Free;
+         Ocarina.Files.Sources.Init;
 
          --  Add DeploymentView.aadl:
          Deployment_AADL_Lib.Append

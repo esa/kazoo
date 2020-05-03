@@ -20,7 +20,7 @@ with System.Assertions,
      Ocarina.Configuration,
      Ocarina.Files,
      Ocarina.Parser,
-     Ocarina.FE_AADL.Parser,
+     --  Ocarina.FE_AADL.Parser,
      Ocarina.Options,
      TASTE.Backend,
      TASTE.Backend.Build_Script,
@@ -119,10 +119,9 @@ package body TASTE.AADL_Parser is
       end loop;
    end Parse_Set_Of_AADL_Files;
 
-   procedure Initialize (Model : out TASTE_Model) is
-      File_Name      : Name_Id;
-      File_Descr     : Location;
-      use String_Holders;
+   procedure Build_TASTE_AST (Model : out TASTE_Model) is
+      use String_Holders,
+          String_Vectors;
    begin
       Banner;
       --  Parse arguments before initializing Ocarina, otherwise Ocarina eats
@@ -142,29 +141,55 @@ package body TASTE.AADL_Parser is
       --  Parse the interface view
       --  -------------------------
 
-      --  Add InterfaceView.aadl:
-      Interface_AADL_Lib.Append (Model.Configuration.Interface_View.Element);
+      --  Define the list of AADL files to parse
+      Interface_AADL_Lib := Interface_AADL_Lib
+        & Model.Configuration.Interface_View.Element
+        & Model.Configuration.Data_View.Element
+        & Model.Configuration.Other_Files;
 
-      --  Add DataView.aadl:
-      Interface_AADL_Lib.Append (Model.Configuration.Data_View.Element);
-
-      --  Add other files given by the user in the command line:
-      for Each of Model.Configuration.Other_Files loop
-         Interface_AADL_Lib.Append (Each);
-      end loop;
-
-      --  Prepare Ocarina by setting the list of files:
+      --  Prepare Ocarina (it will determine other file dependencies, if any)
       for Each of Interface_AADL_Lib loop
          Ocarina.Files.Add_File_To_Parse_List (Get_String_Name (Each), False);
       end loop;
 
-      --  Call Ocarina to parse the AADL files:
-      Parse_Set_Of_AADL_Files (Dest => Interface_Root);
+      --  If requested, call Ocarina to parse the AADL file and build the AST
+      if not Model.Configuration.Check_Data_View then
+         Parse_Set_Of_AADL_Files (Dest => Interface_Root);
+         if Interface_Root = No_Node then
+            raise AADL_Parser_Error with "Interface view parsing error";
+         else
+            Model.Interface_View := Parse_Interface_View (Interface_Root);
+         end if;
+      end if;
 
-      if Interface_Root = No_Node then
-         raise AADL_Parser_Error with "Interface view parsing error";
-      else
-         Model.Interface_View := Parse_Interface_View (Interface_Root);
+      --  ------------------
+      --  Parse the dataview
+      --  ------------------
+
+      --  Reset Ocarina's list of AADL files:
+      Ocarina.Files.Sources.Free;
+      Ocarina.Files.Sources.Init;
+
+      --  Add DataView.aadl to the list of files to parse
+      Data_View_AADL_Lib := Data_View_AADL_Lib
+        & Model.Configuration.Data_View.Element;
+
+      --  Prepare Ocarina (it will determine other file dependencies, if any)
+      for Each of Data_View_AADL_Lib loop
+            Ocarina.Files.Add_File_To_Parse_List
+              (Get_String_Name (Each), False);
+      end loop;
+
+      --  Call Ocarina to parse the AADL files
+      Parse_Set_Of_AADL_Files (Dest => Dataview_Root);
+
+      --  Create the AST of the data view and check ASN.1 file presence
+      Model.Data_View := Parse_Data_View (Dataview_root);
+      Model.Data_View.Check_Files;
+
+      --  User only wants to check ASN.1 file presence, skip IV/DV parsing
+      if Model.Configuration.Check_Data_View then
+         raise Quit_Taste;
       end if;
 
       --  ---------------------------------------------------------
@@ -177,21 +202,12 @@ package body TASTE.AADL_Parser is
          Ocarina.Files.Sources.Free;
          Ocarina.Files.Sources.Init;
 
-         --  Add DeploymentView.aadl:
-         Deployment_AADL_Lib.Append
-           (Model.Configuration.Deployment_View.Element);
-
-         --  Add InterfaceView.aadl:
-         Deployment_AADL_Lib.Append
-           (Model.Configuration.Interface_View.Element);
-
-         --  Add DataView.aadl
-         Deployment_AADL_Lib.Append (Model.Configuration.Data_View.Element);
-
-         --  Add other files given by the user in the command line:
-         for Each of Model.Configuration.Other_Files loop
-            Deployment_AADL_Lib.Append (Each);
-         end loop;
+         --  Define the list of AADL files to parse
+         Deployment_AADL_Lib := Deployment_AADL_Lib
+           & Model.Configuration.Deployment_View.Element
+           & Model.Configuration.Interface_View.Element
+           & Model.Configuration.Data_View.Element
+           & Model.Configuration.Other_Files;
 
          --  Unless otherwise specified, add ocarina_components.aadl:
          if not Model.Configuration.No_Stdlib then
@@ -210,6 +226,7 @@ package body TASTE.AADL_Parser is
          if Deployment_Root = No_Node then
             raise AADL_Parser_Error with "Deployment View is incorrect";
          else
+            --  Build the AST
             Model.Deployment_View :=
               Deployment_View_Holders.To_Holder
                 (Parse_Deployment_View
@@ -217,69 +234,30 @@ package body TASTE.AADL_Parser is
          end if;
       end if;
 
-      if not Model.Configuration.Data_View.Is_Empty then
-         Set_Str_To_Name_Buffer (Model.Configuration.Data_View.Element);
-         File_Name := Ocarina.Files.Search_File (Name_Find);
-         if File_Name = No_Name then
-            raise AADL_Parser_Error
-              with "Could not find " & Model.Configuration.Data_View.Element;
-         end if;
-      else
-         raise AADL_Parser_Error with "No data view found";
-      end if;
+      --  -------------------------------------
+      --  Parse ConcurrencyView_Properties.aadl
+      --  -------------------------------------
 
-      if File_Name /= No_Name then
-         Put_Info ("Parsing " & Model.Configuration.Data_View.Element);
+      --  Reset Ocarina's list of AADL files:
+      Ocarina.Files.Sources.Free;
+      Ocarina.Files.Sources.Init;
+      Ocarina.Files.Add_File_To_Parse_List
+        (Get_String_Name ("ConcurrencyView_Properties.aadl"), False);
 
-         File_Descr := Ocarina.Files.Load_File (File_Name);
+      --  Call Ocarina to parse the AADL files:
+      Parse_Set_Of_AADL_Files (Dest => Concurrency_Properties_Root);
 
-         --  Also parse the data view as a root component
-         Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
-         Dataview_Root := Ocarina.Parser.Parse
-                            (AADL_Language, Dataview_Root, File_Descr);
-      end if;
-
-      --  If present, try and parse ConcurrencyView_Properties.aadl
-      Set_Str_To_Name_Buffer ("ConcurrencyView_Properties.aadl");
-      File_Name := Ocarina.Files.Search_File (Name_Find);
-      if File_Name = No_Name then
-         Put_Debug ("No ConcurrencyView_Properties.aadl file found");
-      else
-         Put_Info ("Parsing ConcurrencyView_Properties.aadl");
-         File_Descr := Ocarina.Files.Load_File (File_Name);
-
-         Concurrency_Properties_Root := Ocarina.Parser.Parse
-           (AADL_Language, Concurrency_Properties_Root, File_Descr);
-         if Concurrency_Properties_Root = No_Node then
-            raise AADL_Parser_Error with
-              "Error parsing ConcurrencyView_Properties.aadl";
-         end if;
-      end if;
-   end Initialize;
+--        if Concurrency_Properties_Root = No_Node then
+--           raise AADL_Parser_Error with
+--             "Error parsing ConcurrencyView_Properties.aadl";
+--        end if;
+   end Build_TASTE_AST;
 
    function Parse_Project return TASTE_Model is
       Result : TASTE_Model;
-      --  use Deployment_View_Holders;
    begin
-      Initialize (Model => Result);
-
-      if not Result.Configuration.Data_View.Is_Empty then
-         begin
-            Result.Data_View := Parse_Data_View (Dataview_root);
-            Result.Data_View.Check_Files;
-         exception
-            when Constraint_Error =>
-               raise Data_View_Error with "Update your data view!";
-         end;
-      end if;
-
+      Build_TASTE_AST (Model => Result);
       Ocarina.Configuration.Reset_Modules;
-      --  Ocarina.Reset;  (No: This make the CV_Properties analysis fail)
-
-      if Result.Configuration.Check_Data_View then
-         raise Quit_Taste;
-      end if;
-
       Semantic_Check.Check_Model (Result);
       return Result;
    exception

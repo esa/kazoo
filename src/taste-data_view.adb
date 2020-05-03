@@ -5,14 +5,10 @@
 --  Interface View parser
 
 with Ada.Directories,
-     Locations,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Backends.Properties,
      Ocarina.Options,
-     Ocarina.Files,
-     Ocarina.FE_AADL.Parser,
-     Ocarina.Parser,
      Ocarina.Instances,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.Namet,
@@ -20,8 +16,7 @@ with Ada.Directories,
 
 package body TASTE.Data_View is
 
-   use Locations,
-       Ocarina.Instances.Queries,
+   use Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.Backends.Properties,
        Ocarina.Options,
@@ -36,41 +31,28 @@ package body TASTE.Data_View is
 
    function Parse_Data_View (Dataview_Root : Node_Id) return Taste_Data_View
    is
-      DV_Root : Node_Id := Dataview_Root;
       use ASN1_File_Maps;
       System            : Node_Id;
       Files             : ASN1_File_Maps.Map;
       ACN_Files         : String_Sets.Set;
       Current_Type      : Node_Id;
-      F                 : Name_Id;
-      Loc               : Location;
    begin
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
-
-      --  Parse all AADL files possibly needed to instantiate the model
-      for Each of Data_View_AADL_Lib loop
-         Set_Str_To_Name_Buffer (Each);
-         F := Ocarina.Files.Search_File (Name_Find);
-         Loc := Ocarina.Files.Load_File (F);
-         DV_Root := Ocarina.Parser.Parse (Get_String_Name ("aadl"),
-                                          DV_Root, Loc);
-      end loop;
-
-      if not Ocarina.Analyzer.Analyze (AADL_Language, DV_Root) then
+      if not Ocarina.Analyzer.Analyze (AADL_Language, Dataview_Root) then
          raise Data_View_Error with "Could not analyse Data View";
       end if;
 
       Ocarina.Options.Root_System_Name :=
         Get_String_Name ("taste_dataview.others");
 
-      if DV_Root /= No_Node then
+      if Dataview_Root /= No_Node then
          declare
-            Inst : constant Node_Id := Instantiate_Model
-              (Root => DV_Root,
-               Exit_If_Error => False);
+            Inst : constant Node_Id :=
+              Instantiate_Model (Root          => Dataview_Root,
+                                 Exit_If_Error => False);
          begin
             if Inst /= No_Node then
-               System := Root_System (Instantiate_Model (Root => DV_Root));
+               System := Root_System
+                 (Instantiate_Model (Root => Dataview_Root));
             else
                System := No_Node;
             end if;
@@ -79,7 +61,7 @@ package body TASTE.Data_View is
 
       if No (System) then
          raise Data_View_Error with
-         "Could not instantiate Data View - Try taste-update-data-view";
+           "Could not instantiate Data View - Try taste-update-data-view";
       end if;
 
       Current_Type := AIN.First_Node (AIN.Subcomponents (System));

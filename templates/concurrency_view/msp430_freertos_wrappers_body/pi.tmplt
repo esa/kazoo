@@ -32,9 +32,9 @@ void pro_@_Parent_Function_@_@_Name_@
 	xSemaphoreTake(@_LOWER:Parent_Function_@_semaphore, portMAX_DELAY);
 
 @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
-   @_LOWER:Parent_Function_@_@_Name_@();
+    @_LOWER:Parent_Function_@_@_Name_@();
 @@ELSE@@
-   @_LOWER:Parent_Function_@_@_Name_@
+    @_LOWER:Parent_Function_@_@_Name_@
 @@INLINE(      \()(,\n       )(\);\n)@@
       @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

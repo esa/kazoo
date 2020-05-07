@@ -1129,7 +1129,7 @@ package body TASTE.AADL_Parser is
                Unit_Str := US (Get_Name_String (Display_Name (Unit)));
             end if;
 
-            --  Check that the units are the expected ones (kb/ms)
+            --  Check that the units are the expected ones (kbytes/bytes/ms)
             if (Prop_Name = "Stack_Size"
                 and then (Unit_Str /= "kbytes" and Unit_Str /= "bytes"))
               or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
@@ -1138,7 +1138,7 @@ package body TASTE.AADL_Parser is
                           & To_String (Unit_Str)
                           & "' used in ConcurrencyView_Properties.aadl. "
                           & " Stack_Size shall be in "
-                          & "'byte' or 'kbyte' and Dispatch_Offset in 'ms'");
+                          & "'bytes' or 'kbyte' and Dispatch_Offset in 'ms'");
                return;
             end if;
 

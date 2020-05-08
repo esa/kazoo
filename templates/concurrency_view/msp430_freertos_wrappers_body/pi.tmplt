@@ -29,7 +29,7 @@ void pro_@_Parent_Function_@_@_Name_@
 @@END_IF@@
 {
     extern SemaphoreHandle_t @_LOWER:Parent_Function_@_semaphore;
-	xSemaphoreTake(@_LOWER:Parent_Function_@_semaphore, portMAX_DELAY);
+    xSemaphoreTake(@_LOWER:Parent_Function_@_semaphore, portMAX_DELAY);
 
 @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
     @_LOWER:Parent_Function_@_@_Name_@();
@@ -46,5 +46,5 @@ void pro_@_Parent_Function_@_@_Name_@
 @@END_INLINE@@
 @@END_IF@@
 
-	xSemaphoreGive(@_LOWER:Parent_Function_@_semaphore);
+    xSemaphoreGive(@_LOWER:Parent_Function_@_semaphore);
 }

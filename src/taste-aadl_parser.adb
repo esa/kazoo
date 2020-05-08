@@ -1138,7 +1138,7 @@ package body TASTE.AADL_Parser is
                           & To_String (Unit_Str)
                           & "' used in ConcurrencyView_Properties.aadl. "
                           & " Stack_Size shall be in "
-                          & "'bytes' or 'kbyte' and Dispatch_Offset in 'ms'");
+                          & "'bytes' or 'kbytes' and Dispatch_Offset in 'ms'");
                return;
             end if;
 

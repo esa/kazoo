@@ -269,11 +269,10 @@ static void uart_transmit_character()
     }
     else
     {
-
         uint8_t c = ring_buffer_get(&stdout_buffer);
         UCA0TXBUF = c;
-        portEXIT_CRITICAL();
     }
+    portEXIT_CRITICAL();
 }
 
 static void uart_receive_character(BaseType_t* parameter)

@@ -21,14 +21,15 @@ void function1_PI_cycl()
 }
 
 void function1_PI_z
-      (const asn1SccTASTE_Boolean *IN_param1)
+      (const asn1SccT_Int32 *IN_param1)
 
 {
        // Write your code here
-        printf("[function1] PI_z got %s\n", *IN_param1?"TRUE":"FALSE");
-        if(*IN_param1){
-            printf("[function1] Calling RI_t %s\n", *IN_param1?"TRUE":"FALSE");
-            function1_RI_t(IN_param1);
+       static asn1SccT_Boolean someBool = true;
+        printf("[function1] PI_z got %d\n", *IN_param1);
+        if(*IN_param1 == 100){
+            printf("[function1] Calling RI_t %s\n", someBool?"TRUE":"FALSE");
+            function1_RI_t(&someBool);
         }
 
 } 

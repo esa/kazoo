@@ -18,15 +18,16 @@ void read_PI_h()
     read_RI_s(&someBool);
 
     someBool = someBool?false:true;
-    printf("[read] Calling RI_z %s\n", someBool?"TRUE":"FALSE");
+    asn1SccT_Int32 int1 = 100;
+    printf("[read] Calling RI_z %u\n", int1);
 
-    read_RI_z(&someBool);
+    read_RI_z(&int1);
 }
 
-void read_PI_new(const asn1SccTASTE_Boolean *IN_c)
+void read_PI_new(const asn1SccMyOctStr *IN_c)
 {
         /* Write your code here! */
-        printf("[read] PI_new: got %s ", *IN_c?"TRUE\n":"FALSE\n");
+        printf("[read] PI_new: got %d \n", IN_c->arr[1]);
 }
 
 

@@ -296,20 +296,20 @@ package body TASTE.Parser_Utils is
       --  We must set the values in the holders based on the parsed strings
       Result.Interface_View :=
         (if IV /= null and then IV.all'Length > 0
-         then To_Holder (IV.all) else Empty_Holder);
+         then To_Holder (IV.all) else To_Holder (Default_Interface_View));
 
       Result.Deployment_View :=
         (if DeplV /= null and then DeplV.all'Length > 0
-         then To_Holder (DeplV.all) else Empty_Holder);
+         then To_Holder (DeplV.all) else To_Holder (Default_Deployment_View));
 
       Result.Data_View :=
         (if DataV /= null and then DataV.all'Length > 0
-         then To_Holder (DataV.all) else Empty_Holder);
+         then To_Holder (DataV.all) else To_Holder (Default_Data_View));
 
       Result.Output_Dir :=
         (if OutDir /= null and then OutDir.all'Length > 0
          then To_Holder (OutDir.all)
-         else To_Holder ("."));
+         else To_Holder ("work"));
 
       Result.Target :=
         (if Target /= null and then Target.all'Length > 0
@@ -333,10 +333,15 @@ package body TASTE.Parser_Utils is
    end To_Template_Tag;
 
    function To_Template (Config : Taste_Configuration) return Translate_Set is
-      Vec    : Tag;
+      Vec,
+      Shared_Libs : Tag;
    begin
       for Each of Config.Other_Files loop
          Vec := Vec & Each;
+      end loop;
+
+      for Each of Config.Shared_Types loop
+         Shared_Libs := Shared_Libs & Each;
       end loop;
 
       return (+Assoc  ("Interface_View", Config.Interface_View.Element)
@@ -356,7 +361,9 @@ package body TASTE.Parser_Utils is
               & Assoc ("Debug_Flag",       Config.Debug_Flag)
               & Assoc ("No_Stdlib_Flag",   Config.No_Stdlib)
               & Assoc ("Timer_Resolution", Config.Timer_Resolution)
-              & Assoc ("Other_Files", Vec));
+              & Assoc ("Shared_Lib_Dir",   Config.Shared_Lib_Dir)
+              & Assoc ("Shared_Types",     Shared_Libs)
+              & Assoc ("Other_Files",      Vec));
    end To_Template;
 
    procedure Debug_Dump (Config : Taste_Configuration; Output : File_Type) is
@@ -465,7 +472,7 @@ package body TASTE.Parser_Utils is
       Ocarina.AADL_Version := Ocarina.AADL_V2;
       Ocarina.Configuration.Init_Modules;
       --  Following is needed to parse the interface view
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := False;
    end Initialize_Ocarina;
 
    --  There is no "&" operator for Translate sets...

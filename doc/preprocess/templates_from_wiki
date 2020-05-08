@@ -91,7 +91,7 @@ This template is identical for Skeleton and Glue subfolders.
 |Optional path to zip file
 |-
 |Use_POHIC
-|Command line configuration
+|Value of command line flag --polyorb-hi-c (or -p)
 |-
 |List_Of_PIs
 |DOCUMENTATION MISSING
@@ -121,7 +121,7 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |Interface_View
-|DOCUMENTATION MISSING
+|Interface view filename
 |-
 |ASync_PI_Param_Type
 |DOCUMENTATION MISSING
@@ -181,13 +181,13 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
-|DOCUMENTATION MISSING
+|Value of command line flag --check-dataview
 |-
 |CP_Types
 |DOCUMENTATION MISSING
 |-
 |Other_Files
-|DOCUMENTATION MISSING
+|List of AADL files passed to the command line
 |-
 |Sync_RIs_Parent
 |DOCUMENTATION MISSING
@@ -196,10 +196,10 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |Data_View
-|DOCUMENTATION MISSING
+|Data view filename
 |-
 |Target
-|DOCUMENTATION MISSING
+|Value of command line flag --target=Target
 |}
 === templates/skeletons/sub/makefile-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for makefile.tmplt, otherwise this template will not be processed.
@@ -312,6 +312,9 @@ The output of this template is saved to the file with name returned by processin
 |-
 |Instance_Of
 |Name of function type if instance
+|-
+|Has_CP
+|True if context parameters are defined for this function
 |}
 === templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
@@ -329,49 +332,49 @@ This file is processed for every node. The result of this file indicates if the 
 |from kazoo configuration
 |-
 |No_Stdlib_Flag
-|DOCUMENTATION MISSING
+|Command line-flag --no-stdlib to avoid loading ocarina_components.aadl
 |-
 |Timer_Resolution
-|DOCUMENTATION MISSING
+|Value of command line --timer
 |-
 |Output_Dir
-|DOCUMENTATION MISSING
+|Value or command line -o to set the output folder
 |-
 |Interface_View
-|DOCUMENTATION MISSING
+|Interface view filename
 |-
 |Binary_Path
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
-|DOCUMENTATION MISSING
+|Value of command line flag --check-dataview
 |-
 |Debug_Flag
-|DOCUMENTATION MISSING
+|Value of command line flag --debug (or -g)
 |-
 |Use_POHIC
-|DOCUMENTATION MISSING
+|Value of command line flag --polyorb-hi-c (or -p)
 |-
 |Other_Files
-|DOCUMENTATION MISSING
+|List of AADL files passed to the command line
 |-
 |Deployment_View
-|DOCUMENTATION MISSING
+|Deployment view filename
 |-
 |Data_View
-|DOCUMENTATION MISSING
+|Data view filename
 |-
 |CPU_Family
-|DOCUMENTATION MISSING
+|CPU Kind (e.g. leon3)
 |-
 |CPU_Platform
-|DOCUMENTATION MISSING
+|AADL CPU_Platform (e.g. PLATFORM_NATIVE)
 |-
 |CPU_Name
-|DOCUMENTATION MISSING
+|CPU AADL Identifier (e.g. x86_inst)
 |-
 |Target
-|DOCUMENTATION MISSING
+|Value of command line flag --target=Target
 |-
 |CPU_Classifier
 |DOCUMENTATION MISSING
@@ -461,7 +464,7 @@ This file is processed for every thread in every partition in every node.
 |DOCUMENTATION MISSING
 |-
 |Interface_View
-|DOCUMENTATION MISSING
+|Interface view filename
 |-
 |IF_Property_Values
 |DOCUMENTATION MISSING
@@ -500,21 +503,30 @@ This file is processed for every thread in every partition in every node.
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
-|DOCUMENTATION MISSING
+|Value of command line flag --check-dataview
 |-
 |Use_POHIC
-|DOCUMENTATION MISSING
+|Value of command line flag --polyorb-hi-c (or -p)
 |-
 |Other_Files
-|DOCUMENTATION MISSING
+|List of AADL files passed to the command line
 |-
 |Data_View
-|DOCUMENTATION MISSING
+|Data view filename
 |-
 |Param_Basic_Types
 |DOCUMENTATION MISSING
 |-
 |Target
+|Value of command line flag --target=Target
+|-
+|Priority
+|DOCUMENTATION MISSING
+|-
+|Dispatch_Offset_ms
+|DOCUMENTATION MISSING
+|-
+|Stack_Size_In_Bytes
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/pi.tmplt ===
@@ -715,7 +727,7 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |Interface_View
-|DOCUMENTATION MISSING
+|Interface view filename
 |-
 |ASync_PI_Param_Type
 |DOCUMENTATION MISSING
@@ -787,16 +799,16 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
-|DOCUMENTATION MISSING
+|Value of command line flag --check-dataview
 |-
 |Use_POHIC
-|DOCUMENTATION MISSING
+|Value of command line flag --polyorb-hi-c (or -p)
 |-
 |CP_Types
 |DOCUMENTATION MISSING
 |-
 |Other_Files
-|DOCUMENTATION MISSING
+|List of AADL files passed to the command line
 |-
 |Sync_RIs_Parent
 |DOCUMENTATION MISSING
@@ -808,12 +820,12 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |Data_View
-|DOCUMENTATION MISSING
+|Data view filename
 |-
 |Target
-|DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|Value of command line flag --target=Target
+|}
+
 
 
 
@@ -964,6 +976,24 @@ This file is evaluated for every partition.
 |DOCUMENTATION MISSING
 |-
 |Device_ASN1_Sort
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Function
+|DOCUMENTATION MISSING
+|-
+|In_Port_Queue_Size
+|DOCUMENTATION MISSING
+|-
+|Block_FPGAConf
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Port_Name
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Remote_Partition
+|DOCUMENTATION MISSING
+|-
+|Out_Port_Queue_Size
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
@@ -1180,7 +1210,7 @@ filesys.tmplt.
 |DOCUMENTATION MISSING
 |-
 |Interface_View
-|DOCUMENTATION MISSING
+|Interface view filename
 |-
 |Binary_Path
 |DOCUMENTATION MISSING
@@ -1207,24 +1237,23 @@ filesys.tmplt.
 |DOCUMENTATION MISSING
 |-
 |Check_Data_View
-|DOCUMENTATION MISSING
+|Value of command line flag --check-dataview
 |-
 |Use_POHIC
-|DOCUMENTATION MISSING
+|Value of command line flag --polyorb-hi-c (or -p)
 |-
 |Other_Files
-|DOCUMENTATION MISSING
+|List of AADL files passed to the command line
 |-
 |Data_View
-|DOCUMENTATION MISSING
+|Data view filename
 |-
 |Target
-|DOCUMENTATION MISSING
+|Value of command line flag --target=Target
 |-
 |Device_Language
 |DOCUMENTATION MISSING
 |-
 |Device_Init
 |DOCUMENTATION MISSING
-|}Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,	
-No_Stdlib_Flag, Timer_Resolution, Other_Files (list of aadl files)
+|}

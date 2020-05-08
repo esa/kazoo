@@ -43,7 +43,7 @@
 
 #include "msp430_serial_minimal.h"
 
-#define RING_BUFFER_SIZE 16
+#define RING_BUFFER_SIZE ((MSP430_BUFFER_SIZE + sizeof(uint32_t) + sizeof(uint32_t)) * 2)
 
 typedef struct
 {
@@ -269,11 +269,10 @@ static void uart_transmit_character()
     }
     else
     {
-
         uint8_t c = ring_buffer_get(&stdout_buffer);
         UCA0TXBUF = c;
-        portEXIT_CRITICAL();
     }
+    portEXIT_CRITICAL();
 }
 
 static void uart_receive_character(BaseType_t* parameter)
@@ -313,9 +312,6 @@ void uart_a0_interrupt_handler(void)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-
-#define POLLER_BUFFER_SIZE 32
-
 #define PACKET_START_BYTE ((uint8_t)'\x02')
 #define PACKET_STOP_BYTE ((uint8_t)'\x03')
 #define PACKET_ESCAPE_BYTE ((uint8_t)'\x1B')
@@ -347,7 +343,7 @@ void process_packet(uint8_t* data, int length)
 
 void spg_serial_msp430_minimal_poller(void* param)
 {
-    uint8_t buffer[32];
+    uint8_t buffer[MSP430_BUFFER_SIZE + sizeof(uint32_t) + sizeof(uint32_t)];
     int counter = 0;
     enum PACKET_STATE state = WAITING_FOR_START_BYTE;
 

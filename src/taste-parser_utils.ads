@@ -192,6 +192,8 @@ package TASTE.Parser_Utils is
          No_Stdlib        : aliased Boolean := False;
          Generate_Doc     : aliased Boolean := False;
          Other_Files      : String_Vectors.Vector;
+         Shared_Lib_Dir   : Unbounded_String;
+         Shared_Types     : String_Vectors.Vector;
       end record;
 
    function To_Template (Config : Taste_Configuration) return Translate_Set;

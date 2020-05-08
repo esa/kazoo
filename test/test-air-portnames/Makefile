@@ -1,15 +1,17 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	cp input_data/hello.c output/hello/C/src && \
-	    cp input_data/read.c output/read/C/src && \
-	    cp input_data/function1.c output/function1/C/src && \
-	    cp input_data/function2.c output/function2/C/src && \
-	cd output && make air
+	cp input_data/hello.c work/hello/C/src && \
+	    cp input_data/read.c work/read/C/src && \
+	    cp input_data/function1.c work/function1/C/src && \
+	    cp input_data/function2.c work/function2/C/src && \
+	cd work && make air
+
+work/glue_built: test-parse
 
 test-parse: clean
 	$(KAZOO) --gw -p \
-	         -o output \
+	         -o work \
 	         --glue \
 		 --no-stdlib \
 	         --debug \
@@ -18,13 +20,13 @@ test-parse: clean
 
 gdb: clean
 	gdb --args $(KAZOO) --gw -p \
-	               -o output \
+	               -o work \
 	               --glue \
 		 --no-stdlib \
 		 ../common/libhw.aadl \
 		       --debug
 
 clean:
-	rm -rf output
+	rm -rf work
 
 .PHONY: clean test-parse gdb

@@ -341,7 +341,7 @@ package body TASTE.Interface_View is
             raise Interface_Error with "Interface view contains errors "
               & "(Missing TASTE::InterfaceName properties)"
               & ASCII.CR & ASCII.LF
-              & "        Try updating it with taste-edit-project";
+              & "        Try updating it with the editor (run taste)";
          end if;
 
          --  Filter out connections if the PI is cyclic (not a connection!)
@@ -759,7 +759,7 @@ package body TASTE.Interface_View is
          return Is_Terminal;
       end Rec_Function;
    begin
-      Put_Info ("Parsing interface view");
+      Put_Info ("Parsing Interface View");
       if No (Interface_Root) then
          raise Interface_Error with "Interface View parsing error";
       end if;

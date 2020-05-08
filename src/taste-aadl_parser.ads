@@ -68,7 +68,8 @@ package TASTE.AADL_Parser is
    procedure Generate_Code         (Model : TASTE_Model);
 
 private
-   function Initialize return Taste_Configuration;
+   procedure Build_TASTE_AST (Model : out TASTE_Model);
+   procedure Find_Shared_Libraries (Model : out TASTE_Model);
 
    --  Perform various processing on a function. Return a map of possibly
    --  created new functions, to be added to the new Model

@@ -153,6 +153,7 @@ project @_CAPITALIZE:Name_@ is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
@@ -166,10 +167,12 @@ project @_CAPITALIZE:Name_@ is
                 "-fdiagnostics-show-option",
                 "-Wcast-align",
                 "-Wswitch")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
       end case;
       --  Increase command line size to avoid using --specs and support ccache
-      for Max_Command_Line_Length use "131072";
+      --  Disable for now - does not work with gprbuild in debian9
+      --  for Max_Command_Line_Length use "131072";
    end Compiler;
 
    package Linker is
@@ -179,6 +182,7 @@ project @_CAPITALIZE:Name_@ is
           "-lpthread",
           "-lm",
           "-Wl,-gc-sections")
+          & external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
           & external_as_list("USER_LDFLAGS", " ");
    end Linker;
 

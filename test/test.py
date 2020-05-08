@@ -29,6 +29,8 @@ def main():
     # the following line is temporarily disabled so that it can run on
     # old versions of python that did not support f-strings
     #print (f"Running {len(paths)} tests using {cpu_count()} processors")
+    print ("Running {} tests using {} processors"
+            .format(len(paths), cpu_count()))
     xfails = os.environ['EXPECTED_FAILURES']
 
     with futures.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
@@ -95,9 +97,6 @@ def make(rule, path):
 def summarize(results, elapsed):
     ''' At the end display the errors of project that failed '''
     failed = 0
-    with openLog("kazoo", "w") as f:
-        f.write("kazoo test report")
-        f.write("-----------------")
     for errcode, stdout, stderr, path, rule in results:
         if errcode == 0:
             continue

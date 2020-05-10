@@ -14,6 +14,7 @@
 @@-- @_Threads_@             : Code generated for the threads
 @@-- @_Thread_Names_@        : List of all threads in the complete system
 @@-- @_Target_Packages_@     : List of all target package names in the complete system
+@@-- @_Used_Shared_Types_@   : List of actually used shared types
 @@-- And all the system configuration obtained from the command line:
 @@-- Interface_View, Deployment_View, Data_View, Binary_Path, Check_Data_View,
 @@-- Output_Dir, Skeletons, Glue, Use_POHIC, Timer_Resolution, Debug_Flag,
@@ -28,7 +29,7 @@ properties
      "../dataview/dataview_aadlv2.aadl",
      "system.aadl",
 @@TABLE@@
-     --  "@_Shared_Lib_Dir_@/@_Shared_Types_@/@_Shared_Types_@.aadl",
+     "@_Shared_Lib_Dir_@/@_LOWER:Used_Shared_Types_@/@_LOWER:Used_Shared_Types_@-iv-@_LOWER:Used_Shared_Types_@.aadl",
 @@END_TABLE@@
 @@IF@@ not @_No_Stdlib_Flag_@     
      "ocarina_components.aadl",

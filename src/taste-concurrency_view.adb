@@ -178,12 +178,17 @@ package body TASTE.Concurrency_View is
       CV_Out_Dir  : constant String  :=
         CV.Base_Output_Path.Element & "/build/";
 
+      Shared_Lib_Dir : Unbounded_String renames
+        CV.Configuration.Shared_Lib_Dir;
+
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:
       Threads          : Unbounded_String;
       All_Thread_Names : Tag;  --  Complete list of threads
       All_Target_Names : Tag;  --  List of all targets used (AADL packages)
       All_Block_Names  : Tag;  --  Complete list of blocks
+      Actual_Shared    : String_Sets.Set;
+      Used_Shared_Types : Tag; --  Actually used shared types (whole system)
    begin
       Put_Debug ("Concurrency View templates expected in " & Prefix);
       Start_Search (Search    => ST,
@@ -389,6 +394,13 @@ package body TASTE.Concurrency_View is
                        (if Block_Check
                         then Strip_String (Parse (Block_File_Id, Block_Tag))
                         else "");
+                     Parent_Is_Shared : constant Boolean :=
+                       (B.Ref_Function.Instance_Of.Has_Value and then
+                          CV.Configuration.Shared_Types.Contains
+                            (To_String
+                               (B.Ref_Function.Instance_Of.Unsafe_Just)));
+                     use String_Sets;
+
                   begin
                      Document_Template
                        (Templates_Concurrency_View_Sub_File_Block, Block_Tag);
@@ -401,11 +413,16 @@ package body TASTE.Concurrency_View is
 
                      --  Check if the function type for this instance is in the
                      --  list of shared library folders instead of in the model
-                     Block_Is_Shared_Type := Block_Is_Shared_Type
-                       & (B.Ref_Function.Instance_Of.Has_Value and then
-                          CV.Configuration.Shared_Types.Contains
+                     Block_Is_Shared_Type :=
+                       Block_Is_Shared_Type & Parent_Is_Shared;
+
+                     if Parent_Is_Shared then
+                        --  Update the list of actually used shared types
+                        Actual_Shared := Actual_Shared or
+                          String_Sets.To_Set
                             (To_String
-                               (B.Ref_Function.Instance_Of.Unsafe_Just)));
+                               (B.Ref_Function.Instance_Of.Unsafe_Just));
+                     end if;
 
                      for TASTE_property of B.Ref_Function.User_Properties loop
                         Property_Names := Property_Names & TASTE_property.Name;
@@ -516,7 +533,8 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Thread_Src_Name",      Thread_Src_Name)
                  & Assoc ("Thread_Src_Port",      Thread_Src_Port)
                  & Assoc ("Thread_Dst_Name",      Thread_Dst_Name)
-                 & Assoc ("Thread_Dst_Port",      Thread_Dst_Port);
+                 & Assoc ("Thread_Dst_Port",      Thread_Dst_Port)
+                 & Assoc ("Shared_Lib_Dir",       Shared_Lib_Dir);
 
                All_Target_Names := All_Target_Names
                  & String'(Get (Get (Partition_Assoc, "Package_Name")));
@@ -821,9 +839,15 @@ package body TASTE.Concurrency_View is
 
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
                --  Generate from system.tmplt
+
+               for Shared of Actual_Shared loop
+                  --  Add list of actually used shared types at system level
+                  Used_Shared_Types := Used_Shared_Types & Shared;
+               end loop;
+
                Set_Sys := Join_Sets (CV.Configuration.To_Template,
                                      Drivers_To_Template (All_Drivers))
-                 & Assoc ("Nodes",       Nodes)
+                 & Assoc ("Nodes",               Nodes)
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
                  & Assoc ("Node_CPU_Classifier", Node_CPU_Cls)
@@ -852,7 +876,8 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Unique_Dev_ASN1_Sorts", Unique_ASN1_Sorts)
                  & Assoc ("Connect_From_Part",   Connect_From_Partition)
                  & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
-                 & Assoc ("Connect_Port_Name",   Connect_Port_Name);
+                 & Assoc ("Connect_Port_Name",   Connect_Port_Name)
+                 & Assoc ("Used_Shared_Types",   Used_Shared_Types);
                Create_Path (CV_Out_Dir
                            & Dir_Separator & Dir_Name (File_Sys));
                Create (File => Output_File,

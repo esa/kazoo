@@ -323,6 +323,22 @@ package body TASTE.Parser_Utils is
 
    end Parse_Command_Line;
 
+   function Properties_To_Template (Properties : Property_Maps.Map;
+                                    Prefix     : String := "")
+                                    return Translate_Set
+   is
+      Names,
+      Values : Vector_Tag;
+   begin
+      for P of Properties loop
+         Names  := Names  & P.Name;
+         Values := Values & P.Value;
+      end loop;
+
+      return (+Assoc  (Prefix & "Property_Names", Names)
+              & Assoc (Prefix & "Property_Values", Values));
+   end Properties_To_Template;
+
    function To_Template_Tag (SS : String_Sets.Set) return Tag is
       Result : Tag;
    begin

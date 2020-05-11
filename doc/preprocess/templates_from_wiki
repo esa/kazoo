@@ -375,6 +375,12 @@ The output of this template is saved to the file with name returned by processin
 |-
 |Has_CP
 |True if context parameters are defined for this function
+|-
+|Property_Names
+|Function user-defined property names (goes in pair with Property_Values)
+|-
+|Property_Values
+|Function user-defined property values (goes in pair with Property_Names)
 |}
 === templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
@@ -1075,7 +1081,10 @@ This file is evaluated for every partition.
 |DOCUMENTATION MISSING
 |-
 |Block_Is_Shared_Type
-|DOCUMENTATION MISSING
+|True if parent of the instance is a shared component
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -1339,8 +1348,11 @@ filesys.tmplt.
 |DOCUMENTATION MISSING
 |-
 |Shared_Types
-|List of available component types
+|Complete list of available component types
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Used_Shared_Types
+|List of actually used shared component types
 |}

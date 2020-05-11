@@ -140,7 +140,7 @@ def process_one_file (tmplt: str, old: str, new: str, res_folder: str) -> None:
         if name not in new_tags:
             LOG.info ("Tag " + name.strip() + " has been removed")
         else:
-            LOG.info ("Tag " + name.strip() + " has been kept")
+            LOG.debug ("Tag " + name.strip() + " has been kept")
             new_tags.remove(name)
             newdoc.append("|-")
             newdoc.append(name.strip())

@@ -998,9 +998,6 @@ package body TASTE.Interface_View is
 
       Timers               : Tag;
 
-      Property_Names,
-      Property_Values      : Vector_Tag;
-
       CP_Names,            --  CP = Context Parameters
       CP_Types,
       CP_Values,
@@ -1025,12 +1022,6 @@ package body TASTE.Interface_View is
             & Each.ASN1_File_Name.Value_Or (US (""));
       end loop;
 
-      --  Add all function user-defined properties
-      for Each of F.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
-      end loop;
-
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
          --  Note: some backends need to have access to the function
@@ -1038,11 +1029,11 @@ package body TASTE.Interface_View is
          --  They are added here. At the moment the user-defined properties
          --  of the interfaces themselves are not part of the template
          --  This could be be added later if needed.
-         Interface_Tmplt := Each.Interface_To_Template
-           & Assoc ("Direction",       "PI")
-           & Assoc ("Property_Names",  Property_Names)
-           & Assoc ("Property_Values", Property_Values)
-           & Assoc ("Language",        Language_Spelling (F));
+         Interface_Tmplt :=
+           Join_Sets (Each.Interface_To_Template,
+                      Properties_To_Template (F.User_Properties))
+           & Assoc ("Direction", "PI")
+           & Assoc ("Language",  Language_Spelling (F));
 
          Result.Provided := Result.Provided & Interface_Tmplt;
          --  Note: List of PIs include timers, while List_Of_(A)Sync do not.
@@ -1071,10 +1062,10 @@ package body TASTE.Interface_View is
 
       --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
-         Interface_Tmplt := Each.Interface_To_Template
+         Interface_Tmplt :=
+           Join_Sets (Each.Interface_To_Template,
+                      Properties_To_Template (F.User_Properties))
            & Assoc ("Direction",       "RI")
-           & Assoc ("Property_Names",  Property_Names)
-           & Assoc ("Property_Values", Property_Values)
            & Assoc ("Language",        Language_Spelling (F));
 
          Result.Required := Result.Required & Interface_Tmplt;
@@ -1117,9 +1108,13 @@ package body TASTE.Interface_View is
       end loop;
 
       --  Setup the mapping for the template (processed by function.tmplt)
-      Result.Header := Result.Header
-        & Assoc ("Zip_File",            (if not F.Zip_File.Has_Value then ""
-                 else Ada.Directories.Full_Name
+      Result.Header :=
+        Join_Sets (Result.Header,
+                   Properties_To_Template (F.User_Properties))
+        & Assoc ("Zip_File",
+                 (if not F.Zip_File.Has_Value
+                  then ""
+                  else Ada.Directories.Full_Name
                    (To_String (F.Zip_File.Unsafe_Just))))
         & Assoc ("List_Of_PIs",         List_Of_PIs)
         & Assoc ("List_Of_RIs",         List_Of_RIs)
@@ -1133,8 +1128,6 @@ package body TASTE.Interface_View is
         & Assoc ("ASync_RI_Param_Name", ASync_RI_Param_Name)
         & Assoc ("ASync_RI_Param_Type", ASync_RI_Param_Type)
         & Assoc ("Async_RIs_Parent",    Async_RIs_Parent)
-        & Assoc ("Property_Names",      Property_Names)
-        & Assoc ("Property_Values",     Property_Values)
         & Assoc ("CP_Names",            CP_Names)
         & Assoc ("CP_Types",            CP_Types)
         & Assoc ("CP_Values",           CP_Values)
@@ -1279,8 +1272,6 @@ package body TASTE.Interface_View is
       Param_Basic_Types,
       Param_Directions,
       Param_Encodings,
-      Property_Names,
-      Property_Values,
       Remote_Function_Names,
       Remote_Interface_Names,
       Remote_Languages : Vector_Tag;
@@ -1293,11 +1284,7 @@ package body TASTE.Interface_View is
          Param_Directions   := Param_Directions & Each.Direction'Img;
          Param_Encodings    := Param_Encodings & Each.Encoding'Img;
       end loop;
-      --  Add all function user-defined properties
-      for Each of TI.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
-      end loop;
+
       --  Add list of callers or callees
       for Each of TI.Remote_Interfaces loop
          Remote_Function_Names  := Remote_Function_Names & Each.Function_Name;
@@ -1306,7 +1293,9 @@ package body TASTE.Interface_View is
          Remote_Languages := Remote_Languages & Each.Language;
       end loop;
 
-      return +Assoc ("Name",               TI.Name)
+      return
+        Properties_To_Template (TI.User_Properties, Prefix => "IF_")
+        & Assoc ("Name",                   TI.Name)
         & Assoc ("Kind",                   TI.RCM'Img)
         & Assoc ("Parent_Function",        TI.Parent_Function)
         & Assoc ("Language",               TI.Language)
@@ -1319,8 +1308,6 @@ package body TASTE.Interface_View is
         & Assoc ("Param_Basic_Types",      Param_Basic_Types)
         & Assoc ("Param_Encodings",        Param_Encodings)
         & Assoc ("Param_Directions",       Param_Directions)
-        & Assoc ("IF_Property_Names",      Property_Names)
-        & Assoc ("IF_Property_Values",     Property_Values)
         & Assoc ("Remote_Function_Names",  Remote_Function_Names)
         & Assoc ("Remote_Interface_Names", Remote_Interface_Names)
         & Assoc ("Remote_Languages",       Remote_Languages)

@@ -234,6 +234,7 @@ package body TASTE.Backend.Code_Generators is
 
          Output_Dir  : constant String := Output_Lang & Output_Sub;
       begin
+         Document_Template (Templates_Skeletons_Sub_Function, Func_Map);
          Document_Template (Templates_Skeletons_Sub_Makefile, Make_Tmpl);
          --  Create directory tree (output/function/language/src)
          Create_Path (Output_Dir);
@@ -453,7 +454,8 @@ package body TASTE.Backend.Code_Generators is
    function Function_Makefile_Template (F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag) return Translate_Set
-   is (Translate_Set'(+Assoc  ("Name",         F.Name)
+   is (Translate_Set'(Properties_To_Template (F.User_Properties)
+                      & Assoc ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules))
                       & Assoc ("Has_CP",       not F.Context_Params.Is_Empty)

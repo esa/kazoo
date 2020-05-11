@@ -379,8 +379,6 @@ package body TASTE.Concurrency_View is
                      Unpro_PI_Tag : Unbounded_String;
                      RI_Tag       : Unbounded_String;
                      Result       : Unbounded_String;
-                     Property_Names,
-                     Property_Values : Vector_Tag;
 
                      --  Optionally generate block code in separate files
                      --  (if fileblock.tmplt present and contains a filename)
@@ -425,9 +423,6 @@ package body TASTE.Concurrency_View is
                      end if;
 
                      for TASTE_property of B.Ref_Function.User_Properties loop
-                        Property_Names := Property_Names & TASTE_property.Name;
-                        Property_Values := Property_Values
-                            & TASTE_property.Value;
                         if TASTE_property.Name =
                             "TASTE_IV_Properties::FPGA_Configurations"
                         then
@@ -468,14 +463,16 @@ package body TASTE.Concurrency_View is
                      end loop;
 
                      Block_Assoc :=
-                       Join_Sets (Block_Assoc, CV.Configuration.To_Template)
+                       Join_Sets
+                         (Properties_To_Template
+                            (B.Ref_Function.User_Properties),
+                          Join_Sets
+                            (Block_Assoc, CV.Configuration.To_Template))
                        & Assoc ("Partition_Name",
                                 Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
-                       & Assoc ("Required",        RI_Tag)
-                       & Assoc ("Property_Names",        Property_Names)
-                       & Assoc ("Property_Values",        Property_Values);
+                       & Assoc ("Required",        RI_Tag);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
                      Document_Template

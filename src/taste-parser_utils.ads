@@ -137,6 +137,12 @@ package TASTE.Parser_Utils is
    package Property_Maps is new Indefinite_Ordered_Maps (String,
                                                          User_Property);
    use Property_Maps;
+
+   --  Convert the map into a translate set made of two Vector Tags
+   function Properties_To_Template (Properties : Property_Maps.Map;
+                                    Prefix     : String := "")
+     return Translate_Set;
+
    package String_Vectors is new Indefinite_Vectors (Natural, String,
                                            Ada.Strings.Equal_Case_Insensitive);
    package String_Sets is new Indefinite_Ordered_Sets

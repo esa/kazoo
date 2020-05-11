@@ -386,10 +386,10 @@ The output of this template is saved to the file with name returned by processin
 |True if context parameters are defined for this function
 |-
 |Property_Names
-|DOCUMENTATION MISSING
+|Function user-defined property names (goes in pair with Property_Values)
 |-
 |Property_Values
-|DOCUMENTATION MISSING
+|Function user-defined property values (goes in pair with Property_Names)
 |}
 === templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.

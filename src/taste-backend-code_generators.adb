@@ -234,6 +234,7 @@ package body TASTE.Backend.Code_Generators is
 
          Output_Dir  : constant String := Output_Lang & Output_Sub;
       begin
+         Document_Template (Templates_Skeletons_Sub_Function, Func_Map);
          Document_Template (Templates_Skeletons_Sub_Makefile, Make_Tmpl);
          --  Create directory tree (output/function/language/src)
          Create_Path (Output_Dir);

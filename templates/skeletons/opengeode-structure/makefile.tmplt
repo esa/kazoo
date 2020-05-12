@@ -43,8 +43,6 @@ generate-code:
 	@@ELSE@@
     :
 	@@END_IF@@
-	cp src/*.h code/
-	cp src/*.c code/
 @@ELSE@@
 generate-code:
 	mkdir -p code && cd code && \

@@ -458,6 +458,7 @@ package body TASTE.Backend.Code_Generators is
                       & Assoc ("Name",         F.Name)
                       & Assoc ("ASN1_Files",   Files)
                       & Assoc ("ASN1_Modules", Modules))
+                      & Assoc ("Language",     Language_Spelling (F))
                       & Assoc ("Has_CP",       not F.Context_Params.Is_Empty)
                       & Assoc ("Is_Type",      F.Is_Type)
                       & Assoc ("Instance_Of",

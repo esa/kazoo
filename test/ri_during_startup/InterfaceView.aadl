@@ -46,7 +46,7 @@ END master;
 
 SYSTEM IMPLEMENTATION master.others
 SUBCOMPONENTS
-  mytimer : DATA DataView::Timer {
+  myTimer : DATA DataView::Timer {
     Taste::FS_Default_Value => "1";
   };
 END master.others;

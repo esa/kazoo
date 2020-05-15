@@ -9,13 +9,16 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@-- @_Is_Shared_Type_@   : True if instance and parent in shared folder
 @@IF@@ @_Language_@ = SDL
 @_LOWER:Name_@:	../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb
 
 @@IF@@ @_Instance_Of_@ = ""
 ../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb:	../@_LOWER:Name_@/SDL/src/@_LOWER:Name_@.pr ../@_LOWER:Name_@/SDL/src/system_structure.pr
-@@ELSE@@
+@@ELSIF@@ not @_Is_Shared_Type_@
 ../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb:	../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr ../@_LOWER:Instance_Of_@/SDL/src/system_structure.pr
+@@ELSE@@
+../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb:	@_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr @_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/system_structure.pr
 @@END_IF@@
 	# Call opengeode to generate the functional code
 	make -j -C ../@_LOWER:Name_@/SDL generate-code

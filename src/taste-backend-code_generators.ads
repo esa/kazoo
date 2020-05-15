@@ -19,7 +19,8 @@ package TASTE.Backend.Code_Generators is
 
    function CP_Template (F : Taste_Terminal_Function)
                          return Translate_Set;
-   function Function_Makefile_Template (F       : Taste_Terminal_Function;
+   function Function_Makefile_Template (Model   : TASTE_Model;
+                                        F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag)
                                         return Translate_Set;

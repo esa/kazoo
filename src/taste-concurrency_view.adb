@@ -472,6 +472,7 @@ package body TASTE.Concurrency_View is
                                 Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
+                       & Assoc ("Is_Shared_Type",  Parent_Is_Shared)
                        & Assoc ("Required",        RI_Tag);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);

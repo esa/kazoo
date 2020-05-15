@@ -205,10 +205,12 @@ package body TASTE.Backend.Code_Generators is
                                   Output_Lang : String;
                                   Output_Sub  : String := "src/") is
          Output_File : File_Type;
-         Make_Tmpl   : constant Translate_Set := Function_Makefile_Template
-                                     (F       => F,
-                                      Modules => Get_Module_List,
-                                      Files   => Get_ASN1_File_List);
+         Make_Tmpl   : constant Translate_Set :=
+           Function_Makefile_Template
+             (Model   => Model,
+              F       => F,
+              Modules => Get_Module_List,
+              Files   => Get_ASN1_File_List);
 
          Make_Path   : constant String := Path & "makefile.tmplt";
          Make_Text   : constant String :=
@@ -451,18 +453,25 @@ package body TASTE.Backend.Code_Generators is
    --  A Makefile can be generated for each function
    --  with a rule to edit the function using an IDE, model editor, etc.
    --  (this is defined in the template)
-   function Function_Makefile_Template (F       : Taste_Terminal_Function;
+   function Function_Makefile_Template (Model   : TASTE_Model;
+                                        F       : Taste_Terminal_Function;
                                         Modules : Tag;
                                         Files   : Tag) return Translate_Set
    is (Translate_Set'(Properties_To_Template (F.User_Properties)
-                      & Assoc ("Name",         F.Name)
-                      & Assoc ("ASN1_Files",   Files)
-                      & Assoc ("ASN1_Modules", Modules))
-                      & Assoc ("Language",     Language_Spelling (F))
-                      & Assoc ("Has_CP",       not F.Context_Params.Is_Empty)
-                      & Assoc ("Is_Type",      F.Is_Type)
+                      & Assoc ("Name",           F.Name)
+                      & Assoc ("ASN1_Files",     Files)
+                      & Assoc ("ASN1_Modules",   Modules)
+                      & Assoc ("Language",       Language_Spelling (F))
+                      & Assoc ("Has_CP",         not F.Context_Params.Is_Empty)
+                      & Assoc ("Is_Type",        F.Is_Type)
+                      & Assoc ("Shared_Lib_Dir",
+                               Model.Configuration.Shared_Lib_Dir)
+                      & Assoc ("Is_Shared_Type",
+                               F.Instance_Of.Has_Value and then not
+                                 Model.Interface_View.Flat_Functions.Contains
+                                   (To_String (F.Instance_Of.Unsafe_Just)))
                       & Assoc ("Instance_Of",
-                                F.Instance_Of.Value_Or (US (""))));
+                               F.Instance_Of.Value_Or (US ("")))));
 
    function Interface_View_Template (IV : Complete_Interface_View)
                                      return IV_As_Template is

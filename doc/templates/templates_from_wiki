@@ -554,13 +554,16 @@ This file is processed for every node. The result of this file indicates if the 
 |Value of command line flag --target=Target
 |-
 |CPU_Classifier
-|DOCUMENTATION MISSING
+|AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
 |-
 |Shared_Types
 |List of available component types
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Is_Distributed
+|True if the system contains at least one bus
 |}
 === templates/concurrency_view/sub/thread.tmplt ===
 This file is processed for every thread in every partition in every node.
@@ -1237,7 +1240,7 @@ This file is evaluated for every node. The result of this file is saved to the f
 |DOCUMENTATION MISSING
 |-
 |CPU_Classifier
-|DOCUMENTATION MISSING
+|AADL CPU Classifier (e.g. ocarina_processors_x86::x86.linux)
 |-
 |CPU_Name
 |DOCUMENTATION MISSING
@@ -1301,31 +1304,31 @@ filesys.tmplt.
 |Vector Tag of node names
 |-
 |Node_CPU
-|Corresponding CPU name (eg x86_linux)
+| -> Corresponding CPU name (eg x86_linux)
 |-
 |Node_CPU_Classifier
-|CPU Classifier (ocarina...::x86_linux)
+| -> Corresponding CPU Classifier (ocarina...::x86_linux)
 |-
 |Node_Major_Frame
-|Time in milliseconds allocated to the CPU (TSP only)
+| -> Corresponding Time in milliseconds allocated to the CPU (TSP only)
 |-
 |Partition_Names
 |Vector Tag of partition names
 |-
 |Partition_Node
-|Corresponding node name
+| -> Corresponding node name
 |-
 |Partition_CPU
-|Corresponding CPU name
+| -> Corresponding CPU name
 |-
 |Partition_Duration
-|Corresponding time allocation (TSP only)
+| -> Corresponding time allocation (TSP only)
 |-
 |Partition_VP
-|Virtual processor binding (TSP only)
+| -> Corresponding Virtual processor binding (TSP only)
 |-
 |Threads
-|Code generated for the threads
+|Code generated for the threads (from thread.tmplt)
 |-
 |Thread_Names
 |List of all threads in the complete system
@@ -1337,22 +1340,22 @@ filesys.tmplt.
 |Inter-partition connections : partition source name (vector tag)
 |-
 |Part_Source_Port
-| |_ Corresponding port name
+| -> Corresponding port name
 |-
 |Part_Dest_Name
-| |_ Corresponding name of the remote partition
+| -> Corresponding name of the remote partition
 |-
 |Part_Dest_Port
-| |_ Corresponding name of the port on the remote partition
+| -> Corresponding name of the port on the remote partition
 |-
 |Bus_Names
 |Vector tag: busses present in the system
 |-
 |Bus_AADL_Package
-| |_ corresponding AADL Package
+| -> Corresponding AADL Package
 |-
 |Bus_Classifier
-| |_ corresponding AADL classifier
+| -> Corresponding AADL classifier
 |-
 |Device_Node_Name
 |

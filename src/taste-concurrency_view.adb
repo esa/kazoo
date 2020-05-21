@@ -724,7 +724,9 @@ package body TASTE.Concurrency_View is
                                .CPU_Platform'Img)
                     & Assoc ("CPU_Classifier",
                              CV.Nodes (Node_Name).Deployment_Node
-                               .CPU_Classifier);
+                             .CPU_Classifier)
+                    & Assoc ("Is_Distributed",
+                             CV.Deployment.Busses.Length > 0);
 
                   Trigger      : constant Boolean :=
                     (Node_Name /= "interfaceview"

@@ -1,9 +1,4 @@
-@@-- The following boolean tags are available to decide if the file
-@@-- shall be generated or not:
-@@--    Filename_Is_Present
-@@--    Skeletons
-@@--    Glue
-@@--    POHIC
-@@--    Debug
-@@--    No_Stdlib
+@@-- Generate drivers_config.asn if the system has more than one node
+@@IF@@ @_Is_Distributed_@
 TRUE
+@@END_IF@@

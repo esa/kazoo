@@ -12,11 +12,7 @@
 @@IF@@ @_LOWER:Language_@ = simulink or @_LOWER:Language_@ = c
 @@TABLE@@
 @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and not @_IS_EMPTY:LOWER:Property_Values_@
-@_LOWER:Name_@: 
-	cp -u Bambu/@_STRIP:Unprotected_PIs_@_bambu.vhd ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src
-	find Bambu -name \*.mem -exec cp -u {} ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src \;
-	make -C ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/project
-
+@_Property_Values_@
 @@END_IF@@
 @@END_TABLE@@
 @@END_IF@@

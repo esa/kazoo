@@ -69,6 +69,7 @@ configuration project ZYNQ_RTEMS is
       for Object_File_Suffix ("C") use ".o";
       for Object_File_Suffix ("C++") use ".o";
       for Object_File_Suffix ("Ada") use ".o";
+      for Object_File_Suffix ("FPGA") use ".vhd";
       for Dependency_Switches ("C") use ("-Wp,-MD,");
       for Dependency_Switches ("C++") use ("-Wp,-MD,");
       for Dependency_Switches ("Ada") use ("-MMD","-MF","");

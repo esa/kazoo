@@ -19,7 +19,7 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
 
    --  for Create_Missing_Dirs use "True"; (not supported in Debian 9, use -p instead)
    for Object_Dir use "Bambu";
-   for Exec_Dir   use "../../binaries";
+   for Exec_Dir   use "Bambu";
    for Languages use ("FPGA");
 
    package Compiler is
@@ -45,8 +45,7 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
         "--reset-name=reset_@_STRIP:Unprotected_PIs_@",
         "--start-name=start_@_STRIP:Unprotected_PIs_@",
         "--done-name=finish_@_STRIP:Unprotected_PIs_@",
-        "--top-fname=bambu_@_STRIP:Unprotected_PIs_@",
-        "../../../@_LOWER:Name_@/@_Language_@/wrappers/@_STRIP:Unprotected_PIs_@_bambu.c");
+        "--top-fname=@_STRIP:Unprotected_PIs_@_bambu");
 
 
       case Build is
@@ -62,14 +61,13 @@ project @_CAPITALIZE:Name_@_Zynq_Bambu is
   --  following to be updated with all relevant source dirs
    for Source_Dirs use
     (
-       "../../@_LOWER:Name_@/@_Language_@/src"
+    "../../@_LOWER:Name_@/@_Language_@/wrappers"
 );
+    for Source_Files use ("@_STRIP:Unprotected_PIs_@_bambu.c");
     
     for Excluded_Source_Files use
       (
-        @@IF@@ @_LOWER:Language_@ = simulink 
-        "ert_main.c"
-        @@END_IF@@
+
         );
 
 

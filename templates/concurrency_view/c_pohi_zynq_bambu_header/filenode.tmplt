@@ -1,0 +1,6 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Node_Name_@        : Name of the node as defined in the Deployment View
+@@-- The content of this file is generated from node.tmplt
+@@-- If there is no string defined here, no file will be generated per node,
+@@-- (that's an option if the intent is to generate only one file per system)

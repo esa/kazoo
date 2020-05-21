@@ -42,19 +42,24 @@ air:
 	gprbuild -l -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
+ifeq ($(NO_BITFILE), 1)
 zynq:
+else
+zynq: zynq_bitfilegen
+endif
 @@TABLE@@
-	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
-@@END_TABLE@@
-	make -f Makefile.bambu
-@@TABLE@@
-	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC="static"
 @@END_TABLE@@
 
+zynq_bitfilegen:
+@@TABLE@@
+	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq.gpr -XCFG="Debug" -cargs:C -DSTATIC="static"
+@@END_TABLE@@
+	make -f Makefile.bambu
 
 zynq_qemu:
 @@TABLE@@
-	gprbuild -p -v --config=zynq_rtems_qemu.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems_qemu.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -p -v --config=zynq_rtems_qemu.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems_qemu.gpr -XCFG="Debug" -cargs:C -DSTATIC="static"
 @@END_TABLE@@
 
 release_native:

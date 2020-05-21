@@ -24,7 +24,7 @@ END PI_cyclic_operation.others;
 SYSTEM Simple_C_Function
 FEATURES
   PI_cyclic_operation : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Simple_C_Function::PI_cyclic_operation.others {
-    Taste::coordinates => "1012 644";
+    Taste::coordinates => "1009 658";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 2000 ms;
     Taste::Deadline => 2000 ms;
@@ -56,7 +56,7 @@ END interfaceview;
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
   Simple_C_Function : SYSTEM interfaceview::IV::Simple_C_Function::Simple_C_Function.others {
-    Taste::coordinates => "1012 492 1676 1181";
+    Taste::coordinates => "1009 506 1673 1195";
   };
 END interfaceview.others;
 

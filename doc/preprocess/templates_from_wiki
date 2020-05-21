@@ -970,13 +970,10 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |Has_Context
-|DOCUMENTATION MISSING
+|True if function has context parameters
 |-
 |Output_Dir
-|DOCUMENTATION MISSING
-|-
-|Instance_Of
-|DOCUMENTATION MISSING
+|Output folder (by default: work)
 |-
 |PIs_Have_Params
 |DOCUMENTATION MISSING
@@ -1005,9 +1002,6 @@ This template is evaluated for every block.
 |List_Of_RIs
 |DOCUMENTATION MISSING
 |-
-|Is_Type
-|DOCUMENTATION MISSING
-|-
 |Data_View
 |Data view filename
 |-
@@ -1019,6 +1013,15 @@ This template is evaluated for every block.
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Is_Type
+|True if function is a function type
+|-
+|Instance_Of
+|DOCUMENTATION MISSING
+|-
+|Is_Shared_Type
+|True if component is an instance of a function in the shared types folder
 |}
 
 

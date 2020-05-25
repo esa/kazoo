@@ -26,7 +26,7 @@
 #include "timers.h"
 
 #include "transport.h"
-#include "msp430_partition_interface.h"
+#include "@_LOWER:Partition_Name_@_interface.h"
 
 extern QueueHandle_t @_Thread_Name_@_global_queue;
 

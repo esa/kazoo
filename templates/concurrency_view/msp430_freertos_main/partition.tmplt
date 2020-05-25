@@ -36,7 +36,7 @@
 #include "semphr.h"
 #include "timers.h"
 
-#include "msp430_partition_interface.h"
+#include "@_LOWER:Name_@_interface.h"
 #include "transport.h"
 
 @@TABLE@@

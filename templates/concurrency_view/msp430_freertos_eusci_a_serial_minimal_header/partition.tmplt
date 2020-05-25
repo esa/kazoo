@@ -27,13 +27,13 @@
 @@-- @_Out_Port_Names_@       : Vector tag: output ports of the partition
 @@-- @_Out_Port_Thread_Name_@ :     |_ corresponding thread inside the partition
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
-#ifndef MSP430_GENERIC_UART_DRIVER_HPP__
-#define MSP430_GENERIC_UART_DRIVER_HPP__
+#ifndef MSP430_EUSCI_A_SERIAL_DRIVER_HPP__
+#define MSP430_EUSCI_A_SERIAL_DRIVER_HPP__
 
 #include <stdint.h>
 
-void spg_serial_msp430_minimal_init(void);
-void spg_serial_msp430_minimal_poller(void* param);
-void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t port);
+void msp430_eusci_a_serial_minimal_init(void);
+void msp430_eusci_a_serial_minimal_poller(void* param);
+void msp430_eusci_a_serial_minimal_sender(uint8_t* data, uint32_t length, uint32_t port);
 
 #endif

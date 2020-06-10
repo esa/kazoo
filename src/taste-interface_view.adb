@@ -722,6 +722,11 @@ package body TASTE.Interface_View is
                            (if Prefix'Length > 0 then "." else "") & Name;
          Terminal_Fn  : Taste_Terminal_Function;
       begin
+         if No (CI) then
+            raise Interface_Error
+              with "Element " & Next_Prefix & " is not properly defined";
+         end if;
+
          case Get_Category_Of_Component (CI) is
             when CC_System =>
                if Present (AIN.Subcomponents (CI)) then

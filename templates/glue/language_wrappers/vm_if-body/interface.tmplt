@@ -63,7 +63,15 @@ void @_LOWER:Parent_Function_@_@_Name_@
 @@END_INLINE@@
 
    // Call user code
+@@TABLE@@
+    @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations
+        @@IF@@ @_LOWER:Property_Values_@ /= ""
+   @_LOWER:Parent_Function_@_@_Name_@_FPGA_Dispatch
+        @@ELSE@@
    @_LOWER:Parent_Function_@_PI_@_Name_@
+        @@END_IF@@
+    @@END_IF@@
+@@END_TABLE@@
 @@INLINE(      \()(,\n       )(\);\n)@@
    @@TABLE@@
       @@IF@@ @_Param_Directions_@ = "PARAM_IN"

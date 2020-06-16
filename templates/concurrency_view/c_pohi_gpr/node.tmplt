@@ -12,7 +12,7 @@ all:	debug_native
 all:	debug_rtems_leon3_with_ada
 @@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR
 all:	air
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQZC706
 all:    zynq
 @@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ_QEMU
 all:    zynq_qemu

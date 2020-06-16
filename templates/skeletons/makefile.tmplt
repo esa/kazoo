@@ -145,7 +145,7 @@ ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
 @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
-	@@IF@@ @_Is_FPGA_@ and @_CPU_Platform_@ = PLATFORM_ZYNQ
+	@@IF@@ @_Is_FPGA_@ and @_CPU_Platform_@ = PLATFORM_ZYNQZC706
 	aadl2glueC -fpga ZYNQZC706 -o $(dir $@) $^
 	@@ELSE@@
 	aadl2glueC -o $(dir $@) $^

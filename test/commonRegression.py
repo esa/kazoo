@@ -25,6 +25,7 @@ def test(binaries, expected, timeout):
                     print g_child
                     return 1
                 else:
+                    print("Received expected: ", elem)
                     sys.stdout.write("\b\b\b\b\b\b\b%3d/%3d" % (cnt+1,total))
                     sys.stdout.flush()
             print "\nVerified ", binary, ": OK"

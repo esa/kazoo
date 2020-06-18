@@ -62,25 +62,38 @@ void @_LOWER:Parent_Function_@_@_Name_@
    @@END_TABLE@@
 @@END_INLINE@@
 
-   // Call user code
+
+@@-- determine if we need FPGA dispatching
 @@TABLE@@
-    @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations
-        @@IF@@ @_LOWER:Property_Values_@ /= ""
-   @_LOWER:Parent_Function_@_@_Name_@_FPGA_Dispatch
-        @@ELSE@@
-   @_LOWER:Parent_Function_@_PI_@_Name_@
-        @@END_IF@@
+    @@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and @_Property_Values_@ /= ""
+       @@SET@@ Dispatch_FPGA=TRUE 
     @@END_IF@@
 @@END_TABLE@@
-@@INLINE(      \()(,\n       )(\);\n)@@
-   @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         &IN_@_UPPER:Param_Names_@
-     @@ELSE@@
-         &OUT_@_UPPER:Param_Names_@
-     @@END_IF@@
-   @@END_TABLE@@
-@@END_INLINE@@
+
+
+@@MACRO(PARAMETERS)@@
+   @@INLINE(, )@@
+      @@TABLE@@
+         @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+            &IN_@_UPPER:Param_Names_@
+         @@ELSE@@
+            &OUT_@_UPPER:Param_Names_@
+         @@END_IF@@
+      @@END_TABLE@@
+   @@END_INLINE@@
+@@END_MACRO@@
+
+   // Call user code
+@@IF@@ @_Dispatch_FPGA_@
+   if(1 == @_LOWER:Parent_Function_@_@_Name_@_FPGA_Dispatch(@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@))
+      @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@);
+@@ELSE@@
+   @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@);
+@@END_IF@@
+
+
+
+
 
 @@TABLE@@    @@-- encode output parameters
 @@IF@@ @_Param_Directions_@ = "PARAM_OUT"

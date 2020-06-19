@@ -146,36 +146,26 @@ project @_CAPITALIZE:Name_@ is
        "remote_configuration.cc");
 
    package Compiler is
+      Common_C_Switches :=
+        ("-DTARGET=native",
+         "-DPOSIX",
+         "-D_POSIX_SOURCE",
+         "-D_GNU_SOURCE",
+         "-Wall",
+         "-Wextra",
+         "-fdiagnostics-show-option",
+         "-Wcast-align",
+         "-Wswitch")
+         & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+         & external_as_list("USER_CFLAGS", " ");
+
       case Build is
          when "Release" =>
-            for Default_Switches ("C") use
-               ("-g",
-                "-O2",
-                "-DTARGET=native",
-                "-DPOSIX",
-                "-D_POSIX_SOURCE",
-                "-D_GNU_SOURCE",
-                "-Wall",
-                "-Wextra",
-                "-fdiagnostics-show-option",
-                "-Wcast-align",
-                "-Wswitch")
-                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
-                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C") use Common_C_Switches & ("-O2", "-DNDEBUG");
+            for Default_Switches ("C++") use Common_C_Switches & ("-O2", "-DNDEBUG");
          when "Debug" =>
-            for Default_Switches ("C") use
-               ("-g",
-                "-DTARGET=native",
-                "-DPOSIX",
-                "-D_POSIX_SOURCE",
-                "-D_GNU_SOURCE",
-                "-Wall",
-                "-Wextra",
-                "-fdiagnostics-show-option",
-                "-Wcast-align",
-                "-Wswitch")
-                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
-                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C") use Common_C_Switches & ("-g", "-O0");
+            for Default_Switches ("C++") use Common_C_Switches & ("-g", "-O0");
       end case;
       --  Increase command line size to avoid using --specs and support ccache
       --  Disable for now - does not work with gprbuild in debian9
@@ -183,7 +173,7 @@ project @_CAPITALIZE:Name_@ is
    end Compiler;
 
    package Linker is
-      for Default_Switches ("C") use
+      Common_LD_Switches :=
          ("-g",
           "-lrt",
           "-lpthread",
@@ -191,6 +181,15 @@ project @_CAPITALIZE:Name_@ is
           "-Wl,-gc-sections")
           & external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
           & external_as_list("USER_LDFLAGS", " ");
+
+      case Build is
+         when "Release" =>
+            for Default_Switches ("C") use Common_LD_Switches;
+            for Default_Switches ("C++") use Common_LD_Switches;
+         when "Debug" =>
+            for Default_Switches ("C") use Common_LD_Switches & "-g";
+            for Default_Switches ("C++") use Common_LD_Switches & "-g";
+      end case;
    end Linker;
 
    package Builder is

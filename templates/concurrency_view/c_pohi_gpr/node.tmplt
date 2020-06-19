@@ -21,7 +21,7 @@ simulate:
 
 debug_native:
 @@TABLE@@
-	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -v -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 debug_rtems_leon3_with_ada:

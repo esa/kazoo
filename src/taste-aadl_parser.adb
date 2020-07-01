@@ -1129,21 +1129,21 @@ package body TASTE.AADL_Parser is
                Unit_Str := US (Get_Name_String (Display_Name (Unit)));
             end if;
 
-            --  Check that the units are the expected ones (kbytes/bytes/ms)
+            --  Check that the units are the expected ones (kbyte/bytes/ms)
             if (Prop_Name = "Stack_Size"
-                and then (Unit_Str /= "kbytes" and Unit_Str /= "bytes"))
+                and then (Unit_Str /= "kbyte" and Unit_Str /= "bytes"))
               or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
             then
                Put_Error ("Unsupported unit '"
                           & To_String (Unit_Str)
                           & "' used in ConcurrencyView_Properties.aadl. "
                           & " Stack_Size shall be in "
-                          & "'bytes' or 'kbytes' and Dispatch_Offset in 'ms'");
+                          & "'bytes' or 'kbyte' and Dispatch_Offset in 'ms'");
                return;
             end if;
 
-            if Prop_Name = "Stack_Size" and Unit_Str = "kbytes" then
-               --  Convert from kbytes to bytes
+            if Prop_Name = "Stack_Size" and Unit_Str = "kbyte" then
+               --  Convert from kbyte to bytes
                declare
                   Value_In_Bytes : constant Integer :=
                     Integer'Value (To_String (Number_Str)) * 1000;

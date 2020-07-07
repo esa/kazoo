@@ -181,6 +181,8 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	cp -f @_LOWER:Function_Names_@/GUI/wrappers/python/* binaries/@_LOWER:Function_Names_@_GUI
 	cp -f @_LOWER:Function_Names_@/GUI/wrappers/*.py binaries/@_LOWER:Function_Names_@_GUI
 	cp -f @_LOWER:Function_Names_@/GUI/wrappers/*.ui binaries/@_LOWER:Function_Names_@_GUI
+	@@-- Compute the error codes
+	@echo "errCodes = ${shell taste-asn1-errCodes binaries/@_LOWER:Function_Names_@_GUI/dataview-uniq.h}" >> binaries/@_LOWER:Function_Names_@_GUI/datamodel.py
         @@-- If system contains the PeekPoke component, copy the relevant code in the gui folder
         @@IF@@ @_LOWER:Function_Names_@ = taste_probe_console
 	@# Peek-Poke function is placed in the gui folder

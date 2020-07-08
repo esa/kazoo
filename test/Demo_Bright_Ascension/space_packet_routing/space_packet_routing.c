@@ -10,14 +10,14 @@
 
 #define MO_HEADERS_LEN asn1SccT_MO_tc_sp_REQUIRED_BYTES_FOR_ACN_ENCODING
 
-void init_space_packet_routing()
+void space_packet_routing_startup()
 {
 	/* Write your initialization code here,
 	   but do not make any call to a required interface!! */
 }
 
 
-void space_packet_routing_packetIndication(void *IN_apid, size_t IN_apid_size, void *IN_rawpacket, size_t IN_rawpacket_size)
+void space_packet_routing_packetIndication(const char *IN_apid, size_t IN_apid_size, const char *IN_rawpacket, size_t IN_rawpacket_size)
 {
      uint16_t apid = *(uint16_t*)IN_apid;
      int i;
@@ -29,7 +29,7 @@ void space_packet_routing_packetIndication(void *IN_apid, size_t IN_apid_size, v
      if (apid >= 2000)
      {   
          // Destined for PUS stack
-         vm_space_packet_routing_pus_spacePacketIndication(IN_rawpacket, IN_rawpacket_size);
+         vm_space_packet_routing_pus_spacepacketindication(IN_rawpacket, IN_rawpacket_size);
      }
      else
      {
@@ -49,16 +49,16 @@ void space_packet_routing_packetIndication(void *IN_apid, size_t IN_apid_size, v
         msgBody.nCount = IN_rawpacket_size - MO_HEADERS_LEN;
         memcpy(msgBody.arr, pMalBodyStart, msgBody.nCount);
         
-        vm_space_packet_routing_mo_packetIndication(IN_rawpacket, 
+        vm_space_packet_routing_mo_packetindication(IN_rawpacket, 
                                                     MO_HEADERS_LEN,
                                                     &msgBody,
                                                     sizeof(msgBody));
      }
 }
 
-void space_packet_routing_mo_packetRequest(void *IN_headers,
+void space_packet_routing_mo_packetRequest(const char *IN_headers,
                                            size_t IN_headers_size,
-                                           void *IN_bodies,
+                                           const char *IN_bodies,
                                            size_t IN_bodies_size)
 {
     // Buffer large enough for concatenated packet parts
@@ -77,14 +77,14 @@ void space_packet_routing_mo_packetRequest(void *IN_headers,
     memcpy(acnBuffer, IN_headers, IN_headers_size);
     memcpy(acnBuffer + IN_headers_size, bodies->arr, bodies->nCount);
     
-    vm_space_packet_routing_packetRequest(&acnBuffer, IN_headers_size + bodies->nCount);
+    vm_space_packet_routing_packetrequest(&acnBuffer, IN_headers_size + bodies->nCount);
 }
 
 
 
-void space_packet_routing_pus_spacePacketRequest(void *IN_telemetry, size_t IN_telemetry_size)
+void space_packet_routing_pus_spacePacketRequest(const char *IN_telemetry, size_t IN_telemetry_size)
 {
-    vm_space_packet_routing_packetRequest(IN_telemetry, IN_telemetry_size);
+    vm_space_packet_routing_packetrequest(IN_telemetry, IN_telemetry_size);
 }
 
 

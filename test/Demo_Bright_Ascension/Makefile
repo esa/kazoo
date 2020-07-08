@@ -1,3 +1,5 @@
+export OBSW_DEMONSTRATOR_USER_LDFLAGS=-lzmq
+
 KAZOO=../../kazoo
 
 all: c
@@ -29,10 +31,10 @@ c: test-parse-c # Polyorb_HI_C output
 	cp pus_parameter_service_handler/pus_parameter_service_handler.c work/pus_parameter_service_handler/C/src
 	cp pus_protocol_handling/pus_protocol_handling.c work/pus_protocol_handling/C/src
 	cp pus_service_dispatch/pus_service_dispatch.c work/pus_service_dispatch/C/src
-	#cp pus_spp_handling/pus_spp_handling.c work/pus_spp_handling/C/src
-	#cp space_link_rx/space_link_rx.c work/space_link_rx/C/src
-	#cp space_link_tx/space_link_tx.c work/space_link_tx/C/src
-	#cp space_packet_routing/space_packet_routing.c work/space_packet_routing/C/src
+	cp pus_spp_handling/pus_spp_handling.c work/pus_spp_handling/Blackbox_C/src
+	cp space_link_rx/space_link_rx.c work/space_link_rx/Blackbox_C/src
+	cp space_link_tx/space_link_tx.c work/space_link_tx/Blackbox_C/src
+	cp space_packet_routing/space_packet_routing.c work/space_packet_routing/Blackbox_C/src
 	#cp spp_packet_service/spp_packet_service.c work/spp_packet_service/C/src
 	cp thermal_manager/thermal_manager.c work/thermal_manager/C/src
 	cp thermal_manager_container/thermal_manager_container.c work/thermal_manager_container/C/src

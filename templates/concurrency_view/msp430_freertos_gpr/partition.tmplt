@@ -89,7 +89,7 @@ project @_CAPITALIZE:Name_@ is
       case Build is
          when "Release" =>
             for Default_Switches ("C") use
-               ("-I/opt/ti/msp430-gcc/include/",
+               ("-I/opt/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
@@ -113,7 +113,7 @@ project @_CAPITALIZE:Name_@ is
                 & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
-               ("-I/opt/ti/msp430-gcc/include/",
+               ("-I/opt/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
@@ -141,8 +141,8 @@ project @_CAPITALIZE:Name_@ is
       for Driver use "msp430-elf-gcc";
 
       for Default_Switches ("C") use
-         ("-L/opt/ti/msp430-gcc/include/",
-          "-I/opt/ti/msp430-gcc/include/",
+         ("-L/opt/msp430-gcc/include/",
+          "-I/opt/msp430-gcc/include/",
           "-I.",
           "-I../FreeRTOS/Source/include",
           "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",

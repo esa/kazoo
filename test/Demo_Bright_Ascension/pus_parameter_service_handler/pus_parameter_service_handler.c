@@ -9,7 +9,7 @@
 // APID for parameter service instance provided by mode manager component
 #define MODE_MANAGER_PROVIDER_ID 101
 
-const asn1SccT_apid applicationID = 2044;
+static const asn1SccT_apid applicationID = 2044;
 
 void pus_parameter_service_handler_startup()
 {

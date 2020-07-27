@@ -8,7 +8,7 @@
 
 #define HEADER_LEN 7
 
-void init_pus_spp_handling()
+void pus_spp_handling_startup()
 {
 	/* Write your initialization code here,
 	   but do not make any call to a required interface!! */
@@ -16,7 +16,7 @@ void init_pus_spp_handling()
     //TODO CRC table
 }
 
-void pus_spp_handling_pus_spacePacketIndication(void *IN_telemetry, size_t size_IN_telemetry)
+void pus_spp_handling_pus_spacePacketIndication(const char *IN_telemetry, size_t size_IN_telemetry)
 {
 	/*
 	 * Write your code here! 
@@ -26,10 +26,10 @@ void pus_spp_handling_pus_spacePacketIndication(void *IN_telemetry, size_t size_
     
     //TODO Check CRC
     
-    vm_pus_spp_handling_pus_packetIndication(IN_telemetry, size_IN_telemetry);
+    vm_pus_spp_handling_pus_packetindication(IN_telemetry, size_IN_telemetry);
 }
 
-void pus_spp_handling_pus_packetRequest(void *IN_telemetry, size_t size_IN_telemetry)
+void pus_spp_handling_pus_packetRequest(const char *IN_telemetry, size_t size_IN_telemetry)
 {
 	/*
 	 * Write your code here! 
@@ -54,6 +54,6 @@ void pus_spp_handling_pus_packetRequest(void *IN_telemetry, size_t size_IN_telem
     //tm[size_IN_telemetry-2] = (0xFF00 & crc) >> 8;
    // tm[size_IN_telemetry-1] =  0x00FF & crc;
     
-    vm_pus_spp_handling_pus_spacePacketRequest(IN_telemetry, size_IN_telemetry);
+    vm_pus_spp_handling_pus_spacepacketrequest(IN_telemetry, size_IN_telemetry);
 }
 

@@ -46,7 +46,7 @@ package @_CAPITALIZE:Name_@ is
 @@IF@@ @_CP_Names'Length_@ = 0
    --  You may define the function per-instance static data in the interface
    --  view in the Context Parameters tab of the function
-   type Conext is tagged null record;
+   type Context is tagged null record;
 @@ELSE@@
    type Context is tagged
      record

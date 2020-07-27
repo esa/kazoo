@@ -15,19 +15,19 @@ all: c ada rtems
 
 ada:
 	rm -rf output.ada
-	$(KAZOO) --gw -o output.ada --glue --debug
+	$(KAZOO) -c DeploymentView_Native.aadl --gw -o output.ada --glue --debug
 	cp simple_c_function/*.c output.ada/simple_c_function/C/src
 	$(MAKE) -C output.ada
 
 c: # Polyorb_HI_C output
 	rm -rf work
-	$(KAZOO) -p -g --gw --glue -o work
+	$(KAZOO) -c DeploymentView_Native.aadl -p -g --gw --glue -o work
 	cp simple_c_function/*.c work/simple_c_function/C/src
 	$(MAKE) -C work
 
 rtems:
 	rm -rf output.rtems
-	$(KAZOO) -p --gw --glue -o output.rtems
+	$(KAZOO) -c DeploymentView_Leon3.aadl -p --gw --glue -o output.rtems
 	cp simple_c_function/*.c output.rtems/simple_c_function/C/src
 	$(MAKE) -C output.rtems build-rtems-ada
 

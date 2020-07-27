@@ -11,12 +11,12 @@
 Context-@_REPLACE_ALL(_/-):LOWER:Name_@ DEFINITIONS ::=
 BEGIN
    IMPORTS
+@@IF@@ @_Instance_Of_@ = ""
 @@INLINE(      )(\n      )(;\n)@@
    @@TABLE@@
       @_REPLACE_ALL(_/-):Sort_Set_@ FROM @_REPLACE_ALL(_/-):Module_Set_@
    @@END_TABLE@@
 @@END_INLINE@@
-
 --  Group all context parameters of this function in a record
 Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= SEQUENCE {
 @@INLINE(   )(,\n   )(\n)@@
@@ -28,6 +28,12 @@ Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= SEQUENCE {
 
 --  Declare a constant with the values set by the user in the interface view
 @_REPLACE_ALL(_/-):LOWER:Name_@-ctxt Context-@_REPLACE_ALL(_/-):LOWER:Name_@ ::= {
+@@ELSE@@
+      Context-@_LOWER:REPLACE_ALL(_/-):Instance_Of_@ FROM Context-@_LOWER:REPLACE_ALL(_/-):Instance_Of_@;
+   
+
+@_REPLACE_ALL(_/-):LOWER:Name_@-ctxt Context-@_LOWER:REPLACE_ALL(_/-):Instance_Of_@ ::= {
+@@END_IF@@
 @@INLINE(   )(,\n   )(\n)@@
    @@TABLE@@
       @_REPLACE_ALL(_/-):LOWER:CP_Name_@ @_REPLACE_ALL(_/-):CP_Value_@

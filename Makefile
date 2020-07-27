@@ -7,7 +7,8 @@ exec = kazoo
 all: build
 
 templatesParser:
-	$(MAKE) -C templates-parser -j
+	cp templates-parser/config/tp_xmlada_dummy.gpr templates-parser/tp_xmlada.gpr
+	@#$(MAKE) -C templates-parser -j
 
 build:	| templatesParser
 ifeq ($(UNAME), Linux)

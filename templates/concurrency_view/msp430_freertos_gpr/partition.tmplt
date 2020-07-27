@@ -67,8 +67,9 @@ project @_CAPITALIZE:Name_@ is
        "@_LOWER:Name_@/drivers/@_Device_Names_@",
 @@END_TABLE@@
        "FreeRTOS/Source",
-       "FreeRTOS/Source/portable/GCC/MSP430FR5969"
-    );
+       "FreeRTOS/Source/portable/GCC/MSP430FR5969")
+       & external_as_list("EXTERNAL_SOURCE_PATH", ":")
+       & external_as_list("@_UPPER:Name_@_EXTERNAL_SOURCE_PATH", ":");
 
    for Object_Dir use "obj";
    for Exec_Dir   use "../../binaries";
@@ -88,7 +89,7 @@ project @_CAPITALIZE:Name_@ is
       case Build is
          when "Release" =>
             for Default_Switches ("C") use
-               ("-I/opt/ti/msp430-gcc/include/",
+               ("-I/opt/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
@@ -98,18 +99,21 @@ project @_CAPITALIZE:Name_@ is
                 "-DWORD_SIZE=4",
                 "-mmcu=msp430fr5969",
                 "-mlarge",
+                "-ffunction-sections",
                 "-mcode-region=either",
-                "-mdata-region=either",
+                "-mdata-region=upper",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
                 "-Wno-unused-parameter",
                 "-Wl,--gc-sections",
                 "-g",
-                "-Os");
+                "-Os")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use
-               ("-I/opt/ti/msp430-gcc/include/",
+               ("-I/opt/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
@@ -119,14 +123,17 @@ project @_CAPITALIZE:Name_@ is
                 "-DWORD_SIZE=4",
                 "-mmcu=msp430fr5969",
                 "-mlarge",
+                "-ffunction-sections",
                 "-mcode-region=either",
-                "-mdata-region=either",
+                "-mdata-region=upper",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
                 "-Wno-unused-parameter",
                 "-O0",
-                "-g");
+                "-g")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
       end case;
    end Compiler;
 
@@ -134,8 +141,8 @@ project @_CAPITALIZE:Name_@ is
       for Driver use "msp430-elf-gcc";
 
       for Default_Switches ("C") use
-         ("-L/opt/ti/msp430-gcc/include/",
-          "-I/opt/ti/msp430-gcc/include/",
+         ("-L/opt/msp430-gcc/include/",
+          "-I/opt/msp430-gcc/include/",
           "-I.",
           "-I../FreeRTOS/Source/include",
           "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
@@ -144,7 +151,7 @@ project @_CAPITALIZE:Name_@ is
           "-mmcu=msp430fr5969",
           "-mlarge",
           "-mcode-region=either",
-          "-mdata-region=either",
+          "-mdata-region=upper",
           "-mrelax",
           "-Wall",
           "-Wextra",
@@ -152,7 +159,10 @@ project @_CAPITALIZE:Name_@ is
           "-Wno-unused-parameter",
           "-Wl,-Map=main.map",
           "-Wl,--gc-sections",
-          "-Tmsp430fr5969.ld");
+          "-Tmsp430fr5969.ld")
+          & external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
+          & external_as_list("USER_LDFLAGS", " ");
+
    end Linker;
 
    package Builder is

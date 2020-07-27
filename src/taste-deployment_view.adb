@@ -9,14 +9,14 @@ with Ada.Exceptions,
      System.Assertions,
      Ocarina.Instances.Queries,
      Ocarina.Instances,
-     Ocarina.Files,
-     Ocarina.FE_AADL.Parser,
-     Ocarina.Parser,
+     --  Ocarina.Files,
+     --  Ocarina.FE_AADL.Parser,
+     --  Ocarina.Parser,
      Ocarina.Namet,
      Ocarina.Analyzer,
      Ocarina.Options,
      Ocarina.Backends.Properties.ARINC653,
-     Locations,
+     --  Locations,
      Ocarina.ME_AADL.AADL_Instances.Nodes,
      Ocarina.ME_AADL.AADL_Instances.Nutils,
      Ocarina.ME_AADL.AADL_Instances.Entities;
@@ -28,34 +28,25 @@ package body TASTE.Deployment_View is
        System.Assertions,
        Ocarina.Instances.Queries,
        Ocarina.Namet,
-       Ocarina.FE_AADL.Parser,
+       --  Ocarina.FE_AADL.Parser,
        Ocarina.Backends.Properties.ARINC653,
-       Locations,
+       --  Locations,
        Ocarina.ME_AADL.AADL_Instances.Nodes,
        Ocarina.ME_AADL.AADL_Instances.Nutils,
        Ocarina.ME_AADL.AADL_Instances.Entities,
        Ocarina.ME_AADL;
 
    function Initialize (Root : Node_Id) return Node_Id is
-      Root_Depl      : Node_Id := Root;
+      --  Root_Depl      : Node_Id := Root;
       Success        : Boolean;
       Root_Instance  : Node_Id;
       AADL_Language  : constant Name_Id := Get_String_Name ("aadl");
-      Loc : Location;
-      F   : Name_Id;
+      --  Loc : Location;
+      --  F   : Name_Id;
    begin
-      Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
+      --  Ocarina.FE_AADL.Parser.Add_Pre_Prop_Sets := True;
 
-      --  Parse all AADL files possibly needed to instantiate the model
-      for Each of Deployment_AADL_Lib loop
-         Set_Str_To_Name_Buffer (Each);
-         F := Ocarina.Files.Search_File (Name_Find);
-         Loc := Ocarina.Files.Load_File (F);
-         Root_Depl := Ocarina.Parser.Parse (Get_String_Name ("aadl"),
-                                            Root_Depl, Loc);
-      end loop;
-
-      Success := Ocarina.Analyzer.Analyze (AADL_Language, Root_Depl);
+      Success := Ocarina.Analyzer.Analyze (AADL_Language, Root);
 
       if not Success then
          raise Deployment_View_Error with "Deployment view is incorrect";

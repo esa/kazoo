@@ -41,7 +41,7 @@
 
 #include "drivers_config.h"
 
-#include "msp430_serial_minimal.h"
+#include "msp430_eusci_a_serial_minimal.h"
 
 #define RING_BUFFER_SIZE ((MSP430_BUFFER_SIZE + sizeof(uint32_t) + sizeof(uint32_t)) * 2)
 
@@ -269,11 +269,10 @@ static void uart_transmit_character()
     }
     else
     {
-
         uint8_t c = ring_buffer_get(&stdout_buffer);
         UCA0TXBUF = c;
-        portEXIT_CRITICAL();
     }
+    portEXIT_CRITICAL();
 }
 
 static void uart_receive_character(BaseType_t* parameter)
@@ -342,7 +341,7 @@ void process_packet(uint8_t* data, int length)
     }
 }
 
-void spg_serial_msp430_minimal_poller(void* param)
+void msp430_eusci_a_serial_minimal_poller(void* param)
 {
     uint8_t buffer[MSP430_BUFFER_SIZE + sizeof(uint32_t) + sizeof(uint32_t)];
     int counter = 0;
@@ -397,7 +396,7 @@ void spg_serial_msp430_minimal_poller(void* param)
 static SemaphoreHandle_t sender_semaphore = {0};
 static StaticSemaphore_t sender_semaphore_buffer = {0};
 
-void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t port)
+void msp430_eusci_a_serial_minimal_sender(uint8_t* data, uint32_t length, uint32_t port)
 {
     xSemaphoreTake(sender_semaphore, portMAX_DELAY);
 
@@ -434,16 +433,18 @@ void spg_serial_msp430_minimal_sender(uint8_t* data, uint32_t length, uint32_t p
     xSemaphoreGive(sender_semaphore);
 }
 
-__attribute__ ((persistent)) StackType_t prv_spg_serial_msp430_minimal_poller_stack[configMINIMAL_STACK_SIZE] = {0};
-__attribute__ ((persistent)) StaticTask_t prv_spg_serial_msp430_minimal_poller_tcb = {0};
+__attribute__ ((persistent)) StackType_t prv_msp430_eusci_a_serial_minimal_poller_stack[configMINIMAL_STACK_SIZE] = {0};
+__attribute__ ((persistent)) StaticTask_t prv_msp430_eusci_a_serial_minimal_poller_tcb = {0};
 
 /*
  * initialization function
  */
-void spg_serial_msp430_minimal_init(void)
+void msp430_eusci_a_serial_minimal_init(void)
 {
     ring_buffer_init(&stdin_buffer);
     ring_buffer_init(&stdout_buffer);
+
+    P4DIR |= 0x40;   // configure P4.6 as output :: LED B
 
     semaphore = xSemaphoreCreateBinaryStatic(&semaphore_buffer);
     sender_semaphore = xSemaphoreCreateMutexStatic(&sender_semaphore_buffer);
@@ -460,13 +461,13 @@ void spg_serial_msp430_minimal_init(void)
     // enable async mode (UART)
     UCA0CTLW0 &= ~UCSYNC;
 
-    //pohidrv_msp430_node_msp430_serial_minimal
+    //pohidrv_msp430_node_msp430_eusci_a_serial_minimal
 
-    if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.use_paritybit)
+    if(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.exist.use_paritybit)
     {
-        if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.parity && pohidrv_@_Node_Name_@_msp430_serial_minimal.use_paritybit)
+        if(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.exist.parity && pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.use_paritybit)
         {
-            if(pohidrv_@_Node_Name_@_msp430_serial_minimal.parity == Parity_T_even)
+            if(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.parity == Parity_T_even)
             {
                 uart_setup_parity(PARITY_ENABLED, PARITY_EVEN);
             }
@@ -489,9 +490,9 @@ void spg_serial_msp430_minimal_init(void)
 
     uart_setup_byte_order(LSB);
 
-    if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.bits)
+    if(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.exist.bits)
     {
-        switch(pohidrv_@_Node_Name_@_msp430_serial_minimal.bits)
+        switch(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.bits)
         {
         case 7:
             uart_setup_character_bits(CHAR_7BIT);
@@ -508,9 +509,9 @@ void spg_serial_msp430_minimal_init(void)
         uart_setup_character_bits(CHAR_8BIT);
     }
 
-    if(pohidrv_@_Node_Name_@_msp430_serial_minimal.exist.speed)
+    if(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.exist.speed)
     {
-        switch(pohidrv_@_Node_Name_@_msp430_serial_minimal.speed)
+        switch(pohidrv_@_Node_Name_@_msp430_eusci_a_serial_minimal.speed)
         {
         case Baudrate_T_b9600:
             uart_setup_baudrate(BAUDRATE_9600);
@@ -544,13 +545,13 @@ void spg_serial_msp430_minimal_init(void)
     // start uart
     UCA0CTLW0 &= ~UCSWRST;
 
-    register_remote_transport_func(&spg_serial_msp430_minimal_sender);
+    register_remote_transport_func(&msp430_eusci_a_serial_minimal_sender);
 
-    xTaskCreateStatic(&spg_serial_msp430_minimal_poller,
+    xTaskCreateStatic(&msp430_eusci_a_serial_minimal_poller,
                 "serial_poller",
                 configMINIMAL_STACK_SIZE,
                 NULL,
                 1,
-                prv_spg_serial_msp430_minimal_poller_stack,
-                &prv_spg_serial_msp430_minimal_poller_tcb);
+                prv_msp430_eusci_a_serial_minimal_poller_stack,
+                &prv_msp430_eusci_a_serial_minimal_poller_tcb);
 }

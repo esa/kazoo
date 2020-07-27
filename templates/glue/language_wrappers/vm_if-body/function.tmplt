@@ -42,9 +42,27 @@
    #include <stdio.h>
 #endif
 
-@@IF@@ @_Language_@ = Ada or @_Language_@ = SDL
-extern void adainit(void);
+@@SET@@ SDL_Target_Language=""
+
+@@IF@@ @_Language_@ = Ada
+@@SET@@ SDL_Target_Language="Ada"
+@@ELSIF@@ @_Language_@ = SDL
+@@SET@@ SDL_Target_Language="Ada"
+@@TABLE@@
+@@IF@@ @_Property_Names_@ = "TASTE_IV_Properties::Default_CodeGen" and @_Property_Values_@ = ada
+@@SET@@ SDL_Target_Language="Ada"
+@@ELSIF@@ @_Property_Names_@ = "TASTE_IV_Properties::Default_CodeGen" and @_Property_Values_@ = c
+@@SET@@ SDL_Target_Language="C"
 @@END_IF@@
+@@END_TABLE@@
+@@END_IF@@
+
+@@IF@@ @_SDL_Target_Language_@ = "Ada"
+extern void adainit(void);
+@@ELSIF@@ @_SDL_Target_Language_@ = "C"
+extern void CInit@_CAPITALIZE:Name_@(void);
+@@END_IF@@
+
 @@TABLE@@
 extern void init_@_LOWER:Sync_RIs_Parent_@(void);
 extern unsigned @_LOWER:Sync_RIs_Parent_@_initialized;
@@ -60,8 +78,13 @@ void init_@_LOWER:Name_@(void)
       // Call user code startup function
       @_LOWER:Name_@_startup();
 @@ELSIF@@ @_Language_@ = Ada or @_Language_@ = SDL
+@@IF@@ @_SDL_Target_Language_@ = "Ada"
       // Initialize Ada runtime to call elaboration functions
       adainit();
+@@ELSIF@@ @_SDL_Target_Language_@ = "C"
+      // Initialize C to call elaboration functions
+      CInit@_CAPITALIZE:Name_@();
+@@END_IF@@
 @@END_IF@@
 @@IF@@ @_EXIST:Sync_RIs_Parent_@
       // Iterate over all synchronous RIs, and call their parent's

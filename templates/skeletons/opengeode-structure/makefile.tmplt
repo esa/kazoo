@@ -5,6 +5,23 @@
 @@-- @_ASN1_Modules_@        : List of all ASN.1 modules
 @@-- @_Is_Type_@             : Flag set to True for function type
 @@-- @_Instance_Of_@         : Name of function type if instance
+@@-- @_Is_Shared_Type_@      : True if the function type is in the shared library
+@@-- @_Shared_Lib_Dir_@      : Base folder containing the shared types
+# @_Language_@
+@@SET@@ SDL_Target_Language=""
+@@IF@@ @_Language_@ = Ada
+@@SET@@ SDL_Target_Language="Ada"
+@@ELSIF@@ @_Language_@ = SDL
+@@SET@@ SDL_Target_Language="Ada"
+@@TABLE@@
+#@_Property_Names_@ @_Property_Values_@
+@@IF@@ @_Property_Names_@ = "TASTE_IV_Properties::Default_CodeGen" and @_Property_Values_@ = ada
+@@SET@@ SDL_Target_Language="Ada"
+@@ELSIF@@ @_Property_Names_@ = "TASTE_IV_Properties::Default_CodeGen" and @_Property_Values_@ = c
+@@SET@@ SDL_Target_Language="C"
+@@END_IF@@
+@@END_TABLE@@
+@@END_IF@@
 OPENGEODE?=opengeode
 
 all: compile-linux
@@ -15,11 +32,32 @@ clean:
 edit:
 	cd src && $(OPENGEODE) system_structure.pr @_LOWER:Name_@.pr
 
+# @_SDL_Target_Language_@
+@@IF@@ @_SDL_Target_Language_@ = C
 generate-code:
 	mkdir -p code && cd code && \
 	@@IF@@ @_EXIST:Instance_Of_@
+	  @@IF@@ not @_Is_Shared_Type_@
+	   opengeode --toC  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr
+	   @@ELSE@@
+	   opengeode --toC  ../src/system_structure.pr @_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr
+	   @@END_IF@@
+ 	@@ELSE@@
+	   opengeode --taste --toC ../src/@_LOWER:Name_@.pr ../src/system_structure.pr
+	@@END_IF@@
+	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
+	@@ELSE@@
+    :
+	@@END_IF@@
+@@ELSE@@
+generate-code:
+	mkdir -p code && cd code && \
+	@@IF@@ @_EXIST:Instance_Of_@
+	  @@IF@@ not @_Is_Shared_Type_@
 	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
-	       mv *.gpr ..
+	  @@ELSE@@
+	   opengeode --toAda  ../src/system_structure.pr @_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr
+	  @@END_IF@@
  	@@ELSE@@
 	   opengeode --taste --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
@@ -28,6 +66,7 @@ generate-code:
 	@@ELSE@@
 	:
 	@@END_IF@@
+@@END_IF@@
 
 compile-linux: generate-code
 	@@IF@@ @_EXIST:Instance_Of_@

@@ -21,6 +21,6 @@
 #ifndef @_Thread_Name_@_INCLUDED
 #define @_Thread_Name_@_INCLUDED
 
-void prv_@_Thread_Name_@Task(void* prParameters);
+void prv_@_Thread_Name_@_Task(void* prParameters);
 
 #endif

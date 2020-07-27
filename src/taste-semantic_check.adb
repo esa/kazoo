@@ -169,10 +169,16 @@ package body TASTE.Semantic_Check is
                   end;
                exception
                   when Constraint_Error =>
-                     --  if call to Element did not return anything
-                     raise Semantic_Error with "Function not found : "
-                     & To_String (Each.Instance_Of.Unsafe_Just) & " (specified"
-                     & " as type of function " & To_String (Each.Name) & ")";
+                     --  if the component type is not in the model,
+                     --  it may not be an error: it could be a shared type
+                     if not Model.Configuration.Shared_Types.Contains
+                       (To_String (Each.Instance_Of.Unsafe_Just))
+                     then
+                        raise Semantic_Error with "Function not found : "
+                          & To_String (Each.Instance_Of.Unsafe_Just)
+                          & " (specified as type of function "
+                          & To_String (Each.Name) & ")";
+                     end if;
                end;
             end if;
          end loop;

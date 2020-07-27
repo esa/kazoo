@@ -5,9 +5,10 @@
 @@-- @_Thread_Names_@    : Tag: list of thread names
 @@-- @_Node_Name_@       : Name of the node containing this partition
 @@-- @_Blocks_@          : Code generated for protected functions
-@@-- @_Block_Names@      : Vector Tag: list of block (user functions) names
-@@-- @_Block_Languages_@ :   |_ Corresponding implementation language
-@@-- @_Block_Instance_Of_@:  |_ Name of parent function (if instance)
+@@-- @_Block_Names@           : Vector Tag: list of block (user functions) names
+@@-- @_Block_Languages_@      :  |_ Corresponding implementation language
+@@-- @_Block_Instance_Of_@    :  |_ Name of parent function (if instance)
+@@-- @_Block_Is_Shared_Type_@ :  |_ If instance and the parent function is a shared type
 @@-- @_Coverage_@        : True if user requested code coverage enable
 @@-- @_Package_Name_@    : AADL Package name for the target (e.g. ocarina_porocessors_x86)
 @@-- @_CPU_Name_@        : CPU Name (e.g. x86_linux)
@@ -30,6 +31,7 @@
 @@-- @_Out_Port_Names_@       : Vector tag: output ports of the partition
 @@-- @_Out_Port_Thread_Name_@ :     |_ corresponding thread inside the partition
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
+@@-- @_Shared_Lib_Dir_@ : Shared library folder
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
 project @_CAPITALIZE:Name_@ is
@@ -65,8 +67,13 @@ project @_CAPITALIZE:Name_@ is
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
 @@END_IF@@
 @@--  Instances: Add the folder of the parent function (in C++ and Ada)
+@@--  (choose the right path if parent is a shared library)
 @@IF@@ @_EXIST:Block_Instance_Of_@ and (@_Block_Languages_@ = CPP or @_Block_Languages_@ = Ada)
+  @@IF@@ not @_Block_Is_Shared_Type_@
        "../../@_LOWER:Block_Instance_Of_@/@_Block_Languages_@/src",
+  @@ELSE@@
+       "@_Shared_Lib_Dir_@/@_LOWER:Block_Instance_Of_@/@_LOWER:Block_Instance_Of_@/@_Block_Languages_@/src",
+  @@END_IF@@
 @@END_IF@@
 @@END_TABLE@@
        "../deploymentview_final/@_LOWER:Name_@")
@@ -139,36 +146,26 @@ project @_CAPITALIZE:Name_@ is
        "remote_configuration.cc");
 
    package Compiler is
+      Common_C_Switches :=
+        ("-DTARGET=native",
+         "-DPOSIX",
+         "-D_POSIX_SOURCE",
+         "-D_GNU_SOURCE",
+         "-Wall",
+         "-Wextra",
+         "-fdiagnostics-show-option",
+         "-Wcast-align",
+         "-Wswitch")
+         & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+         & external_as_list("USER_CFLAGS", " ");
+
       case Build is
          when "Release" =>
-            for Default_Switches ("C") use
-               ("-g",
-                "-O2",
-                "-DTARGET=native",
-                "-DPOSIX",
-                "-D_POSIX_SOURCE",
-                "-D_GNU_SOURCE",
-                "-Wall",
-                "-Wextra",
-                "-fdiagnostics-show-option",
-                "-Wcast-align",
-                "-Wswitch")
-                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
-                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C") use Common_C_Switches & ("-O2", "-DNDEBUG");
+            for Default_Switches ("C++") use Common_C_Switches & ("-O2", "-DNDEBUG");
          when "Debug" =>
-            for Default_Switches ("C") use
-               ("-g",
-                "-DTARGET=native",
-                "-DPOSIX",
-                "-D_POSIX_SOURCE",
-                "-D_GNU_SOURCE",
-                "-Wall",
-                "-Wextra",
-                "-fdiagnostics-show-option",
-                "-Wcast-align",
-                "-Wswitch")
-                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
-                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C") use Common_C_Switches & ("-g", "-O0");
+            for Default_Switches ("C++") use Common_C_Switches & ("-g", "-O0");
       end case;
       --  Increase command line size to avoid using --specs and support ccache
       --  Disable for now - does not work with gprbuild in debian9
@@ -176,7 +173,7 @@ project @_CAPITALIZE:Name_@ is
    end Compiler;
 
    package Linker is
-      for Default_Switches ("C") use
+      Common_LD_Switches :=
          ("-g",
           "-lrt",
           "-lpthread",
@@ -184,6 +181,15 @@ project @_CAPITALIZE:Name_@ is
           "-Wl,-gc-sections")
           & external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
           & external_as_list("USER_LDFLAGS", " ");
+
+      case Build is
+         when "Release" =>
+            for Default_Switches ("C") use Common_LD_Switches;
+            for Default_Switches ("C++") use Common_LD_Switches;
+         when "Debug" =>
+            for Default_Switches ("C") use Common_LD_Switches & "-g";
+            for Default_Switches ("C++") use Common_LD_Switches & "-g";
+      end case;
    end Linker;
 
    package Builder is

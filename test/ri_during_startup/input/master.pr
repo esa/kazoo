@@ -5,7 +5,7 @@ process Master;
     -- Use SET_TIMER (value, timer name)
     -- and RESET_TIMER (timer name) in a
     -- PROCEDURE CALL symbol to use them
-    timer myTimer;
+    timer mytimer;
     
     dcl count T_uInt8 := 0;
     /* CIF ENDTEXT */

@@ -32,6 +32,54 @@ This template is evaluated only once. The output is saved to the Makefile within
 |-
 |ASN1_Modules
 |List of all ASN.1 modules
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|List of available component types
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Glue
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/context-parameters.tmplt ===
 This template is evaluated for every function which has context parameters. The output is saved to the file Context-<function name>.asn
@@ -59,6 +107,12 @@ This template is evaluated for every function which has context parameters. The 
 |-
 |CP_Value
 |... with default value
+|-
+|Is_Type
+|DOCUMENTATION MISSING
+|-
+|Instance_Of
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/trigger.tmplt ===
 This template is evaluated to trigger processing of other files from given directory.
@@ -200,6 +254,12 @@ This template is identical for Skeleton and Glue subfolders.
 |-
 |Target
 |Value of command line flag --target=Target
+|-
+|Shared_Types
+|List of available component types
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
 |}
 === templates/skeletons/sub/makefile-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for makefile.tmplt, otherwise this template will not be processed.
@@ -218,6 +278,108 @@ This file is optional, if exists the result of parsing of this file is a name of
 |-
 |Name
 |The name of the function
+|}
+=== templates/skeletons/sub/function.tmplt ===
+Template for a function in the skeleton or glue folder
+{| class="wikitable"
+!Parameter name
+!Description
+|-
+|Name
+|The name of the function
+|-
+|RIs_Have_Params
+|DOCUMENTATION MISSING
+|-
+|Zip_File
+|DOCUMENTATION MISSING
+|-
+|ASync_RI_Param_Type
+|DOCUMENTATION MISSING
+|-
+|Is_Type
+|DOCUMENTATION MISSING
+|-
+|CP_Values
+|DOCUMENTATION MISSING
+|-
+|CP_Asn1Modules
+|DOCUMENTATION MISSING
+|-
+|Provided_Interfaces
+|DOCUMENTATION MISSING
+|-
+|Instance_Of
+|Name of the function type if it is an instance
+|-
+|Language
+|Implementation language
+|-
+|Property_Names
+|Vector tag: user defined AADL property names
+|-
+|Property_Values
+| ... and corresponding value
+|-
+|List_Of_ASync_PIs
+|DOCUMENTATION MISSING
+|-
+|Sync_RIs_Parent
+|DOCUMENTATION MISSING
+|-
+|Async_RIs_Parent
+|DOCUMENTATION MISSING
+|-
+|List_Of_PIs
+|DOCUMENTATION MISSING
+|-
+|CP_Asn1Filenames
+|DOCUMENTATION MISSING
+|-
+|Required_Interfaces
+|DOCUMENTATION MISSING
+|-
+|PIs_Have_Params
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Type
+|DOCUMENTATION MISSING
+|-
+|CP_Types
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|Timers
+|DOCUMENTATION MISSING
+|-
+|CP_Names
+|DOCUMENTATION MISSING
+|-
+|List_Of_Sync_RIs
+|DOCUMENTATION MISSING
+|-
+|List_Of_Sync_PIs
+|DOCUMENTATION MISSING
+|-
+|List_Of_RIs
+|DOCUMENTATION MISSING
+|-
+|Has_Context
+|DOCUMENTATION MISSING
+|-
+|ASN1_Modules
+|DOCUMENTATION MISSING
+|-
+|ASync_RI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|List_Of_ASync_RIs
+|DOCUMENTATION MISSING
+|-
+|ASN1_Files
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/interface.tmplt ===
 This file is processed twice, first time for required interfaces of the function from Interface View, second time for the provided interfaces. The results are parameters for processing function.tmplt
@@ -315,6 +477,21 @@ The output of this template is saved to the file with name returned by processin
 |-
 |Has_CP
 |True if context parameters are defined for this function
+|-
+|Property_Names
+|Function user-defined property names (goes in pair with Property_Values)
+|-
+|Property_Values
+|Function user-defined property values (goes in pair with Property_Names)
+|-
+|Is_Shared_Type
+|True if component is an instance of a function in the shared types folder
+|-
+|Language
+|Implementation language of the function
+|-
+|Shared_Lib_Dir
+|Path to the shared component type folder
 |}
 === templates/concurrency_view/sub/trigger.tmplt ===
 This file is processed for every node. The result of this file indicates if the rest of templates for given node will be processed.
@@ -378,6 +555,12 @@ This file is processed for every node. The result of this file indicates if the 
 |-
 |CPU_Classifier
 |DOCUMENTATION MISSING
+|-
+|Shared_Types
+|List of available component types
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
 |}
 === templates/concurrency_view/sub/thread.tmplt ===
 This file is processed for every thread in every partition in every node.
@@ -470,7 +653,7 @@ This file is processed for every thread in every partition in every node.
 |DOCUMENTATION MISSING
 |-
 |Language
-|DOCUMENTATION MISSING
+|Implementation language of the function
 |-
 |Binary_Path
 |DOCUMENTATION MISSING
@@ -528,6 +711,12 @@ This file is processed for every thread in every partition in every node.
 |-
 |Stack_Size_In_Bytes
 |DOCUMENTATION MISSING
+|-
+|Shared_Types
+|List of available component types
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
 |}
 === templates/concurrency_view/sub/pi.tmplt ===
 The template pi.tmplt is evaluated many times for every protected and unprotected provided interface.
@@ -570,7 +759,7 @@ The result of every evaluation is joined to one string and passed as a parameter
 |DOCUMENTATION MISSING
 |-
 |Language
-|DOCUMENTATION MISSING
+|Implementation language of the function
 |-
 |Protected_Block_Name
 |DOCUMENTATION MISSING
@@ -781,13 +970,10 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |Has_Context
-|DOCUMENTATION MISSING
+|True if function has context parameters
 |-
 |Output_Dir
-|DOCUMENTATION MISSING
-|-
-|Instance_Of
-|DOCUMENTATION MISSING
+|Output folder (by default: work)
 |-
 |PIs_Have_Params
 |DOCUMENTATION MISSING
@@ -816,14 +1002,26 @@ This template is evaluated for every block.
 |List_Of_RIs
 |DOCUMENTATION MISSING
 |-
-|Is_Type
-|DOCUMENTATION MISSING
-|-
 |Data_View
 |Data view filename
 |-
 |Target
 |Value of command line flag --target=Target
+|-
+|Shared_Types
+|List of available component types
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
+|-
+|Is_Type
+|True if function is a function type
+|-
+|Instance_Of
+|DOCUMENTATION MISSING
+|-
+|Is_Shared_Type
+|True if component is an instance of a function in the shared types folder
 |}
 
 
@@ -937,7 +1135,7 @@ This file is evaluated for every partition.
 |DOCUMENTATION MISSING
 |-
 |Block_Languages
-|DOCUMENTATION MISSING
+|For each block: implementation language
 |-
 |VP_Duration
 |DOCUMENTATION MISSING
@@ -995,6 +1193,12 @@ This file is evaluated for every partition.
 |-
 |Out_Port_Queue_Size
 |DOCUMENTATION MISSING
+|-
+|Block_Is_Shared_Type
+|True if parent of the instance is a shared component
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -1256,4 +1460,13 @@ filesys.tmplt.
 |-
 |Device_Init
 |DOCUMENTATION MISSING
+|-
+|Shared_Types
+|Complete list of available component types
+|-
+|Shared_Lib_Dir
+|Folder hosting the shared component types
+|-
+|Used_Shared_Types
+|List of actually used shared component types
 |}

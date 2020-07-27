@@ -49,6 +49,8 @@ configuration project RTEMS_WITH_ADA is
 
       Common_C_Switches := 
          ("--pipe",
+          "-fdata-sections",
+          "-ffunction-sections",
 @@IF@@ @_CPU_Family_@ /= gr740
           "-mcpu=cypress",
           "-DLEON3",
@@ -107,6 +109,7 @@ configuration project RTEMS_WITH_ADA is
       Common_C_Linker_Switches :=
            ("--pipe",
             "-g",
+            "-Wl,--gc-sections",
 @@IF@@ @_CPU_Family_@ = gr740
             "-B/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib",
 @@ELSIF@@  @_CPU_Family_@ = gr712rc

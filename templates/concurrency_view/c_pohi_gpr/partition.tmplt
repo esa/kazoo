@@ -146,6 +146,9 @@ project @_CAPITALIZE:Name_@ is
        "remote_configuration.cc");
 
    package Compiler is
+      for Driver ("C") use External ("CC", "gcc");
+      for Driver ("C++") use External ("CXX", "g++");
+
       Common_C_Switches :=
         ("-DTARGET=native",
          "-DPOSIX",

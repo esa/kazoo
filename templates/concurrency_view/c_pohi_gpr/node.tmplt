@@ -20,6 +20,8 @@ simulate:
 @@END_TABLE@@
 
 debug_native:
+	# Configure gprbuild to use GCC toolchain even if LLVM is installed
+	gprconfig --batch --target=x86_64-pc-linux-gnu --config=C,,,,GCC --config=C++,,,,G++
 @@TABLE@@
 	gprbuild -v -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@

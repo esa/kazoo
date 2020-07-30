@@ -11,7 +11,7 @@
 @@SET@@ STM32_GNAT = True
 @@END_IF@@
 
-GNATMAKE = gprbuild
+GPRBUILD = gprbuild
 
 @@IF@@ @_STM32_GNAT_@
 export ADA_PROJECT_PATH=${CURDIR}/Ada_Drivers_Library/boards:${CURDIR}/Ada_Drivers_Library/boards/@_REPLACE(_full/):LOWER:Ada_Runtime_@/
@@ -26,7 +26,7 @@ TARGET = NATIVE
 @@IF@@ @_STM32_GNAT_@
 all:	Ada_Drivers_Library/README.md ../../dataview/Ada_STM32/built
 @@TABLE@@
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:C -DFP_WORD_SIZE=4
+	$(GPRBUILD) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:C -DFP_WORD_SIZE=4
 @@END_TABLE@@
 
 Ada_Drivers_Library/README.md:
@@ -40,7 +40,9 @@ Ada_Drivers_Library/README.md:
 
 @@ELSE@@
 all:
+	# Configure gprbuild to use GCC toolchain (for C and C++) even if LLVM is installed
+	gprconfig --batch --target=x86_64-pc-linux-gnu --config=C,,,,GCC --config=C++,,,,G++
 @@TABLE@@
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
+	$(GPRBUILD) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
 @@END_TABLE@@
 @@END_IF@@

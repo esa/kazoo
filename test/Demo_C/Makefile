@@ -35,7 +35,7 @@ gdb-ada: clean
 	gdb --args $(KAZOO) --gw --glue --debug -o output.gdb
 
 gdb-c: clean
-	gdb --args $(KAZOO) -p --gw --glue --debug -o output.gdb
+	gdb --args $(KAZOO) -p -c DeploymentView_Native.aadl --gw --glue --debug -o output.gdb
 
 clean-ada:
 	rm -rf output.ada

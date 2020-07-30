@@ -692,8 +692,10 @@ package body TASTE.Deployment_View is
             if not Is_Empty (Subcomponents (CI)) then
                Node      := Parse_Node (CI);
                Node.Name := US (Get_Name_String (Name (Identifier (Subs))));
-               Nodes.Insert (Key      => To_String (Node.Name),
-                             New_Item => Node);
+               if Node.Name /= "interfaceview" then
+                  Nodes.Insert (Key      => To_String (Node.Name),
+                                New_Item => Node);
+               end if;
             end if;
          elsif Get_Category_Of_Component (CI) = CC_Bus then  --  Bus
             Busses.Append (Parse_Bus (Subs, CI));

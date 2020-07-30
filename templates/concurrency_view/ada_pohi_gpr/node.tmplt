@@ -41,7 +41,7 @@ Ada_Drivers_Library/README.md:
 @@ELSE@@
 all:
 	# Configure gprbuild to use GCC toolchain (for C and C++) even if LLVM is installed
-	gprconfig --batch --target=x86_64-pc-linux-gnu --config=C,,,,GCC --config=C++,,,,G++
+	gprconfig --batch --config=Ada,,default,,GNAT --config=C,,default,,GCC --config=C++,,default,,G++ || :
 @@TABLE@@
 	$(GPRBUILD) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
 @@END_TABLE@@

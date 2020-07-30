@@ -56,7 +56,9 @@ project @_CAPITALIZE:Name_@ is
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
-       "../../dataview/Ada",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/x86", -- Additional tests may be needed if other platforms are used
 @@END_IF@@
 @@TABLE@@
 @@IF@@ @_Block_Languages_@ = SDL

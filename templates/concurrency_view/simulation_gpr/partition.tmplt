@@ -69,7 +69,9 @@ library project @_CAPITALIZE:Name_@_Simulator is
 @@END_IF@@ 
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
-       "../../dataview/Ada",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/x86",
 @@END_IF@@
 @@TABLE@@
 @@IF@@ @_LOWER:Block_Languages_@ = sdl

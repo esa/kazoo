@@ -235,6 +235,7 @@ package body TASTE.Concurrency_View is
                Block_Instance_Of,
                Block_Is_Shared_Type,
                Block_FPGAConf  : Vector_Tag;
+               Block_Default_Codegen : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -431,6 +432,15 @@ package body TASTE.Concurrency_View is
                         end if;
                      end loop;
 
+                     for TASTE_Property of B.Ref_Function.User_Properties loop
+                        if TASTE_Property.Name =
+                            "TASTE_IV_Properties::Default_CodeGen"
+                        then
+                           Block_Default_Codegen := Block_Default_Codegen &
+                            TASTE_Property.Value;
+                        end if;
+                     end loop;
+
                      if Size (Block_FPGAConf) /= Size (Block_Names)
                      then
                         Block_FPGAConf := Block_FPGAConf & "";
@@ -513,6 +523,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
                  & Assoc ("Block_Is_Shared_Type", Block_Is_Shared_Type)
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
+                 & Assoc ("Block_Default_Codegen", Block_Default_Codegen)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Queue_Size",   Input_Port_Queue_Size)

@@ -33,6 +33,12 @@
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
 --  This file is generated for MSP430 with FreeRTOS
+@@-- Not all systems use Ada so we must not always include Ada dataview folder
+@@TABLE@@
+@@IF@@ ( @_LOWER:Block_Languages_@ = sdl and @_LOWER:Block_Default_Codegen_@ = "ada" ) or @_LOWER:Block_Languages_@ = ada
+@@SET@@ Need_Ada = TRUE
+@@END_IF@@
+@@END_TABLE@@
 
 project @_CAPITALIZE:Name_@ is
 
@@ -63,7 +69,7 @@ project @_CAPITALIZE:Name_@ is
 @@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada/asn1rtl",
        "../../dataview/Ada/src",
-       "../../dataview/Ada/boards/msp430",
+       --"../../dataview/Ada/boards/msp430", -- temporary workaround
 @@END_IF@@
 @@TABLE@@
        "@_LOWER:Name_@/drivers/@_Device_Names_@",
@@ -76,17 +82,29 @@ project @_CAPITALIZE:Name_@ is
    for Object_Dir use "obj";
    for Exec_Dir   use "../../binaries";
 
-   for Languages use ("C", "C++");
+   for Languages use ("C", "C++", "Ada");
 
    for Main use ("main.c");
 
    package Naming is
        for Body_Suffix ("C++") use ".cc";
+	   for Body_Suffix ("Ada") use ".adb";
    end Naming;
+
+   package Binder is
+      for Driver ("Ada")  use "msp430-elf-adabind"; -- workaround for Binder
+      --for Switches ("Ada")  use ("--gnatbind_path=/home/taste/projects/adac/adac/bin/llvm-gnatbind"); -- alternative
+   end Binder;
+
+   -- Need_Ada : @_Need_Ada_@
 
    package Compiler is
       for Driver ("C") use "msp430-elf-gcc";
       for Driver ("C++") use "msp430-elf-g++";
+      for Driver ("Ada") use "msp430-elf-adac";
+
+      for Required_Switches ("C") use ("-c");
+      for Required_Switches ("Ada") use ("-c");
 
       case Build is
          when "Release" =>
@@ -97,13 +115,17 @@ project @_CAPITALIZE:Name_@ is
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
                 "-I../../deploymentview_final/@_LOWER:Name_@",
                 "-I../../deploymentview_final/polyorb-hi-c/include",
-                "-D__LARGE_DATA_MODEL__=1",
                 "-DWORD_SIZE=4",
                 "-mmcu=msp430fr5969",
+@@IF@@ @_Need_Ada_@ = TRUE
+                "-msmall",
+@@ELSE@@
+                "-D__LARGE_DATA_MODEL__=1",
                 "-mlarge",
-                "-ffunction-sections",
                 "-mcode-region=either",
                 "-mdata-region=upper",
+@@END_IF@@
+                "-ffunction-sections",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
@@ -113,6 +135,16 @@ project @_CAPITALIZE:Name_@ is
                 "-Os")
                 & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("Ada") use
+               ("-Wgnat,-I.",
+                "-Wgnat,-gnateDWORD_SIZE=4",
+                "-Wgnat,-I../../../dataview/Ada/asn1rtl",
+                "-Wgnat,-I../../../dataview/Ada/src",
+                "-Wgnat,-I../../../dataview/Ada/boards/msp430",
+                "-Wgnat,-I../FreeRTOS/Source/include",
+                "-Wgnat,-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-Wgnat,-I../../deploymentview_final/@_LOWER:Name_@",
+                "-Wgnat,-I../../deploymentview_final/polyorb-hi-c/include");
          when "Debug" =>
             for Default_Switches ("C") use
                ("-I/opt/msp430-gcc/include/",
@@ -121,13 +153,17 @@ project @_CAPITALIZE:Name_@ is
                 "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
                 "-I../../deploymentview_final/@_LOWER:Name_@",
                 "-I../../deploymentview_final/polyorb-hi-c/include",
-                "-D__LARGE_DATA_MODEL__=1",
                 "-DWORD_SIZE=4",
                 "-mmcu=msp430fr5969",
+@@IF@@ @_Need_Ada_@ = TRUE
+                "-msmall",
+@@ELSE@@
+                "-D__LARGE_DATA_MODEL__=1",
                 "-mlarge",
-                "-ffunction-sections",
                 "-mcode-region=either",
                 "-mdata-region=upper",
+@@END_IF@@
+                "-ffunction-sections",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
@@ -136,6 +172,16 @@ project @_CAPITALIZE:Name_@ is
                 "-g")
                 & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("Ada") use
+               ("-I.",
+                "-Wgnat,-gnateDWORD_SIZE=4",
+                "-Wgnat,-I../../../dataview/Ada/asn1rtl",
+                "-Wgnat,-I../../../dataview/Ada/src",
+                "-Wgnat,-I../../../dataview/Ada/boards/msp430",
+                "-Wgnat,-I../FreeRTOS/Source/include",
+                "-Wgnat,-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-Wgnat,-I../../deploymentview_final/@_LOWER:Name_@",
+                "-Wgnat,-I../../deploymentview_final/polyorb-hi-c/include");
       end case;
    end Compiler;
 
@@ -143,17 +189,25 @@ project @_CAPITALIZE:Name_@ is
       for Driver use "msp430-elf-gcc";
 
       for Default_Switches ("C") use
-         ("-L/opt/msp430-gcc/include/",
-          "-I/opt/msp430-gcc/include/",
+         ("-L/opt/ti/msp430-gcc/include/",
+          "-I/opt/ti/msp430-gcc/include/",
           "-I.",
           "-I../FreeRTOS/Source/include",
           "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
-          "-D__LARGE_DATA_MODEL__=1",
           "-DWORD_SIZE=4",
           "-mmcu=msp430fr5969",
-          "-mlarge",
+@@IF@@ @_Need_Ada_@ = TRUE
+          "-L/home/taste/projects/adac/adac/lib", -- temporary path
+          "-msmall",
+          "-lgnatmsp430x",
+          "-lllvmmsp430x",
+          "-lc",
+@@ELSE@@
+	      "-D__LARGE_DATA_MODEL__=1",
+    	  "-mlarge",
           "-mcode-region=either",
           "-mdata-region=upper",
+@@END_IF@@
           "-mrelax",
           "-Wall",
           "-Wextra",

@@ -134,6 +134,33 @@ project @_CAPITALIZE:Name_@ is
                 "-Os")
                 & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C++") use
+               ("-I/opt/msp430-gcc/include/",
+                "-I.",
+                "-I../FreeRTOS/Source/include",
+                "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-I../../deploymentview_final/@_LOWER:Name_@",
+                "-I../../deploymentview_final/polyorb-hi-c/include",
+                "-DWORD_SIZE=4",
+                "-mmcu=msp430fr5969",
+@@IF@@ @_Need_Ada_@ = TRUE
+                "-msmall",
+@@ELSE@@
+                "-D__LARGE_DATA_MODEL__=1",
+                "-mlarge",
+                "-mcode-region=either",
+                "-mdata-region=upper",
+@@END_IF@@
+                "-ffunction-sections",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wno-unused-parameter",
+                "-Wl,--gc-sections",
+                "-g",
+                "-Os")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
             for Default_Switches ("Ada") use
                ("-Wgnat,-I.",
                 "-Wgnat,-gnateDWORD_SIZE=4",
@@ -146,6 +173,32 @@ project @_CAPITALIZE:Name_@ is
                 "-Wgnat,-I../../deploymentview_final/polyorb-hi-c/include");
          when "Debug" =>
             for Default_Switches ("C") use
+               ("-I/opt/msp430-gcc/include/",
+                "-I.",
+                "-I../FreeRTOS/Source/include",
+                "-I../FreeRTOS/Source/portable/GCC/MSP430FR5969",
+                "-I../../deploymentview_final/@_LOWER:Name_@",
+                "-I../../deploymentview_final/polyorb-hi-c/include",
+                "-DWORD_SIZE=4",
+                "-mmcu=msp430fr5969",
+@@IF@@ @_Need_Ada_@ = TRUE
+                "-msmall",
+@@ELSE@@
+                "-D__LARGE_DATA_MODEL__=1",
+                "-mlarge",
+                "-mcode-region=either",
+                "-mdata-region=upper",
+@@END_IF@@
+                "-ffunction-sections",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wno-unused-parameter",
+                "-O0",
+                "-g")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C++") use
                ("-I/opt/msp430-gcc/include/",
                 "-I.",
                 "-I../FreeRTOS/Source/include",

@@ -1,0 +1,8 @@
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fthread.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@--  ASN.1 Module imports
+@@TABLE@@
+@_Param_Types_@ FROM @_Param_ASN1_Modules_@
+@@END_TABLE@@
+

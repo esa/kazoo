@@ -1,9 +1,3 @@
-@@-- The following boolean tags are available to decide if the file
-@@-- shall be generated or not:
-@@--    Filename_Is_Present
-@@--    Skeletons
-@@--    Glue
-@@--    Use_POHIC
-@@--    Debug
-@@--    No_Stdlib
+@@IF@@ @_Target_@ = SIMU
 TRUE
+@@END_IF@@

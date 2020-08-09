@@ -3,13 +3,20 @@
 @@-- If you are using vim, go over the URL and pres gx in to follow the link
 @@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
 @@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_system.ascii
-Simulation-DataView ::=
+Simulation-DataView DEFINITIONS ::=
 BEGIN
    IMPORTS
       @_Threads'Indent_@
+      T-UInt32 FROM TASTE-BasicTypes
    ;
 
+   @_Nodes'Indent_@
+
    Events ::= CHOICE {
-      @_Nodes'Indent_@
+      @@INLINE(      )(,\n      )()@@
+          @@TABLE'ALIGN_ON(" ")@@
+                @_LOWER:REPLACE_ALL(_/-):Block_Names_@ @_REPLACE_ALL(_/-):CAPITALIZE:Block_Names_@-Event
+          @@END_TABLE@@
+      @@END_INLINE@@
    }
 END

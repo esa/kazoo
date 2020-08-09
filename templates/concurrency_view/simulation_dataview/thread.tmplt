@@ -1,8 +1,11 @@
 @@-- The up to date list of tags available for this template is available here:
 @@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fthread.tmplt
 @@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_thread.ascii
 @@--  ASN.1 Module imports
-@@TABLE@@
-@_Param_Types_@ FROM @_Param_ASN1_Modules_@
+--  ASN.1 modules used by thread @_Thread_Name_@
+@@TABLE'ALIGN_ON(" ")@@
+@_Param_Types_@ FROM @_REPLACE_ALL(_/-):Param_ASN1_Modules_@
 @@END_TABLE@@
 

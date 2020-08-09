@@ -1,0 +1,151 @@
+templates/concurrency_view/sub/system.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This file is evaluated for every node. The result of this file is save
+to the file with name returned by filesys.tmplt.
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Nodes                             | Code generated for the nodes      |
++-----------------------------------+-----------------------------------+
+| Node_Names                        | Vector Tag of node names          |
++-----------------------------------+-----------------------------------+
+| Node_CPU                          | -> Corresponding CPU name (eg     |
+|                                   | x86_linux)                        |
++-----------------------------------+-----------------------------------+
+| Node_CPU_Classifier               | -> Corresponding CPU Classifier   |
+|                                   | (ocarina...::x86_linux)           |
++-----------------------------------+-----------------------------------+
+| Node_Major_Frame                  | -> Corresponding Time in          |
+|                                   | milliseconds allocated to the CPU |
+|                                   | (TSP only)                        |
++-----------------------------------+-----------------------------------+
+| Partition_Names                   | Vector Tag of partition names     |
++-----------------------------------+-----------------------------------+
+| Partition_Node                    | -> Corresponding node name        |
++-----------------------------------+-----------------------------------+
+| Partition_CPU                     | -> Corresponding CPU name         |
++-----------------------------------+-----------------------------------+
+| Partition_Duration                | -> Corresponding time allocation  |
+|                                   | (TSP only)                        |
++-----------------------------------+-----------------------------------+
+| Partition_VP                      | -> Corresponding Virtual          |
+|                                   | processor binding (TSP only)      |
++-----------------------------------+-----------------------------------+
+| Threads                           | Code generated for the threads    |
+|                                   | (from thread.tmplt)               |
++-----------------------------------+-----------------------------------+
+| Thread_Names                      | List of all threads in the        |
+|                                   | complete system                   |
++-----------------------------------+-----------------------------------+
+| Target_Packages                   | List of all target package names  |
+|                                   | in the complete system            |
++-----------------------------------+-----------------------------------+
+| Part_Source_Name                  | Inter-partition connections :     |
+|                                   | partition source name (vector     |
+|                                   | tag)                              |
++-----------------------------------+-----------------------------------+
+| Part_Source_Port                  | -> Corresponding port name        |
++-----------------------------------+-----------------------------------+
+| Part_Dest_Name                    | -> Corresponding name of the      |
+|                                   | remote partition                  |
++-----------------------------------+-----------------------------------+
+| Part_Dest_Port                    | -> Corresponding name of the port |
+|                                   | on the remote partition           |
++-----------------------------------+-----------------------------------+
+| Bus_Names                         | Vector tag: busses present in the |
+|                                   | system                            |
++-----------------------------------+-----------------------------------+
+| Bus_AADL_Package                  | -> Corresponding AADL Package     |
++-----------------------------------+-----------------------------------+
+| Bus_Classifier                    | -> Corresponding AADL classifier  |
++-----------------------------------+-----------------------------------+
+| Device_Node_Name                  |                                   |
++-----------------------------------+-----------------------------------+
+| Device_Partition                  |                                   |
++-----------------------------------+-----------------------------------+
+| Device_AADL_Pkg                   |                                   |
++-----------------------------------+-----------------------------------+
+| Device_Classifier                 |                                   |
++-----------------------------------+-----------------------------------+
+| Device_CPU                        |                                   |
++-----------------------------------+-----------------------------------+
+| Device_Config                     |                                   |
++-----------------------------------+-----------------------------------+
+| Device_Bus_Name                   |                                   |
++-----------------------------------+-----------------------------------+
+| Device_Port_Name                  |                                   |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_File                  |                                   |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Sort                  |                                   |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Module                | Device drivers (vector tag)       |
++-----------------------------------+-----------------------------------+
+| Unique_Dev_ASN1_Files             | List of ASN.1 files/module/type   |
+|                                   | for device configuration with no  |
+|                                   | duplicates (vector tag)           |
++-----------------------------------+-----------------------------------+
+| Unique_Dev_ASN1_Mod               | ... corresponding asn1 module     |
++-----------------------------------+-----------------------------------+
+| Unique_Dev_ASN1_Sorts             | ... type name                     |
++-----------------------------------+-----------------------------------+
+| Connect_From_Part                 | Vector tag - bus connection:      |
+|                                   | partition source                  |
++-----------------------------------+-----------------------------------+
+| Connect_Via_Bus                   | ... bus name                      |
++-----------------------------------+-----------------------------------+
+| Connect_Port_Name                 | ... port name                     |
++-----------------------------------+-----------------------------------+
+| Debug_Flag                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Timer_Resolution                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Skeletons                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Interface_View                    | Interface view filename           |
++-----------------------------------+-----------------------------------+
+| Binary_Path                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Block_Names                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Deployment_View                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| No_Stdlib_Flag                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Glue                              | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Names                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Output_Dir                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Node_Has_Memory                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Check_Data_View                   | Value of command line flag        |
+|                                   | --check-dataview                  |
++-----------------------------------+-----------------------------------+
+| Use_POHIC                         | Value of command line flag        |
+|                                   | --polyorb-hi-c (or -p)            |
++-----------------------------------+-----------------------------------+
+| Other_Files                       | List of AADL files passed to the  |
+|                                   | command line                      |
++-----------------------------------+-----------------------------------+
+| Data_View                         | Data view filename                |
++-----------------------------------+-----------------------------------+
+| Target                            | Value of command line flag        |
+|                                   | --target=Target                   |
++-----------------------------------+-----------------------------------+
+| Device_Language                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Init                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Shared_Types                      | Complete list of available        |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | Folder hosting the shared         |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Used_Shared_Types                 | List of actually used shared      |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+

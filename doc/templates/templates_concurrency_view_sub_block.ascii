@@ -1,0 +1,130 @@
+templates/concurrency_view/sub/block.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template is evaluated for every block.
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Name                              | Protected block name              |
++-----------------------------------+-----------------------------------+
+| Language                          | Implementation language           |
++-----------------------------------+-----------------------------------+
+| Calling_Threads                   | List of calling threads           |
++-----------------------------------+-----------------------------------+
+| Protected_PIs                     | Protected Provided interfaces     |
+|                                   | (from pi.tmplt)                   |
++-----------------------------------+-----------------------------------+
+| Unprotected_PIs                   | Unprotected Provided interfaces   |
+|                                   | (from pi.tmplt)                   |
++-----------------------------------+-----------------------------------+
+| Required                          | Required interfaces (from         |
+|                                   | ri.tmplt)                         |
++-----------------------------------+-----------------------------------+
+| List_Of_PIs                       | Complete list of provided         |
+|                                   | interfaces                        |
++-----------------------------------+-----------------------------------+
+| List_Of_ASync_RIs                 | Vector tag: name of asynchronous  |
+|                                   | RIs                               |
++-----------------------------------+-----------------------------------+
+| ASync_RI_Param_Name               | ... corresponding parameter Name  |
++-----------------------------------+-----------------------------------+
+| ASync_RI_Param_Type               | ... corresponding parameter ASN.1 |
+|                                   | type                              |
++-----------------------------------+-----------------------------------+
+| RIs_Have_Params                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| List_Of_Sync_RIs                  | List of synchronous RIs           |
++-----------------------------------+-----------------------------------+
+| List_Of_ASync_PIs                 | Vector tag: name of asynchronous  |
+|                                   | PIs                               |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Param_Name               | ... corresponding parameter Name  |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Param_Type               | ... corresponding parameter ASN.1 |
+|                                   | type                              |
++-----------------------------------+-----------------------------------+
+| Timer_Resolution                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | Vector tag: AADL Property name    |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | ... corresponding AADL property   |
+|                                   | value                             |
++-----------------------------------+-----------------------------------+
+| Skeletons                         | Command line flag (--gw)          |
++-----------------------------------+-----------------------------------+
+| Interface_View                    | Interface view filename           |
++-----------------------------------+-----------------------------------+
+| Binary_Path                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| CP_Names                          | Vector tag: context parameter     |
+|                                   | names                             |
++-----------------------------------+-----------------------------------+
+| CP_Values                         | ... value                         |
++-----------------------------------+-----------------------------------+
+| CP_Asn1Modules                    | ... ASN.1 module                  |
++-----------------------------------+-----------------------------------+
+| CP_Asn1Filenames                  | ... ASN.1 file name               |
++-----------------------------------+-----------------------------------+
+| CP_Types                          | ... Context parameter ASN.1 type  |
++-----------------------------------+-----------------------------------+
+| Deployment_View                   | Path/name of Deployment view file |
++-----------------------------------+-----------------------------------+
+| No_Stdlib_Flag                    | command line flag --no-stdlib     |
++-----------------------------------+-----------------------------------+
+| Glue                              | command line flag --glue          |
++-----------------------------------+-----------------------------------+
+| Partition_Name                    | Name of the partition containing  |
+|                                   | this function                     |
++-----------------------------------+-----------------------------------+
+| Async_RIs_Parent                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Zip_File                          | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Node_Name                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| List_Of_Sync_PIs                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Has_Context                       | True if function has context      |
+|                                   | parameters                        |
++-----------------------------------+-----------------------------------+
+| Output_Dir                        | Output folder (by default: work)  |
++-----------------------------------+-----------------------------------+
+| PIs_Have_Params                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Timers                            | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Check_Data_View                   | Value of command line flag        |
+|                                   | --check-dataview                  |
++-----------------------------------+-----------------------------------+
+| Use_POHIC                         | Value of command line flag        |
+|                                   | --polyorb-hi-c (or -p)            |
++-----------------------------------+-----------------------------------+
+| Other_Files                       | List of AADL files passed to the  |
+|                                   | command line                      |
++-----------------------------------+-----------------------------------+
+| Sync_RIs_Parent                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| List_Of_RIs                       | List of required interface        |
++-----------------------------------+-----------------------------------+
+| Data_View                         | Data view filename                |
++-----------------------------------+-----------------------------------+
+| Target                            | Value of command line flag        |
+|                                   | --target=Target                   |
++-----------------------------------+-----------------------------------+
+| Shared_Types                      | List of available component types |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | Folder hosting the shared         |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Is_Type                           | True if function is a function    |
+|                                   | type                              |
++-----------------------------------+-----------------------------------+
+| Instance_Of                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Debug_Flag                        | if -g is set in the command line  |
++-----------------------------------+-----------------------------------+
+| Is_Shared_Type                    | True if component is an instance  |
+|                                   | of a function in the shared types |
+|                                   | folder                            |
++-----------------------------------+-----------------------------------+

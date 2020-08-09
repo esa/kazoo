@@ -1,0 +1,56 @@
+templates/concurrency_view/sub/pi.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The template pi.tmplt is evaluated many times for every protected and
+unprotected provided interface. The result of every evaluation is joined
+to one string and passed as a parameter to block.tmplt
+
++------------------------+-----------------------------------------+
+| Parameter name         | Description                             |
++========================+=========================================+
+| Name                   | The name of the interface               |
++------------------------+-----------------------------------------+
+| Kind                   | The RCM Kind                            |
++------------------------+-----------------------------------------+
+| Parent_Function        | The name of the function                |
++------------------------+-----------------------------------------+
+| Param_Names            | List of parameter names                 |
++------------------------+-----------------------------------------+
+| Param_Types            | ... Corresponding parameter types       |
++------------------------+-----------------------------------------+
+| Param_Directions       | ... Corresponding direction             |
++------------------------+-----------------------------------------+
+| Is_Timer               | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Param_Encodings        | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Caller_Is_Local        | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| IF_Property_Values     | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Queue_Size             | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Language               | Implementation language of the function |
++------------------------+-----------------------------------------+
+| Protected_Block_Name   | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Remote_Languages       | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Param_ASN1_Modules     | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Partition_Name         | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Calling_Threads        | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| IF_Property_Names      | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Period                 | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Remote_Interface_Names | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| WCET                   | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Remote_Function_Names  | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+
+| Param_Basic_Types      | DOCUMENTATION MISSING                   |
++------------------------+-----------------------------------------+

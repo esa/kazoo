@@ -1,0 +1,58 @@
+templates/skeletons/sub/interface.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This file is processed twice, first time for required interfaces of the
+function from Interface View, second time for the provided interfaces.
+The results are parameters for processing function.tmplt
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Name                              | The name of the interface         |
++-----------------------------------+-----------------------------------+
+| Direction                         | "PI" or "RI"                      |
++-----------------------------------+-----------------------------------+
+| Kind                              | The RCM Kind                      |
++-----------------------------------+-----------------------------------+
+| Parent_Function                   | The name of the function          |
++-----------------------------------+-----------------------------------+
+| Language                          | The implementation language of    |
+|                                   | the function                      |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | All AADL properties (names)       |
+|                                   | associated to the function        |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | ... and corresponding values      |
++-----------------------------------+-----------------------------------+
+| Param_Names                       | List of parameter names           |
++-----------------------------------+-----------------------------------+
+| Param_Types                       | ... Corresponding parameter types |
++-----------------------------------+-----------------------------------+
+| Param_Directions                  | ... Corresponding direction       |
++-----------------------------------+-----------------------------------+
+| Param_Encodings                   | ... Corresponding ASN.1 encoding  |
++-----------------------------------+-----------------------------------+
+| Is_Timer                          | Flag set to true if this is a     |
+|                                   | timer interface                   |
++-----------------------------------+-----------------------------------+
+| Period                            | Property of the interface         |
++-----------------------------------+-----------------------------------+
+| WCET                              | Property of the interface         |
++-----------------------------------+-----------------------------------+
+| Queue_Size                        | Property of the interface         |
++-----------------------------------+-----------------------------------+
+| IF_Property_Names                 | and Values User-defined           |
+|                                   | properties (vector tag)           |
++-----------------------------------+-----------------------------------+
+| IF_Property_Values                | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Remote_Languages                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Param_ASN1_Modules                | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Remote_Interface_Names            | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Remote_Function_Names             | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Param_Basic_Types                 | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+

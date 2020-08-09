@@ -169,7 +169,10 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |Property_Names
-|DOCUMENTATION MISSING
+|Vector tag: AADL Property name
+|-
+|Property_Values
+|  ... corresponding AADL property value
 |-
 |Skeletons
 |DOCUMENTATION MISSING
@@ -184,9 +187,6 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Property_Values
 |DOCUMENTATION MISSING
 |-
 |Binary_Path
@@ -412,13 +412,13 @@ This file is processed twice, first time for required interfaces of the function
 |List of parameter names
 |-
 |Param_Types
-| |_ Corresponding parameter types
+| ... Corresponding parameter types
 |-
 |Param_Directions
-| |_ Corresponding direction
+| ... Corresponding direction
 |-
 |Param_Encodings
-| |_ Corresponding ASN.1 encoding
+| ... Corresponding ASN.1 encoding
 |-
 |Is_Timer
 |Flag set to true if this is a timer interface
@@ -596,13 +596,13 @@ This file is processed for every thread in every partition in every node.
 |Vector tag: output remote thread list
 |-
 |Remote_PIs
-| |_ Associated PI Name
+| ... Associated PI Name
 |-
 |Remote_PI_Sorts
-| |_ Optional param type of the remote thread
+| ... Optional param type of the remote thread
 |-
 |Remote_PI_Modules
-| |_ Asn1 module of the optional param type
+| ... Asn1 module of the optional param type
 |-
 |Name
 |
@@ -741,10 +741,10 @@ The result of every evaluation is joined to one string and passed as a parameter
 |List of parameter names
 |-
 |Param_Types
-| |_ Corresponding parameter types
+| ... Corresponding parameter types
 |-
 |Param_Directions
-| |_ Corresponding direction
+| ... Corresponding direction
 |-
 |Is_Timer
 |DOCUMENTATION MISSING
@@ -892,67 +892,76 @@ This template is evaluated for every block.
 |Required interfaces (from ri.tmplt)
 |-
 |List_Of_PIs
-|DOCUMENTATION MISSING
+|Complete list of provided interfaces
+|-
+|List_Of_ASync_RIs
+|Vector tag: name of asynchronous RIs
+|-
+|ASync_RI_Param_Name
+|  ... corresponding parameter Name
 |-
 |ASync_RI_Param_Type
-|DOCUMENTATION MISSING
+|  ... corresponding parameter ASN.1 type
 |-
 |RIs_Have_Params
 |DOCUMENTATION MISSING
 |-
 |List_Of_Sync_RIs
-|DOCUMENTATION MISSING
+|List of synchronous RIs
 |-
-|Debug_Flag
-|DOCUMENTATION MISSING
+|List_Of_ASync_PIs
+|Vector tag: name of asynchronous PIs
 |-
 |ASync_PI_Param_Name
-|DOCUMENTATION MISSING
+|  ... corresponding parameter Name
+|-
+|ASync_PI_Param_Type
+|  ... corresponding parameter ASN.1 type
 |-
 |Timer_Resolution
 |DOCUMENTATION MISSING
 |-
 |Property_Names
-|DOCUMENTATION MISSING
+|Vector tag: AADL Property name
+|-
+|Property_Values
+|  ... corresponding AADL property value
 |-
 |Skeletons
-|DOCUMENTATION MISSING
+|Command line flag (--gw)
 |-
 |Interface_View
 |Interface view filename
 |-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Property_Values
-|DOCUMENTATION MISSING
-|-
 |Binary_Path
 |DOCUMENTATION MISSING
 |-
+|CP_Names
+|Vector tag: context parameter names
+|-
 |CP_Values
-|DOCUMENTATION MISSING
+|  ... value
+|-
+|CP_Asn1Modules
+|  ... ASN.1 module
+|-
+|CP_Asn1Filenames
+|  ... ASN.1 file name
+|-
+|CP_Types
+|  ... Context parameter ASN.1 type
 |-
 |Deployment_View
-|DOCUMENTATION MISSING
+|Path/name of Deployment view file
 |-
 |No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_PIs
-|DOCUMENTATION MISSING
+|command line flag --no-stdlib
 |-
 |Glue
-|DOCUMENTATION MISSING
+|command line flag --glue
 |-
 |Partition_Name
-|DOCUMENTATION MISSING
+|Name of the partition containing this function
 |-
 |Async_RIs_Parent
 |DOCUMENTATION MISSING
@@ -963,13 +972,7 @@ This template is evaluated for every block.
 |Node_Name
 |DOCUMENTATION MISSING
 |-
-|CP_Names
-|DOCUMENTATION MISSING
-|-
 |List_Of_Sync_PIs
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
 |DOCUMENTATION MISSING
 |-
 |Has_Context
@@ -981,9 +984,6 @@ This template is evaluated for every block.
 |PIs_Have_Params
 |DOCUMENTATION MISSING
 |-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
 |Timers
 |DOCUMENTATION MISSING
 |-
@@ -993,9 +993,6 @@ This template is evaluated for every block.
 |Use_POHIC
 |Value of command line flag --polyorb-hi-c (or -p)
 |-
-|CP_Types
-|DOCUMENTATION MISSING
-|-
 |Other_Files
 |List of AADL files passed to the command line
 |-
@@ -1003,7 +1000,7 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |List_Of_RIs
-|DOCUMENTATION MISSING
+|List of required interface
 |-
 |Data_View
 |Data view filename
@@ -1022,6 +1019,9 @@ This template is evaluated for every block.
 |-
 |Instance_Of
 |DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|if -g is set in the command line
 |-
 |Is_Shared_Type
 |True if component is an instance of a function in the shared types folder
@@ -1105,22 +1105,22 @@ This file is evaluated for every partition.
 |Vector tag: input ports of the partition
 |-
 |In_Port_Thread_Name
-| |_ corresponding thread inside the partition
+| ... corresponding thread inside the partition
 |-
 |In_Port_Type_Name
-| |_ corresponding parameter type name (optional)
+| ... corresponding parameter type name (optional)
 |-
 |Out_Port_Names
 |Vector tag: output ports of the partition
 |-
 |Out_Port_Type_Name
-| |_ corresponding parameter type name (optional)
+| ... corresponding parameter type name (optional)
 |-
 |Part_Out_Port_Name
 |Vector tag: output ports of the partition (can be several times the same)
 |-
 |Connected_Threads
-| |_ Corresponding thread connected to it
+| ... Corresponding thread connected to it
 |-
 |Block_Instance_Of
 |DOCUMENTATION MISSING
@@ -1225,13 +1225,13 @@ This file is evaluated for every node. The result of this file is saved to the f
 |Vector tag: list of virtual processors on this node
 |-
 |VP_Package_Names
-| |_ Corresponding package name
+| ... Corresponding package name
 |-
 |VP_Platforms
-| |_ Corresponding platform name
+| ... Corresponding platform name
 |-
 |VP_Classifiers
-| |_ Corresponding aadl classifier
+| ... Corresponding aadl classifier
 |-
 |Package_Name
 |DOCUMENTATION MISSING
@@ -1393,19 +1393,19 @@ filesys.tmplt.
 |List of ASN.1 files/module/type for device configuration with no duplicates (vector tag)
 |-
 |Unique_Dev_ASN1_Mod
-| |_  corresponding asn1 module
+| ...  corresponding asn1 module
 |-
 |Unique_Dev_ASN1_Sorts
-| |_  type name
+| ...  type name
 |-
 |Connect_From_Part
 |Vector tag - bus connection: partition source
 |-
 |Connect_Via_Bus
-| |_ bus name
+| ... bus name
 |-
 |Connect_Port_Name
-| |_ port name
+| ... port name
 |-
 |Debug_Flag
 |DOCUMENTATION MISSING

@@ -39,6 +39,7 @@ endif
 	@#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ;
 	OCARINA_PATH=`ocarina-config --prefix` \
             $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P kazoo.gpr -XBUILD="debug" $$EXTRAFLAG
+	@rm -f templates-parser/config/setup/auto.cgpr
 
 install:
 	$(MAKE)

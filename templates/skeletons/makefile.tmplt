@@ -1,11 +1,17 @@
 @@-- The up to date list of tags available for this template is available here:
 @@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fskeletons.2Fmakefile.tmplt
 @@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
+@@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_skeletons_makefile.ascii
 @@--
 # MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
 OUTDIR          := $(dir $(MAKEFILE_PATH))
+@@IF@@ @_Target_@ /= SIMU
 ASN1_FILES      := @_REPLACE_ALL(,/):ASN1_Files_@
+@@ELSE@@
+ASN1_FILES      := @_REPLACE_ALL(,/):ASN1_Files_@ ${OUTDIR}/build/simulation.asn
+@@END_IF@@
 CP_FILES        := @_REPLACE_ALL(,/):CP_Files_@      # Context parameters
 DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn
@@ -20,11 +26,14 @@ DATAVIEW_AADLV2 := ${DATAVIEW_PATH}/dataview_aadlv2.aadl
 # Project cache folder is used to speed up all ASN.1-related processing
 export PROJECT_CACHE=${HOME}/.taste_AST_cache
 
+@@IF@@ @_Target_@ /= SIMU
 all:	build-default
-
+@@ELSE@@
 # Build a simulator of the system
-simu:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
+all:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
+	cd dataview && taste-asn1-iterators --raw dataview-uniq.asn
 	$(MAKE) -j -C build -f Makefile.taste simu
+@@END_IF@@
 
 @@-- global check to check which dataviews are neeeded
 @@TABLE@@
@@ -36,7 +45,12 @@ simu:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentvi
      @@SET@@ Has_GUI=TRUE
   @@END_IF@@
 @@END_TABLE@@
-
+@@--
+@@-- for pure simulation target, force the generation of the Ada dataview
+@@IF@@ @_Target_@ = SIMU
+  @@SET@@ Need_Ada = TRUE
+@@END_IF@@
+@@--
 # Generate the language-specific data view needed before editing user code
 @@IF@@ not @_Need_Ada_@ and not @_Other_DataViews_@
 dataview:	dataview/C/built

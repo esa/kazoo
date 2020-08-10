@@ -25,6 +25,12 @@ c: # Polyorb_HI_C output
 	cp simple_c_function/*.c work/simple_c_function/C/src
 	$(MAKE) -C work
 
+simu:
+	rm -rf work
+	$(KAZOO) -t SIMU -c DeploymentView_Native.aadl -p -g --gw --glue -o work
+	cp simple_c_function/*.c work/simple_c_function/C/src
+	$(MAKE) -C work 
+
 rtems:
 	rm -rf output.rtems
 	$(KAZOO) -c DeploymentView_Leon3.aadl -p --gw --glue -o output.rtems

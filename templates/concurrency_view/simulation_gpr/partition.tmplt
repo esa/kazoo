@@ -32,18 +32,11 @@
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
-@@-- Not all systems use Ada so we must not always include Ada dataview folder
-@@TABLE@@
-@@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
-@@SET@@ Need_Ada = TRUE
-@@END_IF@@
-@@END_TABLE@@
 library project @_CAPITALIZE:Name_@_Simulator is
 
    for Library_Name use "@_LOWER:Name_@";
    for Library_Dir use "../../simulation";
    for Library_Kind use "dynamic";
-@@IF@@ @_Need_Ada_@
    --  In order to get the libinit and libfinal functions:
    for Library_Standalone use "encapsulated";
    for Library_Options use ("-lrt", "-lm");
@@ -56,7 +49,6 @@ library project @_CAPITALIZE:Name_@_Simulator is
 @@END_IF@@
 @@END_TABLE@@
       "adaasn1rtl.ads");
-@@END_IF@@
 
    type Build_Type is ("Debug", "Release");
    Build : Build_Type := external ("CFG", "Debug");
@@ -68,9 +60,8 @@ library project @_CAPITALIZE:Name_@_Simulator is
        "../DriversConfig",
 @@END_IF@@ 
        "../../dataview/C",
-@@IF@@ @_Need_Ada_@ = TRUE
        "../../dataview/Ada",
-@@END_IF@@
+       "../../dataview/iterators",
 @@TABLE@@
 @@IF@@ @_LOWER:Block_Languages_@ = sdl
        "../../@_LOWER:Block_Names_@/SDL/code",
@@ -92,11 +83,7 @@ library project @_CAPITALIZE:Name_@_Simulator is
    for Object_Dir use "@_LOWER:Name_@_simu_obj";
    -- for Exec_Dir   use "../../binaries";
 
-@@IF@@ @_Need_Ada_@ = TRUE
    for Languages use ("Ada", "C", "C++");
-@@ELSE@@
-   for Languages use ("C", "C++");
-@@END_IF@@
 
    --  for Main use ("main.c");
 

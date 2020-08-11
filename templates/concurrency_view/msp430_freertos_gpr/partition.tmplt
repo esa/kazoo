@@ -92,7 +92,7 @@ project @_CAPITALIZE:Name_@ is
    end Naming;
 
    package Binder is
-      for Driver ("Ada")  use "/opt/adac-hybrid-msp430/bin/msp430-elf-adabind";
+      for Driver ("Ada")  use "msp430-elf-adabind";
    end Binder;
 
    -- Need_Ada : @_Need_Ada_@
@@ -100,7 +100,7 @@ project @_CAPITALIZE:Name_@ is
    package Compiler is
       for Driver ("C") use "msp430-elf-gcc";
       for Driver ("C++") use "msp430-elf-g++";
-      for Driver ("Ada") use "/opt/adac-hybrid-msp430/bin/msp430-elf-adac";
+      for Driver ("Ada") use "msp430-elf-adac";
 
       for Required_Switches ("C") use ("-c");
       for Required_Switches ("Ada") use ("-c");
@@ -249,7 +249,7 @@ project @_CAPITALIZE:Name_@ is
           "-DWORD_SIZE=4",
           "-mmcu=msp430fr5969",
 @@IF@@ @_Need_Ada_@ = TRUE
-          "-L/opt/adac-hybrid-msp430/lib", -- temporary path
+          "-L/opt/adac-hybrid-msp430-1.0.0/lib",
           "-msmall",
           "-lgnatmsp430x",
           "-lllvmmsp430x",

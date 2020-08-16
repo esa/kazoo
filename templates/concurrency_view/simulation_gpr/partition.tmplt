@@ -60,8 +60,10 @@ library project @_CAPITALIZE:Name_@_Simulator is
        "../DriversConfig",
 @@END_IF@@ 
        "../../dataview/C",
-       "../../dataview/Ada",
        "../../dataview/iterators",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/x86",
 @@TABLE@@
 @@IF@@ @_LOWER:Block_Languages_@ = sdl
        "../../@_LOWER:Block_Names_@/SDL/code",

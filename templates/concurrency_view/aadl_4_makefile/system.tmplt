@@ -64,7 +64,7 @@ rtems_ada:
 @@END_TABLE@@
 @@END_INLINE@@
 @@TABLE@@
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
+	$(MAKE) -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ debug_rtems_leon3_with_ada
 @@END_TABLE@@
 
 @@INLINE()( )()@@
@@ -84,9 +84,9 @@ air:
                 ../../../common/ocarina_components.aadl && \
         cd deploymentview_final && rm -f Makefile && (configure --keep-files-silent)
 	@echo "XML generated, AIR configuration done, building..."
-	make -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ air
+	$(MAKE) -j -C @_Node_Names_@ -f Makefile.@_Node_Names_@ air
 	@echo Putting partitions alltogether
-	make -j -f Makefile.air && mkdir -p ../binaries && cp deploymentview_final/executable/* ../binaries
+	$(MAKE) -j -f Makefile.air && mkdir -p ../binaries && cp deploymentview_final/executable/* ../binaries
 @@END_TABLE@@
 
 @@--  If there are busses, there are drivers, and therefore asn1 configurations
@@ -106,7 +106,7 @@ DriversConfig/drivers_config.h:  # Not a distributed system => nothing to do
 
 clean:
 @@TABLE@@
-	make -C @_Node_Names_@ -f Makefile.@_Node_Names_@ clean
+	$(MAKE) -C @_Node_Names_@ -f Makefile.@_Node_Names_@ clean
 	rm -rf *_adainit deploymentview_final
 @@END_TABLE@@
 

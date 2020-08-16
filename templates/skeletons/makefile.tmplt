@@ -29,6 +29,8 @@ export PROJECT_CACHE=${HOME}/.taste_AST_cache
 @@IF@@ @_Target_@ /= SIMU
 all:	build-default
 @@ELSE@@
+@@-- for pure simulation target, force the generation of the Ada dataview
+@@SET@@ Need_Ada = TRUE
 # Build a simulator of the system
 all:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
 	cd dataview && taste-asn1-iterators --raw dataview-uniq.asn
@@ -45,12 +47,6 @@ all:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentvie
      @@SET@@ Has_GUI=TRUE
   @@END_IF@@
 @@END_TABLE@@
-@@--
-@@-- for pure simulation target, force the generation of the Ada dataview
-@@IF@@ @_Target_@ = SIMU
-  @@SET@@ Need_Ada = TRUE
-@@END_IF@@
-@@--
 # Generate the language-specific data view needed before editing user code
 @@IF@@ not @_Need_Ada_@ and not @_Other_DataViews_@
 dataview:	dataview/C/built

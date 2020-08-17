@@ -3,6 +3,8 @@
 @@-- If you are using vim, go over the URL and pres gx in to follow the link
 @@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
 @@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_block.ascii
+@@IF@@ @_EXIST:List_Of_ASync_PIs_@ or @_EXIST:List_Of_ASync_RIs_@
+@@-- Skip synchronous-only functions like Simulink...
 @_REPLACE_ALL(_/-):CAPITALIZE:Name_@-Event ::= CHOICE {
 @@IF@@ @_EXIST:List_Of_ASync_PIs_@
    msg-in CHOICE {
@@ -41,3 +43,6 @@
 @@END_IF@@
 @@END_IF@@
 }
+@@ELSE@@
+@_REPLACE_ALL(_/-):CAPITALIZE:Name_@-Event ::= SEQUENCE {}  -- Synchronous function
+@@END_IF@@

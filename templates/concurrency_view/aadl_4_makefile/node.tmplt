@@ -21,7 +21,8 @@
 	$(MAKE) -j -C @_Node_Name_@ -f Makefile.@_Node_Name_@
 
 
-@_LOWER:Node_Name_@_simu:	@_LOWER:REPLACE_ALL(,/):Partition_Names_@ DriversConfig/drivers_config.h
+@_LOWER:Node_Name_@_simu:	@_LOWER:REPLACE_ALL(,/):Partition_Names_@ DriversConfig/drivers_config.h simulation.asn
+	asn2dataModel -toAda -o ../dataview/C simulation.asn ../dataview/dataview-uniq.asn
 	$(MAKE) -j -C @_Node_Name_@ -f Makefile.@_Node_Name_@ simulate
 
 # Force build of node @_Node_Name_@ for RTEMS

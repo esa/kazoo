@@ -7,11 +7,7 @@
 # MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
 OUTDIR          := $(dir $(MAKEFILE_PATH))
-@@IF@@ @_Target_@ /= SIMU
 ASN1_FILES      := @_REPLACE_ALL(,/):ASN1_Files_@
-@@ELSE@@
-ASN1_FILES      := @_REPLACE_ALL(,/):ASN1_Files_@ ${OUTDIR}/build/simulation.asn
-@@END_IF@@
 CP_FILES        := @_REPLACE_ALL(,/):CP_Files_@      # Context parameters
 DATAVIEW_PATH   := ${OUTDIR}/dataview
 DATAVIEW_UNIQ   := ${DATAVIEW_PATH}/dataview-uniq.asn

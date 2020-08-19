@@ -45,7 +45,8 @@ install:
 	$(MAKE)
 	mkdir -p `ocarina-config --prefix`/share/kazoo
 	cp -a templates kazoo `ocarina-config --prefix`/share/kazoo
-	cp -a doc/templates `ocarina-config --prefix`/share/kazoo/doc
+	mkdir -p `ocarina-config --prefix`/share/kazoo/doc
+	cp -au doc/templates/* `ocarina-config --prefix`/share/kazoo/doc
 
 edit:
 	OCARINA_PATH=`ocarina-config --prefix` gps

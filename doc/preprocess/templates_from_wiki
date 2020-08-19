@@ -288,98 +288,102 @@ Template for a function in the skeleton or glue folder
 |Name
 |The name of the function
 |-
-|RIs_Have_Params
-|DOCUMENTATION MISSING
+|Language
+|Implementation language
 |-
-|Zip_File
-|DOCUMENTATION MISSING
+|List_Of_PIs
+|List of all provided interfaces (names only)
 |-
-|ASync_RI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|Is_Type
-|DOCUMENTATION MISSING
-|-
-|CP_Values
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
+|List_Of_RIs
+|List of all required interfaces (names only)
 |-
 |Provided_Interfaces
-|DOCUMENTATION MISSING
+|Generated from interfaces.tmplt
+|-
+|Required_Interfaces
+|Generated from interfaces.tmplt
+|-
+|RIs_Have_Params
+|True if at least one RI has an ASN.1 parameter
+|-
+|PIs_Have_Params
+|True if at least one PI has an ASN.1 parameter
+|-
+|Zip_File
+|Path to optional zip file containing the code of the function
+|(deprecated functionality)
+|-
+|Is_Type
+|True if it is a function type
 |-
 |Instance_Of
 |Name of the function type if it is an instance
 |-
-|Language
-|Implementation language
+|Has_Context
+|True if function has context parameters
+|-
+|CP_Names
+|Vector tag: context parameters (names)
+|-
+|CP_Types
+| ... corresponding ASN.1 type
+|-
+|CP_Values
+| ... corresponding value
+|-
+|CP_Asn1Modules
+| ... corresponding ASN.1 module containing the type
+|-
+|CP_Asn1Filenames
+| ... corresponding ASN.1 filename
 |-
 |Property_Names
 |Vector tag: user defined AADL property names
 |-
 |Property_Values
-| ... and corresponding value
+| ... corresponding value
 |-
 |List_Of_ASync_PIs
-|DOCUMENTATION MISSING
-|-
-|Sync_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|Async_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|List_Of_PIs
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
-|Required_Interfaces
-|DOCUMENTATION MISSING
-|-
-|PIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|CP_Types
-|DOCUMENTATION MISSING
+|List of asynchronous provided interfaces
 |-
 |ASync_PI_Param_Name
-|DOCUMENTATION MISSING
+| ... name of the parameter
+|-
+|ASync_PI_Param_Type
+| ... ASN.1 typename of the parameter
+|-
+|Async_RIs_Parent
+| ... and corresponding parent function name
 |-
 |Timers
-|DOCUMENTATION MISSING
-|-
-|CP_Names
-|DOCUMENTATION MISSING
+|List of timers (names)
 |-
 |List_Of_Sync_RIs
-|DOCUMENTATION MISSING
+|List of synchronous required interfaces
 |-
 |List_Of_Sync_PIs
-|DOCUMENTATION MISSING
+|List of synchronous provided interfaces
 |-
-|List_Of_RIs
-|DOCUMENTATION MISSING
-|-
-|Has_Context
-|DOCUMENTATION MISSING
+|Sync_RIs_Parent
+| ... and corresponding parent function name
 |-
 |ASN1_Modules
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
-|DOCUMENTATION MISSING
+|List of ASN.1 modules containing types used in this function
 |-
 |ASN1_Files
-|DOCUMENTATION MISSING
+|List of ASN.1 files containing types used in this function
+|-
+|List_Of_ASync_RIs
+|vector tag: list of asynchronous required interfaces
+|-
+|ASync_RI_Param_Name
+| ... parameter name of the required interface
+|-
+|ASync_RI_Param_Type
+| ... ASN1 typename of the parameter
+|-
+|ASN1_Files
+|List of ASN.1 files containing types used in this function
 |}
 === templates/skeletons/sub/interface.tmplt ===
 This file is processed twice, first time for required interfaces of the function from Interface View, second time for the provided interfaces. The results are parameters for processing function.tmplt

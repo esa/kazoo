@@ -68,7 +68,16 @@ project @_CAPITALIZE:Name_@ is
 @@END_IF@@
 @@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
 @@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
-       "../DriversConfig",
+       "../DriversConfig/src",
+@@IF@@ @_Need_Ada_@ /= TRUE
+       "../DriversConfig/asn1rtl",
+@@IF@@ @_STM32_GNAT_@
+       "../DriversConfig/boards/stm32",
+@@ELSE@@
+       "../DriversConfig/boards/x86",
+@@END_IF@@
+
+@@END_IF@@
 @@END_IF@@ 
 @@TABLE@@
 @@IF@@ @_Block_Languages_@ = SDL

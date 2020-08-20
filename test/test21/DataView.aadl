@@ -17,7 +17,7 @@
 --! InputASN1FileChecksum:075dd5e8c3034a95a7f895094481d5a9:/home/taste/tool-src/kazoo/test/test21/pus_st23.asn:
 --! InputASN1FileChecksum:1d101eee7d33706816f61cba7fee7ab6:/home/taste/tool-src/kazoo/test/test21/pus_time.asn:
 --! InputASN1FileChecksum:b004d74b545be82f3a3e04e26f4edfaa:/home/taste/tool-src/kazoo/test/test21/pus_types_definitions.asn:
---! InputASN1FileChecksum:ee8a7e01f29874c0d50f437d5abb9599:/home/taste/tool-inst/share/taste-types/taste-types.asn:
+--! InputASN1FileChecksum:ee8a7e01f29874c0d50f437d5abb9599:/home/taste/tool-src/kazoo/test/common/taste-types.asn:
 --------------------------------------------------------
 
 package DataView
@@ -3748,7 +3748,7 @@ END PusVersionNumber_Buffer.impl;
 DATA T_Boolean
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    Source_Text => ("/home/taste/tool-src/kazoo/test/common/taste-types.asn");
     TASTE::Ada_Package_Name => "TASTE_BasicTypes";
     Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
     Source_Language => (ASN1);
@@ -3793,7 +3793,7 @@ END T_Boolean_Buffer.impl;
 DATA T_Int32
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    Source_Text => ("/home/taste/tool-src/kazoo/test/common/taste-types.asn");
     TASTE::Ada_Package_Name => "TASTE_BasicTypes";
     Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
     Source_Language => (ASN1);
@@ -3838,7 +3838,7 @@ END T_Int32_Buffer.impl;
 DATA T_Int8
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    Source_Text => ("/home/taste/tool-src/kazoo/test/common/taste-types.asn");
     TASTE::Ada_Package_Name => "TASTE_BasicTypes";
     Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
     Source_Language => (ASN1);
@@ -3883,7 +3883,7 @@ END T_Int8_Buffer.impl;
 DATA T_UInt32
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    Source_Text => ("/home/taste/tool-src/kazoo/test/common/taste-types.asn");
     TASTE::Ada_Package_Name => "TASTE_BasicTypes";
     Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
     Source_Language => (ASN1);
@@ -3928,7 +3928,7 @@ END T_UInt32_Buffer.impl;
 DATA T_UInt8
 PROPERTIES
     -- name of the ASN.1 source file:
-    Source_Text => ("/home/taste/tool-inst/share/taste-types/taste-types.asn");
+    Source_Text => ("/home/taste/tool-src/kazoo/test/common/taste-types.asn");
     TASTE::Ada_Package_Name => "TASTE_BasicTypes";
     Deployment::ASN1_Module_Name => "TASTE-BasicTypes";
     Source_Language => (ASN1);

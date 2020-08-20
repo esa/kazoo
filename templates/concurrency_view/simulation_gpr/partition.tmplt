@@ -43,7 +43,7 @@ library project @_CAPITALIZE:Name_@_Simulator is
    for Interfaces use
      ("@_LOWER:Name_@_simulator_interface.h",
 @@TABLE@@
-      "@_LOWER:Block_Names_@_vm_if.h",
+      --  "@_LOWER:Block_Names_@_vm_if.h",
 @@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
       "@_LOWER:Block_Names_@.ads",
 @@END_IF@@

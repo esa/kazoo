@@ -8,10 +8,20 @@
 @_LOWER:Name_@:	@_REPLACE_ALL(,/ ):LOWER:Block_Names_@
   @@-- Opengeode generate intermediate ASN.1 files, they must be compiled
   @@-- (at partition level, not shared by all nodes)
-  @@INLINE(	asn2dataModel -toAda -o ../dataview/Ada )( )(\n)@@
+  @@-- The code below is needed because if there is more than one instance of
+  @@-- a component type, opengeode will generate the _datamodel.asn file in
+  @@-- the folder of the instance, i.e. there may be more than one reference
+  @@-- to the same file generated at different places The python code checks
+  @@-- that when this happens only one _datamodel.asn file is kept to avoid
+  @@-- an error that would otherwise be raised by asn2dataModel
+  @@INLINE(	args=$$\(python3 -c "import os, sys; print\(' '.join\({os.path.basename\(f\):f for f in sys.argv[1:]}.values\(\)\)\)" )( )(\); \\	mkdir -p ..\/dataview\/Ada; asn2dataModel -toAda -o ..\/dataview\/Ada $$args)@@
     @@TABLE@@
        @@IF@@ @_Block_Languages_@ = SDL
-          ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Names_@_datamodel.asn
+          @@IF@@ @_Block_Instance_Of_@ = ""
+             ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Names_@_datamodel.asn
+          @@ELSE@@ 
+             ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Instance_Of_@_datamodel.asn
+          @@END_IF@@
        @@END_IF@@
     @@END_TABLE@@
   @@END_INLINE@@
@@ -31,7 +41,7 @@
 @@END_INLINE@@
         cd @_LOWER:Name_@_adainit && \
 @@INLINE(    )(:)( \\)@@
-   ADA_INCLUDE_PATH=../../dataview/Ada
+   ADA_INCLUDE_PATH=../../dataview/Ada/src:../../dataview/Ada/asn1rtl:../../dataview/Ada/boards/x86
    @@TABLE'TERSE@@
       @@IF@@ @_LOWER:Block_Languages_@ = sdl
          ../../@_LOWER:Block_Names_@/SDL/code

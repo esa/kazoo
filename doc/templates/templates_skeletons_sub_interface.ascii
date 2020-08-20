@@ -22,15 +22,15 @@ The results are parameters for processing function.tmplt
 | Property_Names                    | All AADL properties (names)       |
 |                                   | associated to the function        |
 +-----------------------------------+-----------------------------------+
-| Property_Values                   | ... and corresponding values      |
+| Property_Values                   | ↳ and corresponding values        |
 +-----------------------------------+-----------------------------------+
 | Param_Names                       | List of parameter names           |
 +-----------------------------------+-----------------------------------+
-| Param_Types                       | ... Corresponding parameter types |
+| Param_Types                       | ↳ Corresponding parameter types   |
 +-----------------------------------+-----------------------------------+
-| Param_Directions                  | ... Corresponding direction       |
+| Param_Directions                  | ↳ Corresponding direction         |
 +-----------------------------------+-----------------------------------+
-| Param_Encodings                   | ... Corresponding ASN.1 encoding  |
+| Param_Encodings                   | ↳ Corresponding ASN.1 encoding    |
 +-----------------------------------+-----------------------------------+
 | Is_Timer                          | Flag set to true if this is a     |
 |                                   | timer interface                   |

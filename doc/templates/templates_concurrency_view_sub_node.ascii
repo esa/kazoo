@@ -23,11 +23,11 @@ used as a parameter for system.tmplt.
 | VP_Names                          | Vector tag: list of virtual       |
 |                                   | processors on this node           |
 +-----------------------------------+-----------------------------------+
-| VP_Package_Names                  | ... Corresponding package name    |
+| VP_Package_Names                  | ↳ Corresponding package name      |
 +-----------------------------------+-----------------------------------+
-| VP_Platforms                      | ... Corresponding platform name   |
+| VP_Platforms                      | ↳ Corresponding platform name     |
 +-----------------------------------+-----------------------------------+
-| VP_Classifiers                    | ... Corresponding aadl classifier |
+| VP_Classifiers                    | ↳ Corresponding aadl classifier   |
 +-----------------------------------+-----------------------------------+
 | Package_Name                      | DOCUMENTATION MISSING             |
 +-----------------------------------+-----------------------------------+

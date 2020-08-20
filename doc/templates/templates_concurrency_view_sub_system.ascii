@@ -14,24 +14,24 @@ to the file with name returned by filesys.tmplt.
 | Node_CPU                          | -> Corresponding CPU name (eg     |
 |                                   | x86_linux)                        |
 +-----------------------------------+-----------------------------------+
-| Node_CPU_Classifier               | -> Corresponding CPU Classifier   |
+| Node_CPU_Classifier               | ↳ Corresponding CPU Classifier    |
 |                                   | (ocarina...::x86_linux)           |
 +-----------------------------------+-----------------------------------+
-| Node_Major_Frame                  | -> Corresponding Time in          |
+| Node_Major_Frame                  | ↳ Corresponding Time in           |
 |                                   | milliseconds allocated to the CPU |
 |                                   | (TSP only)                        |
 +-----------------------------------+-----------------------------------+
 | Partition_Names                   | Vector Tag of partition names     |
 +-----------------------------------+-----------------------------------+
-| Partition_Node                    | -> Corresponding node name        |
+| Partition_Node                    | ↳ Corresponding node name         |
 +-----------------------------------+-----------------------------------+
-| Partition_CPU                     | -> Corresponding CPU name         |
+| Partition_CPU                     | ↳ Corresponding CPU name          |
 +-----------------------------------+-----------------------------------+
-| Partition_Duration                | -> Corresponding time allocation  |
+| Partition_Duration                | ↳ Corresponding time allocation   |
 |                                   | (TSP only)                        |
 +-----------------------------------+-----------------------------------+
-| Partition_VP                      | -> Corresponding Virtual          |
-|                                   | processor binding (TSP only)      |
+| Partition_VP                      | ↳ Corresponding Virtual processor |
+|                                   | binding (TSP only)                |
 +-----------------------------------+-----------------------------------+
 | Threads                           | Code generated for the threads    |
 |                                   | (from thread.tmplt)               |
@@ -46,20 +46,20 @@ to the file with name returned by filesys.tmplt.
 |                                   | partition source name (vector     |
 |                                   | tag)                              |
 +-----------------------------------+-----------------------------------+
-| Part_Source_Port                  | -> Corresponding port name        |
+| Part_Source_Port                  | ↳ Corresponding port name         |
 +-----------------------------------+-----------------------------------+
-| Part_Dest_Name                    | -> Corresponding name of the      |
+| Part_Dest_Name                    | ↳ Corresponding name of the       |
 |                                   | remote partition                  |
 +-----------------------------------+-----------------------------------+
-| Part_Dest_Port                    | -> Corresponding name of the port |
+| Part_Dest_Port                    | ↳ Corresponding name of the port  |
 |                                   | on the remote partition           |
 +-----------------------------------+-----------------------------------+
 | Bus_Names                         | Vector tag: busses present in the |
 |                                   | system                            |
 +-----------------------------------+-----------------------------------+
-| Bus_AADL_Package                  | -> Corresponding AADL Package     |
+| Bus_AADL_Package                  | ↳ Corresponding AADL Package      |
 +-----------------------------------+-----------------------------------+
-| Bus_Classifier                    | -> Corresponding AADL classifier  |
+| Bus_Classifier                    | ↳ Corresponding AADL classifier   |
 +-----------------------------------+-----------------------------------+
 | Device_Node_Name                  |                                   |
 +-----------------------------------+-----------------------------------+
@@ -87,16 +87,16 @@ to the file with name returned by filesys.tmplt.
 |                                   | for device configuration with no  |
 |                                   | duplicates (vector tag)           |
 +-----------------------------------+-----------------------------------+
-| Unique_Dev_ASN1_Mod               | ... corresponding asn1 module     |
+| Unique_Dev_ASN1_Mod               | ↳ corresponding asn1 module       |
 +-----------------------------------+-----------------------------------+
-| Unique_Dev_ASN1_Sorts             | ... type name                     |
+| Unique_Dev_ASN1_Sorts             | ↳ type name                       |
 +-----------------------------------+-----------------------------------+
 | Connect_From_Part                 | Vector tag - bus connection:      |
 |                                   | partition source                  |
 +-----------------------------------+-----------------------------------+
-| Connect_Via_Bus                   | ... bus name                      |
+| Connect_Via_Bus                   | ↳ bus name                        |
 +-----------------------------------+-----------------------------------+
-| Connect_Port_Name                 | ... port name                     |
+| Connect_Port_Name                 | ↳ port name                       |
 +-----------------------------------+-----------------------------------+
 | Debug_Flag                        | DOCUMENTATION MISSING             |
 +-----------------------------------+-----------------------------------+

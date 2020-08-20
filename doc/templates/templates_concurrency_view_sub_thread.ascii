@@ -26,12 +26,12 @@ node.
 | Remote_Threads                    | Vector tag: output remote thread  |
 |                                   | list                              |
 +-----------------------------------+-----------------------------------+
-| Remote_PIs                        | ... Associated PI Name            |
+| Remote_PIs                        | ↳ Associated PI Name              |
 +-----------------------------------+-----------------------------------+
-| Remote_PI_Sorts                   | ... Optional param type of the    |
+| Remote_PI_Sorts                   | ↳ Optional param type of the      |
 |                                   | remote thread                     |
 +-----------------------------------+-----------------------------------+
-| Remote_PI_Modules                 | ... Asn1 module of the optional   |
+| Remote_PI_Modules                 | ↳ Asn1 module of the optional     |
 |                                   | param type                        |
 +-----------------------------------+-----------------------------------+
 | Name                              |                                   |

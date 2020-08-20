@@ -16,9 +16,9 @@ to one string and passed as a parameter to block.tmplt
 +------------------------+-----------------------------------------+
 | Param_Names            | List of parameter names                 |
 +------------------------+-----------------------------------------+
-| Param_Types            | ... Corresponding parameter types       |
+| Param_Types            | ↳ Corresponding parameter types         |
 +------------------------+-----------------------------------------+
-| Param_Directions       | ... Corresponding direction             |
+| Param_Directions       | ↳ Corresponding direction               |
 +------------------------+-----------------------------------------+
 | Is_Timer               | DOCUMENTATION MISSING                   |
 +------------------------+-----------------------------------------+

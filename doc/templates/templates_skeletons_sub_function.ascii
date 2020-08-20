@@ -41,29 +41,28 @@ Template for a function in the skeleton or glue folder
 | CP_Names                          | Vector tag: context parameters    |
 |                                   | (names)                           |
 +-----------------------------------+-----------------------------------+
-| CP_Types                          | ... corresponding ASN.1 type      |
+| CP_Types                          | ↳ corresponding ASN.1 type        |
 +-----------------------------------+-----------------------------------+
-| CP_Values                         | ... corresponding value           |
+| CP_Values                         | ↳ corresponding value             |
 +-----------------------------------+-----------------------------------+
-| CP_Asn1Modules                    | ... corresponding ASN.1 module    |
+| CP_Asn1Modules                    | ↳ corresponding ASN.1 module      |
 |                                   | containing the type               |
 +-----------------------------------+-----------------------------------+
-| CP_Asn1Filenames                  | ... corresponding ASN.1 filename  |
+| CP_Asn1Filenames                  | ↳ corresponding ASN.1 filename    |
 +-----------------------------------+-----------------------------------+
 | Property_Names                    | Vector tag: user defined AADL     |
 |                                   | property names                    |
 +-----------------------------------+-----------------------------------+
-| Property_Values                   | ... corresponding value           |
+| Property_Values                   | ↳ corresponding value             |
 +-----------------------------------+-----------------------------------+
 | List_Of_ASync_PIs                 | List of asynchronous provided     |
 |                                   | interfaces                        |
 +-----------------------------------+-----------------------------------+
-| ASync_PI_Param_Name               | ... name of the parameter         |
+| ASync_PI_Param_Name               | ↳ name of the parameter           |
 +-----------------------------------+-----------------------------------+
-| ASync_PI_Param_Type               | ... ASN.1 typename of the         |
-|                                   | parameter                         |
+| ASync_PI_Param_Type               | ↳ ASN.1 typename of the parameter |
 +-----------------------------------+-----------------------------------+
-| Async_RIs_Parent                  | ... and corresponding parent      |
+| Async_RIs_Parent                  | ↳ and corresponding parent        |
 |                                   | function name                     |
 +-----------------------------------+-----------------------------------+
 | Timers                            | List of timers (names)            |
@@ -74,7 +73,7 @@ Template for a function in the skeleton or glue folder
 | List_Of_Sync_PIs                  | List of synchronous provided      |
 |                                   | interfaces                        |
 +-----------------------------------+-----------------------------------+
-| Sync_RIs_Parent                   | ... and corresponding parent      |
+| Sync_RIs_Parent                   | ↳ and corresponding parent        |
 |                                   | function name                     |
 +-----------------------------------+-----------------------------------+
 | ASN1_Modules                      | List of ASN.1 modules containing  |
@@ -86,9 +85,8 @@ Template for a function in the skeleton or glue folder
 | List_Of_ASync_RIs                 | vector tag: list of asynchronous  |
 |                                   | required interfaces               |
 +-----------------------------------+-----------------------------------+
-| ASync_RI_Param_Name               | ... parameter name of the         |
-|                                   | required interface                |
+| ASync_RI_Param_Name               | ↳ parameter name of the required  |
+|                                   | interface                         |
 +-----------------------------------+-----------------------------------+
-| ASync_RI_Param_Type               | ... ASN1 typename of the          |
-|                                   | parameter                         |
+| ASync_RI_Param_Type               | ↳ ASN1 typename of the parameter  |
 +-----------------------------------+-----------------------------------+

@@ -69,24 +69,24 @@ This file is evaluated for every partition.
 | In_Port_Names                     | Vector tag: input ports of the    |
 |                                   | partition                         |
 +-----------------------------------+-----------------------------------+
-| In_Port_Thread_Name               | ... corresponding thread inside   |
-|                                   | the partition                     |
+| In_Port_Thread_Name               | ↳ corresponding thread inside the |
+|                                   | partition                         |
 +-----------------------------------+-----------------------------------+
-| In_Port_Type_Name                 | ... corresponding parameter type  |
+| In_Port_Type_Name                 | ↳ corresponding parameter type    |
 |                                   | name (optional)                   |
 +-----------------------------------+-----------------------------------+
 | Out_Port_Names                    | Vector tag: output ports of the   |
 |                                   | partition                         |
 +-----------------------------------+-----------------------------------+
-| Out_Port_Type_Name                | ... corresponding parameter type  |
+| Out_Port_Type_Name                | ↳ corresponding parameter type    |
 |                                   | name (optional)                   |
 +-----------------------------------+-----------------------------------+
 | Part_Out_Port_Name                | Vector tag: output ports of the   |
 |                                   | partition (can be several times   |
 |                                   | the same)                         |
 +-----------------------------------+-----------------------------------+
-| Connected_Threads                 | ... Corresponding thread          |
-|                                   | connected to it                   |
+| Connected_Threads                 | ↳ Corresponding thread connected  |
+|                                   | to it                             |
 +-----------------------------------+-----------------------------------+
 | Block_Instance_Of                 | DOCUMENTATION MISSING             |
 +-----------------------------------+-----------------------------------+

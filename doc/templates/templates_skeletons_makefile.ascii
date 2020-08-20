@@ -10,13 +10,13 @@ Makefile within output directory.
 | Function_Names                    | Combined table: list of fuction   |
 |                                   | names...                          |
 +-----------------------------------+-----------------------------------+
-| Language                          | ... and corresponding             |
+| Language                          | ↳ and corresponding               |
 |                                   | implementation language           |
 +-----------------------------------+-----------------------------------+
-| Is_Type                           | ... and flag if it is a function  |
+| Is_Type                           | ↳ and flag if it is a function    |
 |                                   | type                              |
 +-----------------------------------+-----------------------------------+
-| Has_Context_Param                 | ... and flag to indicate if       |
+| Has_Context_Param                 | ↳ and flag to indicate if         |
 |                                   | function has context parameters   |
 +-----------------------------------+-----------------------------------+
 | CP_Files                          | List of all context parameters    |

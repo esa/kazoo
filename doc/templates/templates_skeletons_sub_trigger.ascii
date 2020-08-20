@@ -41,7 +41,7 @@ and Glue subfolders.
 +---------------------+---------------------------------------------------+
 | Property_Names      | Vector tag: AADL Property name                    |
 +---------------------+---------------------------------------------------+
-| Property_Values     | ... corresponding AADL property value             |
+| Property_Values     | ↳ corresponding AADL property value               |
 +---------------------+---------------------------------------------------+
 | Skeletons           | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+

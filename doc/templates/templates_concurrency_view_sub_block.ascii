@@ -27,9 +27,9 @@ This template is evaluated for every block.
 | List_Of_ASync_RIs                 | Vector tag: name of asynchronous  |
 |                                   | RIs                               |
 +-----------------------------------+-----------------------------------+
-| ASync_RI_Param_Name               | ... corresponding parameter Name  |
+| ASync_RI_Param_Name               | ↳ corresponding parameter Name    |
 +-----------------------------------+-----------------------------------+
-| ASync_RI_Param_Type               | ... corresponding parameter ASN.1 |
+| ASync_RI_Param_Type               | ↳ corresponding parameter ASN.1   |
 |                                   | type                              |
 +-----------------------------------+-----------------------------------+
 | RIs_Have_Params                   | DOCUMENTATION MISSING             |
@@ -39,16 +39,16 @@ This template is evaluated for every block.
 | List_Of_ASync_PIs                 | Vector tag: name of asynchronous  |
 |                                   | PIs                               |
 +-----------------------------------+-----------------------------------+
-| ASync_PI_Param_Name               | ... corresponding parameter Name  |
+| ASync_PI_Param_Name               | ↳ corresponding parameter Name    |
 +-----------------------------------+-----------------------------------+
-| ASync_PI_Param_Type               | ... corresponding parameter ASN.1 |
+| ASync_PI_Param_Type               | ↳ corresponding parameter ASN.1   |
 |                                   | type                              |
 +-----------------------------------+-----------------------------------+
 | Timer_Resolution                  | DOCUMENTATION MISSING             |
 +-----------------------------------+-----------------------------------+
 | Property_Names                    | Vector tag: AADL Property name    |
 +-----------------------------------+-----------------------------------+
-| Property_Values                   | ... corresponding AADL property   |
+| Property_Values                   | ↳ corresponding AADL property     |
 |                                   | value                             |
 +-----------------------------------+-----------------------------------+
 | Skeletons                         | Command line flag (--gw)          |
@@ -60,13 +60,13 @@ This template is evaluated for every block.
 | CP_Names                          | Vector tag: context parameter     |
 |                                   | names                             |
 +-----------------------------------+-----------------------------------+
-| CP_Values                         | ... value                         |
+| CP_Values                         | ↳ value                           |
 +-----------------------------------+-----------------------------------+
-| CP_Asn1Modules                    | ... ASN.1 module                  |
+| CP_Asn1Modules                    | ↳ ASN.1 module                    |
 +-----------------------------------+-----------------------------------+
-| CP_Asn1Filenames                  | ... ASN.1 file name               |
+| CP_Asn1Filenames                  | ↳ ASN.1 file name                 |
 +-----------------------------------+-----------------------------------+
-| CP_Types                          | ... Context parameter ASN.1 type  |
+| CP_Types                          | ↳ Context parameter ASN.1 type    |
 +-----------------------------------+-----------------------------------+
 | Deployment_View                   | Path/name of Deployment view file |
 +-----------------------------------+-----------------------------------+

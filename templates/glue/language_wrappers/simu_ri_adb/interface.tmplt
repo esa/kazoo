@@ -1,0 +1,32 @@
+@@-- The documentation of the templates is there:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_skeletons_sub_interface.ascii
+@@IF@@ @_EXIST:Param_Names_@
+
+procedure @_CAPITALIZE:Name_@
+@@INLINE(   \()(;\n    )(\) is)@@
+   @@TABLE'ALIGN_ON("out")@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@ELSE@@
+         @_CAPITALIZE:Param_Names_@ : out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@ is
+@@END_IF@@
+   Event : asn1SccEvents (Kind => @_Parent_Function_@_PRESENT);
+begin
+   Event.@_CAPITALIZE:Parent_Function_@ :=
+     (Kind => msg_out_PRESENT,
+      msg_out => (Kind => @_Name_@_PRESENT,
+                  @_CAPITALIZE:Name_@ =>
+@@INLINE(                     \()(, )(\)\)\);)@@
+      @@TABLE@@
+      @_CAPITALIZE:Param_Names_@ => @_CAPITALIZE:Param_Names_@
+      @@END_TABLE@@@
+@@END_INLINE@@
+end @_CAPITALIZE:Name_@;

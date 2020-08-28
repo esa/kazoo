@@ -13,7 +13,7 @@ with Simulation_Dataview;   use Simulation_Dataview;
 package @_CAPITALIZE:Name_@_RI is
 
    @@IF@@ @_EXIST:Required_Interfaces_@ and @_Language_@ /= "Blackbox_C"
-   --  Required interface hooks
+   --  Required interface hooks for simulation
    @_Required_Interfaces'Indent_@
    @@END_IF@@
 

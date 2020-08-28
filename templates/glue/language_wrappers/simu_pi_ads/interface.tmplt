@@ -6,12 +6,12 @@
 @@IF@@ @_Direction_@ = "PI"
 @@IF@@ @_EXIST:Param_Names_@
 procedure @_CAPITALIZE:Name_@
-   @@INLINE(      \()(;\n       )(\);\n)@@
+   @@INLINE(   \()(;\n    )(\);\n)@@
       @@TABLE'ALIGN_ON(":")@@
          @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-            @_CAPITALIZE:Param_Names_@ : in out @_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+            @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
          @@ELSE@@
-            @_CAPITALIZE:Param_Names_@ :    out @_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+            @_CAPITALIZE:Param_Names_@ :    out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
          @@END_IF@@
       @@END_TABLE@@
    @@END_INLINE@@

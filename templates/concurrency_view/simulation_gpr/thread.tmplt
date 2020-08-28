@@ -1,19 +1,8 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Thread_Name_@       : Thread name
-@@-- @_Entry_Port_Name_@   : Name of the PI
-@@-- @_RCM_@               : One of "CYCLIC_OPERATION", "SPORADIC_OPERATION"
-@@-- @_Pro_Block_Name_@    : Name of the protected function
-@@-- @_Node_Name_@         : Name of the deployment node
-@@-- @_Remote_Threads_@    : Vector tag: output remote thread list
-@@-- @_RI_Port_Name_@      :    |_ Corresponding local RI name
-@@-- @_Remote_PIs_@        :    |_ Associated PI Name
-@@-- @_Remote_PI_Sorts_@   :    |_ Optional param type of the remote thread
-@@-- @_Remote_PI_Modules_@ :    |_ Asn1 module of the optional param type
-@@-- Tags related to the PI that is at the origin of the thread creation:
-@@-- @_Name_@, @_Kind_@, @_Parent_Function_@   : shoud be useless here
-@@-- @_Param_Names_@, _Types_@, _ASN1_Modules, _Encodings_@, _Directions_@ : param vector tag
-@@-- @_Period_@, @_WCET_@, @_Queue_Size_@ : relevant here
-@@-- @_IF_Property_Names_@, _Values_@ : user properties (vector tag)
-@@--
-@@-- Matrix of output ports: Remote thread/corresponding remote PI @_Name_@
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fthread.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_thread.ascii
+@@TABLE@@
+"@_LOWER:REPLACE_ALL(-/_):Param_ASN1_Modules_@.ads",
+@@END_TABLE@@

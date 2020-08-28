@@ -29,4 +29,5 @@ begin
       @_CAPITALIZE:Param_Names_@ => @_CAPITALIZE:Param_Names_@
       @@END_TABLE@@@
 @@END_INLINE@@
+   Simulation_Event (Event);
 end @_CAPITALIZE:Name_@;

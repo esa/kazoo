@@ -3,12 +3,14 @@ with Ada.Characters.Handling,
      Ada.Containers.Ordered_Sets,
      Ada.Exceptions,
      Ada.Directories,
+     GNAT.Directory_Operations,  --  for Dir_Nme
      TASTE.Parser_Utils;
 
 use Ada.Characters.Handling,
     Ada.Containers,
     Ada.Exceptions,
     Ada.Directories,
+    GNAT.Directory_Operations,
     TASTE.Parser_Utils;
 
 --  This package covers the generation of code for all supported languages
@@ -287,7 +289,8 @@ package body TASTE.Backend.Code_Generators is
                                                      others    => False);
                --  File_Tmpl: to get the output filename from user template
                File_Tmpl  : constant Translate_Set :=
-                  +Assoc  ("Name", Each.Name);
+                 +Assoc  ("Name", Each.Name)
+                 & Assoc ("Language", Language);
                --  Base output folder where code is generated
                --  e.g. output/Ada/src/
                Output_Lang : constant String := Output_Base
@@ -374,6 +377,11 @@ package body TASTE.Backend.Code_Generators is
                      Document_Template
                        (Templates_Skeletons_Sub_Trigger, Trig_Tmpl);
                      if Trigger then
+                        --  Possibly create folder to generate the file
+                        if File_Name /= "" then
+                           Create_Path (Output_Dir & Dir_Separator
+                                        & Dir_Name (File_Name));
+                        end if;
                         --  Output code and Makefile from this template folder
                         Process_Template (F           => Each,
                                           File_Name   => File_Name,

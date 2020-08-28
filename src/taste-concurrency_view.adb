@@ -1,13 +1,12 @@
 --  *************************** kazoo ***********************  --
---  (c) 2019 European Space Agency - maxime.perrotin@esa.int
---  LGPL license, see LICENSE file
+--  (c) 2020 European Space Agency - maxime.perrotin@esa.int
 
 with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
      --  Ada.Strings.Fixed,
-     GNAT.Directory_Operations,   -- Contains Dir_Name
+     GNAT.Directory_Operations,   --  Contains Dir_Name
      TASTE.Backend;
 
 use Ada.Directories,

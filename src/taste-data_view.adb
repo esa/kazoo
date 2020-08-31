@@ -84,19 +84,27 @@ package body TASTE.Data_View is
             File_Ref : constant ASN1_File_Maps.Cursor := Files.Find (Filename);
          begin
             --  If there are ACN files, add them to the list
+            --  Transform absolute paths to relative paths
             if ACN_Ref /= No_Node then
                declare
                   ACN : constant Name_Array := Get_Source_Text (ACN_Ref);
                   use String_Sets;
                begin
                   for F of ACN loop
-                     ACN_Files.Union
-                       (To_Set (Get_Name_String (F)));
+                     declare
+                        ACN_F    : constant String := Get_Name_String (F);
+                        Rel_Path : constant String :=
+                           (if ACN_F (ACN_F'First) /= '/'
+                            then "../" & ACN_F
+                            else ACN_F);
+                     begin
+                        ACN_Files.Union (To_Set (Rel_Path));
+                     end;
                   end loop;
                end;
-
             end if;
 
+            --  Transform absolute paths to ASN.1 files to relative paths
             if File_Ref = ASN1_File_Maps.No_Element then
                declare
                   New_File      : ASN1_File;

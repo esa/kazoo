@@ -6,6 +6,7 @@
 @@--
 # MAKEFILE_PATH   := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_PATH   := $(lastword $(MAKEFILE_LIST))
+TOOL_INST       := $(shell taste-config --prefix)
 OUTDIR          := $(dir $(MAKEFILE_PATH))
 ASN1_FILES      := @_REPLACE_ALL(,/):ASN1_Files_@
 CP_FILES        := @_REPLACE_ALL(,/):CP_Files_@      # Context parameters
@@ -149,8 +150,8 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	# asn2dataModel does not take the ACN files, and only calls asn1.exe
 	# asn2dataModel -o $(dir $@) -toC ${DATAVIEW_UNIQ} ${DATAVIEW_ACN}
 	mono $(shell which asn1.exe) -typePrefix asn1Scc -equal -fp AUTO -o $(dir $@) -c -uPER -ACN $^
-	cp $(shell taste-config --prefix)/share/AutoGUI/debug_messages.? dataview/C
-	cp $(shell taste-config --prefix)/share/AutoGUI/timeInMS.? dataview/C
+	cp ${TOOL_INST}/share/AutoGUI/debug_messages.? dataview/C
+	cp ${TOOL_INST}/share/AutoGUI/timeInMS.? dataview/C
 	cd dataview/C && msgPrinter ../dataview-uniq.asn
 	cd dataview/C && msgPrinterASN1  ../dataview-uniq.asn
 	touch $@
@@ -193,15 +194,15 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
         @@-- If system contains the PeekPoke component, copy the relevant code in the gui folder
         @@IF@@ @_LOWER:Function_Names_@ = taste_probe_console
 	@# Peek-Poke function is placed in the gui folder
-	cp $(shell taste-config --prefix)/bin/taste-gnuplot-streams binaries/@_LOWER:Function_Names_@_GUI/driveGnuPlotsStreams.pl
-	cp $(shell taste-config --prefix)/share/peekpoke/peekpoke.py binaries/@_LOWER:Function_Names_@_GUI
-	cp $(shell taste-config --prefix)/share/peekpoke/PeekPoke.glade binaries/@_LOWER:Function_Names_@_GUI
+	cp ${TOOL_INST}/bin/taste-gnuplot-streams binaries/@_LOWER:Function_Names_@_GUI/driveGnuPlotsStreams.pl
+	cp ${TOOL_INST}/share/peekpoke/peekpoke.py binaries/@_LOWER:Function_Names_@_GUI
+	cp ${TOOL_INST}/share/peekpoke/PeekPoke.glade binaries/@_LOWER:Function_Names_@_GUI
         @@END_IF@@  @@-- End of PeekPoke-specifics
         @@-- Add symbolic link to the SQL Database interface for the GUIs, if needed
 	if [ -f sql_db/db.info ]; then cd binaries/@_LOWER:Function_Names_@_GUI && ln -fs ../../sql_db; fi
         @@-- Copy default UserWidgets.py file for user to customise the GUI widgets
 	# User can edit at will the customisable user widgets python module:
-	cp -u $(shell taste-config --prefix)/share/AutoGUI/UserWidgets.py binaries/@_LOWER:Function_Names_@_GUI
+	cp -u ${TOOL_INST}/share/AutoGUI/UserWidgets.py binaries/@_LOWER:Function_Names_@_GUI
         @@-- Copy InterfaceView.aadl, it is needed to replay MSC scenarios
 	#  Interface view must be placed in the gui folder to allow replaying MSCs
 	cp -u ../InterfaceView.aadl binaries/@_LOWER:Function_Names_@_GUI

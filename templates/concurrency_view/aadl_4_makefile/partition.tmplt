@@ -14,7 +14,7 @@
   @@-- to the same file generated at different places The python code checks
   @@-- that when this happens only one _datamodel.asn file is kept to avoid
   @@-- an error that would otherwise be raised by asn2dataModel
-  @@INLINE(	args=$$\(python3 -c "import os, sys; print\(' '.join\({os.path.basename\(f\):f for f in sys.argv[1:]}.values\(\)\)\)" )( )(\); \\	mkdir -p ..\/dataview\/Ada; asn2dataModel -toAda -o ..\/dataview\/Ada $$args)@@
+  @@INLINE(	args=$$\(python3 -c "import os, sys; print\(' '.join\({os.path.basename\(f\):f for f in sys.argv[1:]}.values\(\)\)\)" )( )(\); \\\n	mkdir -p ..\/dataview\/Ada; asn2dataModel -toAda -o ..\/dataview\/Ada $$args)@@
     @@TABLE@@
        @@IF@@ @_Block_Languages_@ = SDL
           @@IF@@ @_Block_Instance_Of_@ = ""

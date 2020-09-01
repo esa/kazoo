@@ -1,0 +1,3 @@
+@@IF@@ @_Target_@ = SIMU
+TRUE
+@@END_IF@@

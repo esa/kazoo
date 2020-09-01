@@ -688,7 +688,9 @@ package body TASTE.AADL_Parser is
          Model.Interface_View.Debug_Dump (Output);
          Close (Output);
 
-         if not Model.Configuration.Deployment_View.Is_Empty then
+         if not Model.Configuration.Deployment_View.Is_Empty and
+             not Model.Deployment_View.Is_Empty
+         then
             Create (File => Output,
                     Mode => Out_File,
                     Name => Output_Path & "/DeploymentView.dump");

@@ -69,7 +69,6 @@ class Arrows_TC(UserWidgetsCommon.TC):
 
     def clicked(self, name):
         ''' Called when user clicks on one of the buttons '''
-        print ("Clicked on ", name)
         if name == "Rotate":
             self.parent.asn1Instance.Set(DV.rotate)
         elif name == "Drop":
@@ -97,8 +96,11 @@ class Grid_TM(UserWidgetsCommon.TM):
             line = []
             for x in range (10):
                 block = QGraphicsRectItem(x*20, y*20, 19, 19)
-                brush = QBrush (Qt.white)
-                block.setBrush (brush)
+                brush = QBrush(Qt.white)
+                block.setBrush(brush)
+                pen = QPen(Qt.lightGray)
+                pen.setWidthF (0.1)
+                block.setPen(pen)
                 self.scene.addItem(block)
                 line.append(block)
             self.playground.append(line)
@@ -113,14 +115,14 @@ class Grid_TM(UserWidgetsCommon.TM):
         ''' Slot called when a TM has been received in the editor '''
         # Nothing to do, the update() function does nothing thread-related
         # that would need to be done here
-        print('new_tm')
+        pass #print('new_tm')
 
     def update(self, value):
         ''' Receive ASN.1 value '''
         colors = {DV.empty : Qt.white,
-                  DV.red   : Qt.red,
-                  DV.blue  : Qt.blue,
-                  DV.green : Qt.green}
+                  DV.red   : Qt.darkRed,
+                  DV.blue  : Qt.darkBlue,
+                  DV.green : Qt.darkGreen}
         for y in range(20):
             for x in range(10):
                 color = value[y][x].Get()

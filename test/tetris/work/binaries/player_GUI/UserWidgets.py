@@ -26,7 +26,6 @@ import DV
 # you must list here the classes you want to expose to the GUI:
 __all__ = ['Arrows_TC', 'Grid_TM']
 
-
 class Arrows_TC(UserWidgetsCommon.TC):
     ''' Fill / mimick this class to create a custom TC widget '''
     name = "Show Controls"
@@ -38,8 +37,9 @@ class Arrows_TC(UserWidgetsCommon.TC):
         names = ['Rotate', 'Drop', 'Left', 'Right']
 
         # UserWidgetsCommonTC.TC is a QDockWidgets
-        self.widget = QGroupBox(self)
+        self.widget = QGroupBox (self) #MyGroupBox (self) #QGroupBox(self)
         layout = QVBoxLayout()
+        self.widget.setFocusPolicy (Qt.ClickFocus)  # to allow key events
 
         self.buttons = {}
         for each in names:
@@ -79,6 +79,17 @@ class Arrows_TC(UserWidgetsCommon.TC):
             self.parent.asn1Instance.Set(DV.left)
         self.parent.updateVariable()
         self.parent.sendTC()
+
+    def keyPressEvent (self, evt):
+        key = evt.key()
+        if key == Qt.Key_Up:
+            self.clicked("Rotate")
+        elif key == Qt.Key_Down:
+            self.clicked("Drop")
+        elif key == Qt.Key_Right:
+            self.clicked("Right")
+        elif key == Qt.Key_Left:
+            self.clicked("Left")
 
 
 class Grid_TM(UserWidgetsCommon.TM):

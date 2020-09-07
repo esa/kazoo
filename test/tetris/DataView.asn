@@ -52,24 +52,24 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   }
  
   j-shape Pixels ::= {
-     {empty, red, empty, empty},
-     {empty, red, empty, empty},
-     {empty, red, empty, empty},
-     {red,  red, empty, empty}
+     {empty, blue, empty, empty},
+     {empty, blue, empty, empty},
+     {empty, blue, empty, empty},
+     {blue,  blue, empty, empty}
   }
  
   s-shape Pixels ::= {
      {empty, empty, empty, empty},
-     {empty, red,   red,   empty},
-     {empty, red,   empty, empty},
-     {red,   red,   empty, empty}
+     {empty, green,   green,   empty},
+     {empty, green,   empty, empty},
+     {green,   green,   empty, empty}
   }
 
   z-shape Pixels ::= {
      {empty, empty, empty, empty},
-     {red,   red,   empty, empty},
-     {empty, red,   empty, empty},
-     {empty, red,   red,   empty}
+     {blue,   blue,   empty, empty},
+     {empty, blue,   empty, empty},
+     {empty, blue,   blue,   empty}
   }
 
   i-shape Pixels ::= {
@@ -82,8 +82,8 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   o-shape Pixels ::= {
      {empty, empty, empty, empty},
      {empty, empty, empty, empty},
-     {empty, red,   red,  empty},
-     {empty, red,   red,  empty}
+     {empty, red,   green,  empty},
+     {empty, green,   red,  empty}
   } 
 END
 

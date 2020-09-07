@@ -2,8 +2,8 @@ KAZOO?=kazoo
 # Here you can specify custom compiler/linker flags, and add folders containing
 # external code you want to compile and link for a specific partition.
 # Use upper case for the partition name:
-# export <PARTITIONNAME>_USER_CFLAGS=...
-# export <PARTITIONNAME>_USER_LDFLAGS=...
+export TETRIS_USER_CFLAGS=-fdata-sections -ffunction-sections
+export TETRIS_USER_LDFLAGS=-fdata-sections -ffunction-sections -Wl,--gc-sections 
 # export <PARTITIONNAME>_EXTERNAL_SOURCE_PATH=
 
 all:	c
@@ -25,7 +25,7 @@ work/skeletons_built:	InterfaceView.aadl DataView.aadl
 	touch $@
 
 work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl ConcurrencyView_Properties.aadl
-	$(KAZOO) --glue --gw -o work
+	$(KAZOO) -p --glue --gw -o work
 	touch $@
 
 clean:

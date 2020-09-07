@@ -13,44 +13,47 @@ __url__ = "https://taste.tools"
 import sys
 import os
 import importlib
+from functools import partial
 
-try:
-    from PySide.QtCore import (QObject, Signal, Slot, Qt, QTimer)
-    from PySide.QtGui import *
-except ImportError:
-    # When using Python3/PySide2
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 from asn1_value_editor import UserWidgetsCommon
+import DV
 
 # ** IMPORTANT **
 # you must list here the classes you want to expose to the GUI:
-__all__ = ['CustomTC_Widget', 'CustomTM_Widget']
+__all__ = ['Arrows_TC', 'Grid_TM']
 
 
-class CustomTC_Widget(UserWidgetsCommon.TC):
+class Arrows_TC(UserWidgetsCommon.TC):
     ''' Fill / mimick this class to create a custom TC widget '''
-    name = 'My TC Widget' # name on the GUI combo button
+    name = "Show Controls"
 
     def __init__(self, asn1_typename, parent):
         ''' Initialise the widget '''
-        super(CustomTC_Widget, self).__init__(asn1_typename, parent)
+        super(Arrows_TC, self).__init__(asn1_typename, parent)
         self._asn1_typename = asn1_typename
+        names = ['Rotate', 'Drop', 'Left', 'Right']
 
-        # examples of widgets
-        #self.widget = QListWidget()
-        #self.widget.itemClicked.connect(self.select)
-        #self.setWidget(self.widget)
+        # UserWidgetsCommonTC.TC is a QDockWidgets
+        self.widget = QGroupBox(self)
+        layout = QVBoxLayout()
 
-        #self.widget = QPushButton(asn1_typename)
-        #self.widget.clicked.connect(self.clicked))
-        #self.setWidget(self.widget)
+        self.buttons = {}
+        for each in names:
+            self.buttons[each] = QPushButton(each)
+            self.buttons[each].clicked.connect(partial(self.clicked, each))
+            layout.addWidget(self.buttons[each])
+        layout.addStretch(1)
+        self.widget.setLayout(layout)
+
+        self.setWidget(self.widget)
 
         # parent is the ASN.1 value editor
         self.parent = parent
-        self.setWindowTitle("My Window")
+        self.setWindowTitle("Tetris Controls")
         self.show()
 
     @staticmethod
@@ -62,49 +65,69 @@ class CustomTC_Widget(UserWidgetsCommon.TC):
     def editorIsApplicable(editor):
         ''' Return true if this particular editor is compatible with this
         widget'''
-        return False
+        return editor.messageName == 'Move'
 
-    def select(self, item):
-        ''' Called when user clicks on a line of the table '''
-        #self.parent.asn1Instance.SetData(native_asn1scc._ptr)
-
-    def clicked(self):
-        ''' Called when user clicks on the button '''
-        # Get the ASN.1 value from the database (in native an1scc format)
-        # self.parent.getVariable(dest=self.parent.asn1Instance)
-
-       #self.parent.tmToEditor(emit_msc=False)
-
-    def onUpdateButtonClick(self, lineNb):
-        ''' When user clicks on Update, the content of the selected TC will
-        be used to feed the main GUI TC editor '''
-        #self.update.emit(as_asn1)   # use signal to send data to the GUI
-
-    def onSendButtonClick(self, lineNb):
-        ''' When user clicks on Send, the selected TC will be sent to the
-        running application '''
-        #self.send.emit(as_asn1)   # use signal to send data to the GUI
+    def clicked(self, name):
+        ''' Called when user clicks on one of the buttons '''
+        print ("Clicked on ", name)
+        if name == "Rotate":
+            self.parent.asn1Instance.Set(DV.rotate)
+        elif name == "Drop":
+            self.parent.asn1Instance.Set(DV.down)
+        elif name == "Right":
+            self.parent.asn1Instance.Set(DV.right)
+        elif name == "Left":
+            self.parent.asn1Instance.Set(DV.left)
+        self.parent.updateVariable()
+        self.parent.sendTC()
 
 
-class CustomTM_Widget(UserWidgetsCommon.TM):
-    '''Save telemetries in the database'''
-    name = 'My Widget'  # name for the combo button in the GUI
+class Grid_TM(UserWidgetsCommon.TM):
+    ''' Display the Tetris playground '''
+    name = 'Show Playground'
 
     def __init__(self, parent=None):
         ''' Initialise the widget '''
-        super(CustomTM_Widget, self).__init__(parent)
-        self.hide()
+        super(Grid_TM, self).__init__(parent)
+        self.widget = QGraphicsView()
+        self.scene = QGraphicsScene()
+        self.widget.setScene(self.scene)
+        self.playground=[]
+        for y in range(20):
+            line = []
+            for x in range (10):
+                block = QGraphicsRectItem(x*20, y*20, 19, 19)
+                brush = QBrush (Qt.white)
+                block.setBrush (brush)
+                self.scene.addItem(block)
+                line.append(block)
+            self.playground.append(line)
+
+        self.parent = parent
+        self.setWindowTitle("Tastris Playground")
+        self.setWidget(self.widget)
+        self.show()
 
     @Slot()
     def new_tm(self):
         ''' Slot called when a TM has been received in the editor '''
         # Nothing to do, the update() function does nothing thread-related
         # that would need to be done here
-        print('Recorded a new TM in the database')
+        print('new_tm')
 
     def update(self, value):
         ''' Receive ASN.1 value '''
-        pass
+        colors = {DV.empty : Qt.white,
+                  DV.red   : Qt.red,
+                  DV.blue  : Qt.blue,
+                  DV.green : Qt.green}
+        for y in range(20):
+            for x in range(10):
+                color = value[y][x].Get()
+                block = self.playground[y][x]
+                brush = block.brush()
+                brush.setColor(colors[color])
+                block.setBrush(brush)
 
     @staticmethod
     def applicable():
@@ -115,7 +138,7 @@ class CustomTM_Widget(UserWidgetsCommon.TM):
     def editorIsApplicable(editor):
         ''' Return true if this particular editor is compatible with this
         widget'''
-        return False
+        return editor.messageName == "Update_Grid"
 
 
 if __name__ == '__main__':

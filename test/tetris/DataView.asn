@@ -85,8 +85,8 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   o-shape Pixels ::= {
      empty-line,
      empty-line,
-     {empty, green, green, empty},
-     {empty, green, green, empty}
+     {green, green, empty, empty},
+     {green, green, empty, empty}
   } 
 END
 

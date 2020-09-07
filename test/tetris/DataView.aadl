@@ -5,7 +5,7 @@
 --! MadeInFastMode:True:
 --! InputASN1FileChecksum:ee8a7e01f29874c0d50f437d5abb9599:/home/taste/tool-inst/share/taste-types/taste-types.asn:
 --! InputASN1FileChecksum:99e1f09759aa9f2926ec6dc3cf0090af:/home/taste/tool-src/kazoo/test/tetris/DataView.acn:
---! InputASN1FileChecksum:0ad00e3c12c0121747f66f0e6d298bc2:/home/taste/tool-src/kazoo/test/tetris/DataView.asn:
+--! InputASN1FileChecksum:0b1e4da590eecd37f298fefa98b9c18e:/home/taste/tool-src/kazoo/test/tetris/DataView.asn:
 --------------------------------------------------------
 
 package DataView

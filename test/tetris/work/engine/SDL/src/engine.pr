@@ -1,6 +1,6 @@
 /* CIF PROCESS (250, 150), (150, 75) */
 process Engine;
-    /* CIF TEXT (768, 0), (255, 250) */
+    /* CIF TEXT (787, 0), (255, 296) */
     -- Timers defined in the interface view
     -- Use SET_TIMER (value, timer name)
     -- and RESET_TIMER (timer name) in a
@@ -9,6 +9,7 @@ process Engine;
     
     dcl foo T_Boolean;
     
+    dcl Move_Time Timer_Duration := 500;
     dcl Timer_Value Timer_Duration := 500;
     
     dcl Prev_Sprite, Next_Sprite Sprite;
@@ -16,8 +17,10 @@ process Engine;
     dcl cmd Move_Command;
     
     dcl Landscape, Play_Area Grid;
+    
+    dcl Score T_Uint32 := 0;
     /* CIF ENDTEXT */
-    /* CIF procedure (171, 278), (135, 35) */
+    /* CIF procedure (190, 278), (135, 35) */
     procedure Remove_Full_Lines;
         /* CIF TEXT (38, 111), (267, 152) */
         -- Shift down if any line is complete
@@ -27,8 +30,6 @@ process Engine;
         dcl Is_Full T_Boolean := True;
         
         dcl y Coordinates_y := 19;
-        
-        
         /* CIF ENDTEXT */
         /* CIF START (615, 184), (70, 35) */
         START;
@@ -52,31 +53,46 @@ the test on the same line
 (do not decrement y)';
                         /* CIF ANSWER (527, 619), (70, 24) */
                         (True):
-                            /* CIF task (477, 663), (168, 72) */
+                            /* CIF task (500, 663), (123, 35) */
+                            task score := score + 1;
+                            /* CIF task (477, 713), (168, 72) */
                             task for line in range (y):
    Playground (y-line) :=
       Playground (y-line - 1)
 endfor;
-                            /* CIF task (462, 755), (198, 56) */
+                            /* CIF task (462, 805), (198, 56) */
                             task for col in range (cols):
    Playground (0)(col) := empty
 endfor;
-                            /* CIF join (544, 842), (35, 35) */
+                            /* CIF decision (486, 881), (151, 50) */
+                            decision score mod 10 = 0
+and Move_Time > 100
+                            /* CIF comment (657, 888), (133, 40) */
+                            comment 'Increase the speed
+every 10 lines';
+                                /* CIF ANSWER (482, 951), (70, 24) */
+                                (true):
+                                    /* CIF task (410, 995), (213, 35) */
+                                    task Move_Time := Move_Time - 100;
+                                /* CIF ANSWER (634, 951), (70, 24) */
+                                (false):
+                            enddecision;
+                            /* CIF join (544, 1046), (35, 35) */
                             join More;
-                        /* CIF ANSWER (717, 619), (70, 24) */
+                        /* CIF ANSWER (800, 619), (70, 24) */
                         (False):
-                            /* CIF task (716, 663), (72, 35) */
+                            /* CIF task (799, 663), (72, 35) */
                             task y := y - 1;
-                            /* CIF join (735, 713), (35, 35) */
+                            /* CIF join (817, 713), (35, 35) */
                             join More;
                     enddecision;
-                /* CIF ANSWER (854, 360), (70, 24) */
+                /* CIF ANSWER (882, 360), (70, 24) */
                 (false):
-                    /* CIF return (872, 404), (35, 35) */
+                    /* CIF return (899, 404), (35, 35) */
                     return ;
             enddecision;
     endprocedure;
-    /* CIF procedure (179, 108), (127, 35) */
+    /* CIF procedure (198, 108), (127, 35) */
     procedure Clear_Playground;
         /* CIF TEXT (66, 127), (267, 140) */
         fpar
@@ -96,7 +112,7 @@ a new game';
             /* CIF return (482, 278), (35, 35) */
             return ;
     endprocedure;
-    /* CIF procedure (183, 66), (73, 35) */
+    /* CIF procedure (202, 66), (73, 35) */
     procedure Rotate;
         /* CIF TEXT (0, 27), (334, 136) */
         fpar
@@ -176,7 +192,7 @@ Ret.Shape (3)(3) := empty;
                     return Source;
             enddecision;
     endprocedure;
-    /* CIF procedure (179, 23), (76, 35) */
+    /* CIF procedure (198, 23), (76, 35) */
     procedure Move_To;
         /* CIF TEXT (0, 137), (267, 184) */
         fpar
@@ -230,13 +246,13 @@ endfor
                     comment 'Add the new sprite';
                     /* CIF task (388, 685), (168, 35) */
                     task Playground := New_Field;
-                /* CIF ANSWER (908, 463), (75, 24) */
+                /* CIF ANSWER (906, 463), (75, 24) */
                 (Rejected):
             enddecision;
             /* CIF return (638, 736), (35, 35) */
             return Ret;
     endprocedure;
-    /* CIF procedure (188, 202), (77, 35) */
+    /* CIF procedure (207, 202), (77, 35) */
     procedure Translate;
         /* CIF TEXT (0, 27), (267, 140) */
         fpar
@@ -277,9 +293,9 @@ endfor
             /* CIF return (657, 307), (35, 35) */
             return Res;
     endprocedure;
-    /* CIF procedure (181, 153), (125, 35) */
+    /* CIF procedure (200, 153), (125, 35) */
     procedure Print_Playground
-    /* CIF comment (328, 142), (127, 56) */
+    /* CIF comment (348, 142), (127, 56) */
     comment 'For debugging:
 display the grid in
 the console';
@@ -298,13 +314,13 @@ endfor;
             /* CIF return (520, 339), (35, 35) */
             return ;
     endprocedure;
-    /* CIF START (1461, 10), (70, 35) */
+    /* CIF START (1480, 10), (70, 35) */
     START;
-        /* CIF NEXTSTATE (1461, 65), (70, 35) */
+        /* CIF NEXTSTATE (1480, 65), (70, 35) */
         NEXTSTATE Wait;
-    /* CIF label (439, 208), (70, 35) */
+    /* CIF label (458, 208), (70, 35) */
     connection Move:
-        /* CIF decision (396, 263), (156, 72) */
+        /* CIF decision (415, 263), (156, 72) */
         decision Move_To (Next_Sprite,
 Landscape, Play_Area);
             /* CIF ANSWER (67, 355), (70, 24) */
@@ -317,175 +333,175 @@ Landscape, Play_Area);
                 output Update_Grid (Play_Area);
                 /* CIF NEXTSTATE (57, 554), (90, 35) */
                 NEXTSTATE Next_Move;
-            /* CIF ANSWER (542, 371), (75, 24) */
+            /* CIF ANSWER (561, 371), (75, 24) */
             (Rejected):
-                /* CIF decision (492, 415), (174, 39) */
+                /* CIF decision (511, 415), (174, 39) */
                 decision Next_Sprite = Prev_Sprite;
-                    /* CIF ANSWER (279, 475), (70, 24) */
+                    /* CIF ANSWER (298, 475), (70, 24) */
                     (true):
-                        /* CIF PROCEDURECALL (220, 519), (186, 35) */
+                        /* CIF PROCEDURECALL (240, 519), (186, 35) */
                         call Reset_Timer (Tetris_Timer);
-                        /* CIF output (268, 569), (92, 40) */
+                        /* CIF output (287, 569), (92, 40) */
                         output Game_Over
-(True);
-                        /* CIF PROCEDURECALL (240, 629), (147, 35) */
-                        call writeln('Game Over');
-                        /* CIF NEXTSTATE (279, 679), (70, 35) */
+(score);
+                        /* CIF PROCEDURECALL (215, 629), (236, 35) */
+                        call writeln('Game Over, score: ', score);
+                        /* CIF NEXTSTATE (298, 679), (70, 35) */
                         NEXTSTATE Wait;
-                    /* CIF ANSWER (645, 475), (70, 24) */
+                    /* CIF ANSWER (690, 475), (70, 24) */
                     (false):
-                        /* CIF decision (608, 519), (143, 56) */
+                        /* CIF decision (653, 519), (143, 56) */
                         decision Next_Sprite.Origin.y
 /=
 Prev_Sprite.Origin.y
-                        /* CIF comment (788, 504), (187, 88) */
+                        /* CIF comment (833, 504), (187, 88) */
                         comment 'If move command is
 Left/Right (same line) still
 try to go down
 if move was rotate, cancel it
 first';
-                            /* CIF ANSWER (476, 601), (70, 24) */
+                            /* CIF ANSWER (521, 601), (70, 24) */
                             (True):
-                                /* CIF PROCEDURECALL (418, 645), (186, 35) */
+                                /* CIF PROCEDURECALL (462, 645), (186, 35) */
                                 call Reset_Timer (Tetris_Timer);
-                                /* CIF task (443, 695), (135, 35) */
-                                task Timer_Value := 500;
-                                /* CIF PROCEDURECALL (418, 750), (185, 40) */
+                                /* CIF task (465, 695), (181, 35) */
+                                task Timer_Value := Move_Time;
+                                /* CIF PROCEDURECALL (463, 750), (185, 40) */
                                 call set_timer
 (Timer_Value, Tetris_Timer);
-                                /* CIF NEXTSTATE (466, 810), (90, 35) */
+                                /* CIF NEXTSTATE (510, 810), (90, 35) */
                                 NEXTSTATE Next_Block;
-                            /* CIF ANSWER (738, 601), (70, 24) */
+                            /* CIF ANSWER (783, 601), (70, 24) */
                             (False):
-                                /* CIF decision (702, 645), (142, 56) */
+                                /* CIF decision (746, 645), (142, 56) */
                                 decision Next_Sprite.Origin.x
 =
 Prev_Sprite.Origin.x
-                                /* CIF comment (864, 655), (174, 40) */
+                                /* CIF comment (909, 655), (174, 40) */
                                 comment 'Revert rotation command
 (exact same Origin)';
-                                    /* CIF ANSWER (672, 721), (70, 24) */
+                                    /* CIF ANSWER (717, 721), (70, 24) */
                                     (true):
-                                        /* CIF task (615, 765), (183, 35) */
+                                        /* CIF task (660, 765), (183, 35) */
                                         task Next_Sprite := Prev_Sprite;
-                                    /* CIF ANSWER (810, 721), (70, 24) */
+                                    /* CIF ANSWER (855, 721), (70, 24) */
                                     (false):
                                 enddecision;
-                                /* CIF NEXTSTATE (728, 816), (90, 35) */
+                                /* CIF NEXTSTATE (772, 816), (90, 35) */
                                 NEXTSTATE Next_Move;
                         enddecision;
                 enddecision;
         enddecision;
     /* CIF End Label */
     endconnection;
-    /* CIF state (1541, 377), (90, 35) */
-    state Next_Move;
-        /* CIF input (1136, 432), (96, 35) */
-        input Tetris_Timer;
-            /* CIF PROCEDURECALL (1092, 487), (185, 40) */
-            call Set_Timer
-(Timer_Value, Tetris_Timer);
-            /* CIF task (1049, 542), (270, 40) */
-            task Next_Sprite.Origin :=
-   call Translate (Prev_Sprite.Origin, Down);
-            /* CIF join (1167, 602), (35, 35) */
-            join Move;
-        /* CIF input (1696, 432), (70, 40) */
-        input Move
-(cmd);
-            /* CIF decision (1696, 492), (70, 50) */
-            decision cmd;
-                /* CIF ANSWER (1388, 562), (70, 24) */
-                (rotate):
-                    /* CIF task (1336, 606), (173, 40) */
-                    task Next_Sprite :=
-  call Rotate (Prev_Sprite);
-                /* CIF ANSWER (1553, 562), (70, 24) */
-                (down):
-                    /* CIF task (1520, 606), (135, 35) */
-                    task Timer_Value := 100;
-                /* CIF ANSWER (1762, 562), (70, 24) */
-                (left):
-                    /* CIF task (1666, 606), (260, 40) */
-                    task Next_Sprite.Origin :=
-   call Translate (Prev_Sprite.Origin, Left);
-                /* CIF ANSWER (2038, 562), (70, 24) */
-                (right):
-                    /* CIF task (1939, 606), (268, 40) */
-                    task Next_Sprite.Origin :=
-   call Translate (Prev_Sprite.Origin, Right);
-            enddecision;
-            /* CIF join (1713, 662), (35, 35) */
-            join Move;
-    endstate;
-    /* CIF state (2299, 12), (90, 35) */
+    /* CIF state (2318, 12), (90, 35) */
     state Next_Block;
-        /* CIF input (2292, 67), (103, 35) */
+        /* CIF input (2311, 67), (103, 35) */
         input Tetris_Timer;
-            /* CIF task (2263, 122), (160, 35) */
+            /* CIF task (2283, 122), (160, 35) */
             task Landscape := Play_Area;
-            /* CIF task (2242, 172), (201, 35) */
+            /* CIF task (2262, 172), (201, 35) */
             task Prev_Sprite.Origin := { x 4, y 0 };
-            /* CIF decision (2308, 222), (70, 50) */
+            /* CIF decision (2328, 222), (70, 50) */
             decision any
-            /* CIF comment (2399, 229), (126, 40) */
+            /* CIF comment (2418, 229), (126, 40) */
             comment 'Choose randomly
 the next brick';
-                /* CIF ANSWER (1822, 292), (70, 24) */
+                /* CIF ANSWER (1841, 292), (70, 24) */
                 ('t brick'):
-                    /* CIF task (1785, 336), (144, 40) */
+                    /* CIF task (1804, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    t_shape;
-                /* CIF ANSWER (1977, 292), (70, 24) */
+                /* CIF ANSWER (1996, 292), (70, 24) */
                 ('l brick'):
-                    /* CIF task (1940, 336), (144, 40) */
+                    /* CIF task (1959, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    l_shape;
-                /* CIF ANSWER (2132, 292), (70, 24) */
+                /* CIF ANSWER (2151, 292), (70, 24) */
                 ('j brick'):
-                    /* CIF task (2095, 336), (144, 40) */
+                    /* CIF task (2114, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    j_shape;
-                /* CIF ANSWER (2287, 292), (70, 24) */
+                /* CIF ANSWER (2306, 292), (70, 24) */
                 ('s brick'):
-                    /* CIF task (2250, 336), (144, 40) */
+                    /* CIF task (2269, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    s_shape;
-                /* CIF ANSWER (2442, 292), (70, 24) */
+                /* CIF ANSWER (2461, 292), (70, 24) */
                 ('z brick'):
-                    /* CIF task (2405, 336), (144, 40) */
+                    /* CIF task (2424, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    z_shape;
-                /* CIF ANSWER (2598, 292), (70, 24) */
+                /* CIF ANSWER (2617, 292), (70, 24) */
                 ('i brick'):
-                    /* CIF task (2561, 336), (144, 40) */
+                    /* CIF task (2580, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    i_shape;
-                /* CIF ANSWER (2753, 292), (70, 24) */
+                /* CIF ANSWER (2772, 292), (70, 24) */
                 ('o brick'):
-                    /* CIF task (2716, 336), (144, 40) */
+                    /* CIF task (2735, 336), (144, 40) */
                     task Prev_Sprite.Shape :=
    o_shape;
             enddecision;
-            /* CIF task (2251, 392), (184, 35) */
+            /* CIF task (2271, 392), (184, 35) */
             task Next_Sprite := Prev_Sprite;
-            /* CIF PROCEDURECALL (2251, 447), (185, 40) */
+            /* CIF PROCEDURECALL (2270, 447), (185, 40) */
             call Set_Timer
 (Timer_Value, Tetris_Timer);
-            /* CIF join (2326, 502), (35, 35) */
+            /* CIF join (2345, 502), (35, 35) */
             join Move;
     endstate;
-    /* CIF state (1461, 65), (70, 35) */
+    /* CIF state (1560, 377), (90, 35) */
+    state Next_Move;
+        /* CIF input (1134, 432), (96, 35) */
+        input Tetris_Timer;
+            /* CIF PROCEDURECALL (1090, 487), (185, 40) */
+            call Set_Timer
+(Timer_Value, Tetris_Timer);
+            /* CIF task (1047, 542), (270, 40) */
+            task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Down);
+            /* CIF join (1165, 602), (35, 35) */
+            join Move;
+        /* CIF input (1715, 432), (70, 40) */
+        input Move
+(cmd);
+            /* CIF decision (1715, 492), (70, 50) */
+            decision cmd;
+                /* CIF ANSWER (1380, 562), (70, 24) */
+                (rotate):
+                    /* CIF task (1329, 606), (173, 40) */
+                    task Next_Sprite :=
+  call Rotate (Prev_Sprite);
+                /* CIF ANSWER (1572, 562), (70, 24) */
+                (down):
+                    /* CIF task (1540, 606), (135, 41) */
+                    task Timer_Value := 100;
+                /* CIF ANSWER (1807, 562), (70, 24) */
+                (left):
+                    /* CIF task (1712, 606), (260, 40) */
+                    task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Left);
+                /* CIF ANSWER (2083, 562), (70, 24) */
+                (right):
+                    /* CIF task (1984, 606), (268, 40) */
+                    task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Right);
+            enddecision;
+            /* CIF join (1733, 663), (35, 35) */
+            join Move;
+    endstate;
+    /* CIF state (1480, 65), (70, 35) */
     state Wait;
-        /* CIF input (1451, 120), (90, 40) */
+        /* CIF input (1470, 120), (90, 40) */
         input New_Game
  (foo);
-            /* CIF PROCEDURECALL (1396, 180), (200, 35) */
+            /* CIF PROCEDURECALL (1415, 180), (200, 35) */
             call Clear_Playground (Play_Area);
-            /* CIF PROCEDURECALL (1403, 230), (185, 40) */
+            /* CIF PROCEDURECALL (1423, 230), (185, 40) */
             call set_timer
 (Timer_Value, Tetris_Timer);
-            /* CIF NEXTSTATE (1451, 290), (90, 35) */
+            /* CIF NEXTSTATE (1470, 290), (90, 35) */
             NEXTSTATE Next_Block;
     endstate;
 endprocess Engine;

@@ -28,7 +28,7 @@ END PI_Update_Grid.others;
 
 SUBPROGRAM PI_Game_Over
 FEATURES
-  foo : IN PARAMETER DataView::T_Boolean {
+  score : IN PARAMETER DataView::T_UInt32 {
     Taste::encoding => NATIVE;
   };
 PROPERTIES
@@ -145,7 +145,7 @@ END RI_Update_Grid.others;
 
 SUBPROGRAM RI_Game_Over
 FEATURES
-  foo : IN PARAMETER DataView::T_Boolean {
+  score : IN PARAMETER DataView::T_UInt32 {
     Taste::encoding => NATIVE;
   };
 END RI_Game_Over;

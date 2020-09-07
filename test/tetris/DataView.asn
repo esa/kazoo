@@ -20,7 +20,8 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   }
 
   --  A shape is contained in a 4x4 grid located at (x, y) on the grid
-  Pixels ::= SEQUENCE (SIZE (4)) OF SEQUENCE (SIZE (4)) OF Color
+  Pixels-Line ::= SEQUENCE (SIZE (4)) OF Color
+  Pixels ::= SEQUENCE (SIZE (4)) OF Pixels-Line
   Sprite ::= SEQUENCE {
      origin Coordinates,
      shape  Pixels
@@ -36,39 +37,41 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   Line ::= SEQUENCE (SIZE (cols)) OF Color
   Grid ::= SEQUENCE (SIZE (rows)) OF Line
 
+  empty-line Pixels-Line ::= { empty, empty, empty, empty }
+
   --  Tetris blocks
   t-shape Pixels ::= {
-     {empty, empty, empty, empty},
-     {empty, empty, empty, empty},
+     empty-line,
+     empty-line,
      {empty, red,   empty, empty},
      {red,   red,   red,   empty} 
   }
 
   l-shape Pixels ::= {
-     {red, empty, empty, empty},
+     empty-line,
      {red, empty, empty, empty},
      {red, empty, empty, empty},
      {red, red,  empty, empty}
   }
  
   j-shape Pixels ::= {
-     {empty, blue, empty, empty},
+     empty-line,
      {empty, blue, empty, empty},
      {empty, blue, empty, empty},
      {blue,  blue, empty, empty}
   }
  
   s-shape Pixels ::= {
-     {empty, empty, empty, empty},
-     {empty, green,   green,   empty},
-     {empty, green,   empty, empty},
-     {green,   green,   empty, empty}
+     empty-line,
+     empty-line,
+     {empty, green, green, empty},
+     {green, green, empty, empty}
   }
 
   z-shape Pixels ::= {
-     {empty, empty, empty, empty},
-     {blue,   blue,   empty, empty},
-     {empty, blue,   empty, empty},
+     empty-line,
+     empty-line,
+     {blue,  blue,   empty, empty},
      {empty, blue,   blue,   empty}
   }
 
@@ -80,10 +83,10 @@ IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
   }
 
   o-shape Pixels ::= {
-     {empty, empty, empty, empty},
-     {empty, empty, empty, empty},
-     {empty, red,   green,  empty},
-     {empty, green,   red,  empty}
+     empty-line,
+     empty-line,
+     {empty, green, green, empty},
+     {empty, green, green, empty}
   } 
 END
 

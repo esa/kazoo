@@ -19,7 +19,7 @@
        @@IF@@ @_Block_Languages_@ = SDL
           @@IF@@ @_Block_Instance_Of_@ = ""
              ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Names_@_datamodel.asn
-          @@ELSE@@ 
+          @@ELSE@@
              ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Instance_Of_@_datamodel.asn
           @@END_IF@@
        @@END_IF@@
@@ -33,7 +33,7 @@
 	mkdir -p @_LOWER:Name_@_adainit && \
 @@INLINE(    echo ')()()@@
    @@TABLE@@
-      @@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
+      @@IF@@ @_Block_Languages_@ = SDL or @_Block_Languages_@ = Ada
          with @_CAPITALIZE:Block_Names_@;
       @@END_IF@@
    @@END_TABLE@@
@@ -43,9 +43,9 @@
 @@INLINE(    )(:)( \\)@@
    ADA_INCLUDE_PATH=../../dataview/Ada/src:../../dataview/Ada/asn1rtl:../../dataview/Ada/boards/x86
    @@TABLE'TERSE@@
-      @@IF@@ @_LOWER:Block_Languages_@ = sdl
+      @@IF@@ @_Block_Languages_@ = SDL
          ../../@_LOWER:Block_Names_@/SDL/code
-      @@ELSIF@@ @_LOWER:Block_Languages_@ = ada
+      @@ELSIF@@ @_Block_Languages_@ = Ada
          ../../@_LOWER:Block_Names_@/Ada/src
       @@END_IF@@
    @@END_TABLE@@

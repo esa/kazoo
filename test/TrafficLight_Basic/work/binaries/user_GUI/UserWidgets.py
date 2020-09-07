@@ -14,13 +14,9 @@ import sys
 import os
 import importlib
 import DV
-try:
-    from PySide.QtCore import (QObject, Signal, Slot, Qt, QTimer)
-    import PySide.QtGui as QtGui
-except ImportError:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 from asn1_value_editor import UserWidgetsCommon
 
@@ -44,7 +40,7 @@ class PedestrianButton(UserWidgetsCommon.TC):
 
         self._asn1_typename = asn1_typename
 
-        self.widget = QtGui.QPushButton("Request passage")
+        self.widget = QPushButton("Request passage")
         self.widget.clicked.connect(self.clicked)
         self.setWidget(self.widget)
 
@@ -77,10 +73,10 @@ class TrafficLight(UserWidgetsCommon.TM):
     def __init__(self, parent=None):
         ''' Initialise the widget '''
         super(TrafficLight, self).__init__(parent)
-        self.widget = QtGui.QLabel()
-        self.colorMap = { DV.red: QtGui.QPixmap ("red.png"),
-                          DV.orange: QtGui.QPixmap ("orange.png"),
-                          DV.green: QtGui.QPixmap ("green.png") }
+        self.widget = QLabel()
+        self.colorMap = { DV.red: QPixmap ("red.png"),
+                          DV.orange: QPixmap ("orange.png"),
+                          DV.green: QPixmap ("green.png") }
         self.widget.setPixmap (self.colorMap[DV.red])
         self.setWidget(self.widget)
         self.setWindowTitle(parent.treeItem.text())
@@ -116,9 +112,9 @@ class Pedestrian(UserWidgetsCommon.TM):
     def __init__(self, parent=None):
         ''' Initialise the widget '''
         super(Pedestrian, self).__init__(parent)
-        self.widget = QtGui.QLabel()
-        self.colorMap = { DV.wait: QtGui.QPixmap ("wait.png"),
-                          DV.go: QtGui.QPixmap ("go.png")}
+        self.widget = QLabel()
+        self.colorMap = { DV.wait: QPixmap ("wait.png"),
+                          DV.go: QPixmap ("go.png")}
         self.widget.setPixmap (self.colorMap[DV.wait])
         self.setWidget(self.widget)
         self.setWindowTitle(parent.treeItem.text())

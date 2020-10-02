@@ -990,6 +990,7 @@ package body TASTE.Interface_View is
       List_Of_Sync_PIs     : Tag;
 
       List_Of_ASync_PIs,
+      ASync_PI_Kind, --  Can be Cyclic or Sporadic
       ASync_PI_Param_Name,
       ASync_PI_Param_Type  : Vector_Tag;
 
@@ -1047,6 +1048,7 @@ package body TASTE.Interface_View is
             when Cyclic_Operation | Sporadic_Operation =>
                if not Each.Is_Timer then
                   List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
+                  ASync_PI_Kind := ASync_PI_Kind & Each.RCM'Img;
                   if not Each.Params.Is_Empty then
                      ASync_PI_Param_Name := ASync_PI_Param_Name
                        & Each.Params.First_Element.Name;
@@ -1127,6 +1129,7 @@ package body TASTE.Interface_View is
         & Assoc ("List_Of_Sync_RIs",    List_Of_Sync_RIs)
         & Assoc ("Sync_RIs_Parent",     Sync_RIs_Parent)
         & Assoc ("List_Of_ASync_PIs",   List_Of_ASync_PIs)
+        & Assoc ("ASync_PI_Kind",       ASync_PI_Kind)
         & Assoc ("ASync_PI_Param_Name", ASync_PI_Param_Name)
         & Assoc ("ASync_PI_Param_Type", ASync_PI_Param_Type)
         & Assoc ("List_Of_ASync_RIs",   List_Of_ASync_RIs)

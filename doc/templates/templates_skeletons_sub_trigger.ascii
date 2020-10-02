@@ -35,8 +35,6 @@ and Glue subfolders.
 +---------------------+---------------------------------------------------+
 | Debug_Flag          | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
-| ASync_PI_Param_Name | DOCUMENTATION MISSING                             |
-+---------------------+---------------------------------------------------+
 | Timer_Resolution    | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
 | Property_Names      | Vector tag: AADL Property name                    |
@@ -46,8 +44,6 @@ and Glue subfolders.
 | Skeletons           | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
 | Interface_View      | Interface view filename                           |
-+---------------------+---------------------------------------------------+
-| ASync_PI_Param_Type | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
 | ASync_RI_Param_Name | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
@@ -61,7 +57,13 @@ and Glue subfolders.
 +---------------------+---------------------------------------------------+
 | No_Stdlib_Flag      | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
-| List_Of_ASync_PIs   | DOCUMENTATION MISSING                             |
+| List_Of_ASync_PIs   | Vector tag: list of async Provided interfaces     |
++---------------------+---------------------------------------------------+
+| ASync_PI_Kind       | ↳ CYCLIC_OPERATION or SPORADIC_OPERATION          |
++---------------------+---------------------------------------------------+
+| ASync_PI_Param_Name | DOCUMENTATION MISSING                             |
++---------------------+---------------------------------------------------+
+| ASync_PI_Param_Type | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+
 | Glue                | DOCUMENTATION MISSING                             |
 +---------------------+---------------------------------------------------+

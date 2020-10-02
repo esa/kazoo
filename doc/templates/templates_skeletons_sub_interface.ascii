@@ -13,6 +13,8 @@ The results are parameters for processing function.tmplt
 | Direction                         | "PI" or "RI"                      |
 +-----------------------------------+-----------------------------------+
 | Kind                              | The RCM Kind                      |
+|                                   | (SPORADIC|CYCLIC|PROTECTED|UNPROT |
+|                                   | ECTED_OPERATION)                  |
 +-----------------------------------+-----------------------------------+
 | Parent_Function                   | The name of the function          |
 +-----------------------------------+-----------------------------------+

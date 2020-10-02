@@ -62,8 +62,8 @@ Template for a function in the skeleton or glue folder
 +-----------------------------------+-----------------------------------+
 | ASync_PI_Param_Type               | ↳ ASN.1 typename of the parameter |
 +-----------------------------------+-----------------------------------+
-| Async_RIs_Parent                  | ↳ and corresponding parent        |
-|                                   | function name                     |
+| ASync_PI_Kind                     | ↳ CYCLIC_OPERATION or             |
+|                                   | SPORADIC_OPERATION                |
 +-----------------------------------+-----------------------------------+
 | Timers                            | List of timers (names)            |
 +-----------------------------------+-----------------------------------+
@@ -84,6 +84,9 @@ Template for a function in the skeleton or glue folder
 +-----------------------------------+-----------------------------------+
 | List_Of_ASync_RIs                 | vector tag: list of asynchronous  |
 |                                   | required interfaces               |
++-----------------------------------+-----------------------------------+
+| Async_RIs_Parent                  | ↳ Corresponding parent function   |
+|                                   | name                              |
 +-----------------------------------+-----------------------------------+
 | ASync_RI_Param_Name               | ↳ parameter name of the required  |
 |                                   | interface                         |

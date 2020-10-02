@@ -162,9 +162,6 @@ This template is identical for Skeleton and Glue subfolders.
 |Debug_Flag
 |DOCUMENTATION MISSING
 |-
-|ASync_PI_Param_Name
-|DOCUMENTATION MISSING
-|-
 |Timer_Resolution
 |DOCUMENTATION MISSING
 |-
@@ -179,9 +176,6 @@ This template is identical for Skeleton and Glue subfolders.
 |-
 |Interface_View
 |Interface view filename
-|-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
 |-
 |ASync_RI_Param_Name
 |DOCUMENTATION MISSING
@@ -202,6 +196,15 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |List_Of_ASync_PIs
+|Vector tag: list of async Provided interfaces
+|-
+|ASync_PI_Kind
+|  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
+|-
+|ASync_PI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Type
 |DOCUMENTATION MISSING
 |-
 |Glue
@@ -269,6 +272,9 @@ This file is optional, if exists the result of parsing of this file is a name of
 |-
 |Name
 |The name of the function
+|-
+|Language
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/function-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for function.tmplt, otherwise this template will not be processed.
@@ -278,6 +284,9 @@ This file is optional, if exists the result of parsing of this file is a name of
 |-
 |Name
 |The name of the function
+|-
+|Language
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/function.tmplt ===
 Template for a function in the skeleton or glue folder
@@ -352,8 +361,8 @@ Template for a function in the skeleton or glue folder
 |ASync_PI_Param_Type
 | &#8627; ASN.1 typename of the parameter
 |-
-|Async_RIs_Parent
-| &#8627; and corresponding parent function name
+|ASync_PI_Kind
+| &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
 |-
 |Timers
 |List of timers (names)
@@ -376,6 +385,9 @@ Template for a function in the skeleton or glue folder
 |List_Of_ASync_RIs
 |vector tag: list of asynchronous required interfaces
 |-
+|Async_RIs_Parent
+| &#8627; Corresponding parent function name
+|-
 |ASync_RI_Param_Name
 | &#8627; parameter name of the required interface
 |-
@@ -395,7 +407,7 @@ This file is processed twice, first time for required interfaces of the function
 |"PI" or "RI"
 |-
 |Kind
-|The RCM Kind
+|The RCM Kind (SPORADIC|CYCLIC|PROTECTED|UNPROTECTED_OPERATION)
 |-
 |Parent_Function
 |The name of the function
@@ -912,6 +924,9 @@ This template is evaluated for every block.
 |-
 |List_Of_ASync_PIs
 |Vector tag: name of asynchronous PIs
+|-
+|ASync_PI_Kind
+|  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
 |-
 |ASync_PI_Param_Name
 |  &#8627; corresponding parameter Name

@@ -160,21 +160,34 @@ project @_CAPITALIZE:Name_@ is
          "-Wextra",
          "-fdiagnostics-show-option",
          "-Wcast-align",
+         "-fdata-sections",
+         "-ffunction-sections",
          "-Wswitch")
-         & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
-         & external_as_list("USER_CFLAGS", " ");
+         & External_As_List ("@_UPPER:Name_@_USER_CFLAGS", " ")
+         & External_As_List ("USER_CFLAGS", " ");
+
+      Common_Ada_Switches :=
+        ("-Wall",
+         "-Wextra",
+         "-fdata-sections",
+         "-ffunction-sections",
+         "-gnatd.E")   -- this flag allows to have an IN and IN OUT parameter with the same variable
+         & External_As_List ("@_UPPER:Name_@_USER_ADAFLAGS", " ")
+         & External_As_List ("USER_ADAFLAGS", " ");
 
       case Build is
          when "Release" =>
-            for Default_Switches ("C") use Common_C_Switches & ("-O2", "-DNDEBUG");
-            for Default_Switches ("C++") use Common_C_Switches & ("-O2", "-DNDEBUG");
+            for Default_Switches ("C")   use Common_C_Switches   & ("-O2", "-DNDEBUG");
+            for Default_Switches ("C++") use Common_C_Switches   & ("-O2", "-DNDEBUG");
+            for Default_Switches ("Ada") use Common_Ada_Switches & ("-O2", "-DNDEBUG");
          when "Debug" =>
-            for Default_Switches ("C") use Common_C_Switches & ("-g", "-O0");
-            for Default_Switches ("C++") use Common_C_Switches & ("-g", "-O0");
+            for Default_Switches ("C")   use Common_C_Switches   & ("-g", "-O0");
+            for Default_Switches ("C++") use Common_C_Switches   & ("-g", "-O0");
+            for Default_Switches ("Ada") use Common_Ada_Switches & ("-g", "-O0");
       end case;
       --  Increase command line size to avoid using --specs and support ccache
-      --  Disable for now - does not work with gprbuild in debian9
-      --  for Max_Command_Line_Length use "131072";
+      --  Comment the line if you are using an old version of gprbuild, eg. in Debian 9
+      for Max_Command_Line_Length use "131072";
    end Compiler;
 
    package Linker is

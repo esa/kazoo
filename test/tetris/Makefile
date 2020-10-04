@@ -10,6 +10,7 @@ all:	c
 
 c:	work/glue_built
 	$(MAKE) -C work
+	cp UserWidgets.py work/binaries/player_GUI/
 
 # Simulation target (experimental)
 simu:	InterfaceView.aadl DeploymentView.aadl DataView.aadl ConcurrencyView_Properties.aadl

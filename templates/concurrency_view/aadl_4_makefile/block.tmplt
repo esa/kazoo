@@ -1,16 +1,15 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Name_@             : Protected block name
-@@-- @_Partition_Name_@   : Containing partition name
-@@-- @_Language_@         : Implementation language
-@@-- ...all function attribute: Zip_File, etc... are also available
-@@-- @_Calling_Threads_@  : List of calling threads
-@@-- @_Node name_@        : Node name
-@@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
-@@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
-@@-- @_Required_@         : Required interfaces (from ri.tmplt)
-@@-- @_Is_Shared_Type_@   : True if instance and parent in shared folder
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fblock.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_block.ascii
 @@IF@@ @_Language_@ = SDL
+@@SET@@ SDL_Target_Language=Ada
+@@TABLE@@
+  @@ELSIF@@ @_Property_Names_@ = "TASTE_IV_Properties::Default_CodeGen" and @_Property_Values_@ = c
+    @@SET@@ SDL_Target_Language=C
+  @@END_IF@@
+@@END_TABLE@@
 @_LOWER:Name_@:	../@_LOWER:Name_@/SDL/code/@_LOWER:Name_@.adb
 
 @@IF@@ @_Instance_Of_@ = ""

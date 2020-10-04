@@ -1,13 +1,15 @@
 ---------------------------------------------------
--- AADL2.0
--- TASTE
--- (c)Ellidiss Technologies
+-- AADL2.2
+-- TASTE type interfaceview
 -- 
+-- generated code: do not edit
 ---------------------------------------------------
 
-PACKAGE interfaceview::FV::orchestrator
+PACKAGE interfaceview::IV::orchestrator
 PUBLIC
 
+WITH interfaceview::IV::ground;
+WITH interfaceview::IV::passiveFunction;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -17,6 +19,8 @@ PROPERTIES
 END PI_pulse;
 
 SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_pulse.others;
 
 SUBPROGRAM PI_run
@@ -29,6 +33,8 @@ PROPERTIES
 END PI_run;
 
 SUBPROGRAM IMPLEMENTATION PI_run.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_run.others;
 
 SUBPROGRAM RI_housekeeping
@@ -54,11 +60,49 @@ END RI_computeGNC;
 SUBPROGRAM IMPLEMENTATION RI_computeGNC.others
 END RI_computeGNC.others;
 
-END interfaceview::FV::orchestrator;
+SYSTEM orchestrator
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::orchestrator::PI_pulse.others {
+    Taste::coordinates => "1889 312";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::orchestrator::PI_run.others {
+    Taste::coordinates => "1889 417";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "run";
+  };
+  RI_housekeeping : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::ground::PI_housekeeping.others {
+    Taste::coordinates => "1889 722";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "housekeeping";
+    Taste::labelInheritance => "true";
+  };
+  RI_computeGNC : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::passiveFunction::PI_computeGNC.others {
+    Taste::coordinates => "2132 928";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "computeGNC";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => enabled;
+END orchestrator;
 
-PACKAGE interfaceview::FV::ground
+SYSTEM IMPLEMENTATION orchestrator.others
+END orchestrator.others;
+
+END interfaceview::IV::orchestrator;
+
+PACKAGE interfaceview::IV::ground
 PUBLIC
 
+WITH interfaceview::IV::orchestrator;
+WITH interfaceview::IV::MemoryScrub;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -72,6 +116,8 @@ PROPERTIES
 END PI_housekeeping;
 
 SUBPROGRAM IMPLEMENTATION PI_housekeeping.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_housekeeping.others;
 
 SUBPROGRAM RI_run
@@ -94,9 +140,38 @@ END RI_EnableOrDisable;
 SUBPROGRAM IMPLEMENTATION RI_EnableOrDisable.others
 END RI_EnableOrDisable.others;
 
-END interfaceview::FV::ground;
+SYSTEM ground
+FEATURES
+  PI_housekeeping : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::ground::PI_housekeeping.others {
+    Taste::coordinates => "1335 728";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "housekeeping";
+  };
+  RI_run : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::orchestrator::PI_run.others {
+    Taste::coordinates => "1335 423";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "run";
+    Taste::labelInheritance => "true";
+  };
+  RI_EnableOrDisable : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::MemoryScrub::PI_EnableOrDisable.others {
+    Taste::coordinates => "849 974";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "EnableOrDisable";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => enabled;
+END ground;
 
-PACKAGE interfaceview::FV::passiveFunction
+SYSTEM IMPLEMENTATION ground.others
+END ground.others;
+
+END interfaceview::IV::ground;
+
+PACKAGE interfaceview::IV::passiveFunction
 PUBLIC
 
 WITH Taste;
@@ -115,11 +190,30 @@ PROPERTIES
 END PI_computeGNC;
 
 SUBPROGRAM IMPLEMENTATION PI_computeGNC.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_computeGNC.others;
 
-END interfaceview::FV::passiveFunction;
+SYSTEM passiveFunction
+FEATURES
+  PI_computeGNC : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::passiveFunction::PI_computeGNC.others {
+    Taste::coordinates => "2132 1180";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "computeGNC";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END passiveFunction;
 
-PACKAGE interfaceview::FV::MemoryScrub
+SYSTEM IMPLEMENTATION passiveFunction.others
+END passiveFunction.others;
+
+END interfaceview::IV::passiveFunction;
+
+PACKAGE interfaceview::IV::MemoryScrub
 PUBLIC
 
 WITH Taste;
@@ -135,171 +229,71 @@ PROPERTIES
 END PI_EnableOrDisable;
 
 SUBPROGRAM IMPLEMENTATION PI_EnableOrDisable.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_EnableOrDisable.others;
 
-END interfaceview::FV::MemoryScrub;
+SYSTEM MemoryScrub
+FEATURES
+  PI_EnableOrDisable : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::MemoryScrub::PI_EnableOrDisable.others {
+    Taste::coordinates => "852 1221";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "EnableOrDisable";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => enabled;
+END MemoryScrub;
+
+SYSTEM IMPLEMENTATION MemoryScrub.others
+END MemoryScrub.others;
+
+END interfaceview::IV::MemoryScrub;
 
 PACKAGE interfaceview::IV
 PUBLIC
 
-WITH interfaceview::FV::orchestrator;
-WITH interfaceview::FV::ground;
-WITH interfaceview::FV::passiveFunction;
-WITH interfaceview::FV::MemoryScrub;
-WITH interfaceview::FV;
+WITH interfaceview::IV::orchestrator;
+WITH interfaceview::IV::ground;
+WITH interfaceview::IV::passiveFunction;
+WITH interfaceview::IV::MemoryScrub;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
-SYSTEM orchestrator
-FEATURES
-  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::orchestrator::PI_pulse.others {
-    Taste::coordinates => "1889 312";
-    Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "pulse";
-  };
-  PI_run : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::orchestrator::PI_run.others {
-    Taste::coordinates => "1889 417";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "run";
-  };
-  RI_housekeeping : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::ground::PI_housekeeping.others {
-    Taste::coordinates => "1889 722";
-    Taste::RCMoperationKind => sporadic;
-    Taste::InterfaceName => "housekeeping";
-    Taste::labelInheritance => "true";
-  };
-  RI_computeGNC : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::passiveFunction::PI_computeGNC.others {
-    Taste::coordinates => "2132 928";
-    Taste::RCMoperationKind => unprotected;
-    Taste::InterfaceName => "computeGNC";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (SDL);
-END orchestrator;
-
-SYSTEM IMPLEMENTATION orchestrator.others
-SUBCOMPONENTS
-  pulse_impl : SUBPROGRAM interfaceview::FV::orchestrator::PI_pulse.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-  run_impl : SUBPROGRAM interfaceview::FV::orchestrator::PI_run.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_pulse_impl : SUBPROGRAM ACCESS pulse_impl -> PI_pulse;
-  OpToPICnx_run_impl : SUBPROGRAM ACCESS run_impl -> PI_run;
-END orchestrator.others;
-
-SYSTEM ground
-FEATURES
-  PI_housekeeping : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::ground::PI_housekeeping.others {
-    Taste::coordinates => "1338 722";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "housekeeping";
-  };
-  RI_run : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::orchestrator::PI_run.others {
-    Taste::coordinates => "1338 417";
-    Taste::RCMoperationKind => sporadic;
-    Taste::InterfaceName => "run";
-    Taste::labelInheritance => "true";
-  };
-  RI_EnableOrDisable : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::MemoryScrub::PI_EnableOrDisable.others {
-    Taste::coordinates => "852 968";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "EnableOrDisable";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (GUI);
-END ground;
-
-SYSTEM IMPLEMENTATION ground.others
-SUBCOMPONENTS
-  housekeeping_impl : SUBPROGRAM interfaceview::FV::ground::PI_housekeeping.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_housekeeping_impl : SUBPROGRAM ACCESS housekeeping_impl -> PI_housekeeping;
-END ground.others;
-
-SYSTEM passiveFunction
-FEATURES
-  PI_computeGNC : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::passiveFunction::PI_computeGNC.others {
-    Taste::coordinates => "2132 1180";
-    Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "computeGNC";
-  };
-PROPERTIES
-  Source_Language => (C);
-END passiveFunction;
-
-SYSTEM IMPLEMENTATION passiveFunction.others
-SUBCOMPONENTS
-  computeGNC_impl : SUBPROGRAM interfaceview::FV::passiveFunction::PI_computeGNC.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_computeGNC_impl : SUBPROGRAM ACCESS computeGNC_impl -> PI_computeGNC;
-END passiveFunction.others;
-
-SYSTEM MemoryScrub
-FEATURES
-  PI_EnableOrDisable : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::MemoryScrub::PI_EnableOrDisable.others {
-    Taste::coordinates => "852 1221";
-    Taste::RCMoperationKind => sporadic;
-    Taste::InterfaceName => "EnableOrDisable";
-  };
-PROPERTIES
-  Source_Language => (SDL);
-END MemoryScrub;
-
-SYSTEM IMPLEMENTATION MemoryScrub.others
-SUBCOMPONENTS
-  EnableOrDisable_impl : SUBPROGRAM interfaceview::FV::MemoryScrub::PI_EnableOrDisable.others {
-    Compute_Execution_Time => 0 ms .. 0 ms;
-  };
-CONNECTIONS
-  OpToPICnx_EnableOrDisable_impl : SUBPROGRAM ACCESS EnableOrDisable_impl -> PI_EnableOrDisable;
-END MemoryScrub.others;
-
 SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
 END interfaceview;
 
 SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
-  orchestrator : SYSTEM interfaceview::IV::orchestrator.others {
+  orchestrator : SYSTEM interfaceview::IV::orchestrator::orchestrator.others {
     Taste::coordinates => "1889 199 2582 928";
   };
-  ground : SYSTEM interfaceview::IV::ground.others {
-    Taste::coordinates => "432 232 1338 968";
+  ground : SYSTEM interfaceview::IV::ground::ground.others {
+    Taste::coordinates => "429 238 1335 974";
   };
-  passiveFunction : SYSTEM interfaceview::IV::passiveFunction.others {
+  passiveFunction : SYSTEM interfaceview::IV::passiveFunction::passiveFunction.others {
     Taste::coordinates => "1920 1180 2607 1814";
   };
-  MemoryScrub : SYSTEM interfaceview::IV::MemoryScrub.others {
+  MemoryScrub : SYSTEM interfaceview::IV::MemoryScrub::MemoryScrub.others {
     Taste::coordinates => "359 1221 1344 1883";
   };
 CONNECTIONS
-  orchestrator_run_ground_run : SUBPROGRAM ACCESS orchestrator.PI_run -> ground.RI_run {
-    Taste::coordinates => "1338 417 1613 417 1613 417 1889 417";
+  ground_RI_run_orchestrator_PI_run : SUBPROGRAM ACCESS orchestrator.PI_run -> ground.RI_run {
+    Taste::coordinates => "1335 423 1613 423 1613 417 1889 417";
   };
-  ground_housekeeping_orchestrator_housekeeping : SUBPROGRAM ACCESS ground.PI_housekeeping -> orchestrator.RI_housekeeping {
-    Taste::coordinates => "1889 722 1613 722 1613 722 1338 722";
+  orchestrator_RI_housekeeping_ground_PI_housekeeping : SUBPROGRAM ACCESS ground.PI_housekeeping -> orchestrator.RI_housekeeping {
+    Taste::coordinates => "1889 722 1613 722 1613 728 1335 728";
   };
-  passiveFunction_computeGNC_orchestrator_computeGNC : SUBPROGRAM ACCESS passiveFunction.PI_computeGNC -> orchestrator.RI_computeGNC {
+  orchestrator_RI_computeGNC_passiveFunction_PI_computeGNC : SUBPROGRAM ACCESS passiveFunction.PI_computeGNC -> orchestrator.RI_computeGNC {
     Taste::coordinates => "2132 928 2132 1054 2132 1054 2132 1180";
   };
-  MemoryScrub_EnableOrDisable_ground_EnableOrDisable : SUBPROGRAM ACCESS MemoryScrub.PI_EnableOrDisable -> ground.RI_EnableOrDisable {
-    Taste::coordinates => "852 968 852 1094 852 1094 852 1221";
+  ground_RI_EnableOrDisable_MemoryScrub_PI_EnableOrDisable : SUBPROGRAM ACCESS MemoryScrub.PI_EnableOrDisable -> ground.RI_EnableOrDisable {
+    Taste::coordinates => "849 974 849 1094 852 1094 852 1221";
   };
 END interfaceview.others;
 
@@ -307,14 +301,6 @@ PROPERTIES
   Taste::dataView => ("DataView");
   Taste::dataViewPath => ("DataView.aadl");
   Taste::coordinates => "0 0 2970 2100";
-  Taste::version => "1.3.17";
+  Taste::version => "2.4";
 END interfaceview::IV;
-
-PACKAGE interfaceview::FV
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-END interfaceview::FV;
 

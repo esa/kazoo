@@ -1,5 +1,5 @@
---  *************************** taste aadl parser ***********************  --
---  (c) 2017-2019 European Space Agency - maxime.perrotin@esa.int
+--  *************************** kazoo ***********************  --
+--  (c) 2017-2020 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Interface View parser
@@ -992,6 +992,7 @@ package body TASTE.Interface_View is
       List_Of_ASync_PIs,
       ASync_PI_Kind, --  Can be Cyclic or Sporadic
       ASync_PI_Param_Name,
+      ASync_PI_Is_Connected,
       ASync_PI_Param_Type  : Vector_Tag;
 
       List_Of_Sync_RIs,
@@ -1049,6 +1050,10 @@ package body TASTE.Interface_View is
                if not Each.Is_Timer then
                   List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
                   ASync_PI_Kind := ASync_PI_Kind & Each.RCM'Img;
+                  --  Keep a flag for non-connected async PIs,
+                  --  useful in templates to skip unnecessary code
+                  ASync_PI_Is_Connected := ASync_PI_Is_Connected
+                    & (not Each.Remote_Interfaces.Is_Empty);
                   if not Each.Params.Is_Empty then
                      ASync_PI_Param_Name := ASync_PI_Param_Name
                        & Each.Params.First_Element.Name;
@@ -1123,29 +1128,30 @@ package body TASTE.Interface_View is
                   then ""
                   else Ada.Directories.Full_Name
                    (To_String (F.Zip_File.Unsafe_Just))))
-        & Assoc ("List_Of_PIs",         List_Of_PIs)
-        & Assoc ("List_Of_RIs",         List_Of_RIs)
-        & Assoc ("List_Of_Sync_PIs",    List_Of_Sync_PIs)
-        & Assoc ("List_Of_Sync_RIs",    List_Of_Sync_RIs)
-        & Assoc ("Sync_RIs_Parent",     Sync_RIs_Parent)
-        & Assoc ("List_Of_ASync_PIs",   List_Of_ASync_PIs)
-        & Assoc ("ASync_PI_Kind",       ASync_PI_Kind)
-        & Assoc ("ASync_PI_Param_Name", ASync_PI_Param_Name)
-        & Assoc ("ASync_PI_Param_Type", ASync_PI_Param_Type)
-        & Assoc ("List_Of_ASync_RIs",   List_Of_ASync_RIs)
-        & Assoc ("ASync_RI_Param_Name", ASync_RI_Param_Name)
-        & Assoc ("ASync_RI_Param_Type", ASync_RI_Param_Type)
-        & Assoc ("Async_RIs_Parent",    Async_RIs_Parent)
-        & Assoc ("CP_Names",            CP_Names)
-        & Assoc ("CP_Types",            CP_Types)
-        & Assoc ("CP_Values",           CP_Values)
-        & Assoc ("CP_Asn1Modules",      CP_Asn1Modules)
-        & Assoc ("CP_Asn1Filenames",    CP_Filenames)
-        & Assoc ("Is_Type",             F.Is_Type)
-        & Assoc ("Instance_Of",         F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",              Timers)
-        & Assoc ("PIs_Have_Params",     PIs_Have_Params)
-        & Assoc ("RIs_Have_Params",     RIs_Have_Params);
+        & Assoc ("List_Of_PIs",           List_Of_PIs)
+        & Assoc ("List_Of_RIs",           List_Of_RIs)
+        & Assoc ("List_Of_Sync_PIs",      List_Of_Sync_PIs)
+        & Assoc ("List_Of_Sync_RIs",      List_Of_Sync_RIs)
+        & Assoc ("Sync_RIs_Parent",       Sync_RIs_Parent)
+        & Assoc ("List_Of_ASync_PIs",     List_Of_ASync_PIs)
+        & Assoc ("ASync_PI_Kind",         ASync_PI_Kind)
+        & Assoc ("ASync_PI_Is_Connected", ASync_PI_Is_Connected)
+        & Assoc ("ASync_PI_Param_Name",   ASync_PI_Param_Name)
+        & Assoc ("ASync_PI_Param_Type",   ASync_PI_Param_Type)
+        & Assoc ("List_Of_ASync_RIs",     List_Of_ASync_RIs)
+        & Assoc ("ASync_RI_Param_Name",   ASync_RI_Param_Name)
+        & Assoc ("ASync_RI_Param_Type",   ASync_RI_Param_Type)
+        & Assoc ("Async_RIs_Parent",      Async_RIs_Parent)
+        & Assoc ("CP_Names",              CP_Names)
+        & Assoc ("CP_Types",              CP_Types)
+        & Assoc ("CP_Values",             CP_Values)
+        & Assoc ("CP_Asn1Modules",        CP_Asn1Modules)
+        & Assoc ("CP_Asn1Filenames",      CP_Filenames)
+        & Assoc ("Is_Type",               F.Is_Type)
+        & Assoc ("Instance_Of",           F.Instance_Of.Value_Or (US ("")))
+        & Assoc ("Timers",                Timers)
+        & Assoc ("PIs_Have_Params",       PIs_Have_Params)
+        & Assoc ("RIs_Have_Params",       RIs_Have_Params);
 
       return Result;
    end Function_To_Template;

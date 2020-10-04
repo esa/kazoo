@@ -21,7 +21,7 @@ void @_LOWER:Name_@_check_queue(bool *OUT_has_pending_msg)
    // Check all incoming queues for a pending message
    *OUT_has_pending_msg = false;
    @@TABLE@@
-   @@IF@@ @_ASync_PI_Kind_@ = SPORADIC_OPERATION
+   @@IF@@ @_ASync_PI_Kind_@ = SPORADIC_OPERATION and @_ASync_PI_Is_Connected_@
    if(__po_hi_gqueue_get_count(
         @_LOWER:Partition_Name_@_@_LOWER:Name_@_@_LOWER:List_Of_ASync_PIs_@_k,
         @_LOWER:Name_@_@_LOWER:List_Of_ASync_PIs_@_local_inport_@_LOWER:List_Of_ASync_PIs_@)) {

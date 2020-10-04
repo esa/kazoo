@@ -42,6 +42,9 @@ This template is evaluated for every block.
 | ASync_PI_Kind                     | ↳ CYCLIC_OPERATION or             |
 |                                   | SPORADIC_OPERATION                |
 +-----------------------------------+-----------------------------------+
+| ASync_PI_Is_Connected             | ↳ Flag set to true if PI is       |
+|                                   | connected                         |
++-----------------------------------+-----------------------------------+
 | ASync_PI_Param_Name               | ↳ corresponding parameter Name    |
 +-----------------------------------+-----------------------------------+
 | ASync_PI_Param_Type               | ↳ corresponding parameter ASN.1   |

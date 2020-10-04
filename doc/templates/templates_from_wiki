@@ -201,6 +201,9 @@ This template is identical for Skeleton and Glue subfolders.
 |ASync_PI_Kind
 |  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
 |-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
+|-
 |ASync_PI_Param_Name
 |DOCUMENTATION MISSING
 |-
@@ -363,6 +366,9 @@ Template for a function in the skeleton or glue folder
 |-
 |ASync_PI_Kind
 | &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
+|-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
 |-
 |Timers
 |List of timers (names)
@@ -928,6 +934,9 @@ This template is evaluated for every block.
 |ASync_PI_Kind
 |  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
 |-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
+|-
 |ASync_PI_Param_Name
 |  &#8627; corresponding parameter Name
 |-
@@ -1042,11 +1051,6 @@ This template is evaluated for every block.
 |Is_Shared_Type
 |True if component is an instance of a function in the shared types folder
 |}
-
-
-
-
-
 
 === templates/concurrency_view/sub/partition.tmplt ===
 This file is evaluated for every partition.

@@ -137,7 +137,7 @@ ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
 @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
-	aadl2glueC -o $(dir $@) $^
+	aadl2glueC -allboards -o $(dir $@) $^
 	touch $@
 
 	@@END_IF@@
@@ -211,7 +211,7 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	touch $@
 	   @@ELSE@@
 dataview/@_Unique_Languages_@/built: ${DATAVIEW_UNIQ} # no context parameters except for C and Ada
-	mkdir -p $(dir $@) && asn2dataModel -o $(dir $@) -to@_Unique_Languages_@ $^
+	mkdir -p $(dir $@) && asn2dataModel -allboards -o $(dir $@) -to@_Unique_Languages_@ $^
 	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@
@@ -219,7 +219,7 @@ dataview/@_Unique_Languages_@/built: ${DATAVIEW_UNIQ} # no context parameters ex
 	@@IF@@ @_Need_Ada_@=TRUE
 dataview/Ada/built: ${DATAVIEW_UNIQ} ${CP_FILES}
 	mkdir -p $(dir $@)
-	asn2dataModel -o $(dir $@) -toAda $^
+	asn2dataModel -allboards -o $(dir $@) -toAda $^
 	touch $@
 	cd dataview/Ada && rm -f gnat.cfg GPS_project.gpr IgnoredExaminerWarnings.wrn runSpark.sh
         @@END_IF@@

@@ -14,7 +14,7 @@
   @@-- to the same file generated at different places The python code checks
   @@-- that when this happens only one _datamodel.asn file is kept to avoid
   @@-- an error that would otherwise be raised by asn2dataModel
-  @@INLINE(	args=$$\(python3 -c "import os, sys; print\(' '.join\({os.path.basename\(f\):f for f in sys.argv[1:]}.values\(\)\)\)" )( )(\); \\\n	mkdir -p ..\/dataview\/Ada; find $$args && asn2dataModel -toAda -o ..\/dataview\/Ada $$args || echo 'Ignore this error if you are using the OpenGEODE C Backend')@@
+  @@INLINE(	args=$$\(python3 -c "import os, sys; print\(' '.join\({os.path.basename\(f\):f for f in sys.argv[1:]}.values\(\)\)\)" )( )(\); \\\n	mkdir -p ..\/dataview\/Ada; find $$args && asn2dataModel -toAda -allboards -o ..\/dataview\/Ada $$args || echo 'Ignore this error if you are using the OpenGEODE C Backend')@@
     @@TABLE@@
        @@IF@@ @_Block_Languages_@ = SDL
           @@--  Use wildcard because in the case of the SDL to C backend the _datamodel files are not generated (yet)

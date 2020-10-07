@@ -1,0 +1,21 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+PROCESS flight;
+    /* CIF TEXT (630, 69), (287, 140) */
+    -- Text area for declarations and comments
+
+dcl blah EmptySeq;
+    /* CIF ENDTEXT */
+    /* CIF START (401, 11), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (401, 61), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF STATE (401, 61), (70, 35) */
+    STATE Wait;
+        /* CIF INPUT (364, 116), (143, 35) */
+        INPUT fromGUI(blah);
+            /* CIF OUTPUT (382, 166), (108, 35) */
+            OUTPUT toGUI(blah);
+            /* CIF NEXTSTATE (401, 216), (70, 35) */
+            NEXTSTATE Wait;
+    ENDSTATE;
+ENDPROCESS flight;

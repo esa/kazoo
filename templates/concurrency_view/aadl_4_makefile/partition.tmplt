@@ -23,8 +23,11 @@
           @@ELSE@@
              ${wildcard ../@_LOWER:Block_Names_@/SDL/code/@_LOWER:Block_Instance_Of_@_datamodel.asn}
           @@END_IF@@
+             @@-- If the function has context parameters, add the file
+             ${wildcard ../@_LOWER:Block_Names_@/SDL/Context-@_LOWER:REPLACE_ALL(_/-):Block_Names_@.asn}
        @@END_IF@@
     @@END_TABLE@@
+    ../dataview/dataview-uniq.asn
   @@END_INLINE@@
 
 # Build of partition @_Name_@ for RTEMS (generate adainit)

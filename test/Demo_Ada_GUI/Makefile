@@ -12,6 +12,8 @@ c: test-parse-c # Polyorb_HI_C output
 	cp displayer/displayer.adb work/displayer/Ada/src
 	cp router/router.adb work/router/Ada/src
 	$(MAKE) -C work
+	./regression.py
+	./test.with.python.sh
 
 simu: clean-c
 	$(KAZOO) -t SIMU -p --gw --glue

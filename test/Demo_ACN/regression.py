@@ -4,7 +4,7 @@ import sys
 timeout = 5
 
 binaries = [
-    "binary.c/binaries/demo"
+    "work/binaries/demo"
 ]
 
 expected = [

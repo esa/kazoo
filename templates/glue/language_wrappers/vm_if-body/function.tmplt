@@ -46,12 +46,10 @@ extern void CInit@_CAPITALIZE:Name_@(void);
 extern void init_@_LOWER:Sync_RIs_Parent_@(void);
 extern unsigned @_LOWER:Sync_RIs_Parent_@_initialized;
 @@END_TABLE@@
-@@-- define a global initialization flag for the function, that is checked in invoke_ri
-@@-- to prevent calls to RIs during the startup function
 unsigned @_LOWER:Name_@_initialized = 0;
 void init_@_LOWER:Name_@(void)
 {
-   if (!@_LOWER:Name_@_initialized) {
+   if (0 == @_LOWER:Name_@_initialized) {
       @_LOWER:Name_@_initialized = 1;
 @@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
       // Call user code startup function
@@ -77,6 +75,9 @@ void init_@_LOWER:Name_@(void)
 #ifdef __unix__
       puts ("[TASTE] Initialization completed for function @_Name_@");
 #endif
+      @@-- Value is set to 2 only once the function is fully initialized
+      @@-- This was used to prevent RI calls during startup, but this
+      @@-- is not needed anymore at runtime since this is now allowed
       @_LOWER:Name_@_initialized = 2;
    }
 }

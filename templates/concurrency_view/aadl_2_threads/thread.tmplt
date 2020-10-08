@@ -63,9 +63,9 @@ end @_CAPITALIZE:Thread_Name_@;
 thread implementation @_CAPITALIZE:Thread_Name_@.others
 properties
 @@IF@@ @_Use_POHIC_@
-   Initialize_Entrypoint_Source_Text => "init_@_LOWER:Pro_Block_Name_@";
+   Activate_Entrypoint_Source_Text => "init_@_LOWER:Pro_Block_Name_@";
 @@ELSE@@
-   Initialize_Entrypoint_Source_Text => "@_CAPITALIZE:Partition_Name_@_TASTE_Interface.@_CAPITALIZE:Thread_Name_@_Init";
+   Activate_Entrypoint_Source_Text => "@_CAPITALIZE:Partition_Name_@_TASTE_Interface.@_CAPITALIZE:Thread_Name_@_Init";
 @@END_IF@@
 @@INLINE(   )(\n   )()@@
 @@IF@@ @_RCM_@ = "SPORADIC_OPERATION"

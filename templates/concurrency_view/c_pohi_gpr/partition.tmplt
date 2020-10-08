@@ -181,7 +181,7 @@ project @_CAPITALIZE:Name_@ is
             for Default_Switches ("C++") use Common_C_Switches   & ("-O2", "-DNDEBUG");
             for Default_Switches ("Ada") use Common_Ada_Switches & ("-O2", "-DNDEBUG");
          when "Debug" =>
-            for Default_Switches ("C")   use Common_C_Switches   & ("-g", "-O0");
+            for Default_Switches ("C")   use Common_C_Switches   & ("-g", "-O0", "-D__PO_HI_USE_VCD=1");
             for Default_Switches ("C++") use Common_C_Switches   & ("-g", "-O0");
             for Default_Switches ("Ada") use Common_Ada_Switches & ("-g", "-O0");
       end case;

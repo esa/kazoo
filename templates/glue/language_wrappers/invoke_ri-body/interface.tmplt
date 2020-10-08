@@ -18,16 +18,6 @@ void @_LOWER:Parent_Function_@_RI_@_Name_@
 void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
 @@END_IF@@
 {
-   // Check that we are not in the startup transition
-   if (2 != @_LOWER:Parent_Function_@_initialized) {
-      #ifdef __unix__
-         puts("A call to @_LOWER:Parent_Function_@_RI_@_Name_@ was made during system startup.");
-         puts("This is not allowed because the system is not yet fully initialized. Please fix your code/models");
-      #endif
-      // crash the application
-      abort();
-   }
-
    #ifdef __unix__
       // Log MSC data on Linux when environment variable is set
       static int innerMsc = -1;

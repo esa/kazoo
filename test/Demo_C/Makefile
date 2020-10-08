@@ -24,6 +24,7 @@ c: # Polyorb_HI_C output
 	$(KAZOO) -c DeploymentView_Native.aadl -p -g --gw --glue -o work
 	cp simple_c_function/*.c work/simple_c_function/C/src
 	$(MAKE) -C work
+	./regression.py
 
 simu:
 	rm -rf work

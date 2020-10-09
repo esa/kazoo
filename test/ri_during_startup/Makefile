@@ -10,7 +10,7 @@ c:	work/glue_built
 	cp input/master.pr  work/master/SDL/src/
 	cp input/slave.c    work/slave/C/src
 	$(MAKE) -C work
-	./regression.py
+	./regression.py 1>&2
 
 skeletons:
 	$(MAKE) work/skeletons_built

@@ -12,7 +12,7 @@ c: test-parse-c # Polyorb_HI_C output
 	cp a/a.c work/a/C/src
 	cp b/b.c work/b/C/src
 	make -C work
-	./regression.py
+	./regression.py 1>&2
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \

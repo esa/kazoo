@@ -162,6 +162,7 @@ project @_CAPITALIZE:Name_@ is
          "-Wcast-align",
          "-fdata-sections",
          "-ffunction-sections",
+         "-fdiagnostics-color=always",
          "-Wswitch")
          & External_As_List ("@_UPPER:Name_@_USER_CFLAGS", " ")
          & External_As_List ("USER_CFLAGS", " ");

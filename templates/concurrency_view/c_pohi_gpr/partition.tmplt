@@ -164,6 +164,7 @@ project @_CAPITALIZE:Name_@ is
          "-ffunction-sections",
          "-fdiagnostics-color=always",
          "-Wno-cast-function-type",
+         "-Wmissing-prototypes",
          "-Wswitch")
          & External_As_List ("@_UPPER:Name_@_USER_CFLAGS", " ")
          & External_As_List ("USER_CFLAGS", " ");

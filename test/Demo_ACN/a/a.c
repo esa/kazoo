@@ -29,4 +29,5 @@ void a_PI_Cyclic_Run()
 
 void a_PI_from_gui(const asn1SccT_POS *toto)
 {
+    (void)toto;
 }

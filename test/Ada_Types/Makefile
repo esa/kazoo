@@ -19,7 +19,7 @@ work/skeletons_built:	InterfaceView.aadl DataView.aadl
 	$(MAKE) -C work dataview
 	touch $@
 
-work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
+work/glue_built:	clean
 	$(KAZOO) -p --glue --gw -o work
 	touch $@
 

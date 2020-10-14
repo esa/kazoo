@@ -75,10 +75,10 @@ void @_LOWER:Parent_Function_@_@_Name_@
 
    // Call user code
 @@IF@@ @_Dispatch_FPGA_@
-   if(1 == @_LOWER:Parent_Function_@_@_Name_@_FPGA_Dispatch(@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@))
-      @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@);
+   if(1 == @_LOWER:Parent_Function_@_@_Name_@_FPGA_Dispatch(@_STRIP:PARAMETERS()_@))
+      @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS()_@);
 @@ELSE@@
-   @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS(@_Param_Directions_@, @_Param_Names_@)_@);
+   @_LOWER:Parent_Function_@_PI_@_Name_@ (@_STRIP:PARAMETERS()_@);
 @@END_IF@@
 
 @@TABLE@@    @@-- encode output parameters

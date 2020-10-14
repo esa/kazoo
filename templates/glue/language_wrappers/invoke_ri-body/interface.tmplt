@@ -3,20 +3,24 @@
 @@-- If you are using vim, go over the URL and pres gx in to follow the link
 @@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
 @@-- $HOME/tool-inst/share/kazoo/doc/templates_skeletons_sub_interface.ascii
+@@MACRO(PARAMETERS)@@
 @@IF@@ @_EXIST:Param_Names_@
-void @_LOWER:Parent_Function_@_RI_@_Name_@
-@@INLINE(      \()(,\n       )(\)\n)@@
-   @@TABLE@@
-      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
-         const asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *IN_@_LOWER:Param_Names_@
-      @@ELSE@@
-         asn1Scc@_REPLACE_ALL((-)/_):Param_Types_@ *OUT_@_LOWER:Param_Names_@
-      @@END_IF@@
-   @@END_TABLE@@
-@@END_INLINE@@
+    @@INLINE(\n      \()(,\n       )(\))@@
+       @@TABLE'ALIGN_ON("*")@@
+          @@IF@@ @_Param_Directions_@ = PARAM_IN
+             const asn1Scc@_Param_Types_@ *IN_@_LOWER:Param_Names_@
+          @@ELSE@@
+             asn1Scc@_Param_Types_@ *OUT_@_LOWER:Param_Names_@
+          @@END_IF@@
+       @@END_TABLE@@
+    @@END_INLINE@@
 @@ELSE@@
-void @_LOWER:Parent_Function_@_RI_@_Name_@(void)
+(void)
 @@END_IF@@
+@@END_MACRO@@
+
+void @_LOWER:Parent_Function_@_RI_@_Name_@@_REPLACE_ALL(-/_):REPLACE((.*)(\))(\n)/\\1\\2):PARAMETERS()_@;
+void @_LOWER:Parent_Function_@_RI_@_Name_@@_REPLACE_ALL(-/_):REPLACE((.*)(\))(\n)/\\1\\2):PARAMETERS()_@
 {
    #ifdef __unix__
       // Log MSC data on Linux when environment variable is set

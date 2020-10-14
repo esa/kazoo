@@ -53,6 +53,7 @@ void init_@_LOWER:Name_@(void)
       @_LOWER:Name_@_initialized = 1;
 @@IF@@ @_Language_@ /= "Ada" and @_Language_@ /= "QGenAda" and @_Language_@ /= "QGenC" and @_Language_@ /= "SDL"
       // Call user code startup function
+      extern void @_LOWER:Name_@_startup(void);
       @_LOWER:Name_@_startup();
 @@ELSIF@@ @_Language_@ = Ada or @_Language_@ = SDL
 @@IF@@ @_SDL_Target_Language_@ = "Ada"

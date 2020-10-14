@@ -7,4 +7,5 @@
 
 void TASTE_FDIR(const char *msg)
 {
+ (void)msg;
 }

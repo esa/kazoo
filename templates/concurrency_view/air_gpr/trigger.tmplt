@@ -6,6 +6,6 @@
 @@--    Use_POHIC
 @@--    Debug
 @@--    No_Stdlib
-@@IF@@ @_Use_POHIC_@ and @_CPU_Platform_@ = PLATFORM_AIR
+@@IF@@ @_Use_POHIC_@ and (@_CPU_Platform_@ = PLATFORM_AIR or @_CPU_Platform_@ = PLATFORM_AIR_IOP)
 TRUE
 @@END_IF@@

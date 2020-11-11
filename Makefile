@@ -49,6 +49,7 @@ endif
 install:
 	$(MAKE)
 	mkdir -p `ocarina-config --prefix`/share/kazoo
+	rm -rf `ocarina-config --prefix`/share/kazoo/templates
 	cp -a templates kazoo `ocarina-config --prefix`/share/kazoo
 	mkdir -p `ocarina-config --prefix`/share/kazoo/doc
 	cp -au doc/templates/* `ocarina-config --prefix`/share/kazoo/doc

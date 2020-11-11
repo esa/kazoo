@@ -28,8 +28,8 @@ all:	build-default
 @@ELSE@@
 @@-- for pure simulation target, force the generation of the Ada dataview
 @@SET@@ Need_Ada = TRUE
-# Build a simulator of the system
-all:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built build/deploymentview_final/Makefile
+# Build a simulator of the system (experimental)
+all:	aadl2glueC build/system_config.h
 	cd dataview && taste-asn1-iterators --raw dataview-uniq.asn
 	$(MAKE) -j -C build -f Makefile.taste simu
 @@END_IF@@

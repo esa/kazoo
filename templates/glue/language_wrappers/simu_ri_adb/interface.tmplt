@@ -16,6 +16,7 @@ procedure @_CAPITALIZE:Name_@
    @@END_TABLE@@
 @@END_INLINE@@
 @@ELSE@@
+
 procedure @_CAPITALIZE:Name_@ is
 @@END_IF@@
    Event : asn1SccEvents (Kind => @_Parent_Function_@_PRESENT);
@@ -31,3 +32,4 @@ begin
 @@END_INLINE@@
    Simulation_Event (Event);
 end @_CAPITALIZE:Name_@;
+

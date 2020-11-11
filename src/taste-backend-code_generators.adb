@@ -119,15 +119,22 @@ package body TASTE.Backend.Code_Generators is
       function Process_Interfaces (Interfaces : Template_Vectors.Vector;
                                    Path       : String) return Unbounded_String
       is
-         Result : Unbounded_String := Null_Unbounded_String;
+         Result      : Unbounded_String := Null_Unbounded_String;
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
+         Doc_Done    : Boolean := False;
       begin
          for Each of Interfaces loop
-            --  if Result /= Null_Unbounded_String then
-            --     Result := Result & ASCII.LF;
-            --  end if;
-            Document_Template (Templates_Skeletons_Sub_Interface, Each);
-            Result := Result & US (String'(Parse (Tmplt_Sign, Each)));
+            declare
+               Tmplt :  constant Translate_Set :=
+                  Join_Sets (Model.Configuration.To_Template, Each);
+            begin
+               if not Doc_Done then
+                  --  Template documentation (done once)
+                  Document_Template (Templates_Skeletons_Sub_Interface, Tmplt);
+                  Doc_Done := True;
+               end if;
+               Result := Result & US (String'(Parse (Tmplt_Sign, Tmplt)));
+            end;
          end loop;
          return Strip_String (Result);
       end Process_Interfaces;
@@ -223,7 +230,8 @@ package body TASTE.Backend.Code_Generators is
                                 Template.Funcs.Element (To_String (F.Name));
 
          Func_Map    : constant Translate_Set :=
-                         Func_Tmpl.Header
+                         Join_Sets (Model.Configuration.To_Template,
+                                    Func_Tmpl.Header)
                          & Assoc ("Provided_Interfaces",
                                   Process_Interfaces
                                      (Func_Tmpl.Provided, Path))

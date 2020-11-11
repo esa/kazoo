@@ -1289,6 +1289,7 @@ package body TASTE.Interface_View is
       Remote_Function_Names,
       Remote_Interface_Names,
       Remote_Languages : Vector_Tag;
+      TI_Language : constant String := Map_Language (To_String (TI.Language));
    begin
       for Each of TI.Params loop
          Param_Names        := Param_Names & Each.Name;
@@ -1312,7 +1313,7 @@ package body TASTE.Interface_View is
         & Assoc ("Name",                   TI.Name)
         & Assoc ("Kind",                   TI.RCM'Img)
         & Assoc ("Parent_Function",        TI.Parent_Function)
-        & Assoc ("Language",               TI.Language)
+        & Assoc ("Language",               TI_Language)
         & Assoc ("Period",                 TI.Period_Or_MIAT'Img)
         & Assoc ("WCET",                   TI.WCET_ms.Value_Or (0)'Img)
         & Assoc ("Queue_Size",             TI.Queue_Size.Value_Or (1)'Img)

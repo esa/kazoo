@@ -94,7 +94,7 @@ package body TASTE.Backend.Code_Generators is
             Unique_Languages := Unique_Languages & To_String (Each);
          end loop;
          Content_Set := Model.Configuration.To_Template
-           & Assoc  ("Function_Names",    Functions_Tag)
+           & Assoc ("Function_Names",    Functions_Tag)
            & Assoc ("Language",          Language_Tag)
            & Assoc ("Is_Type",           Is_Type_Tag)
            & Assoc ("CP_Files",          All_CP_Files)

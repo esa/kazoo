@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-timeout = 5
+timeout = 20
 
 binaries = [
     "work/binaries/demo"

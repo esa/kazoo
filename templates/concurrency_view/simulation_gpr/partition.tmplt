@@ -16,6 +16,7 @@ library project @_CAPITALIZE:Name_@_Simulator is
       "simulation_dataview.ads",
       "board_config.ads",
       "simulator.ads",
+      "taste_basictypes.ads",
       @_Threads'Indent_@
       "adaasn1rtl.ads");
 

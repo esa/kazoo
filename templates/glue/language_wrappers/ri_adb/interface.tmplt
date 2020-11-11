@@ -19,17 +19,51 @@ procedure @_CAPITALIZE:Name_@
 
 procedure @_CAPITALIZE:Name_@ is
 @@END_IF@@
+@@IF@@ @_Target_@ = SIMU
+@@IF@@ @_Kind_@ = SPORADIC_OPERATION
    Event : asn1SccEvents (Kind => @_Parent_Function_@_PRESENT);
 begin
    Event.@_CAPITALIZE:Parent_Function_@ :=
      (Kind => msg_out_PRESENT,
       msg_out => (Kind => @_Name_@_PRESENT,
+@@IF@@ @_EXIST:Param_Names_@
                   @_CAPITALIZE:Name_@ =>
 @@INLINE(                     \()(, )(\)\)\);)@@
       @@TABLE@@
       @_CAPITALIZE:Param_Names_@ => @_CAPITALIZE:Param_Names_@
       @@END_TABLE@@@
 @@END_INLINE@@
+@@ELSE@@
+                  @_CAPITALIZE:Name_@ => (null record)));
+@@END_IF@@
    Simulation_Event (Event);
+@@ELSE@@
+@@-- Non-sporadic call
+begin
+   null;  -- TODO: implement event for synchronous calls
+@@END_IF@@
+@@ELSE@@
+@@-- Non-simulation targets
+   procedure C_@_CAPITALIZE:Name_@
+@@INLINE(      \()(;\n       )(\))@@
+   @@TABLE'ALIGN_ON("out")@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@ELSE@@
+         @_CAPITALIZE:Param_Names_@ : out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+      with Import,
+           Convention => C,
+           Link_Name  => "@_LOWER:Parent_Function_@_RI_@_Name_@";
+begin
+@@IF@@ @_EXIST:Param_Names_@
+      C_@_CAPITALIZE:Name_@ (@_Param_Names_@);
+@@ELSE@@
+@@-- No Params
+      C_@_CAPITALIZE:Name_@;
+@@END_IF@@
+@@END_IF@@
 end @_CAPITALIZE:Name_@;
 

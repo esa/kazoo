@@ -212,11 +212,13 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	   @@ELSE@@
 dataview/@_Unique_Languages_@/built: ${DATAVIEW_UNIQ} # no context parameters except for C and Ada
 	mkdir -p $(dir $@) && asn2dataModel -allboards -o $(dir $@) -to@_Unique_Languages_@ $^
-	@@TABLE@@
 	@@IF@@ @_Unique_Languages_@ = SIMULINK
-	cp -u $(dir $@)/* @_LOWER:Function_Names_@/@_Unique_Languages_@/src
+	@@TABLE@@
+	@@IF@@ @_Language_@ = SIMULINK
+	cp -u $(dir $@)/* @_LOWER:Function_Names_@/SIMULINK/src
 	@@END_IF@@
 	@@END_TABLE@@
+	@@END_IF@@
 	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@

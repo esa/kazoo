@@ -3,6 +3,9 @@ KAZOO?=kazoo
 all:	c
 
 c:	work/glue_built
+	cp -u input/controller.pr work/controller/SDL/src/
+	cp -u input/stm32_debug.adb work/stm32_debug/Ada/src/
+	cp -u input/watchdog.pr work/watchdog/SDL/src/
 	$(MAKE) -C work
 
 skeletons:	InterfaceView.aadl DataView.aadl
@@ -15,7 +18,6 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 
 clean:
 	rm -rf work
-	git checkout -- work
 
 .PHONY: clean skeletons c
 

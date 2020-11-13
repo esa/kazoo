@@ -1,0 +1,107 @@
+templates/skeletons/sub/trigger.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template is evaluated to trigger processing of other files from
+given directory. If the result of evaluation is equal to "TRUE", then
+other files will be processed. This template is identical for Skeleton
+and Glue subfolders.
+
++-----------------------+---------------------------------------------------+
+| Parameter name        | Description                                       |
++=======================+===================================================+
+| Name                  | The name of the function                          |
++-----------------------+---------------------------------------------------+
+| Is_Type               | True if function type                             |
++-----------------------+---------------------------------------------------+
+| Instance_Of           | Name of instance or empty string                  |
++-----------------------+---------------------------------------------------+
+| Language              | Implementation language for the function          |
++-----------------------+---------------------------------------------------+
+| Filename_Is_Present   | True if target function output already exists     |
++-----------------------+---------------------------------------------------+
+| Makefile_Is_Present   | True if target build script already exists        |
++-----------------------+---------------------------------------------------+
+| Zip_File              | Optional path to zip file                         |
++-----------------------+---------------------------------------------------+
+| Use_POHIC             | Value of command line flag --polyorb-hi-c (or -p) |
++-----------------------+---------------------------------------------------+
+| List_Of_PIs           | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| ASync_RI_Param_Type   | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| RIs_Have_Params       | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| List_Of_Sync_RIs      | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Debug_Flag            | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Timer_Resolution      | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Property_Names        | Vector tag: AADL Property name                    |
++-----------------------+---------------------------------------------------+
+| Property_Values       | ↳ corresponding AADL property value               |
++-----------------------+---------------------------------------------------+
+| Skeletons             | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Interface_View        | Interface view filename                           |
++-----------------------+---------------------------------------------------+
+| ASync_RI_Param_Name   | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| CP_Asn1Modules        | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Binary_Path           | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| CP_Values             | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Deployment_View       | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| No_Stdlib_Flag        | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| List_Of_ASync_PIs     | Vector tag: list of async Provided interfaces     |
++-----------------------+---------------------------------------------------+
+| ASync_PI_Kind         | ↳ CYCLIC_OPERATION or SPORADIC_OPERATION          |
++-----------------------+---------------------------------------------------+
+| ASync_PI_Is_Connected | ↳ Flag set to true if PI is connected             |
++-----------------------+---------------------------------------------------+
+| ASync_PI_Param_Name   | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| ASync_PI_Param_Type   | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Glue                  | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Async_RIs_Parent      | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| CP_Names              | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| List_Of_Sync_PIs      | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| List_Of_ASync_RIs     | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Has_Context           | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Output_Dir            | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| PIs_Have_Params       | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| CP_Asn1Filenames      | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Timers                | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Check_Data_View       | Value of command line flag --check-dataview       |
++-----------------------+---------------------------------------------------+
+| CP_Types              | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Other_Files           | List of AADL files passed to the command line     |
++-----------------------+---------------------------------------------------+
+| Sync_RIs_Parent       | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| List_Of_RIs           | DOCUMENTATION MISSING                             |
++-----------------------+---------------------------------------------------+
+| Data_View             | Data view filename                                |
++-----------------------+---------------------------------------------------+
+| Target                | Value of command line flag --target=Target        |
++-----------------------+---------------------------------------------------+
+| Shared_Types          | List of available component types                 |
++-----------------------+---------------------------------------------------+
+| Shared_Lib_Dir        | Folder hosting the shared component types         |
++-----------------------+---------------------------------------------------+

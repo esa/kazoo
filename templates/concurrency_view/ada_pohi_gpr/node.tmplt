@@ -35,7 +35,7 @@ Ada_Drivers_Library/README.md:
 # STM32 have no support for double precision: we need to call asn1.exe with dedicated flag
 ../../dataview/Ada_STM32/built:	../../dataview/dataview-uniq.asn
 	mkdir -p $(dir $@)
-	mono $(shell which asn1.exe) --fp-word-size 4 -equal -Ada -typePrefix asn1Scc -fp AUTO -o $(dir $@) $^
+	mono $(shell which asn1.exe) -t allboards --fp-word-size 4 -equal -Ada -typePrefix asn1Scc -fp AUTO -o $(dir $@) $^
 	touch $@
 
 @@ELSE@@

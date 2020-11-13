@@ -51,6 +51,7 @@ configuration project RTEMS_WITH_ADA is
          ("--pipe",
           "-fdata-sections",
           "-ffunction-sections",
+          "-fdiagnostics-color=always",
 @@IF@@ @_CPU_Family_@ /= gr740
           "-mcpu=cypress",
           "-DLEON3",

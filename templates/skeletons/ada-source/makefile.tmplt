@@ -14,7 +14,7 @@ clean:
 	rm -rf obj
 edit:
 	echo "project tmp_@_LOWER:Name_@ is For Source_Dirs use (\"src\", \"../../dataview/Ada/\"); end tmp_@_LOWER:Name_@;" > tmp_@_LOWER:Name_@.gpr
-	gps -P tmp_@_LOWER:Name_@.gpr
+	gnat-gps -P tmp_@_LOWER:Name_@.gpr
 	rm tmp_@_LOWER:Name_@.gpr
 @@--@@INLINE(	$(VISUAL) )( )()@@
 @@--  @@TABLE@@

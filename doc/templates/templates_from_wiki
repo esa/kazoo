@@ -10,13 +10,13 @@ This template is evaluated only once. The output is saved to the Makefile within
 |Combined table: list of fuction names...
 |-
 |Language
-|... and corresponding implementation language
+|&#8627; and corresponding implementation language
 |-
 |Is_Type
-|... and flag if it is a function type
+|&#8627; and flag if it is a function type
 |-
 |Has_Context_Param
-|... and flag to indicate if function has context parameters
+|&#8627; and flag to indicate if function has context parameters
 |-
 |CP_Files
 |List of all context parameters ASN.1 files
@@ -94,19 +94,19 @@ This template is evaluated for every function which has context parameters. The 
 |Set of types used for this Context Parameter file
 |-
 |Module_Set
-|... corresponding module (needed for ASN.1 "IMPORTS")
+|&#8627; corresponding module (needed for ASN.1 "IMPORTS")
 |-
 |CP_Name
 |Table of context parameter names
 |-
 |CP_Sort
-|... corresponding ASN.1 type
+|&#8627; corresponding ASN.1 type
 |-
 |CP_ASN1_Module
-|... in ASN.1 module
+|&#8627; in ASN.1 module
 |-
 |CP_Value
-|... with default value
+|&#8627; with default value
 |-
 |Is_Type
 |DOCUMENTATION MISSING
@@ -162,14 +162,14 @@ This template is identical for Skeleton and Glue subfolders.
 |Debug_Flag
 |DOCUMENTATION MISSING
 |-
-|ASync_PI_Param_Name
-|DOCUMENTATION MISSING
-|-
 |Timer_Resolution
 |DOCUMENTATION MISSING
 |-
 |Property_Names
-|DOCUMENTATION MISSING
+|Vector tag: AADL Property name
+|-
+|Property_Values
+|  &#8627; corresponding AADL property value
 |-
 |Skeletons
 |DOCUMENTATION MISSING
@@ -177,16 +177,10 @@ This template is identical for Skeleton and Glue subfolders.
 |Interface_View
 |Interface view filename
 |-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
 |ASync_RI_Param_Name
 |DOCUMENTATION MISSING
 |-
 |CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Property_Values
 |DOCUMENTATION MISSING
 |-
 |Binary_Path
@@ -202,6 +196,18 @@ This template is identical for Skeleton and Glue subfolders.
 |DOCUMENTATION MISSING
 |-
 |List_Of_ASync_PIs
+|Vector tag: list of async Provided interfaces
+|-
+|ASync_PI_Kind
+|  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
+|-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
+|-
+|ASync_PI_Param_Name
+|DOCUMENTATION MISSING
+|-
+|ASync_PI_Param_Type
 |DOCUMENTATION MISSING
 |-
 |Glue
@@ -269,6 +275,9 @@ This file is optional, if exists the result of parsing of this file is a name of
 |-
 |Name
 |The name of the function
+|-
+|Language
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/function-filename.tmplt ===
 This file is optional, if exists the result of parsing of this file is a name of output file for function.tmplt, otherwise this template will not be processed.
@@ -278,6 +287,9 @@ This file is optional, if exists the result of parsing of this file is a name of
 |-
 |Name
 |The name of the function
+|-
+|Language
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/function.tmplt ===
 Template for a function in the skeleton or glue folder
@@ -288,97 +300,152 @@ Template for a function in the skeleton or glue folder
 |Name
 |The name of the function
 |-
-|RIs_Have_Params
-|DOCUMENTATION MISSING
+|Language
+|Implementation language
 |-
-|Zip_File
-|DOCUMENTATION MISSING
+|List_Of_PIs
+|List of all provided interfaces (names only)
 |-
-|ASync_RI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|Is_Type
-|DOCUMENTATION MISSING
-|-
-|CP_Values
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
+|List_Of_RIs
+|List of all required interfaces (names only)
 |-
 |Provided_Interfaces
-|DOCUMENTATION MISSING
+|Generated from interfaces.tmplt
+|-
+|Required_Interfaces
+|Generated from interfaces.tmplt
+|-
+|RIs_Have_Params
+|True if at least one RI has an ASN.1 parameter
+|-
+|PIs_Have_Params
+|True if at least one PI has an ASN.1 parameter
+|-
+|Zip_File
+|Path to optional zip file containing the code of the function
+|(deprecated functionality)
+|-
+|Is_Type
+|True if it is a function type
 |-
 |Instance_Of
 |Name of the function type if it is an instance
 |-
-|Language
-|Implementation language
+|Has_Context
+|True if function has context parameters
+|-
+|CP_Names
+|Vector tag: context parameters (names)
+|-
+|CP_Types
+| &#8627; corresponding ASN.1 type
+|-
+|CP_Values
+| &#8627; corresponding value
+|-
+|CP_Asn1Modules
+| &#8627; corresponding ASN.1 module containing the type
+|-
+|CP_Asn1Filenames
+| &#8627; corresponding ASN.1 filename
 |-
 |Property_Names
 |Vector tag: user defined AADL property names
 |-
 |Property_Values
-| ... and corresponding value
+| &#8627; corresponding value
 |-
 |List_Of_ASync_PIs
-|DOCUMENTATION MISSING
-|-
-|Sync_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|Async_RIs_Parent
-|DOCUMENTATION MISSING
-|-
-|List_Of_PIs
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
-|Required_Interfaces
-|DOCUMENTATION MISSING
-|-
-|PIs_Have_Params
-|DOCUMENTATION MISSING
-|-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|CP_Types
-|DOCUMENTATION MISSING
+|List of asynchronous provided interfaces
 |-
 |ASync_PI_Param_Name
-|DOCUMENTATION MISSING
+| &#8627; name of the parameter
+|-
+|ASync_PI_Param_Type
+| &#8627; ASN.1 typename of the parameter
+|-
+|ASync_PI_Kind
+| &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
+|-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
 |-
 |Timers
-|DOCUMENTATION MISSING
-|-
-|CP_Names
-|DOCUMENTATION MISSING
+|List of timers (names)
 |-
 |List_Of_Sync_RIs
-|DOCUMENTATION MISSING
+|List of synchronous required interfaces
 |-
 |List_Of_Sync_PIs
-|DOCUMENTATION MISSING
+|List of synchronous provided interfaces
 |-
-|List_Of_RIs
-|DOCUMENTATION MISSING
-|-
-|Has_Context
-|DOCUMENTATION MISSING
+|Sync_RIs_Parent
+| &#8627; and corresponding parent function name
 |-
 |ASN1_Modules
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
-|DOCUMENTATION MISSING
+|List of ASN.1 modules containing types used in this function
 |-
 |ASN1_Files
+|List of ASN.1 files containing types used in this function
+|-
+|List_Of_ASync_RIs
+|vector tag: list of asynchronous required interfaces
+|-
+|Async_RIs_Parent
+| &#8627; Corresponding parent function name
+|-
+|ASync_RI_Param_Name
+| &#8627; parameter name of the required interface
+|-
+|ASync_RI_Param_Type
+| &#8627; ASN1 typename of the parameter
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Glue
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
 |DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/interface.tmplt ===
@@ -394,7 +461,7 @@ This file is processed twice, first time for required interfaces of the function
 |"PI" or "RI"
 |-
 |Kind
-|The RCM Kind
+|The RCM Kind (SPORADIC|CYCLIC|PROTECTED|UNPROTECTED_OPERATION)
 |-
 |Parent_Function
 |The name of the function
@@ -406,19 +473,19 @@ This file is processed twice, first time for required interfaces of the function
 |All AADL properties (names) associated to the function
 |-
 |Property_Values
-|... and corresponding values
+|&#8627; and corresponding values
 |-
 |Param_Names
 |List of parameter names
 |-
 |Param_Types
-| |_ Corresponding parameter types
+| &#8627; Corresponding parameter types
 |-
 |Param_Directions
-| |_ Corresponding direction
+| &#8627; Corresponding direction
 |-
 |Param_Encodings
-| |_ Corresponding ASN.1 encoding
+| &#8627; Corresponding ASN.1 encoding
 |-
 |Is_Timer
 |Flag set to true if this is a timer interface
@@ -451,6 +518,54 @@ This file is processed twice, first time for required interfaces of the function
 |DOCUMENTATION MISSING
 |-
 |Param_Basic_Types
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Glue
 |DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/makefile.tmplt ===
@@ -596,13 +711,13 @@ This file is processed for every thread in every partition in every node.
 |Vector tag: output remote thread list
 |-
 |Remote_PIs
-| |_ Associated PI Name
+| &#8627; Associated PI Name
 |-
 |Remote_PI_Sorts
-| |_ Optional param type of the remote thread
+| &#8627; Optional param type of the remote thread
 |-
 |Remote_PI_Modules
-| |_ Asn1 module of the optional param type
+| &#8627; Asn1 module of the optional param type
 |-
 |Name
 |
@@ -741,10 +856,10 @@ The result of every evaluation is joined to one string and passed as a parameter
 |List of parameter names
 |-
 |Param_Types
-| |_ Corresponding parameter types
+| &#8627; Corresponding parameter types
 |-
 |Param_Directions
-| |_ Corresponding direction
+| &#8627; Corresponding direction
 |-
 |Is_Timer
 |DOCUMENTATION MISSING
@@ -892,67 +1007,82 @@ This template is evaluated for every block.
 |Required interfaces (from ri.tmplt)
 |-
 |List_Of_PIs
-|DOCUMENTATION MISSING
+|Complete list of provided interfaces
+|-
+|List_Of_ASync_RIs
+|Vector tag: name of asynchronous RIs
+|-
+|ASync_RI_Param_Name
+|  &#8627; corresponding parameter Name
 |-
 |ASync_RI_Param_Type
-|DOCUMENTATION MISSING
+|  &#8627; corresponding parameter ASN.1 type
 |-
 |RIs_Have_Params
 |DOCUMENTATION MISSING
 |-
 |List_Of_Sync_RIs
-|DOCUMENTATION MISSING
+|List of synchronous RIs
 |-
-|Debug_Flag
-|DOCUMENTATION MISSING
+|List_Of_ASync_PIs
+|Vector tag: name of asynchronous PIs
+|-
+|ASync_PI_Kind
+|  &#8627; CYCLIC_OPERATION or SPORADIC_OPERATION
+|-
+|ASync_PI_Is_Connected
+|  &#8627; Flag set to true if PI is connected
 |-
 |ASync_PI_Param_Name
-|DOCUMENTATION MISSING
+|  &#8627; corresponding parameter Name
+|-
+|ASync_PI_Param_Type
+|  &#8627; corresponding parameter ASN.1 type
 |-
 |Timer_Resolution
 |DOCUMENTATION MISSING
 |-
 |Property_Names
-|DOCUMENTATION MISSING
+|Vector tag: AADL Property name
+|-
+|Property_Values
+|  &#8627; corresponding AADL property value
 |-
 |Skeletons
-|DOCUMENTATION MISSING
+|Command line flag (--gw)
 |-
 |Interface_View
 |Interface view filename
 |-
-|ASync_PI_Param_Type
-|DOCUMENTATION MISSING
-|-
-|ASync_RI_Param_Name
-|DOCUMENTATION MISSING
-|-
-|CP_Asn1Modules
-|DOCUMENTATION MISSING
-|-
-|Property_Values
-|DOCUMENTATION MISSING
-|-
 |Binary_Path
 |DOCUMENTATION MISSING
 |-
+|CP_Names
+|Vector tag: context parameter names
+|-
 |CP_Values
-|DOCUMENTATION MISSING
+|  &#8627; value
+|-
+|CP_Asn1Modules
+|  &#8627; ASN.1 module
+|-
+|CP_Asn1Filenames
+|  &#8627; ASN.1 file name
+|-
+|CP_Types
+|  &#8627; Context parameter ASN.1 type
 |-
 |Deployment_View
-|DOCUMENTATION MISSING
+|Path/name of Deployment view file
 |-
 |No_Stdlib_Flag
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_PIs
-|DOCUMENTATION MISSING
+|command line flag --no-stdlib
 |-
 |Glue
-|DOCUMENTATION MISSING
+|command line flag --glue
 |-
 |Partition_Name
-|DOCUMENTATION MISSING
+|Name of the partition containing this function
 |-
 |Async_RIs_Parent
 |DOCUMENTATION MISSING
@@ -963,13 +1093,7 @@ This template is evaluated for every block.
 |Node_Name
 |DOCUMENTATION MISSING
 |-
-|CP_Names
-|DOCUMENTATION MISSING
-|-
 |List_Of_Sync_PIs
-|DOCUMENTATION MISSING
-|-
-|List_Of_ASync_RIs
 |DOCUMENTATION MISSING
 |-
 |Has_Context
@@ -981,9 +1105,6 @@ This template is evaluated for every block.
 |PIs_Have_Params
 |DOCUMENTATION MISSING
 |-
-|CP_Asn1Filenames
-|DOCUMENTATION MISSING
-|-
 |Timers
 |DOCUMENTATION MISSING
 |-
@@ -993,9 +1114,6 @@ This template is evaluated for every block.
 |Use_POHIC
 |Value of command line flag --polyorb-hi-c (or -p)
 |-
-|CP_Types
-|DOCUMENTATION MISSING
-|-
 |Other_Files
 |List of AADL files passed to the command line
 |-
@@ -1003,7 +1121,7 @@ This template is evaluated for every block.
 |DOCUMENTATION MISSING
 |-
 |List_Of_RIs
-|DOCUMENTATION MISSING
+|List of required interface
 |-
 |Data_View
 |Data view filename
@@ -1023,14 +1141,12 @@ This template is evaluated for every block.
 |Instance_Of
 |DOCUMENTATION MISSING
 |-
+|Debug_Flag
+|if -g is set in the command line
+|-
 |Is_Shared_Type
 |True if component is an instance of a function in the shared types folder
 |}
-
-
-
-
-
 
 === templates/concurrency_view/sub/partition.tmplt ===
 This file is evaluated for every partition.
@@ -1093,34 +1209,34 @@ This file is evaluated for every partition.
 |Vector tag : connection thread name (source)
 |-
 |Thread_Dst_Name
-|Vector tag : connection thread name (dest)
+| &#8627; connection thread name (destination)
 |-
 |Thread_Src_Port
-|Vector tag : connection port name (source)
+| &#8627; connection port name (source)
 |-
 |Thread_Dst_Port
-|Vector tag : connection port name (dest)
+| &#8627; connection port name (dest)
 |-
 |In_Port_Names
 |Vector tag: input ports of the partition
 |-
 |In_Port_Thread_Name
-| |_ corresponding thread inside the partition
+| &#8627; corresponding thread inside the partition
 |-
 |In_Port_Type_Name
-| |_ corresponding parameter type name (optional)
+| &#8627; corresponding parameter type name (optional)
 |-
 |Out_Port_Names
 |Vector tag: output ports of the partition
 |-
 |Out_Port_Type_Name
-| |_ corresponding parameter type name (optional)
+| &#8627; corresponding parameter type name (optional)
 |-
 |Part_Out_Port_Name
 |Vector tag: output ports of the partition (can be several times the same)
 |-
 |Connected_Threads
-| |_ Corresponding thread connected to it
+| &#8627; Corresponding thread connected to it
 |-
 |Block_Instance_Of
 |DOCUMENTATION MISSING
@@ -1202,6 +1318,12 @@ This file is evaluated for every partition.
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Property_Names
+|DOCUMENTATION MISSING
+|-
+|Property_Values
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -1225,13 +1347,13 @@ This file is evaluated for every node. The result of this file is saved to the f
 |Vector tag: list of virtual processors on this node
 |-
 |VP_Package_Names
-| |_ Corresponding package name
+| &#8627; Corresponding package name
 |-
 |VP_Platforms
-| |_ Corresponding platform name
+| &#8627; Corresponding platform name
 |-
 |VP_Classifiers
-| |_ Corresponding aadl classifier
+| &#8627; Corresponding aadl classifier
 |-
 |Package_Name
 |DOCUMENTATION MISSING
@@ -1289,6 +1411,54 @@ This file is evaluated for every node. The result of this file is saved to the f
 |-
 |Device_Init
 |DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Glue
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/system.tmplt ===
 This file is evaluated for every node. The result of this file is save to the file with name returned by 
@@ -1307,25 +1477,25 @@ filesys.tmplt.
 | -> Corresponding CPU name (eg x86_linux)
 |-
 |Node_CPU_Classifier
-| -> Corresponding CPU Classifier (ocarina...::x86_linux)
+| &#8627; Corresponding CPU Classifier (ocarina...::x86_linux)
 |-
 |Node_Major_Frame
-| -> Corresponding Time in milliseconds allocated to the CPU (TSP only)
+| &#8627; Corresponding Time in milliseconds allocated to the CPU (TSP only)
 |-
 |Partition_Names
 |Vector Tag of partition names
 |-
 |Partition_Node
-| -> Corresponding node name
+| &#8627; Corresponding node name
 |-
 |Partition_CPU
-| -> Corresponding CPU name
+| &#8627; Corresponding CPU name
 |-
 |Partition_Duration
-| -> Corresponding time allocation (TSP only)
+| &#8627; Corresponding time allocation (TSP only)
 |-
 |Partition_VP
-| -> Corresponding Virtual processor binding (TSP only)
+| &#8627; Corresponding Virtual processor binding (TSP only)
 |-
 |Threads
 |Code generated for the threads (from thread.tmplt)
@@ -1340,22 +1510,22 @@ filesys.tmplt.
 |Inter-partition connections : partition source name (vector tag)
 |-
 |Part_Source_Port
-| -> Corresponding port name
+| &#8627; Corresponding port name
 |-
 |Part_Dest_Name
-| -> Corresponding name of the remote partition
+| &#8627; Corresponding name of the remote partition
 |-
 |Part_Dest_Port
-| -> Corresponding name of the port on the remote partition
+| &#8627; Corresponding name of the port on the remote partition
 |-
 |Bus_Names
 |Vector tag: busses present in the system
 |-
 |Bus_AADL_Package
-| -> Corresponding AADL Package
+| &#8627; Corresponding AADL Package
 |-
 |Bus_Classifier
-| -> Corresponding AADL classifier
+| &#8627; Corresponding AADL classifier
 |-
 |Device_Node_Name
 |
@@ -1393,19 +1563,19 @@ filesys.tmplt.
 |List of ASN.1 files/module/type for device configuration with no duplicates (vector tag)
 |-
 |Unique_Dev_ASN1_Mod
-| |_  corresponding asn1 module
+| &#8627;  corresponding asn1 module
 |-
 |Unique_Dev_ASN1_Sorts
-| |_  type name
+| &#8627;  type name
 |-
 |Connect_From_Part
 |Vector tag - bus connection: partition source
 |-
 |Connect_Via_Bus
-| |_ bus name
+| &#8627; bus name
 |-
 |Connect_Port_Name
-| |_ port name
+| &#8627; port name
 |-
 |Debug_Flag
 |DOCUMENTATION MISSING

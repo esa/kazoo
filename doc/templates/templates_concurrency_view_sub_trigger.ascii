@@ -1,0 +1,68 @@
+templates/concurrency_view/sub/trigger.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This file is processed for every node. The result of this file indicates
+if the rest of templates for given node will be processed.
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Filename_Is_Present               | true if file with name returned   |
+|                                   | by filenode.tmplt exists          |
++-----------------------------------+-----------------------------------+
+| Skeletons                         | from kazoo configuration          |
++-----------------------------------+-----------------------------------+
+| Glue                              | from kazoo configuration          |
++-----------------------------------+-----------------------------------+
+| No_Stdlib_Flag                    | Command line-flag --no-stdlib to  |
+|                                   | avoid loading                     |
+|                                   | ocarina_components.aadl           |
++-----------------------------------+-----------------------------------+
+| Timer_Resolution                  | Value of command line --timer     |
++-----------------------------------+-----------------------------------+
+| Output_Dir                        | Value or command line -o to set   |
+|                                   | the output folder                 |
++-----------------------------------+-----------------------------------+
+| Interface_View                    | Interface view filename           |
++-----------------------------------+-----------------------------------+
+| Binary_Path                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Check_Data_View                   | Value of command line flag        |
+|                                   | --check-dataview                  |
++-----------------------------------+-----------------------------------+
+| Debug_Flag                        | Value of command line flag        |
+|                                   | --debug (or -g)                   |
++-----------------------------------+-----------------------------------+
+| Use_POHIC                         | Value of command line flag        |
+|                                   | --polyorb-hi-c (or -p)            |
++-----------------------------------+-----------------------------------+
+| Other_Files                       | List of AADL files passed to the  |
+|                                   | command line                      |
++-----------------------------------+-----------------------------------+
+| Deployment_View                   | Deployment view filename          |
++-----------------------------------+-----------------------------------+
+| Data_View                         | Data view filename                |
++-----------------------------------+-----------------------------------+
+| CPU_Family                        | CPU Kind (e.g. leon3)             |
++-----------------------------------+-----------------------------------+
+| CPU_Platform                      | AADL CPU_Platform (e.g.           |
+|                                   | PLATFORM_NATIVE)                  |
++-----------------------------------+-----------------------------------+
+| CPU_Name                          | CPU AADL Identifier (e.g.         |
+|                                   | x86_inst)                         |
++-----------------------------------+-----------------------------------+
+| Target                            | Value of command line flag        |
+|                                   | --target=Target                   |
++-----------------------------------+-----------------------------------+
+| CPU_Classifier                    | AADL CPU Classifier (e.g.         |
+|                                   | ocarina_processors_x86::x86.linux |
+|                                   | )                                 |
++-----------------------------------+-----------------------------------+
+| Shared_Types                      | List of available component types |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | Folder hosting the shared         |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Is_Distributed                    | True if the system contains at    |
+|                                   | least one bus                     |
++-----------------------------------+-----------------------------------+

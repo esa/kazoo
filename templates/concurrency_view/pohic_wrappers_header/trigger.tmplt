@@ -6,6 +6,6 @@
 @@--    Use_POHIC
 @@--    Debug_Flag
 @@--    No_Stdlib
-@@IF@@ @_Use_POHIC_@ and @_CPU_Platform_@ /= PLATFORM_MSP430_FREERTOS
+@@IF@@ @_Use_POHIC_@ and @_CPU_Platform_@ /= PLATFORM_MSP430_FREERTOS and @_Target_@ /= SIMU
 TRUE
 @@END_IF@@

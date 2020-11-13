@@ -1,0 +1,68 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+--
+--
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::obj75
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS demo_c
+END demo_c;
+
+PROCESS IMPLEMENTATION demo_c.others
+END demo_c.others;
+
+END deploymentview::DV::obj75;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::obj75;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM obj75
+END obj75;
+
+SYSTEM IMPLEMENTATION obj75.others
+SUBCOMPONENTS
+  IV_Simple_C_Function : SYSTEM interfaceview::IV::Simple_C_Function.others {
+    Taste::coordinates => "1161 619 1727 810";
+    Taste::FunctionName => "Simple_C_Function";
+  };
+  demo_c : PROCESS deploymentview::DV::obj75::demo_c.others {
+    Taste::coordinates => "1019 511 1928 873";
+    Deployment::Port_Number => 0;
+  };
+  p : PROCESSOR ocarina_processors_x86::x86.linux_dll {
+    Taste::coordinates => "890 391 2002 919";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo_c)) APPLIES TO IV_Simple_C_Function;
+  Actual_Processor_Binding => (reference (p)) APPLIES TO demo_c;
+END obj75.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  obj75 : SYSTEM obj75.others {
+    Taste::coordinates => "545 244 2768 1299";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.18";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;

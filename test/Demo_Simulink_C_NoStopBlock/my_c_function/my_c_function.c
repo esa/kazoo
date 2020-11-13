@@ -19,7 +19,7 @@ void my_c_function_PI_pulse()
     
     my_c_function_RI_Add_Two_Params (&a, &b, &res);
 
-    printf ("Result: %lld + %lld = %lld\n", a, b, res);
+    printf ("Result: %"PRId64" + %"PRId64" = %"PRId64"\n", a, b, res);
 
     a++;
     b++;

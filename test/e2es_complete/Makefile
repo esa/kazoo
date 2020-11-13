@@ -5,6 +5,10 @@ all:	c
 c:	work/glue_built
 	$(MAKE) -C work
 
+simu:
+	$(KAZOO) -t SIMU --gw --glue -p 
+	$(MAKE) -C work
+
 skeletons:
 	$(MAKE) work/skeletons_built
 

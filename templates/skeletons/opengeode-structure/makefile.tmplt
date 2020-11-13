@@ -54,12 +54,12 @@ generate-code:
 	mkdir -p code && cd code && \
 	@@IF@@ @_EXIST:Instance_Of_@
 	  @@IF@@ not @_Is_Shared_Type_@
-	   opengeode --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
+	   $(OPENGEODE) --taste --toAda  ../src/system_structure.pr ../../../@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr && \
 	  @@ELSE@@
-	   opengeode --toAda  ../src/system_structure.pr @_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr
+	   $(OPENGEODE) --taste --toAda  ../src/system_structure.pr @_Shared_Lib_Dir_@/@_LOWER:Instance_Of_@/@_LOWER:Instance_Of_@/SDL/src/@_LOWER:Instance_Of_@.pr
 	  @@END_IF@@
  	@@ELSE@@
-	   opengeode --taste --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
+	   $(OPENGEODE) --taste --toAda ../src/@_LOWER:Name_@.pr ../src/system_structure.pr && \
 	@@END_IF@@
 	@@IF@@ not @_Is_Type_@ and not @_EXIST:Instance_Of_@
 	   mv *.gpr ..

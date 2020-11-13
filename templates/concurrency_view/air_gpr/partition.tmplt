@@ -100,7 +100,9 @@ project @_CAPITALIZE:Name_@_AIR is
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
-       "../../dataview/Ada",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/x86", -- Leon use same configuration as x86
        "ada_code_startup",
 @@END_IF@@
 @@TABLE@@

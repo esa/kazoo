@@ -58,15 +58,26 @@ project @_CAPITALIZE:Name_@ is
        "../deploymentview_final/polyorb-hi-ada",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
 @@IF@@ @_STM32_GNAT_@
-       "../../dataview/Ada_STM32",
+       "../../dataview/Ada/boards/stm32",
 @@ELSE@@
-       "../../dataview/Ada",
+       "../../dataview/Ada/boards/x86",
 @@END_IF@@
 @@END_IF@@
 @@IF@@ @_VP_Name_@ = "" and (@_In_Port_Names'Length_@ > 0 or @_Out_Port_Names'Length_@ > 0)
 @@-- Detect distributed systems (no virtual processor) - add DriversConfig folder
-       "../DriversConfig",
+       "../DriversConfig/src",
+@@IF@@ @_Need_Ada_@ /= TRUE
+       "../DriversConfig/asn1rtl",
+@@IF@@ @_STM32_GNAT_@
+       "../DriversConfig/boards/stm32",
+@@ELSE@@
+       "../DriversConfig/boards/x86",
+@@END_IF@@
+
+@@END_IF@@
 @@END_IF@@ 
 @@TABLE@@
 @@IF@@ @_Block_Languages_@ = SDL

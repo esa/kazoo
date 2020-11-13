@@ -1,0 +1,22 @@
+# image: $CI_REGISTRY_IMAGE/taste:latest
+image: taste-buster:latest
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - build
+  - post_build
+
+build:
+  stage: build
+  script:
+    # As soon as TASTE moves from .bashrc.taste to .profile.taste this can be simplified
+    - echo -e "(source ~/.bashrc ; sudo apt install --no-install-recommends -y --force-yes unzip ; export TASTE_IN_DOCKER=1 ; /etc/init.d/postgresql start ; make install ; make dependencies ; make test )" > docker_workaround.sh
+    - chmod +x docker_workaround.sh
+    - ./docker_workaround.sh
+  artifacts:
+    paths:
+      - 'test/logs/*.err.txt'
+    when: on_failure
+    expire_in: 2 weeks

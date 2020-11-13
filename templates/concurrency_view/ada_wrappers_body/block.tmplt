@@ -7,7 +7,16 @@
 @@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
 @@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
 @@-- @_Required_@         : Required interfaces (from ri.tmplt)
+--  The package body comes templates/concurrency_view/ada_wrappers_body/block.tmplt
 package body @_CAPITALIZE:Name_@ is
+
+   --  Initialization function is implemented in C (in vm_if.c)
+   procedure Init is
+      procedure C_Init
+         with Import, Convention => C, Link_Name => "init_@_LOWER:Name_@";
+   begin
+      C_Init;
+   end Init;    
 
 @@IF@@ @_Protected_PIs_@ /= ""
    --  Protected provided interfaces (incl. Sporadic and cyclics)

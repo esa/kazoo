@@ -38,7 +38,8 @@ void @_LOWER:Name_@_startup(void);
 void @_LOWER:Name_@_PI_Tick(void);
 
 @@TABLE@@
-void @_Name_@_PI_@_List_Of_Sync_PIs_@ (asn1SccT_UInt32 *);
+void @_LOWER:Name_@_PI_SET_@_Timers_@(asn1SccT_UInt32 *val);
+void @_LOWER:Name_@_PI_RESET_@_Timers_@(void);
 @@END_TABLE@@
 
 #ifdef __cplusplus

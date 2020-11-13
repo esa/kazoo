@@ -1,0 +1,43 @@
+templates/skeletons/sub/makefile.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template is processed when makefile-filename.tmplt exists. The
+output of this template is saved to the file with name returned by
+processing makefile-filename.tmplt In directory [functionname]/[
+languagename]
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Name                              | The function name                 |
++-----------------------------------+-----------------------------------+
+| ASN1_Files                        | List of all ASN.1 files           |
++-----------------------------------+-----------------------------------+
+| ASN1_Modules                      | List of all ASN.1 modules         |
++-----------------------------------+-----------------------------------+
+| Is_Type                           | Flag set to True for function     |
+|                                   | type                              |
++-----------------------------------+-----------------------------------+
+| Instance_Of                       | Name of function type if instance |
++-----------------------------------+-----------------------------------+
+| Has_CP                            | True if context parameters are    |
+|                                   | defined for this function         |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | Function user-defined property    |
+|                                   | names (goes in pair with          |
+|                                   | Property_Values)                  |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | Function user-defined property    |
+|                                   | values (goes in pair with         |
+|                                   | Property_Names)                   |
++-----------------------------------+-----------------------------------+
+| Is_Shared_Type                    | True if component is an instance  |
+|                                   | of a function in the shared types |
+|                                   | folder                            |
++-----------------------------------+-----------------------------------+
+| Language                          | Implementation language of the    |
+|                                   | function                          |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | Path to the shared component type |
+|                                   | folder                            |
++-----------------------------------+-----------------------------------+

@@ -61,7 +61,9 @@ project @_CAPITALIZE:Name_@ is
 @@END_IF@@
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
-       "../../dataview/Ada",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/msp430",
 @@END_IF@@
 @@TABLE@@
        "@_LOWER:Name_@/drivers/@_Device_Names_@",

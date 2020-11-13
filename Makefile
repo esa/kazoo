@@ -6,6 +6,11 @@ exec = kazoo
 
 all: build
 
+dependencies:
+	# install a version of asn1scc that is compatible with kazoo
+	mkdir -p ~/.local/bin
+	cd ~/.local ; wget -q -O - https://github.com/ttsiodras/asn1scc/releases/download/4.2.4.3f/asn1scc-bin-4.2.4.3f.tar.bz2 | tar jxpvf - ; cd bin ; ln -s ../asn1scc/* .
+
 templatesParser:
 	cp templates-parser/config/tp_xmlada_dummy.gpr templates-parser/tp_xmlada.gpr
 	@#$(MAKE) -C templates-parser -j
@@ -39,11 +44,15 @@ endif
 	@#[ $(ARCH) == 64 ] && EXTRAFLAG="--target=x86_64-linux" ;
 	OCARINA_PATH=`ocarina-config --prefix` \
             $(gnatpath)gprbuild -j0 -x -g $(exec) -p -P kazoo.gpr -XBUILD="debug" $$EXTRAFLAG
+	@rm -f templates-parser/config/setup/auto.cgpr
 
 install:
 	$(MAKE)
 	mkdir -p `ocarina-config --prefix`/share/kazoo
+	rm -rf `ocarina-config --prefix`/share/kazoo/templates
 	cp -a templates kazoo `ocarina-config --prefix`/share/kazoo
+	mkdir -p `ocarina-config --prefix`/share/kazoo/doc
+	cp -au doc/templates/* `ocarina-config --prefix`/share/kazoo/doc
 
 edit:
 	OCARINA_PATH=`ocarina-config --prefix` gps

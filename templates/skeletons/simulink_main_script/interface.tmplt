@@ -119,7 +119,7 @@ set_param('@_Name_@/@_Param_Names_@','BusObject','@_REPLACE_ALL(-/_):Param_Types
 add_block('simulink/Commonly Used Blocks/Bus Creator','@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
 add_line('@_Name_@','@_Paam_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre/1','@_Param_Names_@/1');
 @@-- set BUS creator inputs to be consistent with the name of the complex type fields
-setInputsBusCreator(@_Param_Types_@,'@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
+setInputsBusCreator(@_REPLACE_ALL(-/_):Param_Types_@,'@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
 @@-- set the properties specification by bus object to 'on'
 set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
 @@-- set the NonVirtualBus to 'on'

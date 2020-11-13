@@ -212,6 +212,11 @@ dataview/C/built: ${DATAVIEW_UNIQ} ${DATAVIEW_ACN} ${CP_FILES}
 	   @@ELSE@@
 dataview/@_Unique_Languages_@/built: ${DATAVIEW_UNIQ} # no context parameters except for C and Ada
 	mkdir -p $(dir $@) && asn2dataModel -allboards -o $(dir $@) -to@_Unique_Languages_@ $^
+	@@TABLE@@
+	@@IF@@ @_Unique_Languages_@ = SIMULINK
+	cp -u $(dir $@)/* @_LOWER:Function_Names_@/@_Unique_Languages_@/src
+	@@END_IF@@
+	@@END_TABLE@@
 	touch $@
 	   @@END_IF@@
 	@@END_TABLE@@
@@ -225,7 +230,7 @@ dataview/Ada/built: ${DATAVIEW_UNIQ} ${CP_FILES}
         @@END_IF@@
 	@@-- Then symlink the files for each function
 	@@TABLE@@
-	@@IF@@ @_Language_@ = "SDL"
+	@@IF@@ @_Language_@ = SDL
         @@IF@@ @_Has_Context_Param_@
 	# SDL function with context parameters: put them in dataview
 	sed -e '$$s/$$/\n/' -s ${DATAVIEW_UNIQ} @_LOWER:Function_Names_@/SDL/Context-@_LOWER:REPLACE_ALL(_/-):Function_Names_@.asn > @_LOWER:Function_Names_@/SDL/src/dataview-uniq.asn

@@ -9,7 +9,7 @@ all: build
 dependencies:
 	# install a version of asn1scc that is compatible with kazoo
 	mkdir -p ~/.local/bin
-	cd ~/.local ; wget -q -O - https://github.com/ttsiodras/asn1scc/releases/download/4.2.4.0f/asn1scc-bin-4.2.4.0f.tar.bz2 | tar jxpvf - ; cd bin ; ln -s ../asn1scc/* .
+	cd ~/.local ; wget -q -O - https://github.com/ttsiodras/asn1scc/releases/download/4.2.4.3f/asn1scc-bin-4.2.4.3f.tar.bz2 | tar jxpvf - ; cd bin ; ln -s ../asn1scc/* .
 
 templatesParser:
 	cp templates-parser/config/tp_xmlada_dummy.gpr templates-parser/tp_xmlada.gpr

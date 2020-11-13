@@ -468,6 +468,9 @@ package body TASTE.Deployment_View is
                (CI, Get_String_Name ("taste_dv_properties::coverageenabled"));
          end if;
 
+         --  Gather all user properties
+         Result.User_Properties := Get_Properties_Map (CI);
+
          CPU := Get_Bound_Processor (CI);
 
          Result.CPU_Name :=

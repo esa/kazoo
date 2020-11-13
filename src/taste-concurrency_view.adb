@@ -584,8 +584,10 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
-                                                    .Deployment_Node.Drivers)
+               Node_Assoc :=
+                 Join_Sets (CV.Configuration.To_Template,
+                            Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers))
                  & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'

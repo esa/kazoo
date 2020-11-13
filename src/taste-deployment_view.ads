@@ -1,8 +1,6 @@
 --  *************************** taste/kazoo ***********************  --
---  (c) 2019 Maxime Perrotin / European Space Agency
+--  (c) 2019-2020 Maxime Perrotin / European Space Agency
 --  contact: maxime.perrotin@esa.int
---  LGPL license, see LICENSE file
-
 --  Deployment View parser
 
 with Ada.Containers.Indefinite_Ordered_Maps,
@@ -138,11 +136,13 @@ package TASTE.Deployment_View is
          Memory_Region   : Unbounded_String := US ("");  --  TSP only
          Ada_Runtime     : Unbounded_String; --  if CPU_Platform = GNAT_Runtime
          Bound_Functions : String_Sets.Set;
+         User_Properties : Property_Maps.Map;  -- From TASTE_DV_Properties.aadl
       end record;
 
    --  Make a Templates Parser translate set, to generate code
    function To_Template (P : Taste_Partition) return Translate_Set is
-      (+Assoc  ("Name",            P.Name)
+     (Properties_To_Template (P.User_Properties)
+       & Assoc  ("Name",            P.Name)
        & Assoc ("Coverage",        P.Coverage)
        & Assoc ("Package_Name",    P.Package_Name)
        & Assoc ("CPU_Name",        P.CPU_Name)

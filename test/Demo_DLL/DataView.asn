@@ -1,0 +1,7 @@
+DataView DEFINITIONS ::=
+BEGIN
+
+MyInteger ::= INTEGER (0..65535)
+
+END
+

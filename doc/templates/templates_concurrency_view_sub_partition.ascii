@@ -57,14 +57,12 @@ This file is evaluated for every partition.
 | Thread_Src_Name                   | Vector tag : connection thread    |
 |                                   | name (source)                     |
 +-----------------------------------+-----------------------------------+
-| Thread_Dst_Name                   | Vector tag : connection thread    |
-|                                   | name (dest)                       |
+| Thread_Dst_Name                   | ↳ connection thread name          |
+|                                   | (destination)                     |
 +-----------------------------------+-----------------------------------+
-| Thread_Src_Port                   | Vector tag : connection port name |
-|                                   | (source)                          |
+| Thread_Src_Port                   | ↳ connection port name (source)   |
 +-----------------------------------+-----------------------------------+
-| Thread_Dst_Port                   | Vector tag : connection port name |
-|                                   | (dest)                            |
+| Thread_Dst_Port                   | ↳ connection port name (dest)     |
 +-----------------------------------+-----------------------------------+
 | In_Port_Names                     | Vector tag: input ports of the    |
 |                                   | partition                         |
@@ -144,4 +142,8 @@ This file is evaluated for every partition.
 +-----------------------------------+-----------------------------------+
 | Shared_Lib_Dir                    | Folder hosting the shared         |
 |                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | DOCUMENTATION MISSING             |
 +-----------------------------------+-----------------------------------+

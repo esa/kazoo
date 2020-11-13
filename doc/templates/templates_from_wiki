@@ -1209,13 +1209,13 @@ This file is evaluated for every partition.
 |Vector tag : connection thread name (source)
 |-
 |Thread_Dst_Name
-|Vector tag : connection thread name (dest)
+| &#8627; connection thread name (destination)
 |-
 |Thread_Src_Port
-|Vector tag : connection port name (source)
+| &#8627; connection port name (source)
 |-
 |Thread_Dst_Port
-|Vector tag : connection port name (dest)
+| &#8627; connection port name (dest)
 |-
 |In_Port_Names
 |Vector tag: input ports of the partition
@@ -1318,6 +1318,12 @@ This file is evaluated for every partition.
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Property_Names
+|DOCUMENTATION MISSING
+|-
+|Property_Values
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.
@@ -1404,6 +1410,54 @@ This file is evaluated for every node. The result of this file is saved to the f
 |DOCUMENTATION MISSING
 |-
 |Device_Init
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Glue
 |DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/system.tmplt ===

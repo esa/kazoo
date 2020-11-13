@@ -399,6 +399,54 @@ Template for a function in the skeleton or glue folder
 |-
 |ASync_RI_Param_Type
 | &#8627; ASN1 typename of the parameter
+|-
+|Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Lib_Dir
+|DOCUMENTATION MISSING
+|-
+|Binary_Path
+|DOCUMENTATION MISSING
+|-
+|Timer_Resolution
+|DOCUMENTATION MISSING
+|-
+|Skeletons
+|DOCUMENTATION MISSING
+|-
+|Other_Files
+|DOCUMENTATION MISSING
+|-
+|Check_Data_View
+|DOCUMENTATION MISSING
+|-
+|Shared_Types
+|DOCUMENTATION MISSING
+|-
+|Output_Dir
+|DOCUMENTATION MISSING
+|-
+|Use_POHIC
+|DOCUMENTATION MISSING
+|-
+|Debug_Flag
+|DOCUMENTATION MISSING
+|-
+|Target
+|DOCUMENTATION MISSING
+|-
+|Interface_View
+|DOCUMENTATION MISSING
+|-
+|Glue
+|DOCUMENTATION MISSING
+|-
+|No_Stdlib_Flag
+|DOCUMENTATION MISSING
+|-
+|Deployment_View
+|DOCUMENTATION MISSING
 |}
 === templates/skeletons/sub/interface.tmplt ===
 This file is processed twice, first time for required interfaces of the function from Interface View, second time for the provided interfaces. The results are parameters for processing function.tmplt
@@ -1161,13 +1209,13 @@ This file is evaluated for every partition.
 |Vector tag : connection thread name (source)
 |-
 |Thread_Dst_Name
-|Vector tag : connection thread name (dest)
+| &#8627; connection thread name (destination)
 |-
 |Thread_Src_Port
-|Vector tag : connection port name (source)
+| &#8627; connection port name (source)
 |-
 |Thread_Dst_Port
-|Vector tag : connection port name (dest)
+| &#8627; connection port name (dest)
 |-
 |In_Port_Names
 |Vector tag: input ports of the partition
@@ -1270,6 +1318,12 @@ This file is evaluated for every partition.
 |-
 |Shared_Lib_Dir
 |Folder hosting the shared component types
+|-
+|Property_Names
+|DOCUMENTATION MISSING
+|-
+|Property_Values
+|DOCUMENTATION MISSING
 |}
 === templates/concurrency_view/sub/node.tmplt ===
 This file is evaluated for every node. The result of this file is saved to the file with name returned by filenode.tmplt. The result is also used as a parameter for system.tmplt.

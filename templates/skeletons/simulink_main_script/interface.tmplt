@@ -87,12 +87,12 @@ set_param('@_Name_@/@_Param_Names_@','BusObject','@_REPLACE_ALL(-/_):Param_Types
 add_block('simulink/Commonly Used Blocks/Bus Selector','@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel');
 add_line('@_Name_@','@_Param_Names_@/1','@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel/1');
 @@--   set BUS selector outputs to be consistent with the complex type fields
-setOutputsBusSelector(@_Param_Names_@, '@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel');
+setOutputsBusSelector(@_REPLACE_ALL(-/_):Param_Types_@, '@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel');
 @@--   set BUS icon's position and size
 if bussel_positions(@_TABLE_LINE_@) > 0
    set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel','Position', bussel_positions(@_TABLE_LINE_@,:));
 else
-   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel','Position',[95 @_"-"(19):"*"(100):TABLE_LINE_@ 125 @_"+"(19):"*"(100):TABLE_LINE_@]);
+   set_param('@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusSel','Position',[95 @_"-"(19):"*"(100):TABLE_LINE_@ 100 @_"+"(19):"*"(100):TABLE_LINE_@]);
 end
 @@END_IF@@
 @@END_IF@@
@@ -117,7 +117,7 @@ set_param('@_Name_@/@_Param_Names_@','UseBusObject','on');
 set_param('@_Name_@/@_Param_Names_@','BusObject','@_REPLACE_ALL(-/_):Param_Types_@');
 @@-- create the respective type's bus and a line from the bus to the port
 add_block('simulink/Commonly Used Blocks/Bus Creator','@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
-add_line('@_Name_@','@_Paam_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre/1','@_Param_Names_@/1');
+add_line('@_Name_@','@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre/1','@_Param_Names_@/1');
 @@-- set BUS creator inputs to be consistent with the name of the complex type fields
 setInputsBusCreator(@_REPLACE_ALL(-/_):Param_Types_@,'@_Name_@/@_Param_Names_@_@_REPLACE_ALL(-/_):Param_Types_@_BusCre');
 @@-- set the properties specification by bus object to 'on'

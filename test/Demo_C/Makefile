@@ -11,7 +11,7 @@ export EXTERNAL_SOURCE_PATH=
 # Per partition:
 export DEMO_C_EXTERNAL_SOURCE_PATH=
 
-all: c ada rtems
+all: c ada rtems c-debug-coverage
 
 ada:
 	rm -rf output.ada
@@ -19,12 +19,18 @@ ada:
 	cp simple_c_function/*.c output.ada/simple_c_function/C/src
 	$(MAKE) -C output.ada
 
-c: # Polyorb_HI_C output
+c: # Polyorb_HI_C output in Release mode
 	rm -rf work
-	$(KAZOO) -c DeploymentView_Native.aadl -p -g --gw --glue -o work
+	$(KAZOO) -c DeploymentView_Native.aadl -p --gw --glue -o work
 	cp simple_c_function/*.c work/simple_c_function/C/src
 	$(MAKE) -C work
 	./regression.py
+
+c-debug-coverage: # Polyorb_HI_C output in Debug with Coverage enabled
+	rm -rf work-debug
+	$(KAZOO) -c DeploymentView_Coverage.aadl -p -g --gw --glue -o work-debug
+	cp simple_c_function/*.c work-debug/simple_c_function/C/src
+	$(MAKE) -C work-debug
 
 simu:
 	rm -rf work
@@ -48,7 +54,7 @@ clean-ada:
 	rm -rf output.ada
 
 clean-c:
-	rm -rf work
+	rm -rf work work-debug
 
 clean-rtems:
 	rm -rf output.rtems

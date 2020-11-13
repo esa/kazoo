@@ -42,7 +42,7 @@ SUBCOMPONENTS
   };
   demo_c : PROCESS deploymentview::DV::demo_c::demo_c.others {
     Taste::coordinates => "1015 511 1924 873";
-    TASTE_DV_Properties::CoverageEnabled => false;
+    TASTE_DV_Properties::CoverageEnabled => true;
     Deployment::Port_Number => 0;
   };
   p : PROCESSOR ocarina_processors_x86::x86.linux {

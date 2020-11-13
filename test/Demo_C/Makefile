@@ -42,7 +42,7 @@ rtems:
 	rm -rf output.rtems
 	$(KAZOO) -c DeploymentView_Leon3.aadl -p --gw --glue -o output.rtems
 	cp simple_c_function/*.c output.rtems/simple_c_function/C/src
-	$(MAKE) -C output.rtems build-rtems-ada
+	$(MAKE) -C output.rtems
 
 gdb-ada: clean
 	gdb --args $(KAZOO) --gw --glue --debug -o output.gdb

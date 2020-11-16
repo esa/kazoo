@@ -12,8 +12,13 @@ c: test-parse-c # Polyorb_HI_C output
 	cp function1/function1.c work/function1/C/src
 	cp function2/function2.cc work/function2/CPP/src
 	cp function2/function2_state.h work/function2/CPP/src
+	cp function1/function1.c work.leon3/function1/C/src
+	cp function2/function2.cc work.leon3/function2/CPP/src
+	cp function2/function2_state.h work.leon3/function2/CPP/src
 	$(MAKE) -C work
-	$(MAKE) -C work build-rtems-ada
+	$(MAKE) -C work.leon3
+
+native:
 
 test-parse-ada: clean-ada
 	$(KAZOO) --gw \
@@ -22,8 +27,15 @@ test-parse-ada: clean-ada
 	         --debug
 
 test-parse-c: clean-c
-	$(KAZOO) -p --gw \
+	$(KAZOO) -p \
+	         -c DeploymentView_Native.aadl \
+	         --gw \
 	         -o work \
+	         --glue -g
+	$(KAZOO) -p \
+	         -c DeploymentView_Leon3.aadl \
+	         --gw \
+	         -o work.leon3 \
 	         --glue -g
 buildsupport_pohic:
 	buildsupport -o output.buildsupport.pohic -p --aadlv2 --glue -i InterfaceView.aadl -c DeploymentView.aadl -d DataView.aadl ../common/ocarina_components.aadl ../common/TASTE_IV_Properties.aadl ../common/TASTE_DV_Properties.aadl
@@ -41,7 +53,7 @@ clean-ada:
 	rm -rf output.ada
 
 clean-c:
-	rm -rf work
+	rm -rf work work.leon3
 
 skeletons:
 	$(KAZOO) -p --gw --glue -o work && make -C work dataview

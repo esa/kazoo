@@ -1,0 +1,27 @@
+templates/skeletons/context-parameters.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template is evaluated for every function which has context
+parameters. The output is saved to the file Context-.asn
+
++----------------+-----------------------------------------------------+
+| Parameter name | Description                                         |
++================+=====================================================+
+| Name           | Function name                                       |
++----------------+-----------------------------------------------------+
+| Sort_Set       | Set of types used for this Context Parameter file   |
++----------------+-----------------------------------------------------+
+| Module_Set     | ↳ corresponding module (needed for ASN.1 "IMPORTS") |
++----------------+-----------------------------------------------------+
+| CP_Name        | Table of context parameter names                    |
++----------------+-----------------------------------------------------+
+| CP_Sort        | ↳ corresponding ASN.1 type                          |
++----------------+-----------------------------------------------------+
+| CP_ASN1_Module | ↳ in ASN.1 module                                   |
++----------------+-----------------------------------------------------+
+| CP_Value       | ↳ with default value                                |
++----------------+-----------------------------------------------------+
+| Is_Type        | DOCUMENTATION MISSING                               |
++----------------+-----------------------------------------------------+
+| Instance_Of    | DOCUMENTATION MISSING                               |
++----------------+-----------------------------------------------------+

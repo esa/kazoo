@@ -1,51 +1,64 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Node_Name_@       : Name of the node from deployment view
-@@-- @_Partition_Names_@ : Tag listing the partitions in this node
-@@-- @_Partitions_@      : List of rendered code for partitions
-@@-- @_CPU_Name_@, _Platform_@, _Classifier_@, _Ada_Runtime_@ : Info about CPU
-@@-- In standard TASTE systems there is only one partition per node
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fnode.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_node.ascii
 #  @_Node_Name_@ @_CPU_Name_@ @_Ada_Runtime_@ @_CPU_Platform_@ @_CPU_Classifier_@
-@@IF@@ @_CPU_Platform_@ = PLATFORM_NATIVE
-all:	debug_native
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_LEON_RTEMS_POSIX
-all:	debug_rtems_leon3_with_ada
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR
-all:	air
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQZC706
-all:    zynq
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ_QEMU
-all:    zynq_qemu
+@@IF@@ @_Debug_Flag_@
+all:	debug
+@@ELSE@@
+all:	release
 @@END_IF@@
 
 simulate:
+	# Configure gprbuild to use GCC toolchain even if LLVM is installed
+	gprconfig --batch --config=Ada,,default,,GNAT --config=C,,default,,GCC --config=C++,,default,,G++ || :
 @@TABLE@@
 	gprbuild -p -P @_Partition_Names_@_simulator.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
-debug_native:
+@@IF@@ @_CPU_Platform_@ = PLATFORM_NATIVE
+debug:
+	# Configure gprbuild to use GCC toolchain even if LLVM is installed
+	gprconfig --batch --config=Ada,,default,,GNAT --config=C,,default,,GCC --config=C++,,default,,G++ || :
 @@TABLE@@
-	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	# In debug mode, add -v to gprbuild command for verbose output
+	gprbuild -v -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
-debug_rtems_leon3_with_ada:
+release:
+	# Configure gprbuild to use GCC toolchain even if LLVM is installed
+	gprconfig --batch --config=Ada,,default,,GNAT --config=C,,default,,GCC --config=C++,,default,,G++ || :
 @@TABLE@@
-	gprbuild -v -p --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
-air:
+
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_LEON_RTEMS_POSIX
+debug:
+@@TABLE@@
+	gprbuild -p -v --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+release:
+@@TABLE@@
+	gprbuild -p --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Release" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR
+debug:
 @@TABLE@@
 	# We need to compile and link separately because the linker script must
 	# be copied to the obj folder. Path cannot be set manually with -T
-	gprbuild -c -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -c -p --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
-	gprbuild -l -p -v --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -l -v -p --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQZC706
 ifeq ($(NO_BITFILE), 1)
-zynq:
+debug:
 else
-zynq: zynq_bitfilegen
+debug: zynq_bitfilegen
 endif
 @@TABLE@@
 	gprbuild -p -v --config=zynq_rtems.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems.gpr -XCFG="Debug" -cargs:C -DSTATIC="static"
@@ -57,15 +70,21 @@ zynq_bitfilegen:
 @@END_TABLE@@
 	make -f Makefile.bambu
 
-zynq_qemu:
+release:	debug
+
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQ_QEMU
+debug:
 @@TABLE@@
 	gprbuild -p -v --config=zynq_rtems_qemu.cgpr -P @_LOWER:Partition_Names_@_zynq_rtems_qemu.gpr -XCFG="Debug" -cargs:C -DSTATIC="static"
 @@END_TABLE@@
+release:	debug
 
-release_native:
-@@TABLE@@
-	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""
-@@END_TABLE@@
+@@ELSE@@
+@@-- Unsupported platform
+debug:
+	@echo -e '\e[1m\e[32m[ERROR]\e[0m Unsupported platform: @_CPU_Platform_@' && exit 1
+release:	debug
+@@END_IF@@
 
 clean:
 @@TABLE@@

@@ -1,0 +1,6 @@
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Ftrigger.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@IF@@ @_Target_@ = SIMU
+TRUE
+@@END_IF@@

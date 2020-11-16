@@ -1,0 +1,19 @@
+@@-- The documentation of the templates is there:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
+@@-- $HOME/tool-inst/share/kazoo/doc/templates_skeletons_sub_interface.ascii
+@@IF@@ @_EXIST:Param_Names_@
+procedure @_CAPITALIZE:Name_@
+@@INLINE(   \()(;\n    )(\);\n)@@
+   @@TABLE'ALIGN_ON("out")@@
+      @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+         @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@ELSE@@
+         @_CAPITALIZE:Param_Names_@ : out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+      @@END_IF@@
+   @@END_TABLE@@
+@@END_INLINE@@
+@@ELSE@@
+procedure @_CAPITALIZE:Name_@;
+@@END_IF@@

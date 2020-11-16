@@ -46,7 +46,7 @@ Cabin-button ::= CHOICE {
 
 Start-condition ::= CHOICE {
 	forever     BOOLEAN,
-	nb-of-cycle INTEGER (50 .. 255)
+	nb-of-cycle INTEGER (0 .. 255)
 }
 
 Status ::= SEQUENCE {

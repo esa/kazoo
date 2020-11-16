@@ -1,0 +1,16 @@
+work/Makefile
+work/binaries/
+work/build-script.sh
+work/build/
+work/dataview/
+work/engine/SDL/Makefile
+work/engine/SDL/code/
+work/engine/SDL/engine_ada.gpr
+work/engine/SDL/src/dataview-uniq.asn
+work/engine/SDL/src/engine.pr.autosave
+work/engine/SDL/src/system_structure.pr
+work/engine/SDL/wrappers/
+work/glue_built
+work/player/
+work/sql_db/
+work/tetris_timer_manager/

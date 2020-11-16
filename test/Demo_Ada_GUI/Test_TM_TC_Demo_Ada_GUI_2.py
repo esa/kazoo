@@ -1,18 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Automatically generated Python sequence chart (MSC) implementation
 
+
 import os
 import sys
+import time
 import signal
-import Queue
-
-taste_inst = os.popen('taste-config --prefix').readlines()[0].strip()
-sys.path.append(taste_inst+'/share/asn1-editor')
-
-from Scenario import Scenario, PollerThread
-from PySide.QtCore import QCoreApplication, Qt
-from udpcontroller import tasteUDP
+import queue
+from PySide2.QtCore                  import QCoreApplication, Qt
+# ----------------------------------------------------------------------------
+from asn1_value_editor.Scenario      import Scenario, PollerThread
+from asn1_value_editor.udpcontroller import tasteUDP
 
 # Generated due to "mygui_trace_201604071040.msc"
 # From the section: MSCDOCUMENT automade
@@ -30,7 +29,7 @@ def Exercise_mygui(queue):
 
 def runScenario(pipe_in=None, pipe_out=None, udpController=None):
     # Queue for getting scenario status
-    log = Queue.Queue()
+    log = queue.Queue()
     if udpController:
         mygui = Exercise_mygui(log, name='Scenario')
         udpController.slots.append(mygui.msq_q)
@@ -48,7 +47,7 @@ def runScenario(pipe_in=None, pipe_out=None, udpController=None):
         while True:
             try:
                 scenario, severity, msg = log.get(block=False)
-            except Queue.Empty:
+            except queue.Empty:
                 pass
             else:
                 log.task_done()

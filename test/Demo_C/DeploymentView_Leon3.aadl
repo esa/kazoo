@@ -1,0 +1,72 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::leon3
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS demo_c
+END demo_c;
+
+PROCESS IMPLEMENTATION demo_c.others
+END demo_c.others;
+
+END deploymentview::DV::leon3;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Simple_C_Function;
+WITH ocarina_processors_leon;
+WITH deploymentview::DV::leon3;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM leon3
+END leon3;
+
+SYSTEM IMPLEMENTATION leon3.others
+SUBCOMPONENTS
+  IV_Simple_C_Function : SYSTEM interfaceview::IV::Simple_C_Function::Simple_C_Function.others {
+    Taste::FunctionName => "Simple_C_Function";
+  };
+  demo_c : PROCESS deploymentview::DV::leon3::demo_c.others {
+    Taste::coordinates => "1146 814 1852 1223";
+    Deployment::Port_Number => 0;
+  };
+  leon3_rtems51_posix : PROCESSOR ocarina_processors_leon::leon3.rtems51_posix {
+    Taste::coordinates => "1053 697 1935 1281";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo_c)) APPLIES TO IV_Simple_C_Function;
+  Actual_Processor_Binding => (reference (leon3_rtems51_posix)) APPLIES TO demo_c;
+END leon3.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  leon3 : SYSTEM leon3.others {
+    Taste::coordinates => "943 530 2045 1364";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.4";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

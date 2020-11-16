@@ -23,8 +23,14 @@
 void call_@_LOWER:Thread_Name_@ (const char* buf, size_t len)
 {
 @@IF@@ @_Need_Mutex_@
-    extern SemaphoreHandle_t @_LOWER:Pro_Block_Name_@_semaphore;
-    xSemaphoreTake(@_LOWER:Pro_Block_Name_@_semaphore, portMAX_DELAY);
+    extern SemaphoreHandle_t @_LOWER:Pro_Block_Name_@_Semaphore;
+
+    BaseType_t result;
+    do
+    {
+        result = xSemaphoreTake(@_LOWER:Pro_Block_Name_@_Semaphore, portMAX_DELAY);
+    } while(result != pdTRUE);
+
 @@END_IF@@
 @@IF@@ @_Param_Names'Length_@ > 0
     @_Thread_Name_@ (buf, len);
@@ -32,6 +38,6 @@ void call_@_LOWER:Thread_Name_@ (const char* buf, size_t len)
     @_Thread_Name_@();
 @@END_IF@@
 @@IF@@ @_Need_Mutex_@
-	xSemaphoreGive(@_LOWER:Pro_Block_Name_@_semaphore);
+	xSemaphoreGive(@_LOWER:Pro_Block_Name_@_Semaphore);
 @@END_IF@@
 }

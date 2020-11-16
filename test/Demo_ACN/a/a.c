@@ -20,7 +20,7 @@ void a_PI_Cyclic_Run()
 //    p.u.first_choice = 1;
 
 	/* Write your code here! */
-    printf ("[A] Cyclic_Run (value = %lld)\n", p.u.first_choice);
+    printf ("[A] Cyclic_Run (value = %"PRId64")\n", p.u.first_choice);
     a_RI_Hi (&p);
     p.u.first_choice ++;
     if (p.u.first_choice > 10)
@@ -29,4 +29,5 @@ void a_PI_Cyclic_Run()
 
 void a_PI_from_gui(const asn1SccT_POS *toto)
 {
+    (void)toto;
 }

@@ -26,14 +26,14 @@ void cyclic_function_PI_cyclic_activation()
 	seq.y=j;	
 	
 #if WORD_SIZE==8
-	printf("cycle: input i=%lld, j=%lld\n", i, j);
+	printf("cycle: input i=%"PRId64", j=%"PRId64"\n", i, j);
 #else
 	printf("cycle: input i=%ld, j=%ld\n", i, j);
 #endif
 	cyclic_function_RI_compute_data(&seq, &result);
 
 #if WORD_SIZE==8
-	printf("   result of computation: %lld\n", result);
+	printf("   result of computation: %"PRId64"\n", result);
 #else
 	printf("   result of computation: %ld\n", result);
 #endif

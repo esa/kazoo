@@ -1,0 +1,4 @@
+@@-- Specify the file name for a partition
+@@-- @_Partition_Name_@ is available.
+@@-- Don't specify anything if you don't want the file to be created
+@_LOWER:Partition_Name_@/drivers/msp430_eusci_a_serial_minimal/msp430_eusci_a_serial_minimal.c

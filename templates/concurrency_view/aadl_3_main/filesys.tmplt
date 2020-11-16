@@ -1,3 +1,2 @@
-@@-- Specify the file name for the complete system (including nodes)
-@@-- (no template tag)
+@@-- Generate the scenario file for Ocarina
 main.aadl

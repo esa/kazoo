@@ -4,11 +4,12 @@ import sys
 timeout = 5
 
 binaries = [
-    "output.c/binaries/demo_c"
+    "work/binaries/demo_c"
     ]
 
 expected = [
-    '\[Startup\] Expected output: "Hello, world..." every 2 seconds',
+    ['[Startup] Expected output: "Hello, world..." every 2 seconds',
+     '[TASTE] Initialization completed for function Simple_C_Function'],
     'Hello, world...',
     'Hello, world...',
     'Hello, world...',

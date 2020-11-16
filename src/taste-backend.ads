@@ -9,22 +9,25 @@ package TASTE.Backend is
 
    Backend_Error : exception;
 
+   function Map_Language (Language : String) return String is
+     (if    Language = "ada"             then "Ada"
+      elsif Language = "c"               then "C"
+      elsif Language = "blackbox_device" then "Blackbox_C"
+      elsif Language = "gui"             then "GUI"
+      elsif Language = "cpp"             then "CPP"
+      elsif Language = "rtds"            then "RTDS"
+      elsif Language = "sdl"             then "SDL"
+      elsif Language = "sdl_opengeode"   then "SDL"
+      elsif Language = "simulink"        then "SIMULINK"
+      elsif Language = "qgenc"           then "QGenC"
+      elsif Language = "qgenada"         then "QGenAda"
+      elsif Language = "system_c"        then "System_C"
+      elsif Language = "vdm"             then "VDM"
+      elsif Language = "vhdl"            then "VHDL"
+      elsif Language = "vhdl_brave"      then "VHDL_BRAVE"
+      elsif Language = "micropython"     then "MicroPython"
+      else Language);
+
    function Language_Spelling (Func : Taste_Terminal_Function) return String is
-      (if    Func.Language = "ada"             then "Ada"
-       elsif Func.Language = "c"               then "C"
-       elsif Func.Language = "blackbox_device" then "Blackbox_C"
-       elsif Func.Language = "gui"             then "GUI"
-       elsif Func.Language = "cpp"             then "CPP"
-       elsif Func.Language = "rtds"            then "RTDS"
-       elsif Func.Language = "sdl"             then "SDL"
-       elsif Func.Language = "sdl_opengeode"   then "SDL"
-       elsif Func.Language = "simulink"        then "SIMULINK"
-       elsif Func.Language = "qgenc"           then "QGenC"
-       elsif Func.Language = "qgenada"         then "QGenAda"
-       elsif Func.Language = "system_c"        then "System_C"
-       elsif Func.Language = "vdm"             then "VDM"
-       elsif Func.Language = "vhdl"            then "VHDL"
-       elsif Func.Language = "vhdl_brave"      then "VHDL_BRAVE"
-       elsif Func.Language = "micropython"     then "MicroPython"
-       else  To_String (Func.Language));
+      (Map_Language (To_String (Func.Language)));
 end TASTE.Backend;

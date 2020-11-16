@@ -1,0 +1,3 @@
+@@IF@@ (@_Language_@ = Ada or @_Language_@ = SDL) and not @_Is_Type_@ 
+TRUE
+@@END_IF@@

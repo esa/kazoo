@@ -3,6 +3,7 @@ templates/skeletons/context-parameters.tmplt
 templates/skeletons/sub/trigger.tmplt
 templates/skeletons/sub/makefile-filename.tmplt
 templates/skeletons/sub/function-filename.tmplt
+templates/skeletons/sub/function.tmplt
 templates/skeletons/sub/interface.tmplt
 templates/skeletons/sub/makefile.tmplt
 templates/concurrency_view/sub/trigger.tmplt

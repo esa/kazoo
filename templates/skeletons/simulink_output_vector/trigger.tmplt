@@ -1,0 +1,3 @@
+@@IF@@ @_Language_@ = SIMULINK
+TRUE
+@@END_IF@@

@@ -1,6 +1,10 @@
 AIR-IOP-DEVICE-DATAVIEW DEFINITIONS ::=
 BEGIN
 
+--  Define a buffer to receive data from devices
+Data-Stream ::= OCTET STRING (SIZE (0..100))
+
+--  Device configuration
 IOP-Device-Identifier ::= CHOICE {
    eth     IOP-ETHn,
    grspw   IOP-GRSPWn,
@@ -8,6 +12,9 @@ IOP-Device-Identifier ::= CHOICE {
    spwrtr  IOP-SPWRTR,
    mil     IOP-MILn
 }
+
+-- All types below give the detailed configuration for each
+-- supported device.
 
 IP-Address ::= SEQUENCE (SIZE (4)) OF INTEGER (0..255)
 MAC-Address ::= SEQUENCE (SIZE(6)) OF INTEGER (0..255)

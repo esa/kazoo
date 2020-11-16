@@ -1,12 +1,12 @@
 KAZOO=../../kazoo
 
 all: test-parse
-	$(MAKE) -C output.pohic
+	$(MAKE) -C work
 
 test-parse: clean
-	$(KAZOO) --gw -p -o output.pohic --glue --debug
+	$(KAZOO) --gw -p --glue --debug
 
 clean:
-	rm -rf output.pohic
+	rm -rf work
 
 .PHONY: clean test-parse

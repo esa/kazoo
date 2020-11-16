@@ -109,9 +109,13 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
    --  following to be updated with all relevant source dirs
    for Source_Dirs use
       ("@_LOWER:Name_@",
-@@IF@@ @_CPU_Family_@ = gr740 or @_CPU_Family_@ = gr712rc or @_CPU_Family_@ = n2x
+@@IF@@ @_CPU_Family_@ = gr740 or @_CPU_Family_@ = gr712rc 
        "/opt/rtems-5.1-2019.07.25/sparc-rtems5/@_CPU_Family_@/lib/include",
        "/opt/rtems-5.1-2019.07.25/sparc-rtems5/@_CPU_Family_@/lib/include/grlib",
+@@END_IF@@
+@@IF@@ @_CPU_Family_@ = n2x
+       "/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib/include",
+       "/opt/rtems-5.1-2019.07.25/sparc-rtems5/gr740/lib/include/grlib",
 @@END_IF@@
 @@IF@@ @_Distributed_System_@
       "../deploymentview_final/polyorb-hi-c/include/drivers/configuration",
@@ -121,7 +125,9 @@ project @_CAPITALIZE:Name_@_RTEMS_Ada is
        "../deploymentview_final/polyorb-hi-c/include",
        "../../dataview/C",
 @@IF@@ @_Need_Ada_@ = TRUE
-       "../../dataview/Ada",
+       "../../dataview/Ada/asn1rtl",
+       "../../dataview/Ada/src",
+       "../../dataview/Ada/boards/x86", -- Leon boards use the same config as x86
        "ada_code_startup",
 @@END_IF@@
 @@TABLE@@

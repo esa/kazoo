@@ -30,7 +30,7 @@ TASTE-Boolean ::= BOOLEAN
 --
 --  MySeqOf     ::= SEQUENCE (SIZE (2)) OF MyEnum
 --
---  MyOctStr    ::= OCTET STRING (SIZE (3))
+MyOctStr    ::= OCTET STRING (SIZE (256))
 --
 --  -- You can also declare constants
 --  myVar       MySeqOf     ::= { hello, world }

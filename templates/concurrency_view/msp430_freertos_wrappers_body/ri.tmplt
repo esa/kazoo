@@ -46,16 +46,20 @@ void vm_@_LOWER:Parent_Function_@_@_LOWER:Name_@
 @@END_IF@@
 {
 @@IF@@ @_Kind_@ = SPORADIC_OPERATION
-	struct Request request;
-	if(size_IN_buf_@_LOWER:Param_Names_@ != 0)
-	{
-		request.m_length = size_IN_buf_@_LOWER:Param_Names_@;
-		memcpy(request.m_data, IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@);
-	}
-	else
-	{
-		request.m_length = 0;
-	}
+    struct Request request;
+    @@IF@@ @_No_Param_@
+    request.m_length = 0;
+    @@ELSE@@
+    if(size_IN_buf_@_LOWER:Param_Names_@ != 0)
+    {
+        request.m_length = size_IN_buf_@_LOWER:Param_Names_@;
+        memcpy(request.m_data, IN_buf_@_LOWER:Param_Names_@, size_IN_buf_@_LOWER:Param_Names_@);
+    }
+    else
+    {
+        request.m_length = 0;
+    }
+    @@END_IF@@
     deliver_to_@_Remote_Function_Names_@_@_Remote_Interface_Names_@(&request);
 @@ELSIF@@ @_Kind_@ = UNPROTECTED_OPERATION
    // Unprotected call (call function defined in vm_if or SIMULINK.Simulink.c function)

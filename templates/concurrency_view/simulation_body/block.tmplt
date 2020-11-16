@@ -1,12 +1,8 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Name_@             : Protected block name
-@@-- @_Language_@         : Implementation language
-@@-- @_Calling_Threads_@  : List of calling threads
-@@-- @_Node name_@        : Node name
-@@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
-@@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
-@@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fnode.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
+@@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_block.ascii
 @@IF@@ @_Required_@ /= ""
 // Required interfaces of function @_Name_@
 @_Required_@

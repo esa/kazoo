@@ -2,10 +2,11 @@ KAZOO=../../kazoo
 
 all: c
 
-simu:	test-parse-c
+simu:
+	$(KAZOO) -t SIMU -p --gw --glue -g
 	cp controller/controller.pr work/controller/SDL/src
 	cp lift_model/* work/lift_model/SIMULINK/src
-	$(MAKE) -C work simu
+	$(MAKE) -C work
 
 c: test-parse-c # Polyorb_HI_C output
 	cp controller/controller.pr work/controller/SDL/src

@@ -1,0 +1,103 @@
+templates/concurrency_view/sub/node.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This file is evaluated for every node. The result of this file is saved
+to the file with name returned by filenode.tmplt. The result is also
+used as a parameter for system.tmplt.
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Node_Name                         | Name of the node from deployment  |
+|                                   | view                              |
++-----------------------------------+-----------------------------------+
+| Partition_Names                   | Tag listing the partitions in     |
+|                                   | this node                         |
++-----------------------------------+-----------------------------------+
+| Has_Memory                        | Boolean flag indicating that a    |
+|                                   | memory is defined for this node   |
++-----------------------------------+-----------------------------------+
+| Partitions                        | List of rendered code for         |
+|                                   | partitions                        |
++-----------------------------------+-----------------------------------+
+| VP_Names                          | Vector tag: list of virtual       |
+|                                   | processors on this node           |
++-----------------------------------+-----------------------------------+
+| VP_Package_Names                  | ↳ Corresponding package name      |
++-----------------------------------+-----------------------------------+
+| VP_Platforms                      | ↳ Corresponding platform name     |
++-----------------------------------+-----------------------------------+
+| VP_Classifiers                    | ↳ Corresponding aadl classifier   |
++-----------------------------------+-----------------------------------+
+| Package_Name                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| CPU_Family                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| CPU_Classifier                    | AADL CPU Classifier (e.g.         |
+|                                   | ocarina_processors_x86::x86.linux |
+|                                   | )                                 |
++-----------------------------------+-----------------------------------+
+| CPU_Name                          | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| CPU_Platform                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Ada_Runtime                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| CPU_Instance                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_CPU                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Bus_Name                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_AADL_Pkg                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Module                | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Port_Name                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Config                     | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Names                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_File                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Classifier                 | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Language                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Sort                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Init                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Timer_Resolution                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Interface_View                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Data_View                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Check_Data_View                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Other_Files                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Target                            | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Output_Dir                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Deployment_View                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Binary_Path                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Use_POHIC                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Debug_Flag                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| No_Stdlib_Flag                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Shared_Types                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Skeletons                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Glue                              | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+

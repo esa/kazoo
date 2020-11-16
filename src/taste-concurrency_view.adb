@@ -1,13 +1,12 @@
 --  *************************** kazoo ***********************  --
---  (c) 2019 European Space Agency - maxime.perrotin@esa.int
---  LGPL license, see LICENSE file
+--  (c) 2020 European Space Agency - maxime.perrotin@esa.int
 
 with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
      --  Ada.Strings.Fixed,
-     GNAT.Directory_Operations,   -- Contains Dir_Name
+     GNAT.Directory_Operations,   --  Contains Dir_Name
      TASTE.Backend;
 
 use Ada.Directories,
@@ -178,12 +177,17 @@ package body TASTE.Concurrency_View is
       CV_Out_Dir  : constant String  :=
         CV.Base_Output_Path.Element & "/build/";
 
+      Shared_Lib_Dir : Unbounded_String renames
+        CV.Configuration.Shared_Lib_Dir;
+
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:
       Threads          : Unbounded_String;
       All_Thread_Names : Tag;  --  Complete list of threads
       All_Target_Names : Tag;  --  List of all targets used (AADL packages)
       All_Block_Names  : Tag;  --  Complete list of blocks
+      Actual_Shared    : String_Sets.Set;
+      Used_Shared_Types : Tag; --  Actually used shared types (whole system)
    begin
       Put_Debug ("Concurrency View templates expected in " & Prefix);
       Start_Search (Search    => ST,
@@ -228,6 +232,7 @@ package body TASTE.Concurrency_View is
                Block_Names,
                Block_Languages,
                Block_Instance_Of,
+               Block_Is_Shared_Type,
                Block_FPGAConf  : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
@@ -373,8 +378,6 @@ package body TASTE.Concurrency_View is
                      Unpro_PI_Tag : Unbounded_String;
                      RI_Tag       : Unbounded_String;
                      Result       : Unbounded_String;
-                     Property_Names,
-                     Property_Values : Vector_Tag;
 
                      --  Optionally generate block code in separate files
                      --  (if fileblock.tmplt present and contains a filename)
@@ -388,6 +391,13 @@ package body TASTE.Concurrency_View is
                        (if Block_Check
                         then Strip_String (Parse (Block_File_Id, Block_Tag))
                         else "");
+                     Parent_Is_Shared : constant Boolean :=
+                       (B.Ref_Function.Instance_Of.Has_Value and then
+                          CV.Configuration.Shared_Types.Contains
+                            (To_String
+                               (B.Ref_Function.Instance_Of.Unsafe_Just)));
+                     use String_Sets;
+
                   begin
                      Document_Template
                        (Templates_Concurrency_View_Sub_File_Block, Block_Tag);
@@ -398,10 +408,20 @@ package body TASTE.Concurrency_View is
                      Block_Instance_Of := Block_Instance_Of
                        & B.Ref_Function.Instance_Of.Value_Or (US (""));
 
+                     --  Check if the function type for this instance is in the
+                     --  list of shared library folders instead of in the model
+                     Block_Is_Shared_Type :=
+                       Block_Is_Shared_Type & Parent_Is_Shared;
+
+                     if Parent_Is_Shared then
+                        --  Update the list of actually used shared types
+                        Actual_Shared := Actual_Shared or
+                          String_Sets.To_Set
+                            (To_String
+                               (B.Ref_Function.Instance_Of.Unsafe_Just));
+                     end if;
+
                      for TASTE_property of B.Ref_Function.User_Properties loop
-                        Property_Names := Property_Names & TASTE_property.Name;
-                        Property_Values := Property_Values
-                            & TASTE_property.Value;
                         if TASTE_property.Name =
                             "TASTE_IV_Properties::FPGA_Configurations"
                         then
@@ -442,14 +462,17 @@ package body TASTE.Concurrency_View is
                      end loop;
 
                      Block_Assoc :=
-                       Join_Sets (Block_Assoc, CV.Configuration.To_Template)
+                       Join_Sets
+                         (Properties_To_Template
+                            (B.Ref_Function.User_Properties),
+                          Join_Sets
+                            (Block_Assoc, CV.Configuration.To_Template))
                        & Assoc ("Partition_Name",
                                 Partition.Deployment_Partition.Name)
                        & Assoc ("Protected_PIs",   Pro_PI_Tag)
                        & Assoc ("Unprotected_PIs", Unpro_PI_Tag)
-                       & Assoc ("Required",        RI_Tag)
-                       & Assoc ("Property_Names",        Property_Names)
-                       & Assoc ("Property_Values",        Property_Values);
+                       & Assoc ("Is_Shared_Type",  Parent_Is_Shared)
+                       & Assoc ("Required",        RI_Tag);
 
                      Result := Parse (Path & "/block.tmplt", Block_Assoc);
                      Document_Template
@@ -475,11 +498,10 @@ package body TASTE.Concurrency_View is
                end loop;
                --  Association includes Name, Coverage, CPU Info, etc.
                --  (see taste-deployment_view.ads for the complete list)
-               Partition_Assoc := Join_Sets (Partition.Deployment_Partition
-                                               .To_Template,
-                                             Drivers_To_Template
-                                               (CV.Nodes (Node_Name)
-                                                  .Deployment_Node.Drivers))
+               Partition_Assoc :=
+                 Join_Sets (Partition.Deployment_Partition.To_Template,
+                            Drivers_To_Template
+                              (CV.Nodes (Node_Name).Deployment_Node.Drivers))
                  & Assoc ("Threads",              Part_Threads)
                  & Assoc ("Thread_Names",         Thread_Names)
                  & Assoc ("Thread_Has_Param",     Thread_Has_Param)
@@ -488,6 +510,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Names",          Block_Names)
                  & Assoc ("Block_Languages",      Block_Languages)
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
+                 & Assoc ("Block_Is_Shared_Type", Block_Is_Shared_Type)
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
@@ -507,7 +530,8 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Thread_Src_Name",      Thread_Src_Name)
                  & Assoc ("Thread_Src_Port",      Thread_Src_Port)
                  & Assoc ("Thread_Dst_Name",      Thread_Dst_Name)
-                 & Assoc ("Thread_Dst_Port",      Thread_Dst_Port);
+                 & Assoc ("Thread_Dst_Port",      Thread_Dst_Port)
+                 & Assoc ("Shared_Lib_Dir",       Shared_Lib_Dir);
 
                All_Target_Names := All_Target_Names
                  & String'(Get (Get (Partition_Assoc, "Package_Name")));
@@ -560,8 +584,10 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
-                                                    .Deployment_Node.Drivers)
+               Node_Assoc :=
+                 Join_Sets (CV.Configuration.To_Template,
+                            Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers))
                  & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'
@@ -699,7 +725,9 @@ package body TASTE.Concurrency_View is
                                .CPU_Platform'Img)
                     & Assoc ("CPU_Classifier",
                              CV.Nodes (Node_Name).Deployment_Node
-                               .CPU_Classifier);
+                             .CPU_Classifier)
+                    & Assoc ("Is_Distributed",
+                             CV.Deployment.Busses.Length > 0);
 
                   Trigger      : constant Boolean :=
                     (Node_Name /= "interfaceview"
@@ -812,9 +840,15 @@ package body TASTE.Concurrency_View is
 
             if Trig_Sys and File_Sys /= "" and Nodes /= "" then
                --  Generate from system.tmplt
+
+               for Shared of Actual_Shared loop
+                  --  Add list of actually used shared types at system level
+                  Used_Shared_Types := Used_Shared_Types & Shared;
+               end loop;
+
                Set_Sys := Join_Sets (CV.Configuration.To_Template,
                                      Drivers_To_Template (All_Drivers))
-                 & Assoc ("Nodes",       Nodes)
+                 & Assoc ("Nodes",               Nodes)
                  & Assoc ("Node_Names",          Node_Names)
                  & Assoc ("Node_CPU",            Node_CPU)
                  & Assoc ("Node_CPU_Classifier", Node_CPU_Cls)
@@ -843,7 +877,8 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Unique_Dev_ASN1_Sorts", Unique_ASN1_Sorts)
                  & Assoc ("Connect_From_Part",   Connect_From_Partition)
                  & Assoc ("Connect_Via_Bus",     Connect_Via_Bus)
-                 & Assoc ("Connect_Port_Name",   Connect_Port_Name);
+                 & Assoc ("Connect_Port_Name",   Connect_Port_Name)
+                 & Assoc ("Used_Shared_Types",   Used_Shared_Types);
                Create_Path (CV_Out_Dir
                            & Dir_Separator & Dir_Name (File_Sys));
                Create (File => Output_File,

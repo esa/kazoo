@@ -1,5 +1,5 @@
---  *************************** taste aadl parser ***********************  --
---  (c) 2017-2019 European Space Agency - maxime.perrotin@esa.int
+--  *************************** kazoo ***********************  --
+--  (c) 2017-2020 European Space Agency - maxime.perrotin@esa.int
 --  LGPL license, see LICENSE file
 
 --  Interface View parser
@@ -341,7 +341,7 @@ package body TASTE.Interface_View is
             raise Interface_Error with "Interface view contains errors "
               & "(Missing TASTE::InterfaceName properties)"
               & ASCII.CR & ASCII.LF
-              & "        Try updating it with taste-edit-project";
+              & "        Try updating it with the editor (run taste)";
          end if;
 
          --  Filter out connections if the PI is cyclic (not a connection!)
@@ -722,6 +722,11 @@ package body TASTE.Interface_View is
                            (if Prefix'Length > 0 then "." else "") & Name;
          Terminal_Fn  : Taste_Terminal_Function;
       begin
+         if No (CI) then
+            raise Interface_Error
+              with "Element " & Next_Prefix & " is not properly defined";
+         end if;
+
          case Get_Category_Of_Component (CI) is
             when CC_System =>
                if Present (AIN.Subcomponents (CI)) then
@@ -759,7 +764,7 @@ package body TASTE.Interface_View is
          return Is_Terminal;
       end Rec_Function;
    begin
-      Put_Info ("Parsing interface view");
+      Put_Info ("Parsing Interface View");
       if No (Interface_Root) then
          raise Interface_Error with "Interface View parsing error";
       end if;
@@ -985,7 +990,9 @@ package body TASTE.Interface_View is
       List_Of_Sync_PIs     : Tag;
 
       List_Of_ASync_PIs,
+      ASync_PI_Kind, --  Can be Cyclic or Sporadic
       ASync_PI_Param_Name,
+      ASync_PI_Is_Connected,
       ASync_PI_Param_Type  : Vector_Tag;
 
       List_Of_Sync_RIs,
@@ -997,9 +1004,6 @@ package body TASTE.Interface_View is
       ASync_RI_Param_Type  : Vector_Tag;   --  Parent function of the async RI
 
       Timers               : Tag;
-
-      Property_Names,
-      Property_Values      : Vector_Tag;
 
       CP_Names,            --  CP = Context Parameters
       CP_Types,
@@ -1025,12 +1029,6 @@ package body TASTE.Interface_View is
             & Each.ASN1_File_Name.Value_Or (US (""));
       end loop;
 
-      --  Add all function user-defined properties
-      for Each of F.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
-      end loop;
-
       --  Add list of all PI names (both synchronous and asynchronous)
       for Each of F.Provided loop
          --  Note: some backends need to have access to the function
@@ -1038,11 +1036,11 @@ package body TASTE.Interface_View is
          --  They are added here. At the moment the user-defined properties
          --  of the interfaces themselves are not part of the template
          --  This could be be added later if needed.
-         Interface_Tmplt := Each.Interface_To_Template
-           & Assoc ("Direction",       "PI")
-           & Assoc ("Property_Names",  Property_Names)
-           & Assoc ("Property_Values", Property_Values)
-           & Assoc ("Language",        Language_Spelling (F));
+         Interface_Tmplt :=
+           Join_Sets (Each.Interface_To_Template,
+                      Properties_To_Template (F.User_Properties))
+           & Assoc ("Direction", "PI")
+           & Assoc ("Language",  Language_Spelling (F));
 
          Result.Provided := Result.Provided & Interface_Tmplt;
          --  Note: List of PIs include timers, while List_Of_(A)Sync do not.
@@ -1051,6 +1049,11 @@ package body TASTE.Interface_View is
             when Cyclic_Operation | Sporadic_Operation =>
                if not Each.Is_Timer then
                   List_Of_ASync_PIs := List_Of_ASync_PIs & Each.Name;
+                  ASync_PI_Kind := ASync_PI_Kind & Each.RCM'Img;
+                  --  Keep a flag for non-connected async PIs,
+                  --  useful in templates to skip unnecessary code
+                  ASync_PI_Is_Connected := ASync_PI_Is_Connected
+                    & (not Each.Remote_Interfaces.Is_Empty);
                   if not Each.Params.Is_Empty then
                      ASync_PI_Param_Name := ASync_PI_Param_Name
                        & Each.Params.First_Element.Name;
@@ -1071,10 +1074,10 @@ package body TASTE.Interface_View is
 
       --  Add list of all RI names (both synchronous and asynchronous)
       for Each of F.Required loop
-         Interface_Tmplt := Each.Interface_To_Template
+         Interface_Tmplt :=
+           Join_Sets (Each.Interface_To_Template,
+                      Properties_To_Template (F.User_Properties))
            & Assoc ("Direction",       "RI")
-           & Assoc ("Property_Names",  Property_Names)
-           & Assoc ("Property_Values", Property_Values)
            & Assoc ("Language",        Language_Spelling (F));
 
          Result.Required := Result.Required & Interface_Tmplt;
@@ -1117,34 +1120,38 @@ package body TASTE.Interface_View is
       end loop;
 
       --  Setup the mapping for the template (processed by function.tmplt)
-      Result.Header := Result.Header
-        & Assoc ("Zip_File",            (if not F.Zip_File.Has_Value then ""
-                 else Ada.Directories.Full_Name
+      Result.Header :=
+        Join_Sets (Result.Header,
+                   Properties_To_Template (F.User_Properties))
+        & Assoc ("Zip_File",
+                 (if not F.Zip_File.Has_Value
+                  then ""
+                  else Ada.Directories.Full_Name
                    (To_String (F.Zip_File.Unsafe_Just))))
-        & Assoc ("List_Of_PIs",         List_Of_PIs)
-        & Assoc ("List_Of_RIs",         List_Of_RIs)
-        & Assoc ("List_Of_Sync_PIs",    List_Of_Sync_PIs)
-        & Assoc ("List_Of_Sync_RIs",    List_Of_Sync_RIs)
-        & Assoc ("Sync_RIs_Parent",     Sync_RIs_Parent)
-        & Assoc ("List_Of_ASync_PIs",   List_Of_ASync_PIs)
-        & Assoc ("ASync_PI_Param_Name", ASync_PI_Param_Name)
-        & Assoc ("ASync_PI_Param_Type", ASync_PI_Param_Type)
-        & Assoc ("List_Of_ASync_RIs",   List_Of_ASync_RIs)
-        & Assoc ("ASync_RI_Param_Name", ASync_RI_Param_Name)
-        & Assoc ("ASync_RI_Param_Type", ASync_RI_Param_Type)
-        & Assoc ("Async_RIs_Parent",    Async_RIs_Parent)
-        & Assoc ("Property_Names",      Property_Names)
-        & Assoc ("Property_Values",     Property_Values)
-        & Assoc ("CP_Names",            CP_Names)
-        & Assoc ("CP_Types",            CP_Types)
-        & Assoc ("CP_Values",           CP_Values)
-        & Assoc ("CP_Asn1Modules",      CP_Asn1Modules)
-        & Assoc ("CP_Asn1Filenames",    CP_Filenames)
-        & Assoc ("Is_Type",             F.Is_Type)
-        & Assoc ("Instance_Of",         F.Instance_Of.Value_Or (US ("")))
-        & Assoc ("Timers",              Timers)
-        & Assoc ("PIs_Have_Params",     PIs_Have_Params)
-        & Assoc ("RIs_Have_Params",     RIs_Have_Params);
+        & Assoc ("List_Of_PIs",           List_Of_PIs)
+        & Assoc ("List_Of_RIs",           List_Of_RIs)
+        & Assoc ("List_Of_Sync_PIs",      List_Of_Sync_PIs)
+        & Assoc ("List_Of_Sync_RIs",      List_Of_Sync_RIs)
+        & Assoc ("Sync_RIs_Parent",       Sync_RIs_Parent)
+        & Assoc ("List_Of_ASync_PIs",     List_Of_ASync_PIs)
+        & Assoc ("ASync_PI_Kind",         ASync_PI_Kind)
+        & Assoc ("ASync_PI_Is_Connected", ASync_PI_Is_Connected)
+        & Assoc ("ASync_PI_Param_Name",   ASync_PI_Param_Name)
+        & Assoc ("ASync_PI_Param_Type",   ASync_PI_Param_Type)
+        & Assoc ("List_Of_ASync_RIs",     List_Of_ASync_RIs)
+        & Assoc ("ASync_RI_Param_Name",   ASync_RI_Param_Name)
+        & Assoc ("ASync_RI_Param_Type",   ASync_RI_Param_Type)
+        & Assoc ("Async_RIs_Parent",      Async_RIs_Parent)
+        & Assoc ("CP_Names",              CP_Names)
+        & Assoc ("CP_Types",              CP_Types)
+        & Assoc ("CP_Values",             CP_Values)
+        & Assoc ("CP_Asn1Modules",        CP_Asn1Modules)
+        & Assoc ("CP_Asn1Filenames",      CP_Filenames)
+        & Assoc ("Is_Type",               F.Is_Type)
+        & Assoc ("Instance_Of",           F.Instance_Of.Value_Or (US ("")))
+        & Assoc ("Timers",                Timers)
+        & Assoc ("PIs_Have_Params",       PIs_Have_Params)
+        & Assoc ("RIs_Have_Params",       RIs_Have_Params);
 
       return Result;
    end Function_To_Template;
@@ -1279,11 +1286,10 @@ package body TASTE.Interface_View is
       Param_Basic_Types,
       Param_Directions,
       Param_Encodings,
-      Property_Names,
-      Property_Values,
       Remote_Function_Names,
       Remote_Interface_Names,
       Remote_Languages : Vector_Tag;
+      TI_Language : constant String := Map_Language (To_String (TI.Language));
    begin
       for Each of TI.Params loop
          Param_Names        := Param_Names & Each.Name;
@@ -1293,11 +1299,7 @@ package body TASTE.Interface_View is
          Param_Directions   := Param_Directions & Each.Direction'Img;
          Param_Encodings    := Param_Encodings & Each.Encoding'Img;
       end loop;
-      --  Add all function user-defined properties
-      for Each of TI.User_Properties loop
-         Property_Names  := Property_Names  & Each.Name;
-         Property_Values := Property_Values & Each.Value;
-      end loop;
+
       --  Add list of callers or callees
       for Each of TI.Remote_Interfaces loop
          Remote_Function_Names  := Remote_Function_Names & Each.Function_Name;
@@ -1306,10 +1308,12 @@ package body TASTE.Interface_View is
          Remote_Languages := Remote_Languages & Each.Language;
       end loop;
 
-      return +Assoc ("Name",               TI.Name)
+      return
+        Properties_To_Template (TI.User_Properties, Prefix => "IF_")
+        & Assoc ("Name",                   TI.Name)
         & Assoc ("Kind",                   TI.RCM'Img)
         & Assoc ("Parent_Function",        TI.Parent_Function)
-        & Assoc ("Language",               TI.Language)
+        & Assoc ("Language",               TI_Language)
         & Assoc ("Period",                 TI.Period_Or_MIAT'Img)
         & Assoc ("WCET",                   TI.WCET_ms.Value_Or (0)'Img)
         & Assoc ("Queue_Size",             TI.Queue_Size.Value_Or (1)'Img)
@@ -1319,8 +1323,6 @@ package body TASTE.Interface_View is
         & Assoc ("Param_Basic_Types",      Param_Basic_Types)
         & Assoc ("Param_Encodings",        Param_Encodings)
         & Assoc ("Param_Directions",       Param_Directions)
-        & Assoc ("IF_Property_Names",      Property_Names)
-        & Assoc ("IF_Property_Values",     Property_Values)
         & Assoc ("Remote_Function_Names",  Remote_Function_Names)
         & Assoc ("Remote_Interface_Names", Remote_Interface_Names)
         & Assoc ("Remote_Languages",       Remote_Languages)

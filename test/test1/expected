@@ -1,2 +1,2 @@
 [ERROR] Interface view contains errors (Missing TASTE::InterfaceName properties)
-        Try updating it with taste-edit-project
+        Try updating it with the editor (run taste)

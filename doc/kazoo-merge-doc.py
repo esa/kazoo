@@ -7,8 +7,8 @@
 
    It is part of kazoo - TASTE Project
 
-   Copyright (c) 2019 Maxime Perrotin
-             (c) 2019 European Space Agency
+   Copyright (c) 2019-2020 Maxime Perrotin
+             (c) 2019-2020 European Space Agency
 
    Contact : maxime.perrotin@esa.int
 """
@@ -140,7 +140,7 @@ def process_one_file (tmplt: str, old: str, new: str, res_folder: str) -> None:
         if name not in new_tags:
             LOG.info ("Tag " + name.strip() + " has been removed")
         else:
-            LOG.info ("Tag " + name.strip() + " has been kept")
+            LOG.debug ("Tag " + name.strip() + " has been kept")
             new_tags.remove(name)
             newdoc.append("|-")
             newdoc.append(name.strip())
@@ -184,6 +184,10 @@ def run(options):
     for each in orderlist:
         filename=each.strip()
         name=filename.replace("/", "_").replace("-", "_").split(".tmplt")[0]
+        
+        # Also generate individual files for pandoc text rendering
+        split_output = open (result_folder + f"/{name}.split", "w")
+
         middle_file = f"{result_folder}/{name}"
         pre_file    = f"{middle_file}.pre"
         post_file   = f"{middle_file}.post"
@@ -196,11 +200,14 @@ def run(options):
             pass
         else:
             wiki_output.write(f"\n=== {filename} ===\n")
+            split_output.write(f"\n=== {filename} ===\n")
             pre_content    = open(pre_file, "r").readlines()
             middle_content = open(middle_file, "r").readlines()
             post_content   = open(post_file, "r").readlines()
             for lines in chain(pre_content, middle_content, post_content):
                 wiki_output.write(lines)
+                split_output.write(lines)
+            split_output.close()
 
             # Once the wiki file is generated, delete intermediate files
             os.remove(pre_file)

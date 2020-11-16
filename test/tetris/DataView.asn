@@ -1,0 +1,92 @@
+TETRIS-DATAVIEW DEFINITIONS ::=
+BEGIN
+IMPORTS T-Int32, T-UInt32, T-Int8, T-UInt8, T-Boolean FROM TASTE-BasicTypes;
+
+  --  Traditional Tetris has 10 columns and 20 rows
+  cols INTEGER ::= 10
+  rows INTEGER ::= 20
+
+  Coordinates ::= SEQUENCE {
+     x INTEGER (-1 .. 11),
+     y INTEGER (-1 .. 21)
+  }
+
+  --  Each shape has its color
+  Color ::= ENUMERATED {
+     empty,
+     blue,
+     green,
+     red
+  }
+
+  --  A shape is contained in a 4x4 grid located at (x, y) on the grid
+  Pixels-Line ::= SEQUENCE (SIZE (4)) OF Color
+  Pixels ::= SEQUENCE (SIZE (4)) OF Pixels-Line
+  Sprite ::= SEQUENCE {
+     origin Coordinates,
+     shape  Pixels
+  }
+
+  Move-Status ::= ENUMERATED { ok, rejected }
+
+  Move-Command ::= ENUMERATED { down, right, left, rotate }
+
+  Timer-Duration ::= INTEGER (0 .. 2000)
+
+  --  Define the play area
+  Line ::= SEQUENCE (SIZE (cols)) OF Color
+  Grid ::= SEQUENCE (SIZE (rows)) OF Line
+
+  empty-line Pixels-Line ::= { empty, empty, empty, empty }
+
+  --  Tetris blocks
+  t-shape Pixels ::= {
+     empty-line,
+     empty-line,
+     {empty, red,   empty, empty},
+     {red,   red,   red,   empty} 
+  }
+
+  l-shape Pixels ::= {
+     empty-line,
+     {red, empty, empty, empty},
+     {red, empty, empty, empty},
+     {red, red,  empty, empty}
+  }
+ 
+  j-shape Pixels ::= {
+     empty-line,
+     {empty, blue, empty, empty},
+     {empty, blue, empty, empty},
+     {blue,  blue, empty, empty}
+  }
+ 
+  s-shape Pixels ::= {
+     empty-line,
+     empty-line,
+     {empty, green, green, empty},
+     {green, green, empty, empty}
+  }
+
+  z-shape Pixels ::= {
+     empty-line,
+     empty-line,
+     {blue,  blue,   empty, empty},
+     {empty, blue,   blue,   empty}
+  }
+
+  i-shape Pixels ::= {
+     {red, empty, empty, empty},
+     {red, empty, empty, empty},
+     {red, empty, empty, empty},
+     {red, empty, empty, empty}
+  }
+
+  o-shape Pixels ::= {
+     empty-line,
+     empty-line,
+     {green, green, empty, empty},
+     {green, green, empty, empty}
+  } 
+END
+

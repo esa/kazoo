@@ -1,0 +1,78 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- 
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::Simple_C_Function
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_cyclic_operation
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_cyclic_operation;
+
+SUBPROGRAM IMPLEMENTATION PI_cyclic_operation.others
+END PI_cyclic_operation.others;
+
+END interfaceview::FV::Simple_C_Function;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::FV::Simple_C_Function;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM Simple_C_Function
+FEATURES
+  PI_cyclic_operation : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::Simple_C_Function::PI_cyclic_operation.others {
+    Taste::coordinates => "1042 584";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 2000 ms;
+    Taste::Deadline => 2000 ms;
+    Taste::InterfaceName => "cyclic_operation";
+  };
+PROPERTIES
+  Source_Language => (C);
+END Simple_C_Function;
+
+SYSTEM IMPLEMENTATION Simple_C_Function.others
+SUBCOMPONENTS
+  cyclic_operation_impl : SUBPROGRAM interfaceview::FV::Simple_C_Function::PI_cyclic_operation.others {
+    Compute_Execution_Time => 0 ms .. 2000 ms;
+  };
+CONNECTIONS
+  OpToPICnx_cyclic_operation_impl : SUBPROGRAM ACCESS cyclic_operation_impl -> PI_cyclic_operation;
+END Simple_C_Function.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Simple_C_Function : SYSTEM interfaceview::IV::Simple_C_Function.others {
+    Taste::coordinates => "1042 432 1706 1121";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.18";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

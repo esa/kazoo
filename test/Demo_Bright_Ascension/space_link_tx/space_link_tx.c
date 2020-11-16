@@ -13,7 +13,7 @@
 static void *context;
 static void* sock;
 
-void init_space_link_tx()
+void space_link_tx_startup()
 {        
     /* Write your initialization code here,
        but do not make any call to a required interface!! */
@@ -41,7 +41,7 @@ void init_space_link_tx()
     
 }
 
-void space_link_tx_packetSendRequest(void *IN_rawpacket, size_t IN_rawpacket_size)
+void space_link_tx_packetSendRequest(const char *IN_rawpacket, size_t IN_rawpacket_size)
 {
    
     //Lazy init spacelink tx as taste inits only one blackbox func.

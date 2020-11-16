@@ -1,0 +1,38 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+PROCESS memoryscrub;
+    /* CIF TEXT (702, 157), (287, 140) */
+    -- Text area for declarations and comments
+
+dcl par EnableDisable;
+    /* CIF ENDTEXT */
+    /* CIF START (362, 14), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (351, 64), (91, 35) */
+        NEXTSTATE Disabled;
+    /* CIF STATE (345, 167), (87, 35) */
+    STATE Enabled;
+        /* CIF PROVIDED (354, 222), (70, 35) */
+        PROVIDED true;
+            /* CIF PROCEDURECALL (308, 272), (162, 35) */
+            CALL writeln('scrubbing');
+            /* CIF NEXTSTATE (354, 322), (70, 35) */
+            NEXTSTATE -;
+    ENDSTATE;
+    /* CIF STATE (518, 18), (91, 38) */
+    STATE Enabled,
+Disabled;
+        /* CIF INPUT (474, 76), (180, 35) */
+        INPUT EnableOrDisable(par);
+            /* CIF DECISION (529, 126), (70, 50) */
+            DECISION par;
+                    /* CIF ANSWER (458, 196), (86, 23) */
+                    (scrubon):
+                        /* CIF NEXTSTATE (457, 234), (87, 35) */
+                        NEXTSTATE Enabled;
+                    /* CIF ANSWER (564, 196), (89, 23) */
+                    (scruboff):
+                        /* CIF NEXTSTATE (563, 234), (91, 35) */
+                        NEXTSTATE Disabled;
+            ENDDECISION;
+    ENDSTATE;
+ENDPROCESS memoryscrub;

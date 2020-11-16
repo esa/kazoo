@@ -26,40 +26,40 @@
 #include "timers.h"
 
 #include "transport.h"
-#include "msp430_partition_interface.h"
+#include "@_LOWER:Partition_Name_@_interface.h"
 
-extern QueueHandle_t @_Thread_Name_@_global_queue;
+extern QueueHandle_t @_Thread_Name_@_Global_Queue;
 
 @@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
-void prv@_Thread_Name_@TimerCallback(TimerHandle_t timer)
+void prv_@_Thread_Name_@_Timer_Callback(TimerHandle_t timer)
 {
     struct Request request;
     request.m_length = 0;
-    xQueueSend(@_Thread_Name_@_global_queue, &request, 0);
+    xQueueSend(@_Thread_Name_@_Global_Queue, &request, 0);
 }
 
-__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_timer_buffer = {0};
-__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_timer = {0};
+__attribute__ ((persistent)) StaticTimer_t prv_@_LOWER:Thread_Name_@_Timer_Buffer = {0};
+__attribute__ ((persistent)) TimerHandle_t prv_@_LOWER:Thread_Name_@_Timer = {0};
 
 @@END_IF@@
-void prv_@_Thread_Name_@Task(void* prParameters)
+void prv_@_Thread_Name_@_Task(void* prParameters)
 {
-    extern QueueHandle_t @_Thread_Name_@_global_queue;
+    extern QueueHandle_t @_Thread_Name_@_Global_Queue;
 @@IF@@ @_RCM_@ = "CYCLIC_OPERATION"
     TickType_t period = pdMS_TO_TICKS(@_Period_@);
-    prv_@_LOWER:Thread_Name_@_timer = xTimerCreateStatic("@_Thread_Name_@Timer",
+    prv_@_LOWER:Thread_Name_@_Timer = xTimerCreateStatic("@_Thread_Name_@_Timer",
                                                          period,
                                                          pdTRUE,
                                                          NULL,
-                                                         &prv@_Thread_Name_@TimerCallback,
-                                                         &prv_@_LOWER:Thread_Name_@_timer_buffer);
-    xTimerStart(prv_@_LOWER:Thread_Name_@_timer, portMAX_DELAY);
+                                                         &prv_@_Thread_Name_@_Timer_Callback,
+                                                         &prv_@_LOWER:Thread_Name_@_Timer_Buffer);
+    xTimerStart(prv_@_LOWER:Thread_Name_@_Timer, portMAX_DELAY);
 @@END_IF@@
 
     while(1)
     {
         struct Request request;
-        BaseType_t result = xQueueReceive(@_Thread_Name_@_global_queue, &request, portMAX_DELAY);
+        BaseType_t result = xQueueReceive(@_Thread_Name_@_Global_Queue, &request, portMAX_DELAY);
         if(result == pdTRUE)
         {
             call_@_LOWER:Thread_Name_@((const char*)request.m_data, request.m_length);

@@ -1,0 +1,73 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::demo_c
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS demo_c
+END demo_c;
+
+PROCESS IMPLEMENTATION demo_c.others
+END demo_c.others;
+
+END deploymentview::DV::demo_c;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Simple_C_Function;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::demo_c;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM demo_c
+END demo_c;
+
+SYSTEM IMPLEMENTATION demo_c.others
+SUBCOMPONENTS
+  IV_Simple_C_Function : SYSTEM interfaceview::IV::Simple_C_Function::Simple_C_Function.others {
+    Taste::FunctionName => "Simple_C_Function";
+  };
+  demo_c : PROCESS deploymentview::DV::demo_c::demo_c.others {
+    Taste::coordinates => "1015 511 1924 873";
+    TASTE_DV_Properties::CoverageEnabled => false;
+    Deployment::Port_Number => 0;
+  };
+  p : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "886 391 1998 919";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (demo_c)) APPLIES TO IV_Simple_C_Function;
+  Actual_Processor_Binding => (reference (p)) APPLIES TO demo_c;
+END demo_c.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  demo_c : SYSTEM demo_c.others {
+    Taste::coordinates => "541 244 2764 1299";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.4";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("../../../../tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

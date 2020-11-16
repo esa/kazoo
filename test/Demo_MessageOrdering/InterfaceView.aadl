@@ -1,0 +1,170 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::F1
+PUBLIC
+
+WITH interfaceview::IV::F2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM RI_A
+FEATURES
+  counter : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_A;
+
+SUBPROGRAM IMPLEMENTATION RI_A.others
+END RI_A.others;
+
+SUBPROGRAM RI_B
+FEATURES
+  couter : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+END RI_B;
+
+SUBPROGRAM IMPLEMENTATION RI_B.others
+END RI_B.others;
+
+SYSTEM F1
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::F1::PI_pulse.others {
+    Taste::coordinates => "551 366";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 200 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  RI_A : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::F2::PI_A.others {
+    Taste::coordinates => "1182 395";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "A";
+    Taste::labelInheritance => "true";
+  };
+  RI_B : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::F2::PI_B.others {
+    Taste::coordinates => "1182 791";
+    Taste::RCMoperationKind => sporadic;
+    Taste::InterfaceName => "B";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END F1;
+
+SYSTEM IMPLEMENTATION F1.others
+END F1.others;
+
+END interfaceview::IV::F1;
+
+PACKAGE interfaceview::IV::F2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_A
+FEATURES
+  counter : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_A;
+
+SUBPROGRAM IMPLEMENTATION PI_A.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_A.others;
+
+SUBPROGRAM PI_B
+FEATURES
+  couter : IN PARAMETER DataView::MyInteger {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_B;
+
+SUBPROGRAM IMPLEMENTATION PI_B.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_B.others;
+
+SYSTEM F2
+FEATURES
+  PI_A : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::F2::PI_A.others {
+    Taste::coordinates => "1913 392";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "A";
+  };
+  PI_B : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::F2::PI_B.others {
+    Taste::coordinates => "1913 762";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "B";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+END F2;
+
+SYSTEM IMPLEMENTATION F2.others
+END F2.others;
+
+END interfaceview::IV::F2;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::F1;
+WITH interfaceview::IV::F2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  F1 : SYSTEM interfaceview::IV::F1::F1.others {
+    Taste::coordinates => "551 257 1182 1055";
+  };
+  F2 : SYSTEM interfaceview::IV::F2::F2.others {
+    Taste::coordinates => "1913 201 2627 1067";
+  };
+CONNECTIONS
+  F2_PI_A_F1_RI_A : SUBPROGRAM ACCESS F2.PI_A -> F1.RI_A {
+    Taste::coordinates => "1182 395 1516 395 1516 392 1913 392";
+  };
+  F2_PI_B_F1_RI_B : SUBPROGRAM ACCESS F2.PI_B -> F1.RI_B {
+    Taste::coordinates => "1182 791 1516 791 1516 762 1913 762";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

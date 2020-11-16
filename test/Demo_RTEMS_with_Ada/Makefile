@@ -19,7 +19,7 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 	touch $@
 
 clean:
-	$(MAKE) -C work clean
+	rm -rf work
 
 .PHONY: clean skeletons c
 

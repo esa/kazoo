@@ -16,8 +16,7 @@ package @_CAPITALIZE:Name_@ is
    --  This package interfaces with the user code directly
    --  It may contain a protected object if a PI requires mutual exclusion
 
-   procedure Init
-      with Import, Convention => C, Link_Name => "init_@_LOWER:Name_@";
+   procedure Init;
 
 @@IF@@ @_Protected_PIs_@ /= ""
    --  Protected provided interfaces (incl. Sporadic and cyclics)

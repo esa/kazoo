@@ -49,6 +49,10 @@ package body TASTE.Dump is
       --  Tags that are built over the whole system
       --  and cleant up between each template folder:
    begin
+      if Model.Deployment_View.Is_Empty then
+         Put_Debug ("No Deployment View - Ignoring Dump request");
+         return;
+      end if;
       Put_Debug ("Folder with Dump templates: " & Prefix);
       Start_Search (Search    => ST,
                     Pattern   => "",

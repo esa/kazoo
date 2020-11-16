@@ -11,7 +11,7 @@
 @@SET@@ STM32_GNAT = True
 @@END_IF@@
 
-GNATMAKE = gprbuild
+GPRBUILD = gprbuild
 
 @@IF@@ @_STM32_GNAT_@
 export ADA_PROJECT_PATH=${CURDIR}/Ada_Drivers_Library/boards:${CURDIR}/Ada_Drivers_Library/boards/@_REPLACE(_full/):LOWER:Ada_Runtime_@/
@@ -26,7 +26,7 @@ TARGET = NATIVE
 @@IF@@ @_STM32_GNAT_@
 all:	Ada_Drivers_Library/README.md ../../dataview/Ada_STM32/built
 @@TABLE@@
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:C -DFP_WORD_SIZE=4
+	$(GPRBUILD) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:C -DFP_WORD_SIZE=4
 @@END_TABLE@@
 
 Ada_Drivers_Library/README.md:
@@ -35,12 +35,14 @@ Ada_Drivers_Library/README.md:
 # STM32 have no support for double precision: we need to call asn1.exe with dedicated flag
 ../../dataview/Ada_STM32/built:	../../dataview/dataview-uniq.asn
 	mkdir -p $(dir $@)
-	mono $(shell which asn1.exe) --fp-word-size 4 -equal -Ada -typePrefix asn1Scc -fp AUTO -o $(dir $@) $^
+	mono $(shell which asn1.exe) -t allboards --fp-word-size 4 -equal -Ada -typePrefix asn1Scc -fp AUTO -o $(dir $@) $^
 	touch $@
 
 @@ELSE@@
 all:
+	# Configure gprbuild to use GCC toolchain (for C and C++) even if LLVM is installed
+	gprconfig --batch --config=Ada,,default,,GNAT --config=C,,default,,GCC --config=C++,,default,,G++ || :
 @@TABLE@@
-	$(GNATMAKE) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
+	$(GPRBUILD) -p -P @_LOWER:Partition_Names_@.gpr -XTARGET=$(TARGET) -cargs:C -DSTATIC=static -cargs:Ada -gnatE
 @@END_TABLE@@
 @@END_IF@@

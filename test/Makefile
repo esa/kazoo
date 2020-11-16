@@ -19,5 +19,6 @@ clean:
 	@for v in $(TEST_CASES) ; \
 		do $(MAKE) -s -C $$v clean ; \
 	done
+	find . -name "DataView.aadl" -exec git checkout -- {} \;
 
 .PHONY: test-parse clean

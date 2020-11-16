@@ -3,3 +3,5 @@ obj/
 src/*.swp
 *.swp
 src/taste-parser_version.ads
+doc/templates/*.old
+doc/templates/*.html

@@ -1,0 +1,22 @@
+@@-- The up to date list of tags available for this template is available here:
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
+@@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_skeletons_sub_interface.ascii
+@@IF@@ @_Direction_@ = RI and not @_Is_Timer_@
+   @@IF@@ @_EXIST:Param_Names_@
+      @@INLINE@@
+         procedure @_CAPITALIZE:Name_@
+            @@INLINE(\()(; )(\);)@@
+               @@TABLE@@
+                  @@IF@@ @_Param_Directions_@ = "PARAM_IN"
+                     @_CAPITALIZE:Param_Names_@ : in out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+                  @@ELSE@@
+                     @_CAPITALIZE:Param_Names_@ : out asn1Scc@_CAPITALIZE:REPLACE_ALL(-/_):Param_Types_@
+                  @@END_IF@@
+               @@END_TABLE@@
+            @@END_INLINE@@
+      @@END_INLINE@@
+   @@ELSE@@
+procedure @_CAPITALIZE:Name_@;
+   @@END_IF@@
+@@END_IF@@
+

@@ -15,7 +15,7 @@ def test(binaries, expected, timeout):
                     realList.extend(elem)
                 else:
                     realList.append(elem)
-                idx = g_child.expect(realList)
+                idx = g_child.expect_exact(realList)
                 if 0 == idx:
                     print "\nTimed out waiting for:", realList
                     print g_child

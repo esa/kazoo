@@ -42,21 +42,13 @@ extern void adainit(void);
 extern void CInit@_CAPITALIZE:Name_@(void);
 @@END_IF@@
 
-@@IF@@ @_Use_POHIC_@
 @@TABLE@@
 extern void init_@_LOWER:Sync_RIs_Parent_@(void);
 extern unsigned @_LOWER:Sync_RIs_Parent_@_initialized;
-@@END_TABLE@@
-@@ELSE@@
-@@-- in Ada include the _vm_if.h that is otherwise
-@@-- included by the C polyorb_interface.c
-@@-- in case of simulink, the _initialized variable is
-@@-- unfortunately defined in the .h, so this would cause
-@@-- issue if it was included several times.
-@@TABLE@@
+@@IF@@ not @_Use_POHIC_@
 #include "@_LOWER:Sync_RIs_Parent_@_vm_if.h"
-@@END_TABLE@@
 @@END_IF@@
+@@END_TABLE@@
 unsigned @_LOWER:Name_@_initialized = 0;
 void init_@_LOWER:Name_@(void)
 {

@@ -45,6 +45,9 @@ extern void CInit@_CAPITALIZE:Name_@(void);
 @@TABLE@@
 extern void init_@_LOWER:Sync_RIs_Parent_@(void);
 extern unsigned @_LOWER:Sync_RIs_Parent_@_initialized;
+@@IF@@ not @_Use_POHIC_@
+#include "@_LOWER:Sync_RIs_Parent_@_vm_if.h"
+@@END_IF@@
 @@END_TABLE@@
 unsigned @_LOWER:Name_@_initialized = 0;
 void init_@_LOWER:Name_@(void)

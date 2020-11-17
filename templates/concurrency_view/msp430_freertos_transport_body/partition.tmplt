@@ -43,7 +43,7 @@
 #include "queue.h"
 #include "semphr.h"
 
-@@IF@@ @_In_Port_Names_@ /= "" AND @_Out_Port_Names_@ /= ""
+@@IF@@ @_In_Port_Names_@ /= "" OR @_Out_Port_Names_@ /= ""
 __attribute__ ((persistent)) static RemoteTransportFuncPtr remote_transport_func = NULL;
 void register_remote_transport_func(RemoteTransportFuncPtr fn)
 {

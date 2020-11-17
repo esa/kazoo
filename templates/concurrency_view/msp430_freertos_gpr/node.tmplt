@@ -13,7 +13,7 @@
 all: partitions
 
 partitions: freertos
-	gprbuild -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""
+	gprbuild -R -p -P @_LOWER:Partition_Names_@.gpr -XCFG="Release" -cargs:C -DSTATIC=""
 
 freertos:
 	sh gather_freertos_files.sh

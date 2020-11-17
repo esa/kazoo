@@ -1,0 +1,5 @@
+@@-- OpenGEODE's generate code goes into the "code" folder
+@@IF@@ @_Language_@ = SDL
+../code/@_LOWER:Name_@_ri.ads
+@@ELSE@@
+@_LOWER:Name_@_ri.ads

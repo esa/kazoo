@@ -1,0 +1,151 @@
+templates/concurrency_view/sub/partition.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This file is evaluated for every partition.
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Name                              | Partition name (usually the name  |
+|                                   | of the binary)                    |
++-----------------------------------+-----------------------------------+
+| Threads                           | Code generated for the threads    |
++-----------------------------------+-----------------------------------+
+| Thread_Names                      | Tag: list of thread names         |
++-----------------------------------+-----------------------------------+
+| Node_Name                         | Name of the node containing this  |
+|                                   | partition                         |
++-----------------------------------+-----------------------------------+
+| Blocks                            | Code generated for protected      |
+|                                   | functions                         |
++-----------------------------------+-----------------------------------+
+| Block_Names                       | Tag: list of block (user          |
+|                                   | functions) names                  |
++-----------------------------------+-----------------------------------+
+| Coverage                          | True if user requested code       |
+|                                   | coverage enable                   |
++-----------------------------------+-----------------------------------+
+| Package_Name                      | AADL Package name for the target  |
+|                                   | (e.g. ocarina_porocessors_x86)    |
++-----------------------------------+-----------------------------------+
+| CPU_Name                          | CPU AADL Identifier (e.g.         |
+|                                   | x86_inst)                         |
++-----------------------------------+-----------------------------------+
+| CPU_Family                        | CPU Kind (e.g. leon3)             |
++-----------------------------------+-----------------------------------+
+| CPU_Instance                      | AADL component instance (e.g.     |
+|                                   | rtems_posix)                      |
++-----------------------------------+-----------------------------------+
+| CPU_Platform                      | AADL CPU_Platform (e.g.           |
+|                                   | PLATFORM_NATIVE)                  |
++-----------------------------------+-----------------------------------+
+| CPU_Classifier                    | AADL CPU Classifier (e.g.         |
+|                                   | ocarina_processors_x86::x86.linux |
+|                                   | )                                 |
++-----------------------------------+-----------------------------------+
+| VP_Name                           | Virtual processor name on which   |
+|                                   | the partition is bounded          |
++-----------------------------------+-----------------------------------+
+| VP_Platform                       | Virtual processor platform (e.g.  |
+|                                   | PLATFORM_AIR)                     |
++-----------------------------------+-----------------------------------+
+| VP_Classifier                     | Virtual processor classifier      |
++-----------------------------------+-----------------------------------+
+| Bound_Functions                   | List of user functions from       |
+|                                   | Interface view                    |
++-----------------------------------+-----------------------------------+
+| Thread_Src_Name                   | Vector tag : connection thread    |
+|                                   | name (source)                     |
++-----------------------------------+-----------------------------------+
+| Thread_Dst_Name                   | ↳ connection thread name          |
+|                                   | (destination)                     |
++-----------------------------------+-----------------------------------+
+| Thread_Src_Port                   | ↳ connection port name (source)   |
++-----------------------------------+-----------------------------------+
+| Thread_Dst_Port                   | ↳ connection port name (dest)     |
++-----------------------------------+-----------------------------------+
+| In_Port_Names                     | Vector tag: input ports of the    |
+|                                   | partition                         |
++-----------------------------------+-----------------------------------+
+| In_Port_Thread_Name               | ↳ corresponding thread inside the |
+|                                   | partition                         |
++-----------------------------------+-----------------------------------+
+| In_Port_Type_Name                 | ↳ corresponding parameter type    |
+|                                   | name (optional)                   |
++-----------------------------------+-----------------------------------+
+| Out_Port_Names                    | Vector tag: output ports of the   |
+|                                   | partition                         |
++-----------------------------------+-----------------------------------+
+| Out_Port_Type_Name                | ↳ corresponding parameter type    |
+|                                   | name (optional)                   |
++-----------------------------------+-----------------------------------+
+| Part_Out_Port_Name                | Vector tag: output ports of the   |
+|                                   | partition (can be several times   |
+|                                   | the same)                         |
++-----------------------------------+-----------------------------------+
+| Connected_Threads                 | ↳ Corresponding thread connected  |
+|                                   | to it                             |
++-----------------------------------+-----------------------------------+
+| Block_Instance_Of                 | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Thread_Has_Param                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Memory_Region                     | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| VP_Package_Name                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Ada_Runtime                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Block_Languages                   | For each block: implementation    |
+|                                   | language                          |
++-----------------------------------+-----------------------------------+
+| VP_Duration                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_CPU                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Bus_Name                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Init                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_AADL_Pkg                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Module                | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Port_Name                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Config                     | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Names                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_File                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Classifier                 | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_Language                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Device_ASN1_Sort                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Out_Port_Remote_Function          | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| In_Port_Queue_Size                | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Block_FPGAConf                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Out_Port_Remote_Port_Name         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Out_Port_Remote_Partition         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Out_Port_Queue_Size               | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Block_Is_Shared_Type              | True if parent of the instance is |
+|                                   | a shared component                |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | Folder hosting the shared         |
+|                                   | component types                   |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Block_Default_Codegen             | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+

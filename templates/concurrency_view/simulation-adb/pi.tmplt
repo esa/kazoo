@@ -1,0 +1,13 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@                   : The name of the interface
+@@-- @_Direction_@              : "PI" or "RI"
+@@-- @_Kind_@                   : The RCM Kind
+@@-- @_Parent_Function_@        : The name of the function
+@@-- @_Partition_Name_@         : Partition name for parent function
+@@-- @_Param_Names_@            : List of parameter names
+@@-- @_Param_Types_@            :   |_ Corresponding parameter types
+@@-- @_Param_Directions_@       :   |_ Corresponding direction
+@@-- @_Remote_Function_Names_@  : List of callers
+@@-- @_Remote_Interface_Names_@ :   |_ caller's interface name
+@@-- @_Calling_Threads_@        : Calling threads of the containing block

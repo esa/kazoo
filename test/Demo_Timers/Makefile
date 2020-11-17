@@ -8,6 +8,13 @@ c: test-parse-c # Polyorb_HI_C output
 	cp sdl_fct/sdl_fct.pr work/sdl_fct/SDL/src
 	make -C work
 
+simu: clean-c
+	$(KAZOO) -p -t SIMU --gw -o work --glue -g
+	$(MAKE) -C work dataview
+	cp ada_fct/ada_fct.adb work/ada_fct/Ada/src
+	cp function2/function2.c work/function2/C/src
+	cp sdl_fct/sdl_fct.pr work/sdl_fct/SDL/src
+
 test-parse-c: clean-c
 	$(KAZOO) -p --gw \
 	         -o work \
@@ -32,4 +39,4 @@ clean-c:
 
 clean: clean-c
 
-.PHONY: clean clean-c gdb test-parse-c buildsupport_pohic c skeletons clean-skeletons
+.PHONY: simu clean clean-c gdb test-parse-c buildsupport_pohic c skeletons clean-skeletons

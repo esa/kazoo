@@ -16,7 +16,7 @@ static void* sock;
 /* #define MAX_SP_LEN 65542 */
 #define MAX_SP_LEN 256
 
-void init_space_link_rx()
+void space_link_rx_startup()
 {
 	/* Write your initialization code here,
 	   but do not make any call to a required interface!! */
@@ -87,7 +87,7 @@ void space_link_rx_pollSocket()
         
         printFlag=1;
                 
-        vm_space_link_rx_packetReceiveIndication(rxBuf, nBytes);
+        vm_space_link_rx_packetreceiveindication(rxBuf, nBytes);
     }
 }
 

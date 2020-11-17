@@ -32,17 +32,17 @@ include $(AIR_ROOT)/Makefile.inc
 # All
 .PHONY : all
 all:
-	make -C deploymentview_final/common
-	make -C deploymentview_final/config all
+	$(MAKE) -C deploymentview_final/common
+	$(MAKE) -C deploymentview_final/config all
 
 # Clean
 .PHONY : clean
 clean:
-	make -C deploymentview_final/common clean
-	make -C deploymentview_final/config clean
+	$(MAKE) -C deploymentview_final/common clean
+	$(MAKE) -C deploymentview_final/config clean
 
 # Distclean
 .PHONY : distclean
 distclean: clean
-	make -C deploymentview_final/config distclean
+	$(MAKE) -C deploymentview_final/config distclean
 	$(AIR_TOOLS)/configurator clean

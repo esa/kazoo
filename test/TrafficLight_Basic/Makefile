@@ -3,7 +3,10 @@ KAZOO?=kazoo
 all:	c
 
 c:	work/glue_built
+	cp input/controller.pr work/controller/SDL/src
 	$(MAKE) -C work
+	cp input/*.png input/UserWidgets.py work/binaries/user_GUI
+
 
 edit:
 	taste
@@ -22,7 +25,6 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 
 clean:
 	rm -rf work
-	git checkout -- work
 
 .PHONY: clean skeletons c
 

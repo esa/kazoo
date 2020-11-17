@@ -1,0 +1,515 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Engine;
+    /* CIF TEXT (787, 0), (255, 296) */
+    -- Timers defined in the interface view
+    -- Use SET_TIMER (value, timer name)
+    -- and RESET_TIMER (timer name) in a
+    -- PROCEDURE CALL symbol to use them
+    timer Tetris_Timer;
+    
+    dcl foo T_Boolean;
+    
+    dcl Move_Time Timer_Duration := 500;
+    dcl Timer_Value Timer_Duration := 500;
+    
+    dcl Prev_Sprite, Next_Sprite Sprite;
+    
+    dcl cmd Move_Command;
+    
+    dcl Landscape, Play_Area Grid;
+    
+    dcl Score T_Uint32 := 0;
+    /* CIF ENDTEXT */
+    /* CIF procedure (200, 153), (125, 35) */
+    procedure Print_Playground
+    /* CIF comment (348, 142), (127, 56) */
+    comment 'For debugging:
+display the grid in
+the console';
+        /* CIF TEXT (33, 59), (267, 140) */
+        fpar in Area Grid;
+        /* CIF ENDTEXT */
+        /* CIF START (503, 133), (70, 35) */
+        START;
+            /* CIF task (370, 188), (334, 120) */
+            task for y in range(rows):
+   for x in range(cols):
+       call write(if area(y)(x) = Empty then '.' else 'X' fi);
+   endfor
+   call writeln('');
+endfor;
+            /* CIF return (520, 339), (35, 35) */
+            return ;
+    endprocedure;
+    /* CIF procedure (207, 202), (77, 35) */
+    procedure Translate;
+        /* CIF TEXT (0, 27), (267, 140) */
+        fpar
+           in source Coordinates,
+           in cmd      Move_Command;
+        returns Coordinates;
+        
+        dcl Res Coordinates;
+        /* CIF ENDTEXT */
+        /* CIF START (640, 50), (70, 35) */
+        START;
+            /* CIF decision (640, 105), (70, 50) */
+            decision cmd;
+                /* CIF ANSWER (405, 175), (70, 24) */
+                (down):
+                    /* CIF task (385, 219), (109, 72) */
+                    task Res := {
+  x Source.x,
+  y Source.y + 1
+};
+                /* CIF ANSWER (528, 175), (70, 24) */
+                (right):
+                    /* CIF task (505, 219), (115, 72) */
+                    task Res := {
+   x Source.x + 1,
+   y Source.y
+};
+                /* CIF ANSWER (669, 175), (70, 24) */
+                (left):
+                    /* CIF task (647, 219), (112, 72) */
+                    task Res := {
+   x Source.x - 1,
+   y Source.y
+};
+                /* CIF ANSWER (815, 175), (70, 24) */
+                (rotate):
+            enddecision;
+            /* CIF return (657, 307), (35, 35) */
+            return Res;
+    endprocedure;
+    /* CIF procedure (198, 23), (76, 35) */
+    procedure Move_To;
+        /* CIF TEXT (0, 137), (267, 184) */
+        fpar
+          in          Dest              Sprite,
+          in          Spriteless    Grid,
+          in/out Playground Grid;
+        
+        dcl New_Field Grid;
+        
+        dcl Ret Move_Status := OK;
+        
+        returns Move_Status;
+        /* CIF ENDTEXT */
+        /* CIF START (621, 73), (70, 35) */
+        START;
+            /* CIF task (576, 128), (159, 35) */
+            task New_Field := Spriteless
+            /* CIF comment (750, 125), (226, 40) */
+            comment 'The Spriteless playground only has
+non-moving blocks on the bottom';
+            /* CIF task (407, 178), (497, 184) */
+            task for y in range (4):
+   for x in range (4):
+      Ret := (if Dest.Shape (y)(x) /= Empty and
+                        (
+                          (Dest.Origin.x+x < 0 or Dest.Origin.x + x > 9 or Dest.Origin.y + y >19)
+                          or else (New_Field (Dest.Origin.y + y)(Dest.Origin.x + x) /= Empty
+                                  and Dest.Shape(y)(x) /= Empty)
+                        )
+                   then Rejected else Ret fi)
+   endfor
+endfor
+            /* CIF comment (919, 250), (173, 40) */
+            comment 'Check that all destination
+spots in the grid are free';
+            /* CIF decision (628, 393), (55, 50) */
+            decision Ret;
+                /* CIF ANSWER (438, 463), (70, 24) */
+                (OK):
+                    /* CIF task (232, 502), (480, 152) */
+                    task for y in range (4):
+   for x in range (4):
+      decision Dest.Shape(y)(x) /= Empty;
+       (true): 
+           task New_Field (Dest.Origin.y + y)(Dest.Origin.x + x) := Dest.Shape (y)(x);
+       (false):
+      enddecision;
+    endfor
+endfor
+                    /* CIF comment (733, 558), (134, 40) */
+                    comment 'Add the new sprite';
+                    /* CIF task (388, 685), (168, 35) */
+                    task Playground := New_Field;
+                /* CIF ANSWER (905, 463), (75, 24) */
+                (Rejected):
+            enddecision;
+            /* CIF return (638, 736), (35, 35) */
+            return Ret;
+    endprocedure;
+    /* CIF procedure (202, 66), (73, 35) */
+    procedure Rotate;
+        /* CIF TEXT (0, 27), (334, 136) */
+        fpar
+           in source Sprite;
+        returns Sprite;
+        
+        dcl ret Sprite;
+        --  Perform a rotation of the shape within its pixel grid
+        /* CIF ENDTEXT */
+        /* CIF START (457, 50), (70, 35) */
+        START;
+            /* CIF decision (406, 105), (170, 50) */
+            decision Source.Shape /= o_shape;
+                /* CIF ANSWER (346, 175), (70, 24) */
+                (true):
+                    /* CIF task (289, 219), (184, 35) */
+                    task Ret.Origin := Source.Origin;
+                    /* CIF task (243, 269), (274, 104) */
+                    task for y in range (4):
+   for x in range (4):
+      Ret.Shape (y)(x) := Source.Shape (3-x)(y)
+  endfor
+endfor;
+                    /* CIF label (328, 393), (105, 35) */
+                    push_down:
+                    /* CIF decision (292, 448), (177, 50) */
+                    decision Ret.Shape(3) = empty_line
+                    /* CIF comment (492, 453), (138, 40) */
+                    comment 'After the rotation,
+move all lines down';
+                        /* CIF ANSWER (112, 518), (70, 24) */
+                        (True):
+                            /* CIF task (17, 562), (259, 56) */
+                            task for y in range (3):
+    Ret.Shape (3-y) := Ret.Shape (2-y)
+endfor;
+                            /* CIF task (54, 638), (184, 35) */
+                            task Ret.Shape (0) := empty_line;
+                            /* CIF join (129, 688), (35, 35) */
+                            join push_down;
+                        /* CIF ANSWER (472, 518), (70, 24) */
+                        (False):
+                            /* CIF label (467, 562), (78, 35) */
+                            push_left:
+                            /* CIF decision (409, 617), (195, 72) */
+                            decision Ret.Shape (0)(0) = empty
+and Ret.Shape (1)(0) = empty
+and Ret.Shape (2)(0) = empty
+and Ret.Shape (3)(0) = empty
+                            /* CIF comment (625, 635), (176, 40) */
+                            comment 'And push pixels to the
+left of the 4x4 grid';
+                                /* CIF ANSWER (382, 709), (70, 24) */
+                                (true):
+                                    /* CIF task (287, 753), (258, 88) */
+                                    task for y in range (4):
+   for x in range (3):
+      Ret.Shape (y)(x) := Ret.Shape (y)(x+1)
+   endfor
+endfor;
+                                    /* CIF task (327, 861), (179, 72) */
+                                    task Ret.Shape (0)(3) := empty,
+Ret.Shape (1)(3) := empty,
+Ret.Shape (2)(3) := empty,
+Ret.Shape (3)(3) := empty;
+                                    /* CIF join (399, 964), (35, 35) */
+                                    join push_left;
+                                /* CIF ANSWER (602, 725), (70, 24) */
+                                (false):
+                                    /* CIF return (619, 769), (35, 35) */
+                                    return ret;
+                            enddecision;
+                    enddecision;
+                /* CIF ANSWER (827, 175), (70, 24) */
+                (false):
+                    /* CIF return (844, 219), (35, 35) */
+                    return Source;
+            enddecision;
+    endprocedure;
+    /* CIF procedure (198, 108), (127, 35) */
+    procedure Clear_Playground;
+        /* CIF TEXT (66, 127), (267, 140) */
+        fpar
+            in/out Playground Grid;
+        /* CIF ENDTEXT */
+        /* CIF START (465, 115), (70, 35) */
+        START;
+            /* CIF task (396, 170), (208, 88) */
+            task for y in range (rows):
+   for x in range (cols):
+      Playground (y)(x) := empty
+   endfor
+endfor
+            /* CIF comment (620, 194), (126, 40) */
+            comment 'Clear the grid for 
+a new game';
+            /* CIF return (482, 278), (35, 35) */
+            return ;
+    endprocedure;
+    /* CIF procedure (190, 278), (135, 35) */
+    procedure Remove_Full_Lines;
+        /* CIF TEXT (38, 111), (267, 152) */
+        -- Shift down if any line is complete
+        
+        fpar in/out Playground Grid;
+        
+        dcl Is_Full T_Boolean := True;
+        
+        dcl y Coordinates_y := 19;
+        /* CIF ENDTEXT */
+        /* CIF START (615, 184), (70, 35) */
+        START;
+            /* CIF label (613, 239), (73, 31) */
+            More:
+            /* CIF decision (615, 290), (70, 50) */
+            decision y > 0;
+                /* CIF ANSWER (572, 360), (70, 24) */
+                (true):
+                    /* CIF task (554, 404), (104, 40) */
+                    task Is_Full := True;
+                    /* CIF task (451, 464), (311, 56) */
+                    task for x in range (cols):
+   Is_Full := Is_Full and (Playground(y)(x) /= empty)
+endfor;
+                    /* CIF decision (572, 540), (70, 55) */
+                    decision Is_Full
+                    /* CIF comment (656, 540), (195, 56) */
+                    comment 'Shift all lines above, and redo
+the test on the same line
+(do not decrement y)';
+                        /* CIF ANSWER (527, 619), (70, 24) */
+                        (True):
+                            /* CIF task (500, 663), (123, 35) */
+                            task score := score + 1;
+                            /* CIF PROCEDURECALL (482, 718), (158, 35) */
+                            call writeln('Score: ', score);
+                            /* CIF task (477, 768), (168, 72) */
+                            task for line in range (y):
+   Playground (y-line) :=
+      Playground (y-line - 1)
+endfor;
+                            /* CIF task (462, 860), (198, 56) */
+                            task for col in range (cols):
+   Playground (0)(col) := empty
+endfor;
+                            /* CIF decision (486, 936), (151, 50) */
+                            decision score mod 10 = 0
+and Move_Time > 100
+                            /* CIF comment (657, 943), (133, 40) */
+                            comment 'Increase the speed
+every 10 lines';
+                                /* CIF ANSWER (482, 1006), (70, 24) */
+                                (true):
+                                    /* CIF task (410, 1050), (213, 35) */
+                                    task Move_Time := Move_Time - 100;
+                                /* CIF ANSWER (634, 1006), (70, 24) */
+                                (false):
+                            enddecision;
+                            /* CIF join (544, 1101), (35, 35) */
+                            join More;
+                        /* CIF ANSWER (800, 619), (70, 24) */
+                        (False):
+                            /* CIF task (799, 663), (72, 35) */
+                            task y := y - 1;
+                            /* CIF join (817, 713), (35, 35) */
+                            join More;
+                    enddecision;
+                /* CIF ANSWER (882, 360), (70, 24) */
+                (false):
+                    /* CIF return (899, 404), (35, 35) */
+                    return ;
+            enddecision;
+    endprocedure;
+    /* CIF START (1480, 10), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (1480, 65), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF label (458, 208), (70, 35) */
+    connection Move:
+        /* CIF decision (415, 263), (156, 72) */
+        decision Move_To (Next_Sprite,
+Landscape, Play_Area);
+            /* CIF ANSWER (67, 355), (70, 24) */
+            (OK):
+                /* CIF task (13, 399), (178, 35) */
+                task Prev_Sprite := Next_Sprite;
+                /* CIF output (15, 454), (173, 35) */
+                output Update_Grid (Play_Area);
+                /* CIF NEXTSTATE (57, 504), (90, 35) */
+                NEXTSTATE Next_Move;
+            /* CIF ANSWER (561, 355), (75, 24) */
+            (Rejected):
+                /* CIF decision (511, 399), (174, 39) */
+                decision Next_Sprite = Prev_Sprite;
+                    /* CIF ANSWER (298, 459), (70, 24) */
+                    (true):
+                        /* CIF PROCEDURECALL (240, 503), (186, 35) */
+                        call Reset_Timer (Tetris_Timer);
+                        /* CIF output (287, 553), (92, 40) */
+                        output Game_Over
+(score);
+                        /* CIF PROCEDURECALL (259, 613), (147, 35) */
+                        call writeln('Game Over');
+                        /* CIF NEXTSTATE (298, 663), (70, 35) */
+                        NEXTSTATE Wait;
+                    /* CIF ANSWER (690, 459), (70, 24) */
+                    (false):
+                        /* CIF decision (653, 503), (143, 56) */
+                        decision Next_Sprite.Origin.y
+/=
+Prev_Sprite.Origin.y
+                        /* CIF comment (833, 488), (187, 88) */
+                        comment 'If move command is
+Left/Right (same line) still
+try to go down
+if move was rotate, cancel it
+first';
+                            /* CIF ANSWER (521, 585), (70, 24) */
+                            (True):
+                                /* CIF PROCEDURECALL (463, 629), (186, 35) */
+                                call Reset_Timer (Tetris_Timer);
+                                /* CIF task (465, 679), (181, 35) */
+                                task Timer_Value := Move_Time;
+                                /* CIF PROCEDURECALL (454, 734), (204, 35) */
+                                call Remove_Full_Lines (Play_Area);
+                                /* CIF output (469, 789), (173, 35) */
+                                output Update_Grid (Play_Area);
+                                /* CIF PROCEDURECALL (463, 839), (185, 40) */
+                                call set_timer
+(Timer_Value, Tetris_Timer);
+                                /* CIF NEXTSTATE (511, 899), (90, 35) */
+                                NEXTSTATE Next_Block;
+                            /* CIF ANSWER (783, 585), (70, 24) */
+                            (False):
+                                /* CIF decision (747, 629), (142, 56) */
+                                decision Next_Sprite.Origin.x
+=
+Prev_Sprite.Origin.x
+                                /* CIF comment (909, 639), (174, 40) */
+                                comment 'Revert rotation command
+(exact same Origin)';
+                                    /* CIF ANSWER (717, 705), (70, 24) */
+                                    (true):
+                                        /* CIF task (660, 749), (183, 35) */
+                                        task Next_Sprite := Prev_Sprite;
+                                    /* CIF ANSWER (855, 705), (70, 24) */
+                                    (false):
+                                enddecision;
+                                /* CIF NEXTSTATE (773, 800), (90, 35) */
+                                NEXTSTATE Next_Move;
+                        enddecision;
+                enddecision;
+        enddecision;
+    /* CIF End Label */
+    endconnection;
+    /* CIF state (1480, 65), (70, 35) */
+    state Wait;
+        /* CIF input (1470, 120), (90, 40) */
+        input New_Game
+ (foo);
+            /* CIF task (1444, 180), (142, 35) */
+            task Timer_Value := 500
+            /* CIF comment (1606, 180), (117, 35) */
+            comment 'Set Initial speed';
+            /* CIF PROCEDURECALL (1415, 230), (200, 35) */
+            call Clear_Playground (Play_Area);
+            /* CIF PROCEDURECALL (1422, 280), (185, 40) */
+            call set_timer
+(Timer_Value, Tetris_Timer);
+            /* CIF NEXTSTATE (1470, 340), (90, 35) */
+            NEXTSTATE Next_Block;
+    endstate;
+    /* CIF state (1560, 377), (90, 35) */
+    state Next_Move;
+        /* CIF input (1134, 432), (96, 35) */
+        input Tetris_Timer;
+            /* CIF PROCEDURECALL (1089, 487), (185, 40) */
+            call Set_Timer
+(Timer_Value, Tetris_Timer);
+            /* CIF task (1047, 542), (270, 40) */
+            task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Down);
+            /* CIF join (1164, 602), (35, 35) */
+            join Move;
+        /* CIF input (1715, 432), (70, 40) */
+        input Move
+(cmd);
+            /* CIF decision (1715, 492), (70, 50) */
+            decision cmd;
+                /* CIF ANSWER (1380, 562), (70, 24) */
+                (rotate):
+                    /* CIF task (1328, 606), (173, 40) */
+                    task Next_Sprite :=
+  call Rotate (Prev_Sprite);
+                /* CIF ANSWER (1572, 562), (70, 24) */
+                (down):
+                    /* CIF task (1539, 606), (135, 41) */
+                    task Timer_Value := 100;
+                /* CIF ANSWER (1807, 562), (70, 24) */
+                (left):
+                    /* CIF task (1712, 606), (260, 40) */
+                    task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Left);
+                /* CIF ANSWER (2083, 562), (70, 24) */
+                (right):
+                    /* CIF task (1984, 606), (268, 40) */
+                    task Next_Sprite.Origin :=
+   call Translate (Prev_Sprite.Origin, Right);
+            enddecision;
+            /* CIF join (1732, 663), (35, 35) */
+            join Move;
+    endstate;
+    /* CIF state (2318, 12), (90, 35) */
+    state Next_Block;
+        /* CIF input (2311, 67), (103, 35) */
+        input Tetris_Timer;
+            /* CIF task (2282, 122), (160, 35) */
+            task Landscape := Play_Area;
+            /* CIF task (2262, 172), (201, 35) */
+            task Prev_Sprite.Origin := { x 4, y 0 };
+            /* CIF decision (2327, 222), (70, 50) */
+            decision any
+            /* CIF comment (2418, 229), (126, 40) */
+            comment 'Choose randomly
+the next brick';
+                /* CIF ANSWER (1841, 292), (70, 24) */
+                ('t brick'):
+                    /* CIF task (1804, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   t_shape;
+                /* CIF ANSWER (1996, 292), (70, 24) */
+                ('l brick'):
+                    /* CIF task (1959, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   l_shape;
+                /* CIF ANSWER (2151, 292), (70, 24) */
+                ('j brick'):
+                    /* CIF task (2114, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   j_shape;
+                /* CIF ANSWER (2306, 292), (70, 24) */
+                ('s brick'):
+                    /* CIF task (2269, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   s_shape;
+                /* CIF ANSWER (2461, 292), (70, 24) */
+                ('z brick'):
+                    /* CIF task (2424, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   z_shape;
+                /* CIF ANSWER (2617, 292), (70, 24) */
+                ('i brick'):
+                    /* CIF task (2580, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   i_shape;
+                /* CIF ANSWER (2772, 292), (70, 24) */
+                ('o brick'):
+                    /* CIF task (2735, 336), (144, 40) */
+                    task Prev_Sprite.Shape :=
+   o_shape;
+            enddecision;
+            /* CIF task (2270, 392), (184, 35) */
+            task Next_Sprite := Prev_Sprite;
+            /* CIF PROCEDURECALL (2270, 447), (185, 40) */
+            call Set_Timer
+(Timer_Value, Tetris_Timer);
+            /* CIF join (2345, 502), (35, 35) */
+            join Move;
+    endstate;
+endprocess Engine;

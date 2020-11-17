@@ -8,12 +8,12 @@ binaries = [
     "work_ada/binaries/demo"]
 
 expected = [
-        ["\[passive_function\] startup done: 42 -42",
-         "\[cyclic function\] startup done",
-         "\[TASTE\] Initialization completed for function passive_function",
-         "\[TASTE\] Initialization completed for function cyclic_function",
-         "\[Ada\] Startup:  42 FALSE",
-         "\[TASTE\] Initialization completed for function Function_in_Ada"],
+        ["[passive_function] startup done: 42 -42",
+         "[cyclic function] startup done",
+         "[TASTE] Initialization completed for function passive_function",
+         "[TASTE] Initialization completed for function cyclic_function",
+         "[Ada] Startup:  42 FALSE",
+         "[TASTE] Initialization completed for function Function_in_Ada"],
     "cycle: input i=0, j=0",
     "test1 = 0",
     "   result of computation: 0",

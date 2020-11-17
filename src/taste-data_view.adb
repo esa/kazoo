@@ -5,6 +5,7 @@
 --  Interface View parser
 
 with Ada.Directories,
+     GNAT.Directory_Operations,
      Ocarina.Instances.Queries,
      Ocarina.Analyzer,
      Ocarina.Backends.Properties,
@@ -16,7 +17,8 @@ with Ada.Directories,
 
 package body TASTE.Data_View is
 
-   use Ocarina.Instances.Queries,
+   use GNAT.Directory_Operations,
+       Ocarina.Instances.Queries,
        Ocarina.Namet,
        Ocarina.Backends.Properties,
        Ocarina.Options,
@@ -79,24 +81,35 @@ package body TASTE.Data_View is
                Get_String_Name ("taste::ada_package_name")));
             ACN_Ref  : constant Node_Id := Get_Classifier_Property
               (Asntype, "taste::encodingdefinitionfile");
-            Filename : constant String  := Get_Name_String
+            Raw_Name : constant String  := Get_Name_String
               (Get_Source_Text (Asntype) (1));
+            Filename : constant String :=
+              (if Base_Name (Raw_Name) = "taste-types.asn"
+               then "taste-types.asn" else Raw_Name);
             File_Ref : constant ASN1_File_Maps.Cursor := Files.Find (Filename);
          begin
             --  If there are ACN files, add them to the list
+            --  Transform absolute paths to relative paths
             if ACN_Ref /= No_Node then
                declare
                   ACN : constant Name_Array := Get_Source_Text (ACN_Ref);
                   use String_Sets;
                begin
                   for F of ACN loop
-                     ACN_Files.Union
-                       (To_Set (Get_Name_String (F)));
+                     declare
+                        ACN_F    : constant String := Get_Name_String (F);
+                        Rel_Path : constant String :=
+                           (if ACN_F (ACN_F'First) /= '/'
+                            then "../" & ACN_F
+                            else ACN_F);
+                     begin
+                        ACN_Files.Union (To_Set (Rel_Path));
+                     end;
                   end loop;
                end;
-
             end if;
 
+            --  Transform absolute paths to ASN.1 files to relative paths
             if File_Ref = ASN1_File_Maps.No_Element then
                declare
                   New_File      : ASN1_File;
@@ -105,7 +118,10 @@ package body TASTE.Data_View is
                begin
                   New_Module.Name  := US (Module);
                   New_Module.Types := (Empty_Vector & Sort);
-                  if Filename (Filename'First) /= '/' then
+                  if Filename = "taste-types.asn" then
+                     Relative_Path := US ("${TOOL_INST}"
+                                      & "/share/taste-types/taste-types.asn");
+                  elsif Filename (Filename'First) /= '/' then
                      Relative_Path := "../" & Relative_Path;
                   end if;
                   New_File.Path    := Relative_Path;
@@ -139,12 +155,15 @@ package body TASTE.Data_View is
    --  Function checking the actual file presence of the ASN.1 models that
    --  are referenced in the input file DataView.aadl. Raise an exception
    --  if any file is missing.
+   --  Ignore taste-types.asn, because it is provided by taste and its actual
+   --  location depends on the current installation path (user name)
    procedure Check_Files (DV : Taste_Data_View) is
       Success : Boolean := True;
    begin
       for Idx in DV.ASN1_Files.Iterate loop
          --  The Key of the map contains the path as found in the dataview
          if not Ada.Directories.Exists (ASN1_File_Maps.Key (Idx))
+             and ASN1_File_Maps.Key (Idx) /= "taste-types.asn"
          then
             Put_Error ("ASN.1 File not found: " & ASN1_File_Maps.Key (Idx));
             Success := False;
@@ -176,10 +195,12 @@ package body TASTE.Data_View is
    procedure Export_ASN1_Files (DV : Taste_Data_View; Output_Path : String) is
    begin
       for Idx in DV.ASN1_Files.Iterate loop
-         Ada.Directories.Copy_File
-           (Source_Name => ASN1_File_Maps.Key (Idx),
-            Target_Name => Output_Path
-            & Ada.Directories.Simple_Name (ASN1_File_Maps.Key (Idx)));
+         if ASN1_File_Maps.Key (Idx) /= "taste-types.asn" then
+            Ada.Directories.Copy_File
+              (Source_Name => ASN1_File_Maps.Key (Idx),
+               Target_Name => Output_Path
+               & Ada.Directories.Simple_Name (ASN1_File_Maps.Key (Idx)));
+         end if;
       end loop;
    end Export_ASN1_Files;
 end TASTE.Data_View;

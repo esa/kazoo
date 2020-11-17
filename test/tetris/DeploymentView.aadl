@@ -1,0 +1,77 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS tetris
+END tetris;
+
+PROCESS IMPLEMENTATION tetris.others
+END tetris.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::Player;
+WITH interfaceview::IV::Engine;
+WITH ocarina_processors_x86;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_Player : SYSTEM interfaceview::IV::Player::Player.others {
+    Taste::FunctionName => "Player";
+  };
+  IV_Engine : SYSTEM interfaceview::IV::Engine::Engine.others {
+    Taste::FunctionName => "Engine";
+  };
+  tetris : PROCESS deploymentview::DV::Node1::tetris.others {
+    Taste::coordinates => "128804 65192 168512 95826";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "123840 56440 173476 100202";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (tetris)) APPLIES TO IV_Player;
+  Taste::APLC_Binding => (reference (tetris)) APPLIES TO IV_Engine;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO tetris;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "117635 43936 179680 106454";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.4";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

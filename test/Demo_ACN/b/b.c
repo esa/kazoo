@@ -13,6 +13,6 @@ void b_startup()
 void b_PI_Hello(const asn1SccT_POS *IN_in_param)
 {
 	/* Write your code here! */
-        printf ("[B] Hello (value = %lld)\n", IN_in_param->u.first_choice);
+        printf ("[B] Hello (value = %"PRId64")\n", IN_in_param->u.first_choice);
 }
 

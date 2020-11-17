@@ -1,0 +1,44 @@
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fnode.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
+@@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_block.ascii
+@@IF@@ @_EXIST:List_Of_ASync_PIs_@ or @_EXIST:List_Of_ASync_RIs_@
+@@-- Skip synchronous-only functions like Simulink...
+@_REPLACE_ALL(_/-):CAPITALIZE:Name_@-Event ::= CHOICE {
+@@IF@@ @_EXIST:List_Of_ASync_PIs_@ or @_EXIST:Timers_@
+   msg-in CHOICE {
+@@INLINE(      )(,\n      )()@@
+    @@TABLE'ALIGN_ON(" ")@@
+          @_LOWER:REPLACE_ALL(_/-):List_Of_ASync_PIs_@ SEQUENCE { @_LOWER:REPLACE_ALL(_/-):ASync_PI_Param_Name_@ @_ASync_PI_Param_Type_@ }
+    @@END_TABLE@@
+    @@-- Add timers expiration PIs, except for the Timer Manager function
+    @@IF@@ @_EXIST:Timers_@ and @_LOWER:Name_@ /= @_LOWER:Partition_Name_@ & _timer_manager
+        --  Timers:
+        @@TABLE'ALIGN_ON(" ")@@
+              @_REPLACE_ALL(_/-):Timers_@ SEQUENCE {}
+        @@END_TABLE@@
+    @@END_IF@@
+@@END_INLINE@@
+@@END_IF@@
+@@IF@@ @_EXIST:List_Of_ASync_RIs_@ or @_EXIST:Timers_@
+   },
+   msg-out CHOICE {
+@@INLINE(      )(,\n      )()@@
+    @@TABLE'ALIGN_ON(" ")@@
+       @_LOWER:REPLACE_ALL(_/-):List_Of_ASync_RIs_@ SEQUENCE { @_LOWER:REPLACE_ALL(_/-):ASync_RI_Param_Name_@ @_ASync_RI_Param_Type_@ }
+    @@END_TABLE@@
+    @@IF@@ @_EXIST:Timers_@ and @_LOWER:Name_@ /= @_LOWER:Partition_Name_@ & _timer_manager
+        -- Timers:
+        @@TABLE'ALIGN_ON(" ")@@
+           set-@_REPLACE_ALL(_/-):Timers_@ SEQUENCE { val T-UInt32 }
+           reset-@_REPLACE_ALL(_/-):Timers_@ SEQUENCE {}
+        @@END_TABLE@@
+    @@END_IF@@
+@@END_INLINE@@
+@@END_IF@@
+   }
+}
+@@ELSE@@
+@_REPLACE_ALL(_/-):CAPITALIZE:Name_@-Event ::= SEQUENCE {}  -- Synchronous function
+@@END_IF@@

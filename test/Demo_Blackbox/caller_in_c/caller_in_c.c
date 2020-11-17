@@ -15,7 +15,7 @@ void caller_in_c_PI_pulse()
  printf("[C] Calling in C\n");
  caller_in_c_RI_RunDriver(&i1, &i2, &o1, &o2);
 
- printf ("[C] i1 = %lld, i2 = %lld, o1 = %lld, o2 = %lld", i1,i2,o1,o2);
+ printf ("[C] i1 = %"PRId64", i2 = %"PRId64", o1 = %"PRId64", o2 = %"PRId64"", i1,i2,o1,o2);
  if (i1 != o2 || i2 != o1) {
      printf ("... ERROR!\n");
      exit(-1);

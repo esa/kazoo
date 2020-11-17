@@ -1,0 +1,5 @@
+Demo_EmptySeq
+
+Check that it is possible to use empty sequences even with GUIs:
+EmptySeq ::= SEQUENCE {}
+

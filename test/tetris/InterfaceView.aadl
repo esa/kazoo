@@ -1,0 +1,241 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Player
+PUBLIC
+
+WITH interfaceview::IV::Engine;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_Update_Grid
+FEATURES
+  layout : IN PARAMETER DataView::Grid {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Update_Grid;
+
+SUBPROGRAM IMPLEMENTATION PI_Update_Grid.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Update_Grid.others;
+
+SUBPROGRAM PI_Game_Over
+FEATURES
+  score : IN PARAMETER DataView::T_UInt32 {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Game_Over;
+
+SUBPROGRAM IMPLEMENTATION PI_Game_Over.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Game_Over.others;
+
+SUBPROGRAM RI_New_Game
+FEATURES
+  foo : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+END RI_New_Game;
+
+SUBPROGRAM IMPLEMENTATION RI_New_Game.others
+END RI_New_Game.others;
+
+SUBPROGRAM RI_Move
+FEATURES
+  move_cmd : IN PARAMETER DataView::Move_Command {
+    Taste::encoding => NATIVE;
+  };
+END RI_Move;
+
+SUBPROGRAM IMPLEMENTATION RI_Move.others
+END RI_Move.others;
+
+SYSTEM Player
+FEATURES
+  PI_Update_Grid : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Player::PI_Update_Grid.others {
+    Taste::coordinates => "108081 72576";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Update_Grid";
+  };
+  PI_Game_Over : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Player::PI_Game_Over.others {
+    Taste::coordinates => "108081 86256";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Game_Over";
+  };
+  RI_New_Game : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Engine::PI_New_Game.others {
+    Taste::coordinates => "108081 55412";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "New_Game";
+    Taste::labelInheritance => "true";
+  };
+  RI_Move : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Engine::PI_Move.others {
+    Taste::coordinates => "108081 64858";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Move";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+  Taste::Active_Interfaces => any;
+END Player;
+
+SYSTEM IMPLEMENTATION Player.others
+END Player.others;
+
+END interfaceview::IV::Player;
+
+PACKAGE interfaceview::IV::Engine
+PUBLIC
+
+WITH interfaceview::IV::Player;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_New_Game
+FEATURES
+  foo : IN PARAMETER DataView::T_Boolean {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_New_Game;
+
+SUBPROGRAM IMPLEMENTATION PI_New_Game.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_New_Game.others;
+
+SUBPROGRAM PI_Move
+FEATURES
+  move_cmd : IN PARAMETER DataView::Move_Command {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_Move;
+
+SUBPROGRAM IMPLEMENTATION PI_Move.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_Move.others;
+
+SUBPROGRAM RI_Update_Grid
+FEATURES
+  layout : IN PARAMETER DataView::Grid {
+    Taste::encoding => NATIVE;
+  };
+END RI_Update_Grid;
+
+SUBPROGRAM IMPLEMENTATION RI_Update_Grid.others
+END RI_Update_Grid.others;
+
+SUBPROGRAM RI_Game_Over
+FEATURES
+  score : IN PARAMETER DataView::T_UInt32 {
+    Taste::encoding => NATIVE;
+  };
+END RI_Game_Over;
+
+SUBPROGRAM IMPLEMENTATION RI_Game_Over.others
+END RI_Game_Over.others;
+
+SYSTEM Engine
+FEATURES
+  PI_New_Game : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Engine::PI_New_Game.others {
+    Taste::coordinates => "152232 55379";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "New_Game";
+  };
+  PI_Move : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Engine::PI_Move.others {
+    Taste::coordinates => "152232 64829";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "Move";
+  };
+  RI_Update_Grid : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Player::PI_Update_Grid.others {
+    Taste::coordinates => "152232 72546";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Update_Grid";
+    Taste::labelInheritance => "true";
+  };
+  RI_Game_Over : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Player::PI_Game_Over.others {
+    Taste::coordinates => "152232 86015";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "Game_Over";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+  Taste::Active_Interfaces => any;
+END Engine;
+
+SYSTEM IMPLEMENTATION Engine.others
+SUBCOMPONENTS
+  Tetris_Timer : DATA DataView::Timer {
+    Taste::FS_Default_Value => "1";
+  };
+END Engine.others;
+
+END interfaceview::IV::Engine;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Player;
+WITH interfaceview::IV::Engine;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Player : SYSTEM interfaceview::IV::Player::Player.others {
+    Taste::coordinates => "38575 47376 108081 101884";
+  };
+  Engine : SYSTEM interfaceview::IV::Engine::Engine.others {
+    Taste::coordinates => "152232 49079 230152 102855";
+  };
+CONNECTIONS
+  Engine_RI_Update_Grid_Player_PI_Update_Grid : SUBPROGRAM ACCESS Player.PI_Update_Grid -> Engine.RI_Update_Grid {
+    Taste::coordinates => "152232 72546 130156 72546 130156 72576 108081 72576";
+  };
+  Engine_RI_Game_Over_Player_PI_Game_Over : SUBPROGRAM ACCESS Player.PI_Game_Over -> Engine.RI_Game_Over {
+    Taste::coordinates => "152232 86015 130156 86015 130156 86256 108081 86256";
+  };
+  Player_RI_New_Game_Engine_PI_New_Game : SUBPROGRAM ACCESS Engine.PI_New_Game -> Player.RI_New_Game {
+    Taste::coordinates => "108081 55412 130156 55412 130156 55379 152232 55379";
+  };
+  Player_RI_Move_Engine_PI_Move : SUBPROGRAM ACCESS Engine.PI_Move -> Player.RI_Move {
+    Taste::coordinates => "108081 64858 130156 64858 130156 64829 152232 64829";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.4";
+END interfaceview::IV;
+

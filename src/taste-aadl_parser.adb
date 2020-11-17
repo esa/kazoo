@@ -688,7 +688,9 @@ package body TASTE.AADL_Parser is
          Model.Interface_View.Debug_Dump (Output);
          Close (Output);
 
-         if not Model.Configuration.Deployment_View.Is_Empty then
+         if not Model.Configuration.Deployment_View.Is_Empty and
+             not Model.Deployment_View.Is_Empty
+         then
             Create (File => Output,
                     Mode => Out_File,
                     Name => Output_Path & "/DeploymentView.dump");
@@ -1134,11 +1136,12 @@ package body TASTE.AADL_Parser is
                 and then (Unit_Str /= "kbyte" and Unit_Str /= "bytes"))
               or else (Prop_Name = "Dispatch_Offset" and then Unit_Str /= "ms")
             then
-               Put_Error ("Unsupported unit '"
-                          & To_String (Unit_Str)
-                          & "' used in ConcurrencyView_Properties.aadl. "
-                          & " Stack_Size shall be in "
-                          & "'bytes' or 'kbyte' and Dispatch_Offset in 'ms'");
+               raise AADL_Parser_Error
+                  with "Unsupported unit '"
+                        & To_String (Unit_Str)
+                        & "' used in ConcurrencyView_Properties.aadl. "
+                        & " Stack_Size shall be in "
+                        & "'bytes' or 'kbyte' and Dispatch_Offset in 'ms'";
                return;
             end if;
 

@@ -24,6 +24,11 @@
 
 #include "@_LOWER:Name_@.h"
 
+@@TABLE@@
+// When @_Timers_@ expires, this function is called:
+extern void @_LOWER:Name_@_RI_@_Timers_@(void);
+@@END_TABLE@@
+
 void @_LOWER:Name_@_startup(void)
 {
  // Timer start up (nothing to do)
@@ -41,7 +46,7 @@ void @_LOWER:Name_@_PI_Tick(void)
 }
 
 @@TABLE@@
-void @_LOWER:Name_@_PI_SET_@_Timers_@ (asn1SccT_UInt32 *val)
+void @_LOWER:Name_@_PI_SET_@_Timers_@(asn1SccT_UInt32 *val)
 {
    /* Timer value must be multiple of 10 ms */
    assert (0 == (*val % 10));
@@ -49,7 +54,7 @@ void @_LOWER:Name_@_PI_SET_@_Timers_@ (asn1SccT_UInt32 *val)
    timers[@_Timers_@].value = *val / 10;
 }
 
-void @_LOWER:Name_@_PI_RESET_@_Timers_@ (void)
+void @_LOWER:Name_@_PI_RESET_@_Timers_@(void)
 {
    timers[@_Timers_@].state = inactive;
 }

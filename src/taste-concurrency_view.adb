@@ -1,13 +1,12 @@
 --  *************************** kazoo ***********************  --
---  (c) 2019 European Space Agency - maxime.perrotin@esa.int
---  LGPL license, see LICENSE file
+--  (c) 2020 European Space Agency - maxime.perrotin@esa.int
 
 with Ada.Directories,
      Ada.IO_Exceptions,
      Ada.Exceptions,
      Ada.Characters.Latin_1,
      --  Ada.Strings.Fixed,
-     GNAT.Directory_Operations,   -- Contains Dir_Name
+     GNAT.Directory_Operations,   --  Contains Dir_Name
      TASTE.Backend;
 
 use Ada.Directories,
@@ -234,7 +233,8 @@ package body TASTE.Concurrency_View is
                Block_Languages,
                Block_Instance_Of,
                Block_Is_Shared_Type,
-               Block_FPGAConf  : Vector_Tag;
+               Block_FPGAConf,
+               Block_Default_Codegen : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
                Partition_Assoc : Translate_Set;
@@ -431,9 +431,23 @@ package body TASTE.Concurrency_View is
                         end if;
                      end loop;
 
+                     for TASTE_Property of B.Ref_Function.User_Properties loop
+                        if TASTE_Property.Name =
+                            "TASTE_IV_Properties::Default_CodeGen"
+                        then
+                           Block_Default_Codegen := Block_Default_Codegen &
+                            TASTE_Property.Value;
+                        end if;
+                     end loop;
+
                      if Size (Block_FPGAConf) /= Size (Block_Names)
                      then
                         Block_FPGAConf := Block_FPGAConf & "";
+                     end if;
+
+                     if Size (Block_Default_Codegen) /= Size (Block_Names)
+                     then
+                        Block_Default_Codegen := Block_Default_Codegen & "";
                      end if;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop
@@ -513,6 +527,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Block_Instance_Of",    Block_Instance_Of)
                  & Assoc ("Block_Is_Shared_Type", Block_Is_Shared_Type)
                  & Assoc ("Block_FPGAConf",       Block_FPGAConf)
+                 & Assoc ("Block_Default_Codegen", Block_Default_Codegen)
                  & Assoc ("In_Port_Names",        Input_Port_Names)
                  & Assoc ("In_Port_Thread_Name",  Input_Port_Thread_Name)
                  & Assoc ("In_Port_Queue_Size",   Input_Port_Queue_Size)
@@ -585,8 +600,10 @@ package body TASTE.Concurrency_View is
                   VP_Classifiers   := VP_Classifiers & VP.Classifier;
                end loop;
 
-               Node_Assoc := Drivers_To_Template (CV.Nodes (Node_Name)
-                                                    .Deployment_Node.Drivers)
+               Node_Assoc :=
+                 Join_Sets (CV.Configuration.To_Template,
+                            Drivers_To_Template (CV.Nodes (Node_Name)
+                                                    .Deployment_Node.Drivers))
                  & Assoc ("Partitions", Partitions)
                  & Assoc ("Partition_Names", Partition_Names)
                  & Assoc ("Has_Memory", Boolean'

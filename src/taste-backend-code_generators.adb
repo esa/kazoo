@@ -3,12 +3,14 @@ with Ada.Characters.Handling,
      Ada.Containers.Ordered_Sets,
      Ada.Exceptions,
      Ada.Directories,
+     GNAT.Directory_Operations,  --  for Dir_Nme
      TASTE.Parser_Utils;
 
 use Ada.Characters.Handling,
     Ada.Containers,
     Ada.Exceptions,
     Ada.Directories,
+    GNAT.Directory_Operations,
     TASTE.Parser_Utils;
 
 --  This package covers the generation of code for all supported languages
@@ -92,7 +94,7 @@ package body TASTE.Backend.Code_Generators is
             Unique_Languages := Unique_Languages & To_String (Each);
          end loop;
          Content_Set := Model.Configuration.To_Template
-           & Assoc  ("Function_Names",    Functions_Tag)
+           & Assoc ("Function_Names",    Functions_Tag)
            & Assoc ("Language",          Language_Tag)
            & Assoc ("Is_Type",           Is_Type_Tag)
            & Assoc ("CP_Files",          All_CP_Files)
@@ -117,15 +119,22 @@ package body TASTE.Backend.Code_Generators is
       function Process_Interfaces (Interfaces : Template_Vectors.Vector;
                                    Path       : String) return Unbounded_String
       is
-         Result : Unbounded_String := Null_Unbounded_String;
+         Result      : Unbounded_String := Null_Unbounded_String;
          Tmplt_Sign  : constant String := Path & "interface.tmplt";
+         Doc_Done    : Boolean := False;
       begin
          for Each of Interfaces loop
-            --  if Result /= Null_Unbounded_String then
-            --     Result := Result & ASCII.LF;
-            --  end if;
-            Document_Template (Templates_Skeletons_Sub_Interface, Each);
-            Result := Result & US (String'(Parse (Tmplt_Sign, Each)));
+            declare
+               Tmplt :  constant Translate_Set :=
+                  Join_Sets (Model.Configuration.To_Template, Each);
+            begin
+               if not Doc_Done then
+                  --  Template documentation (done once)
+                  Document_Template (Templates_Skeletons_Sub_Interface, Tmplt);
+                  Doc_Done := True;
+               end if;
+               Result := Result & US (String'(Parse (Tmplt_Sign, Tmplt)));
+            end;
          end loop;
          return Strip_String (Result);
       end Process_Interfaces;
@@ -221,7 +230,8 @@ package body TASTE.Backend.Code_Generators is
                                 Template.Funcs.Element (To_String (F.Name));
 
          Func_Map    : constant Translate_Set :=
-                         Func_Tmpl.Header
+                         Join_Sets (Model.Configuration.To_Template,
+                                    Func_Tmpl.Header)
                          & Assoc ("Provided_Interfaces",
                                   Process_Interfaces
                                      (Func_Tmpl.Provided, Path))
@@ -287,7 +297,8 @@ package body TASTE.Backend.Code_Generators is
                                                      others    => False);
                --  File_Tmpl: to get the output filename from user template
                File_Tmpl  : constant Translate_Set :=
-                  +Assoc  ("Name", Each.Name);
+                 +Assoc  ("Name", Each.Name)
+                 & Assoc ("Language", Language);
                --  Base output folder where code is generated
                --  e.g. output/Ada/src/
                Output_Lang : constant String := Output_Base
@@ -374,6 +385,11 @@ package body TASTE.Backend.Code_Generators is
                      Document_Template
                        (Templates_Skeletons_Sub_Trigger, Trig_Tmpl);
                      if Trigger then
+                        --  Possibly create folder to generate the file
+                        if File_Name /= "" then
+                           Create_Path (Output_Dir & Dir_Separator
+                                        & Dir_Name (File_Name));
+                        end if;
                         --  Output code and Makefile from this template folder
                         Process_Template (F           => Each,
                                           File_Name   => File_Name,

@@ -1,0 +1,231 @@
+---------------------------------------------------
+-- AADL2.0
+-- TASTE
+-- (c)Ellidiss Technologies
+-- 
+---------------------------------------------------
+
+PACKAGE interfaceview::FV::flight
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_fromGUI
+FEATURES
+  abcd : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_fromGUI;
+
+SUBPROGRAM IMPLEMENTATION PI_fromGUI.others
+END PI_fromGUI.others;
+
+SUBPROGRAM RI_toGUI
+FEATURES
+  abcd : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+END RI_toGUI;
+
+SUBPROGRAM IMPLEMENTATION RI_toGUI.others
+END RI_toGUI.others;
+
+SUBPROGRAM RI_printf
+FEATURES
+  nothing : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+END RI_printf;
+
+SUBPROGRAM IMPLEMENTATION RI_printf.others
+END RI_printf.others;
+
+END interfaceview::FV::flight;
+
+PACKAGE interfaceview::FV::ground
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_toGUI
+FEATURES
+  abcd : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_toGUI;
+
+SUBPROGRAM IMPLEMENTATION PI_toGUI.others
+END PI_toGUI.others;
+
+SUBPROGRAM RI_fromGUI
+FEATURES
+  abcd : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+END RI_fromGUI;
+
+SUBPROGRAM IMPLEMENTATION RI_fromGUI.others
+END RI_fromGUI.others;
+
+END interfaceview::FV::ground;
+
+PACKAGE interfaceview::FV::someDriver
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_printf
+FEATURES
+  nothing : IN PARAMETER DataView::EmptySeq {
+    Taste::encoding => NATIVE;
+  };
+END PI_printf;
+
+SUBPROGRAM IMPLEMENTATION PI_printf.others
+END PI_printf.others;
+
+END interfaceview::FV::someDriver;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::FV::flight;
+WITH interfaceview::FV::ground;
+WITH interfaceview::FV::someDriver;
+WITH interfaceview::FV;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM flight
+FEATURES
+  PI_fromGUI : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::flight::PI_fromGUI.others {
+    Taste::coordinates => "1175 569";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "fromGUI";
+  };
+  RI_toGUI : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::ground::PI_toGUI.others {
+    Taste::coordinates => "1175 903";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "toGUI";
+    Taste::labelInheritance => "true";
+  };
+  RI_printf : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::someDriver::PI_printf.others {
+    Taste::coordinates => "877 1087";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "printf";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (SDL);
+END flight;
+
+SYSTEM IMPLEMENTATION flight.others
+SUBCOMPONENTS
+  abcd : DATA DataView::T_Int8 {
+    Taste::FS_Default_Value => "5";
+  };
+  fromGUI_impl : SUBPROGRAM interfaceview::FV::flight::PI_fromGUI.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_fromGUI_impl : SUBPROGRAM ACCESS fromGUI_impl -> PI_fromGUI;
+END flight.others;
+
+SYSTEM ground
+FEATURES
+  PI_toGUI : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::ground::PI_toGUI.others {
+    Taste::coordinates => "2016 892";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "toGUI";
+  };
+  RI_fromGUI : REQUIRES SUBPROGRAM ACCESS interfaceview::FV::flight::PI_fromGUI.others {
+    Taste::coordinates => "2016 564";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "fromGUI";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (GUI);
+END ground;
+
+SYSTEM IMPLEMENTATION ground.others
+SUBCOMPONENTS
+  toGUI_impl : SUBPROGRAM interfaceview::FV::ground::PI_toGUI.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_toGUI_impl : SUBPROGRAM ACCESS toGUI_impl -> PI_toGUI;
+END ground.others;
+
+SYSTEM someDriver
+FEATURES
+  PI_printf : PROVIDES SUBPROGRAM ACCESS interfaceview::FV::someDriver::PI_printf.others {
+    Taste::coordinates => "944 1467";
+    Taste::RCMoperationKind => unprotected;
+    Taste::InterfaceName => "printf";
+  };
+PROPERTIES
+  Source_Language => (Blackbox_device);
+END someDriver;
+
+SYSTEM IMPLEMENTATION someDriver.others
+SUBCOMPONENTS
+  printf_impl : SUBPROGRAM interfaceview::FV::someDriver::PI_printf.others {
+    Compute_Execution_Time => 0 ms .. 0 ms;
+  };
+CONNECTIONS
+  OpToPICnx_printf_impl : SUBPROGRAM ACCESS printf_impl -> PI_printf;
+END someDriver.others;
+
+SYSTEM interfaceview
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  flight : SYSTEM interfaceview::IV::flight.others {
+    Taste::coordinates => "692 364 1175 1087";
+  };
+  ground : SYSTEM interfaceview::IV::ground.others {
+    Taste::coordinates => "2016 421 2421 1026";
+  };
+  someDriver : SYSTEM interfaceview::IV::someDriver.others {
+    Taste::coordinates => "610 1467 1411 1934";
+  };
+CONNECTIONS
+  flight_fromGUI_ground_fromGUI : SUBPROGRAM ACCESS flight.PI_fromGUI -> ground.RI_fromGUI {
+    Taste::coordinates => "2016 564 1595 564 1595 569 1175 569";
+  };
+  ground_toGUI_flight_toGUI : SUBPROGRAM ACCESS ground.PI_toGUI -> flight.RI_toGUI {
+    Taste::coordinates => "1175 903 1595 903 1595 892 2016 892";
+  };
+  someDriver_printf_flight_printf : SUBPROGRAM ACCESS someDriver.PI_printf -> flight.RI_printf {
+    Taste::coordinates => "877 1087 877 1277 944 1277 944 1467";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 2970 2100";
+  Taste::version => "1.3.17";
+END interfaceview::IV;
+
+PACKAGE interfaceview::FV
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+END interfaceview::FV;
+

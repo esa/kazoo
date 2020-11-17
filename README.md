@@ -1,6 +1,6 @@
 [![pipeline status](https://gitrepos.estec.esa.int/taste/kazoo/badges/master/pipeline.svg)](https://gitrepos.estec.esa.int/taste/kazoo/-/commits/master)
 
-Kazoo is the TASTE tool in chage of generating code skeletons, glue code and build scripts
+Kazoo is the TASTE tool in charge of generating code skeletons, glue code and build scripts
 
 License: LGPL (see LICENSE file)
 

@@ -61,7 +61,7 @@ struct Request
 
 };
 
-@@IF@@ @_In_Port_Names_@ /= "" AND @_Out_Port_Names_@ /= ""
+@@IF@@ @_In_Port_Names_@ /= "" OR @_Out_Port_Names_@ /= ""
 
 struct Message
 {

@@ -1,0 +1,82 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type deploymentview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE deploymentview::DV::Node1
+PUBLIC
+
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+WITH deploymentview::DV;
+WITH Memory_Properties;
+WITH ARINC653;
+PROCESS msp430fr5969_partition
+END msp430fr5969_partition;
+
+PROCESS IMPLEMENTATION msp430fr5969_partition.others
+END msp430fr5969_partition.others;
+
+END deploymentview::DV::Node1;
+
+PACKAGE deploymentview::DV
+PUBLIC
+
+WITH interfaceview::IV::function1;
+WITH interfaceview::IV::function2;
+WITH interfaceview::IV::function3;
+WITH ocarina_processors_msp430;
+WITH deploymentview::DV::Node1;
+WITH Taste;
+WITH Deployment;
+WITH interfaceview::IV;
+WITH TASTE_DV_Properties;
+SYSTEM Node1
+END Node1;
+
+SYSTEM IMPLEMENTATION Node1.others
+SUBCOMPONENTS
+  IV_function1 : SYSTEM interfaceview::IV::function1::function1.others {
+    Taste::FunctionName => "function1";
+  };
+  IV_function2 : SYSTEM interfaceview::IV::function2::function2.others {
+    Taste::FunctionName => "function2";
+  };
+  IV_function3 : SYSTEM interfaceview::IV::function3::function3.others {
+    Taste::FunctionName => "function3";
+  };
+  msp430fr5969_partition : PROCESS deploymentview::DV::Node1::msp430fr5969_partition.others {
+    Taste::coordinates => "91097 63469 120425 81462";
+    Deployment::Port_Number => 0;
+  };
+  msp430fr5969_freertos : PROCESSOR ocarina_processors_msp430::msp430fr5969.freertos {
+    Taste::coordinates => "87431 58328 124091 84032";
+  };
+PROPERTIES
+  Taste::APLC_Binding => (reference (msp430fr5969_partition)) APPLIES TO IV_function1;
+  Taste::APLC_Binding => (reference (msp430fr5969_partition)) APPLIES TO IV_function2;
+  Taste::APLC_Binding => (reference (msp430fr5969_partition)) APPLIES TO IV_function3;
+  Actual_Processor_Binding => (reference (msp430fr5969_freertos)) APPLIES TO msp430fr5969_partition;
+END Node1.others;
+
+SYSTEM deploymentview
+END deploymentview;
+
+SYSTEM IMPLEMENTATION deploymentview.others
+SUBCOMPONENTS
+  Node1 : SYSTEM Node1.others {
+    Taste::coordinates => "82848 50984 128673 87704";
+  };
+  interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+END deploymentview.others;
+
+PROPERTIES
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.4";
+  Taste::interfaceView => "InterfaceView.aadl";
+  Taste::HWLibraries => ("/home/taste/tool-inst/share/ocarina/AADLv2/ocarina_components.aadl");
+END deploymentview::DV;
+

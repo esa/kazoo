@@ -1,0 +1,10 @@
+run Simulink_DataView_asn;
+
+inports_positions  = zeros(1, 4);
+bussel_positions   = zeros(1, 4);
+outports_positions = zeros(1, 4);
+buscre_positions   = zeros(1, 4);
+
+@_Provided_Interfaces_@
+
+simulink('close');

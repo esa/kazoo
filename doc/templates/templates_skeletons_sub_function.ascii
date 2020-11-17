@@ -1,0 +1,130 @@
+templates/skeletons/sub/function.tmplt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Template for a function in the skeleton or glue folder
+
++-----------------------------------+-----------------------------------+
+| Parameter name                    | Description                       |
++===================================+===================================+
+| Name                              | The name of the function          |
++-----------------------------------+-----------------------------------+
+| Language                          | Implementation language           |
++-----------------------------------+-----------------------------------+
+| List_Of_PIs                       | List of all provided interfaces   |
+|                                   | (names only)                      |
++-----------------------------------+-----------------------------------+
+| List_Of_RIs                       | List of all required interfaces   |
+|                                   | (names only)                      |
++-----------------------------------+-----------------------------------+
+| Provided_Interfaces               | Generated from interfaces.tmplt   |
++-----------------------------------+-----------------------------------+
+| Required_Interfaces               | Generated from interfaces.tmplt   |
++-----------------------------------+-----------------------------------+
+| RIs_Have_Params                   | True if at least one RI has an    |
+|                                   | ASN.1 parameter                   |
++-----------------------------------+-----------------------------------+
+| PIs_Have_Params                   | True if at least one PI has an    |
+|                                   | ASN.1 parameter                   |
++-----------------------------------+-----------------------------------+
+| Zip_File                          | Path to optional zip file         |
+|                                   | containing the code of the        |
+|                                   | function                          |
++-----------------------------------+-----------------------------------+
+| Is_Type                           | True if it is a function type     |
++-----------------------------------+-----------------------------------+
+| Instance_Of                       | Name of the function type if it   |
+|                                   | is an instance                    |
++-----------------------------------+-----------------------------------+
+| Has_Context                       | True if function has context      |
+|                                   | parameters                        |
++-----------------------------------+-----------------------------------+
+| CP_Names                          | Vector tag: context parameters    |
+|                                   | (names)                           |
++-----------------------------------+-----------------------------------+
+| CP_Types                          | ↳ corresponding ASN.1 type        |
++-----------------------------------+-----------------------------------+
+| CP_Values                         | ↳ corresponding value             |
++-----------------------------------+-----------------------------------+
+| CP_Asn1Modules                    | ↳ corresponding ASN.1 module      |
+|                                   | containing the type               |
++-----------------------------------+-----------------------------------+
+| CP_Asn1Filenames                  | ↳ corresponding ASN.1 filename    |
++-----------------------------------+-----------------------------------+
+| Property_Names                    | Vector tag: user defined AADL     |
+|                                   | property names                    |
++-----------------------------------+-----------------------------------+
+| Property_Values                   | ↳ corresponding value             |
++-----------------------------------+-----------------------------------+
+| List_Of_ASync_PIs                 | List of asynchronous provided     |
+|                                   | interfaces                        |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Param_Name               | ↳ name of the parameter           |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Param_Type               | ↳ ASN.1 typename of the parameter |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Kind                     | ↳ CYCLIC_OPERATION or             |
+|                                   | SPORADIC_OPERATION                |
++-----------------------------------+-----------------------------------+
+| ASync_PI_Is_Connected             | ↳ Flag set to true if PI is       |
+|                                   | connected                         |
++-----------------------------------+-----------------------------------+
+| Timers                            | List of timers (names)            |
++-----------------------------------+-----------------------------------+
+| List_Of_Sync_RIs                  | List of synchronous required      |
+|                                   | interfaces                        |
++-----------------------------------+-----------------------------------+
+| List_Of_Sync_PIs                  | List of synchronous provided      |
+|                                   | interfaces                        |
++-----------------------------------+-----------------------------------+
+| Sync_RIs_Parent                   | ↳ and corresponding parent        |
+|                                   | function name                     |
++-----------------------------------+-----------------------------------+
+| ASN1_Modules                      | List of ASN.1 modules containing  |
+|                                   | types used in this function       |
++-----------------------------------+-----------------------------------+
+| ASN1_Files                        | List of ASN.1 files containing    |
+|                                   | types used in this function       |
++-----------------------------------+-----------------------------------+
+| List_Of_ASync_RIs                 | vector tag: list of asynchronous  |
+|                                   | required interfaces               |
++-----------------------------------+-----------------------------------+
+| Async_RIs_Parent                  | ↳ Corresponding parent function   |
+|                                   | name                              |
++-----------------------------------+-----------------------------------+
+| ASync_RI_Param_Name               | ↳ parameter name of the required  |
+|                                   | interface                         |
++-----------------------------------+-----------------------------------+
+| ASync_RI_Param_Type               | ↳ ASN1 typename of the parameter  |
++-----------------------------------+-----------------------------------+
+| Data_View                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Shared_Lib_Dir                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Binary_Path                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Timer_Resolution                  | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Skeletons                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Other_Files                       | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Check_Data_View                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Shared_Types                      | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Output_Dir                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Use_POHIC                         | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Debug_Flag                        | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Target                            | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Interface_View                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Glue                              | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| No_Stdlib_Flag                    | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+
+| Deployment_View                   | DOCUMENTATION MISSING             |
++-----------------------------------+-----------------------------------+

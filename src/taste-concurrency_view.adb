@@ -233,7 +233,7 @@ package body TASTE.Concurrency_View is
                Block_Languages,
                Block_Instance_Of,
                Block_Is_Shared_Type,
-               Block_FPGAConf  : Vector_Tag;
+               Block_FPGAConf,
                Block_Default_Codegen : Vector_Tag;
                Blocks          : Unbounded_String;
                Part_Threads    : Unbounded_String;
@@ -443,6 +443,11 @@ package body TASTE.Concurrency_View is
                      if Size (Block_FPGAConf) /= Size (Block_Names)
                      then
                         Block_FPGAConf := Block_FPGAConf & "";
+                     end if;
+
+                     if Size (Block_Default_Codegen) /= Size (Block_Names)
+                     then
+                        Block_Default_Codegen := Block_Default_Codegen & "";
                      end if;
 
                      for PI_Assoc of Tmpl.Protected_Provided loop

@@ -1,0 +1,19 @@
+
+PACKAGE Process_Package_proxy
+PUBLIC
+WITH Process_Package;
+WITH AI;
+
+SYSTEM DeploymentView
+EXTENDS Process_Package::DeploymentView
+END DeploymentView;
+
+SYSTEM IMPLEMENTATION DeploymentView.final
+EXTENDS Process_Package::DeploymentView.final
+PROPERTIES
+  AI::root_system => "SELECTED";
+  Stack_Size => 512bytes APPLIES TO Msp430fr5969_Partition.function1_cyclic_interface;
+END DeploymentView.final;
+
+END Process_Package_proxy;
+

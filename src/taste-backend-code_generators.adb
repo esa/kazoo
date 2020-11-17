@@ -4,14 +4,16 @@ with Ada.Characters.Handling,
      Ada.Exceptions,
      Ada.Directories,
      GNAT.Directory_Operations,  --  for Dir_Nme
-     TASTE.Parser_Utils;
+     TASTE.Parser_Utils,
+     TASTE.Deployment_View;
 
 use Ada.Characters.Handling,
     Ada.Containers,
     Ada.Exceptions,
     Ada.Directories,
     GNAT.Directory_Operations,
-    TASTE.Parser_Utils;
+    TASTE.Parser_Utils,
+    TASTE.Deployment_View;
 
 --  This package covers the generation of code for all supported languages
 --  There is no code that is specific to one particular language. The package

@@ -6,6 +6,7 @@
 @@--    Use_POHIC
 @@--    Debug
 @@--    No_Stdlib
-@@IF@@ @_Use_POHIC_@ and @_CPU_Platform_@ = PLATFORM_AIR and @_Target_@ /= SIMU
+<<<<<<< HEAD
+@@IF@@ @_Use_POHIC_@ and (@_CPU_Platform_@ = PLATFORM_AIR or @_CPU_Platform_@ = PLATFORM_AIR_IOP) and @_Target_@ /= SIMU
 TRUE
 @@END_IF@@

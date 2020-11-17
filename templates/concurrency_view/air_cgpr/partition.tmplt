@@ -21,8 +21,12 @@
 @@-- @_Thread_Dst_Name_@ : Vector tag : connection thread name (dest)
 @@-- @_Thread_Src_Port_@ : Vector tag : connection port name (source)
 @@-- @_Thread_Dst_Port_@ : Vector tag : connection port name (dest)
+@@IF@@ @_VP_Platform_@ = PLATFORM_AIR_IOP
+@@SET@@ Need_IOP = TRUE
+@@END_IF@@
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
+--  VP Platform        : @_VP_Platform_@
 -- Generic gprbuild configuration file for rtems5 with Ada support for leon3
 configuration project AIR is
    package Compiler is
@@ -31,6 +35,7 @@ configuration project AIR is
       for Driver ("Ada") use "sparc-rtems5-gcc";
 
       for Leading_Required_Switches ("C") use ("-c");
+      for Leading_Required_Switches ("C++") use ("-c");
 
       for Required_Switches("Ada") use
          ("-c",
@@ -45,10 +50,49 @@ configuration project AIR is
           "-DRTEMS_POSIX",
           "-DRTEMS412",
           "-DGRLEON3",
+          "-DPMK_MAX_CORES=4",
           "-ffunction-sections",
           "-fdata-sections",
           "-B/home/taste/tool-src/air/air/install/libs/libprintf/",
           "-B/home/taste/tool-src/air/air/install/libs/libair/",
+@@IF@@ @_Need_IOP_@ 
+          "-B/home/taste/tool-src/air/air/install/libs/libiop/",
+          "-B/home/taste/tool-src/air/air/install/pos/bare/",
+          "-I/home/taste/tool-src/air/air/install/libs/libiop/include/",
+@@END_IF@@
+          "-I/home/taste/tool-src/air/air/install/pmk/bsp/sparc/leon3/include",
+          "-I/home/taste/tool-src/air/air/install/pmk/core/include",
+          "-I/home/taste/tool-src/air/air/install/pmk/arch/sparc/include",
+          "-DLEON_RTEMS",
+          "-DLEON3",
+          "-DGAISLER",
+          "-B/home/taste/tool-src/air/air/install/pos/rtems5/rtems5-install/sparc-rtems5/leon3/lib",
+          "-specs=bsp_specs",
+          "-qrtems",
+          "-mcpu=leon3");
+
+      for Required_Switches("C++") use
+         ("--pipe",
+          "-DTARGET=air",
+          "-DAIR_HYPERVISOR",
+          "-DRTEMS_POSIX",
+          "-DRTEMS412",
+          "-DGRLEON3",
+          "-DPMK_MAX_CORES=4",
+          "-ffunction-sections",
+          "-fdata-sections",
+          "-fpermissive",
+          "-B/home/taste/tool-src/air/air/install/libs/libprintf/",
+          "-B/home/taste/tool-src/air/air/install/libs/libair/",
+@@IF@@ @_Need_IOP_@ 
+          "-B/home/taste/tool-src/air/air/install/libs/libiop/",
+          "-B/home/taste/tool-src/air/air/install/pos/bare/",
+          "-I/home/taste/tool-src/air/air/install/libs/libiop/include/",
+          "-I/home/taste/tool-inst/share/SharedTypes/air_device/air_device/CPP/src",
+@@END_IF@@
+          "-I/home/taste/tool-src/air/air/install/pmk/bsp/sparc/leon3/include",
+          "-I/home/taste/tool-src/air/air/install/pmk/core/include",
+          "-I/home/taste/tool-src/air/air/install/pmk/arch/sparc/include",
           "-DLEON_RTEMS",
           "-DLEON3",
           "-DGAISLER",
@@ -58,10 +102,13 @@ configuration project AIR is
           "-mcpu=leon3");
 
       for Object_File_Suffix ("C") use ".o";
+      for Object_File_Suffix ("C++") use ".o";
       for Object_File_Suffix ("Ada") use ".o";
       for Dependency_Switches ("C") use ("-Wp,-MD,");
+      for Dependency_Switches ("C++") use ("-Wp,-MD,");
       for Dependency_Switches ("Ada") use ("-MMD","-MF","");
       for Include_Switches ("C") use ("-I");
+      for Include_Switches ("C++") use ("-I");
       for Include_Switches ("Ada") use ("-I");
       for Include_Path ("Ada") use "ADA_INCLUDE_PATH";
       for Include_Path_File ("Ada") use "ADA_PRJ_INCLUDE_FILE";
@@ -86,6 +133,11 @@ configuration project AIR is
             "-B/home/taste/tool-src/air/air/install/pos/rtems5/rtems5-install/sparc-rtems5/leon3/lib",
             "-B/home/taste/tool-src/air/air/install/libs/libprintf/",
             "-B/home/taste/tool-src/air/air/install/libs/libair/",
+@@IF@@ @_Need_IOP_@ 
+            "-B/home/taste/tool-src/air/air/install/libs/libiop/",
+            "-B/home/taste/tool-src/air/air/install/pos/bare/",
+            "-L/home/taste/tool-inst/share/SharedTypes/air_device/air_device/CPP/src",
+@@END_IF@@
             "-specs=bsp_specs",
             "-qrtems",
             "-lm",
@@ -102,9 +154,15 @@ configuration project AIR is
             "-lrtemsbsp",
             "/home/taste/tool-src/air/air/install/libs/libprintf/libprintf.a",
             "/home/taste/tool-src/air/air/install/libs/libair/libair.a",
+@@IF@@ @_Need_IOP_@ 
+            "/home/taste/tool-src/air/air/install/libs/libiop/libiop.a",
+            "/home/taste/tool-src/air/air/install/pos/bare/bare.a",
+            "/home/taste/tool-src/air/air/install/pmk/pmk.a",
+@@END_IF@@
             "/home/taste/tool-src/air/air/install/libs/imaspex/imaspex.a",
             "-Wl,--end-group",
             "-mcpu=leon3");
+
        for Default_Switches ("Ada") use
            ("--pipe",
             "-g",

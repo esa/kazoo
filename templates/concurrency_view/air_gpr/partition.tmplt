@@ -29,12 +29,16 @@
 @@-- @_Out_Port_Type_Name_@   :     |_ corresponding parameter type name (optional)
 --  Node name          : @_Name_@
 --  Execution platform : @_CPU_Platform_@
+--  VP Platform        : @_VP_Platform_@
 @@-- Not all systems use Ada so we must not always include Ada dataview folder
 @@TABLE@@
 @@IF@@ @_LOWER:Block_Languages_@ = sdl or @_LOWER:Block_Languages_@ = ada
 @@SET@@ Need_Ada = TRUE
 @@END_IF@@
 @@END_TABLE@@
+@@IF@@ @_VP_Platform_@ = PLATFORM_AIR_IOP
+@@SET@@ Need_IOP = TRUE
+@@END_IF@@
 project @_CAPITALIZE:Name_@_AIR is
 
    type Build_Type is ("Debug", "Release");
@@ -64,16 +68,30 @@ project @_CAPITALIZE:Name_@_AIR is
            --"-fdata-sections",
            "-Wmissing-prototypes",
            "-Wimplicit-function-declaration",
-           "-Wstrict-prototypes",
-           "-Wnested-externs");
+           "-Wstrict-prototypes");
+
+      Common_Cpp_Switches :=
+          ("-Wall",
+           "-Wextra",
+           "-g",
+           "-fdiagnostics-show-option",
+           "-Wcast-align",
+           "-Wswitch");
+
 
       case Build is
          when "Release" =>
             for Default_Switches ("C") use Common_C_Switches & ("-O2", "-DNDEBUG")
                 & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C++") use Common_Cpp_Switches & ("-O2", "-DNDEBUG")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
          when "Debug" =>
             for Default_Switches ("C") use Common_C_Switches & ("-D__PO_HI_USE_VCD=1")
+                & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
+                & external_as_list("USER_CFLAGS", " ");
+            for Default_Switches ("C++") use Common_Cpp_Switches & ("-D__PO_HI_USE_VCD=1")
                 & external_as_list("@_UPPER:Name_@_USER_CFLAGS", " ")
                 & external_as_list("USER_CFLAGS", " ");
       end case;
@@ -81,6 +99,9 @@ project @_CAPITALIZE:Name_@_AIR is
 
    package Linker is
       for Default_Switches ("C") use
+         external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
+         & external_as_list("USER_LDFLAGS", " ");
+      for Default_Switches ("C++") use
          external_as_list("@_UPPER:Name_@_USER_LDFLAGS", " ")
          & external_as_list("USER_LDFLAGS", " ");
    end Linker;
@@ -114,6 +135,9 @@ project @_CAPITALIZE:Name_@_AIR is
        "../../@_LOWER:Block_Names_@/@_Block_Languages_@/wrappers",
 @@END_IF@@
 @@END_TABLE@@
+@@IF@@ @_Need_IOP_@ = TRUE
+       "/home/taste/tool-inst/share/SharedTypes/air_device/air_device/CPP/src",
+@@END_IF@@
        "../deploymentview_final/@_LOWER:Name_@")
         & external_as_list("EXTERNAL_SOURCE_PATH", ":")
         & external_as_list("@_UPPER:Name_@_EXTERNAL_SOURCE_PATH", ":")

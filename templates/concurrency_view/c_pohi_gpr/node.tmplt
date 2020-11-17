@@ -44,14 +44,20 @@ release:
 	gprbuild -p --config=rtems_ada.cgpr -P @_LOWER:Partition_Names_@_rtems_ada.gpr -XCFG="Release" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
-@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR
+@@ELSIF@@ @_CPU_Platform_@ = PLATFORM_AIR or @_CPU_Platform_@ = PLATFORM_AIR_IOP
 debug:
 @@TABLE@@
 	# We need to compile and link separately because the linker script must
 	# be copied to the obj folder. Path cannot be set manually with -T
-	gprbuild -c -p --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -c -p -v --config=@_LOWER:Partition_Names_@_air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
 	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
-	gprbuild -l -v -p --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+	gprbuild -l -p -v --config=@_LOWER:Partition_Names_@_air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Debug" -cargs:C -DSTATIC=""
+@@END_TABLE@@
+release:
+@@TABLE@@
+	gprbuild -c -p --config=@_LOWER:Partition_Names_@_air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Release" -cargs:C -DSTATIC=""
+	cp ../deploymentview_final/@_LOWER:Partition_Names_@/linkcmds.inc @_LOWER:Partition_Names_@_obj/
+	gprbuild -l -p --config=air.cgpr -P @_LOWER:Partition_Names_@_air.gpr -XCFG="Release" -cargs:C -DSTATIC=""
 @@END_TABLE@@
 
 @@ELSIF@@ @_CPU_Platform_@ = PLATFORM_ZYNQZC706

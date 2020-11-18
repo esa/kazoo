@@ -4,6 +4,7 @@ import sys
 timeout = 5
 
 binaries = [
+    "taste-simulate-leon3 output.rtems/binaries/demo_c_leon3_rtems.exe",
     "work/binaries/demo_c"
     ]
 

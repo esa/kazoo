@@ -52,8 +52,9 @@ begin
 @@END_TABLE@@
 @@END_IF@@ @@-- Has param
             Put_Value (@_Partition_Name_@_@_Calling_Threads_@_k, Value);
-            Err := Send_Output (@_Partition_Name_@_@_Calling_Threads_@_k,
-                               @_Calling_Threads_@_Thread_@_Calling_Threads_@_others_Port_Type'(OUTPORT_@_Name_@));
+            Send_Output (@_Partition_Name_@_@_Calling_Threads_@_k,
+                         @_Calling_Threads_@_Thread_@_Calling_Threads_@_others_Port_Type'(OUTPORT_@_Name_@),
+                         Err);
            --  TODO : Report the error if any
          end;
 @@-- End of the "case" block

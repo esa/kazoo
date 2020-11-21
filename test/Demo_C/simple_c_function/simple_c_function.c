@@ -6,24 +6,22 @@
 #include <signal.h>
 #include <stddef.h>
 
-void myhandler ();
+void myhandler();
 
-void simple_c_function_startup()
+void simple_c_function_startup(void)
 {
-	/* Write your initialization code here,
-	   but do not make any call to a required interface!! */
-	printf ("[Startup] Expected output: \"Hello, world...\" every 2 seconds\n");
-	(void) signal (SIGINT, myhandler);
+   printf ("[Startup] Expected output: \"Hello, world...\" every 2 seconds\n");
+   (void) signal (SIGINT, myhandler);
 }
 
-void myhandler ()
+void myhandler(void)
 {
-    printf ("Ctrl-C hit!\n");
-    exit (0);
+   printf ("Ctrl-C hit!\n");
+   exit (0);
 }
 
-void simple_c_function_PI_cyclic_operation()
+void simple_c_function_PI_cyclic_operation(void)
 {
-    printf ("Hello, world...\n");
+   printf ("Hello, world...\n");
 }
 

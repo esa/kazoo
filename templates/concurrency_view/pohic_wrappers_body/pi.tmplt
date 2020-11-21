@@ -1,16 +1,9 @@
-@@-- The following tags are available in this template:
-@@--
-@@-- @_Name_@                : The name of the interface
-@@-- @_Direction_@           : "PI" or "RI"
-@@-- @_Kind_@                : The RCM Kind
-@@-- @_Parent_Function_@     : The name of the function
-@@-- @_Partition_Name_@         : Partition name for parent function
-@@-- @_Param_Names_@         : List of parameter names
-@@-- @_Param_Types_@         :   |_ Corresponding parameter types
-@@-- @_Param_Directions_@    :   |_ Corresponding direction
-@@-- @_Remote_Function_Names_@  : List of callers
-@@-- @_Remote_Interface_Names_@ :   |_ caller's interface name
-@@-- @_Calling_Threads_@        : Calling threads of the containing block
+@@-- The up to date list of tags available for this template is available here:
+@@-- https://taste.tuxfamily.org/wiki/index.php?title=Kazoo_Templates_Documentation#templates.2Fconcurrency_view.2Fsub.2Fri.tmplt
+@@-- If you are using vim, go over the URL and pres gx in to follow the link
+@@-- If you have no internet access you can also use (with vim) Ctrl-W-f then Ctrl-W-L (or gf)
+@@-- in vim to open the doc: $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_pi.ascii
+@@IF@@ @_EXIST:Remote_Function_Names_@
 @@IF@@ @_Kind_@ = PROTECTED_OPERATION
    @@IF@@ @_Param_Names'Length_@ = 0    @@-- zero param
 void pro_@_Parent_Function_@_@_Name_@(void)
@@ -46,3 +39,5 @@ void pro_@_Parent_Function_@_@_Name_@
 @@END_IF@@  
    __po_hi_protected_unlock (@_LOWER:Parent_Function_@_protected.protected_id);
 }
+@@END_IF@@
+@@-- end if: has callers, i.e. not cyclic

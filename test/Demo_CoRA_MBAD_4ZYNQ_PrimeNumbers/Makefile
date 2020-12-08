@@ -4,7 +4,7 @@ KAZOO?=kazoo
 # Use upper case for the partition name:
 # export <PARTITION_NAME>_EXTERNAL_SOURCE_PATH=/absolute/path/1:/....
 
-all:	c
+all:	sw
 
 c:	work/glue_built
 	rsync -c input/function1.c work/function1/C/src
@@ -25,6 +25,9 @@ work/skeletons_built:	InterfaceView.aadl DataView.aadl
 work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 	$(KAZOO) -p --glue --gw -o work
 	touch $@
+
+DataView.aadl:	DataView.asn
+	taste-update-data-view
 
 clean:
 	rm -rf work/build

@@ -26,6 +26,9 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl
 	$(KAZOO) -p --glue --gw -o work
 	touch $@
 
+DataView.aadl:	DataView.asn
+	taste-update-data-view
+
 clean:
 	rm -rf work/build
 	rm -f work/glue_built work/skeletons_built

@@ -4,7 +4,9 @@
 @@-- If you have no internet access you can also use (with vim) Ctrl-W-f or gf in vim to open the text doc:
 @@-- $HOME/tool-inst/share/kazoo/doc/templates_concurrency_view_sub_thread.ascii
 @@--  ASN.1 Module imports
+@@IF@@ @_Param_Types'Length_@ > 0
 --  ASN.1 modules used by thread @_Thread_Name_@
+@@END_IF@@
 @@TABLE'ALIGN_ON(" ")@@
 @_Param_Types_@ FROM @_REPLACE_ALL(_/-):Param_ASN1_Modules_@
 @@END_TABLE@@

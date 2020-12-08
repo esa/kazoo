@@ -185,7 +185,8 @@ package body TASTE.Concurrency_View is
       Threads          : Unbounded_String;
       All_Thread_Names : Tag;  --  Complete list of threads
       All_Target_Names : Tag;  --  List of all targets used (AADL packages)
-      All_Block_Names  : Tag;  --  Complete list of blocks
+      All_Block_Names,         --  List of all blocks in the system
+      All_Block_Languages : Vector_Tag;  --  and their language
       Actual_Shared    : String_Sets.Set;
       Used_Shared_Types : Tag; --  Actually used shared types (whole system)
    begin
@@ -210,6 +211,7 @@ package body TASTE.Concurrency_View is
          Clear (All_Thread_Names);
          Clear (All_Target_Names);
          Clear (All_Block_Names);
+         Clear (All_Block_Languages);
 
          Get_Next_Entry (ST, Current);
 
@@ -405,6 +407,8 @@ package body TASTE.Concurrency_View is
                      Block_Names     := Block_Names & Block_Name;
                      All_Block_Names := All_Block_Names & Block_Name;
                      Block_Languages := Block_Languages
+                       & TASTE.Backend.Language_Spelling (B.Ref_Function);
+                     All_Block_Languages := All_Block_Languages
                        & TASTE.Backend.Language_Spelling (B.Ref_Function);
                      Block_Instance_Of := Block_Instance_Of
                        & B.Ref_Function.Instance_Of.Value_Or (US (""));
@@ -882,6 +886,7 @@ package body TASTE.Concurrency_View is
                  & Assoc ("Threads",             Threads)
                  & Assoc ("Thread_Names",        All_Thread_Names)
                  & Assoc ("Block_Names",         All_Block_Names)
+                 & Assoc ("Block_Languages",     All_Block_Languages)
                  & Assoc ("Target_Packages",     All_Target_Names)
                  & Assoc ("Bus_Names",           Bus_Names)
                  & Assoc ("Bus_AADL_Package",    Bus_AADL_Pkg)

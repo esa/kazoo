@@ -7,7 +7,16 @@ Simulation-DataView DEFINITIONS ::=
 BEGIN
    IMPORTS
       @_Threads'Indent_@
+      -- Import generic integer type (used for timers)
       T-UInt32 FROM TASTE-BasicTypes
+      --  Import the SDL function states needed for the global system state
+      @@INLINE(      )(\n      )()@@
+         @@TABLE'ALIGN_ON(" ")@@
+            @@IF@@ @_Block_Languages_@ = SDL
+               @_CAPITALIZE:REPLACE_ALL(_/-):Block_Names_@-Context FROM @_CAPITALIZE:REPLACE_ALL(_/-):Block_Names_@-Datamodel
+            @@END_IF@@
+         @@END_TABLE@@
+      @@END_INLINE@@
    ;
 
    @_Nodes'Indent_@
@@ -15,8 +24,19 @@ BEGIN
    Events ::= CHOICE {
       @@INLINE(      )(,\n      )()@@
           @@TABLE'ALIGN_ON(" ")@@
-                @_LOWER:REPLACE_ALL(_/-):Block_Names_@ @_REPLACE_ALL(_/-):CAPITALIZE:Block_Names_@-Event
+             @_LOWER:REPLACE_ALL(_/-):Block_Names_@ @_REPLACE_ALL(_/-):CAPITALIZE:Block_Names_@-Event
           @@END_TABLE@@
+      @@END_INLINE@@
+   }
+
+   --  Global system state
+   System-State ::= SEQUENCE {
+      @@INLINE(      )(,\n      )()@@
+         @@TABLE'ALIGN_ON(" ")@@
+            @@IF@@ @_Block_Languages_@ = SDL
+               @_LOWER:REPLACE_ALL(_/-):Block_Names_@  @_CAPITALIZE:REPLACE_ALL(_/-):Block_Names_@-Context
+            @@END_IF@@
+         @@END_TABLE@@
       @@END_INLINE@@
    }
 END

@@ -1,0 +1,61 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+process Watchdog;
+    /* CIF START (408, 21), (70, 35) */
+    START;
+        /* CIF NEXTSTATE (408, 71), (70, 35) */
+        NEXTSTATE Off;
+    /* CIF state (1002, 265), (118, 35) */
+    state Running_Pong;
+        /* CIF input (1027, 320), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (956, 375), (212, 40) */
+            call Send_to_UART('Pong
+');
+            /* CIF NEXTSTATE (1003, 435), (116, 35) */
+            NEXTSTATE Running_Ping;
+    endstate;
+    /* CIF state (591, 43), (70, 35) */
+    state On;
+        /* CIF input (591, 98), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (558, 153), (134, 35) */
+            call SWitch_Leds_OFF;
+            /* CIF PROCEDURECALL (547, 208), (158, 40) */
+            call Send_to_UART('Pong
+');
+            /* CIF NEXTSTATE (591, 268), (70, 35) */
+            NEXTSTATE Off;
+    endstate;
+    /* CIF state (789, 264), (118, 35) */
+    state Running_Ping;
+        /* CIF input (814, 319), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (743, 374), (212, 40) */
+            call Send_to_UART('Ping
+');
+            /* CIF NEXTSTATE (792, 434), (112, 35) */
+            NEXTSTATE Running_Pong;
+    endstate;
+    /* CIF state (809, 55), (70, 35) */
+    state On, Off;
+        /* CIF input (804, 110), (77, 35) */
+        input Kick_WD;
+            /* CIF PROCEDURECALL (736, 165), (215, 40) */
+            call Send_to_UART('Initialized
+');
+            /* CIF NEXTSTATE (782, 220), (123, 35) */
+            NEXTSTATE Running_Ping;
+    endstate;
+    /* CIF state (408, 71), (70, 35) */
+    state Off;
+        /* CIF input (408, 126), (70, 35) */
+        input pulse;
+            /* CIF PROCEDURECALL (379, 181), (126, 35) */
+            call Switch_Leds_ON;
+            /* CIF PROCEDURECALL (367, 236), (150, 40) */
+            call Send_to_UART('Ping
+');
+            /* CIF NEXTSTATE (408, 296), (70, 35) */
+            NEXTSTATE On;
+    endstate;
+endprocess Watchdog;

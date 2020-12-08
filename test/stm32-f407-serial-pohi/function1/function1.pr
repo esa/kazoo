@@ -4,7 +4,6 @@ process function1;
     -- pulse is rececived every 50 ms. Use a counter to toggle the leds
     -- at a lower period.
     dcl counter T_UInt8 := 0;
-    dcl switch MyBool := false;
     
     dcl received_data, response DataOverSerial;
     /* CIF ENDTEXT */

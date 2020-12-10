@@ -89,9 +89,9 @@ def make(rule, path):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
-    # Timeout of 5 mn per project, to avoid being stuck
+    # Timeout of 10 mn per project, to avoid being stuck
     try:
-        stdout, stderr = proc.communicate(timeout=300)
+        stdout, stderr = proc.communicate(timeout=600)
     except subprocess.TimeoutExpired:
         # Kill the process
         proc.kill()

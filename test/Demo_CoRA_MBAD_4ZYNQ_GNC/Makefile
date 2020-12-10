@@ -4,7 +4,7 @@ KAZOO?=kazoo
 # Use upper case for the partition name:
 # export <PARTITION_NAME>_EXTERNAL_SOURCE_PATH=/absolute/path/1:/....
 
-all:	c
+all:	sw
 
 c:	work/glue_built
 	rsync -rc gnc/ work/gnc/SIMULINK/src/

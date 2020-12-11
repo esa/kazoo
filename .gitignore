@@ -6,5 +6,4 @@ src/taste-parser_version.ads
 doc/templates/*.old
 doc/templates/*.html
 test/Demo_C/work-debug/
-test/Demo_CoRA_MBAD_4ZYNQ_PrimeNumbers/DataView.aadl
 test/Demo_Simulink_C_NoStopBlock/build.log

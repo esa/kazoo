@@ -1,0 +1,22 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@             : Protected block name
+@@-- @_Language_@         : Implementation language
+@@-- @_Calling_Threads_@  : List of calling threads
+@@-- @_Node name_@        : Node name
+@@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
+@@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
+@@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@        |_ Vector Tag: List of User-defined properties (values)
+@@IF@@ @_LOWER:Language_@ = simulink or @_LOWER:Language_@ = c
+@@TABLE@@
+@@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and not @_IS_EMPTY:LOWER:Property_Values_@
+@_LOWER:Name_@: 
+	cp -u Bambu/@_STRIP:Unprotected_PIs_@_bambu.vhd ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src
+	find Bambu -name \*.mem -exec cp -u {} ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/ip/src \;
+	make -C ../../@_LOWER:Name_@/@_Language_@/wrappers/TASTE-VHDL-DESIGN/project
+
+@@END_IF@@
+@@END_TABLE@@
+@@END_IF@@

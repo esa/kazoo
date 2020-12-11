@@ -8,11 +8,11 @@ binaries = [
 ]
 
 expected = [
-    "[TASTE] Initialization completed for function demo_Timer_Manager",
+    ["[TASTE] Initialization completed for function demo_Timer_Manager",
     "[MASTER] Set timer and call Slave during init",
     "[TASTE] Initialization completed for function master",
     "[slave] Startup",
-    "[TASTE] Initialization completed for function slave",
+    "[TASTE] Initialization completed for function slave"],
     "[slave] I am free? Really? I don't believe it",
     "[MASTER] Timer expired, Slave did not answer within 1 sec (as expected)",
     "[MASTER] Trying again",

@@ -7,11 +7,11 @@
 // Required interfaces of function @_Name_@
 @_Required_@
 @@END_IF@@
-@@-- @@IF@@ @_Language_@ /= SIMULINK  @@-- Simulink's glue is generated from DMT
+@@IF@@ @_STRIP:Protected_PIs_@ /= ""
 #include "@_LOWER:Name_@_vm_if.h"
-@@-- @@END_IF@@
 
 @_Protected_PIs_@
+@@END_IF@@
 @@IF@@ @_Language_@ = SDL and not @_Is_Type_@
 @@-- SDL Functions need to know if a message is pending in their queues
 @@-- to know if they can execute the continuous signals

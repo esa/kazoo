@@ -29,7 +29,7 @@ all:	build-default
 @@-- for pure simulation target, force the generation of the Ada dataview
 @@SET@@ Need_Ada = TRUE
 # Build a simulator of the system (experimental)
-all:	aadl2glueC build/system_config.h
+all:	aadl2glueC build/system_config.h ${DATAVIEW_PATH}/built 
 	cd dataview && taste-asn1-iterators --raw dataview-uniq.asn
 	$(MAKE) -j -C build -f Makefile.taste simu
 @@END_IF@@
@@ -137,7 +137,11 @@ ${DATAVIEW_AADLV2}: ${DATAVIEW_UNIQ}
 	@@TABLE@@
 	@@IF@@ not @_Is_Type_@
 @_LOWER:Function_Names_@/@_Language_@/wrappers/aadl2glueC_built: @_LOWER:Function_Names_@/@_Language_@/wrappers/@_LOWER:Function_Names_@_mini_cv.aadl ${DATAVIEW_AADLV1}
+	@@IF@@ @_Is_FPGA_@ and @_CPU_Platform_@ = PLATFORM_ZYNQZC706
+	aadl2glueC -fpga ZYNQZC706 -o $(dir $@) $^
+	@@ELSE@@
 	aadl2glueC -allboards -o $(dir $@) $^
+	@@END_IF@@
 	touch $@
 
 	@@END_IF@@

@@ -5,3 +5,5 @@ src/*.swp
 src/taste-parser_version.ads
 doc/templates/*.old
 doc/templates/*.html
+test/Demo_C/work-debug/
+test/Demo_Simulink_C_NoStopBlock/build.log

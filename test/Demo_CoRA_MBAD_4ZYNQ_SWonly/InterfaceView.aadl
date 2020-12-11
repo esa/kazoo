@@ -1,0 +1,177 @@
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::Calling
+PUBLIC
+
+WITH interfaceview::IV::Gnc;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_pulse
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pulse;
+
+SUBPROGRAM IMPLEMENTATION PI_pulse.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pulse.others;
+
+SUBPROGRAM PI_changeMode
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_changeMode;
+
+SUBPROGRAM IMPLEMENTATION PI_changeMode.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_changeMode.others;
+
+SUBPROGRAM RI_do_something
+FEATURES
+  inp1 : IN PARAMETER DataView::Seq3 {
+    Taste::encoding => NATIVE;
+  };
+  inp2 : IN PARAMETER DataView::Seq3 {
+    Taste::encoding => NATIVE;
+  };
+  inp3 : IN PARAMETER DataView::Seq4 {
+    Taste::encoding => NATIVE;
+  };
+  outpu : OUT PARAMETER DataView::Seqout {
+    Taste::encoding => NATIVE;
+  };
+  innested : IN PARAMETER DataView::In_Nested {
+    Taste::encoding => NATIVE;
+  };
+  outnested : OUT PARAMETER DataView::Out_Nested {
+    Taste::encoding => NATIVE;
+  };
+END RI_do_something;
+
+SUBPROGRAM IMPLEMENTATION RI_do_something.others
+END RI_do_something.others;
+
+SYSTEM Calling
+FEATURES
+  PI_pulse : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Calling::PI_pulse.others {
+    Taste::coordinates => "100509 56009";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pulse";
+  };
+  PI_changeMode : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Calling::PI_changeMode.others {
+    Taste::coordinates => "111658 56009";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 20000 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "changeMode";
+  };
+  RI_do_something : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Gnc::PI_do_something.others {
+    Taste::coordinates => "134118 68614";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "do_something";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END Calling;
+
+SYSTEM IMPLEMENTATION Calling.others
+END Calling.others;
+
+END interfaceview::IV::Calling;
+
+PACKAGE interfaceview::IV::Gnc
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_do_something
+FEATURES
+  inp1 : IN PARAMETER DataView::Seq3 {
+    Taste::encoding => NATIVE;
+  };
+  inp2 : IN PARAMETER DataView::Seq3 {
+    Taste::encoding => NATIVE;
+  };
+  inp3 : IN PARAMETER DataView::Seq4 {
+    Taste::encoding => NATIVE;
+  };
+  outpu : OUT PARAMETER DataView::Seqout {
+    Taste::encoding => NATIVE;
+  };
+  innested : IN PARAMETER DataView::In_Nested {
+    Taste::encoding => NATIVE;
+  };
+  outnested : OUT PARAMETER DataView::Out_Nested {
+    Taste::encoding => NATIVE;
+  };
+END PI_do_something;
+
+SUBPROGRAM IMPLEMENTATION PI_do_something.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_do_something.others;
+
+SYSTEM Gnc
+FEATURES
+  PI_do_something : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Gnc::PI_do_something.others {
+    Taste::coordinates => "168276 82079";
+    Taste::RCMoperationKind => unprotected;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "do_something";
+  };
+PROPERTIES
+  Source_Language => (Simulink);
+  Taste::Active_Interfaces => any;
+END Gnc;
+
+SYSTEM IMPLEMENTATION Gnc.others
+END Gnc.others;
+
+END interfaceview::IV::Gnc;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::Calling;
+WITH interfaceview::IV::Gnc;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  Calling : SYSTEM interfaceview::IV::Calling::Calling.others {
+    Taste::coordinates => "84026 56009 134118 94306";
+  };
+  Gnc : SYSTEM interfaceview::IV::Gnc::Gnc.others {
+    Taste::coordinates => "168276 62527 229841 103086";
+  };
+CONNECTIONS
+  Gnc_PI_do_something_Calling_RI_do_something : SUBPROGRAM ACCESS Gnc.PI_do_something -> Calling.RI_do_something {
+    Taste::coordinates => "134118 68614 152279 68614 152279 82079 168276 82079";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("DataView.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.3";
+END interfaceview::IV;
+

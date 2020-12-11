@@ -1,0 +1,77 @@
+@@-- The following tags are available in this template:
+@@--
+@@-- @_Name_@             : Protected block name
+@@-- @_Language_@         : Implementation language
+@@-- @_Calling_Threads_@  : List of calling threads
+@@-- @_Node name_@        : Node name
+@@-- @_Protected_PIs_@    : Protected Provided interfaces (from pi.tmplt)
+@@-- @_Unprotected_PIs_@  : Unprotected Provided interfaces (from pi.tmplt)
+@@-- @_Required_@         : Required interfaces (from ri.tmplt)
+@@-- @_Property_Names_@      : List of User-defined properties (names)
+@@-- @_Property_Values_@        |_ Vector Tag: List of User-defined properties (values)
+@@IF@@ @_LOWER:Language_@ = simulink or @_LOWER:Language_@ = c
+@@TABLE@@
+@@IF@@ @_LOWER:Property_Names_@ = taste_iv_properties::fpga_configurations and not @_IS_EMPTY:LOWER:Property_Values_@
+project @_CAPITALIZE:Name_@_Zynq_Bambu is
+
+   type Build_Type is ("Debug", "Release");
+   Build : Build_Type := external ("CFG", "Debug");
+
+   --  for Create_Missing_Dirs use "True"; (not supported in Debian 9, use -p instead)
+   for Object_Dir use "Bambu";
+   for Exec_Dir   use "Bambu";
+   for Languages use ("FPGA");
+
+   package Compiler is
+      Common_Bambu_Switches :=
+          ("--compiler=I386_CLANG4",
+           "--experimental-setup=BAMBU-BALANCED",
+           "--no-iob",
+           "--clock-period=40",
+           "-funroll-loops",
+           "-fno-inline",
+           "--speculative-sdc-scheduling",
+           "--generate-interface=INFER",
+           "-v4",
+           "--do-not-expose-globals",
+           "-wH",
+           "--panda-parameter=none-registered-ptrdefault=1",
+            "-I../../../dataview/C");
+
+    for Switches ("FPGA") use Common_Bambu_Switches &
+        ("-I../../../@_LOWER:Name_@/@_Language_@/src",
+        "-I../../../@_LOWER:Name_@/@_Language_@/wrappers",
+        "--clock-name=clock_@_STRIP:Unprotected_PIs_@",
+        "--reset-name=reset_@_STRIP:Unprotected_PIs_@",
+        "--start-name=start_@_STRIP:Unprotected_PIs_@",
+        "--done-name=finish_@_STRIP:Unprotected_PIs_@",
+        "--top-fname=@_STRIP:Unprotected_PIs_@_bambu");
+
+
+      case Build is
+         when "Release" =>
+            for Default_Switches ("FPGA") use Common_Bambu_Switches & ("-O2")
+                & external_as_list("USER_CFLAGS", "");
+         when "Debug" =>
+            for Default_Switches ("FPGA") use Common_Bambu_Switches & ("")
+                & external_as_list("USER_CFLAGS", "");
+      end case;
+   end Compiler;
+
+  --  following to be updated with all relevant source dirs
+   for Source_Dirs use
+    (
+    "../../@_LOWER:Name_@/@_Language_@/wrappers"
+);
+    for Source_Files use ("@_STRIP:Unprotected_PIs_@_bambu.c");
+    
+    for Excluded_Source_Files use
+      (
+
+        );
+
+
+end @_CAPITALIZE:Name_@_Zynq_Bambu;
+@@END_IF@@
+@@END_TABLE@@
+@@END_IF@@

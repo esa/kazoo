@@ -15,6 +15,7 @@ work/glue_built:	InterfaceView.aadl DeploymentView.aadl DataView.aadl Concurrenc
 
 clean:
 	rm -rf work
+	git checkout -- .
 
 .PHONY: clean skeletons c
 
